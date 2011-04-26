@@ -1,0 +1,45 @@
+/**
+ * The Holier Grail Website Layout Framework
+ * @author    Bill Brown <mailto:macnimble@gmail.com>
+ * @copyright None really.
+ *            You may use The Holier Grail freely, for any project.
+ *            Just please don't claim credit for creating it.
+ * @timestamp 2008-MAR-10 2:40 AM
+ *
+ * @page      Three Column Format, Menu on the Left Style
+ */
+
+#pageFrame{
+  
+}
+#pagePanel{
+  /*margin-left:               20em;   */
+   margin-left:               0;
+  }
+#coreFrame{
+ /* border-right:              0.05em solid transparent;
+  border-left:               0.05em solid transparent;         */
+  /*margin-right:              18em;     */
+  }
+#corePanel{
+  display:                   inline;
+  float:                     right;
+  width:                     100%;
+  }
+#mainFrame{
+  display:                   inline;
+  float:                     left;
+  width:                     100%;
+  }
+#moreFrame{
+  display:                   inline;
+  float:                     right;
+  margin-right:              -18.05em;
+  width:                     18em;
+  }
+#menuFrame{
+  display:                   inline;
+  float:                     left;
+  margin-left:               -20.05em;
+  width:                     20em;
+  }

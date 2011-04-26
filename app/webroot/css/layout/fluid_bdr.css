@@ -1,0 +1,22 @@
+/**
+ * The Holier Grail Website Layout Framework
+ * @author    Bill Brown <mailto:macnimble@gmail.com>
+ * @copyright None really.
+ *            You may use The Holier Grail freely, for any project.
+ *            Just please don't claim credit for creating it.
+ * @timestamp 2008-MAR-10 2:40 AM
+ *
+ * @page      Fluid Width Site with Border Style
+ */
+
+/**
+ * The border styles here can be freely overridden in the theme style sheet.
+ * Min-width can be in ems here. The IE Fixes style sheet will adjust them.
+ */
+#pageShell {
+  border:                    2px solid transparent;
+  margin:                    1em;
+  min-width:                 750px;
+  min-height: 100%;
+  position: relative;
+  }
