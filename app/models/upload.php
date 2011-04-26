@@ -1,7 +1,7 @@
 <?php
 class Upload extends AppModel {
 	var $name = 'Upload';
-	var $actsAs = array('FileUpload.FileUpload' => array('required' => true), 'Containable');
+	var $actsAs = array('FileUpload.FileUpload');
 
 	// [Upload] => Array
 	//       (
