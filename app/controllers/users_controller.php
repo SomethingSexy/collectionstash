@@ -3,7 +3,7 @@ App::import('Sanitize');
 class UsersController extends AppController {
     var $name = 'Users';
 
-    var $helpers = array('Html', 'Form', 'FileUpload.FileUpload');
+    var $helpers = array('Html', 'Form');
 
     var $components = array('Email');
     

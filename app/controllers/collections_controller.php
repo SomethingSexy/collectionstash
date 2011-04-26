@@ -8,8 +8,8 @@ class CollectionsController extends AppController
 {
   var $name = 'Collections';
 
-  var $helpers = array('Html', 'Form', 'FileUpload.FileUpload','Ajax');
-  
+  var $helpers = array('Html', 'Form','Ajax', 'FileUpload.FileUpload');
+
   var $components = array('RequestHandler');
   
   var $uses = array('User');

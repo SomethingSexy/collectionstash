@@ -8,6 +8,8 @@ class CollectiblesController extends AppController {
 
 	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload');
 
+	var $components = array('RequestHandler');
+
 	var $actsAs = array('Searchable.Searchable');
 
 	function index() {
@@ -51,12 +53,12 @@ class CollectiblesController extends AppController {
 	}
 
 	/**
- 	* I think there is an issue with the file upload code and saving the image
- 	* if I redirect to another page. So for now I am doing an inital save
- 	* and setting the pending to 2.  Then on the actual confirm I am changing
- 	* it to 1.  2s will be filtered and should eventually be deleted because
- 	* they are not committed changes.  Really lame but works for now.
- 	*/
+	 * I think there is an issue with the file upload code and saving the image
+	 * if I redirect to another page. So for now I am doing an inital save
+	 * and setting the pending to 2.  Then on the actual confirm I am changing
+	 * it to 1.  2s will be filtered and should eventually be deleted because
+	 * they are not committed changes.  Really lame but works for now.
+	 */
 	function addSelectType() {
 		if($this -> isLoggedIn()) {
 			//check to see if there is data submitted
@@ -150,7 +152,7 @@ class CollectiblesController extends AppController {
 				$userId = $this -> getUserId();
 				//set the id of the user who is adding this collectible
 				$this -> data['Approval']['user_id'] = $userId;
-				$this -> data['Approval']['date_added'] = date("Y-m-d H:i:s",       time());
+				$this -> data['Approval']['date_added'] = date("Y-m-d H:i:s", time());
 				//set the man id of this collectible
 				$this -> data['Collectible']['manufacture_id'] = $manufactureId;
 				//set the license id of this collectible
@@ -169,8 +171,7 @@ class CollectiblesController extends AppController {
 						$this -> Session -> write('lastSaveApprovalId', $approvalId);
 						$this -> Session -> write('collectible', $collectible);
 						$this -> set($this -> data);
-						$this -> redirect( array('action' => 'review'));
-						exit();
+						//$this -> redirect( array('action' => 'review'));
 					} else {
 						debug($this -> Collectible -> validationErrors);
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -199,11 +200,11 @@ class CollectiblesController extends AppController {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$this -> searchCollectible( array('Collectible.variant' => '0'));
 			/*             if(!empty($this -> data['search'])) {
- 			$this -> paginate = array("conditions" => array("MATCH(Collectible.name) AGAINST('{$this->data['search']}')", 'Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
- 			} else {
- 			$this -> paginate = array("conditions" => array('Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
- 			}
- 			$this -> set('collectibles', $this -> paginate('Collectible'));*/
+			 $this -> paginate = array("conditions" => array("MATCH(Collectible.name) AGAINST('{$this->data['search']}')", 'Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
+			 } else {
+			 $this -> paginate = array("conditions" => array('Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
+			 }
+			 $this -> set('collectibles', $this -> paginate('Collectible'));*/
 		}
 	}
 
@@ -224,7 +225,7 @@ class CollectiblesController extends AppController {
 			$userId = $this -> getUserId();
 			//set the id of the user who is adding this collectible
 			$this -> data['Approval']['user_id'] = $userId;
-			$this -> data['Approval']['date_added'] = date("Y-m-d H:i:s",       time());
+			$this -> data['Approval']['date_added'] = date("Y-m-d H:i:s", time());
 
 			$id = $this -> Session -> read('variant-add-id');
 			$collectible = $this -> Collectible -> read(null, $id);
@@ -290,8 +291,8 @@ class CollectiblesController extends AppController {
 		$this -> loadModel('Approval');
 		$this -> Approval -> id = $approvalId;
 		/* Since they confirmed, now set to pending = 1.  I really don't like how
- 		this is setup right now but it works because of the image thing.
- 		A 1 means that this collectible needs to be approved by an admin first */
+		 this is setup right now but it works because of the image thing.
+		 A 1 means that this collectible needs to be approved by an admin first */
 		$pendingState = '1';
 		if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
 			$pendingState = '0';
@@ -352,6 +353,7 @@ class CollectiblesController extends AppController {
 		$this -> Session -> setFlash(__('Collectible was not deleted', true), null, null, 'error');
 		$this -> redirect( array('action' => 'index'));
 	}
+
 }
 ?>
 
