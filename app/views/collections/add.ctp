@@ -1,6 +1,9 @@
 <?php echo $this->Html->script('collection-add',array('inline'=>false)); ?>
 <?php echo $this->Html->script('jquery.form',array('inline'=>false)); ?>
-
+<?php      
+	echo $this->element('search_collectible',
+	array("searchUrl" => '/collections/addSearch/stashId:'.$stashId));
+?>
 <div class="component" id="collectibles-list-component">
   <div class="inside" >
      <div class="component-title">
@@ -62,10 +65,6 @@
         </div>
       
       </div>
-<?php      
-	echo $this->element('search_collectible',
-	array("searchUrl" => '/collections/addSearch/stashId:'.$stashId));
-?>
     </div>
   </div>
 </div>

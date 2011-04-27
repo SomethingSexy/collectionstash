@@ -50,9 +50,16 @@ class User extends AppModel
     ),
     'new_password' => array (
         'samePass' => array (
-          'rule' => array('validatePassword'),
+          'rule' => array('validateSamePassword'),
+           'required' => true,
           'message' => 'Password and confirm password are not the same.'
-        )    
+        ),
+        'validChars' => array (
+			'rule' => array('validatePasswordChars'),
+			'last' => true, 
+			'required' => true,
+			'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.'
+		)
     ),
     'email' => array(
       'rule'=> array('email', true),                                                                                             
@@ -69,21 +76,26 @@ class User extends AppModel
       
   );
   
-	function validatePassword() {
+	function validateSamePassword() {
 		$valid = true;
-		//TODO change error message for invalid password
-		if(!strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
-			if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
-				//doesnt mneet our 1 upper, one lower, 1 digit or special character require,ent
-				//$this->invalidate('new_password');
-				$valid = false;
-			}
-		} else {
+		if(strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
 			$valid = false;
+			debug($valid);
+		} 
+		return $valid;
+	}
+
+	function validatePasswordChars() {
+		$valid = true;
+		if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
+			//doesnt mneet our 1 upper, one lower, 1 digit or special character require,ent
+			$valid = false;
+			
 		}
 
 		return $valid;
 	}
+  
   
   
   public function getUser($username)

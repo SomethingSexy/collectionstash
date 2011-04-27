@@ -66,13 +66,9 @@ class CollectiblesController extends AppController {
 				if($this -> data['Collectible']['addType'] == 'C') {
 					debug($this -> data);
 					$this -> redirect( array('action' => 'addCollectibleManufacture'));
-					exit();
-
 				} else if($this -> data['Collectible']['addType'] == 'V') {
 					debug($this -> data);
 					$this -> redirect( array('action' => 'addVariantSelectCollectible', 'initial' => 'yes'));
-					exit();
-
 				} else {
 					$this -> Session -> setFlash(__('Please select an option to add.', true), null, null, 'error');
 				}
@@ -171,7 +167,7 @@ class CollectiblesController extends AppController {
 						$this -> Session -> write('lastSaveApprovalId', $approvalId);
 						$this -> Session -> write('collectible', $collectible);
 						$this -> set($this -> data);
-						//$this -> redirect( array('action' => 'review'));
+						$this -> redirect( array('action' => 'review'));
 					} else {
 						debug($this -> Collectible -> validationErrors);
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');

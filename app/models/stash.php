@@ -2,7 +2,7 @@
 class Stash extends AppModel {
 	var $name = 'Stash';
 	var $useTable = 'stashes';
-	var $hasMany = array('CollectiblesUser' => array('dependent' => true), 'PostersUser');
+	var $hasMany = array('CollectiblesUser' => array('dependent' => true));
 	var $belongsTo = array('User' => array('counterCache' => true));
 	var $actsAs = array('Revision', 'Containable');
 

@@ -86,7 +86,12 @@
               'rule' => array('validateProductWidthDepthId'),
               'message' => 'Depth is required.'           
            )
-       )             
+       ),
+       'url' => array (
+	   		'rule' => 'url',
+	   		'required' => true,
+	   		'message' => 'Must be a valid url.' 
+	   )             
     );
     
     function beforeSave() 
@@ -137,7 +142,7 @@
           	$results['showUserEditionSize'] = $showEditionSize;
         }
    
-      //debug($results);
+      debug($results);
       return $results;
     }
     

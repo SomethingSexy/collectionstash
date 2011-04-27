@@ -9,8 +9,6 @@ class UsersController extends AppController {
     
     function login() {
         $this -> Session -> destroy();
-        //$this -> layout = 'login';
-        //debug(Configure::read('Settings.title'));
         $success = true;
         if($this -> data) {
             $this -> data = Sanitize::clean($this -> data, array('encode' => false));
@@ -21,6 +19,7 @@ class UsersController extends AppController {
                     if($results['User']['password'] == md5($this -> data['User']['password'])) {
                         $this -> log($results);
                         $this -> Session -> write('user', $results);
+						$this->log('User '.$results['id'].' successfully logged in at '. date("Y-m-d H:i:s", time()) , 'info');	
                         $this -> redirect( array('action' => 'home'), null, true);
                     } else {
                         $this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
@@ -40,6 +39,7 @@ class UsersController extends AppController {
             $this -> data['User']['password'] = '';
             $this -> data['User']['new_password'] = '';
             $this -> data['User']['confirm_password'] = '';
+			$this->log('User '.$this -> data['User']['username'].' failed logging in at '. date("Y-m-d H:i:s", time()) , 'error');	
         }
 
     }
@@ -111,43 +111,59 @@ class UsersController extends AppController {
 
 	function register() {
 		//Make sure the user name is not a list of specific ones...like any controller names :)
-		if(!empty($this -> data)) {
-			$this -> data['User']['password'] = md5($this -> data['User']['new_password']);
-			$this -> data['User']['admin'] = 0;
-			$this -> data['User']['status'] = 1;
-			debug($this -> data);
-			if($this -> User -> save($this -> data)) {
-				$newUserId = $this -> User -> id;
-				$stashData = array();
-				$stashData['Stash']['name'] = 'Default';
-				$stashData['Stash']['user_id'] = $newUserId;
-				//Since this is a new user, the total_count for the stash for validation will start at 0
-				$stashData['Stash']['total_count'] = 0;
-				$this -> User -> Stash -> create();
-
-				if($this -> User -> Stash -> save($stashData)) {
-
-					$this -> User -> id = $newUserId;
-					//since this is a new user we should be able to safetly just make it 1
-					$this -> User -> saveField('stash_user_count', '1');
-					$test = $this -> __sendActivationEmail($this -> User -> id);
-					debug($test);
-					$this -> Session -> setFlash('Your registration information was accepted');
-					//$this->Session->write('user', $this->data);
-					//this of code sets up the newly registered user under the aco user
-					//$parent = $this -> Acl -> Aro -> findByAlias('Users');
-					//$aro = new Aro();
-					//$aro -> create();
-					//$aro -> save( array('alias' => $this -> data['User']['username'], 'model' => 'User', 'foreign_key' => $this -> User -> id, 'parent_id' => 2));
-					//$this -> Acl -> Aro -> save();
-					//$this->redirect(array('action' => 'index'), null, true);
+		if(Configure::read('Settings.registration')) {
+			if(!empty($this -> data)) {
+				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
+				$this -> data['User']['password'] = md5($this -> data['User']['new_password']);
+				$this -> data['User']['admin'] = 0;
+				$this -> data['User']['status'] = 1;
+				debug($this -> data);
+				if($this -> User -> save($this -> data)) {
+					$newUserId = $this -> User -> id;
+					$stashData = array();
+					$stashData['Stash']['name'] = 'Default';
+					$stashData['Stash']['user_id'] = $newUserId;
+					//Since this is a new user, the total_count for the stash for validation will start at 0
+					$stashData['Stash']['total_count'] = 0;
+					$this -> User -> Stash -> create();
+	
+					if($this -> User -> Stash -> save($stashData)) {
+	
+						$this -> User -> id = $newUserId;
+						$newUserStashid = $this -> User -> Stash -> id;
+						//since this is a new user we should be able to safetly just make it 1
+						$this -> User -> saveField('stash_user_count', '1');
+						$emailResult = $this -> __sendActivationEmail($this -> User -> id);
+						if ($emailResult) {
+							$this -> Session -> setFlash('Your registration information was accepted');
+							$this -> render('registrationComplete');							
+						} else {
+							//At this point sending the email failed, so we should roll it all back
+							$this -> User -> delete($newUserId);
+							$this -> User -> Stash -> delete($newUserStashid);
+							$this -> data['User']['password'] = '';
+							$this -> data['User']['new_password'] = '';
+							$this -> data['User']['confirm_password'] = '';
+							$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');							
+						}
+						//$this->Session->write('user', $this->data);
+						//this of code sets up the newly registered user under the aco user
+						//$parent = $this -> Acl -> Aro -> findByAlias('Users');
+						//$aro = new Aro();
+						//$aro -> create();
+						//$aro -> save( array('alias' => $this -> data['User']['username'], 'model' => 'User', 'foreign_key' => $this -> User -> id, 'parent_id' => 2));
+						//$this -> Acl -> Aro -> save();
+						//$this->redirect(array('action' => 'index'), null, true);
+					}
+				} else {
+					$this -> data['User']['password'] = '';
+					$this -> data['User']['new_password'] = '';
+					$this -> data['User']['confirm_password'] = '';
+					$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');
 				}
-			} else {
-				$this -> data['User']['password'] = '';
-				$this -> data['User']['new_password'] = '';
-				$this -> data['User']['confirm_password'] = '';
-				$this -> Session -> setFlash('There was a problem saving this information.');
 			}
+		} else {
+			$this -> redirect( array('action' => 'login'), null, true);
 		}
 	}
 
@@ -166,18 +182,18 @@ class UsersController extends AppController {
                     $this -> User -> saveField('status', 0);
 
                     // Let the user know they can now log in!
-                    $this -> Session -> setFlash('Your account has been activated, please log in below');
+                    $this -> Session -> setFlash(__('Your account has been activated, please log in below', true), null, null, 'success');
                     $this -> redirect('login');
                 }
             } else {
-                $this -> Session -> setFlash('Your account has already been activated!');
+            	$this -> Session -> setFlash(__('Your account has already been activated!', true), null, null, 'error');
                 $this -> redirect('login');
             }
         }
         // Activation failed, render ‘/views/user/activate.ctp’ which should tell the user.
     }
 
-/**
+	/**
      * Send out an activation email to the user.id specified by $user_id
      *  @param Int $user_id User to send activation email to
      *  @return Boolean indicates success
@@ -211,6 +227,11 @@ class UsersController extends AppController {
       $this->Email->sendAs = 'text';   // you probably want to use both :)   
       $return = $this->Email->send();
       $this->set('smtp_errors', $this->Email->smtpError);
+	  if(!empty($this->Email->smtpError)) {
+	  	$return = false;	
+		$this->log('There was an issue sending the email '. $this->Email->smtpError .' for user '.$user_id , 'error');	
+	  }
+
       return $return;
     }
 }

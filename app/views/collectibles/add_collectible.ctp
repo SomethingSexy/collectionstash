@@ -52,7 +52,7 @@
             <li>
               <div class="label-wrapper">
                 <label for="CollectibleEditionSize"><?php __('Edition Size') ?></label>
-                <a class="ui-icon ui-icon-info" title="<?php echo __('This is the edition size of the collectible.  If unknown, leave blank. If it has not been determined yet, enter "TBD".  If there is no edition size, enter "None"', true) ?>" alt="info"></a>
+                <a class="ui-icon ui-icon-info" title="<?php echo __('This is the edition size of the collectible.  If unknown, leave blank. If it has not been determined yet, enter \'TBD\'.  If there is no edition size, enter \'None\'', true) ?>" alt="info"></a>
               </div>            
               <?php echo $this->Form->input('edition_size', array('div' => false, 'label'=>false));?>
             </li>
@@ -60,7 +60,7 @@
               <div class="label-wrapper">
                 <label for="CollectibleProductWeight"><?php __('Weight (lbs)') ?></label>
               </div> 
-              <?php echo $this->Form->input('product_weight', array('div' => false, 'label' => true));?>
+              <?php echo $this->Form->input('product_weight', array('div' => false, 'label' => false));?>
             </li>
             <li>
               <div class="label-wrapper">
@@ -79,6 +79,12 @@
                 <label for="collectibleDepth"><?php __('Depth (inches)') ?></label>
               </div> 
               <?php echo $this->Form->input('product_depth', array('div' => false, 'label' => false, 'id'=>'collectibleDepth'));?>
+            </li>
+            <li>
+              <div class="label-wrapper">
+                <label for="CollectibleUrl"><?php __('Url') ?></label>
+              </div> 
+              <?php echo $this->Form->input('url', array('div' => false, 'label' => false));?>
             </li> 
             <li>
               <div class="label-wrapper">
