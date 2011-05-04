@@ -98,7 +98,7 @@
 							</li>
 							<?php }?>
 							<li>
-								<?php echo $html -> link('Add Collectible', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
+								<?php echo $html -> link('Submit Collectible', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
 							<li>
 								<?php echo $html -> link('Users', array('controller' => 'users', 'action' => 'index'));?>
