@@ -12,7 +12,7 @@
 				<?php __('Oh no!  It looks like the collectible you are trying to add might have been added before.  Please review the existing collectibles below.  If it doesn\'t exist then click the big button.') ?>
 			</div>
 			<div>
-				<form action="/collectibles/addCollectible/bypass:yes" method="post">
+				<form action="/collectibles/review" method="post">
 					<input type="submit" id="submitAnyway" value="Submit Anyway!" />
 				</form>
 				

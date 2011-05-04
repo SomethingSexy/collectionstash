@@ -2,7 +2,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			    <h2><?php  __('Confirm Collectible');?></h2>
+			    <h2><?php  __('Review Collectible');?></h2>
 			</h2>
 		</div>
 	    <?php echo $this->element('flash'); ?>
@@ -13,9 +13,9 @@
 			<div class="collectibles">
 				<div class="collectible item">
 					<div class="collectible image">
-						<?php echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => '100'));?>
+						<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '100'));?>
 						<div class="collectible image-fullsize hidden">
-							<?php echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));?>
+							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
 						</div>
 					</div>
 					<div class="collectible detail">
@@ -79,9 +79,9 @@
 								<?php echo $collectible['Collectible']['msrp'];?>
 							</dd>
 							<?php
-								$editionSize = $collectible['Collectible']['edition_size'];
-								if($collectible['Collectible']['showUserEditionSize'])
-								{ ?>
+								//$editionSize = $collectible['Collectible']['edition_size'];
+								//if($collectible['Collectible']['showUserEditionSize'])
+								//{ ?>
 
 							<dt>
 								<?php __('Edition Size');?>
@@ -89,18 +89,46 @@
 							<dd>
 								<?php echo $collectible['Collectible']['edition_size'];?>
 							</dd>
-							<?php }?>
-							<dt>
-								<?php __('Dimensions');?>
-							</dt>
-							<dd>
-								<?php echo $collectible['Collectible']['product_length'];?> x <?php echo $collectible['Collectible']['product_width'];?> x <?php echo $collectible['Collectible']['product_depth'];?>
-							</dd>
+							<?php //}?>
+							<?php if(!empty($collectible['Collectible']['product_weight'])) {
+								echo '<dt>';
+								echo __('Weight');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_weight'];
+								echo '</dd>';
+							}?>
+							<?php if(!empty($collectible['Collectible']['product_length'])) {
+								echo '<dt>';
+								echo __('Length');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_length'];
+								echo '</dd>';
+							}?>
+							<?php if(!empty($collectible['Collectible']['product_width'])) {
+								echo '<dt>';
+								echo __('Width');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_width'];
+								echo '</dd>';
+							}?>
+							
+							<?php if(!empty($collectible['Collectible']['product_depth'])) {
+								echo '<dt>';
+								echo __('Depth');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_depth'];
+								echo '</dd>';
+							}?>
 						</dl>
 					</div>
 				</div>
 			</div>
-	<a href='/collectibles/confirm' target='_parent' class='button'>Submit</a>
+			<?php echo $this->Form->create('Collectible' , array('url' => '/collectibles/confirm'));?>
+			<?php echo $this->Form->end(__('Submit', true));?>
 		</div>
 	</div>
 </div>
