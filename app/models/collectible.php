@@ -94,27 +94,28 @@
 	   )             
     );
     
-    function beforeSave() 
-    {
-      //Update Edition Size stuff
-      $editionSize = $this->data['Collectible']['edition_size'];
-      //TBD = -1
-      if ( (strcasecmp($editionSize, "TBD") == 0))
-      {
-        $this->data['Collectible']['edition_size'] = -1;
-      }
-      //None = -2
-      else if (strcasecmp($editionSize, "None") == 0)  
-      {
-        $this->data['Collectible']['edition_size'] = -2;
-      } 
-      //If it is unknown = -3
-      else if (trim($editionSize) == '')
-      {
-        $this->data['Collectible']['edition_size'] = -3;
-      }
+	function beforeSave() {
+		//Update Edition Size stuff
+      	$editionSize = $this->data['Collectible']['edition_size'];
+      	//TBD = -1
+      	if ( (strcasecmp($editionSize, "TBD") == 0)) {
+			$this->data['Collectible']['edition_size'] = -1;
+      	}
+      	//None = -2
+      	else if (strcasecmp($editionSize, "None") == 0) {
+        	$this->data['Collectible']['edition_size'] = -2;
+      	} 
+      	//If it is unknown = -3
+      	else if (trim($editionSize) == '') {
+        	$this->data['Collectible']['edition_size'] = -3;
+      	}
+		
+		// if(!isset($this->data['Collectible']['product_length'])) {
+			// product_length 	
+		// }	
+		
       
-      return true;
+      	return true;
     } 
     
     function doAfterFind($results) 
