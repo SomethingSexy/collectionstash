@@ -1,7 +1,14 @@
 <?php
 class Upload extends AppModel {
 	var $name = 'Upload';
-	var $actsAs = array('FileUpload.FileUpload');
+	//var $actsAs = array('FileUpload.FileUpload');
+	var $actsAs = array(
+        'FileUpload.FileUpload' => array(
+          'automatic' => false),
+         'Containable'
+	);
+	var $hasMany = array('Collectible');
+
 
 	// [Upload] => Array
 	//       (
