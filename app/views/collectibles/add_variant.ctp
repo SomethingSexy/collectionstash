@@ -1,32 +1,57 @@
 <?php echo $this->Html->script('variant-add',array('inline'=>false)); ?>
-<div class="component">
-	<div class="component-title">
-      <h2><?php echo $collectible['Collectible']['name']; ?><?php if($collectible['Collectible']['exclusive']){ __(' - Exclusive'); } ?> </h2>
-    </div>	
-  	<div class="collectible item">
-	    <div class="collectible image"><?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => '100')); ?>
-	      <div class="collectible image-fullsize hidden"><?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => 0)); ?></div>
-	      </div>
-	      <div class="collectible detail">
-	       <dl>
-	         <dt>Name: </dt><dd><?php echo $collectible['Collectible']['name']; ?><?php if($collectible['Collectible']['exclusive']){ __(' - Exclusive'); } ?> </dd>
-	         <?php
-	           if ($collectible['Collectible']['variant'])
-	           {
-	             echo '<dt>';
-	             __('Variant:');
-	             echo '</dt><dd>';
-	             __('Yes');
-	             echo '</dd>';
-	             
-	             
-	           }
-	         ?>        
-	         <dt>Manufacture: </dt><dd><a target="_blank" href="<?php echo $collectible['Manufacture']['url']; ?>"><?php echo $collectible['Manufacture']['title']; ?></a></dd>
-	         <dt>Type: </dt><dd><?php echo $collectible['Collectibletype']['name']; ?></dd>
-	       </dl>
-	    </div>
-  	</div>
+<div class="component" id="collectible-detail">
+	<div class="inside">
+		<div class="component-title">
+			<h2>
+			<?php	echo $collectible['Collectible']['name'];?><?php	if($collectible['Collectible']['exclusive']) { __(' - Exclusive');}?>
+			</h2>
+		</div>
+		<div class="component-view">
+			<div class="collectibles">
+				<div class="collectible item">
+					<div class="collectible image">
+						<?php	echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => '100'));?>
+						<div class="collectible image-fullsize hidden">
+							<?php	echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));?>
+						</div>
+					</div>
+					<div class="collectible detail">
+						<dl>
+							<dt>
+								Name:
+							</dt>
+							<dd>
+								<?php	echo $collectible['Collectible']['name'];?><?php	if($collectible['Collectible']['exclusive']) { __(' - Exclusive');
+								}?>
+							</dd>
+							<?php if($collectible['Collectible']['variant']) {
+									echo '<dt>';
+									__('Variant:');
+									echo '</dt><dd>';
+									__('Yes');
+									echo '</dd>';
+
+								}?>
+							<dt>
+								Manufacture:
+							</dt>
+							<dd>
+								<a target="_blank" href="<?php	echo $collectible['Manufacture']['url'];?>">
+								<?php	echo $collectible['Manufacture']['title'];?>
+								</a>
+							</dd>
+							<dt>
+								Type:
+							</dt>
+							<dd>
+								<?php	echo $collectible['Collectibletype']['name'];?>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="component" id="collectible-add-component">

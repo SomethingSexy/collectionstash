@@ -16,9 +16,11 @@ $( function() {
         'resizable': false,
         'buttons': {
             "Submit": function() {
-                DED.submit();
-                $( this ).dialog( "close" );
-                DED.reset();
+                var successful = DED.submit();
+                if (successful) {
+                	$( this ).dialog( "close" );
+               	 	DED.reset();                	
+                }
             },
             Cancel: function() {
                 $( this ).dialog( "close" );
@@ -123,6 +125,7 @@ var DED = function() {
 
         },
         submit : function () {
+        	var successful = true;
             //data[Attribute][0][description]
             //data[Attribute][0][attribute_id]
             /*
@@ -137,20 +140,27 @@ var DED = function() {
             var attributeId = $('#attributeLevel' + attributeLevel,'#add-attribute-dialog').val();
             var attributeName = $('#attributeLevel' + attributeLevel +' option[value="' + attributeId +'"]','#add-attribute-dialog').text();
             var description = $('#attributeDescription','#add-attribute-dialog').val();
-
-            var $li = $('<li></li>');
-            var $attributeName = $('<span></span').text(attributeName).addClass('attribute-name');
-            var $attributeDescription = $('<span></span>').text(description).addClass('attribute-description');
-            var $hiddenId = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][attribute_id]').val(attributeId);
-            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
-			var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
-
-
-            $li.append($attributeName).append($attributeDescription).append($hiddenId).append($hiddenDescription).append($hiddenName);
-
-            $('#add-attributes-list').children('ul').append($li);
-            
-            attributeNumber++;
+			if (attributeId === '-1') {
+				//<div class="error-message"></div>	
+				$('#attributeLevel' + attributeLevel,'#add-attribute-dialog').after('<div class="error-message">Please select a category.</div>');
+				successful = false;				
+			} else {
+				var $li = $('<li></li>');
+	            var $attributeName = $('<span></span').text(attributeName).addClass('attribute-name');
+	            var $attributeDescription = $('<span></span>').text(description).addClass('attribute-description');
+	            var $hiddenId = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][attribute_id]').val(attributeId);
+	            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
+				var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
+	
+	
+	            $li.append($attributeName).append($attributeDescription).append($hiddenId).append($hiddenDescription).append($hiddenName);
+	
+	            $('#add-attributes-list').children('ul').append($li);
+	            
+	            attributeNumber++;	
+			}
+			
+			return successful;
 
         },
         addAttributeList : function(selectId) {

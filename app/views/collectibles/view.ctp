@@ -7,6 +7,9 @@
 		</div>
 		<div class="component-view">
 			<div class="collectibles">
+				<div class="collectible links">
+					<?php echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));?>
+				</div>
 				<div class="collectible item">
 					<div class="collectible image">
 						<?php echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => '100'));?>
@@ -86,12 +89,39 @@
 								<?php echo $collectible['Collectible']['edition_size'];?>
 							</dd>
 							<?php }?>
-							<dt>
-								<?php __('Dimensions');?>
-							</dt>
-							<dd>
-								<?php echo $collectible['Collectible']['product_length'];?> x <?php echo $collectible['Collectible']['product_width'];?> x <?php echo $collectible['Collectible']['product_depth'];?>
-							</dd>
+							<?php if(!empty($collectible['Collectible']['product_weight'])) {
+								echo '<dt>';
+								echo __('Weight');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_weight'];
+								echo '</dd>';
+							}?>
+							<?php if(!empty($collectible['Collectible']['product_length'])) {
+								echo '<dt>';
+								echo __('Length');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_length'];
+								echo '</dd>';
+							}?>
+							<?php if(!empty($collectible['Collectible']['product_width'])) {
+								echo '<dt>';
+								echo __('Width');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_width'];
+								echo '</dd>';
+							}?>
+							
+							<?php if(!empty($collectible['Collectible']['product_depth'])) {
+								echo '<dt>';
+								echo __('Depth');
+								echo '</dt>';
+								echo '<dd>';	
+								echo $collectible['Collectible']['product_depth'];
+								echo '</dd>';
+							}?>
 						</dl>
 					</div>
 				</div>
@@ -107,7 +137,6 @@
 							<?php echo $collectibleCount;?>
 						</dd>
 					</dl>
-					<?php echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));?>
 				</div>
 			</div>
 		</div>

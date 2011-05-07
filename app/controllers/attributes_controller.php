@@ -29,8 +29,8 @@ class AttributesController extends AppController {
 
 	function add() {
 
-		// $data['Attribute']['parent_id'] =  3;
-		$data['Attribute']['name'] = 'Test';
+		$data['Attribute']['parent_id'] =  '3';
+		$data['Attribute']['name'] = 'Head';
 		$this -> Attribute -> save($data);
 		$this -> render(false);
 	}

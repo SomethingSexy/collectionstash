@@ -176,7 +176,9 @@ class AppController extends Controller {
 				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
 			} else {
 				array_push($conditions, array('Approval.state' => '0'));
-				array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
+				//Using like for now because switch to InnoDB
+				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
+				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
 				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
 			}
 		} else {

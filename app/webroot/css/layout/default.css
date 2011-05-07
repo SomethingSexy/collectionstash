@@ -262,7 +262,7 @@ a:active {
 
 /* base component view */
 .component {
-    margin: 20px 20px 0 0;
+    margin: 20px 0px 0 0;
    	background-color: #F8F8F8;
     -moz-border-radius: 10px;
 	border-radius: 10px;
@@ -460,6 +460,7 @@ a:active {
 
 #my-stashes-component {
 	width: 450px;
+	margin-right: 20px;
 }
 
 #collectible-detail {
@@ -476,6 +477,14 @@ a:active {
 #collectible-detail .component-view .collectibles .collectible {
 	border: none;
 
+}
+
+#collectible-detail .component-view .collectibles .links {
+	width: 100%;
+	text-align: left;
+}
+#collectible-detail .component-view .collectibles .links a {
+	font-size: 0.75em;
 }
 
 .collectibles .collectible.statistics {
