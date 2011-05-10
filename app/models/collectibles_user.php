@@ -2,9 +2,10 @@
 class CollectiblesUser extends AppModel {
 
 	var $name = 'CollectiblesUser';
-	var $belongsTo = array('Stash', 'Collectible', 'User', 'Condition', 'Merchant');
-	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'));
+	var $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User', 'Condition', 'Merchant');
 	var $actsAs = array('Revision', 'Containable');
+	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'));
+
 
 	function validateEditionSize($check) {
 		debug($this->data);	
@@ -17,9 +18,18 @@ class CollectiblesUser extends AppModel {
 		$showUserEditionSize = $collectible['Collectible']['showUserEditionSize'];
 		$editionSize = trim($check['edition_size']);
 
-		if($showUserEditionSize == TRUE) {
-			if(is_numeric($editionSize) === TRUE) {
-				return true;
+		//first make sure this collectible shows edition size
+		if($showUserEditionSize == true) {
+			//check first to make sure it is numeric
+			if(is_numeric($editionSize) === true) {
+				$userEditionSize = intval($editionSize);
+				$collectibleEditionSize = intval($collectible['Collectible']['edition_size']);
+				//if the user entered edition size is greater than the collectible edition size, fail it
+				if($userEditionSize > $collectibleEditionSize) {
+					return false;	
+				} else {
+					return true;	
+				}
 			} else {
 				return false;
 			}

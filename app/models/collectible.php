@@ -11,15 +11,14 @@
             'className' => 'License','foreignKey'=>'license_id'),
         'Series' => array(
              'className' => 'Series','foreignKey'=>'series_id'),
-        'Approval'
-    );    
+        'Approval',
+        'Scale');
 
-    var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible');    
+	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible');
 
-    var $actsAs = array('ExtendAssociations','Containable');
-    
-    var $validate = array (
-      'name' =>  array(
+	var $actsAs = array('ExtendAssociations','Containable');
+
+	var $validate = array ('name' =>  array(
            'rule' => '/^[\\w\\s-]+$/' ,
            'required' => true,
            'message' => 'Alphanumeric only'
@@ -265,13 +264,25 @@
       $count2 = $this->CollectiblesUser->find("all", array(
          'conditions'=>array('CollectiblesUser.collectible_id'=>$collectibleId),
          'contain' =>array('Stash'=>array('fields'=>'user_id')),
-         'group'=>array('stash_id'),
+         'group'=>array('stash_id')
 
-      ));
-      debug($count2); 
-    
-      return $count;
-    } 
+	));
+	debug($count2);
 
-  }
-?>
+	return $count;
+	}
+
+	/**
+	 * This method will return a list of collectible variants by
+	 * the given id.
+	 */
+	public function getCollectibleVariants($collectibleId) {
+		$collectibles = $this -> find('all', array(
+			'conditions'=>array(
+				'Collectible.variant_collectible_id' => $collectibleId	
+			)));
+			
+		return $collectibles;
+	}
+
+	}?>

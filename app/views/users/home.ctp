@@ -17,7 +17,7 @@
            <h3><a href="#"><?php echo $details['Stash']['name']; ?></a></h3>
            <div class="stash-list-details">
               <div><?php __('There are '); echo $details['Stash']['count']; __(' collectibles in this stash.'); ?></div>
-              <div class="stash-actions"><?php echo $html->link('View', array('controller' => 'collections',$details['Stash']['id'])); ?> | <?php echo $html->link('Add', array('controller' => 'collections','action'=>'addSearch', 'stashId' => $details['Stash']['id'],'initial'=>'yes')); ?> | <a class="edit-stash link">Edit</a> | <a class="remove-stash link">Remove</a></div>
+              <div class="stash-actions"><?php echo $html->link('View', array('controller' => 'stashs',$details['Stash']['id'])); ?> | <?php echo $html->link('Add', array('controller' => 'collections','action'=>'addSearch', 'stashId' => $details['Stash']['id'],'initial'=>'yes')); ?> | <a class="edit-stash link">Edit</a> | <a class="remove-stash link">Remove</a> | <?php echo $html->link('Stats', array('controller'=>'stashs', 'action' => 'stats',$details['Stash']['id'])); ?></div>
               <input type="hidden" class="stashId" value="<?php echo $details['Stash']['id']; ?>" />
            </div>
         <?php } ?>

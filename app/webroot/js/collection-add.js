@@ -66,6 +66,8 @@ function showRequest(formData, jqForm, options) {
 }
 
 function processJson(data) {
+	$('#dialogEditionSize').next('.error-message').remove();
+	$('#dialogCost').next('.error-message').remove();
     $('#add-collection-dialog').children('#ajax-loader').remove();
     // 'data' is the json object returned from the server
     var success = data.success.isSuccess;

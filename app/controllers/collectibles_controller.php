@@ -12,6 +12,9 @@ class CollectiblesController extends AppController {
 
 	var $actsAs = array('Searchable.Searchable');
 
+	/**
+	 * TODO as of 5/9/11 this method is currently not being used and I do not think works right now.
+	 */
 	function index() {
 		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 
@@ -47,9 +50,17 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect( array('action' => 'index'));
 		}
-		$this -> set('collectible', $this -> Collectible -> findById($id));
+		$collectible = $this -> Collectible -> findById($id);
+		$this -> set('collectible', $collectible);
 		$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
 		$this -> set('collectibleCount', $count);
+		
+		if(!$collectible['Collectible']['variant']){
+			$variants = $this -> Collectible -> getCollectibleVariants($id);
+			$this -> set('variants', $variants);			
+			
+		}
+
 	}
 
 	/**
@@ -253,6 +264,8 @@ class CollectiblesController extends AppController {
 			$this -> set(compact('manufactureName'));
 			$collectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($manufactureId);
 			$this -> set(compact('collectibletypes'));
+			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+			$this -> set(compact('scales'));
 
 		} else {
 			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
@@ -429,7 +442,7 @@ class CollectiblesController extends AppController {
 		} else {
 			debug($this -> Collectible -> validationErrors);
 			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			$this -> redirect( array('action' => 'review'));
+			//$this -> redirect( array('action' => 'review'));
 		}
 	}
 

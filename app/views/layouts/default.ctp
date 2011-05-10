@@ -101,7 +101,7 @@
 								<?php echo $html -> link('Submit Collectible', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
 							<li>
-								<?php echo $html -> link('Users', array('controller' => 'users', 'action' => 'index'));?>
+								<?php //echo $html -> link('Users', array('controller' => 'users', 'action' => 'index'));?>
 							</li>
 							<li>
 								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>

@@ -12,6 +12,12 @@
       <?php echo $this->Form->create('Collectible' , array('type' => 'file'));?>
         <fieldset>
           <ul class="form-fields">
+          	<li>
+              <div class="label-wrapper">
+                <label for="CollectibleName"><?php __('Name') ?></label>
+              </div>              
+              <?php echo $this->Form->input('name', array('div' =>  false, 'label' => false));?>  
+            </li> 
             <li>
               <div class="label-wrapper">
                 <label for="collectibleType"><?php __('What type of collectible is this?') ?></label>
@@ -20,10 +26,16 @@
             </li>
             <li>
               <div class="label-wrapper">
-                <label for="CollectibleName"><?php __('Name') ?></label>
-              </div>              
-              <?php echo $this->Form->input('name', array('div' =>  false, 'label' => false));?>  
-            </li> 
+                <label for="scale"><?php __('Scale') ?></label>
+              </div>
+             <?php echo $this->Form->input('scale_id', array('div' => false, 'label' => false));?>
+            </li>
+            <li>
+              <div class="label-wrapper">
+                <label for="scale"><?php __('Release Year') ?></label>
+              </div>
+              <?php echo $this->Form->year('release', 1900, date('Y'));?>
+            </li>            
             <li>
               <div class="label-wrapper">
                 <label for="CollectibleCode"><?php __('Product Code') ?></label>
@@ -82,7 +94,7 @@
             </li>
             <li>
               <div class="label-wrapper">
-                <label for="CollectibleUrl"><?php __('Url') ?></label>
+                <label for="CollectibleUrl"><?php __('URL') ?></label>
               </div> 
               <?php echo $this->Form->input('url', array('div' => false, 'label' => false));?>
             </li> 

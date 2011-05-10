@@ -23,75 +23,7 @@ class CollectionsController extends AppController
   }
 
 
-  //Use the id is the id of the stash we are viewing
-  function index($id = null)
-  {
-    //Add something in here that if they aren't logged in and they pass in an id, we return that users collection
-    //TODO figure out how to write custom pagniation
-    
-    $username = $this->getUsername();
-    if ($username)
-    {
-      if($id)
-      {
-        $this->setStashIdSession($id);
-      }
-      else
-      {
-        $id = $this->getStashIdSession();  
-      }
-      
-      
-      if($id)
-      {
-        $result = $this->User->findByUsername($username);    
-        $this->loadModel('Stash');     
-       
-       //TODO need to chec to see if $id is valid
-        $this->setStashIdSession($id);
-		/*
-		 * Right now, I am searching and paginating on a stash because
-		 * that is what I am viewing.  Really this should be done in the stashs
-		 * controller and not here since I am trying to get rid of this controller.
-		 * 
-		 * This will let me eventually have other types attached to one stash.
-		 */
- 		$this->paginate = array('conditions'=>array('id'=>$id),
-                'limit' => 20,
-                'contain'=>array('CollectiblesUser' => array (
-                'Collectible' => array ( 'Manufacture','Collectibletype','Upload'))) 
-        );   
-        
-//        $this->paginate = array('conditions'=>array('CollectiblesUser.stash_id'=>$id),
-//                'limit' => 20,
-//                'contain'=>array(
-//                'Collectible' => array ( 'Manufacture','Collectibletype','Upload')) 
-//        );     
-        
-        // $data = $this->User->CollectiblesUser->find("all", array(
-        //         'conditions'=>array('CollectiblesUser.stash_id'=>$id),
-        //         //'limit' => 1,
-        //         'contain'=>array(
-        //         'Collectible' => array ( 'Manufacture','Collectibletype','Upload'))
-        //         
-        //     ));  
-        $collectibleCount = $this->User->Stash->getNumberOfCollectiblesInStash($id);
-        $this->set('collectibleCount', $collectibleCount );
-        $data = $this->paginate('Stash');
-		debug($data[0]['CollectiblesUser']);
-        $this->set('collectibles',$data[0]['CollectiblesUser']);
-      }
-      else
-      {
-       $this->redirect(array('controller'=>'users','action' => 'login'), null, true);
-      }
-    } 
-    else 
-    {
-      $this->redirect(array('controller'=>'users','action' => 'login'), null, true);
-    }
-  }  
-
+  
   public function viewCollectible($id=null)
   {
     if (!$id) 
@@ -228,7 +160,7 @@ class CollectionsController extends AppController
           
         }
 
-        $this->data['CollectiblesUsersStash']['data_added'] = date("Y-m-d H:i:s", time());
+       // $this->data['CollectiblesUsersStash']['data_added'] = date("Y-m-d H:i:s", time());
        // $this->data['CollectiblesUsersStash']['collectibles_user_id'] = '1'; 
         //$addData['CollectiblesStash']['stash_id'] = $this->params['named']['stashId'];        
         $this->data['CollectiblesUser']['user_id'] = $this->getUserId();
@@ -313,20 +245,16 @@ class CollectionsController extends AppController
 			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 	}
-  
-  private function setStashIdSession($id)
-  {
-    if($id)
-    {
-      $this->Session->write('stashId',$id);
-    }
-  }
-  
-  private function getStashIdSession()
-  {
-    return $this->Session->read('stashId');   
-  }
 
+	private function setStashIdSession($id) {
+		if($id) {
+			$this->Session->write('stashId',$id);
+		}
+	}
+
+	private function getStashIdSession() {
+		return $this->Session->read('stashId');
+	}
 }
 
 

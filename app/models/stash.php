@@ -43,16 +43,7 @@ class Stash extends AppModel {
 		return $valid;
 	}
 
-	var $validate = array(
-		'name' => array(
-			'validValues' => array(
-				'rule' => '/^[\\w\\s-]+$/', 
-				'message' => 'Alphanumeric only'),
-			'length' => array (
-				'rule' => array('maxLength', 50),
-				'message' => 'Max length of 50.'),			
-			)
-	);
+	var $validate = array('name' => array('validValues' => array('rule' => '/^[\\w\\s-]+$/', 'message' => 'Alphanumeric only'), 'length' => array('rule' => array('maxLength', 50), 'message' => 'Max length of 50.'), ));
 
 	public function getStashDetails($userId) {
 		$this -> Behaviors -> attach('Containable');
@@ -71,6 +62,40 @@ class Stash extends AppModel {
 	public function getNumberOfCollectiblesInStash($stashId) {
 		$count = $this -> CollectiblesUser -> find("count", array('conditions' => array('CollectiblesUser.stash_id' => $stashId)));
 		return $count;
+	}
+	/**
+	 * This function will return a bunch of stats around a stash
+	 * [StashStats] => Array (
+	 * 		[count]
+	 * 		[total_cost]
+	 * 
+	 * )
+	 */
+	public function getStashStats($stashId) {
+		/*
+		 * TODO: At some point should probably have a count stored in the database, along with stash totals.
+		 */
+		//setup return object
+		$stats = array();
+		$stats['StashStats'] = array();
+		$stashCollectibles = $this -> CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.stash_id' => $stashId), 'contain'=> false));
+		debug($stashCollectibles);
+		$stashCount = count($stashCollectibles);	
+		$stashTotal = 0;
+		foreach($stashCollectibles as $key => $userCollectible) {
+			$floatCost = (float)$userCollectible['CollectiblesUser']['cost'];
+			$formatCost = number_format($floatCost, 2, '.', '');
+			debug($formatCost); 
+			$stashTotal += $formatCost;	
+		}	
+		
+		debug($stashTotal);
+		$formatTotal = number_format($stashTotal, 2, '.', '');
+		$stats['StashStats']['cost_total'] = $formatTotal;
+		$stats['StashStats']['count'] = $stashCount;
+		debug($stats);
+		
+		return $stats;
 	}
 
 }

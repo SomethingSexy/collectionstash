@@ -142,3 +142,46 @@
 		</div>
 	</div>
 </div>
+
+<?php if (!empty($variants)) { ?>
+	<div class="component" id="collectibles-list-component">
+	  <div class="inside" >
+	     <div class="component-title">
+	      <h2><?php __('Variants');?></h2>
+	    </div>
+	    <div class="component-view">
+	      <div class="collectibles view">
+	        <?php  
+	        foreach ($variants as $variant):
+	        ?>
+	        	<div class="collectible item">
+	          	<div class="collectible image"><?php echo $fileUpload->image($variant['Upload'][0]['name'], array('width' => '100')); ?>
+	              <div class="collectible image-fullsize hidden"><?php echo $fileUpload->image($variant['Upload'][0]['name'], array('width' => 0)); ?></div>
+	              </div>
+	          	  <div class="collectible detail">
+	          	   <dl>
+	          	     <dt>Name: </dt><dd><?php echo $variant['Collectible']['name']; ?><?php if($variant['Collectible']['exclusive']){ __(' - Exclusive'); } ?> </dd>
+	          	     <?php
+	          	       if ($variant['Collectible']['variant'])
+	                   {
+	                     echo '<dt>';
+	                     __('Variant:');
+	                     echo '</dt><dd>';
+	                     __('Yes');
+	                     echo '</dd>';
+	                     
+	                     
+	                   }
+	                 ?>  	     
+	          	     <dt>Manufacture: </dt><dd><a target="_blank" href="<?php echo $variant['Manufacture']['url']; ?>"><?php echo $variant['Manufacture']['title']; ?></a></dd>
+	          	     <dt>Type: </dt><dd><?php echo $variant['Collectibletype']['name']; ?></dd>
+	               </dl>
+	            	</div>
+	        	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
+	          </div>
+	        <?php endforeach; ?>      
+	      </div>
+	    </div>
+	  </div>
+	</div>	
+<?php } ?>
