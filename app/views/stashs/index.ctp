@@ -5,7 +5,7 @@
       <h2><?php __('My Stash');?></h2>
     </div>
     <div class="component-info">
-      <div>You have <?php echo $collectibleCount ?> collectibles in this stash. <?php echo $html->link('Add to Stash', array('action'=>'addSearch', 'stashId' => $this->Session->read('stashId'))); ?></div> 
+      <div>You have <?php echo $collectibleCount ?> collectibles in this stash. <?php echo $html->link('Add to Stash', array('controller'=>'collections', 'action'=>'addSearch', 'stashId' => $this->Session->read('stashId'))); ?></div> 
     </div>
     <div class="component-view">
       <div class="collectibles view">
