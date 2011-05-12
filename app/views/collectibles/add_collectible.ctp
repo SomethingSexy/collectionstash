@@ -6,7 +6,7 @@
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
-      <div>Fill out the following information to add the collectible for <?php echo $manufactureName; ?>.</div> 
+      <div>Fill out the following information to add the collectible.</div> 
     </div>
     <div class="component-view">
       <?php echo $this->Form->create('Collectible' , array('type' => 'file'));?>
@@ -14,16 +14,38 @@
           <ul class="form-fields">
           	<li>
               <div class="label-wrapper">
-                <label for="CollectibleName"><?php __('Name') ?></label>
-              </div>              
-              <?php echo $this->Form->input('name', array('div' =>  false, 'label' => false));?>  
-            </li> 
+                <label for=""><?php __('Manufacture') ?></label>
+              </div>
+              <?php echo $this->Form->input('manufacture_id', array('div' => false, 'label' => false));?>
+            </li>
+            <li>
+              <div class="label-wrapper">
+                <label for=""><?php __('Brand/License') ?></label>
+              </div>
+              <?php echo $this->Form->input('license_id', array('div' => false, 'label' => false));?>
+            </li>
+             <?php if(empty($series)){
+             	echo '<li class="hidden">';	
+             } else {
+             	echo '<li>';
+             }?>
+              <div class="label-wrapper">
+                <label for=""><?php __('Category') ?></label>
+              </div>
+              <?php echo $this->Form->input('series_id', array('div' => false, 'label' => false));?>
+            </li>
             <li>
               <div class="label-wrapper">
                 <label for="collectibleType"><?php __('What type of collectible is this?') ?></label>
               </div>
-              <?php  echo $this->Form->select('Collectible.collectibletype_id',$collectibletypes,null,array('id'=>'collectibleType','label' => false,'empty' => false));  ?>
+              <?php  echo $this->Form->select('Collectible.collectibletype_id',$collectibletypes,null,array('label' => false,'empty' => false));  ?>
             </li>
+          	<li>
+              <div class="label-wrapper">
+                <label for="CollectibleName"><?php __('Name') ?></label>
+              </div>              
+              <?php echo $this->Form->input('name', array('div' =>  false, 'label' => false));?>  
+            </li>             
             <li>
               <div class="label-wrapper">
                 <label for="scale"><?php __('Scale') ?></label>

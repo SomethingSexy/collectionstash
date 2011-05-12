@@ -1,29 +1,183 @@
-$(function(){
+var collectibleAdd = function() {
 
-  if( $('#collectibleType').val()=== '1')
-  {
-    $('#widthWrapper').hide();
-    $('#depthWrapper').hide();    
-  }
-  else
-  {
-    $('#widthWrapper').show();
-    $('#depthWrapper').show();    
-  }
+	function handleLicenseChange(element){
+		var licenseid = $(element).val();
+		var manid = $('#CollectibleManufactureId').val();
+		$.ajax({
+			type: "POST",
+			dataType:  'json',
+			url: '/licenses/getLicenseData.json',
+			data: 'data[license_id]=' + licenseid + '&data[manufacture_id]=' + manid ,
+			beforeSend : function(jqXHR, settings) {
+				//$.blockUI();	
+			},
+			success: function(data, textStatus, XMLHttpRequest) {
+				var success = data.success.isSuccess;
 
-  $('#collectibleType').change(function(){
-      var value = $(this).val();
-      
-      if(value == '1')
-      {
-         $('#widthWrapper').hide();
-         $('#depthWrapper').hide();
-      }
-      else if(value == '2')
-      {
-         $('#widthWrapper').show();
-         $('#depthWrapper').show();
-      }
-  });
+				if(success) {
+					if(data.data.series.length !== 0) {
+						var output = [];	
+						$.each(data.data.series, function(key, value) {
+							output.push('<option value="'+ key +'">'+ value +'</option>');	
+						});
+						
+						$('#CollectibleSeriesId')
+							.find('option')
+							.remove()
+							.end()
+							.append(output.join(''));
 
+							
+						$('#CollectibleSeriesId')
+							.parent('li')
+							.show();	
+							//.append('<option value="whatever">text</option>')
+							//.val('whatever');
+
+					} else {
+						$('#CollectibleSeriesId')
+							.find('option')
+							.remove();
+						$('#CollectibleSeriesId')
+							.parent('li')
+							.hide();	
+					}		
+				} else {
+
+				}
+			},
+			complete : function(jqXHR, textStatus){
+				//$.unblockUI();	
+			}
+		});
+	}
+
+
+	function handleManufactureChange(element) {
+		var manid = $(element).val();
+
+		$.ajax({
+			type: "POST",
+			dataType:  'json',
+			url: '/manufactures/getManufactureData.json',
+			data: 'data[id]=' + manid ,
+			beforeSend : function(jqXHR, settings) {
+				//$.blockUI();	
+			},
+			success: function(data, textStatus, XMLHttpRequest) {
+				var success = data.success.isSuccess;
+
+				if(success) {
+					if(data.data.licenses.length !== 0) {
+						var output = [];	
+						$.each(data.data.licenses, function(key, value) {
+							output.push('<option value="'+ key +'">'+ value +'</option>');	
+						});
+						
+						$('#CollectibleLicenseId')
+							.find('option')
+							.remove()
+							.end()
+							.append(output.join(''));
+
+							
+						$('#CollectibleLicenseId')
+							.parent('li')
+							.show();	
+							//.append('<option value="whatever">text</option>')
+							//.val('whatever');
+
+					} else {
+						$('#CollectibleLicenseId')
+							.find('option')
+							.remove();
+						$('#CollectibleLicenseId')
+							.parent('li')
+							.hide();	
+					}
+					
+					if(data.data.types.length !== 0) {
+						var output = [];	
+						$.each(data.data.types, function(key, value) {
+							output.push('<option value="'+ key +'">'+ value +'</option>');	
+						});
+						
+						$('#CollectibleCollectibletypeId')
+							.find('option')
+							.remove()
+							.end()
+							.append(output.join(''));
+
+							
+						$('#CollectibleCollectibletypeId')
+							.parent('li')
+							.show();	
+							//.append('<option value="whatever">text</option>')
+							//.val('whatever');
+
+					} else {
+						$('#CollectibleCollectibletypeId')
+							.find('option')
+							.remove();
+						$('#CollectibleCollectibletypeId')
+							.parent('li')
+							.hide();	
+					}	
+					if(data.data.series.length !== 0) {
+						var output = [];	
+						$.each(data.data.series, function(key, value) {
+							output.push('<option value="'+ key +'">'+ value +'</option>');	
+						});
+						
+						$('#CollectibleSeriesId')
+							.find('option')
+							.remove()
+							.end()
+							.append(output.join(''));
+
+							
+						$('#CollectibleSeriesId')
+							.parent('li')
+							.show();	
+							//.append('<option value="whatever">text</option>')
+							//.val('whatever');
+
+					} else {
+						$('#CollectibleSeriesId')
+							.find('option')
+							.remove();
+						$('#CollectibleSeriesId')
+							.parent('li')
+							.hide();	
+					}					
+					
+				} else {
+
+				}
+			},
+			complete : function(jqXHR, textStatus){
+				//$.unblockUI();	
+			}
+		});
+
+		//CollectibleLicenseId
+		//CollectibleCollectibletypeId
+	}
+
+	return {
+		init : function() {
+			$('#CollectibleManufactureId').change( function() {
+				handleManufactureChange(this)
+			});
+			$('#CollectibleLicenseId').change( function() {
+				handleLicenseChange(this)
+			});
+		},
+		update : function() {
+
+		}
+	};
+}();
+$( function() {
+	collectibleAdd.init();
 });

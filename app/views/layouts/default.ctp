@@ -20,6 +20,7 @@
 
 	echo $this -> Html -> script('jquery-1.4.2');
 	echo $this -> Html -> script('jquery-ui-1.8.5');
+	echo $this -> Html -> script('jquery-plugins');
 	echo $scripts_for_layout;
 	?>
 	<script>
