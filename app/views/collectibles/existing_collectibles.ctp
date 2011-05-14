@@ -12,9 +12,12 @@
 				<?php __('Oh no!  It looks like the collectible you are trying to add might have been added before.  Please review the existing collectibles below.  If it doesn\'t exist then click the big button.') ?>
 			</div>
 			<div>
-				<form action="/collectibles/review" method="post">
-					<input type="submit" id="submitAnyway" value="Submit Anyway!" />
-				</form>
+				<?php echo $this->Form->create(null, array('url'=>'/collectibles/review'));?>
+				
+				<?php echo $this->Form->end(array('label'=>__('Submit Anyway!', true), 'value'=> __('Submit Anyway!', true), 'name'=>'submit'));?>
+				<?php echo $this->Form->create(null, array('url'=>'/collectibles/cancel'));?>
+				
+				<?php echo $this->Form->end(array('label'=>__('Cancel', true), 'value'=> __('Cancel', true), 'name'=>'submit'));?>
 				
 			</div>
 		</div>

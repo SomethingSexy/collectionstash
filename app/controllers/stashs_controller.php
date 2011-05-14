@@ -4,7 +4,7 @@ App::import('Sanitize');
 class StashsController extends AppController {
 	var $name = 'Stashs';
 
-	var $helpers = array('Html', 'Form', 'Ajax');
+	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload');
 
 	var $components = array('RequestHandler');
 
@@ -44,7 +44,7 @@ class StashsController extends AppController {
 
 			if($id) {
 				$result = $this -> Stash -> User -> findByUsername($username);
-				//$this -> loadModel('Stash');
+				$this -> loadModel('Stash');
 
 				//TODO need to chec to see if $id is valid
 				$this -> setStashIdSession($id);

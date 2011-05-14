@@ -1,5 +1,5 @@
 <?php
-//probably should rename this to Stash or something
+//TODO Convert most of this over to Stash or User controller...this is not needed anymore
 //pr Stashes....then the index or default shows Stashes detail...the /stashes/stash/shows the stash info for that one
 //need to handle looking at other peoples stashes that are not your own
 // /username should route to stashes/detail
@@ -12,7 +12,8 @@ class CollectionsController extends AppController
 
   var $components = array('RequestHandler');
   
-  var $uses = array('User');
+  //This is set to null becaue we do not have a backing model
+  var $uses = null;  
 
   public function beforeFilter()
   {
@@ -47,6 +48,7 @@ class CollectionsController extends AppController
   function stash($username=null)
   {
       $id = 1;
+	  $this -> loadModel('User');
      $result = $this->User->findByUsername($username);           
      //TODO need to chec to see if $id is valid
       $this->setStashIdSession($id);
@@ -88,10 +90,11 @@ class CollectionsController extends AppController
   // 
   function gallery()
   {
- //Add something in here that if they aren't logged in and they pass in an id, we return that users collection
+
     $username = $this->getUsername();
     if ($username)
     {
+    	$this -> loadModel('User');
        $joinRecords =  $this->User->getAllCollectiblesByUser($username);
            debug($joinRecords);
         $this->set('collection',$joinRecords);
@@ -103,22 +106,22 @@ class CollectionsController extends AppController
   }
   
   //TODO make sure the one we are removing is for this user
- function remove($id =null) {
+	function remove($id =null) {
 		if(!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect( array('action' => 'index'));
 		} else {
 			$username = $this -> getUsername();
 			if($username) {
-				if($this -> User -> Stash -> CollectiblesStash -> delete($id, false)) {
+				$this -> loadModel('User');
+				if($this -> User -> CollectiblesUser -> delete($id, false)) {
 					$this -> Session -> setFlash(__('Collectible was successfully removed.', true), null, null, 'success');
-					$this -> redirect( array('action' => 'index'), null, true);
+					//WHERE DO I GO BACK TO?
+					$this -> redirect( array('controller'=> 'stashs', 'action' => 'index'), null, true);
 				}
-
 			} else {
 				$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
 			}
-
 		}
 	}  
 
@@ -175,7 +178,7 @@ class CollectionsController extends AppController
 		$this->data['TempCollectible'] = $collectible['Collectible'];
         
         debug($this->data);
-        
+        $this -> loadModel('User');
         if($this->User->CollectiblesUser->saveAll($this->data))
         {
            //$this->redirect(array('action' => 'index'), "null", true);
@@ -199,15 +202,16 @@ class CollectionsController extends AppController
   
   function editCollectible($id =null) {
 		$this->checkLogIn();
+		$this -> loadModel('User');
 		debug($this->data);			
 		if(!$id) {
 			if(!empty($this -> data)) {
-				//$this->loadModel('CollectiblesUser');
+				
 				$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
 				if($this->User->CollectiblesUser->save($this -> data, true, $fieldList))
 				{
 					$this -> Session -> setFlash(__('Collectible was successfully updated.', true), null, null, 'success');
-					$this -> redirect( array('action' => 'index'), null, true);	
+					$this -> redirect( array('controller'=> 'stashs', 'action' => 'index'), null, true);	
 				}
 				else
 				{

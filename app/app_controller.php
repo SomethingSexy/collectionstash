@@ -76,9 +76,9 @@ class AppController extends Controller {
 	}
 
 	/**
- 	* This method will check if the user is logged in, if they are not it will
- 	* auto redirect them.
- 	*/
+	 * This method will check if the user is logged in, if they are not it will
+	 * auto redirect them.
+	 */
 	public function checkLogIn() {
 		if(!$this -> isLoggedIn()) {
 			$this -> handleNotLoggedIn();

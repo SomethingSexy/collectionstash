@@ -16,7 +16,9 @@ class UsersController extends AppController {
             $results = $this -> User -> getUser($this -> data['User']['username']);
             if($results) {
                 if($results['User']['status'] == 0) {
-                    if($results['User']['password'] == md5($this -> data['User']['password'])) {
+                    if($results['User']['password'] == Security::hash($this -> data['User']['password'])) {
+                    	$this -> User -> id = $results['User']['id'];
+						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
                         $this -> log($results);
                         $this -> Session -> write('user', $results);
 						$this->log('User '.$results['id'].' successfully logged in at '. date("Y-m-d H:i:s", time()) , 'info');	
@@ -114,7 +116,7 @@ class UsersController extends AppController {
 		if(Configure::read('Settings.registration')) {
 			if(!empty($this -> data)) {
 				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-				$this -> data['User']['password'] = md5($this -> data['User']['new_password']);
+				$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
 				$this -> data['User']['admin'] = 0;
 				$this -> data['User']['status'] = 1;
 				debug($this -> data);

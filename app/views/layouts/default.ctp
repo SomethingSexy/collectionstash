@@ -139,8 +139,9 @@
 			<?php echo $content_for_layout;?>
 		</div>
 		<div id="footer">
-			<span class="links">About | Contact | Donate | Found a bug? </span>
-			<span class="copyright">Collection Stash - Copyright 2010</span>
+			<span class="version">Version - Alpha</span>
+			<!--<span class="links">About | Contact | Donate | Found a bug? </span> -->
+			<span class="copyright">Collection Stash - Copyright 2011</span>
 		</div>
 		<?php /**echo $this->element('sql_dump');
 			 echo $js->writeBuffer();

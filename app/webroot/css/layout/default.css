@@ -221,6 +221,11 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
     -moz-border-radius: 15px;
 	border-radius: 15px;
 }
+#footer .version {
+    padding-left: 20px;
+    float: left;
+}
+
 #footer .links {
     padding-left: 20px;
     float: left;

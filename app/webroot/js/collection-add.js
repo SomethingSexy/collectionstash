@@ -49,12 +49,15 @@ $( function() {
 
         //remove any errors that might be in the dialog before opening.
         $( "#add-collection-form > fieldset > ul.form-fields > li" ).children().remove('.error-message');
+        $('#add-collection-dialog').children('#ajax-loader').remove();
+        $('#collectibles-list-component > .inside').remove('.component-message');
+        $('#add-collection-dialog').children().show();
         //reset height
         $( "#add-collection-dialog" ).dialog({ height: 425 });
 
         $( "#add-collection-dialog" ).dialog('open');
 
-        $('#collectibles-list-component > .inside').remove('.component-message');
+        
 
     });
 });

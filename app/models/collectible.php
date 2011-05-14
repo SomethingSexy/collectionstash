@@ -16,7 +16,7 @@
 
 	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible');
 
-	var $actsAs = array('ExtendAssociations','Containable');
+	var $actsAs = array('Revision', 'ExtendAssociations','Containable');
 
 	var $validate = array ('name' =>  array(
            'rule' => '/^[\\w\\s-]+$/' ,
@@ -33,6 +33,14 @@
            'required' => true,
            'message' => 'Must be a valid type.'
        ),
+       'license_id' => array(
+	   		'rule' => array('validateLicenseId'),
+	   		'message' => 'Brand/License must be valid for Manufacture.'
+	   ),
+	   'series_id' => array(
+	   		'rule' => array('validateSeriesId'),
+	   		'message' => 'Must be a valid category.'
+	   ),
       'description' => array(
            'minLength' => array(
               'rule' => 'notEmpty',
@@ -69,10 +77,10 @@
              'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
              'message' => 'Must be a valid width.'             
            ),
-           'isRequired'=> array (
-              'rule' => array('validateProductWidthDepthId'),
-              'message' => 'Width is required.'           
-           )
+           // 'isRequired'=> array (
+              // 'rule' => array('validateProductWidthDepthId'),
+              // 'message' => 'Width is required.'           
+           // )
      
        ),
        'product_depth' => array (
@@ -81,10 +89,10 @@
              'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
              'message' => 'Must be a valid depth.'             
            ),
-           'isRequired'=> array (
-              'rule' => array('validateProductWidthDepthId'),
-              'message' => 'Depth is required.'           
-           )
+           // 'isRequired'=> array (
+              // 'rule' => array('validateProductWidthDepthId'),
+              // 'message' => 'Depth is required.'           
+           // )
        ),
        'url' => array (
 	   		'rule' => 'url',
@@ -96,54 +104,51 @@
 	function beforeSave() {
 		//Update Edition Size stuff
       	$editionSize = $this->data['Collectible']['edition_size'];
+		$limited = $this->data['Collectible']['edition_size'];
       	//TBD = -1
-      	if ( (strcasecmp($editionSize, "TBD") == 0)) {
-			$this->data['Collectible']['edition_size'] = -1;
-      	}
-      	//None = -2
-      	else if (strcasecmp($editionSize, "None") == 0) {
-        	$this->data['Collectible']['edition_size'] = -2;
-      	} 
-      	//If it is unknown = -3
-      	else if (trim($editionSize) == '') {
-        	$this->data['Collectible']['edition_size'] = -3;
+      	// if ( (strcasecmp($editionSize, "TBD") == 0)) {
+			// $this->data['Collectible']['edition_size'] = -1;
+      	// }
+      	// //None = -2
+      	// else if (strcasecmp($editionSize, "None") == 0) {
+        	// $this->data['Collectible']['edition_size'] = -2;
+      	// } 
+      	// //If it is unknown = -3
+      	// else if (trim($editionSize) == '') {
+        	// $this->data['Collectible']['edition_size'] = -3;
+      	// }
+      	
+      	if(trim($editionSize) != '' && !$limited) {
+      		$editionSize = '';	
       	}
 		
-		// if(!isset($this->data['Collectible']['product_length'])) {
-			// product_length 	
-		// }	
-		
+		//For whatever reason, cakephp year the put another array under the field
+		if(isset($this->data['Collectible']['release']['year'])) {
+			$year = $this->data['Collectible']['release']['year'];
+			$this->data['Collectible']['release'] = $year;
+		}
+
+		//Check to see if these are set, if they are not, default them to false
+		if(!isset($this->data['Collectible']['exclusive'])) {
+			$this->data['Collectible']['exclusive'] = 0;
+		}
+		if(!isset($this->data['Collectible']['variant'])) {
+			$this->data['Collectible']['variant'] = 0;
+		}	
       
       	return true;
     } 
     
-    function doAfterFind($results) 
-    {
-    	
-        if(isset($results['edition_size']))
-         {
-          $showEditionSize = TRUE;
-          if ($results['edition_size'] == -1) 
-          {
-            $results['edition_size'] = "TBD";
-            $showEditionSize = FALSE;
-          }
-          else if ($results['edition_size'] == -2)
-          {
-            $results['edition_size'] = "None";
-            $showEditionSize =  FALSE;
-          }
-          else if ($results['edition_size'] == -3)
-          {
-            $results['edition_size'] = "Unknown";
-            $showEditionSize = FALSE;
-          }
-			//debug($showEditionSize);
-          	$results['showUserEditionSize'] = $showEditionSize;
+    function doAfterFind($results) {
+		$showEditionSize = false;	
+		if(isset($results['edition_size'])) {
+          	if (!empty($results['edition_size'])) {
+            	$showEditionSize = true;
+          	} 
         }
-   
-      debug($results);
-      return $results;
+		$results['showUserEditionSize'] = $showEditionSize;
+      	debug($results);
+      	return $results;
     }
     
     function validateProductWidthDepthId($check)
@@ -161,8 +166,7 @@
     }
     
     
-    function validateEditionSize($check)
-    {
+    function validateEditionSize($check) {
         $isValid = false;
         $isInt = false;
         $editionSize = trim($check['edition_size']);
@@ -192,27 +196,69 @@
             } 
         // Not a number
         }
-        else if ( (strcasecmp($editionSize, "TBD") == 0) || (strcasecmp($editionSize, "None") == 0) )
-        {
-          debug($test='istbdnone');
-           return TRUE;  
-        }
+        // else if ( (strcasecmp($editionSize, "TBD") == 0) || (strcasecmp($editionSize, "None") == 0) )
+        // {
+          // debug($test='istbdnone');
+           // return TRUE;  
+        // }
 
         return false;
     }
     
-    function validateManufactureId($check)
-    {
+    function validateManufactureId($check) {
         $result = $this->Manufacture->find('count', array('id'=> $check));   
         return $result > 0;    
     }
+	
+    function validateLicenseId($check) {
+        $result = $this->Manufacture -> LicensesManufacture-> find('first', 
+        	array('conditions' => array(
+        			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
+					'LicensesManufacture.license_id' => $check),
+				'contain' => false));   
+        debug($result);
+		if($result) {
+			return true;
+			
+		} else {
+			return false;
+		}
+    }	
     
-    function validateCollectibleType($check)
-    {
-        $result = $this->Collectibletype->find('count', array('id'=> $check)); 
-        return $result > 0;       
+    function validateCollectibleType($check) {
+ 		$result = $this -> Manufacture -> CollectibletypesManufacture-> find('first', 
+        	array('conditions' => array(
+        			'CollectibletypesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
+					'CollectibletypesManufacture.collectibletype_id' => $check),
+				'contain' => false));   
+        debug($result);
+		if($result) {
+			return true;
+			
+		} else {
+			return false;
+		}        	
     }
-    
+
+	/*
+	 * TODO This will have to get updated when we allow more than one series 
+	 */
+    function validateSeriesId($check) {
+ 		$result = $this->Manufacture -> LicensesManufacture-> find('first', 
+        	array('conditions' => array(
+        			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
+					'LicensesManufacture.license_id' => $this->data['Collectible']['license_id']),
+				'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id'=>$check)))));    			
+			
+        debug($result);
+		if(!empty($result['LicensesManufacturesSeries'])) {
+			return true;
+			
+		} else {
+			return false;
+		}        	
+    }
+	
     public function getCollectibleNameById($collectibleId)
     {
       //$this->Behaviors->attach('Containable');

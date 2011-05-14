@@ -41,7 +41,7 @@ class CollectiblesUser extends AppModel {
 	}
 
 	public function getCollectibleDetail($id) {
-		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Collectible' => array('Manufacture', 'Collectibletype', 'Upload', 'License'))));
+		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Collectible' => array('Manufacture', 'Collectibletype', 'Upload', 'License', 'Scale'))));
 	}
 
 	public function getListOfUsersWho($collectibleId) {

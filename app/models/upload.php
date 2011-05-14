@@ -27,7 +27,7 @@ class Upload extends AppModel {
 
 	public function isValidUpload($uploadData) {
 		$validUpload = false;
-
+		debug($uploadData);
 		if(count($uploadData['Upload']) == 1) {
 			if($uploadData['Upload']['0']['file']['name'] != '') {
 				$validUpload = true;

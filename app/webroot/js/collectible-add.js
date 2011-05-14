@@ -172,6 +172,14 @@ var collectibleAdd = function() {
 			$('#CollectibleLicenseId').change( function() {
 				handleLicenseChange(this)
 			});
+			
+			$('#CollectibleLimited').change( function(){
+				if($(this).is(':checked')) {
+					$('#CollectibleEditionSize').parent('li').show();	
+				} else {
+					$('#CollectibleEditionSize').val('').parent('li').hide();	
+				}
+			});
 		},
 		update : function() {
 

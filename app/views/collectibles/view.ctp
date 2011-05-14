@@ -20,24 +20,6 @@
 					<div class="collectible detail">
 						<dl>
 							<dt>
-								<?php __('Name');?>
-							</dt>
-							<dd>
-								<?php echo $collectible['Collectible']['name'];?><?php
-								if($collectible['Collectible']['exclusive']) { __(' - Exclusive');
-								}
- 								?>
-							</dd>
-							<?php
-							if($collectible['Collectible']['variant']) {
-								echo '<dt>';
-								__('Variant:');
-								echo '</dt><dd>';
-								__('Yes');
-								echo '</dd>';
-							}
-							?>
-							<dt>
 								<?php __('Manufacture');?>
 							</dt>
 							<dd>
@@ -46,16 +28,47 @@
 								</a>
 							</dd>
 							<dt>
+								<?php __('License');?>
+							</dt>
+							<dd>
+								<?php echo $collectible['License']['name'];?>
+							</dd>
+							<dt>
 								<?php __('Type');?>
 							</dt>
 							<dd>
 								<?php echo $collectible['Collectibletype']['name'];?>
 							</dd>
+
 							<dt>
-								<?php __('License');?>
+								<?php __('Name');?>
 							</dt>
 							<dd>
-								<?php echo $collectible['License']['name'];?>
+								<?php echo $collectible['Collectible']['name'];?><?php
+								if(isset($collectible['Collectible']['exclusive']) && $collectible['Collectible']['exclusive']) { __(' - Exclusive');
+								}
+ 								?>
+							</dd>
+							<?php
+							if(isset($collectible['Collectible']['variant']) && $collectible['Collectible']['variant']) {
+								echo '<dt>';
+								__('Variant:');
+								echo '</dt><dd>';
+								__('Yes');
+								echo '</dd>';
+							}
+							?>
+							<dt>
+								<?php __('Scale');?>
+							</dt>
+							<dd>
+								<?php echo $collectible['Scale']['scale'];?>
+							</dd>
+							<dt>
+								<?php __('Release Year');?>
+							</dt>
+							<dd>
+								<?php echo $collectible['Collectible']['release'];?>
 							</dd>
 							<dt>
 								<?php __('Description');?>
@@ -65,10 +78,18 @@
 							</dd>
 							<?php if(!empty($collectible['Collectible']['code'])){ ?>
 							<dt>
-								<?php __('Product Id');?>
+								<?php __('Product code');?>
 							</dt>
 							<dd>
 								<?php echo $collectible['Collectible']['code'];?>
+							</dd>
+							<?php }?>
+							<?php if(!empty($collectible['Collectible']['upc'])){ ?>
+							<dt>
+								<?php __('Product UPC');?>
+							</dt>
+							<dd>
+								<?php echo $collectible['Collectible']['upc'];?>
 							</dd>
 							<?php }?>
 							<dt>
@@ -76,6 +97,20 @@
 							</dt>
 							<dd>
 								<?php echo $collectible['Collectible']['msrp'];?>
+							</dd>
+							<?php
+								//$editionSize = $collectible['Collectible']['edition_size'];
+								//if($collectible['Collectible']['showUserEditionSize'])
+								//{ ?>
+							<dt>
+								<?php __('Limited Edition');?>
+							</dt>
+							<dd>
+								<?php if($collectible['Collectible']['limited']) {
+									echo 'Yes';
+								} else {
+									echo 'No';
+								} ?>
 							</dd>
 							<?php
 								$editionSize = $collectible['Collectible']['edition_size'];

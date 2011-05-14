@@ -9,7 +9,7 @@ class AdminCollectiblesController extends AppController
   
   var $components = array('Email');
   
-  var $uses = array();
+  //var $uses = array();
   
   //TODO this needs to be updated to use the new approval stuff
   public function pending()
