@@ -523,6 +523,15 @@ a:active {
 }
 
 
+
+
+#home-components .random-collectibles {
+	height: 400px;
+	width: 400px;
+	
+}
+
+
 .container2 {
     margin:20px 20px 0;
    /* padding:0 0 20px;*/

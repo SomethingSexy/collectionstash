@@ -4,25 +4,22 @@
 <head>
 	<?php echo $this -> Html -> charset();?>
 	<title>Collection Stash</title>
-	<?php
-	echo $this -> Html -> meta('icon');
-	echo $this -> Html -> css('layout/index');
-	echo $this -> Html -> css('layout/fluid_bdr');
-	echo $this -> Html -> css('layout/col_3_ml');
-	echo $this -> Html -> css('layout/default');
-	echo $this -> Html -> css('jquery.ui.core');
-	echo $this -> Html -> css('jquery.ui.theme');
-	echo $this -> Html -> css('jquery.ui.dialog');
-	echo $this -> Html -> css('jquery.ui.tabs');
-	echo $this -> Html -> css('redmond');
-	echo $this -> Html -> css('cake.generic');
-	echo $this -> Html -> css('layout/non_msie');
-
-	echo $this -> Html -> script('jquery-1.4.2');
-	echo $this -> Html -> script('jquery-ui-1.8.5');
-	echo $this -> Html -> script('jquery-plugins');
-	echo $scripts_for_layout;
-	?>
+	<?php echo $this -> Html -> meta('icon'); ?>
+	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/fluid_bdr.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/col_3_ml.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/default.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.core.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.theme.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.dialog.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.tabs.css" />
+	<link rel="stylesheet" type="text/css" href="/css/redmond.css" />
+	<link rel="stylesheet" type="text/css" href="/css/cake.generic.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/non_msie.css" />
+	<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>
+	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
+	<?php echo $scripts_for_layout; ?>
 	<script>
 		$( function() {
 
