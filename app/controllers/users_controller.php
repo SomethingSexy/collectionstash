@@ -21,7 +21,7 @@ class UsersController extends AppController {
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
                         $this -> log($results);
                         $this -> Session -> write('user', $results);
-						$this->log('User '.$results['id'].' successfully logged in at '. date("Y-m-d H:i:s", time()) , 'info');	
+						$this->log('User '.$results['User']['id'].' successfully logged in at '. date("Y-m-d H:i:s", time()) , 'info');	
                         $this -> redirect( array('action' => 'home'), null, true);
                     } else {
                         $this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');

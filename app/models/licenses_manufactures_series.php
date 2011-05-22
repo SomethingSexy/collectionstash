@@ -5,6 +5,7 @@ class LicensesManufacturesSeries extends AppModel {
 	var $actsAs = array('Containable');
 
 	public function getSeriesByLicenseManufactureId($licenseManufactureId) {
+		debug($licenseManufactureId);	
 		$series = $this -> find('all', array('conditions' => array('LicensesManufacturesSeries.licenses_manufacture_id' => $licenseManufactureId), 'fields' => array('Series.name', 'Series.id')));
 		debug($series);
 		$seriesList = array();
@@ -15,5 +16,7 @@ class LicensesManufacturesSeries extends AppModel {
 
 		return $seriesList;
 	}
+	
+
 }
 ?>

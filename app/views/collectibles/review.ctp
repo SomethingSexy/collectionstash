@@ -160,7 +160,7 @@
 			</div>
 			<?php echo $this->Form->create('Collectible' , array('url' => '/collectibles/confirm'));?>
 			<?php echo $this->Form->end(__('Submit', true));?>
-			<?php echo $html->link('Add', array('action'=>'addCollectible', 'edit' => true)); ?>
+			<a href="<?php echo $referer ?>/edit:1">Edit</a>
 		</div>
 	</div>
 </div>

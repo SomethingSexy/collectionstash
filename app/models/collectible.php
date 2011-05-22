@@ -206,7 +206,7 @@
     }
     
     function validateManufactureId($check) {
-        $result = $this->Manufacture->find('count', array('id'=> $check));   
+        $result = $this->Manufacture->find('count', array('id'=> $check['manufacture_id']));   
         return $result > 0;    
     }
 	
@@ -214,7 +214,7 @@
         $result = $this->Manufacture -> LicensesManufacture-> find('first', 
         	array('conditions' => array(
         			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
-					'LicensesManufacture.license_id' => $check),
+					'LicensesManufacture.license_id' => $check['license_id']),
 				'contain' => false));   
         debug($result);
 		if($result) {
@@ -229,7 +229,7 @@
  		$result = $this -> Manufacture -> CollectibletypesManufacture-> find('first', 
         	array('conditions' => array(
         			'CollectibletypesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
-					'CollectibletypesManufacture.collectibletype_id' => $check),
+					'CollectibletypesManufacture.collectibletype_id' => $check['collectibletype_id']),
 				'contain' => false));   
         debug($result);
 		if($result) {
@@ -244,19 +244,26 @@
 	 * TODO This will have to get updated when we allow more than one series 
 	 */
     function validateSeriesId($check) {
- 		$result = $this->Manufacture -> LicensesManufacture-> find('first', 
-        	array('conditions' => array(
-        			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
-					'LicensesManufacture.license_id' => $this->data['Collectible']['license_id']),
-				'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id'=>$check)))));    			
+    	debug($check);
+    	//Is not required but if it is entered make sure it is valid
+    	if(isset($check['series_id'])) {
+	 		$result = $this->Manufacture -> LicensesManufacture-> find('first', 
+	        	array('conditions' => array(
+	        			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],
+						'LicensesManufacture.license_id' => $this->data['Collectible']['license_id']),
+					'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id'=>$check['series_id'])))));    			
+				
+	        debug($result);
+			if(!empty($result['LicensesManufacturesSeries'])) {
+				return true;
+			} else {
+				return false;
+			}       			
+    	} else {
+    		return true;
 			
-        debug($result);
-		if(!empty($result['LicensesManufacturesSeries'])) {
-			return true;
-			
-		} else {
-			return false;
-		}        	
+    	}
+     	
     }
 	
     public function getCollectibleNameById($collectibleId)

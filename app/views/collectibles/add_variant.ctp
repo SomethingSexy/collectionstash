@@ -59,6 +59,7 @@
     <div class="component-title">
       <h2><?php __('Add Collectible Variant');?></h2>
     </div>
+    <?php echo $this -> element('flash');?>
     <div class="component-info">
       <div><?php __('Fill out the information below to add a variant for the following collectible.');?></div> 
     </div>
@@ -90,12 +91,16 @@
             </div>
             <?php echo $this->Form->input('url', array('div' => false, 'label' => false )); ?>
           </li>
-          <li>
-            <div class="label-wrapper">
-               <label for="Upload0File"><?php __('Image') ?></label>
-            </div>
-            <?php echo $this->Form->input('Upload.0.file', array('div' => false, 'type' => 'file', 'label'=> false));?>
-          </li>
+			<?php if(!isset($edit)) { ?>
+				<li>
+					<div class="label-wrapper">
+						<label for="Upload0File">
+							<?php __('Image') ?>
+						</label>
+					</div>
+					<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>
+				</li>
+			<?php }?>
           <li>
           	 <div class="label-wrapper">
                <label for=""><?php __('Attributes') ?></label>
@@ -132,6 +137,11 @@
             <div><a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a></div>
           </li>
         </ul>
+        <?php if(!isset($edit)) { ?>
+			<input type="hidden" name="data[Edit]" value="false" />
+		<?php } else {?>
+			<input type="hidden" name="data[Edit]" value="true" />
+		<?php } ?>
         </fieldset>
       <?php echo $this->Form->end(__('Submit', true));?>    
     </div>

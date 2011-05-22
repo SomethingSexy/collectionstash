@@ -113,7 +113,7 @@
 							</li>
 							<?php if(Configure::read('Settings.registration')){
 								echo '<li>';
-								echo $html -> link('Register', array('action' => 'register'));
+								echo $html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
 								echo '</li>';
 								} 
 							}?>

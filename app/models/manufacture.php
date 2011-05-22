@@ -19,23 +19,17 @@ class Manufacture extends AppModel {
 	public function getManufactureData($manufactureId) {
 		$returnData = array();
 		
-		$manufactures = $this -> find('list');
+		$manufactures = $this -> find('list', array('order'=>array('Manufacture.title'=>'ASC')));
 		//Grab all licenses for this manufacture
 		$licenses = $this -> LicensesManufacture -> getLicensesByManufactureId($manufactureId);
 		reset($licenses);
 		$this -> set(compact('licenses'));
-		$firstLic = key($licenses);
-		debug($firstLic);
-
-		$license = $this -> LicensesManufacture -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId, 'LicensesManufacture.license_id' => $firstLic)));
-		//Grab all series for this license...should I just return all for all licenses and send that down the request?
-		$series = $this -> LicensesManufacture -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
 
 		//grab all collectible types for this manufacture
 		$collectibletypes = $this -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($manufactureId);
 		$returnData['manufactures'] = $manufactures;
 		$returnData['licenses'] = $licenses;
-		$returnData['series'] = $series;
+		// $returnData['series'] = $series;
 		$returnData['collectibletypes'] = $collectibletypes;
 
 		return $returnData;
@@ -43,7 +37,7 @@ class Manufacture extends AppModel {
 
 	public function getManufactureListData() {
 		$returnData = array();
-		$manufactures = $this -> find('list');
+		$manufactures = $this -> find('list', array('order'=>array('Manufacture.title'=>'ASC')));
 		reset($manufactures);
 		//Safety - sets pointer to top of array
 		$firstMan = key($manufactures);

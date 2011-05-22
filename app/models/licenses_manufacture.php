@@ -4,8 +4,9 @@ class LicensesManufacture extends AppModel {
 	var $belongsTo = array('Manufacture', 'License');
 	var $actsAs = array('Containable');
 	var $hasMany = array('LicensesManufacturesSeries');
+	
 	public function getLicensesByManufactureId($manufactureId) {
-		$licenses = $this -> find('all', array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id')));
+		$licenses = $this -> find('all', array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id'), 'order'=>array('License.name'=>'ASC')));
 		$licenseList = array();
 
 		foreach($licenses as $license) {
@@ -13,6 +14,16 @@ class LicensesManufacture extends AppModel {
 		}
 
 		return $licenseList;
+	}
+	
+	public function getSeries($manufactureId, $licenseId) {
+		$license = $this -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId, 'LicensesManufacture.license_id' => $licenseId), 'order'=>array('License.name'=>'ASC')));
+		debug($license);
+		//Grab all series for this license...should I just return all for all licenses and send that down the request?
+		$series = $this -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
+		debug($series);		
+		
+		return $series;
 	}
 }
 

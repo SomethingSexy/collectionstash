@@ -173,17 +173,17 @@ class AppController extends Controller {
 			$this -> Session -> write('Collectibles.filters', $filters);
 			if($search == '') {
 				array_push($conditions, array('Approval.state' => '0'));
-				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
+				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 25);
 			} else {
 				array_push($conditions, array('Approval.state' => '0'));
 				//Using like for now because switch to InnoDB
 				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
 				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
-				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
+				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 25);
 			}
 		} else {
 			array_push($conditions, array('Approval.state' => '0'));
-			$this -> paginate = array("contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'conditions' => array($conditions), 'limit' => 1);
+			$this -> paginate = array("contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'conditions' => array($conditions), 'limit' => 25);
 		}
 
 		$data = $this -> paginate('Collectible');

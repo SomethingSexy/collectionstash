@@ -205,7 +205,7 @@ class CollectiblesController extends AppController {
 				}
 
 				if($validCollectible) {
-					
+
 					//set pending to 2...this really needs to check if user is admin first TODO
 					$newCollectible['Approval']['state'] = 2;
 					$userId = $this -> getUserId();
@@ -252,7 +252,13 @@ class CollectiblesController extends AppController {
 					$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($newCollectible['Collectible']['manufacture_id']);
 					$this -> set('manufactures', $manufactureData['manufactures']);
 					$this -> set('licenses', $manufactureData['licenses']);
-					$this -> set('series', $manufactureData['series']);
+
+					if(isset($newCollectible['Collectible']['series_id'])) {
+						$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+						$this -> set('series', $series);
+					}
+
+					// $this -> set('series', $manufactureData['series']);
 					$this -> set('collectibletypes', $manufactureData['collectibletypes']);
 					$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 					$this -> set(compact('scales'));
@@ -265,8 +271,13 @@ class CollectiblesController extends AppController {
 				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
 				$this -> set('manufactures', $manufactureData['manufactures']);
 				$this -> set('licenses', $manufactureData['licenses']);
-				$this -> set('series', $manufactureData['series']);
 				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+
+				if(isset($newCollectible['Collectible']['series_id'])) {
+					$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+					$this -> set('series', $series);
+				}
+
 				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 				$this -> set(compact('scales'));
 
@@ -281,8 +292,12 @@ class CollectiblesController extends AppController {
 				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureListData();
 				$this -> set('manufactures', $manufactureData['manufactures']);
 				$this -> set('licenses', $manufactureData['licenses']);
-				$this -> set('series', $manufactureData['series']);
 				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+
+				if(isset($newCollectible['Collectible']['series_id'])) {
+					$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+					$this -> set('series', $series);
+				}
 
 				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 				$this -> set(compact('scales'));
@@ -312,95 +327,125 @@ class CollectiblesController extends AppController {
 
 	function addVariant($id =null) {
 		$this -> checkLogIn();
-
-		if($id) {
+		//If edit do not do this again
+		if($id && empty($this -> params['named']['edit'])) {
+			
 			$this -> set('collectible', $this -> Collectible -> read(null, $id));
 			$this -> Session -> write('variant-add-id', $id);
-		} else if(!empty($this -> data)) {
+		} 
+		
+		if(!empty($this -> data)) {
 			debug($this -> data);
-			// $pendingState = '2';
-			// if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
-			// $pendingState = '0';
-			// }
+			$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible'], array('encode' => false));
 
-			if($this -> Collectible -> Upload -> isValidUpload($this -> data)) {
-				$this -> data['Approval']['state'] = 2;
-				$userId = $this -> getUserId();
-				//set the id of the user who is adding this collectible
-				$this -> data['Approval']['user_id'] = $userId;
-				// -> data['Approval']['date_added'] = date("Y-m-d H:i:s", time());
+			$validCollectible = true;
+			//set default to false
+			$editMode = false;
 
-				//Grab the id of the collectible this is a variant for
-				$id = $this -> Session -> read('variant-add-id');
-				//read that collecrible
-				$collectible = $this -> Collectible -> read(null, $id);
-				//why?
-				$this -> set('collectible', $collectible);
+			//First check if we are in edit mode
+			if($this -> data['Edit'] === true) {
+				$editMode = true;
+			}
 
-				$saveData = array();
+			$this -> data['Approval']['state'] = 2;
+			$userId = $this -> getUserId();
+			//set the id of the user who is adding this collectible
+			$this -> data['Approval']['user_id'] = $userId;
+			// -> data['Approval']['date_added'] = date("Y-m-d H:i:s", time());
 
-				$saveData['Approval'] = $this -> data['Approval'];
-				//Set the base of that collectible, we will override with what the user
-				//entered.
-				$saveData['Collectible'] = $collectible['Collectible'];
-				$saveData['Upload'] = $this -> data['Upload'];
-				$saveData['Collectible']['id'] = '';
-				$saveData['Collectible']['approval_id'] = '';
+			//Grab the id of the collectible this is a variant for
+			$id = $this -> Session -> read('variant-add-id');
+			//read that collecrible
+			$collectible = $this -> Collectible -> read(null, $id);
+			//do this for display purposes
+			$this -> set('collectible', $collectible);
 
-				if(isset($this -> data['AttributesCollectible'])) {
-					$saveData['AttributesCollectible'] = $this -> data['AttributesCollectible'];
-				}
+			$newCollectible = array();
 
-				$saveData['Collectible']['exclusive'] = $this -> data['Collectible']['exclusive'];
-				$saveData['Collectible']['edition_size'] = $this -> data['Collectible']['edition_size'];
-				$saveData['Collectible']['url'] = $this -> data['Collectible']['url'];
-				$saveData['Collectible']['variant'] = '1';
-				//we are saving what collectible this variant came from.
-				$saveData['Collectible']['variant_collectible_id'] = $id;
-				//Null thee out so they will update, probably should go in the model
-				unset($saveData['Collectible']['created']);
-				unset($saveData['Collectible']['modified']);
+			$newCollectible['Approval'] = $this -> data['Approval'];
+			//Set the base of that collectible, we will override with what the user
+			//entered.
+			$newCollectible['Collectible'] = $collectible['Collectible'];
+			$newCollectible['Upload'] = $this -> data['Upload'];
+			$newCollectible['Collectible']['id'] = '';
+			$newCollectible['Collectible']['approval_id'] = '';
 
-				debug($saveData);
+			if(isset($this -> data['AttributesCollectible'])) {
+				$newCollectible['AttributesCollectible'] = $this -> data['AttributesCollectible'];
+			}
 
-				$this -> Collectible -> set($saveData);
+			//These are the things that variant can override
+			$newCollectible['Collectible']['name'] = $this -> data['Collectible']['name'];
+			$newCollectible['Collectible']['exclusive'] = $this -> data['Collectible']['exclusive'];
+			$newCollectible['Collectible']['edition_size'] = $this -> data['Collectible']['edition_size'];
+			$newCollectible['Collectible']['url'] = $this -> data['Collectible']['url'];
+			$newCollectible['Collectible']['variant'] = '1';
+			//we are saving what collectible this variant came from.
+			$newCollectible['Collectible']['variant_collectible_id'] = $id;
+			//Null thee out so they will update, probably should go in the model
+			unset($newCollectible['Collectible']['created']);
+			unset($newCollectible['Collectible']['modified']);
 
-				if($this -> Collectible -> validates()) {
-					if($this -> Collectible -> Upload -> saveAll($saveData['Upload'], array('validate' => false))) {
-						$uploadId = $this -> Collectible -> Upload -> id;
-						$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
-						$saveData['Upload'] = $upload['Upload'];
-						$this -> Session -> write('preSaveCollectible', $saveData);
+			debug($newCollectible);
 
-						$this -> redirect( array('action' => 'review'));
-
+			$this -> Collectible -> set($newCollectible);
+			if($this -> Collectible -> validates()) {
+				if($editMode || $this -> Session -> check('uploadId')) {
+					if($this -> Session -> check('uploadId')) {
+						$previouslySubmitedCollectible = $this -> Session -> read('preSaveCollectible');
+						$newCollectible['Upload'] = $previouslySubmitedCollectible['Upload'];
+					}
+				} else {
+					//If we are NOT in edit mode, check to see if the photo is valid
+					if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
+						if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'], array('validate' => false))) {
+							//We have to save the upload right away because of how these work.  So lets save it
+							//Then lets grab the id of the upload and return the data of the uploaded one and store
+							//it in our saving object.  This will allow us to display the details to the user in the
+							//review and confirm process.
+							$uploadId = $this -> Collectible -> Upload -> id;
+							$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
+							debug($upload);
+							$newCollectible['Upload'] = $upload['Upload'];
+							$this -> Session -> write('uploadId', $uploadId);
+						} else {
+							debug($this -> Collectible -> Upload -> invalidFields());
+							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
+							$validCollectible = false;
+						}
+					} else {
+						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						debug($this -> Collectible -> Upload -> invalidFields());
+						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						$validCollectible = false;
 					}
 				}
 
 			} else {
-				$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-				debug($this -> Collectible -> Upload -> invalidFields());
+				$this -> log('User ' . $userId . ' failed at adding collectible variant ', 'error');
+				$validCollectible = false;
+				debug($this -> Collectible -> invalidFields());
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+
 			}
 
-			// //Doing this for now because I think the way I am doing uploads is a bit different so error handling doesn't seem to be working
-			// //or I am not doing this correct.  For now it is forcing Upload to show errors first.  I could validate upload, then run
-			// // validation on collectible so I get both errors at once.
-			// if($this -> Collectible -> Upload -> isValidUpload($saveData)) {
-			// $this -> Collectible -> create();
-			// if($this -> Collectible -> saveAll($saveData)) {
-			// $collectible = $this -> Collectible -> findById($this -> Collectible -> id);
-			// $approvalId = $collectible['Collectible']['approval_id'];
-			// $this -> Session -> write('lastSaveApprovalId', $approvalId);
-			// $this -> Session -> write('collectible', $collectible);
-			// $this -> set($this -> data);
-			// $this -> redirect( array('action' => 'review'));
-			// }
-			// } else {
-			// $this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-			// debug($this -> Collectible -> Upload -> invalidFields());
-			// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			// }
+			if($validCollectible) {
+				$this -> Session -> write('preSaveCollectible', $newCollectible);
+				$this -> redirect( array('action' => 'review'));
+			} else {
+
+			}
+
+		} else if(!empty($this -> params['named']['edit'])) {
+			$collectible = $this -> Session -> read('preSaveCollectible');
+			$this -> data = $collectible;
+			//TODO this is way redundant and should not need to be done again...instead pull from session
+			$id = $this -> Session -> read('variant-add-id');
+			//read that collecrible
+			$collectible = $this -> Collectible -> read(null, $id);
+			//do this for display purposes
+			$this -> set('collectible', $collectible);
+			$this -> set('edit', true);
 		}
 	}
 
@@ -408,7 +453,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		//remove this cause we do not need it
 		$collectible = $this -> Session -> read('preSaveCollectible');
-
+		$this -> set('referer', $this -> referer());
 		if(!is_null($collectible)) {
 			//Lets retrieve some data for display purposes
 			//TODO this may be redundant...should we save off later?
@@ -469,7 +514,6 @@ class CollectiblesController extends AppController {
 				debug($this -> Collectible -> validationErrors);
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 				$this -> redirect( array('action' => 'review'));
-				//$this -> redirect( array('action' => 'review'));
 			}
 		} else {
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
