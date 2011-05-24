@@ -25,7 +25,7 @@ var stash = function() {
 		if(success) {
 			//Remove any messages first before we add a new one.
 			$('#my-stashes-component > .inside > .component-title').next('.component-message').remove();
-			$('#my-stashes-component > .inside > .component-title').after('<div class="component-message"><span>' + data.success.message +'</span></div>');
+			$('#my-stashes-component > .inside > .component-title').after('<div class="component-message success"><span>' + data.success.message +'</span></div>');
 			$( "#edit-stash-dialog" ).dialog('close');
 			stash.update();
 		} else {
@@ -37,7 +37,7 @@ var stash = function() {
 			} else {
 				if(data.errors[0]['totalAllowed']) {
 					$('#my-stashes-component > .inside > .component-title').next('.component-message').remove();
-					$('#my-stashes-component > .inside > .component-title').after('<div class="component-message"><span>' + data.errors[0]['totalAllowed'] +'</span></div>')
+					$('#my-stashes-component > .inside > .component-title').after('<div class="component-message error"><span>' + data.errors[0]['totalAllowed'] +'</span></div>')
 					$( "#edit-stash-dialog" ).dialog('close');
 				} else {
 					if(data.errors[0]['name']) {
@@ -61,7 +61,7 @@ var stash = function() {
 		if(success) {
 			//Remove any messages first before we add a new one.
 			$('#my-stashes-component > .inside > .component-title').next('.component-message').remove();
-			$('#my-stashes-component > .inside > .component-title').after('<div class="component-message"><span>' + data.success.message +'</span></div>');
+			$('#my-stashes-component > .inside > .component-title').after('<div class="component-message success"><span>' + data.success.message +'</span></div>');
 			$( "#add-stash-dialog" ).dialog('close');
 			stash.update();
 		} else {
@@ -73,7 +73,7 @@ var stash = function() {
 			} else {
 				if(data.errors[0]['totalAllowed']) {
 					$('#my-stashes-component > .inside > .component-title').next('.component-message').remove();
-					$('#my-stashes-component > .inside > .component-title').after('<div class="component-message"><span>' + data.errors[0]['totalAllowed'] +'</span></div>')
+					$('#my-stashes-component > .inside > .component-title').after('<div class="component-message error"><span>' + data.errors[0]['totalAllowed'] +'</span></div>')
 					$( "#add-stash-dialog" ).dialog('close');
 				} else {
 					if(data.errors[0]['name']) {

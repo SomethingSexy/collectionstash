@@ -250,6 +250,10 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
     padding: 5px;
 
 }
+a {
+    font-weight: bold;
+    text-decoration: underline;
+}
 a:link,
 a.link {
 	cursor: pointer;
@@ -665,6 +669,31 @@ input[type=radio] {
 div.radio label {
     margin: 0 0 6px 20px;
 }
+
+input[type=submit],
+div.actions ul li a,
+td.actions a {
+	font-weight:normal;
+	padding: 4px 8px;
+	background:#e6e49f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
+	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
+	color:#333;
+	border:1px solid #aaac62;
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	border-radius:8px;
+	text-decoration:none;
+	text-shadow: #fff 0px 1px 0px;
+	min-width: 0;
+}
+input[type=submit]:hover,
+div.actions ul li a:hover,
+td.actions a:hover {
+	background: #f0f09a;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
+}
+
 input[type=submit] {
     display: inline;
     font-size: 110%;

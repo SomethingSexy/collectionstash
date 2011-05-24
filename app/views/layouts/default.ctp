@@ -1,5 +1,3 @@
-<?php
-?>
 <!DOCTYPE html>
 <head>
 	<?php echo $this -> Html -> charset();?>
@@ -14,7 +12,6 @@
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.dialog.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.tabs.css" />
 	<link rel="stylesheet" type="text/css" href="/css/redmond.css" />
-	<link rel="stylesheet" type="text/css" href="/css/cake.generic.css" />
 	<link rel="stylesheet" type="text/css" href="/css/layout/non_msie.css" />
 	<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>

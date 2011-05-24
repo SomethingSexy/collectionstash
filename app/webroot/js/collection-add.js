@@ -50,7 +50,7 @@ $( function() {
         //remove any errors that might be in the dialog before opening.
         $( "#add-collection-form > fieldset > ul.form-fields > li" ).children().remove('.error-message');
         $('#add-collection-dialog').children('#ajax-loader').remove();
-        $('#collectibles-list-component > .inside').remove('.component-message');
+        $('#collectibles-list-component > .inside').children('.component-message').remove();
         $('#add-collection-dialog').children().show();
         //reset height
         $( "#add-collection-dialog" ).dialog({ height: 425 });
@@ -76,7 +76,7 @@ function processJson(data) {
     var success = data.success.isSuccess;
     //TODO need to handle here grabbing the success message
     if(success) {
-        $('#collectibles-list-component > .inside > .component-title').after('<div class="component-message"><span>' + data.success.message +'</span></div>')
+        $('#collectibles-list-component > .inside > .component-title').after('<div class="component-message success"><span>' + data.success.message +'</span></div>')
         $( "#add-collection-dialog" ).dialog('close');
     } else {
 		if(data.isTimeOut) {
