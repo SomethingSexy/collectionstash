@@ -8,7 +8,21 @@ class UsersController extends AppController {
     var $components = array('Email');
     
     function login() {
+    	$message = null;	
+		$messageType = null;	
+    	if($this->Session->check('Message.error')) {
+    		$message = $this -> Session ->read('Message.error');
+			$message = $message['message'];
+			$messageType  = 'error';
+    	} else if($this->Session->check('Message.success')) {
+    		$message = $this->Session-> read('Message.success');
+			$message = $message['message'];
+			$messageType  = 'success';
+    	}
+		
         $this -> Session -> destroy();
+		debug($message);
+		$this -> Session -> setFlash($message, null, null, $messageType);
         $success = true;
         if($this -> data) {
             $this -> data = Sanitize::clean($this -> data, array('encode' => false));
@@ -186,14 +200,43 @@ class UsersController extends AppController {
                     // Let the user know they can now log in!
                     $this -> Session -> setFlash(__('Your account has been activated, please log in below', true), null, null, 'success');
                     $this -> redirect('login');
+                } else {
+                	$this -> set ('userId', $user_id);
+                	$this -> render('activationExpired');
                 }
             } else {
             	$this -> Session -> setFlash(__('Your account has already been activated!', true), null, null, 'error');
                 $this -> redirect('login');
             }
+        } else {
+        	$this -> Session -> setFlash(__('That user does not exist, please register.', true), null, null, 'error');
+        	$this -> redirect('login');
         }
         // Activation failed, render ‘/views/user/activate.ctp’ which should tell the user.
     }
+
+	function resendActivation($user_id = null){
+		if($user_id) {
+			$this -> User -> id = $user_id;
+    		if($this -> User -> exists()) {
+        		if($this -> User -> field('status') != 0) {
+        			$emailResult = $this -> __sendActivationEmail($this -> User -> id);
+					if ($emailResult) {
+						//do nothing
+					} else {
+						//Do what?	
+					}	
+				} else {
+					$this -> Session -> setFlash(__('Your account has already been activated!', true), null, null, 'error');
+					$this -> redirect('login');
+				}
+			} else {
+				$this -> redirect('login');
+			}
+		} else {
+			$this -> redirect('login');
+		}	
+	}
 
 	/**
      * Send out an activation email to the user.id specified by $user_id

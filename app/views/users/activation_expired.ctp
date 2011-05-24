@@ -7,7 +7,8 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<p><?php __('Your registration was successful!  You will receive an email shortly about how to confirm your registration.'); ?></p>
+			<p><?php __('Your activation code has expired or is invalid.  If you wish to receive a new activation code, please click the link below.'); ?></p>
+			<p><a class="link" href="/users/resendActivation/<?php echo $userId; ?>">Resend activation code</a></p>
 		</div>
 	</div>
 </div>

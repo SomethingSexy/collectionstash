@@ -2,12 +2,12 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Registration');?>
+			<?php __('Activation');?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<p><?php __('Your registration was successful!  You will receive an email shortly about how to confirm your registration.'); ?></p>
+			<p><?php __('You will receive an email shortly about how activate your account.'); ?></p>
 		</div>
 	</div>
 </div>

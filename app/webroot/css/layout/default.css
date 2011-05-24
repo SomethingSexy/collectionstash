@@ -321,7 +321,7 @@ a:active {
 .component .component-message.success  {
 	color: #fff;
 	font-weight: bold;
-	background: #c73e14;
+	background: green;
 }
 
 .component .component-message span {
@@ -522,15 +522,19 @@ a:active {
   margin: 0;
 }
 
-
-
-
 #home-components .random-collectibles {
 	height: 400px;
 	width: 400px;
 	
 }
 
+#registration-component {
+	width: 100%;
+}
+
+#registration-component .inside .component-view p {
+	text-align: center;
+}
 
 .container2 {
     margin:20px 20px 0;
