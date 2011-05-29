@@ -8,7 +8,13 @@
     		<div class="component-view">
     			<div id="images">
 					<?php foreach ($randomCollectibles as $collectible):?>	
-		 				<?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => 200)); ?>
+						<?php 
+							if (!empty($collectible['Upload'])) { ?>
+								<?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => 200)); ?>
+							<?php } else { ?>
+								<img src="/img/silhouette.gif"/>
+						<?php } ?>
+		 				
 		 			<?php endforeach; ?>     				
     			</div>
 

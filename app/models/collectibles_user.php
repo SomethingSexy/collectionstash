@@ -6,6 +6,12 @@ class CollectiblesUser extends AppModel {
 	var $actsAs = array('Revision', 'Containable');
 	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'));
 
+	function beforeSave() {
+		$this->data['CollectiblesUser']['cost'] = str_replace('$','', $this->data['CollectiblesUser']['cost']);
+		$this->data['CollectiblesUser']['cost'] = str_replace(',','', $this->data['CollectiblesUser']['cost']);
+      
+      	return true;
+    } 
 
 	function validateEditionSize($check) {
 		debug($this->data);	

@@ -74,7 +74,12 @@
 								<?php __('Description');?>
 							</dt>
 							<dd>
-								<?php echo $collectible['Collectible']['description'];?>
+								<?php 
+									$data = str_replace('\n', "\n", $collectible['Collectible']['description']);
+            						$data = str_replace('\r', "\r", $data);
+									
+									echo nl2br($data);
+								//echo nl2br(htmlspecialchars($collectible['Collectible']['description'],ENT_QUOTES,'UTF-8',false)); ?>
 							</dd>
 							<?php if(!empty($collectible['Collectible']['code'])){ ?>
 							<dt>
@@ -96,7 +101,7 @@
 								<?php __('Original Retail Price');?>
 							</dt>
 							<dd>
-								<?php echo $collectible['Collectible']['msrp'];?>
+								<?php echo '$'.$collectible['Collectible']['msrp'];?>
 							</dd>
 							<?php
 								//$editionSize = $collectible['Collectible']['edition_size'];
@@ -127,7 +132,7 @@
 								echo __('Weight');
 								echo '</dt>';
 								echo '<dd>';	
-								echo $collectible['Collectible']['product_weight'];
+								echo $collectible['Collectible']['product_weight'].' lbs';
 								echo '</dd>';
 							}?>
 							<?php if(!empty($collectible['Collectible']['product_length'])) {
@@ -135,7 +140,7 @@
 								echo __('Length');
 								echo '</dt>';
 								echo '<dd>';	
-								echo $collectible['Collectible']['product_length'];
+								echo $collectible['Collectible']['product_length'].'"';
 								echo '</dd>';
 							}?>
 							<?php if(!empty($collectible['Collectible']['product_width'])) {
@@ -143,7 +148,7 @@
 								echo __('Width');
 								echo '</dt>';
 								echo '<dd>';	
-								echo $collectible['Collectible']['product_width'];
+								echo $collectible['Collectible']['product_width'].'"';
 								echo '</dd>';
 							}?>
 							
@@ -152,7 +157,7 @@
 								echo __('Depth');
 								echo '</dt>';
 								echo '<dd>';	
-								echo $collectible['Collectible']['product_depth'];
+								echo $collectible['Collectible']['product_depth'].'"';
 								echo '</dd>';
 							}?>
 						</dl>

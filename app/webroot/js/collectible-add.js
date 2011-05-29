@@ -180,6 +180,9 @@ var collectibleAdd = function() {
 					$('#CollectibleEditionSize').val('').parent('li').hide();	
 				}
 			});
+			$('#CollectibleMsrp').blur( function() {
+				$('#CollectibleMsrp').formatCurrency();
+			});
 		},
 		update : function() {
 

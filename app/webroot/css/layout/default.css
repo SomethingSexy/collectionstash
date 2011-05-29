@@ -348,6 +348,85 @@ a:active {
 	padding: 0;
 }
 
+.collectibles .collectible.item {
+    padding: 10px;
+    float: left;
+    clear: both;
+    width: 550px;
+    border-bottom: 1px solid #FDB924;
+}
+.collectibles .collectible.item .test {
+    float: left;
+    width: 100%;
+}
+.collectibles .collectible.item.added {
+    border: 1px solid #000;
+}
+/*
+.collectibles div.collectible:hover {
+    background-color:#E6E2AF;
+
+}*/
+.collectibles div.collectible:hover .links {
+    display: inline;
+
+}
+.collectibles .collectible.image {
+    float: left;
+}
+.collectibles .collectible.detail {
+    float: left;
+    margin-left: 10px;
+    width: 350px;
+}
+.collectibles .collectible.statistics dl,
+.collectibles .collectible.detail dl {
+    font-size: 0.75em;
+  
+}
+
+.collectibles.view {
+    float: left;
+
+}
+.collectibles.view table {
+    width: 100%;
+    margin-bottom: 1em;
+}
+.collectibles.view table caption {
+    text-align: left;
+    color: #993;
+    font-size: 140%;
+}
+.collectibles.view table th {
+    text-align: right;
+}
+.collectibles.view table td, .collectibles.view table th {
+    padding: 0.5em;
+}
+.collectibles .collectible .links {
+    /*display: none;*/
+    float: right;
+}
+.collectibles .collectible .links a {
+	font-size: 0.75em;
+	color: #000;
+}
+.collectibles .collectible .links ul li {
+    display: inline;
+}
+
+.collectibles.view .collectible.actions {
+  float: left;
+  clear: both;
+  margin-top: 5px;
+}
+
+.collectibles.view .collectible.actions a {
+  font-size: 0.75em;
+  padding: 0;
+}
+
 
 
 
@@ -427,7 +506,7 @@ a:active {
 }
 
 #collectible-add-component {
-  width: 600px;
+  width: 100%;
 }  
 #collectible-add-component .component-title {
   /*margin: 5px;*/  
@@ -437,12 +516,70 @@ a:active {
   width: 100%;
 }
 #collectible-add-component .component-view {
-  /*margin: 0 1em 0 1em;*/
-  /*width: 600px;*/
+ 	overflow: hidden;
+}
+#collectible-add-component .inside .component-view .collectible.add,
+#collectible-add-component .inside .component-view .collectible.image {
+	float: left;
+}
+
+#collectible-add-component .inside .component-view .collectible.image.uploader .collectible.image {
+	margin-right: 1em;
+}
+#collectible-add-component .inside .component-view .collectible.add {
+	margin-bottom: 1em;
 }
 #collectible-add-component .component-view .form-fields li {
 	/*width: 600px; matches the width of the component */
 }
+#collectible-add-component .component-view .form-fields li .dimensions {
+	clear: both;
+}
+#collectible-add-component .component-view .form-fields li .dimensions span,
+#collectible-add-component .component-view .form-fields li .dimensions {
+	float: left;
+	
+}
+#collectible-add-component .component-view .form-fields li .dimensions span {
+	line-height: 2;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+#collectible-add-component .component-view .collectible.add fieldset {
+	/*float: left;*/
+	margin-bottom: 1em;
+}
+#collectible-add-component .component-view .collectible.add fieldset legend {
+	font-size: 0.85em;
+	font-weight: bold;
+	border-bottom: 1px solid #FDB924;
+	width: 100%;
+	margin-bottom: 0.5em;
+}
+
+#collectible-add-component .inside .component-view .collectible.image.uploader .file-uploader {
+	float: left;
+	clear: both;
+}
+
+
+/*#collectible-add-component*/
+#CollectibleProductWeight,
+#collectibleHeight,
+#collectibleWidth,
+#collectibleDepth {
+	width: 100px;
+}
+#CollectibleMsrp {
+	width: 100px;
+}
+
+/*
+#collectibleWidth,
+#collectibleDepth {
+	clear: none;
+}
+*/
 #add-attributes-list,
 #add-attributes-list ul {
 	width: 100%;
@@ -494,6 +631,16 @@ a:active {
 }
 #collectible-detail .component-view .collectibles .links a {
 	font-size: 0.75em;
+}
+
+#collectible-detail .component-view .collectibles  .collectible.item {
+	width: 100%;
+	
+}
+
+#collectible-detail .component-view .collectibles  .collectible.item  .collectible.detail {
+	width: 500px;
+	
 }
 
 .collectibles .collectible.statistics {
@@ -908,84 +1055,6 @@ img, a img {
 }
 .hide, .cloak div {
     display:none !important;
-}
-.collectibles .collectible.item {
-    padding: 10px;
-    float: left;
-    clear: both;
-    width: 550px;
-    border-bottom: 1px solid #FDB924;
-}
-.collectibles .collectible.item .test {
-    float: left;
-    width: 100%;
-}
-.collectibles .collectible.item.added {
-    border: 1px solid #000;
-}
-/*
-.collectibles div.collectible:hover {
-    background-color:#E6E2AF;
-
-}*/
-.collectibles div.collectible:hover .links {
-    display: inline;
-
-}
-.collectibles .collectible.image {
-    float: left;
-}
-.collectibles .collectible.detail {
-    float: left;
-    margin-left: 10px;
-    width: 350px;
-}
-.collectibles .collectible.statistics dl,
-.collectibles .collectible.detail dl {
-    font-size: 0.75em;
-  
-}
-
-.collectibles.view {
-    float: left;
-
-}
-.collectibles.view table {
-    width: 100%;
-    margin-bottom: 1em;
-}
-.collectibles.view table caption {
-    text-align: left;
-    color: #993;
-    font-size: 140%;
-}
-.collectibles.view table th {
-    text-align: right;
-}
-.collectibles.view table td, .collectibles.view table th {
-    padding: 0.5em;
-}
-.collectibles .collectible .links {
-    /*display: none;*/
-    float: right;
-}
-.collectibles .collectible .links a {
-	font-size: 0.75em;
-	color: #000;
-}
-.collectibles .collectible .links ul li {
-    display: inline;
-}
-
-.collectibles.view .collectible.actions {
-  float: left;
-  clear: both;
-  margin-top: 5px;
-}
-
-.collectibles.view .collectible.actions a {
-  font-size: 0.75em;
-  padding: 0;
 }
 
 /** Paging **/

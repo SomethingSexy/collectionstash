@@ -1,9 +1,12 @@
-<?php echo $this->Html->script('variant-add',array('inline'=>false)); ?>
+<?php echo $this -> Html -> script('variant-add', array('inline' => false));?>
 <div class="component" id="collectible-detail">
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php	echo $collectible['Collectible']['name'];?><?php	if($collectible['Collectible']['exclusive']) { __(' - Exclusive');}?>
+			<?php	echo $collectible['Collectible']['name'];?><?php
+				if($collectible['Collectible']['exclusive']) { __(' - Exclusive');
+				}
+			?>
 			</h2>
 		</div>
 		<div class="component-view">
@@ -21,17 +24,21 @@
 								Name:
 							</dt>
 							<dd>
-								<?php	echo $collectible['Collectible']['name'];?><?php	if($collectible['Collectible']['exclusive']) { __(' - Exclusive');
-								}?>
+								<?php	echo $collectible['Collectible']['name'];?><?php
+								if($collectible['Collectible']['exclusive']) { __(' - Exclusive');
+								}
+							?>
 							</dd>
-							<?php if($collectible['Collectible']['variant']) {
+							<?php
+								if($collectible['Collectible']['variant']) {
 									echo '<dt>';
 									__('Variant:');
 									echo '</dt><dd>';
 									__('Yes');
 									echo '</dd>';
 
-								}?>
+								}
+							?>
 							<dt>
 								Manufacture:
 							</dt>
@@ -53,121 +60,179 @@
 		</div>
 	</div>
 </div>
-
 <div class="component" id="collectible-add-component">
-  <div class="inside">
-    <div class="component-title">
-      <h2><?php __('Add Collectible Variant');?></h2>
-    </div>
-    <?php echo $this -> element('flash');?>
-    <div class="component-info">
-      <div><?php __('Fill out the information below to add a variant for the following collectible.');?></div> 
-    </div>
-    <div class="component-view">
-      <?php echo $this->Form->create('Collectible', array('type' => 'file', 'url' => '/collectibles/addVariant'));?>
-        <fieldset>
-        <ul class="form-fields">
-          <li>
-            <div class="label-wrapper">
-               <label for="CollectibleName"><?php __('Name') ?></label>
-            </div>
-            <?php echo $this->Form->input('name', array('value'=> $collectible['Collectible']['name'], 'div' =>  false, 'label'=>false));?>
-          </li> 
-          <li>
-            <div class="label-wrapper">
-               <label for="CollectibleExclusive"><?php __('Exclusive') ?></label>
-            </div>
-            <?php echo $this->Form->input('exclusive', array('div' => false, 'label' => false )); ?>
-          </li>
-          <li>
-            <div class="label-wrapper">
-               <label for="CollectibleEditionSize"><?php __('Edition size') ?></label>
-            </div>
-            <?php echo $this->Form->input('edition_size', array('div' => false, 'label' => false )); ?>
-          </li>
-          <li>
-            <div class="label-wrapper">
-               <label for="CollectibleUrl"><?php __('URL') ?></label>
-            </div>
-            <?php echo $this->Form->input('url', array('div' => false, 'label' => false )); ?>
-          </li>
-			<?php if(!isset($edit)) { ?>
-				<li>
-					<div class="label-wrapper">
-						<label for="Upload0File">
-							<?php __('Image') ?>
-						</label>
-					</div>
-					<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>
-				</li>
-			<?php }?>
-          <li>
-          	 <div class="label-wrapper">
-               <label for=""><?php __('Attributes') ?></label>
-               <a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an attribute for this collectible.  An attribute is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
-            </div>
-            <div id="add-attributes-list">
-            	<ul>
-            		<?php  
-            			
-            			if(isset($this->data['AttributesCollectible']))
-						{
-							$lastKey = 1;
-							foreach ($this->data['AttributesCollectible'] as $key=>$attribue)
-						    {
-						      echo '<li>';	
-							  echo '<span class="attribute-name">';
-							  echo $attribue['name'];
-							  echo '</span>';
-							  echo '<span class="attribute-description">';
-							  echo $attribue['description'];
-							  echo '</span>';
-							  echo '<input type="hidden" name="data[AttributesCollectible]['.$key.'][attribute_id]" value="'.$attribue['attribute_id'].'"/>';
-							  echo '<input type="hidden" name="data[AttributesCollectible]['.$key.'][description]" value="'.$attribue['description'].'"/>';
-							  echo '<input type="hidden" name="data[AttributesCollectible]['.$key.'][name]" value="'.$attribue['name'].'"/>';
-							  echo '</li>';
-							  $lastKey = $key;
-						    }
-							echo '<script>var lastAttributeKey ='.$lastKey.';</script>';
-						}
-						
-            		?>
-            	</ul>
-            </div>
-            <div><a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a></div>
-          </li>
-        </ul>
-        <?php if(!isset($edit)) { ?>
-			<input type="hidden" name="data[Edit]" value="false" />
-		<?php } else {?>
-			<input type="hidden" name="data[Edit]" value="true" />
-		<?php } ?>
-        </fieldset>
-      <?php echo $this->Form->end(__('Submit', true));?>    
-    </div>
-  </div>
-</div>
+	<div class="inside">
+		<div class="component-title">
+			<h2>
+			<?php __('Add Collectible Variant');?>
+			</h2>
+		</div>
+		<?php echo $this -> element('flash');?>
+		<div class="component-info">
+			<div>
+				<?php __('Fill out the information below to add a variant for the following collectible.');?>
+			</div>
+		</div>
+		<div class="component-view">
+			<div class="collectible add">
+				<?php echo $this -> Form -> create('Collectible', array('type' => 'file', 'url' => '/collectibles/addVariant'));?>
+				<fieldset>
+					<legend>
+						<?php __('Details');?>
+					</legend>
+					<ul class="form-fields">
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleName">
+									<?php __('Name') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('name', array('value' => $collectible['Collectible']['name'], 'div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleExclusive">
+									<?php __('Exclusive') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleEditionSize">
+									<?php __('Edition size') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleCode">
+									<?php __('Product Code') ?>
+								</label>
+								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the item code or product code given by the manufacture.', true) ?>" alt="info"></a>
+							</div>
+							<?php echo $this -> Form -> input('code', array('div' => false, 'label' => false, 'between' => ''));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleUpc">
+									<?php __('Product UPC') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('upc', array('div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleUrl">
+									<?php __('URL') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false));?>
+						</li>
+					</ul>
+					<?php if(!isset($edit)) { ?>
+					<input type="hidden" name="data[Edit]" value="false" />
+					<?php } else {?>
+					<input type="hidden" name="data[Edit]" value="true" />
+					<?php }?>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<?php __('Attributes');?>
+					</legend>
+					<ul class="form-fields">
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Attributes') ?>
+								</label>
+								<a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an attribute for this collectible.  An attribute is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
+							</div>
+							<div id="add-attributes-list">
+								<ul>
+									<?php
 
+									if(isset($this -> data['AttributesCollectible'])) {
+										$lastKey = 1;
+										foreach($this->data['AttributesCollectible'] as $key => $attribue) {
+											echo '<li>';
+											echo '<span class="attribute-name">';
+											echo $attribue['name'];
+											echo '</span>';
+											echo '<span class="attribute-description">';
+											echo $attribue['description'];
+											echo '</span>';
+											echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+											echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+											echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+											echo '</li>';
+											$lastKey = $key;
+										}
+										echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
+									}
+									?>
+								</ul>
+							</div>
+							<div>
+								<a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a>
+							</div>
+						</li>
+					</ul>
+				</fieldset>
+				<?php if(!isset($edit)) { ?>
+				<fieldset>
+					<legend>
+						<?php __('Image');?>
+					</legend>
+					<ul class="form-fields">	
+						<li>
+							<div class="label-wrapper">
+								<label for="Upload0File">
+									<?php __('Upload image from your computer') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="Upload0File">
+									<?php __('Upload image from URL') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('Upload.0.url', array('div' => false, 'label' => false));?>
+						</li>
+					</ul>
+				</fieldset>
+				<?php }?>
+				<?php echo $this -> Form -> end(__('Submit', true));?>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="add-attribute-dialog" class="dialog" title="Add Attribute">
-  <div class="component">
-    <div class="inside" >
-      <div class="component-info">
-        <div><?php __('Fill out the information below to add an Attribute to this variant.') ?></div> 
-      </div>
-      <div class="component-view">
-        <fieldset>
-          <ul id="add-attribute-dialog-fields" class="form-fields">
-            <li id="description-field">
-              <div class="label-wrapper">
-                 <label for="CollectibleName"><?php __('Description') ?></label>
-              </div>
-              <?php echo $this->Form->input('description', array('maxlength'=> 50, 'id' => 'attributeDescription','div' =>  false, 'label'=>false));?>
-            </li>             
-          </ul>
-        </fieldset>
-      </div>
-    </div>
-  </div>
+	<div class="component">
+		<div class="inside" >
+			<div class="component-info">
+				<div>
+					<?php __('Fill out the information below to add an Attribute to this variant.') ?>
+				</div>
+			</div>
+			<div class="component-view">
+				<fieldset>
+					<ul id="add-attribute-dialog-fields" class="form-fields">
+						<li id="description-field">
+							<div class="label-wrapper">
+								<label for="CollectibleName">
+									<?php __('Description') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('description', array('maxlength' => 50, 'id' => 'attributeDescription', 'div' => false, 'label' => false));?>
+						</li>
+					</ul>
+				</fieldset>
+			</div>
+		</div>
+	</div>
 </div>
-
 

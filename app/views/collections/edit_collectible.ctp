@@ -1,3 +1,4 @@
+<?php echo $this->Html->script('collection-edit',array('inline'=>false)); ?>
 <div class="component" id="collectible-add-component">
   <div class="inside">
     <div class="component-title">
@@ -10,12 +11,17 @@
       <?php echo $this->Form->create('CollectiblesUser' , array('type' => 'file', 'url' => array('controller'=>'collections','action'=>'editCollectible')));?>
         <fieldset>
           <ul class="form-fields">
+          	<?php 
+          		$editionSize = $collectible['Collectible']['edition_size'];
+				if($collectible['Collectible']['showUserEditionSize'])
+				{ ?>
             <li>
               <div class="label-wrapper">
-                <label for="collectibleType"><?php __('Edition Size')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
+                <label for="collectibleType"><?php __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
               </div>
               <?php  echo $this->Form->input('edition_size', array('div' => false, 'label'=>false, 'value'=>$collectible['CollectiblesUser']['edition_size']));  ?>
             </li>
+            <?php } ?>
 			<li>
                 <div class="label-wrapper">
                   <label for="dialogCost"><?php __('How much did you pay?') ?></label>

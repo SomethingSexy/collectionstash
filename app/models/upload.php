@@ -1,12 +1,10 @@
 <?php
 class Upload extends AppModel {
 	var $name = 'Upload';
-	//var $actsAs = array('FileUpload.FileUpload');
-	var $actsAs = array(
-        'FileUpload.FileUpload' => array(
-          'automatic' => false),
-         'Containable'
-	);
+	var $actsAs = array('FileUpload.FileUpload'=> array(
+			'maxFileSize' => '2097152'
+		), 
+		'Containable');
 	var $hasMany = array('Collectible');
 
 
@@ -29,7 +27,7 @@ class Upload extends AppModel {
 		$validUpload = false;
 		debug($uploadData);
 		if(count($uploadData['Upload']) == 1) {
-			if($uploadData['Upload']['0']['file']['name'] != '') {
+			if($uploadData['Upload']['0']['file']['name'] != '' || $uploadData['Upload']['0']['url'] != '') {
 				$validUpload = true;
 			}
 		}

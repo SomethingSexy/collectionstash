@@ -61,9 +61,26 @@
            'message' => 'Must be numeric.'
        ), 
       'upc' => array(
-           'rule' => 'numeric',
-           'required' => true,
-           'message' => 'Must be numeric.'
+	        'numeric' => array(
+	           'rule' => 'numeric',
+	           'allowEmpty' => true,
+	           'message' => 'Must be numeric.'
+	        ),
+	        'maxLength' => array(
+	          'rule' => array('maxLength', 10),
+	          'message' => 'Invalid length.'
+	        )
+       ),
+      'code' => array(
+	        'numeric' => array(
+	           'rule' => 'alphanumeric',
+	           'allowEmpty' => true,
+	           'message' => 'Must be alphanumeric.'
+	        ),
+	        'maxLength' => array(
+	          'rule' => array('maxLength', 50),
+	          'message' => 'Invalid length.'
+	        )
        ),
        'product_length' => array (
             //This should be decmial or blank
@@ -105,19 +122,7 @@
 		//Update Edition Size stuff
       	$editionSize = $this->data['Collectible']['edition_size'];
 		$limited = $this->data['Collectible']['edition_size'];
-      	//TBD = -1
-      	// if ( (strcasecmp($editionSize, "TBD") == 0)) {
-			// $this->data['Collectible']['edition_size'] = -1;
-      	// }
-      	// //None = -2
-      	// else if (strcasecmp($editionSize, "None") == 0) {
-        	// $this->data['Collectible']['edition_size'] = -2;
-      	// } 
-      	// //If it is unknown = -3
-      	// else if (trim($editionSize) == '') {
-        	// $this->data['Collectible']['edition_size'] = -3;
-      	// }
-      	
+
       	if(trim($editionSize) != '' && !$limited) {
       		$editionSize = '';	
       	}
@@ -135,6 +140,9 @@
 		if(!isset($this->data['Collectible']['variant'])) {
 			$this->data['Collectible']['variant'] = 0;
 		}	
+		
+		$this->data['Collectible']['msrp'] = str_replace('$','', $this->data['Collectible']['msrp']);
+		$this->data['Collectible']['msrp'] = str_replace(',','', $this->data['Collectible']['msrp']);
       
       	return true;
     } 
