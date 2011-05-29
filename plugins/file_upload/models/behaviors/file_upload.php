@@ -68,7 +68,8 @@ class FileUploadBehavior extends ModelBehavior {
 		$url = $Model->data[$Model->alias]['url'];
 		$urlFile = basename($url);
 		$ch = curl_init($url);
-		$tmpDir = ini_get('upload_tmp_dir');
+		//$tmpDir = ini_get('upload_tmp_dir');
+		$tmpDir = sys_get_temp_dir();
 		debug(PATH_SEPARATOR);
 		$this->log($tmpDir, 'error');
 		$fp = fopen($tmpDir. DIRECTORY_SEPARATOR .$urlFile, 'wb');
