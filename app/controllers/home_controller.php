@@ -7,7 +7,7 @@ class HomeController extends AppController {
 	
 	public function index() {
 		$this->loadModel('Collectible');
-		$randomCollectibleIds = $this -> Collectible -> find('list', array('fields' => 'id', 'order' => 'RAND()', 'limit' => 2));
+		$randomCollectibleIds = $this -> Collectible -> find('list', array('fields' => 'id', 'order' => 'RAND()', 'limit' => 5));
 		debug($randomCollectibleIds);
 		$randomCollectibles = $this -> Collectible -> find('all', array('contain' => array('Upload'), 'conditions' => array('Collectible.id' => $randomCollectibleIds), 'order' => 'RAND()'));
 		debug($randomCollectibles);

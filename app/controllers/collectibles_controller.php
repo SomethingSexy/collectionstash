@@ -85,59 +85,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 	}
-
-	// function addCollectibleManufacture() {
-	// if($this -> isLoggedIn()) {
-	// //check to see if there is data submitted
-	// if(!empty($this -> data)) {
-	// debug($this -> data);
-	// $manufactureId = $this -> data['Collectible']['manufacture_id'];
-	// $this -> Session -> write('manufactureId', $manufactureId);
-	// $licenses = $this -> Collectible -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($manufactureId);
-	//
-	// //If this manufacture has no licenses well then just carry on to adding the collectible.
-	// if(empty($licenses)) {
-	// $this -> redirect( array('action' => 'addCollectible'));
-	// exit();
-	// } else {
-	// //no sense in retrieving this twice.
-	// $this -> Session -> write('licenses', $licenses);
-	// $this -> redirect( array('action' => 'addCollectibleLicense'));
-	// exit();
-	// }
-	// } else {
-	// $manufactures = $this -> Collectible -> Manufacture -> find('list');
-	// $this -> set(compact('manufactures'));
-	// }
-	// } else {
-	// $this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
-	// }
-	// }
-	//
-	// function addCollectibleLicense() {
-	// if($this -> isLoggedIn()) {
-	// if($this -> Session -> read('manufactureId') != null) {
-	// //check to see if there is data submitted
-	// if(!empty($this -> data)) {
-	// debug($this -> data);
-	// $licenseId = $this -> data['Collectible']['license_id'];
-	// $this -> Session -> write('licenseId', $licenseId);
-	// $this -> redirect( array('action' => 'addCollectible'));
-	// exit();
-	// } else {
-	// $licenses = $this -> Session -> read('licenses');
-	// $this -> set(compact('licenses'));
-	// }
-	// } else {
-	// $this -> redirect( array('action' => 'addCollectibleManufacture'));
-	// $this -> Session -> setFlash(__('You need to select a manufacture.', true), null, null, 'error');
-	// exit();
-	// }
-	// } else {
-	// $this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
-	// }
-	// }
-
+	
 	/**
 	 *
 	 */
@@ -149,7 +97,8 @@ class CollectiblesController extends AppController {
 			//First check to see if this is a post
 			if(!empty($this -> data)) {
 				debug($this -> data);
-				$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible'], array('encode' => false));
+				$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible']);
+				debug($this -> data);
 				//Since this is a post, take the data that was submitted and set it to our variable
 				$newCollectible = $this -> data;
 				//set default to true
@@ -174,9 +123,10 @@ class CollectiblesController extends AppController {
 							$newCollectible['Upload'] = $previouslySubmitedCollectible['Upload'];
 						}
 					} else {
+						
 						//If we are NOT in edit mode, check to see if the photo is valid
-						if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
-							if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'], array('validate' => false))) {
+						//if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
+							if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'])) {
 								//We have to save the upload right away because of how these work.  So lets save it
 								//Then lets grab the id of the upload and return the data of the uploaded one and store
 								//it in our saving object.  This will allow us to display the details to the user in the
@@ -187,16 +137,16 @@ class CollectiblesController extends AppController {
 								$newCollectible['Upload'] = $upload['Upload'];
 								$this -> Session -> write('uploadId', $uploadId);
 							} else {
-								debug($this -> Collectible -> validationErrors);
+								debug($this -> Collectible -> Upload -> validationErrors);
 								$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
 								$validCollectible = false;
 							}
-						} else {
-							$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-							debug($this -> Collectible -> Upload -> invalidFields());
-							$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-							$validCollectible = false;
-						}
+						//} //else {
+						//	$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						//	debug($this -> Collectible -> Upload -> invalidFields());
+						//	$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						//	$validCollectible = false;
+						//}
 					}
 				} else {
 					debug($this -> Collectible -> Upload -> validationErrors);
@@ -316,12 +266,6 @@ class CollectiblesController extends AppController {
 		if($this -> isLoggedIn()) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$this -> searchCollectible( array('Collectible.variant' => '0'));
-			/*             if(!empty($this -> data['search'])) {
-			 $this -> paginate = array("conditions" => array("MATCH(Collectible.name) AGAINST('{$this->data['search']}')", 'Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
-			 } else {
-			 $this -> paginate = array("conditions" => array('Approval.state' => '0', 'Collectible.variant' => '0'), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
-			 }
-			 $this -> set('collectibles', $this -> paginate('Collectible'));*/
 		}
 	}
 
@@ -397,7 +341,7 @@ class CollectiblesController extends AppController {
 					}
 				} else {
 					//If we are NOT in edit mode, check to see if the photo is valid
-					if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
+					//if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
 						if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'], array('validate' => false))) {
 							//We have to save the upload right away because of how these work.  So lets save it
 							//Then lets grab the id of the upload and return the data of the uploaded one and store
@@ -413,12 +357,12 @@ class CollectiblesController extends AppController {
 							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
 							$validCollectible = false;
 						}
-					} else {
-						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-						debug($this -> Collectible -> Upload -> invalidFields());
-						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-						$validCollectible = false;
-					}
+					// } else {
+						// $this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						// debug($this -> Collectible -> Upload -> invalidFields());
+						// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						// $validCollectible = false;
+					// }
 				}
 
 			} else {
@@ -453,6 +397,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		//remove this cause we do not need it
 		$collectible = $this -> Session -> read('preSaveCollectible');
+		//TODO need to fix this on multiple edit requets...makes the url ugly
 		$this -> set('referer', $this -> referer());
 		if(!is_null($collectible)) {
 			//Lets retrieve some data for display purposes
@@ -502,8 +447,10 @@ class CollectiblesController extends AppController {
 					$pendingState = '0';
 				}
 				$this -> Approval -> saveField('state', $pendingState);
-				$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
-				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
+				if(isset($newCollectible['Upload'])) {
+					$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
+					$this -> Collectible -> Upload -> saveField('collectible_id', $id);						
+				}
 
 				$collectible = $this -> Collectible -> findById($id);
 				debug($collectible);

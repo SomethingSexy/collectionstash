@@ -27,7 +27,7 @@ class CollectionsController extends AppController
   
   public function viewCollectible($id=null)
   {
-    if (!$id) 
+    if ($id == null) 
     {
       $this->Session->setFlash(__('Invalid collectible', true), null, null, 'error');
       $this->redirect(array('action' => 'index'));
@@ -65,29 +65,6 @@ class CollectionsController extends AppController
       $this->set('collectibles',$data);  
   }
   
-  //This views a users stash details...not logged in
- /* function view($username=null)
-  {
-  //IF not found then do something
-    $result = $this->User->findByUsername($username);   
-    $stashCount = $this->User->getNumberOfStashesByUser($username);
-    $stashDetails = $this->User->Stash->getStashDetails($result['User']['id']);  
-    $this->set('stashCount', $stashCount );
-    $this->set('stashDetails', $stashDetails );
-    $this->set(compact('username'));
-  }   */
-  
-  // function home()
-  // {
-  //   $username = $this->getUsername();
-  //   $user = $this->getUser();
-  //   $stashCount = $this->User->getNumberOfStashesByUser($username);
-  //   $stashDetails = $this->User->Stash->getStashDetails($user['User']['id']);  
-  //   $this->set('stashCount', $stashCount );
-  //   $this->set('stashDetails', $stashDetails );
-  // 
-  // }
-  // 
   function gallery()
   {
 
@@ -203,26 +180,19 @@ class CollectionsController extends AppController
   function editCollectible($id =null) {
 		$this->checkLogIn();
 		$this -> loadModel('User');
-		debug($this->data);			
-		if(!$id) {
-			if(!empty($this -> data)) {
-				
-				$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
-				if($this->User->CollectiblesUser->save($this -> data, true, $fieldList))
-				{
-					$this -> Session -> setFlash(__('Collectible was successfully updated.', true), null, null, 'success');
-					$this -> redirect( array('controller'=> 'stashs', 'action' => 'index'), null, true);	
-				}
-				else
-				{
-					$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-				}
-				
-			
-			} else {
-
+		debug($this->data);		
+		debug($id);		
+		if(!empty($this -> data)) {
+			$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
+			if($this->User->CollectiblesUser->save($this -> data, true, $fieldList))
+			{
+				$this -> Session -> setFlash(__('Collectible was successfully updated.', true), null, null, 'success');
+				$this -> redirect( array('controller'=> 'stashs', 'action' => 'index'), null, true);	
 			}
-
+			else
+			{
+				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+			}	
 		} else {
 			$username = $this -> getUsername();
 			$joinRecords = $this -> User -> getCollectibleByUser($username, $id);
@@ -231,8 +201,6 @@ class CollectionsController extends AppController
 			$this -> loadModel('Merchant');
 			$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
 			$this -> set('collectible', $joinRecords);
-			
-			//$this->User->habtmUpdate('Collectible', 14, 92, array('edition_size' => 60));
 		}
 	}
 
@@ -260,57 +228,6 @@ class CollectionsController extends AppController
 		return $this->Session->read('stashId');
 	}
 }
-
-
- // if (!empty($this->data)) 
- //      {
- //        if($this->data['search'])
- //        {
- //            if(empty($this->data['search']))
- //            {
- //              $this->data['search'] = "test";
- //            }
- //            debug($this->data);
- //            $this->paginate = array(
- //              "conditions"=> array("MATCH(Collectible.name) AGAINST('{$this->data['search']}' IN BOOLEAN MODE)", 'Approval.state' => '0'),
- //              "contain"=>array ('Manufacture','Collectibletype','Upload', 'Approval'),
- //              'limit'=>1
- //            );
- //            $data = $this->paginate('Collectible');
- //            debug($data);
- //            $this->set('stashId',$this->params['named']['stashId']);
- //            $this->set('collectibles', $data);     
- //        }
- //        else
- //        {
- //          $result =  $this->User->findByUsername($username);
- //          $this->data['CollectiblesStash']['data_added'] = date("Y-m-d H:i:s", time());
- //          //$addData['CollectiblesStash']['stash_id'] = $this->params['named']['stashId'];        
- //          if($this->User->Stash->CollectiblesStash->saveAll($this->data))
- //          {
- //            $this->Session->setFlash(__('Collectible was successfully added.', true));
- //            $this->redirect(array('controller' => 'collections', 'action' => 'index'),null, true);
- //          }
- //          else
- //          {
- //              //TODO
- //          }                 
- //        }    
- //      }
- //      else
- //      { 
- //        $this->paginate = array("contain"=>array('Manufacture','Collectibletype','Upload', 'Approval'),
- //          'conditions' => array('Approval.state' => '0'),'limit'=>1
- //        
- //        );
- //        $data = $this->paginate('Collectible');
- //        debug($data);
- //        $this->set('stashId',$this->params['named']['stashId']);
- //        $this->set('collectibles', $data);     
- //      }
-
-
-
 ?>
 
 
