@@ -6,12 +6,23 @@
 			</h2>
 		</div>
 		<div class="component-view">
-			<div class="collectibles">
 				<div class="collectible links">
 					<?php echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));?>
 				</div>
 				<div class="collectible item">
 					<div class="collectible image">
+						<?php 
+						if (!empty($collectible['Upload'])) { ?>
+							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '100'));?>
+							<div class="collectible image-fullsize hidden">
+								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
+							</div>								
+							
+						<?php } else { ?>
+							<img src="/img/silhouette.gif"/>
+						<?php } ?>
+						
+						
 						<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '100'));?>
 						<div class="collectible image-fullsize hidden">
 							<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
@@ -176,7 +187,6 @@
 						</dd>
 					</dl>
 				</div>
-			</div>
 		</div>
 	</div>
 </div>

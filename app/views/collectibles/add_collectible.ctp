@@ -206,31 +206,6 @@
 						});
 					</script>
 				</fieldset>
-				<?php if(!isset($edit)) { ?>
-					<fieldset>
-						<legend><?php __('Image');?></legend>
-						<ul class="form-fields">	
-						
-							<li>
-								<div class="label-wrapper">
-									<label for="Upload0File">
-										<?php __('Upload image from your computer') ?>
-									</label>
-								</div>
-								<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>
-							</li>
-							<li>
-								<div class="label-wrapper">
-									<label for="Upload0File">
-										<?php __('Upload image from URL') ?>
-									</label>
-								</div>
-								<?php echo $this -> Form -> input('Upload.0.url', array('div' => false, 'label' => false));?>
-							</li>
-						
-						</ul>
-					</fieldset>
-				<?php }?>
 				<?php echo $this -> Form -> end(__('Submit', true));?>
 			</div>
 		</div>

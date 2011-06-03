@@ -68,6 +68,8 @@ class CollectiblesController extends AppController {
 			//Always delete this stuff, this could go in a better spot in the future
 			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
+			$this -> Session -> delete('add.collectible.mode.collectible');
+			$this -> Session -> delete('add.collectible.mode.variant');
 			//check to see if there is data submitted
 			if(!empty($this -> data)) {
 				if($this -> data['Collectible']['addType'] == 'C') {
@@ -85,7 +87,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 	}
-	
+
 	/**
 	 *
 	 */
@@ -94,17 +96,15 @@ class CollectiblesController extends AppController {
 		if($this -> isLoggedIn()) {
 			$newCollectible = array();
 			$this -> Session -> delete('collectible');
+			$this -> Session -> write ('add.collectible.mode.collectible', true);
+			$this -> Session -> delete('add.collectible.mode.variant');
 			//First check to see if this is a post
 			if(!empty($this -> data)) {
-				debug($this -> data);
 				$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible']);
-				debug($this -> data);
 				//Since this is a post, take the data that was submitted and set it to our variable
 				$newCollectible = $this -> data;
 				//set default to true
 				$validCollectible = true;
-				//set default to true
-				$validPhoto = true;
 				//set default to false
 				$editMode = false;
 
@@ -116,40 +116,8 @@ class CollectiblesController extends AppController {
 				//First try and validate the collectible.
 				$this -> Collectible -> set($newCollectible);
 				if($this -> Collectible -> validates()) {
-					//If it is valid and we are in edit mode then just grab the previously upload photo data
-					if($editMode || $this -> Session -> check('uploadId')) {
-						if($this -> Session -> check('uploadId')) {
-							$previouslySubmitedCollectible = $this -> Session -> read('preSaveCollectible');
-							$newCollectible['Upload'] = $previouslySubmitedCollectible['Upload'];
-						}
-					} else {
-						
-						//If we are NOT in edit mode, check to see if the photo is valid
-						//if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
-							if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'])) {
-								//We have to save the upload right away because of how these work.  So lets save it
-								//Then lets grab the id of the upload and return the data of the uploaded one and store
-								//it in our saving object.  This will allow us to display the details to the user in the
-								//review and confirm process.
-								$uploadId = $this -> Collectible -> Upload -> id;
-								$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
-								debug($upload);
-								$newCollectible['Upload'] = $upload['Upload'];
-								$this -> Session -> write('uploadId', $uploadId);
-							} else {
-								debug($this -> Collectible -> Upload -> validationErrors);
-								$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
-								$validCollectible = false;
-							}
-						//} //else {
-						//	$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-						//	debug($this -> Collectible -> Upload -> invalidFields());
-						//	$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-						//	$validCollectible = false;
-						//}
-					}
+					
 				} else {
-					debug($this -> Collectible -> Upload -> validationErrors);
 					$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					$validCollectible = false;
 				}
@@ -182,6 +150,14 @@ class CollectiblesController extends AppController {
 					$this -> paginate = array("conditions" => array($conditions), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
 					$existingCollectibles = $this -> paginate('Collectible');
 
+					$currentCollectible = $this -> Session -> read('preSaveCollectible');
+					
+					if(!is_null($currentCollectible)) {
+						if(isset($currentCollectible['Upload'])) {
+							$newCollectible['Upload'] = $currentCollectible['Upload'];
+						}	
+					}
+
 					$this -> Session -> write('preSaveCollectible', $newCollectible);
 
 					//If the size is greater than zero when we have a potential
@@ -196,7 +172,9 @@ class CollectiblesController extends AppController {
 						//does render exit?
 						//exit();
 					} else {
-						$this -> redirect( array('action' => 'review'));
+						$this -> redirect( array('action' => 'addImage'));
+
+						//$this -> redirect( array('action' => 'review'));
 					}
 				} else {
 					$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($newCollectible['Collectible']['manufacture_id']);
@@ -251,10 +229,6 @@ class CollectiblesController extends AppController {
 
 				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 				$this -> set(compact('scales'));
-
-				//Do clean up
-				// $this -> Session -> delete('preSaveCollectible');
-				// $this -> Session -> delete('uploadId');
 			}
 
 		} else {
@@ -271,13 +245,15 @@ class CollectiblesController extends AppController {
 
 	function addVariant($id =null) {
 		$this -> checkLogIn();
+		$this -> Session -> write ('add.collectible.mode.variant', true);
+		$this -> Session -> delete('add.collectible.mode.collectible');
 		//If edit do not do this again
 		if($id && empty($this -> params['named']['edit'])) {
-			
+
 			$this -> set('collectible', $this -> Collectible -> read(null, $id));
 			$this -> Session -> write('variant-add-id', $id);
-		} 
-		
+		}
+
 		if(!empty($this -> data)) {
 			debug($this -> data);
 			$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible'], array('encode' => false));
@@ -310,7 +286,7 @@ class CollectiblesController extends AppController {
 			//Set the base of that collectible, we will override with what the user
 			//entered.
 			$newCollectible['Collectible'] = $collectible['Collectible'];
-			$newCollectible['Upload'] = $this -> data['Upload'];
+			//$newCollectible['Upload'] = $this -> data['Upload'];
 			$newCollectible['Collectible']['id'] = '';
 			$newCollectible['Collectible']['approval_id'] = '';
 
@@ -334,36 +310,7 @@ class CollectiblesController extends AppController {
 
 			$this -> Collectible -> set($newCollectible);
 			if($this -> Collectible -> validates()) {
-				if($editMode || $this -> Session -> check('uploadId')) {
-					if($this -> Session -> check('uploadId')) {
-						$previouslySubmitedCollectible = $this -> Session -> read('preSaveCollectible');
-						$newCollectible['Upload'] = $previouslySubmitedCollectible['Upload'];
-					}
-				} else {
-					//If we are NOT in edit mode, check to see if the photo is valid
-					//if($this -> Collectible -> Upload -> isValidUpload($newCollectible)) {
-						if($this -> Collectible -> Upload -> saveAll($newCollectible['Upload'], array('validate' => false))) {
-							//We have to save the upload right away because of how these work.  So lets save it
-							//Then lets grab the id of the upload and return the data of the uploaded one and store
-							//it in our saving object.  This will allow us to display the details to the user in the
-							//review and confirm process.
-							$uploadId = $this -> Collectible -> Upload -> id;
-							$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
-							debug($upload);
-							$newCollectible['Upload'] = $upload['Upload'];
-							$this -> Session -> write('uploadId', $uploadId);
-						} else {
-							debug($this -> Collectible -> Upload -> invalidFields());
-							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
-							$validCollectible = false;
-						}
-					// } else {
-						// $this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-						// debug($this -> Collectible -> Upload -> invalidFields());
-						// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-						// $validCollectible = false;
-					// }
-				}
+
 
 			} else {
 				$this -> log('User ' . $userId . ' failed at adding collectible variant ', 'error');
@@ -375,7 +322,8 @@ class CollectiblesController extends AppController {
 
 			if($validCollectible) {
 				$this -> Session -> write('preSaveCollectible', $newCollectible);
-				$this -> redirect( array('action' => 'review'));
+				$this -> redirect( array('action' => 'addImage'));
+				//$this -> redirect( array('action' => 'review'));
 			} else {
 
 			}
@@ -393,12 +341,72 @@ class CollectiblesController extends AppController {
 		}
 	}
 
+	function addImage() {
+		$this -> checkLogIn();
+		
+		if(!empty($this -> data)) {
+			debug($this->data['remove']);
+			if($this->data['remove'] === 'true') {
+				debug($this->data);
+				$collectible = $this -> Session -> read('preSaveCollectible');
+				if(isset($collectible['Upload']) && !empty($collectible['Upload']['id'])){
+					$imageId = $collectible['Upload']['id'];
+					if ($this -> Collectible -> Upload -> delete($imageId)) {
+						unset($collectible['Upload']);
+						$this -> Session -> write('preSaveCollectible', $collectible);
+					} else {
+						
+					}
+				} else {
+					
+				}
+			} else {
+				//If they submit and we already added a collectible, think back button, then just redisplay the
+				//page and show the image.  They can then choose to edit the image if they want
+				$collectible = $this -> Session -> read('preSaveCollectible');
+				if(!isset($collectible['Upload'])) {
+					if($this -> Collectible -> Upload -> isValidUpload($this -> data)) {
+						if($this -> Collectible -> Upload -> saveAll($this -> data['Upload'])) {
+							//We have to save the upload right away because of how these work.  So lets save it
+							//Then lets grab the id of the upload and return the data of the uploaded one and store
+							//it in our saving object.  This will allow us to display the details to the user in the
+							//review and confirm process.
+							$uploadId = $this -> Collectible -> Upload -> id;
+							$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
+							debug($upload);
+							$collectible = $this -> Session -> read('preSaveCollectible');
+							$collectible['Upload'] = $upload['Upload'];
+							$this -> Session -> write('preSaveCollectible', $collectible);
+							//$this -> Session -> write('uploadId', $uploadId);
+							
+							$this -> redirect( array('action' => 'review'));
+						} else {
+							debug($this -> Collectible -> Upload -> validationErrors);
+							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
+							$validCollectible = false;
+						}
+					} else {
+						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						debug($this -> Collectible -> Upload -> invalidFields());
+						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						$validCollectible = false;
+					}						
+				} else {
+					$collectible = $this -> Session -> read('preSaveCollectible');
+					$this -> set(compact('collectible'));
+				}
+				
+			}
+		} else {
+			$collectible = $this -> Session -> read('preSaveCollectible');
+			$this -> set(compact('collectible'));
+		}
+	}
+
 	function review() {
 		$this -> checkLogIn();
 		//remove this cause we do not need it
 		$collectible = $this -> Session -> read('preSaveCollectible');
-		//TODO need to fix this on multiple edit requets...makes the url ugly
-		$this -> set('referer', $this -> referer());
 		if(!is_null($collectible)) {
 			//Lets retrieve some data for display purposes
 			//TODO this may be redundant...should we save off later?
@@ -449,7 +457,7 @@ class CollectiblesController extends AppController {
 				$this -> Approval -> saveField('state', $pendingState);
 				if(isset($newCollectible['Upload'])) {
 					$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
-					$this -> Collectible -> Upload -> saveField('collectible_id', $id);						
+					$this -> Collectible -> Upload -> saveField('collectible_id', $id);
 				}
 
 				$collectible = $this -> Collectible -> findById($id);

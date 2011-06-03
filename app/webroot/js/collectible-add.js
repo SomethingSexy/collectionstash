@@ -183,6 +183,12 @@ var collectibleAdd = function() {
 			$('#CollectibleMsrp').blur( function() {
 				$('#CollectibleMsrp').formatCurrency();
 			});
+			
+				//TODO this is really only for image add so should get moved out of here eventually
+			$('#remove-image-submit').click(function(){
+				$('#remove-image-form').submit();
+				return false;
+			});
 		},
 		update : function() {
 

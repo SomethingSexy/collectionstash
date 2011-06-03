@@ -348,39 +348,30 @@ a:active {
 	padding: 0;
 }
 
-.collectibles .collectible.item {
+.collectible.item {
     padding: 10px;
     float: left;
     clear: both;
     width: 550px;
     border-bottom: 1px solid #FDB924;
 }
-.collectibles .collectible.item .test {
+.collectible.item .test {
     float: left;
     width: 100%;
 }
-.collectibles .collectible.item.added {
+.collectible.item.added {
     border: 1px solid #000;
 }
-/*
-.collectibles div.collectible:hover {
-    background-color:#E6E2AF;
-
-}*/
-.collectibles div.collectible:hover .links {
-    display: inline;
-
-}
-.collectibles .collectible.image {
+.collectible.image {
     float: left;
 }
-.collectibles .collectible.detail {
+.collectible.detail {
     float: left;
     margin-left: 10px;
     width: 350px;
 }
-.collectibles .collectible.statistics dl,
-.collectibles .collectible.detail dl {
+.collectible.statistics dl,
+.collectible.detail dl {
     font-size: 0.75em;
   
 }
@@ -515,17 +506,42 @@ a:active {
   float: left;
   width: 100%;
 }
+#collectible-add-component .component-view .collectible.item,
 #collectible-add-component .component-view {
  	overflow: hidden;
 }
-#collectible-add-component .inside .component-view .collectible.add,
-#collectible-add-component .inside .component-view .collectible.image {
+#collectible-add-component .component-view .collectible.item {
+	border-bottom: none;
+}
+#collectible-add-component .inside .component-view .collectible.add {
 	float: left;
 }
 
-#collectible-add-component .inside .component-view .collectible.image.uploader .collectible.image {
-	margin-right: 1em;
+#collectible-add-component .inside .component-view.add-image .collectible.image img {
+	margin-left: auto;   
+	margin-right: auto;
+	display: block;
+	
 }
+
+#collectible-add-component .inside .component-view.add-image .collectible {
+	float: none;
+}
+
+#collectible-add-component .inside .component-view .links {
+	text-align: center;
+	margin-top: 1em;
+}
+#collectible-add-component .inside .component-view .links.review,
+#collectible-add-component .inside .component-view .links.no-image {
+	text-align: left;
+}
+#collectible-add-component .inside .component-view .links a {
+	color: #000;
+	font-size: 1em;
+	cursor: pointer;
+}
+
 #collectible-add-component .inside .component-view .collectible.add {
 	margin-bottom: 1em;
 }
@@ -620,30 +636,30 @@ a:active {
 	
 }
 
-#collectible-detail .component-view .collectibles .collectible {
+#collectible-detail .component-view .collectible {
 	border: none;
 
 }
 
-#collectible-detail .component-view .collectibles .links {
+#collectible-detail .component-view .links {
 	width: 100%;
 	text-align: left;
 }
-#collectible-detail .component-view .collectibles .links a {
+#collectible-detail .component-view .links a {
 	font-size: 0.75em;
 }
 
-#collectible-detail .component-view .collectibles  .collectible.item {
+#collectible-detail .component-view .collectible.item {
 	width: 100%;
 	
 }
 
-#collectible-detail .component-view .collectibles  .collectible.item  .collectible.detail {
+#collectible-detail .component-view .collectible.item  .collectible.detail {
 	width: 500px;
 	
 }
 
-.collectibles .collectible.statistics {
+.collectible.statistics {
     padding: 10px;
     float: left;
     width: 300px;	
@@ -846,7 +862,7 @@ input[type=submit] {
     font-size: 110%;
     width: auto;
 }
-form .submit input[type=submit] {
+input[type=submit] {
     background:#62af56;
     background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
     background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);
@@ -854,7 +870,7 @@ form .submit input[type=submit] {
     color: #000;
     text-shadow: #8cee7c 0px 1px 0px;
 }
-form .submit input[type=submit]:hover {
+input[type=submit]:hover {
     background:#4ca83d;
     background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
     background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
