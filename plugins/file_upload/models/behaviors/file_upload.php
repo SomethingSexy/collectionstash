@@ -138,7 +138,6 @@ class FileUploadBehavior extends ModelBehavior {
           $Model->beforeValidate();
         }
         else {
-        	debug($Model);	  
           $Model->validationErrors[$this->options[$Model->alias]['fileVar']] = $this->Uploader[$Model->alias]->showErrors();
         }
       }

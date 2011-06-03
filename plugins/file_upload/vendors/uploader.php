@@ -150,6 +150,7 @@ class Uploader {
     }
     else{
       $this->_error('Unable to save temp file to file system.');
+	  CakeLog::write('error', 'Unable to move uploaded temp file '.$this->file['name'].' '. $this->file['tmp_name']. ' '.$this->file['error']);  
       return false;
     }
   }
@@ -157,7 +158,6 @@ class Uploader {
   function processURLFile() {
   	//check if we have a file and if we allow the type, return false otherwise.
     if(!$this->checkFile() || !$this->checkType() || !$this->checkSize()){
-    
       return false;
     }
     
@@ -180,6 +180,7 @@ class Uploader {
 	  return $this->finalFile;
 	} else{
       $this->_error('Unable to save temp file to file system.');
+	  CakeLog::write('error','Unable to move uploaded temp file '.$this->file['name'].' '. $this->file['tmp_name']. ' '.$this->file['error']);
       return false;
     }  	
 	
@@ -241,6 +242,7 @@ class Uploader {
       if($file_ext == $ext){
         if(is_array($types) && !in_array($this->file['type'], $types)){
           $this->_error("{$this->file['type']} is not an allowed type.");
+		  CakeLog::write('error', 'The file type of the uploaded file '.$this->file['name']. 'is not allowed'.$this->file['type']);
           return false;
         }
         else {
@@ -270,7 +272,8 @@ class Uploader {
       else {
         $this->_error($this->uploadErrors[$this->file['error']]);
       }
-    }        
+    } 
+	CakeLog::write('error', 'The file '.$this->file['name']. ' did not upload correctly '.$this->file['error']);       
     return false;
   }
   
@@ -297,7 +300,7 @@ class Uploader {
         $this->_error("File exceeds {$this->options['maxFileSize']} byte limit.");
       }
     }
-	
+	CakeLog::write('error', 'The file '.$this->file['name']. ' did not upload because the file size it too big');  
     return false;
   }
   
