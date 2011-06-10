@@ -647,6 +647,7 @@ a:active {
 }
 #collectible-detail .component-view .links a {
 	font-size: 0.75em;
+	margin-left: 1em;
 }
 
 #collectible-detail .component-view .collectible.item {
@@ -690,9 +691,29 @@ a:active {
 }
 
 #home-components .random-collectibles {
-	height: 400px;
 	width: 400px;
-	
+}
+#home-components .random-collectibles .inside .component-view {
+	overflow: hidden;
+}
+
+#home-components .random-collectibles .inside .component-view .collectibles .collectible {
+	padding: 5px;
+	float: left;
+	width: 100%
+}
+
+#home-components .random-collectibles .inside .component-view .collectibles .collectible .image {
+	float: left;
+	width: 100px;	
+}
+
+#home-components .random-collectibles .inside .component-view .collectibles .collectible .detail {
+	float: left;	
+	margin-left: 1em;
+}
+#home-components .random-collectibles .inside .component-view .collectibles .collectible .detail p {
+	font-size: 0.75em;
 }
 
 #registration-component {

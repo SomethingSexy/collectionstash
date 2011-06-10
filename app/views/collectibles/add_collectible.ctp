@@ -1,4 +1,14 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
+<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<?php echo $this -> Html -> script('variant-add', array('inline' => false));?>
+<?php      
+	echo $this->element('collectible_detail', array(
+		'title' => __('Base Collectible Details', true),
+		'showStatistics' => false,
+		'showWho' => false
+	));
+?>
+<?php } ?>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
 		<div class="component-title">
@@ -18,66 +28,68 @@
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<li>
+						<?php if($this -> Session -> check('add.collectible.mode.collectible')) { ?>
+							<li>
+								<div class="label-wrapper">
+									<label for="">
+										<?php __('Manufacture') ?>
+									</label>
+								</div>
+								<?php echo $this -> Form -> input('manufacture_id', array('div' => false, 'label' => false));?>
+							</li>
+							<?php
+								if(empty($licenses)) {
+									echo '<li class="hidden">';
+								} else {
+									echo '<li>';
+								}
+							?>
 							<div class="label-wrapper">
 								<label for="">
-									<?php __('Manufacture') ?>
+									<?php __('Brand/License') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('manufacture_id', array('div' => false, 'label' => false));?>
-						</li>
-						<?php
-							if(empty($licenses)) {
-								echo '<li class="hidden">';
-							} else {
-								echo '<li>';
-							}
-						?>
-						<div class="label-wrapper">
-							<label for="">
-								<?php __('Brand/License') ?>
-							</label>
-						</div>
-						<?php echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));?>
-						</li>
-	
-						<?php
-							if(empty($series)) {
-								echo '<li class="hidden">';
-							} else {
-								echo '<li>';
-							}
-						?>
-						<div class="label-wrapper">
-							<label for="">
-								<?php __('Category') ?>
-							</label>
-						</div>
-						<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
-						</li>
-	
-						<?php
-							if(empty($collectibletypes)) {
-								echo '<li class="hidden">';
-							} else {
-								echo '<li>';
-							}
-						?>
-						<div class="label-wrapper">
-							<label for="">
-								<?php __('What type of collectible is this?') ?>
-							</label>
-						</div>
-						<?php  echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));?>
-						</li>
-						<li>
+							<?php echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));?>
+							</li>
+		
+							<?php
+								if(empty($series)) {
+									echo '<li class="hidden">';
+								} else {
+									echo '<li>';
+								}
+							?>
 							<div class="label-wrapper">
-								<label for="scale">
-									<?php __('Scale') ?>
+								<label for="">
+									<?php __('Category') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
-						</li>	
+							<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
+							</li>
+		
+							<?php
+								if(empty($collectibletypes)) {
+									echo '<li class="hidden">';
+								} else {
+									echo '<li>';
+								}
+							?>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('What type of collectible is this?') ?>
+								</label>
+							</div>
+							<?php  echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));?>
+							</li>
+							<li>
+								<div class="label-wrapper">
+									<label for="scale">
+										<?php __('Scale') ?>
+									</label>
+								</div>
+								<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
+							</li>	
+					    <?php } ?>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleName">
@@ -92,7 +104,12 @@
 									<?php __('Description') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('description', array('div' => false, 'label' => false, 'escape' => false));?>
+							<?php 
+								$data = str_replace('\n', "\n", $this->data['Collectible']['description']);
+        						$data = str_replace('\r', "\r", $data);
+							
+								echo $this -> Form -> input('description', array('div' => false, 'label' => false, 'value'=> $data));	
+							?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -199,15 +216,113 @@
 					<?php } else {?>
 						<input type="hidden" name="data[Edit]" value="true" />
 					<?php } ?>
-					<script>
-						$(".ui-icon-info").tooltip({
-							position: 'center right',
-							opacity: 0.7
-						});
-					</script>
+
 				</fieldset>
+				<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+					<fieldset>
+						<legend>
+							<?php __('Variant Details');?>
+						</legend>
+						<ul class="form-fields">
+							<li>
+								<div class="label-wrapper">
+									<label for="CollectibleExclusive">
+										<?php __('Exclusive') ?>
+									</label>
+								</div>
+								<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
+							</li>	
+							<li>
+								<div class="label-wrapper">
+									<label for="">
+										<?php __('Exclusive Retailer') ?>
+									</label>
+								</div>
+								<?php echo $this -> Form -> select('exclusive_manufacture_id', $exclusive_manufactures, null,array('empty'=>'Select', 'div' => false, 'label' => false));?>
+							</li>					
+						</ul>
+					</fieldset>	
+					<fieldset>
+						<legend>
+							<?php __('Variant Features');?>
+						</legend>
+						<ul class="form-fields">
+							<li>
+								<div class="label-wrapper">
+									<label for="">
+										<?php __('Features') ?>
+									</label>
+									<a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an feature for this collectible.  An feature is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
+								</div>
+								<div id="add-attributes-list">
+									<ul>
+										<?php
+	
+										if(isset($this -> data['AttributesCollectible'])) {
+											$lastKey = 1;
+											foreach($this->data['AttributesCollectible'] as $key => $attribue) {
+												echo '<li>';
+												echo '<span class="attribute-name">';
+												echo $attribue['name'];
+												echo '</span>';
+												echo '<span class="attribute-description">';
+												echo $attribue['description'];
+												echo '</span>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+												echo '</li>';
+												$lastKey = $key;
+											}
+											echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
+										}
+										?>
+									</ul>
+								</div>
+								<div>
+									<a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a>
+								</div>
+							</li>
+						</ul>
+					</fieldset>						
+					
+				<?php } ?>	
 				<?php echo $this -> Form -> end(__('Submit', true));?>
 			</div>
 		</div>
 	</div>
 </div>
+<script>
+	$(".ui-icon-info").tooltip({
+		position: 'center right',
+		opacity: 0.7
+	});
+</script>
+
+<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<div id="add-attribute-dialog" class="dialog" title="Add Attribute">
+	<div class="component">
+		<div class="inside" >
+			<div class="component-info">
+				<div>
+					<?php __('Fill out the information below to add an Attribute to this variant.') ?>
+				</div>
+			</div>
+			<div class="component-view">
+				<fieldset>
+					<ul id="add-attribute-dialog-fields" class="form-fields">
+						<li id="description-field">
+							<div class="label-wrapper">
+								<label for="CollectibleName">
+									<?php __('Description') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('description', array('maxlength' => 50, 'id' => 'attributeDescription', 'div' => false, 'label' => false));?>
+						</li>
+					</ul>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+<?php } ?>

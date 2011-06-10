@@ -4,6 +4,10 @@ class Manufacture extends AppModel {
 	var $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id'), 'LicensesManufacture', 'CollectibletypesManufacture');
 	var $actsAs = array('Containable');
 
+	public function getManufactureList() {
+		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
+	}
+
 	public function getManufactureNameById($manufactureId) {
 		$manufacture = $this -> find('first', array('conditions' => array('Manufacture.id' => $manufactureId), 'fields' => array('Manufacture.title'), 'contain' => false));
 		debug($manufacture);
@@ -18,8 +22,8 @@ class Manufacture extends AppModel {
 
 	public function getManufactureData($manufactureId) {
 		$returnData = array();
-		
-		$manufactures = $this -> find('list', array('order'=>array('Manufacture.title'=>'ASC')));
+
+		$manufactures = $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 		//Grab all licenses for this manufacture
 		$licenses = $this -> LicensesManufacture -> getLicensesByManufactureId($manufactureId);
 		reset($licenses);
@@ -37,7 +41,7 @@ class Manufacture extends AppModel {
 
 	public function getManufactureListData() {
 		$returnData = array();
-		$manufactures = $this -> find('list', array('order'=>array('Manufacture.title'=>'ASC')));
+		$manufactures = $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 		reset($manufactures);
 		//Safety - sets pointer to top of array
 		$firstMan = key($manufactures);

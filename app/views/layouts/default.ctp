@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<?php echo $this -> Html -> charset();?>
-	<title>Collection Stash</title>
+	<title><?php echo $title_for_layout ?></title>
 	<?php echo $this -> Html -> meta('icon'); ?>
 	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
 	<link rel="stylesheet" type="text/css" href="/css/layout/fluid_bdr.css" />
@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>
 	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
 	<?php echo $scripts_for_layout; ?>
+	
 	<script>
 		$( function() {
 
@@ -93,7 +94,7 @@
 							</li>
 							<?php }?>
 							<li>
-								<?php echo $html -> link('Submit Collectible', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
+								<?php echo $html -> link('Contribute', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
 							<li>
 								<?php //echo $html -> link('Users', array('controller' => 'users', 'action' => 'index'));?>

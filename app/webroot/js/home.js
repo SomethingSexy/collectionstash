@@ -1,4 +1,4 @@
 $(function(){
-	$('#images').cycle()
+	//$('#images').cycle()
 	
 });

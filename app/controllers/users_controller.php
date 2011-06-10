@@ -6,7 +6,7 @@ class UsersController extends AppController {
     var $helpers = array('Html', 'Form');
 
     var $components = array('Email');
-    
+	
     function login() {
     	$message = null;	
 		$messageType = null;	

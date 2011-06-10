@@ -85,7 +85,7 @@
        'product_length' => array (
             //This should be decmial or blank
            'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
-           'required' => true,
+           'allowEmpty' => true,
            'message' => 'Must be a valid height.'       
        ),
        'product_width' => array (

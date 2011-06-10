@@ -2,7 +2,6 @@
 class AppController extends Controller {
 
 	//var $components = array('RequestHandler');
-
 	public function beforeFilter() {
 		if($this -> isLoggedIn()) {
 			$this -> set('isLoggedIn', true);
@@ -16,6 +15,8 @@ class AppController extends Controller {
 			$this -> set('isLoggedIn', false);
 			$this -> set('isUserAdmin', false);
 		}
+		//Since this gets set for every request, setting this here for the default
+		$this -> set('title_for_layout', 'Collection Stash');
 	}
 
 	public function getUser() {
