@@ -9,7 +9,10 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
     'auto-approve' => 'false'
   ),
   'Stash' => array (
-  	'total-allowed' => '5'
+  	'total-allowed' => '1'
+  ),
+  'Search' => array (
+  	'list-size' => 25	
   )
 ));
 

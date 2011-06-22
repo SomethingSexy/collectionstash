@@ -17,37 +17,20 @@
         foreach ($collectibles as $collectible):
         ?>
         	<div class="collectible item">
-          	<div class="collectible image"><?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => '100')); ?>
-              <div class="collectible image-fullsize hidden"><?php echo $fileUpload->image($collectible['Upload'][0]['name'], array('width' => 0)); ?></div>
-              </div>
-          	  <div class="collectible detail">
-          	   <dl>
-          	     <dt>Name: </dt><dd><?php echo $collectible['Collectible']['name']; ?><?php if($collectible['Collectible']['exclusive']){ __(' - Exclusive'); } ?> </dd>
-          	     <?php
-          	       if ($collectible['Collectible']['variant'])
-                   {
-                     echo '<dt>';
-                     __('Variant:');
-                     echo '</dt><dd>';
-                     __('Yes');
-                     echo '</dd>';
-                     
-                     
-                   }
-                 ?>  	     
-          	     <dt>Manufacture: </dt><dd><a target="_blank" href="<?php echo $collectible['Manufacture']['url']; ?>"><?php echo $collectible['Manufacture']['title']; ?></a></dd>
-          	     <dt>Type: </dt><dd><?php echo $collectible['Collectibletype']['name']; ?></dd>
-               </dl>
-            	</div>
-        	 <div class="links">
-        	   <?php //At some point we should use Ajax to pull this data back. ?>
-        	   <input type="hidden" class="collectibleId" value='<?php echo $collectible['Collectible']['id']; ?>' />
-        	   <input type="hidden" class="showEditionSize" value='<?php echo $collectible['Collectible']['showUserEditionSize']; ?>' />
-        	   <a title="Add to stash" class="ui-icon ui-icon-plus add-to-collection">Add to Stash</a>
-        	    <?php 
-        
-                // echo $html->link('Add to Stash', array('controller' => 'collections', 'action' => 'add', $collectible['Collectible']['id'],'stashId'=>$stashId)); 
-              ?>
+				<?php echo $this -> element('collectible_list_image', array(
+					'collectible' => $collectible
+				));?>
+				<?php echo $this -> element('collectible_list_detail', array(
+					'collectible' => $collectible['Collectible'],
+					'manufacture' => $collectible['Manufacture'],
+					'license' => $collectible['License'],
+					'collectibletype' => $collectible['Collectibletype']
+				));?>
+        		<div class="links">
+	        	   <?php //At some point we should use Ajax to pull this data back. ?>
+	        	   <input type="hidden" class="collectibleId" value='<?php echo $collectible['Collectible']['id']; ?>' />
+	        	   <input type="hidden" class="showEditionSize" value='<?php echo $collectible['Collectible']['showUserEditionSize']; ?>' />
+	        	   <a title="Add to stash" class="ui-icon ui-icon-plus add-to-collection">Add to Stash</a>
         	 </div>
         	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'])); ?></div>
           </div>

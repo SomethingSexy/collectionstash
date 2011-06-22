@@ -2,6 +2,8 @@
 	if(isset($setPageTitle) && $setPageTitle) {
 		$this->set("title_for_layout", $collectible['Manufacture']['title'].' - '.$collectible['Collectible']['name']);
 	}
+	$this->set('description_for_layout', $collectible['Manufacture']['title'].' '.$collectible['Collectible']['name']);
+	$this->set('keywords_for_layout', $collectible['Manufacture']['title'].' '.$collectible['Collectible']['name'].','.$collectible['Collectible']['name'].','.$collectible['Collectibletype']['name'].','.$collectible['License']['name']);
 ?>
 <div class="component" id="collectible-detail">
 	<div class="inside">
@@ -226,36 +228,15 @@
 	        foreach ($variants as $variant):
 	        ?>
 	        	<div class="collectible item">
-	          	<div class="collectible image">
-	          		<?php 
-						if (!empty($variant['Upload'])) { ?>
-							<?php echo $fileUpload -> image($variant['Upload'][0]['name'], array('width' => '100'));?>
-							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($variant['Upload'][0]['name'], array('width' => 0));?>
-							</div>
-						<?php } else { ?>
-							<img src="/img/silhouette_thumb.gif"/>
-					<?php } ?>
-	              </div>
-	          	  <div class="collectible detail">
-	          	   <dl>
-	          	     <dt>Name: </dt><dd><?php echo $variant['Collectible']['name']; ?><?php if($variant['Collectible']['exclusive']){ __(' - Exclusive'); } ?> </dd>
-	          	     <?php
-	          	       if ($variant['Collectible']['variant'])
-	                   {
-	                     echo '<dt>';
-	                     __('Variant:');
-	                     echo '</dt><dd>';
-	                     __('Yes');
-	                     echo '</dd>';
-	                     
-	                     
-	                   }
-	                 ?>  	     
-	          	     <dt>Manufacture: </dt><dd><a target="_blank" href="<?php echo $variant['Manufacture']['url']; ?>"><?php echo $variant['Manufacture']['title']; ?></a></dd>
-	          	     <dt>Type: </dt><dd><?php echo $variant['Collectibletype']['name']; ?></dd>
-	               </dl>
-	            	</div>
+	            	<?php echo $this -> element('collectible_list_image', array(
+						'collectible' => $variant
+					));?>
+					<?php echo $this -> element('collectible_list_detail', array(
+						'collectible' => $variant['Collectible'],
+						'manufacture' => $variant['Manufacture'],
+						'license' => $variant['License'],
+						'collectibletype' => $variant['Collectibletype']
+					));?>
 	        	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
 	          </div>
 	        <?php endforeach; ?>      

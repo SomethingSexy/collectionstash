@@ -55,7 +55,7 @@ class StashsController extends AppController {
 				 *
 				 * This will let me eventually have other types attached to one stash.
 				 */
-				$this -> paginate = array('conditions' => array('id' => $id), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'Collectibletype', 'Upload'))));
+				$this -> paginate = array('conditions' => array('id' => $id), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture','License', 'Collectibletype', 'Upload'))));
 
 				//        $this->paginate = array('conditions'=>array('CollectiblesUser.stash_id'=>$id),
 				//                'limit' => 20,

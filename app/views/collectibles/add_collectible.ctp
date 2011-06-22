@@ -13,7 +13,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Add Collectible');?>
+			<?php echo $collectible_title ?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -28,7 +28,7 @@
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<?php if($this -> Session -> check('add.collectible.mode.collectible')) { ?>
+						<?php if($this -> Session -> check('add.collectible.mode.collectible') || $this -> Session -> check('edit.collectible.mode.collectible')) { ?>
 							<li>
 								<div class="label-wrapper">
 									<label for="">

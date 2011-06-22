@@ -170,7 +170,7 @@
 				</div>
 			</div>		
 			<div class="links review">
-				<?php echo $this->Form->create('Collectible' , array('url' => '/collectibles/confirm'));?>
+				<?php echo $this->Form->create('Collectible' , array('url' => $confirmUrl));?>
 					<input type="submit" value="Submit">
 				</form>
 				<?php 
@@ -179,7 +179,10 @@
 						
 					} else if($this -> Session -> check('add.collectible.mode.variant')) {
 						echo '<a href="/collectibles/addVariant/edit:1">Edit</a>';
-					} ?>
+					} else if($this -> Session -> check('edit.collectible.mode.collectible')) {
+						echo '<a href="/collectibles/edit/edit:1">Edit</a>';
+					}
+					?>
 			</div>
 		</div>
 	</div>

@@ -4,46 +4,11 @@ class CollectiblesController extends AppController {
 
 	var $name = 'Collectibles';
 
-	//var $components = array('CollectibleDisplayCondition');
-
 	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload');
 
 	var $components = array('RequestHandler');
 
 	var $actsAs = array('Searchable.Searchable');
-
-	/**
-	 * TODO as of 5/9/11 this method is currently not being used and I do not think works right now.
-	 */
-	function index() {
-		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-
-		$options = array();
-		if(!empty($this -> data['search'])) {
-			// $options = array("MATCH(Collectible.name) AGAINST('{$this->data['search']}')");
-
-			debug($this -> data);
-			$this -> paginate = array("conditions" => array("MATCH(Collectible.name) AGAINST('{$this->data['search']}' IN BOOLEAN MODE)"), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
-		} else {
-			$this -> paginate = array("contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'));
-			//  $params = array();
-		}
-		//$options['contains'] = array('Collectible' => array ( 'Manufacture','Collectibletype','Upload'));
-		//this brings back variants
-		//$this->Collectible->recursive = 1;
-		//TODO update this so it limits what is returned
-		$collectilbes = $this -> paginate('Collectible');
-		debug($collectilbes);
-		$this -> set('collectibles', $collectilbes);
-
-		$username = $this -> getUsername();
-		if($this -> Acl -> check($username, 'collectibles', 'update')) {
-			$this -> set('showUpdate', TRUE);
-		} else {
-			$this -> set('showUpdate', FALSE);
-		}
-
-	}
 
 	function view($id =null) {
 		if(!$id) {
@@ -64,10 +29,13 @@ class CollectiblesController extends AppController {
 	function addSelectType() {
 		if($this -> isLoggedIn()) {
 			//Always delete this stuff, this could go in a better spot in the future
+			//Should probably update this so I set to show and not show different things, not put the biz logic in the view
 			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
 			$this -> Session -> delete('add.collectible.mode.collectible');
 			$this -> Session -> delete('add.collectible.mode.variant');
+			$this -> Session -> delete('edit.collectible.mode.collectible');
+			$this -> Session -> delete('edit.collectible.mode.variant');
 			$this -> Session -> delete('variant.add-id');
 			$this -> Session -> delete('variant.base-collectible');
 			//check to see if there is data submitted
@@ -98,6 +66,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> delete('collectible');
 			$this -> Session -> write('add.collectible.mode.collectible', true);
 			$this -> Session -> delete('add.collectible.mode.variant');
+			$this -> set('collectible_title', __('Add Collectible', true));
 			//First check to see if this is a post
 			if(!empty($this -> data)) {
 				$this -> data['Collectible'] = Sanitize::clean($this -> data['Collectible']);
@@ -147,7 +116,7 @@ class CollectiblesController extends AppController {
 					//Search on just the name for now
 					array_push($conditions, array('Collectible.name LIKE' => '%' . $newCollectible['Collectible']['name'] . '%'));
 					//array_push($conditions, array("LIKE(Collectible.name) AGAINST('{$this->data['Collectible']['name']}' IN BOOLEAN MODE)"));
-					$this -> paginate = array("conditions" => array($conditions), "contain" => array('Manufacture', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
+					$this -> paginate = array("conditions" => array($conditions), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
 					$existingCollectibles = $this -> paginate('Collectible');
 
 					$currentCollectible = $this -> Session -> read('preSaveCollectible');
@@ -168,7 +137,7 @@ class CollectiblesController extends AppController {
 						$this -> render('existingCollectibles');
 						return ;
 					} else {
-						$this -> redirect( array('action' => 'addImage'));
+						//$this -> redirect( array('action' => 'addImage'));
 
 						//$this -> redirect( array('action' => 'review'));
 					}
@@ -243,6 +212,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> Session -> write('add.collectible.mode.variant', true);
 		$this -> Session -> delete('add.collectible.mode.collectible');
+		$this -> set('collectible_title', __('Add Collectible', true));
 
 		//If edit do not do this again
 		//If it is not an edit and the id is passed, store and grab the collectible
@@ -351,7 +321,6 @@ class CollectiblesController extends AppController {
 			$this -> set('exclusive_manufactures', $manufactureData);
 			return ;
 		} else {
-			//TODO this is redundant but if this is the first time through, save as data to prepopulate input fields
 			$baseCollectible = $this -> Session -> read('variant.base-collectible');
 			$this -> data = $baseCollectible;
 			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureList();
@@ -444,6 +413,7 @@ class CollectiblesController extends AppController {
 
 			debug($collectible);
 			$this -> set('collectible', $collectible);
+			$this -> set('confirmUrl', '/collectibles/confirm');
 		} else {
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
 			$this -> redirect( array('action' => 'addSelectType'));
@@ -513,27 +483,76 @@ class CollectiblesController extends AppController {
 
 	}
 
+	/*
+	 * I think I will have a "collectibles_edit" table and potentially going to have to have edit tables for the other related tables.
+	 * All edits will be put to the collectibles_edit table as to not interfer with the main tables, once an edit has been approved then it
+	 * will push it out to the main tables.  We will reuse the approval table but the approval id on the edit collectible will be for the edit...
+	 *
+	 * Once the edit is approved we will update the fields of the collectible that were being changed, this will keep the history on the rev table...however
+	 * how do we maintain who did the edits? Does each entry in the collectible_rev get its own approval id?
+	 * 
+	 * Notes from 6/21/11
+	 * 	- I need either to have the user id on the collectible that created it, and then the approval id will be the most current version that will keep the 
+	 * edit trail.  That way I always know who created it and I also know who did the lastest edits.  If I want to go back and look at history, I would do compares against
+	 * the rev table and each approval id would be the id of the person who did the edit, although do it make more sense to have an edit table or edit user id?  Since that isn't
+	 * the purpose of approval?
+	 */
 	function edit($id =null) {
 		$this -> checkLogIn();
-		if(!$id && empty($this -> data)) {
+		if(!$id && empty($this -> data) && !empty($this -> params['named']['edit'])) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
-			$this -> redirect( array('action' => 'index'));
+			//TODO go somewhere
+			//$this -> redirect( array('action' => 'index'));
 		}
 		$username = $this -> getUsername();
-		$this -> Session -> write('add.collectible.mode.collectible', true);
+		//Check if it is a variant or not
+		$this -> Session -> write('edit.collectible.mode.collectible', true);
+		$this -> Session -> delete('edit.collectible.mode.variant');
+		$this -> Session -> delete('add.collectible.mode.collectible');
 		$this -> Session -> delete('add.collectible.mode.variant');
-		if(!empty($this -> data)) {
-			if($this -> Collectible -> saveAll($this -> data)) {
-				$this -> Session -> setFlash(__('The collectible has been saved', true), null, null, 'success');
-				$this -> redirect( array('action' => 'index'));
-			} else {
-				$this -> Session -> setFlash(__('The collectible could not be saved. Please, try again.', true), null, null, 'error');
-			}
-		}
+		$this -> set('collectible_title', __('Edit Collectible', true));
 
-		if(empty($this -> data)) {
-			$collectible = $this -> Collectible -> read(null, $id);
-			$this -> data = $this -> Collectible -> read(null, $id);
+		if(!empty($this -> data)) {
+			$this -> data = Sanitize::clean($this -> data);
+			$this -> Collectible -> set($this -> data);
+			$validCollectible = true;
+			if($this -> Collectible -> validates()) {
+
+			} else {
+				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+				$validCollectible = false;
+			}
+
+			if($validCollectible) {
+				$this -> Session -> write('preSaveCollectible', $this -> data);
+				$this -> redirect( array('action' => 'editReview'));
+			} else {
+				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($this -> data['Collectible']['manufacture_id']);
+				$this -> set('manufactures', $manufactureData['manufactures']);
+				$this -> set('licenses', $manufactureData['licenses']);
+
+				if(isset($newCollectible['Collectible']['series_id'])) {
+					$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
+					$this -> set('series', $series);
+				}
+
+				// $this -> set('series', $manufactureData['series']);
+				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+				$this -> set(compact('scales'));
+			}
+		} else if(empty($this -> data)) {
+			//TODO 6/19/11 - finish all of this logic
+
+			if(!empty($this -> params['named']['edit'])) {
+				$collectible = $this -> Session -> read('preSaveCollectible');
+				$this -> data = $collectible;
+				$this -> set('edit', true);
+			} else {
+				$collectible = $this -> Collectible -> read(null, $id);
+				$this -> data = $collectible;
+			}
+
 			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
 			$this -> set('manufactures', $manufactureData['manufactures']);
 			$this -> set('licenses', $manufactureData['licenses']);
@@ -546,20 +565,90 @@ class CollectiblesController extends AppController {
 
 			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 			$this -> set(compact('scales'));
+
+			$this -> render('addCollectible');
+			return ;
+		} else {
+			//do somethinf
 		}
 
-		$manufactures = $this -> Collectible -> Manufacture -> find('list');
-		$this -> set(compact('manufactures'));
 	}
 
-	function editReview(){
-		
-		
+	function editReview() {
+		$this -> checkLogIn();
+		//remove this cause we do not need it
+		$collectible = $this -> Session -> read('preSaveCollectible');
+		if(!is_null($collectible)) {
+			//Lets retrieve some data for display purposes
+			//TODO this may be redundant...should we save off later?
+			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
+			$collectible['Manufacture'] = $manufacture['Manufacture'];
+
+			$collectibleType = $this -> Collectible -> Collectibletype -> find('first', array('conditions' => array('Collectibletype.id' => $collectible['Collectible']['collectibletype_id']), 'fields' => array('Collectibletype.name'), 'contain' => false));
+			$collectible['Collectibletype'] = $collectibleType['Collectibletype'];
+
+			$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
+			$collectible['License'] = $license['License'];
+
+			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
+			$collectible['Scale'] = $scale['Scale'];
+
+			debug($collectible);
+			$this -> set('collectible', $collectible);
+			
+			$this -> set('confirmUrl', '/collectibles/editConfirm');
+			$this -> render('review');
+			return ;
+		} else {
+			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'addSelectType'));
+		}
 	}
-	
-	function editConfirm(){
-		
-		
+
+	function editConfirm() {
+		$this -> checkLogIn();
+		$newCollectible = $this -> Session -> read('preSaveCollectible');
+		if(!is_null($newCollectible)) {
+			$saveCollectible['Approval'] = $newCollectible['Approval'];
+			$saveCollectible['Collectible'] = $newCollectible['Collectible'];
+			if(isset($newCollectible['AttributesCollectible'])) {
+				$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
+			}
+			$this -> CollectiblesEdit -> create();
+			if($this -> CollectiblesEdit -> saveAll($saveCollectible, array('validate' => false))) {
+				$id = $this -> Collectible -> id;
+				$collectible = $this -> Collectible -> findById($id);
+				$approvalId = $collectible['Collectible']['approval_id'];
+				$this -> loadModel('Approval');
+				$this -> Approval -> id = $approvalId;
+				/* Since they confirmed, now set to pending = 1.  I really don't like how
+				 this is setup right now but it works because of the image thing.
+				 A 1 means that this collectible needs to be approved by an admin first */
+				$pendingState = '1';
+				if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
+					$pendingState = '0';
+				}
+				$this -> Approval -> saveField('state', $pendingState);
+				if(isset($newCollectible['Upload'])) {
+					$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
+					$this -> Collectible -> Upload -> saveField('collectible_id', $id);
+				}
+
+				$collectible = $this -> Collectible -> findById($id);
+				debug($collectible);
+				$this -> set('collectible', $collectible);
+				$this -> Session -> delete('preSaveCollectible');
+				$this -> Session -> delete('uploadId');
+			} else {
+				debug($this -> Collectible -> validationErrors);
+				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+				$this -> redirect( array('action' => 'review'));
+			}
+		} else {
+			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'addSelectType'));
+		}
+
 	}
 
 	function delete($id =null) {
@@ -579,6 +668,30 @@ class CollectiblesController extends AppController {
 		}
 		$this -> Session -> setFlash(__('Collectible was not deleted', true), null, null, 'error');
 		$this -> redirect( array('action' => 'index'));
+	}
+
+	function search() {
+		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
+		//Should update this if we want to pass multiple paramaters in
+		if(isset($this -> params['url']['q'])) {
+			$this -> data['Search'] = array();
+			$this -> data['Search']['search'] = $this -> params['url']['q'];
+		} else if(isset($this -> params['url']['m'])) {
+			$this -> data['Search'] = array();
+			//find all of this license
+			$this -> data['Search']['search'] = '';
+			$this -> data['Search']['Manufacture'] = array();
+			$this -> data['Search']['Manufacture']['Filter'] = array();
+			$this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
+		} else if(isset($this -> params['url']['l'])) {
+			$this -> data['Search'] = array();
+			//find all of this license
+			$this -> data['Search']['search'] = '';
+			$this -> data['Search']['License'] = array();
+			$this -> data['Search']['License']['Filter'] = array();
+			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
+		}
+		$this -> searchCollectible();
 	}
 
 }

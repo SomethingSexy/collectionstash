@@ -3,15 +3,16 @@
 	<?php echo $this -> Html -> charset();?>
 	<title><?php echo $title_for_layout ?></title>
 	<?php echo $this -> Html -> meta('icon'); ?>
+	<?php if(isset($description_for_layout)){ echo "<meta name='description' content='".$description_for_layout."' />"; } ?>
+	<?php if(isset($keywords_for_layout)){ echo "<meta name='keywords' content='".$keywords_for_layout."' />"; } ?>
 	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/fluid_bdr.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/col_3_ml.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/default.css" />
+
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.core.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.theme.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.dialog.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.tabs.css" />
 	<link rel="stylesheet" type="text/css" href="/css/redmond.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/default.css" />
 	<link rel="stylesheet" type="text/css" href="/css/layout/non_msie.css" />
 	<script type="text/javascript" src="/js/jquery-1.6.1.js"></script>
 	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>
@@ -47,6 +48,26 @@
 			//}, function() {	//On Hover Out
 			// $(this).removeClass("subhover"); //On hover out, remove class "subhover"
 			//});
+			$( "#login-dialog" ).dialog({
+				'autoOpen' : false,
+				'width' : 500,
+				'height': 300,
+				'resizable': false,
+				'modal': true,
+				'buttons': {
+					"Login": function() {
+						$('#UserLoginForm').submit();
+					}
+				}
+		
+			});	
+			
+			$('#login-link').click(function(){
+				$('#UserUsername').val('');
+				$('#UserPassword').val('');
+				$('#login-dialog').dialog('open');
+				return false;
+			});		
 		});
 		//TODO I don't like this here
 		$( function() {
@@ -107,7 +128,7 @@
 								{
    							?>
 							<li>
-								<?php echo $html -> link('Login', array('controller' => 'users', 'action' => 'login'));?>
+								<a id='login-link' href="/users/login"><?php __('Login');?></a>
 							</li>
 							<?php if(Configure::read('Settings.registration')){
 								echo '<li>';
@@ -116,6 +137,13 @@
 								} 
 							}?>
 						</ul>
+						<div id="site-search-container">
+							<form id="search-site" method="get" action="/collectibles/search">
+								<p>
+								<input id="q" type="text" name="q">
+								</p>
+							</form>								
+						</div>
 					</div>
 				</div>
 			</div>
@@ -132,16 +160,45 @@
 		</div>
 		<div id="stage">
 			<?php echo $content_for_layout;?>
-		</div>
-		<div id="footer">
-			<span class="version">Version - Alpha</span>
+		</div>		
+	</div>
+	<div id="footer">
+		<span class="version">Version - Alpha</span>
 			<!--<span class="links">About | Contact | Donate | Found a bug? </span> -->
-			<span class="copyright">Collection Stash - Copyright 2011</span>
-		</div>
+		<span class="copyright">Collection Stash - Copyright 2011</span>
+	</div>
 		<?php /**echo $this->element('sql_dump');
 			 echo $js->writeBuffer();
 			 */
 		?>
 		<?php echo $this -> element('sql_dump');?>
+		
+<div id="login-dialog" class="dialog" title="Login">
+  <div class="component component-dialog">
+    <div class="inside" >
+      <div class="component-view">
+      <?php echo $form->create('User', array('action' => 'login')); ?>
+        <fieldset>
+          <ul class="form-fields">
+            <li>
+              <div class="label-wrapper">
+                <label for=""><?php __('Username') ?></label>
+              </div>
+            <?php echo $form->input('username', array('div' => false,'label'=> false));?>
+           </li>
+           <li>
+              <div class="label-wrapper">
+                <label for=""><?php __('Password') ?></label>
+              </div>           
+            <?php echo $form->input('password', array('div' => false, 'label'=> false));?>
+           </li>
+          </ul>
+          <?php echo $form->hidden('fromPage', array('value'=> $this->here.$request_params)); ?>
+        </fieldset>
+      <?php echo $form->end();?>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

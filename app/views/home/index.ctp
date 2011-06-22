@@ -29,4 +29,43 @@
 			</div>
 		</div>	
 	</div>
+	
+	<div class="component find-by">
+		<div class="inside" >
+			<div class="component-title">
+      			<h2><?php __('Find Collectibles By...');?></h2>
+    		</div>
+    		<div class="component-view">
+    			<div class="search-types">
+	           		<h3><a href="#"><?php echo __('Manufacturer'); ?></a></h3>
+	       			<div>
+						<ul>
+						<?php foreach($manufactures as $manufacture) {?>
+						 	<li>
+						 		<?php
+						 			echo '<a href="/collectibles/search?m='.$manufacture['Manufacture']['id'].'"';
+									echo '>'.$manufacture['Manufacture']['title'].'</a>';
+						 		?>	
+						 	</li>
+						 <?php } ?>
+		       			</ul>
+	       			</div>
+	           		<h3><a href="#"><?php echo __('License'); ?></a></h3>
+	       			<div>
+						<ul>
+						<?php foreach($licenses as $license) {?>
+						 	<li>
+						 		<?php
+						 			echo '<a href="/collectibles/search?l='.$license['License']['id'].'"';
+									echo '>'.$license['License']['name'].'</a>';
+						 		?>	
+						 	</li>
+						 <?php } ?>
+		       			</ul>
+	       			</div>
+       			</div>
+			</div>
+		</div>	
+	</div>
+	
 </div>

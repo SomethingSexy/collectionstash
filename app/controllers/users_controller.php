@@ -36,7 +36,11 @@ class UsersController extends AppController {
                         $this -> log($results);
                         $this -> Session -> write('user', $results);
 						$this->log('User '.$results['User']['id'].' successfully logged in at '. date("Y-m-d H:i:s", time()) , 'info');	
-                        $this -> redirect( array('action' => 'home'), null, true);
+                        if(!empty($this -> data['User']['fromPage'])) {
+                        	$this -> redirect($this -> data['User']['fromPage'], null, true);
+                        } else {
+                        	$this -> redirect( array('action' => 'home'), null, true);                       	
+                        }
                     } else {
                         $this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
                         $success = false;
@@ -64,7 +68,7 @@ class UsersController extends AppController {
 		$this -> Session -> delete('user');
 		$this -> Session -> destroy();
 
-		$this -> redirect( array('action' => 'login'), null, true);
+		$this -> redirect('/', null, true);
 	}
 
     function index() {

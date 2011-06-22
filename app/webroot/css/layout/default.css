@@ -1,12 +1,14 @@
 html {
+	height: 100%;
 }
 body {
     font-family: Verdana, Geneva, sans-serif;
     font-size: 100.1%;
     letter-spacing:0.01em;
-    margin:17px 0 15px;
+  /*  margin:17px 0 15px;*/
     text-rendering:optimizelegibility;
     background: #656464;
+    height: 100%;
 
 }
 .hidden {
@@ -19,15 +21,13 @@ body {
     text-align:left;
     font-size: 100%;
     overflow: hidden;
-}
-#container {
-    margin:0 auto;
+	min-height: 100%;
+	margin:0 auto;
     width:900px;
-}
-#container {
-    background:  #F8F8F8;
+    background:  #656464;
     padding:0;
 }
+
 #container, #bottom {
     width:1024px;
 }
@@ -53,6 +53,7 @@ body {
     width: 100%;
     -moz-border-radius: 15px;
 	border-radius: 15px;
+	background-color: #F8F8F8;
 }
 
 #header #header-top {
@@ -114,6 +115,22 @@ body {
   
 }
 
+#site-search-container {
+	float: left;
+	
+}
+form#search-site label {
+    display: block;
+    text-indent: -9999px;
+}
+form input#q {
+    background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: #9E9FA4;
+    height: 31px;
+    padding: 0 0 0 30px;
+    width: 229px;
+}
 ul.nav {
     list-style: none;
     /*  padding: 0 20px;*/
@@ -215,11 +232,10 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
     clear: both;
     padding: 10px 0px 10px 0px;
     text-align: right;
-    color:#444444;
+    background-color: #111111;
+    color: #CCCCCC;
     float: left;
     width: 100%;
-    -moz-border-radius: 15px;
-	border-radius: 15px;
 }
 #footer .version {
     padding-left: 20px;
@@ -713,6 +729,15 @@ a:active {
 	margin-left: 1em;
 }
 #home-components .random-collectibles .inside .component-view .collectibles .collectible .detail p {
+	font-size: 0.75em;
+}
+
+#home-components .find-by {
+	float: right;
+	width: 400px;
+}
+
+#home-components .find-by .inside .component-view .search-types div ul li a {
 	font-size: 0.75em;
 }
 
@@ -1231,4 +1256,17 @@ div.paging span a {
 #stash-list-container .stash-list-details {
     color: #444444;
     font-size: 0.8em;
+}
+
+.ui-dialog {
+	border: 8px solid #333333;
+    border-radius: 8px 8px 8px 8px;
+	
+}
+
+.ui-widget-header {
+	background: none;
+	border: none;
+	color: #ccc;
+	
 }
