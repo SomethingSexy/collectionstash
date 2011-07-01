@@ -5,6 +5,7 @@
 			'showStatistics' => true,
 			'showWho' => true,
 			'showEdit' => true,
+			'showHistory' => true,
 			'showVariants' => true,
 			'setPageTitle' => true
 		));		

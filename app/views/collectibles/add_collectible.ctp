@@ -24,11 +24,17 @@
 		</div>
 		<div class="component-view">
 			<div class="collectible add">
-				<?php echo $this -> Form -> create('Collectible', array('type' => 'file'));?>
+				<?php 
+					if(isset($collectible_action)) {
+						echo $this -> Form -> create('Collectible', array('url'=> $collectible_action , 'type' => 'file'));
+					} else {
+						echo $this -> Form -> create('Collectible', array('url' => $this->here, 'type' => 'file'));
+					}
+					?>
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<?php if($this -> Session -> check('add.collectible.mode.collectible') || $this -> Session -> check('edit.collectible.mode.collectible')) { ?>
+						<?php  if($this -> Session -> check('add.collectible.mode.collectible') || $this -> Session -> check('edit.collectible.mode.collectible')) { ?>
 							<li>
 								<div class="label-wrapper">
 									<label for="">
@@ -90,6 +96,14 @@
 								<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
 							</li>	
 					    <?php } ?>
+					    <li>
+							<div class="label-wrapper">
+								<label for="scale">
+									<?php __('Release Year') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> year('release', 1900, date('Y'));?>
+						</li>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleName">
@@ -113,11 +127,19 @@
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="scale">
-									<?php __('Release Year') ?>
+								<label for="CollectibleMsrp">
+									<?php __('Original Retail Price (USD)') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> year('release', 1900, date('Y'));?>
+							<?php echo $this -> Form -> input('msrp', array('div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleUrl">
+									<?php __('URL') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -157,15 +179,6 @@
 							</div>
 							<?php echo $this -> Form -> input('upc', array('div' => false, 'label' => false));?>
 						</li>
-
-						<li>
-							<div class="label-wrapper">
-								<label for="CollectibleMsrp">
-									<?php __('Original Retail Price (USD)') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> input('msrp', array('div' => false, 'label' => false));?>
-						</li>
 						
 						<li>
 							<div class="label-wrapper">
@@ -200,16 +213,7 @@
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('product_depth', array('div' => false, 'label' => false, 'id' => 'collectibleDepth'));?>
-						</li>
-						<li>
-							<div class="label-wrapper">
-								<label for="CollectibleUrl">
-									<?php __('URL') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false));?>
-						</li>
-						
+						</li>						
 					</ul>
 					<?php if(!isset($edit)) { ?>
 						<input type="hidden" name="data[Edit]" value="false" />
@@ -218,6 +222,54 @@
 					<?php } ?>
 
 				</fieldset>
+				<fieldset>
+					<legend>
+						<?php __('Part Break Down');?>
+					</legend>
+					<ul class="form-fields">
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Features') ?>
+								</label>
+								<a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an feature for this collectible.  An feature is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
+							</div>
+							<div id="collectible-attributes-list" class="attributes-list">
+								<ul>
+									<?php
+									$lastKey = 0;
+									if(isset($this -> data['AttributesCollectible'])) {
+										foreach($this->data['AttributesCollectible'] as $key => $attribue) {
+											if($attribue['variant'] !== '1') {
+												echo '<li>';
+												echo '<span class="attribute-label">Part: </span>';
+												echo '<span class="attribute-name">';
+												echo $attribue['name'];
+												echo '</span>';
+												echo '<span class="attribute-description">';
+												echo $attribue['description'];
+												echo '</span>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][variant]" value="' . $attribue['variant'] . '"/>';
+												echo '</li>';
+												$lastKey = $key;
+											}
+										}
+										if(!$this -> Session -> check('add.collectible.mode.variant')) {
+											echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
+										}
+									}
+									?>
+								</ul>
+							</div>
+							<div>
+								<a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a>
+							</div>
+						</li>
+					</ul>
+				</fieldset>	
 				<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
 					<fieldset>
 						<legend>
@@ -238,7 +290,7 @@
 										<?php __('Exclusive Retailer') ?>
 									</label>
 								</div>
-								<?php echo $this -> Form -> select('exclusive_manufacture_id', $exclusive_manufactures, null,array('empty'=>'Select', 'div' => false, 'label' => false));?>
+								<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
 							</li>					
 						</ul>
 					</fieldset>	
@@ -248,31 +300,28 @@
 						</legend>
 						<ul class="form-fields">
 							<li>
-								<div class="label-wrapper">
-									<label for="">
-										<?php __('Features') ?>
-									</label>
-									<a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an feature for this collectible.  An feature is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
-								</div>
-								<div id="add-attributes-list">
+								<div id="variant-attributes-list" class="attributes-list">
 									<ul>
 										<?php
 	
 										if(isset($this -> data['AttributesCollectible'])) {
-											$lastKey = 1;
 											foreach($this->data['AttributesCollectible'] as $key => $attribue) {
-												echo '<li>';
-												echo '<span class="attribute-name">';
-												echo $attribue['name'];
-												echo '</span>';
-												echo '<span class="attribute-description">';
-												echo $attribue['description'];
-												echo '</span>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
-												echo '</li>';
-												$lastKey = $key;
+												if($attribue['variant'] === '1') {
+													echo '<li>';
+													echo '<span class="attribute-label">Feature: </span>';
+													echo '<span class="attribute-name">';
+													echo $attribue['name'];
+													echo '</span>';
+													echo '<span class="attribute-description">';
+													echo $attribue['description'];
+													echo '</span>';
+													echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+													echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+													echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+													echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][variant]" value="' . $attribue['variant'] . '"/>';
+													echo '</li>';
+													$lastKey = $key;
+												}
 											}
 											echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
 										}
@@ -280,7 +329,7 @@
 									</ul>
 								</div>
 								<div>
-									<a class="ui-icon ui-icon-plus add-attribute">Add Attribute</a>
+									<a class="add-variant-attribute">Add Feature</a>
 								</div>
 							</li>
 						</ul>
