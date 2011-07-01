@@ -51,8 +51,8 @@ body {
     margin-bottom: 8px;*/
    /* overflow: hidden;*/
     width: 100%;
-    -moz-border-radius: 15px;
-	border-radius: 15px;
+   /* -moz-border-radius: 15px;
+	border-radius: 15px;*/
 	background-color: #F8F8F8;
 }
 
@@ -257,7 +257,7 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
     float:right;
 }
 #stage {
-	background-color: #656464;
+	background-color: #F8F8F8;
     float: left;
     width: 100%;
     padding-bottom: 1em;
@@ -308,7 +308,7 @@ a:active {
 }
 .component .component-title {
     /*border-bottom: 1px solid #A6C9E2; */
-    background-color: #FDB924;
+   /* background-color: #FDB924;*/
     -moz-border-radius: 10px 10px 0 0;
 	border-radius: 10px 10px 0 0;
 	padding: 5px;
@@ -317,9 +317,9 @@ a:active {
     clear:both;
     font-weight: bold;
    /* padding: 5px; */
-    color:#000000;
+    color:#FDB924;
     margin: 0;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 /* messages, errors, success */
 
@@ -381,11 +381,43 @@ a:active {
 .collectible.image {
     float: left;
 }
+.collectible.detail-wrapper {
+	float: left;
+	width: 350px;
+}
 .collectible.detail {
     float: left;
     margin-left: 10px;
     width: 350px;
+    border: 1px solid #CCC;
+    margin-bottom: 10px;
 }
+.collectible.detail .detail.title {
+	width: 100%;
+	border-bottom: 1px solid #CCC;
+	overflow: hidden;
+}
+.collectible.detail .detail.title h3 {
+	font-size: 0.8em;
+	padding: 2px;
+	font-weight: normal;
+	margin-bottom: 0;
+	float: left;
+}
+.collectible.detail .detail.title .title.link {
+
+	font-size: 0.75em;
+}
+.collectible.detail .detail.title .title.link a {
+	padding: 2px;
+		float: right;
+}
+
+.collectible.detail dl,
+.collectible.detail ul  {
+	padding: 5px;
+}
+.collectible.detail .attributes-list ul li span,
 .collectible.statistics dl,
 .collectible.detail dl {
     font-size: 0.75em;
@@ -512,6 +544,10 @@ a:active {
    /* margin: 0 0em 0 1em;*/
 }
 
+#collectibles-list-component .component-view .collectibles.view .collectible.item .collectible.detail {
+	border: none;
+}
+
 #collectible-add-component {
   width: 100%;
 }  
@@ -612,28 +648,31 @@ a:active {
 	clear: none;
 }
 */
-#add-attributes-list,
-#add-attributes-list ul {
+.attributes-list,
+.attributes-list ul {
 	width: 100%;
 	float: left;
 }
 
-#add-attributes-list ul li {
+.attributes-list ul li {
 
 }
-
-#add-attributes-list ul li .attribute-name,
-#add-attributes-list ul li .attribute-description {
+.attributes-list ul li .attribute-label,
+.attributes-list ul li .attribute-name,
+.attributes-list ul li .attribute-description {
 	float: left;
 	white-space: normal;
 }
-
-#add-attributes-list ul li .attribute-name {
+.attributes-list ul li .attribute-label {
+	width: 25%;
+	
+}
+.attributes-list ul li .attribute-name {
 	width: 25%;
 }
 
-#add-attributes-list ul li .attribute-description {
-	width: 75%;
+.attributes-list ul li .attribute-description {
+	width: 50%;
 }
 
 #my-stashes-component {
@@ -652,7 +691,7 @@ a:active {
 	
 }
 
-#collectible-detail .component-view .collectible {
+#collectible-detail .component-view .collectible.item {
 	border: none;
 
 }
@@ -676,6 +715,21 @@ a:active {
 	
 }
 
+#collectible-history-list-component {
+	width: 100%;
+}
+
+#collectible-history-list-component .inside .component-view .history {
+	text-align: left;
+	font-size: 0.75em;
+}
+
+#collectible-history-list-component .inside .component-view .history th,
+#collectible-history-list-component .inside .component-view .history td {
+	padding: 5px;
+	
+}
+
 .collectible.statistics {
     padding: 10px;
     float: left;
@@ -690,7 +744,7 @@ a:active {
 .collectible.statistics dt,
 .collectible.detail dt {
 	font-weight: bold;
-	padding-left: 4px;
+	/*padding-left: 4px;*/
 	vertical-align: top;
 }
 .collectible.statistics dd,
@@ -1269,4 +1323,12 @@ div.paging span a {
 	border: none;
 	color: #ccc;
 	
+}
+
+#bread-crumbs {
+	width: 100%;
+}
+
+#bread-crumbs div {
+	display: inline;
 }

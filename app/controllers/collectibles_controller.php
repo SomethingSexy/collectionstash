@@ -6,16 +6,420 @@ class CollectiblesController extends AppController {
 
 	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload');
 
-	var $components = array('RequestHandler');
+	var $components = array('RequestHandler', 'Wizard.Wizard');
 
 	var $actsAs = array('Searchable.Searchable');
+
+	function beforeFilter() {
+		parent::beforeFilter();
+		$this -> Wizard -> steps = array('manufacture', 'attributes', 'image', 'review');
+		$this -> Wizard -> completeUrl = '/collectibles/confirm';
+		$this -> Wizard -> loginRequired = true;
+	}
+
+	function confirm() {
+
+	}
+
+	function wizard($step = null) {
+		$this -> Wizard -> process($step, $this -> isLoggedIn());
+	}
+
+	function _prepareManufacture() {
+		$this -> Session -> delete('collectible');
+		$this -> Session -> write('add.collectible.mode.collectible', true);
+		$this -> Session -> delete('add.collectible.mode.variant');
+		$this -> set('collectible_title', __('Add Collectible', true));
+
+		if(empty($this -> data)) {
+			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureListData();
+			debug($manufactureData);
+			$this -> set('manufactures', $manufactureData['manufactures']);
+			$this -> set('licenses', $manufactureData['licenses']);
+			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+
+			// if(isset($newCollectible['Collectible']['series_id'])) {
+			// $series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+			// $this -> set('series', $series);
+			// }
+
+			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+			$this -> set(compact('scales'));
+		} else {
+			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($this->data['Collectible']['manufacture_id']);
+			debug($manufactureData);
+			$this -> set('manufactures', $manufactureData['manufactures']);
+			$this -> set('licenses', $manufactureData['licenses']);
+			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+
+			if(isset($wizardData['manufacture']['Collectible']['series_id'])) {
+				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this->data['Collectible']['manufacture_id'], $this->data['Collectible']['license_id']);
+				$this -> set('series', $series);
+			}
+
+			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+			$this -> set(compact('scales'));
+
+		}
+	}
+
+	function _processManufacture() {
+		//check if user is logged in
+		if($this -> isLoggedIn()) {
+			$newCollectible = array();
+
+			//First check to see if this is a post
+			// if(!empty($this -> data)) {
+			$this -> data = Sanitize::clean($this -> data);
+			//Since this is a post, take the data that was submitted and set it to our variable
+			$newCollectible = $this -> data;
+			//set default to true
+			$validCollectible = true;
+			//set default to false
+			$editMode = false;
+
+			//First check if we are in edit mode
+			if($this -> data['Edit'] === true) {
+				$editMode = true;
+			}
+
+			//First try and validate the collectible.
+			$this -> Collectible -> set($newCollectible);
+			if($this -> Collectible -> validates()) {
+
+			} else {
+				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+				$validCollectible = false;
+			}
+
+			if($validCollectible) {
+
+				//set pending to 2...this really needs to check if user is admin first TODO
+				$newCollectible['Approval']['state'] = 2;
+				$userId = $this -> getUserId();
+				//set the id of the user who is adding this collectible
+				$newCollectible['Approval']['user_id'] = $userId;
+				//$newCollectible['Approval']['date_added'] = date("Y-m-d H:i:s", time());
+				//set the man id of this collectible
+				//$newCollectible['Collectible']['manufacture_id'] = $manufactureId;
+				//set the license id of this collectible
+				//$newCollectible['Collectible']['license_id'] = $licenseId;
+				//$newCollectible['Collectible']['approval_id'] = '1';
+
+				//Alright since it validates, lets next check to see if
+				//any other collectibles out there exist that might be the
+				//same so we are not adding duplicates
+				$conditions = array();
+				//Make sure they are approved already, might want to change this later
+				array_push($conditions, array('Approval.state' => '0'));
+				//Make sure it is not a variant
+				array_push($conditions, array('Collectible.variant' => '0'));
+				//Search on just the name for now
+				array_push($conditions, array('Collectible.name LIKE' => '%' . $newCollectible['Collectible']['name'] . '%'));
+				//array_push($conditions, array("LIKE(Collectible.name) AGAINST('{$this->data['Collectible']['name']}' IN BOOLEAN MODE)"));
+				$this -> paginate = array("conditions" => array($conditions), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'Approval'), 'limit' => 1);
+				$existingCollectibles = $this -> paginate('Collectible');
+
+				$currentCollectible = $this -> Session -> read('preSaveCollectible');
+
+				if(!is_null($currentCollectible)) {
+					if(isset($currentCollectible['Upload'])) {
+						$newCollectible['Upload'] = $currentCollectible['Upload'];
+					}
+				}
+
+				$this -> Session -> write('preSaveCollectible', $newCollectible);
+
+				//If the size is greater than zero when we have a potential
+				//collectible that is similar.
+				if(count($existingCollectibles) > 0) {
+					debug($existingCollectibles);
+					$this -> set('existingCollectibles', $existingCollectibles);
+					$this -> render('existingCollectibles');
+					return ;
+				} else {
+					//$this -> redirect( array('action' => 'addImage'));
+
+					//$this -> redirect( array('action' => 'review'));
+				}
+
+				return true;
+			} else {
+				// $manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($newCollectible['Collectible']['manufacture_id']);
+				// $this -> set('manufactures', $manufactureData['manufactures']);
+				// $this -> set('licenses', $manufactureData['licenses']);
+				//
+				// if(isset($newCollectible['Collectible']['series_id'])) {
+				// $series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+				// $this -> set('series', $series);
+				// }
+				//
+				// // $this -> set('series', $manufactureData['series']);
+				// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
+				// $scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+				//
+				// $this -> set(compact('scales'));
+
+				return false;
+			}
+
+			// } else if(!empty($this -> params['named']['edit'])) {
+			// $collectible = $this -> Session -> read('preSaveCollectible');
+			// $this -> data = $collectible;
+			// $this -> set('edit', true);
+			// $manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
+			// $this -> set('manufactures', $manufactureData['manufactures']);
+			// $this -> set('licenses', $manufactureData['licenses']);
+			// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
+			//
+			// if(isset($newCollectible['Collectible']['series_id'])) {
+			// $series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($newCollectible['Collectible']['manufacture_id'], $newCollectible['Collectible']['license_id']);
+			// $this -> set('series', $series);
+			// }
+			//
+			// $scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+			// $this -> set(compact('scales'));
+			//
+			// } else {
+			//
+			// }
+
+		} else {
+			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+		}
+		return false;
+	}
+
+	function _processAttributes() {
+		//TODO should validate	
+		return true;
+		
+	}
+
+	function _prepareImage() {
+		$wizardData = $this -> Wizard -> read();
+		
+		//debug($this -> Session -> read('Wizard.Collectibles.image'));
+		debug($wizardData);
+		$collectible = array();
+		if(isset($wizardData['image']['Upload'])) {
+			$collectible['Upload'] = $wizardData['image']['Upload'];		
+			$this -> set('collectible', $collectible);	
+		}
+	}
+
+	function _processImage() {
+		if(!empty($this -> data)) {
+			debug($this -> data['remove']);
+			if($this -> data['skip'] === 'true') {
+				return true;	
+			} else if($this -> data['remove'] === 'true') {
+				debug($this -> data);
+				//$collectible = $this -> Session -> read('preSaveCollectible');
+				$wizardData = $this -> Wizard -> read();
+				$uploadId = $this -> Session -> read('uploadId');
+				if(isset($wizardData['image']['Upload']) && !empty($uploadId)) {
+					$imageId = $uploadId;
+					if($this -> Collectible -> Upload -> delete($imageId)) {
+						//unset($collectible['Upload']);
+						//$this -> Session -> write('preSaveCollectible', $collectible);
+						$this -> Session -> delete('Wizard.Collectibles.image');
+						return false;
+					} else {
+
+					}
+				} else {
+
+				}
+			} else {
+				//If they submit and we already added a collectible, think back button, then just redisplay the
+				//page and show the image.  They can then choose to edit the image if they want
+				$collectible = $this -> Session -> read('preSaveCollectible');
+				if(!isset($collectible['Upload'])) {
+					if($this -> Collectible -> Upload -> isValidUpload($this -> data)) {
+						if($this -> Collectible -> Upload -> saveAll($this -> data['Upload'])) {
+							//We have to save the upload right away because of how these work.  So lets save it
+							//Then lets grab the id of the upload and return the data of the uploaded one and store
+							//it in our saving object.  This will allow us to display the details to the user in the
+							//review and confirm process.
+							$uploadId = $this -> Collectible -> Upload -> id;
+							debug($upload);
+							//$collectible = $this -> Session -> read('preSaveCollectible');
+							//$collectible['Upload'] = $upload['Upload'];
+							//$this -> Session -> write('preSaveCollectible', $collectible);
+							$this -> Session -> write('uploadId', $uploadId);
+							//$this -> Wizard -> save('image', $upload['Upload']);
+							return true;
+						} else {
+							debug($this -> Collectible -> Upload -> validationErrors);
+							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
+							return false;
+						}
+					} else {
+						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						debug($this -> Collectible -> Upload -> invalidFields());
+						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						return false;
+					}
+				} else {
+					$collectible = $this -> Session -> read('preSaveCollectible');
+					$this -> set(compact('collectible'));
+				}
+
+			}
+		} else {
+			$collectible = $this -> Session -> read('preSaveCollectible');
+			$this -> set(compact('collectible'));
+		}
+		
+		return false;
+	}
+
+	function _saveImage() {
+		$uploadId = $this -> Session -> read('uploadId');
+		$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
+		$this -> Wizard -> save('image', $upload);
+	}
+
+	function _prepareReview() {
+		$wizardData = $this -> Wizard -> read();
+		debug($wizardData);
+		$collectible = array();
+		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
+		
+		$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
+		//TODO hack for display purposes
+		if(isset($wizardData['image']['Upload'])) {
+			$collectible['Upload'] = $wizardData['image']['Upload'];		
+			$this -> set('collectible', $collectible);	
+		}
+		$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
+		$collectible['Manufacture'] = $manufacture['Manufacture'];
+
+		$collectibleType = $this -> Collectible -> Collectibletype -> find('first', array('conditions' => array('Collectibletype.id' => $collectible['Collectible']['collectibletype_id']), 'fields' => array('Collectibletype.name'), 'contain' => false));
+		$collectible['Collectibletype'] = $collectibleType['Collectibletype'];
+
+		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
+		$collectible['License'] = $license['License'];
+
+		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
+		$collectible['Scale'] = $scale['Scale'];
+
+		debug($collectible);
+		$this -> set('collectible', $collectible);
+	}
+
+	function _processReview() {
+		return true;
+	}
+
+	function _afterComplete() {
+		$wizardData = $this -> Wizard -> read();
+		$collectible = array();
+		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
+		// if(!is_null($newCollectible)) {
+		//set pending to 2...this really needs to check if user is admin first TODO
+		$collectible['Approval']['state'] = 2;
+		$userId = $this -> getUserId();
+		//set the id of the user who is adding this collectible
+		$collectible['Approval']['user_id'] = $userId;
+
+		// if(isset($newCollectible['AttributesCollectible'])) {
+		// $saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
+		// }
+
+		$collectible['Collectible']['user_id'] = $this -> getUserId();
+		$this -> Collectible -> create();
+		if($this -> Collectible -> saveAll($collectible, array('validate' => true))) {
+			$id = $this -> Collectible -> id;
+			$collectible = $this -> Collectible -> findById($id);
+			$approvalId = $collectible['Collectible']['approval_id'];
+			$this -> loadModel('Approval');
+			$this -> Approval -> id = $approvalId;
+			/* Since they confirmed, now set to pending = 1.  I really don't like how
+			 this is setup right now but it works because of the image thing.
+			 A 1 means that this collectible needs to be approved by an admin first */
+			$pendingState = '1';
+			if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
+				$pendingState = '0';
+			}
+			$this -> Approval -> saveField('state', $pendingState);
+			if(isset($wizardData['image']['Upload'])) {
+				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
+				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
+			}
+
+			$collectible = $this -> Collectible -> findById($id);
+			debug($collectible);
+			$this -> set('collectible', $collectible);
+			$this -> Session -> delete('preSaveCollectible');
+			$this -> Session -> delete('uploadId');
+		} else {
+			debug($this -> Collectible -> validationErrors);
+			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'review'));
+		}
+		// } else {
+		// $this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+		// $this -> redirect( array('action' => 'addSelectType'));
+		// }
+
+	}
+
+	// function confirm() {
+	// $this -> checkLogIn();
+	// $newCollectible = $this -> Session -> read('preSaveCollectible');
+	// if(!is_null($newCollectible)) {
+	// $saveCollectible['Approval'] = $newCollectible['Approval'];
+	// $saveCollectible['Collectible'] = $newCollectible['Collectible'];
+	// if(isset($newCollectible['AttributesCollectible'])) {
+	// $saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
+	// }
+	// $saveCollectible['Collectible']['user_id'] = $this -> getUserId();
+	// $this -> Collectible -> create();
+	// if($this -> Collectible -> saveAll($saveCollectible, array('validate' => true))) {
+	// $id = $this -> Collectible -> id;
+	// $collectible = $this -> Collectible -> findById($id);
+	// $approvalId = $collectible['Collectible']['approval_id'];
+	// $this -> loadModel('Approval');
+	// $this -> Approval -> id = $approvalId;
+	// /* Since they confirmed, now set to pending = 1.  I really don't like how
+	// this is setup right now but it works because of the image thing.
+	// A 1 means that this collectible needs to be approved by an admin first */
+	// $pendingState = '1';
+	// if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
+	// $pendingState = '0';
+	// }
+	// $this -> Approval -> saveField('state', $pendingState);
+	// if(isset($newCollectible['Upload'])) {
+	// $this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
+	// $this -> Collectible -> Upload -> saveField('collectible_id', $id);
+	// }
+	//
+	// $collectible = $this -> Collectible -> findById($id);
+	// debug($collectible);
+	// $this -> set('collectible', $collectible);
+	// $this -> Session -> delete('preSaveCollectible');
+	// $this -> Session -> delete('uploadId');
+	// } else {
+	// debug($this -> Collectible -> validationErrors);
+	// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+	// $this -> redirect( array('action' => 'review'));
+	// }
+	// } else {
+	// $this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+	// $this -> redirect( array('action' => 'addSelectType'));
+	// }
+	//
+	// }
 
 	function view($id =null) {
 		if(!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect( array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> findById($id);
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible')));
+		debug($collectible);
 		$this -> set('collectible', $collectible);
 		$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
 		$this -> set('collectibleCount', $count);
@@ -38,11 +442,12 @@ class CollectiblesController extends AppController {
 			$this -> Session -> delete('edit.collectible.mode.variant');
 			$this -> Session -> delete('variant.add-id');
 			$this -> Session -> delete('variant.base-collectible');
+			$this -> Wizard -> resetWizard();
 			//check to see if there is data submitted
 			if(!empty($this -> data)) {
 				if($this -> data['Collectible']['addType'] == 'C') {
 					debug($this -> data);
-					$this -> redirect( array('action' => 'addCollectible'));
+					$this -> redirect( array('action' => 'wizard/manufacture'));
 				} else if($this -> data['Collectible']['addType'] == 'V') {
 					debug($this -> data);
 					$this -> redirect( array('action' => 'addVariantSelectCollectible', 'initial' => 'yes'));
@@ -154,6 +559,7 @@ class CollectiblesController extends AppController {
 					// $this -> set('series', $manufactureData['series']);
 					$this -> set('collectibletypes', $manufactureData['collectibletypes']);
 					$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+
 					$this -> set(compact('scales'));
 				}
 
@@ -301,8 +707,8 @@ class CollectiblesController extends AppController {
 				return ;
 				//$this -> redirect( array('action' => 'review'));
 			} else {
-				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureList();
-				$this -> set('exclusive_manufactures', $manufactureData);
+				$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+				$this -> set('retailers', $retailers);
 				$this -> render('addCollectible');
 				return ;
 			}
@@ -317,14 +723,14 @@ class CollectiblesController extends AppController {
 			$this -> set('collectible', $baseCollectible);
 			$this -> set('edit', true);
 			$this -> render('addCollectible');
-			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureList();
-			$this -> set('exclusive_manufactures', $manufactureData);
+			$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+			$this -> set('retailers', $retailers);
 			return ;
 		} else {
 			$baseCollectible = $this -> Session -> read('variant.base-collectible');
 			$this -> data = $baseCollectible;
-			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureList();
-			$this -> set('exclusive_manufactures', $manufactureData);
+			$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+			$this -> set('retailers', $retailers);
 		}
 
 		$this -> render('addCollectible');
@@ -421,52 +827,6 @@ class CollectiblesController extends AppController {
 
 	}
 
-	function confirm() {
-		$this -> checkLogIn();
-		$newCollectible = $this -> Session -> read('preSaveCollectible');
-		if(!is_null($newCollectible)) {
-			$saveCollectible['Approval'] = $newCollectible['Approval'];
-			$saveCollectible['Collectible'] = $newCollectible['Collectible'];
-			if(isset($newCollectible['AttributesCollectible'])) {
-				$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
-			}
-			$this -> Collectible -> create();
-			if($this -> Collectible -> saveAll($saveCollectible, array('validate' => true))) {
-				$id = $this -> Collectible -> id;
-				$collectible = $this -> Collectible -> findById($id);
-				$approvalId = $collectible['Collectible']['approval_id'];
-				$this -> loadModel('Approval');
-				$this -> Approval -> id = $approvalId;
-				/* Since they confirmed, now set to pending = 1.  I really don't like how
-				 this is setup right now but it works because of the image thing.
-				 A 1 means that this collectible needs to be approved by an admin first */
-				$pendingState = '1';
-				if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
-					$pendingState = '0';
-				}
-				$this -> Approval -> saveField('state', $pendingState);
-				if(isset($newCollectible['Upload'])) {
-					$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
-					$this -> Collectible -> Upload -> saveField('collectible_id', $id);
-				}
-
-				$collectible = $this -> Collectible -> findById($id);
-				debug($collectible);
-				$this -> set('collectible', $collectible);
-				$this -> Session -> delete('preSaveCollectible');
-				$this -> Session -> delete('uploadId');
-			} else {
-				debug($this -> Collectible -> validationErrors);
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-				$this -> redirect( array('action' => 'review'));
-			}
-		} else {
-			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
-			$this -> redirect( array('action' => 'addSelectType'));
-		}
-
-	}
-
 	function cancel() {
 		$uploadId = $this -> Session -> read('uploadId');
 		debug($uploadId);
@@ -481,193 +841,6 @@ class CollectiblesController extends AppController {
 		$this -> Session -> delete('uploadId');
 		$this -> redirect( array('action' => 'addSelectType'));
 
-	}
-
-	/*
-	 * I think I will have a "collectibles_edit" table and potentially going to have to have edit tables for the other related tables.
-	 * All edits will be put to the collectibles_edit table as to not interfer with the main tables, once an edit has been approved then it
-	 * will push it out to the main tables.  We will reuse the approval table but the approval id on the edit collectible will be for the edit...
-	 *
-	 * Once the edit is approved we will update the fields of the collectible that were being changed, this will keep the history on the rev table...however
-	 * how do we maintain who did the edits? Does each entry in the collectible_rev get its own approval id?
-	 * 
-	 * Notes from 6/21/11
-	 * 	- I need either to have the user id on the collectible that created it, and then the approval id will be the most current version that will keep the 
-	 * edit trail.  That way I always know who created it and I also know who did the lastest edits.  If I want to go back and look at history, I would do compares against
-	 * the rev table and each approval id would be the id of the person who did the edit, although do it make more sense to have an edit table or edit user id?  Since that isn't
-	 * the purpose of approval?
-	 */
-	function edit($id =null) {
-		$this -> checkLogIn();
-		if(!$id && empty($this -> data) && !empty($this -> params['named']['edit'])) {
-			$this -> Session -> setFlash(__('Invalid collectible', true));
-			//TODO go somewhere
-			//$this -> redirect( array('action' => 'index'));
-		}
-		$username = $this -> getUsername();
-		//Check if it is a variant or not
-		$this -> Session -> write('edit.collectible.mode.collectible', true);
-		$this -> Session -> delete('edit.collectible.mode.variant');
-		$this -> Session -> delete('add.collectible.mode.collectible');
-		$this -> Session -> delete('add.collectible.mode.variant');
-		$this -> set('collectible_title', __('Edit Collectible', true));
-
-		if(!empty($this -> data)) {
-			$this -> data = Sanitize::clean($this -> data);
-			$this -> Collectible -> set($this -> data);
-			$validCollectible = true;
-			if($this -> Collectible -> validates()) {
-
-			} else {
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-				$validCollectible = false;
-			}
-
-			if($validCollectible) {
-				$this -> Session -> write('preSaveCollectible', $this -> data);
-				$this -> redirect( array('action' => 'editReview'));
-			} else {
-				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($this -> data['Collectible']['manufacture_id']);
-				$this -> set('manufactures', $manufactureData['manufactures']);
-				$this -> set('licenses', $manufactureData['licenses']);
-
-				if(isset($newCollectible['Collectible']['series_id'])) {
-					$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
-					$this -> set('series', $series);
-				}
-
-				// $this -> set('series', $manufactureData['series']);
-				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
-				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-				$this -> set(compact('scales'));
-			}
-		} else if(empty($this -> data)) {
-			//TODO 6/19/11 - finish all of this logic
-
-			if(!empty($this -> params['named']['edit'])) {
-				$collectible = $this -> Session -> read('preSaveCollectible');
-				$this -> data = $collectible;
-				$this -> set('edit', true);
-			} else {
-				$collectible = $this -> Collectible -> read(null, $id);
-				$this -> data = $collectible;
-			}
-
-			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
-			$this -> set('manufactures', $manufactureData['manufactures']);
-			$this -> set('licenses', $manufactureData['licenses']);
-			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
-
-			if(isset($collectible['Collectible']['series_id'])) {
-				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['license_id']);
-				$this -> set('series', $series);
-			}
-
-			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-			$this -> set(compact('scales'));
-
-			$this -> render('addCollectible');
-			return ;
-		} else {
-			//do somethinf
-		}
-
-	}
-
-	function editReview() {
-		$this -> checkLogIn();
-		//remove this cause we do not need it
-		$collectible = $this -> Session -> read('preSaveCollectible');
-		if(!is_null($collectible)) {
-			//Lets retrieve some data for display purposes
-			//TODO this may be redundant...should we save off later?
-			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
-			$collectible['Manufacture'] = $manufacture['Manufacture'];
-
-			$collectibleType = $this -> Collectible -> Collectibletype -> find('first', array('conditions' => array('Collectibletype.id' => $collectible['Collectible']['collectibletype_id']), 'fields' => array('Collectibletype.name'), 'contain' => false));
-			$collectible['Collectibletype'] = $collectibleType['Collectibletype'];
-
-			$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
-			$collectible['License'] = $license['License'];
-
-			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
-			$collectible['Scale'] = $scale['Scale'];
-
-			debug($collectible);
-			$this -> set('collectible', $collectible);
-			
-			$this -> set('confirmUrl', '/collectibles/editConfirm');
-			$this -> render('review');
-			return ;
-		} else {
-			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
-			$this -> redirect( array('action' => 'addSelectType'));
-		}
-	}
-
-	function editConfirm() {
-		$this -> checkLogIn();
-		$newCollectible = $this -> Session -> read('preSaveCollectible');
-		if(!is_null($newCollectible)) {
-			$saveCollectible['Approval'] = $newCollectible['Approval'];
-			$saveCollectible['Collectible'] = $newCollectible['Collectible'];
-			if(isset($newCollectible['AttributesCollectible'])) {
-				$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
-			}
-			$this -> CollectiblesEdit -> create();
-			if($this -> CollectiblesEdit -> saveAll($saveCollectible, array('validate' => false))) {
-				$id = $this -> Collectible -> id;
-				$collectible = $this -> Collectible -> findById($id);
-				$approvalId = $collectible['Collectible']['approval_id'];
-				$this -> loadModel('Approval');
-				$this -> Approval -> id = $approvalId;
-				/* Since they confirmed, now set to pending = 1.  I really don't like how
-				 this is setup right now but it works because of the image thing.
-				 A 1 means that this collectible needs to be approved by an admin first */
-				$pendingState = '1';
-				if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
-					$pendingState = '0';
-				}
-				$this -> Approval -> saveField('state', $pendingState);
-				if(isset($newCollectible['Upload'])) {
-					$this -> Collectible -> Upload -> id = $newCollectible['Upload']['id'];
-					$this -> Collectible -> Upload -> saveField('collectible_id', $id);
-				}
-
-				$collectible = $this -> Collectible -> findById($id);
-				debug($collectible);
-				$this -> set('collectible', $collectible);
-				$this -> Session -> delete('preSaveCollectible');
-				$this -> Session -> delete('uploadId');
-			} else {
-				debug($this -> Collectible -> validationErrors);
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-				$this -> redirect( array('action' => 'review'));
-			}
-		} else {
-			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
-			$this -> redirect( array('action' => 'addSelectType'));
-		}
-
-	}
-
-	function delete($id =null) {
-		$this -> checkLogIn();
-		$username = $this -> getUsername();
-		$aco = $this -> params['controller'];
-		if($this -> Acl -> check($username, 'collectibles', 'delete')) {
-			if(!$id) {
-				$this -> Session -> setFlash(__('Invalid id for collectible', true), null, null, 'error');
-				$this -> redirect( array('action' => 'index'));
-			}
-
-			if($this -> Collectible -> delete($id)) {
-				$this -> Session -> setFlash(__('Collectible deleted', true), null, null, 'success');
-				$this -> redirect( array('action' => 'index'));
-			}
-		}
-		$this -> Session -> setFlash(__('Collectible was not deleted', true), null, null, 'error');
-		$this -> redirect( array('action' => 'index'));
 	}
 
 	function search() {
@@ -692,6 +865,43 @@ class CollectiblesController extends AppController {
 			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
 		}
 		$this -> searchCollectible();
+	}
+
+	function history($id=null) {
+		$this -> checkLogIn();
+		if($id && is_numeric($id)) {
+			$this -> Collectible -> id = $id;
+			$history = $this -> Collectible -> revisions(null, true);
+			$this -> loadModel('User');
+			//This is like the worst thing ever and needs to get cleaned up
+			//Making this by reference so we can modify it, is this proper in php?
+			foreach($history as $key => &$collectible) {
+				$userId = $collectible['Collectible']['user_id'];
+				$userDetails = $this -> User -> findById($userId, array('contain' => false));
+				$collectible['Collectible']['user_name'] = $userDetails['User']['username'];
+			}
+
+			debug($history);
+			$this -> set(compact('history'));
+
+		} else {
+			$this -> redirect($this -> referer());
+		}
+	}
+
+	function historyDetail($id=null, $version_id =null) {
+		$this -> checkLogIn();
+		debug($id);
+		debug($version_id);
+		if($id && $version_id && is_numeric($id) && is_numeric($version_id)) {
+			$this -> Collectible -> id = $id;
+			$collectible = $this -> Collectible -> revisions( array('conditions' => array('version_id' => $version_id)), true);
+			debug($collectible);
+			$this -> set(compact('collectible'));
+
+		} else {
+			//$this -> redirect($this -> referer());
+		}
 	}
 
 }

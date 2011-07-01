@@ -12,7 +12,8 @@
         'Series' => array(
              'className' => 'Series','foreignKey'=>'series_id'),
         'Approval',
-        'Scale');
+        'Scale',
+		'Retailer');
 
 	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible');
 
@@ -84,14 +85,14 @@
        ),
        'product_length' => array (
             //This should be decmial or blank
-           'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
+           'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/',
            'allowEmpty' => true,
            'message' => 'Must be a valid height.'       
        ),
        'product_width' => array (
            'validValues'=> array (
               //This should be decmial or blank
-             'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
+             'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/',
              'message' => 'Must be a valid width.'             
            ),
            // 'isRequired'=> array (
@@ -103,7 +104,7 @@
        'product_depth' => array (
            'validValues'=> array (
               //This should be decmial or blank
-             'rule' => '/^(?:\d{1,2}(?:\.\d{0,6})?)?$/',
+             'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/',
              'message' => 'Must be a valid depth.'             
            ),
            // 'isRequired'=> array (
