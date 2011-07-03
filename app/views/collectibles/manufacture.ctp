@@ -30,7 +30,7 @@
 					if(isset($collectible_action)) {
 						echo $this -> Form -> create('Collectible', array('url'=> $collectible_action , 'type' => 'file'));
 					} else {
-						echo $this -> Form -> create('Collectible', array('url' => $this->here, 'type' => 'file'));
+						echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/manufacture', 'type' => 'file'));
 					}
 					?>
 				<fieldset>

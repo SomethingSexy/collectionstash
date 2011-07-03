@@ -5,6 +5,7 @@ class CollectibleEditController extends AppController {
 	var $name = 'CollectibleEdit';
 	var $helpers = array('Html', 'FileUpload.FileUpload');
 
+
 	/*
 	 * I think I will have a "collectibles_edit" table and potentially going to have to have edit tables for the other related tables.
 	 * All edits will be put to the collectibles_edit table as to not interfer with the main tables, once an edit has been approved then it
@@ -23,6 +24,9 @@ class CollectibleEditController extends AppController {
 	 * 	- How to handle edits on hasmany relationship
 	 * 	id attribute_collectible_id description variant mode (Edit/Delete/Add), if attribute_collectible_id = 0 then it is an Add
 	 * 
+	 * TODO need to add all of the variant shit back in here
+	 * The special variant details will have their own edit section
+	 *
 	 */
 	function edit($id =null) {
 		$this -> checkLogIn();
@@ -53,7 +57,7 @@ class CollectibleEditController extends AppController {
 			$this -> data = Sanitize::clean($this -> data);
 			$this -> Collectible -> set($this -> data);
 			$validCollectible = true;
-			
+
 			if($this -> Collectible -> validates()) {
 
 			} else {

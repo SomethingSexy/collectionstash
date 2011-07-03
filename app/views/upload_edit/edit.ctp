@@ -1,12 +1,16 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
-<div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(); ?>	
-</div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Add Image');?>
+				<?php 
+				if($addImage){
+					__('Add Image');
+				} else {
+					__('Change Image');
+				}
+				
+				?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -31,21 +35,17 @@
 								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
 							</div>								
 						</div>	
-						<div class="links">
-							<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image','id'=>'skip-image-form'));?>
-								<input type="hidden" name="data[skip]" value="true" />
-							</form>
-							<?php 
-								echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' , 'type' => 'file', 'id' => 'remove-image-form'));
-								echo '<input type="hidden" name="data[remove]" value="true" />';
-								echo $this -> Form -> end(); 
-							?>
-							<a id="remove-image-submit">Change Image</a> <a id="skip-image-button">Continue</a>
-						</div>
-				<?php } else { ?>
-					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' , 'id'=>'add-image-form', 'type' => 'file'));?>
+				<?php } ?>
+					<?php echo $this -> Form -> create('Collectible', array('url'=>'/uploadEdit/edit', 'id'=>'add-image-form', 'type' => 'file'));?>
 					<fieldset>
-						<legend><?php __('Image');?></legend>
+						<legend><?php 
+						if($addImage){
+							__('Add Image');
+						} else {
+							__('Change Image');
+						}
+						
+						?></legend>
 						<ul class="form-fields">	
 						
 							<li>
@@ -69,15 +69,19 @@
 						<?php echo '<input type="hidden" name="data[remove]" value="false" />'; ?>		 
 					</fieldset>
 					</form>
-					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' ,'id'=>'skip-image-form'));?>
+					<?php echo $this -> Form -> create('Collectible', array('url'=>'/collectibles/view/'.$collectibleId, 'id'=>'skip-image-form'));?>
 						<input type="hidden" name="data[skip]" value="true" />
 					</form>
 					<div class="links no-image">
-						<input type="button" id="add-image-button" class="button" value="Add Image">
-						<input type="button" id="skip-image-button" class="button" value="Skip">
+						<?php 
+						if($addImage){
+							echo '<input type="button" id="add-image-button" class="button" value="Add Image">';	
+						} else {
+							echo '<input type="button" id="add-image-button" class="button" value="Change Image">';
+						}?>
+						
+						<input type="button" id="skip-image-button" class="button" value="Cancel">
 					</div>
-					
-				<?php } ?>
 				<script>
 					//Eh move this out of here
 					$('#add-image-button').click(function(){

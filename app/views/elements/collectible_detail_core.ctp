@@ -9,14 +9,26 @@
 			<?php } else { ?>
 				<img src="/img/silhouette_thumb.gif"/>
 		<?php } ?>
+		<?php if(isset($showEdit) && $showEdit) {
+			echo '<div class="image link">';
+			if (!empty($collectible['Upload'])) { 
+				echo '<a href="'.$editImageUrl.$collectible['Collectible']['id'].'/'.$collectible['Upload'][0]['id'].'">'.__('Edit', true).'</a>';
+			} else {
+				echo '<a href="'.$editImageUrl.$collectible['Collectible']['id'].'/'.'">'.__('Edit', true).'</a>';
+			}
+			echo '</div>';			
+		} ?>
+
 	</div>
 	<div class="collectible detail-wrapper">
 		<div class="collectible detail">
 			<div class="detail title">
 				<h3><?php __('Manufacture Details'); ?></h3>
-				<div class="title link">
-					<?php echo '<a href="/collectibles/wizard/manufacture">Edit</a>'; ?>
-				</div>
+				<?php if(isset($showEdit) && $showEdit) {
+					echo '<div class="title link">';
+					echo '<a href="/collectibles/wizard/manufacture">Edit</a>';
+					echo '</div>';			
+				} ?>
 			</div>
 
 			<dl>
@@ -190,24 +202,26 @@
 		<div class="collectible detail">
 			<div class="detail title">
 				<h3><?php __('Part Break Down'); ?></h3>
-				<div class="title link">
-					<?php echo '<a href="/collectibles/wizard/attributes">Edit</a>'; ?>
-				</div>
+				<?php if(isset($showEdit) && $showEdit) {
+					echo '<div class="title link">';
+					echo '<a href="/collectibles/wizard/attributes">Edit</a>';
+					echo '</div>';			
+				} ?>
 			</div>
 			<div id="collectible-attributes-list" class="attributes-list">
 				<ul>
 					<?php
 					$lastKey = 0;
 					if(!empty($collectible['AttributesCollectible'])) {
-						foreach($collectible['AttributesCollectible'] as $key => $attribue) {
-							if($attribue['variant'] !== '1') {
+						foreach($collectible['AttributesCollectible'] as $key => $attribute) {
+							if($attribute['variant'] !== '1') {
 								echo '<li>';
 								echo '<span class="attribute-label">Part: </span>';
 								echo '<span class="attribute-name">';
-								echo $attribue['name'];
+								echo $attribute['Attribute']['name'];
 								echo '</span>';
 								echo '<span class="attribute-description">';
-								echo $attribue['description'];
+								echo $attribute['description'];
 								echo '</span>';
 								echo '</li>';
 							}
@@ -215,7 +229,24 @@
 					}
 					?>
 				</ul>
-			</div>			
+			</div>
+		
 		</div>
+			<?php
+			if(isset($showStatistics) && $showStatistics) { ?>
+			<div class="collectible detail statistics">
+				<div class="detail title">
+					<h3><?php __('Collectible Statistics');?></h3>
+				</div>
+				<dl>
+					<dt>
+						<?php __('Total owned: ');?>
+					</dt>
+					<dd>
+						<?php echo $collectibleCount;?>
+					</dd>
+				</dl>
+			</div>
+		<?php }?>	
 	</div>
 </div>

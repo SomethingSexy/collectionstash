@@ -5,6 +5,7 @@
 			'showStatistics' => true,
 			'showWho' => true,
 			'showEdit' => true,
+			'editImageUrl'=> '/uploadEdit/edit/',
 			'showHistory' => true,
 			'showVariants' => true,
 			'setPageTitle' => true

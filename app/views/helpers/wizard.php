@@ -107,9 +107,9 @@ class WizardHelper extends AppHelper {
 				if($step == $activeStep) {
 					$class .= ' active';
 				}
-				$this -> output .= "<$wrap class='$class'>" . $this -> Html -> link($title, array('action' => $wizardAction, $step), $htmlAttributes, $confirmMessage, $escapeTitle) . " > ". "</$wrap>";
+				$this -> output .= "<$wrap class='$class'>" . $this -> Html -> link($title, array('action' => $wizardAction, $step), $htmlAttributes, $confirmMessage, $escapeTitle) . "</$wrap>";
 			} else {
-				$this -> output .= "<$wrap class='incomplete'>" . $title . " > </$wrap>";
+				$this -> output .= "<$wrap class='incomplete'>" . $title . "</$wrap>";
 			}
 		}
 

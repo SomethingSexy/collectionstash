@@ -18,31 +18,20 @@
 				if($showWho) {
 					echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));
 				}
-				if(isset($showEdit) && $showEdit) {
-					echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));
-				}
+				// if(isset($showEdit) && $showEdit) {
+					// echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));
+				// }
 				if(isset($showHistory) && $showHistory) {
 					echo $html -> link('History', array( 'action' => 'history', $collectible['Collectible']['id']));
 				}
 				?>
 			</div>
-			<?php echo $this->element('collectible_detail_core');	?>	
-			<?php
-			if($showStatistics) { ?>
-			<div class="collectible statistics">
-				<h3>
-				<?php __('Collectible Statistics');?>
-				</h3>
-				<dl>
-					<dt>
-						<?php __('Total owned: ');?>
-					</dt>
-					<dd>
-						<?php echo $collectibleCount;?>
-					</dd>
-				</dl>
-			</div>
-			<?php }?>
+			<?php echo $this->element('collectible_detail_core', array(
+				'showEdit' => $showEdit,
+				'editImageUrl'=> $editImageUrl,
+				'showStatistics' => $showStatistics
+			));		?>	
+			
 		</div>
 	</div>
 </div>

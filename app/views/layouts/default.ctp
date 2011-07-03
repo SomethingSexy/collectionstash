@@ -6,6 +6,7 @@
 	<?php if(isset($description_for_layout)){ echo "<meta name='description' content='".$description_for_layout."' />"; } ?>
 	<?php if(isset($keywords_for_layout)){ echo "<meta name='keywords' content='".$keywords_for_layout."' />"; } ?>
 	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
+	<link rel="stylesheet" type="text/css" href="/css/layout/layout.css" />
 
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.core.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.theme.css" />
@@ -83,21 +84,48 @@
 <body>
 	<div id="container">
 		<div id="header" class="clearfix">
-			<div id="header-top">
-				<div class="wrapper clearfix">
-					<?php
-					if($isLoggedIn) {
-						echo $username;
-					}
-					?>
-					<div class="box">
-						<ul class="nav">
-
+			<div class="header title">
+				<h1><?php __('Collection Stash'); ?></h1>
+			</div>
+			<div class="header navigation">
+				<div class="box">
+					<ul class="nav">
 							<?php
 							if($isLoggedIn)
 							{  ?>
 							<li>
-								<?php echo $html -> link('Home', array('controller' => 'users', 'action' => 'home'));?>
+								<?php echo $html -> link('Home', array('controller' => '/'));?>
+							</li>
+							<li>
+								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>
+							</li>
+							<?php  }
+								else
+								{
+   							?>
+							<li>
+								<a id='login-link' href="/users/login"><?php __('Login');?></a>
+							</li>
+							<?php if(Configure::read('Settings.registration')){
+								echo '<li>';
+								echo $html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
+								echo '</li>';
+								} 
+							}?>					
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<div id="stage">
+			<div class="main-navigation">
+				<div class="inside">
+					<div class="box">
+						<ul class="nav">
+							<?php
+							if($isLoggedIn)
+							{  ?>
+							<li>
+								<?php echo $html -> link('My Stash', array('controller' => 'users', 'action' => 'home'));?>
 							</li>
 							<?php
 							if($isUserAdmin)
@@ -117,56 +145,41 @@
 							<li>
 								<?php echo $html -> link('Contribute', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
-							<li>
-								<?php //echo $html -> link('Users', array('controller' => 'users', 'action' => 'index'));?>
-							</li>
-							<li>
-								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>
-							</li>
 							<?php  }
-								else
-								{
    							?>
-							<li>
-								<a id='login-link' href="/users/login"><?php __('Login');?></a>
-							</li>
-							<?php if(Configure::read('Settings.registration')){
-								echo '<li>';
-								echo $html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
-								echo '</li>';
-								} 
-							}?>
 						</ul>
-						<div id="site-search-container">
-							<form id="search-site" method="get" action="/collectibles/search">
-								<p>
+						<div class="site-search">
+							<form method="get" action="/collectibles/search">
 								<input id="q" type="text" name="q">
-								</p>
 							</form>								
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="header-bottom">
-				<div class="wrapper">
-					<div class="logo">
-						<?php echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash'))?>
-					</div>
-					<ul class="nav">
-
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div id="stage">
 			<?php echo $content_for_layout;?>
-		</div>		
+			
+			
+		</div>	
+		<div id="footer">					
+			<div class="logo">
+				<?php echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash'))?>
+			</div>
+			<span class="links">
+				<ul>
+					<li>&copy; Collection Stash</li>
+					<li>About Us</li>
+					<li>Contact Us</li>
+					<li>Donate</li>
+					<li>Report a Bug</li>
+					<li>Milestones</li>
+					<li>Request a Feature</li>
+					<li><a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a></li>
+				</ul>
+			</span>
+			
+	</div>	
 	</div>
-	<div id="footer">
-		<span class="version">Version - Alpha</span>
-			<!--<span class="links">About | Contact | Donate | Found a bug? </span> -->
-		<span class="copyright">Collection Stash - Copyright 2011</span>
-	</div>
+	
 		<?php /**echo $this->element('sql_dump');
 			 echo $js->writeBuffer();
 			 */

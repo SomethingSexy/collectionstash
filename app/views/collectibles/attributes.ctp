@@ -17,7 +17,7 @@
 		</div>
 		<div class="component-view">
 			<div class="collectible add">
-				<?php echo $this -> Form -> create('Collectible', array('url' => $this->here)); ?>
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes', )); ?>
 				<fieldset>
 					<legend>
 						<?php __('Part Break Down');?>

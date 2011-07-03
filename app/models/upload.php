@@ -1,13 +1,12 @@
 <?php
 class Upload extends AppModel {
 	var $name = 'Upload';
-	var $actsAs = array('FileUpload.FileUpload'=> array(
+	var $actsAs = array('Revision', 'FileUpload.FileUpload'=> array(
 			'maxFileSize' => '2097152'
 		), 
 		'Containable');
 	var $hasMany = array('Collectible');
-
-
+	
 	// [Upload] => Array
 	//       (
 	//           [0] => Array
