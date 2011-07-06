@@ -255,7 +255,7 @@
     function validateSeriesId($check) {
     	debug($check);
     	//Is not required but if it is entered make sure it is valid
-    	if(isset($check['series_id'])) {
+    	if(isset($check['series_id']) && !empty($check['series_id'])) {
 	 		$result = $this->Manufacture -> LicensesManufacture-> find('first', 
 	        	array('conditions' => array(
 	        			'LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'],

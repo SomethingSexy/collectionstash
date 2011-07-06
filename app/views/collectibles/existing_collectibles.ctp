@@ -12,8 +12,8 @@
 				<?php __('Oh no!  It looks like the collectible you are trying to add might have been added before.  Please review the existing collectibles below.  If it doesn\'t exist then click the big button.') ?>
 			</div>
 			<div>
-				<?php echo $this->Form->create(null, array('url'=>'/collectibles/review'));?>
-				
+				<?php echo $this->Form->create(null, array('url'=> $this->here));?>
+					<input type="hidden" name="data[addAnyway]"	value="true" />
 				<?php echo $this->Form->end(array('label'=>__('Submit Anyway!', true), 'value'=> __('Submit Anyway!', true), 'name'=>'submit'));?>
 				<?php echo $this->Form->create(null, array('url'=>'/collectibles/cancel'));?>
 				

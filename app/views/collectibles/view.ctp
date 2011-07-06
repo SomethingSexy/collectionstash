@@ -8,7 +8,8 @@
 			'editImageUrl'=> '/uploadEdit/edit/',
 			'showHistory' => true,
 			'showVariants' => true,
-			'setPageTitle' => true
+			'setPageTitle' => true,
+			'collectibleDetail' => $collectible
 		));		
 		
 	} else {
@@ -18,7 +19,8 @@
 			'showWho' => false,
 			'showEdit' => false,
 			'showVariants' => true,
-			'setPageTitle' => true
+			'setPageTitle' => true,
+			'collectibleDetail' => $collectible
 		));			
 	}
 ?>

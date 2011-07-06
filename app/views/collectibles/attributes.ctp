@@ -1,12 +1,22 @@
 <?php echo $this -> Html -> script('attributes-add', array('inline' => false));?>
+<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<?php      
+	echo $this->element('collectible_detail', array(
+		'title' => __('Base Collectible Details', true),
+		'showStatistics' => false,
+		'showWho' => false,
+		'collectibleDetail' => $collectible
+	));
+?>
+<?php } ?>
 <div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(); ?>	
+	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacture', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'image'=>'Image', 'review'=> 'Review')); ?>			
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo $collectible_title ?>
+			<?php echo __('Collectible Attributes')?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -22,47 +32,42 @@
 					<legend>
 						<?php __('Part Break Down');?>
 					</legend>
-					<ul class="form-fields">
-						<li>
-							<div class="label-wrapper">
-								<label for="">
-									<?php __('Features') ?>
-								</label>
-								<a class="ui-icon ui-icon-info" title="<?php echo __('Select add, to add an feature for this collectible.  An feature is a way to define what makes this collectible an exclusive or variant.', true) ?>" alt="info"></a>
-							</div>
-							<div id="collectible-attributes-list" class="attributes-list">
-								<ul>
-									<?php
-									$lastKey = 0;
-									if(isset($this -> data['AttributesCollectible'])) {
-										foreach($this->data['AttributesCollectible'] as $key => $attribue) {
-											if($attribue['variant'] !== '1') {
-												echo '<li>';
-												echo '<span class="attribute-label">Part: </span>';
-												echo '<span class="attribute-name">';
-												echo $attribue['name'];
-												echo '</span>';
-												echo '<span class="attribute-description">';
-												echo $attribue['description'];
-												echo '</span>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
-												echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][variant]" value="' . $attribue['variant'] . '"/>';
-												echo '</li>';
-												$lastKey = $key;
-											}
-										}
-										echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
+					<div id="collectible-attributes-list" class="attributes-list">
+						<ul>
+							<?php
+							$lastKey = 0;
+							echo '<li class="title">';
+							echo '<span class="attribute-name">'.__('Part', true).'</span>';
+							echo '<span class="attribute-description">'.__('Description', true).'</span>';
+							echo '</li>';
+							if(isset($this -> data['AttributesCollectible'])) {
+
+								foreach($this->data['AttributesCollectible'] as $key => $attribue) {
+									if($attribue['variant'] !== '1') {
+										echo '<li>';
+										echo '<span class="attribute-label">Part: </span>';
+										echo '<span class="attribute-name">';
+										echo $attribue['name'];
+										echo '</span>';
+										echo '<span class="attribute-description">';
+										echo $attribue['description'];
+										echo '</span>';
+										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][variant]" value="' . $attribue['variant'] . '"/>';
+										echo '</li>';
+										$lastKey = $key;
 									}
-									?>
-								</ul>
-							</div>
-							<div>
-								<a class="add-attribute">Add Attribute</a>
-							</div>
-						</li>
-					</ul>
+								}
+								echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
+							}
+							?>
+						</ul>
+					</div>
+					<div>
+						<a class="add-attribute">Add Attribute</a>
+					</div>
 				</fieldset>	
 				<?php echo $this -> Form -> end(__('Submit', true));?>
 			</div>

@@ -34,7 +34,7 @@
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<?php  if($this -> Session -> check('add.collectible.mode.collectible') || $this -> Session -> check('edit.collectible.mode.collectible')) { ?>
+						<?php  if(!$this -> Session -> check('add.collectible.mode.variant')) { ?>
 							<li>
 								<div class="label-wrapper">
 									<label for="">

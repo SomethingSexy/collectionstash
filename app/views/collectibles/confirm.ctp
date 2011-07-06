@@ -11,7 +11,9 @@
 	    </div>
 		<div class="component-view">
 			<div class="collectibles">
-				<?php echo $this->element('collectible_detail_core');	?>	
+				<?php echo $this->element('collectible_detail_core', array(
+					'collectibleCore' => $collectible
+				));	?>	
 			</div>
 		</div>
 	</div>

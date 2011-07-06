@@ -1,9 +1,9 @@
 <?php 
 	if(isset($setPageTitle) && $setPageTitle) {
-		$this->set("title_for_layout", $collectible['Manufacture']['title'].' - '.$collectible['Collectible']['name']);
+		$this->set("title_for_layout", $collectibleDetail['Manufacture']['title'].' - '.$collectibleDetail['Collectible']['name']);
 	}
-	$this->set('description_for_layout', $collectible['Manufacture']['title'].' '.$collectible['Collectible']['name']);
-	$this->set('keywords_for_layout', $collectible['Manufacture']['title'].' '.$collectible['Collectible']['name'].','.$collectible['Collectible']['name'].','.$collectible['Collectibletype']['name'].','.$collectible['License']['name']);
+	$this->set('description_for_layout', $collectibleDetail['Manufacture']['title'].' '.$collectibleDetail['Collectible']['name']);
+	$this->set('keywords_for_layout', $collectibleDetail['Manufacture']['title'].' '.$collectibleDetail['Collectible']['name'].','.$collectibleDetail['Collectible']['name'].','.$collectibleDetail['Collectibletype']['name'].','.$collectibleDetail['License']['name']);
 ?>
 <div class="component" id="collectible-detail">
 	<div class="inside">
@@ -16,20 +16,28 @@
 			<div class="collectible links">
 				<?php
 				if($showWho) {
-					echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));
+					echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
 				}
 				// if(isset($showEdit) && $showEdit) {
 					// echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));
 				// }
 				if(isset($showHistory) && $showHistory) {
-					echo $html -> link('History', array( 'action' => 'history', $collectible['Collectible']['id']));
+					echo $html -> link('History', array( 'action' => 'history', $collectibleDetail['Collectible']['id']));
 				}
 				?>
 			</div>
-			<?php echo $this->element('collectible_detail_core', array(
+			<?php 
+				if(!isset($showEdit)){
+					$showEdit = false;
+				}
+				if(!isset($editImageUrl)){
+					$editImageUrl = false;
+				}				
+				echo $this->element('collectible_detail_core', array(
 				'showEdit' => $showEdit,
 				'editImageUrl'=> $editImageUrl,
-				'showStatistics' => $showStatistics
+				'showStatistics' => $showStatistics,
+				'collectibleCore' => $collectibleDetail
 			));		?>	
 			
 		</div>

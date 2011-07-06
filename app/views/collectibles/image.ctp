@@ -1,6 +1,16 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
+<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<?php      
+	echo $this->element('collectible_detail', array(
+		'title' => __('Base Collectible Details', true),
+		'showStatistics' => false,
+		'showWho' => false,
+		'collectibleDetail' => $collectible
+	));
+?>
+<?php } ?>
 <div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(); ?>	
+	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacture', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
@@ -24,11 +34,11 @@
 		<div class="component-view add-image">
 			<div class="collectible add">
 				<?php 
-					if (isset($collectible['Upload'])) { ?>
+					if (isset($this->data['Upload'])) { ?>
 						<div class="collectible image">
-							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '0'));?>
+							<?php echo $fileUpload -> image($this->data['Upload']['name'], array('width' => '0'));?>
 							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
+								<?php echo $fileUpload -> image($this->data['Upload']['name'], array('width' => 0));?>
 							</div>								
 						</div>	
 						<div class="links">

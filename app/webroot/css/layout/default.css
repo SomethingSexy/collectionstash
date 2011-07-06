@@ -120,7 +120,7 @@ a:active {
     padding: 20px;
     float: left;
     clear: both;
-    width: 550px;
+    /*width: 550px;*/
     border-bottom: 1px solid #FDB924;
 }
 .collectible.item .test {
@@ -139,7 +139,7 @@ a:active {
 }
 .collectible.detail-wrapper {
 	float: left;
-	width: 350px;
+	width: 550px;
 }
 .collectible.detail {
     float: left;
@@ -171,8 +171,7 @@ a:active {
 		float: right;
 }
 
-.collectible.detail dl,
-.collectible.detail ul  {
+.collectible.detail dl {
 	padding: 5px;
 }
 .collectible.detail .attributes-list ul li span,
@@ -359,6 +358,7 @@ a:active {
 
 #collectible-add-component .inside .component-view .collectible.add {
 	margin-bottom: 1em;
+	width: 500px;
 }
 #collectible-add-component .component-view .form-fields li {
 	/*width: 600px; matches the width of the component */
@@ -388,6 +388,12 @@ a:active {
 	margin-bottom: 0.5em;
 	float: right;
 }
+#collectible-add-component .component-view .collectible.add .add-attribute,
+#collectible-add-component .component-view .collectible.add .add-variant-attribute,
+#collectible-add-component .component-view .collectible.add .attributes-list {
+	font-size: 0.75em;
+	width: 500px;
+}
 
 #collectible-add-component .inside .component-view .collectible.image.uploader .file-uploader {
 	float: left;
@@ -412,15 +418,29 @@ a:active {
 	clear: none;
 }
 */
-.attributes-list,
+.attributes-list {
+	    float: left;
+    width: 100%;
+}
 .attributes-list ul {
-	width: 100%;
-	float: left;
+
+	border-left: 1px solid #D8D8D8;
+    border-right: 1px solid #D8D8D8;
+    border-top: 1px solid #D8D8D8;
 }
 
 .attributes-list ul li {
-
+	overflow: hidden;
+	border-bottom: 1px solid #E1E1E1;
+	padding: 10px;
+	color: #606060;
 }
+.attributes-list ul li.title {
+	background-color: #EAEAEA;
+	border-bottom: 1px solid #D8D8D8;
+    color: #999999;
+    
+} 
 .attributes-list ul li .attribute-label,
 .attributes-list ul li .attribute-name,
 .attributes-list ul li .attribute-description {

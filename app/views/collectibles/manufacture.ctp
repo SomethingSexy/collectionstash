@@ -4,12 +4,13 @@
 	echo $this->element('collectible_detail', array(
 		'title' => __('Base Collectible Details', true),
 		'showStatistics' => false,
-		'showWho' => false
+		'showWho' => false,
+		'collectibleDetail' => $collectible
 	));
 ?>
 <?php } ?>
 <div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(); ?>	
+	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacture', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
@@ -36,7 +37,7 @@
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<?php  if($this -> Session -> check('add.collectible.mode.collectible') || $this -> Session -> check('edit.collectible.mode.collectible')) { ?>
+						<?php  if(!$this -> Session -> check('add.collectible.mode.variant')) { ?>
 							<li>
 								<div class="label-wrapper">
 									<label for="">
@@ -97,7 +98,13 @@
 								</div>
 								<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
 							</li>	
-					    <?php } ?>
+					    <?php } else 
+								echo $this -> Form -> hidden('scale_id');
+								echo $this -> Form -> hidden('Collectible.collectibletype_id');
+								echo $this -> Form -> hidden('series_id');
+								echo $this -> Form -> hidden('license_id');
+								echo $this -> Form -> hidden('manufacture_id');
+							 ?>
 					    <li>
 							<div class="label-wrapper">
 								<label for="scale">
@@ -217,12 +224,6 @@
 							<?php echo $this -> Form -> input('product_depth', array('div' => false, 'label' => false, 'id' => 'collectibleDepth'));?>
 						</li>						
 					</ul>
-					<?php if(!isset($edit)) { ?>
-						<input type="hidden" name="data[Edit]" value="false" />
-					<?php } else {?>
-						<input type="hidden" name="data[Edit]" value="true" />
-					<?php } ?>
-
 				</fieldset>
 				<?php echo $this -> Form -> end(__('Submit', true));?>
 			</div>

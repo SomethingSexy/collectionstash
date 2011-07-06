@@ -147,7 +147,6 @@ var DED = function() {
 				successful = false;				
 			} else {
 				var $li = $('<li></li>');
-				var $attributeLabel = $('<span>Feature: </span>').addClass('attribute-label');
 	            var $attributeName = $('<span></span>').text(attributeName).addClass('attribute-name');
 	            var $attributeDescription = $('<span></span>').text(description).addClass('attribute-description');
 	            var $hiddenId = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][attribute_id]').val(attributeId);
@@ -156,7 +155,7 @@ var DED = function() {
 				var $hiddenVariant = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][variant]').val('1');
 	
 	
-	            $li.append($attributeLabel).append($attributeName).append($attributeDescription).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant);
+	            $li.append($attributeName).append($attributeDescription).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant);
 	
 	            $('#variant-attributes-list').children('ul').append($li);
 	            
