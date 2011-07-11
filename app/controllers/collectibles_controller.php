@@ -12,7 +12,7 @@ class CollectiblesController extends AppController {
 
 	function beforeFilter() {
 		parent::beforeFilter();
-		$this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'image', 'review');
+		$this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'tags', 'image', 'review');
 		$this -> Wizard -> completeUrl = '/collectibles/confirm';
 		$this -> Wizard -> loginRequired = true;
 	}
@@ -193,6 +193,19 @@ class CollectiblesController extends AppController {
 		return true;
 
 	}
+	
+	function _prepareTags() {
+		$tags = $this-> Collectible-> CollectiblesTag -> Tag ->find('list', array('fields' => array('Tag.id', 'Tag.tag'),'order' => array('Tag.tag' => 'ASC')));
+		debug($tags);
+		$this->set('tags', $tags);
+	}
+
+	function _processTags() {
+		//TODO should validate
+		$this -> data = Sanitize::clean($this -> data);
+		return true;
+
+	}
 
 	function _prepareImage() {
 		$wizardData = $this -> Wizard -> read();
@@ -340,6 +353,12 @@ class CollectiblesController extends AppController {
 		} else {
 			$collectible['AttributesCollectible'] = array();
 		}
+		$tag = array();
+		$tag['Tag']  = array();
+		$tag['Tag']['id'] = '';
+		$tag['Tag']['tag'] = 'balls';
+		
+		$collectible['Tag'] = $tag['Tag'];
 
 		if($this -> Session -> check('add.collectible.mode.variant')) {
 			if(isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {

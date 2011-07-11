@@ -12,21 +12,18 @@
 				<div class="collectible item">
 					<div class="collectible image">
 						<?php 
-						if (!empty($collectible['Upload'])) { ?>
-							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '100'));?>
+						if (!empty($collectible['Collectible']['Upload'])) { ?>
+							<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '100'));?>
 							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
-							</div>								
+								<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
+							</div>						
 							
 						<?php } else { ?>
 							<img src="/img/silhouette.gif"/>
 						<?php } ?>
 						
 						
-						<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '100'));?>
-						<div class="collectible image-fullsize hidden">
-							<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
-						</div>
+
 					</div>
 					<div class="collectible detail">
 						<dl>
@@ -75,12 +72,14 @@
 							<dd>
 								<?php echo $collectible['Collectible']['Scale']['scale'];?>
 							</dd>
-							<dt>
-								<?php __('Release Year');?>
-							</dt>
-							<dd>
-								<?php echo $collectible['Collectible']['release'];?>
-							</dd>
+							<?php if(!empty($collectibleCore['Collectible']['release']) && $collectibleCore['Collectible']['release'] !== '0000'){ ?>
+								<dt>
+									<?php __('Release Year');?>
+								</dt>
+								<dd>
+									<?php echo $collectibleCore['Collectible']['release'];?>
+								</dd>
+								<?php }?>
 							<dt>
 								<?php __('Description');?>
 							</dt>
@@ -136,7 +135,7 @@
 							<dt>
 								<?php __('Edition Size');?>
 							</dt>
-							<dd><?php echo $collectible['CollectiblesUser']['edition_size'] . __(' of ', true) . $collectible['Collectible']['edition_size']; ?></dd>  
+							<dd><?php echo $collectible['CollectiblesUser']['edition_size'] . '/' . $collectible['Collectible']['edition_size']; ?></dd>  
 							<?php }?>
 							<?php if(!empty($collectible['Collectible']['product_weight'])) {
 								echo '<dt>';

@@ -98,12 +98,13 @@
 								</div>
 								<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
 							</li>	
-					    <?php } else 
+					    <?php } else {
 								echo $this -> Form -> hidden('scale_id');
 								echo $this -> Form -> hidden('Collectible.collectibletype_id');
 								echo $this -> Form -> hidden('series_id');
 								echo $this -> Form -> hidden('license_id');
 								echo $this -> Form -> hidden('manufacture_id');
+								}
 							 ?>
 					    <li>
 							<div class="label-wrapper">

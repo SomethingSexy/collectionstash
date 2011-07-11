@@ -2,47 +2,75 @@
 <?php echo $this->Html->script('stash',array('inline'=>false)); ?>
 <?php echo $this->Html->script('user-home',array('inline'=>false)); ?>
 
-<div id="my-stashes-component" class="component">
-  <div class="inside">
-    <div class="component-title">
-      <h2><?php __('My Stashes');?></h2>
-    </div>
-    <?php echo $this->element('flash'); ?>
-    <div class="component-info">
-        <div>You have <?php echo $stashCount ?> <?php if($stashCount==1){echo 'stash';}else{echo 'stashes';} ?>. <a class="add-stash link"><?php __('Add new Stash');?></a>   </div>
-    </div>
-    <div class="component-view">
-      <div id="stash-list-container">
-         <?php foreach($stashDetails as $details) {?>
-           <h3><a href="#"><?php echo $details['Stash']['name']; ?></a></h3>
-           <div class="stash-list-details">
-              <div><?php __('There are '); echo $details['Stash']['count']; __(' collectibles in this stash.'); ?></div>
-              <div class="stash-actions"><?php echo $html->link('View', array('controller' => 'stashs',$details['Stash']['id'])); ?> | <?php echo $html->link('Add', array('controller' => 'collections','action'=>'addSearch', 'stashId' => $details['Stash']['id'],'initial'=>'yes')); ?> | <a class="edit-stash link">Edit</a> | <a class="remove-stash link">Remove</a> | <?php echo $html->link('Stats', array('controller'=>'stashs', 'action' => 'stats',$details['Stash']['id'])); ?></div>
-              <input type="hidden" class="stashId" value="<?php echo $details['Stash']['id']; ?>" />
-           </div>
-        <?php } ?>
-       </div>   
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Stash</a></li>
+		<li><a href="#tabs-2">History</a></li>
+		<li><a href="#tabs-3">Profile</a></li>
+	</ul>
+	<div id="tabs-1">
+		<div id="my-stashes-component" class="component">
+		  <div class="inside">
+		    <div class="component-title">
+		      <h2><?php __('My Stash');?></h2>
+		    </div>
+		    <?php echo $this->element('flash'); ?>
+		    <div class="component-view">
+		    	<div class="actions">
+		    		<ul>
+		    			<li><?php echo $html->link('View', array('controller' => 'stashs',$myCollectibles[0]['Stash']['id'])); ?></li>
+		    			<li><?php echo $html->link('Add', array('controller' => 'collections','action'=>'addSearch', 'stashId' => $myCollectibles[0]['Stash']['id'],'initial'=>'yes')); ?></li>
+		    			<li><?php echo $html->link('Stats', array('controller' => 'stashs','action'=>'stats', $myCollectibles[0]['Stash']['id'])); ?></li>
+		    			
+		    		</ul>	
+		    	</div>
+				<div class="glimpse">
+					<?php foreach($myCollectibles[0]['CollectiblesUser'] as $myCollectible) {
+						
+						if (!empty($myCollectible['Collectible']['Upload'])) { 
+							echo '<a href="/collections/viewCollectible/'.$myCollectible['id']. '">'.$fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => '100')).'</a>';
+							echo '<div class="collectible image-fullsize hidden">';
+							echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 0));
+							echo '</div>';
+						 } else { 
+							echo '<a href="/collections/viewCollectible/'.$myCollectible['id']. '"><img src="/img/silhouette_thumb.gif"/></a>';
+					 } 
+						
+					}?>
+					
+				</div>
+		    </div>    
+		  </div>
+		</div>
+	</div>
+	<div id="tabs-2">
+		<?php 
+		if($myCollection)
+		{ ?>
+		<div class="component">
+		  <div class="inside">
+		    <div class="component-title">
+		      <h2><?php __('History');?></h2>
+		    </div>
+		    <div class="component-view">
+		      <ul>
+		        <li>You have <?php echo $submissionCount ?> collectibles awaiting to be approved.</li>
+		      </ul>
+		    </div>
+		  </div>
+		</div>
+		<?php } ?>
 
-    </div>    
-  </div>
+	</div>
+	<div id="tabs-3">
+		<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+	</div>
 </div>
 
-<?php 
-if($myCollection)
-{ ?>
-<div class="component">
-  <div class="inside">
-    <div class="component-title">
-      <h2><?php __('My Submissions');?></h2>
-    </div>
-    <div class="component-view">
-      <ul>
-        <li>You have <?php echo $submissionCount ?> collectibles awaiting to be approved.</li>
-      </ul>
-    </div>
-  </div>
-</div>
-<?php } ?>
+
+
+
 
 
 <div id="edit-stash-dialog" class="dialog" title="Edit Stash Details">
@@ -108,3 +136,9 @@ if($myCollection)
 	    </div>
 	</div>	
 </div>
+
+<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+</script>

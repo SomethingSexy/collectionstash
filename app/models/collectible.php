@@ -15,7 +15,7 @@
         'Scale',
 		'Retailer');
 
-	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible');
+	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible', 'CollectiblesTag');
 
 	var $actsAs = array('Revision', 'ExtendAssociations','Containable');
 

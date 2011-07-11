@@ -116,6 +116,11 @@ a:active {
 	padding: 0;
 }
 
+.ui-tabs-panel .component {
+	float: none;
+	margin: 0;
+}
+
 .collectible.item {
     padding: 20px;
     float: left;
@@ -460,8 +465,31 @@ a:active {
 }
 
 #my-stashes-component {
-	width: 450px;
+	width: 100%;
+}
+#my-stashes-component .inside .component-view {
+	overflow: hidden;
+	padding: 0;
+	padding-top: 10px;
+}
+#my-stashes-component .inside .component-view .actions {
+	float: left;
 	margin-right: 20px;
+	width: 10%;
+}
+#my-stashes-component .inside .component-view .actions li {
+	margin-bottom: 10px;
+}
+#my-stashes-component .inside .component-view .glimpse {
+	float: left;
+	width: 80%;
+}
+
+#my-stashes-component .inside .component-view .glimpse img {
+	padding: 10px;
+	border: 8px solid #333333;
+    border-radius: 8px 8px 8px 8px;
+    margin: 10px;
 }
 
 #collectible-detail {
@@ -1118,7 +1146,41 @@ div.paging span a {
 	background: none;
 	border: none;
 	color: #ccc;
+
 	
+}
+
+.ui-tabs-nav.ui-widget-header {
+	background-color: #464646;	
+}
+.ui-tabs{
+	border: none;
+	background-color: #F8F8F8;
+}
+
+.ui-tabs .ui-state-default {
+	background: url("/img/icon/555555_40x100_textures_03_highlight_soft_75.png") repeat-x scroll 50% 50% #555555;
+    border: 1px solid #666666;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 4px 1.2em 3px;
+}
+
+.ui-tabs .ui-state-default a {
+	color: #FFFFFF;
+	font-weight: normal;	
+}
+.ui-tabs .ui-state-active {
+    background: #F8F8F8;
+    border: 1px solid #666666;
+
+    outline: medium none;
+	
+}
+
+.ui-tabs .ui-state-active a{
+    color: #F6921E;
+    font-weight: normal;	
 }
 
 #bread-crumbs {

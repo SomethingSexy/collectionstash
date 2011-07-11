@@ -58,7 +58,7 @@ body {
 	width: 100%;
 	background-color: #FDB924;
 	margin-top: 5px;
-	float: left;
+	/*float: left;*/
 }
 
 #stage .main-navigation .inside {
@@ -67,6 +67,13 @@ body {
 
 #stage .main-navigation .inside .nav {
 	float: left;
+}
+
+#stage .main-navigation .inside .nav li {
+    border-right: solid 1px #FFF;  	
+}
+#stage .main-navigation .inside .nav li a {
+	padding: 10px;
 }
 #stage .main-navigation .inside .site-search {
 	float: right;
@@ -167,7 +174,7 @@ ul.nav li {
     margin: 0;
    /* padding: 0 15px 0 0; */
     position: relative; /*--Declare X and Y axis base for sub navigation--*/
-  /*  border-right: solid 1px #ca0002;  */
+
 }
 ul.nav li a {
     padding: 10px 5px;

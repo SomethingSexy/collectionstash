@@ -7,7 +7,6 @@
 	<?php if(isset($keywords_for_layout)){ echo "<meta name='keywords' content='".$keywords_for_layout."' />"; } ?>
 	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
 	<link rel="stylesheet" type="text/css" href="/css/layout/layout.css" />
-
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.core.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.theme.css" />
 	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.dialog.css" />
