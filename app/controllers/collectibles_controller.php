@@ -195,9 +195,7 @@ class CollectiblesController extends AppController {
 	}
 	
 	function _prepareTags() {
-		$tags = $this-> Collectible-> CollectiblesTag -> Tag ->find('list', array('fields' => array('Tag.id', 'Tag.tag'),'order' => array('Tag.tag' => 'ASC')));
-		debug($tags);
-		$this->set('tags', $tags);
+
 	}
 
 	function _processTags() {

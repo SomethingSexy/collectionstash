@@ -404,6 +404,14 @@ a:active {
 	float: left;
 	clear: both;
 }
+#collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .button {
+	width: 50px;
+	clear: none;
+	padding: 2px;
+}
+#collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .text-box {
+	clear:left;
+}
 
 
 /*#collectible-add-component*/
@@ -1210,3 +1218,9 @@ div.paging span a {
 #bread-crumbs div a {
 	text-decoration: none;
 }
+
+.autocomplete-w1 { background:url("/img/shadow.png") no-repeat bottom right; position:absolute; top:0px; left:0px; margin:6px 0 0 6px; /* IE6 fix: */ _background:none; _margin:1px 0 0 0; }
+.autocomplete { border:1px solid #999; background:#FFF; cursor:default; text-align:left; max-height:350px; overflow:auto; margin:-6px 6px 6px -6px; /* IE6 specific: */ _height:350px;  _margin:0; _overflow-x:hidden; }
+.autocomplete .selected { background:#F0F0F0; }
+.autocomplete div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
+.autocomplete strong { font-weight:normal; color:#3399FF; }
