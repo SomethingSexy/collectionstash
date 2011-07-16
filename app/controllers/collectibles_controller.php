@@ -19,7 +19,7 @@ class CollectiblesController extends AppController {
 
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
-		$collectible = $this -> Collectible -> findById($id);
+		$collectible = $this -> Collectible -> find('first', array('conditions'=>array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 		$this -> set('collectible', $collectible);
 	}
 
@@ -413,11 +413,7 @@ class CollectiblesController extends AppController {
 				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
 				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
 			}
-			debug($id);
-			$collectible = $this -> Collectible -> findById($id);
-			debug($collectible);
 			$this -> Session -> write('addCollectibleId', $id);
-			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
 			$this -> Session -> delete('add.collectible.mode.variant.collectible');
@@ -425,9 +421,7 @@ class CollectiblesController extends AppController {
 		} else {
 			debug($this -> Collectible -> validationErrors);
 			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			//$this -> redirect(array('controller'=>'collectibles', 'action'=>'wizard', 'review'));
 			return false;
-			//exit();
 		}
 	}
 

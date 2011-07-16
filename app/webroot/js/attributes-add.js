@@ -36,6 +36,11 @@ $( function() {
     $('.add-attribute').click( function() {
         DED.initAttributeList();
     })
+    
+    $('.remove-attribute').live('click', function(){
+    	$(this).parent('span').parent('li').remove();
+    	
+    });
 });
 var DED = function() {
     var attributeLevel = 0;
@@ -150,13 +155,16 @@ var DED = function() {
 				var $attributeLabel = $('<span>Feature: </span>').addClass('attribute-label');
 	            var $attributeName = $('<span></span>').text(attributeName).addClass('attribute-name');
 	            var $attributeDescription = $('<span></span>').text(description).addClass('attribute-description');
+	            var $attributeAction = $('<span></span>').addClass('attribute-action');
+	            var $attributeRemove = $('<a></a>').text('Remove').addClass('remove-attribute');
+	            $attributeAction.append($attributeRemove);
 	            var $hiddenId = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][attribute_id]').val(attributeId);
 	            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
 				var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
 				var $hiddenVariant = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][variant]').val('0');
 	
 	
-	            $li.append($attributeLabel).append($attributeName).append($attributeDescription).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant);
+	            $li.append($attributeLabel).append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant);
 	
 	            $('#collectible-attributes-list').children('ul').append($li);
 	            

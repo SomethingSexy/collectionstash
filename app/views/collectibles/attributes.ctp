@@ -53,6 +53,7 @@
 										echo '<span class="attribute-description">';
 										echo $attribue['description'];
 										echo '</span>';
+										echo '<span class="attribute-action"><a class="remove-attribute">Remove</a></span>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
@@ -70,6 +71,7 @@
 						<a class="add-attribute">Add Attribute</a>
 					</div>
 				</fieldset>	
+				<input type="hidden" name="data[dummy]" value="" />
 				<?php echo $this -> Form -> end();?>
 				
 				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes' ,'id'=>'skip-attributes-form'));?>
