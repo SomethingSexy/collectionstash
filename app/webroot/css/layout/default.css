@@ -344,7 +344,7 @@ a:active {
 }
 
 #collectible-add-component .inside .component-view .links {
-	text-align: center;
+	text-align: left;
 	margin-top: 1em;
 }
 #collectible-add-component .inside .component-view .links.review,
@@ -404,6 +404,9 @@ a:active {
 	float: left;
 	clear: both;
 }
+#collectible-add-component .inside .component-view .collectible.add.tag fieldset {
+	margin-bottom: 0;
+}
 #collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .button {
 	width: 50px;
 	clear: none;
@@ -411,6 +414,19 @@ a:active {
 }
 #collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .text-box {
 	clear:left;
+}
+#collectible-add-component .inside .component-view .collectible.add.tag .tag-list {
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+#collectible-add-component .inside .component-view .collectible.add.tag .tag-list .tag {
+	font-size: 0.75em;
+	display: inline;
+	margin-right: 1em;
+	padding: 10px;
+	float: left;
+	background-color: #CCCCCC;
 }
 
 
@@ -432,7 +448,7 @@ a:active {
 }
 */
 .attributes-list {
-	    float: left;
+	float: left;
     width: 100%;
 }
 .attributes-list ul {
@@ -470,6 +486,15 @@ a:active {
 
 .attributes-list ul li .attribute-description {
 	width: 50%;
+}
+
+.attributes-list.empty ul,
+.attributes-list.empty ul li {
+	border: none;
+}
+
+.attributes-list.empty ul li {
+	font-size: 0.75em;
 }
 
 #my-stashes-component {

@@ -210,11 +210,19 @@
 					echo '</div>';			
 				} ?>
 			</div>
-			<div class="attributes-list">
-				<ul>
+
 					<?php
 					$lastKey = 0;
-					if(!empty($collectibleCore['AttributesCollectible'])) {
+					$attributeEmpty = empty($collectibleCore['AttributesCollectible']);
+					if($attributeEmpty){
+						echo '<div class="attributes-list empty">';
+					} else {
+						echo '<div class="attributes-list">';						
+					}
+					
+
+					echo '<ul>';
+					if(!$attributeEmpty) {
 						echo '<li class="title">';
 						echo '<span class="attribute-name">'.__('Part', true).'</span>';
 						echo '<span class="attribute-description">'.__('Description', true).'</span>';
@@ -232,10 +240,14 @@
 								echo '</li>';
 							}
 						}
+					} else {
+						echo '<li>No Accessories/Features have been added</li>';	
 					}
+					
+					echo '</ul>';
+					echo '</div>';
 					?>
-				</ul>
-			</div>
+
 		
 		</div>
 		<?php if(isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) { ?>

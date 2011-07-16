@@ -27,7 +27,7 @@
 		</div>
 		<div class="component-view">
 			<div class="collectible add">
-				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes', )); ?>
+				<?php echo $this -> Form -> create('Collectible', array('id'=>'add-attributes-form', 'url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes', )); ?>
 				<fieldset>
 					<legend>
 						<?php __('Part Break Down');?>
@@ -39,6 +39,7 @@
 							echo '<li class="title">';
 							echo '<span class="attribute-name">'.__('Part', true).'</span>';
 							echo '<span class="attribute-description">'.__('Description', true).'</span>';
+							echo '<span class="attribute-action">'.__('Action', true).'</span>';
 							echo '</li>';
 							if(isset($this -> data['AttributesCollectible'])) {
 
@@ -69,7 +70,27 @@
 						<a class="add-attribute">Add Attribute</a>
 					</div>
 				</fieldset>	
-				<?php echo $this -> Form -> end(__('Submit', true));?>
+				<?php echo $this -> Form -> end();?>
+				
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes' ,'id'=>'skip-attributes-form'));?>
+					<input type="hidden" name="data[skip]" value="true" />
+				</form>
+				<div class="links">
+					<input type="button" id="add-attributes-button" class="button" value="Submit">
+					<input type="button" id="skip-attributes-button" class="button" value="Skip">
+				</div>
+				<script>
+					$(function(){
+						//Eh move this out of here
+						$('#add-attributes-button').click(function(){
+							$('#add-attributes-form').submit();	
+						});	
+						$('#skip-attributes-button').click(function(){
+							$('#skip-attributes-form').submit();	
+						});						
+					});
+
+				</script>
 			</div>
 		</div>
 	</div>
@@ -89,6 +110,7 @@
 				</div>
 			</div>
 			<div class="component-view">
+				<?php echo $this -> Form -> create('AttributesCollectible', array('url' => '')); ?>
 				<fieldset>
 					<ul id="add-attribute-dialog-fields" class="form-fields">
 						<li id="description-field">
@@ -101,6 +123,7 @@
 						</li>
 					</ul>
 				</fieldset>
+				<?php echo $this -> Form -> end();?>
 			</div>
 		</div>
 	</div>

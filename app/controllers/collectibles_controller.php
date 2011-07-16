@@ -189,18 +189,33 @@ class CollectiblesController extends AppController {
 
 	function _processAttributes() {
 		//TODO should validate
-		$this -> data = Sanitize::clean($this -> data);
+		if(isset($this -> data['skip']) && $this -> data['skip'] === 'true') {
+			return true;
+		} else {
+			$this -> data = Sanitize::clean($this -> data);			
+		}
+
 		return true;
 
 	}
 	
 	function _prepareTags() {
-
+		$wizardData = $this -> Wizard -> read();	
+		debug($wizardData);
+		if(isset($wizardData['tags']['CollectiblesTag'])) {
+			$this->data['Tag'] = $wizardData['tags']['CollectiblesTag'];
+		}
+		
 	}
 
 	function _processTags() {
 		//TODO should validate
 		$this -> data = Sanitize::clean($this -> data);
+		debug($this->data);
+		$this->loadModel('Tag');
+		$processedTags = $this->Tag->processAddTags($this->data['CollectiblesTag']);
+		$this->data['CollectiblesTag'] = $processedTags;
+		debug($this->data);
 		return true;
 
 	}
@@ -294,19 +309,27 @@ class CollectiblesController extends AppController {
 		debug($wizardData);
 		$collectible = array();
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
+		if(isset($wizardData['attributes']['AttributesCollectible'])) {
+			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];			
+		}
 
-		$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
 		if($this -> Session -> check('add.collectible.mode.variant')) {
 			if(isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
-				$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
+				if(isset($collectible['AttributesCollectible'])) {
+					$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);	
+				} else {
+					$result = $wizardData['variantFeatures']['AttributesCollectible'];
+				}	
 				debug($result);
 				$collectible['AttributesCollectible'] = $result;
 			}
 		}
 
-		foreach($collectible['AttributesCollectible'] as $key => &$value) {	
-			$value['Attribute']['name'] = $value['name'];	
-			debug($value);	
+		if(isset($collectible['AttributesCollectible'])) {
+			foreach($collectible['AttributesCollectible'] as $key => &$value) {	
+				$value['Attribute']['name'] = $value['name'];	
+				debug($value);	
+			}			
 		}
 
 		if(isset($wizardData['image']['Upload'])) {
@@ -348,17 +371,14 @@ class CollectiblesController extends AppController {
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
 		if(isset($wizardData['attributes']['AttributesCollectible'])) {
 			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
-		} else {
-			$collectible['AttributesCollectible'] = array();
-		}
-		$tag = array();
-		$tag['Tag']  = array();
-		$tag['Tag']['id'] = '';
-		$tag['Tag']['tag'] = 'balls';
-		
-		$collectible['Tag'] = $tag['Tag'];
+		} 
+		$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 
 		if($this -> Session -> check('add.collectible.mode.variant')) {
+			if(!isset($collectible['AttributesCollectible'])){
+				$collectible['AttributesCollectible'] = array();
+			}	
+				
 			if(isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
 				$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
 				debug($result);
@@ -375,7 +395,7 @@ class CollectiblesController extends AppController {
 		$collectible['Collectible']['user_id'] = $this -> getUserId();
 		debug($collectible);
 		$this -> Collectible -> create();
-		if($this -> Collectible -> saveAll($collectible, array('validate' => true))) {
+		if($this -> Collectible -> saveAll($collectible)) {
 			$id = $this -> Collectible -> id;
 			$collectible = $this -> Collectible -> findById($id);
 			$approvalId = $collectible['Collectible']['approval_id'];
@@ -393,17 +413,21 @@ class CollectiblesController extends AppController {
 				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
 				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
 			}
-
+			debug($id);
 			$collectible = $this -> Collectible -> findById($id);
+			debug($collectible);
 			$this -> Session -> write('addCollectibleId', $id);
 			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
 			$this -> Session -> delete('add.collectible.mode.variant.collectible');
+			return true;
 		} else {
 			debug($this -> Collectible -> validationErrors);
 			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			$this -> redirect( array('action' => 'review'));
+			//$this -> redirect(array('controller'=>'collectibles', 'action'=>'wizard', 'review'));
+			return false;
+			//exit();
 		}
 	}
 

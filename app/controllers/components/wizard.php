@@ -158,7 +158,7 @@ class WizardComponent extends Object {
 	function initialize(&$controller, $settings = array()) {
 		$this -> controller = &$controller;
 		$this -> _set($settings);
-
+		debug($this -> Session -> check('Wizard.complete'));
 		$this -> _sessionKey = $this -> Session -> check('Wizard.complete') ? 'Wizard.complete' : 'Wizard.' . $controller -> name;
 		$this -> _configKey = 'Wizard.config';
 		$this -> _branchKey = 'Wizard.branches.' . $controller -> name;
@@ -171,6 +171,7 @@ class WizardComponent extends Object {
 	 * @access public
 	 */
 	function startup(&$controller) {
+		debug($this->steps);
 		$this -> steps = $this -> _parseSteps($this -> steps);
 
 		$this -> config('wizardAction', $this -> wizardAction);
@@ -188,7 +189,12 @@ class WizardComponent extends Object {
 	 * @access public
 	 */
 	function process($step, $loggedIn = false) {
-
+		// debug($step);
+		// debug($this->steps);
+		// debug($this->_currentStep);
+		// debug($this->config('expectedStep'));
+		// debug($this -> _getExpectedStep());
+		
 		if($this -> loginRequired && !$loggedIn) {
 			$this -> controller -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 			
@@ -213,11 +219,28 @@ class WizardComponent extends Object {
 
 		if(empty($step)) {
 			if($this -> Session -> check('Wizard.complete')) {
+					
+				$completePass = true;	
 				if(method_exists($this -> controller, '_afterComplete')) {
-					$this -> controller -> _afterComplete();
+					$completePass = $this -> controller -> _afterComplete();
 				}
-				$this -> reset();
-				$this -> controller -> redirect($this -> completeUrl);
+				debug($completePass);
+				if($completePass) {
+					$this -> reset();
+					$this -> controller -> redirect($this -> completeUrl);							
+				} else {
+					prev($this -> steps);
+					// debug($this->_currentStep);
+					$this->_setCurrentStep('review');
+					$this -> config('expectedStep', 'review');
+					$this -> Session -> delete("Wizard.Collectibles.review");
+					$this -> Session -> delete("Wizard.complete.review");
+					$this -> Session -> delete('Wizard.complete');
+					// debug(current($this -> steps));
+					// debug($this->Session->check('Wizard.complete'));
+					$this -> redirect(current($this -> steps));
+				}
+			
 			}
 
 			$this -> autoReset = false;
@@ -248,7 +271,7 @@ class WizardComponent extends Object {
 						} else {
 							$this -> save();
 						}						
-						
+						//If not next exists, then we know we are done and we can go to complete
 						if(next($this -> steps)) {
 							if($this -> autoAdvance) {
 								$this -> redirect();
@@ -256,8 +279,9 @@ class WizardComponent extends Object {
 							$this -> redirect(current($this -> steps));
 						} else {
 							$this -> Session -> write('Wizard.complete', $this -> read());
-							$this -> reset();
-
+							//$this -> Session -> delete($this -> _sessionKey);
+							//$this -> reset();
+							//redirect to just the action, passing in an empty step will automatically trigger complete
 							$this -> controller -> redirect($this -> wizardAction);
 						}
 					}
@@ -381,6 +405,7 @@ class WizardComponent extends Object {
 			$step = $this -> _getExpectedStep();
 		}
 		$url = array('controller' => Inflector::underscore($this -> controller -> name), 'action' => $this -> wizardAction, $step);
+		// debug($url);
 		$this -> controller -> redirect($url, $status, $exit);
 	}
 
@@ -454,6 +479,9 @@ class WizardComponent extends Object {
 	 */
 	function _getExpectedStep() {
 		foreach($this->steps as $step) {
+			// debug($step);
+			// debug($this->_sessionKey);
+			// debug($this -> Session -> check("$this->_sessionKey.$step"));
 			if(!$this -> Session -> check("$this->_sessionKey.$step")) {
 				$this -> config('expectedStep', $step);
 				return $step;
@@ -526,6 +554,7 @@ class WizardComponent extends Object {
 		while(current($this -> steps) != $step) {
 			$this -> _currentStep = next($this -> steps);
 		}
+		// debug($this->_currentStep);
 	}
 
 	/**
@@ -561,10 +590,16 @@ class WizardComponent extends Object {
 	 * @access protected
 	 */
 	function _validStep($step) {
+		// debug($step);
+		// debug($this -> steps);
+		// debug($this -> _getExpectedStep());
 		if(in_array($step, $this -> steps)) {
+			// debug($this -> lockdown);
 			if($this -> lockdown) {
+				// debug(array_search($step, $this -> steps) == array_search($this -> _getExpectedStep(), $this -> steps));
 				return (array_search($step, $this -> steps) == array_search($this -> _getExpectedStep(), $this -> steps));
 			}
+			// debug((array_search($step, $this -> steps) <= array_search($this -> _getExpectedStep(), $this -> steps)));
 			return (array_search($step, $this -> steps) <= array_search($this -> _getExpectedStep(), $this -> steps));
 		}
 		return false;

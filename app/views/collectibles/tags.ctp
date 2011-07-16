@@ -27,12 +27,28 @@
 									<?php __('Tags') ?>
 								</label>
 							</div>
-							<input type="text" class="text-box" name="q" id="query" />
+							<input type="text" maxlength="25" class="text-box" name="q" id="query" />
 							<input type="button" class="button" id="add-query" value="Add"/>
 							<?php //echo $this -> Form -> input('tag_id', array('div' => false, 'label' => false));?>
 						</li>
 					</ul>
+
 				</fieldset>	
+				<ul id="add-tag-list" class="tag-list">
+					<?php
+					$lastKey = 0;
+					if(isset($this -> data['Tag'])) {
+						foreach($this->data['Tag'] as $key => $tag) {
+								echo '<li class="tag">';
+								echo $tag['tag'];
+								echo '<input type="hidden" name="data[CollectiblesTag][' . $key . '][tag]" value="' . $tag['tag'] . '"/>';
+								echo '</li>';
+								$lastKey = $key;
+						}
+						echo '<script>var lastTagKey =' . $lastKey . ';</script>';
+					}
+					?>								
+				</ul>
 				<?php echo $this -> Form -> end(__('Submit', true));?>
 			</div>
 		</div>

@@ -39,7 +39,7 @@ $( function() {
 });
 var DED = function() {
     var attributeLevel = 0;
-    var attributeNumber = 1;
+    var attributeNumber = 0;
     function isFirstLevel() {
         return attributeLevel == 1;
 
