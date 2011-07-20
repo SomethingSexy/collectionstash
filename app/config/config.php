@@ -16,7 +16,7 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
   	),
   	'Collectible' => array (
 		'Edit' => array (
-			'auto-approve' => true	
+			'auto-approve' => false	
 		)	
   	)
 ));

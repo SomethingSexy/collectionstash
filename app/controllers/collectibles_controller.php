@@ -19,8 +19,14 @@ class CollectiblesController extends AppController {
 
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
-		$collectible = $this -> Collectible -> find('first', array('conditions'=>array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
-		$this -> set('collectible', $collectible);
+		if(isset($id) && $id != null) {
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$this -> set('collectible', $collectible);
+			$this -> Session -> delete('addCollectibleId');
+		} else {
+			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'addSelectType'));
+		}
 	}
 
 	function wizard($step =null) {
@@ -192,30 +198,45 @@ class CollectiblesController extends AppController {
 		if(isset($this -> data['skip']) && $this -> data['skip'] === 'true') {
 			return true;
 		} else {
-			$this -> data = Sanitize::clean($this -> data);			
+			$this -> data = Sanitize::clean($this -> data);
+			$this -> loadModel('AttributesCollectible');
+			debug($this -> data);
+			//Uh this doesn't make sense, do I need to loop through each of these to validate?
+			if(isset($this -> data['AttributesCollectible'])) {
+				foreach($this -> data['AttributesCollectible'] as $key => $attribue) {
+					$this -> AttributesCollectible -> set($attribue);
+					//debug($this -> AttributesCollectible);
+					if($this -> AttributesCollectible -> validates()) {
+						return true;
+					} else {
+						debug($this -> AttributesCollectible -> invalidFields());
+						$this -> set('errors', $this -> AttributesCollectible -> validationErrors);
+						return false;
+					}
+				}				
+			}
+			
+			return true;
 		}
-
-		return true;
-
 	}
-	
+
 	function _prepareTags() {
-		$wizardData = $this -> Wizard -> read();	
+		$wizardData = $this -> Wizard -> read();
 		debug($wizardData);
 		if(isset($wizardData['tags']['CollectiblesTag'])) {
-			$this->data['Tag'] = $wizardData['tags']['CollectiblesTag'];
+			$this -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
 		}
-		
+
 	}
 
 	function _processTags() {
 		//TODO should validate
 		$this -> data = Sanitize::clean($this -> data);
-		debug($this->data);
-		$this->loadModel('Tag');
-		$processedTags = $this->Tag->processAddTags($this->data['CollectiblesTag']);
-		$this->data['CollectiblesTag'] = $processedTags;
-		debug($this->data);
+		debug($this -> data);
+		$this -> loadModel('Tag');
+		$processedTags = $this -> Tag -> processAddTags($this -> data['CollectiblesTag']);
+		$this -> data['CollectiblesTag'] = $processedTags;
+		debug($this -> data);
 		return true;
 
 	}
@@ -310,26 +331,26 @@ class CollectiblesController extends AppController {
 		$collectible = array();
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
 		if(isset($wizardData['attributes']['AttributesCollectible'])) {
-			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];			
+			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
 		}
 
 		if($this -> Session -> check('add.collectible.mode.variant')) {
 			if(isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
 				if(isset($collectible['AttributesCollectible'])) {
-					$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);	
+					$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
 				} else {
 					$result = $wizardData['variantFeatures']['AttributesCollectible'];
-				}	
+				}
 				debug($result);
 				$collectible['AttributesCollectible'] = $result;
 			}
 		}
 
 		if(isset($collectible['AttributesCollectible'])) {
-			foreach($collectible['AttributesCollectible'] as $key => &$value) {	
-				$value['Attribute']['name'] = $value['name'];	
-				debug($value);	
-			}			
+			foreach($collectible['AttributesCollectible'] as $key => &$value) {
+				$value['Attribute']['name'] = $value['name'];
+				debug($value);
+			}
 		}
 
 		if(isset($wizardData['image']['Upload'])) {
@@ -355,10 +376,9 @@ class CollectiblesController extends AppController {
 			$this -> set('collectible', $variantCollectible);
 			$collectible['Collectible']['variant'] = 1;
 		}
-		
+
 		$this -> set('collectibleReview', $collectible);
-		
-		
+
 	}
 
 	function _processReview() {
@@ -371,14 +391,14 @@ class CollectiblesController extends AppController {
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
 		if(isset($wizardData['attributes']['AttributesCollectible'])) {
 			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
-		} 
+		}
 		$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 
 		if($this -> Session -> check('add.collectible.mode.variant')) {
-			if(!isset($collectible['AttributesCollectible'])){
+			if(!isset($collectible['AttributesCollectible'])) {
 				$collectible['AttributesCollectible'] = array();
-			}	
-				
+			}
+
 			if(isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
 				$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
 				debug($result);
@@ -455,6 +475,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> delete('variant.add-id');
 			$this -> Session -> delete('variant.base-collectible');
 			$this -> Session -> delete('add.collectible.variant.collectible');
+			$this -> Session -> delete('addCollectibleId');
 			$this -> Wizard -> resetWizard();
 			//check to see if there is data submitted
 			if(!empty($this -> data)) {

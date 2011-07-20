@@ -6,6 +6,7 @@
 			'showWho' => true,
 			'showEdit' => true,
 			'editImageUrl'=> '/uploadEdit/edit/',
+			'editManufactureUrl' => '/collectibleEdit/wizard/manufacture/',
 			'showHistory' => true,
 			'showVariants' => true,
 			'setPageTitle' => true,

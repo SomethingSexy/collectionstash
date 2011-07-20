@@ -26,7 +26,7 @@
 				<h3><?php __('Manufacture Details'); ?></h3>
 				<?php if(isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
-					echo '<a href="/collectibles/wizard/manufacture">Edit</a>';
+					echo '<a href="'.$editManufactureUrl.$collectibleCore['Collectible']['id'].'/'.'">Edit</a>';
 					echo '</div>';			
 				} ?>
 			</div>
@@ -201,6 +201,13 @@
 				?>
 			</dl>
 		</div>
+		<?php 
+			if(!isset($showAttributes)) {
+				$showAttributes = true;
+			}
+			
+			if($showAttributes) {
+		?>
 		<div class="collectible detail">
 			<div class="detail title">
 				<h3><?php __('Accessories/Features'); ?></h3>
@@ -288,7 +295,9 @@
 			</div>
 		
 		</div>
-		<?php } ?>
+		<?php }
+		}//show attribute end
+			 ?>
 			<?php
 			if(isset($showStatistics) && $showStatistics) { ?>
 			<div class="collectible detail statistics">

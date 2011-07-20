@@ -32,10 +32,14 @@
 				}
 				if(!isset($editImageUrl)){
 					$editImageUrl = false;
+				}
+				if(!isset($editManufactureUrl)){
+					$editManufactureUrl = '';
 				}				
 				echo $this->element('collectible_detail_core', array(
 				'showEdit' => $showEdit,
 				'editImageUrl'=> $editImageUrl,
+				'editManufactureUrl' => $editManufactureUrl,
 				'showStatistics' => $showStatistics,
 				'collectibleCore' => $collectibleDetail
 			));		?>	

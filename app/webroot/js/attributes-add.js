@@ -109,6 +109,7 @@ var DED = function() {
             }
 
         }
+        $('#add-attribute-dialog').find('.error-message').remove();
         // $('#add-attribute-dialog-fields').after($select);
         $( "#add-attribute-dialog" ).dialog('open');
 
