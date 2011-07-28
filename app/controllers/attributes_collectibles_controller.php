@@ -5,6 +5,10 @@ class AttributesCollectiblesController extends AppController {
 	var $helpers = array('Html', 'Ajax');
 	var $components = array('RequestHandler');
 
+	/*
+	 * In the future when doing this edits, we are going to have to make sure that these parts are not being
+	 * used in a custom when we delete them
+	 */
 	function edit($id =null) {
 		$this -> checkLogIn();
 		$this -> set('collectibleId', $id);
@@ -31,18 +35,26 @@ class AttributesCollectiblesController extends AppController {
 					foreach($this -> data['AttributesCollectible'] as $key => $attribue) {
 						//debug($this -> AttributesCollectible);
 						if($attribue['action'] === 'D') {
-							if($this -> AttributesCollectible -> delete($attribue['id'])) {
+							$this -> AttributesCollectible -> id = $attribue['id'];
+							if($this -> AttributesCollectible -> save(array('active'=>0), false, array('active'))) {
 
 							}
 						} else if($attribue['action'] === 'N') {
 							$attribue['collectible_id'] = $id;
+							$this -> AttributesCollectible -> create();
 							$this -> AttributesCollectible -> set($attribue);
 							if($this -> AttributesCollectible -> save()) {
 
 							}
+						} else if($attribue['action'] === 'E') {
+							$this -> AttributesCollectible -> id = $attribue['id'];
+							if($this -> AttributesCollectible -> saveField('description', $attribue['description'], false)) {
+
+							}
 						}
+
 					}
-					$attributes = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id), 'contain' => 'Attribute'));
+					$attributes = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => 'Attribute'));
 					$this -> data = $attributes;
 				} else {
 					$errorAttributes = array();
@@ -59,29 +71,22 @@ class AttributesCollectiblesController extends AppController {
 			}
 		} else {
 			//Submit the deletes as deletes....then loop throuh each one to either delete or add
-			$attributes = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id), 'contain' => 'Attribute'));
+			$attributes = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => 'Attribute'));
 			debug($attributes);
 			//$this -> set('attributes', $attributes);
 			$this -> data = $attributes;
 		}
 	}
 
+	/**
+	 * This method will return the history for a given attributes collectible
+	 */
 	function history($id=null) {
 		$this -> checkLogIn();
 		if($id && is_numeric($id)) {
-			$attributeList = $this-> AttributesCollectible->find("list", array('conditions'=>array('AttributesCollectible.collectible_id'=>65)));
-			debug($this-> AttributesCollectible->find("all", array('conditions'=> array('AttributesCollectible.id'=>array('17', '18','19')))));
-			debug($attributeList);
-			$this -> AttributesCollectible -> id = 37;
+			//Date and timestamp of update and user who did the update
+			$this -> AttributesCollectible -> id = $id;
 			$history = $this -> AttributesCollectible -> revisions(null, true);
-			// $this -> loadModel('User');
-			// //This is like the worst thing ever and needs to get cleaned up
-			// //Making this by reference so we can modify it, is this proper in php?
-			// foreach($history as $key => &$collectible) {
-				// $userId = $collectible['Collectible']['user_id'];
-				// $userDetails = $this -> User -> findById($userId, array('contain' => false));
-				// $collectible['Collectible']['user_name'] = $userDetails['User']['username'];
-			// }
 
 			debug($history);
 			$this -> set(compact('history'));

@@ -41,13 +41,14 @@
 										echo '<span class="attribute-name">';
 										echo $attribue['Attribute']['name'];
 										echo '</span>';
-										echo '<span class="attribute-description">';
+										echo '<span class="attribute-description"><span>';
 										echo $attribue['AttributesCollectible']['description'];
+										echo '</span><input type="input" class="edit attribute description" value="' . $attribue['AttributesCollectible']['description'] . '"/>';
 										echo '</span>';
-										echo '<span class="attribute-action"><a class="remove-attribute">Remove</a></span>';
+										echo '<span class="attribute-action"><a class="edit-attribute">Edit</a><a class="remove-attribute">Remove</a></span>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][id]" value="' . $attribue['AttributesCollectible']['id'] . '"/>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['AttributesCollectible']['attribute_id'] . '"/>';
-										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['AttributesCollectible']['description'] . '"/>';
+										echo '<input type="hidden" class="attribute description" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['AttributesCollectible']['description'] . '"/>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['Attribute']['name'] . '"/>';
 										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][variant]" value="' . $attribue['AttributesCollectible']['variant'] . '"/>';
 										if(isset($attribue['AttributesCollectible']['action'] )) {

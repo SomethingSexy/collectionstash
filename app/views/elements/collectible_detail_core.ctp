@@ -232,7 +232,7 @@
 						$added = false;
 						foreach($collectibleCore['AttributesCollectible'] as $key => $attribute) {
 							if($attribute['variant'] !== '1') {
-								$outputAttribtes = '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
+								$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
 								$added = true;
 							}
 						}								
@@ -280,7 +280,7 @@
 						$added = false;
 						foreach($collectibleCore['AttributesCollectible'] as $key => $attribute) {
 							if($attribute['variant'] === '1') {
-								$outputAttribtes = '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
+								$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
 								$added = true;
 							}
 						}								

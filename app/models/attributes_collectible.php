@@ -4,7 +4,7 @@ class AttributesCollectible extends AppModel {
 	//var $useTable = 'accessories_collectibles';
 	var $belongsTo = array('Attribute', 'Collectible');
 	var $actsAs = array('Revision','Containable');
-	
+	// => array('ignore'=>array('active', 'modified', 'created'))
 	var $validate = array (
       'description' => array(
               'rule' => 'notEmpty',

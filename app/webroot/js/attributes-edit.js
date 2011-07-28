@@ -44,10 +44,33 @@ $( function() {
     		$li.remove();
     	} else {
     		$li.children('input.attribute.action').val('D');
-    		$li.css('border','solid 1px red');    		
+    		$li.css('border','solid 1px red');    	
+    		$(this).parent('.attribute-action').children('.edit-attribute').hide();	
+    	}
+    });
+    
+    $('.edit-attribute').live('click', function(){
+    	if($(this).text() === 'Edit') {
+	    	var $li = $(this).parent('span').parent('li');
+	    	$li.children('.attribute-description').children('span').hide();
+	    	$li.children('.attribute-description').children('input').show();
+	    	$(this).text('Save');    		
+    	} else {
+	    	var $li = $(this).parent('span').parent('li');
+	    	var $descriptionVal = $li.children('.attribute-description').children('input').val();
+	    	$li.children('.attribute-description').children('span').text($descriptionVal);
+	    	$li.children('input[type=hidden].attribute.description').val($descriptionVal);
+	    	$li.children('.attribute-description').children('span').show();
+	    	$li.children('.attribute-description').children('input').hide();
+	    	var $currentAction = $li.children('input.attribute.action').val();
+	    	if($currentAction !== 'D' && $currentAction !== 'N') {
+	    		$li.children('input.attribute.action').val('E');
+	    	}
+	    	
+	    	
+	    	$(this).text('Edit');     		
     	}
 
-    	
     });
 });
 var DED = function() {

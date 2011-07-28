@@ -455,6 +455,7 @@ a:active {
 .attributes-list {
 	float: left;
     width: 100%;
+    margin-bottom: 10px;
 }
 .attributes-list ul {
 
@@ -491,6 +492,14 @@ a:active {
 
 .attributes-list ul li .attribute-description {
 	width: 50%;
+}
+.attributes-list ul li .attribute-description .edit.attribute.description {
+	display: none;
+}
+
+.attributes-list ul li .attribute-action a {
+	margin-right: 5px;
+	cursor: pointer;
 }
 
 .attributes-list.empty ul,
