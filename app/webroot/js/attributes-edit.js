@@ -38,7 +38,15 @@ $( function() {
     })
     
     $('.remove-attribute').live('click', function(){
-    	$(this).parent('span').parent('li').remove();
+    	var $li = $(this).parent('span').parent('li');
+    	var actionVal = $li.children('input.attribute.action').val();
+    	if(actionVal === 'N') {
+    		$li.remove();
+    	} else {
+    		$li.children('input.attribute.action').val('D');
+    		$li.css('border','solid 1px red');    		
+    	}
+
     	
     });
 });
@@ -162,9 +170,9 @@ var DED = function() {
 	            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
 				var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
 				var $hiddenVariant = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][variant]').val('0');
+				var $hiddenAction = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][action]').val('N').addClass('attribute').addClass('action');
 	
-	
-	            $li.append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant);
+	            $li.append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant).append($hiddenAction);
 	
 	            $('#collectible-attributes-list').children('ul').append($li);
 	            

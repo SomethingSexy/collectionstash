@@ -310,6 +310,11 @@ a:active {
 	border: none;
 }
 
+#collectibles-list-component .component-view .collectibles.view.empty p {
+	font-size: 0.75em;
+	color: #606060;
+}
+
 #collectible-add-component {
   width: 100%;
 }  

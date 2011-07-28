@@ -25,7 +25,7 @@
 		<div class="component-view">
 			<div class="collectible add">
 				<?php 
-						echo $this -> Form -> create('Collectible', array('url'=>'/collectibleEdit/edit/'));
+						echo $this -> Form -> create('Collectible', array('url'=>'/collectibleEdit/manufacture/'));
 				?>
 				<fieldset>
 					<legend><?php __('Details');?></legend>

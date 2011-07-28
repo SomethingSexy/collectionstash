@@ -213,7 +213,7 @@
 				<h3><?php __('Accessories/Features'); ?></h3>
 				<?php if(isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
-					echo '<a href="/collectibles/wizard/attributes">Edit</a>';
+					echo '<a href="/attributesCollectibles/edit/'.$collectibleCore['Collectible']['id'].'/'.'">Edit</a>';
 					echo '</div>';			
 				} ?>
 			</div>
@@ -223,39 +223,38 @@
 					$attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 					if($attributeEmpty){
 						echo '<div class="attributes-list empty">';
+						echo '<ul>';
+						echo '<li>No Accessories/Features have been added</li>';	
+						echo '</ul>';
+						echo '</div>';						
 					} else {
-						echo '<div class="attributes-list">';						
-					}
-					
-
-					echo '<ul>';
-					if(!$attributeEmpty) {
-						echo '<li class="title">';
-						echo '<span class="attribute-name">'.__('Part', true).'</span>';
-						echo '<span class="attribute-description">'.__('Description', true).'</span>';
-						echo '</li>';
-							
+						$outputAttribtes = '';
+						$added = false;
 						foreach($collectibleCore['AttributesCollectible'] as $key => $attribute) {
 							if($attribute['variant'] !== '1') {
-								echo '<li>';
-								echo '<span class="attribute-name">';
-								echo $attribute['Attribute']['name'];
-								echo '</span>';
-								echo '<span class="attribute-description">';
-								echo $attribute['description'];
-								echo '</span>';
-								echo '</li>';
+								$outputAttribtes = '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
+								$added = true;
 							}
-						}
-					} else {
-						echo '<li>No Accessories/Features have been added</li>';	
-					}
-					
-					echo '</ul>';
-					echo '</div>';
-					?>
-
-		
+						}								
+						
+						if($added) {
+							echo '<div class="attributes-list">';	
+							echo '<ul>';
+							echo '<li class="title">';
+							echo '<span class="attribute-name">'.__('Part', true).'</span>';
+							echo '<span class="attribute-description">'.__('Description', true).'</span>';
+							echo '</li>';
+							echo $outputAttribtes;	
+							echo '</ul>';
+							echo '</div>';								
+						} else {
+							echo '<div class="attributes-list empty">';
+							echo '<ul>';
+							echo '<li>No Accessories/Features have been added</li>';	
+							echo '</ul>';
+							echo '</div>';								
+						}						
+					} ?>
 		</div>
 		<?php if(isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) { ?>
 		<div class="collectible detail">
@@ -267,33 +266,43 @@
 					echo '</div>';			
 				} ?>
 			</div>
-			<div class="attributes-list">
-				<ul>
 					<?php
 					$lastKey = 0;
-					if(!empty($collectibleCore['AttributesCollectible'])) {
-						echo '<li class="title">';
-						echo '<span class="attribute-name">'.__('Part', true).'</span>';
-						echo '<span class="attribute-description">'.__('Description', true).'</span>';
-						echo '</li>';
-							
+					$attributeEmpty = empty($collectibleCore['AttributesCollectible']);
+					if($attributeEmpty){
+						echo '<div class="attributes-list empty">';
+						echo '<ul>';
+						echo '<li>No Accessories/Features have been added</li>';	
+						echo '</ul>';
+						echo '</div>';						
+					} else {
+						$outputAttribtes = '';
+						$added = false;
 						foreach($collectibleCore['AttributesCollectible'] as $key => $attribute) {
 							if($attribute['variant'] === '1') {
-								echo '<li>';
-								echo '<span class="attribute-name">';
-								echo $attribute['Attribute']['name'];
-								echo '</span>';
-								echo '<span class="attribute-description">';
-								echo $attribute['description'];
-								echo '</span>';
-								echo '</li>';
+								$outputAttribtes = '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>'. '<span class="attribute-description">' . $attribute['description']. '</span>'. '</li>';
+								$added = true;
 							}
-						}
-					}
-					?>
-				</ul>
-			</div>
-		
+						}								
+						
+						if($added) {
+							echo '<div class="attributes-list">';	
+							echo '<ul>';
+							echo '<li class="title">';
+							echo '<span class="attribute-name">'.__('Part', true).'</span>';
+							echo '<span class="attribute-description">'.__('Description', true).'</span>';
+							echo '</li>';
+							echo $outputAttribtes;	
+							echo '</ul>';
+							echo '</div>';								
+						} else {
+							echo '<div class="attributes-list empty">';
+							echo '<ul>';
+							echo '<li>No Accessories/Features have been added</li>';	
+							echo '</ul>';
+							echo '</div>';								
+						}						
+					} ?>
 		</div>
 		<?php }
 		}//show attribute end

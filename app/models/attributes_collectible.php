@@ -7,10 +7,8 @@ class AttributesCollectible extends AppModel {
 	
 	var $validate = array (
       'description' => array(
-     
               'rule' => 'notEmpty',
               'message' => 'Description is required.'
-
        )            
     );
 	   
