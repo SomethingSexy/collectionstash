@@ -26,6 +26,15 @@
 				}
 				?>
 			</div>
+			<div class="collectible tags">
+				<?php 
+					foreach($collectibleDetail['CollectiblesTag'] as $tag) {
+						echo '<span class="tag">';
+						echo $tag['Tag']['tag'];
+						echo '</span>';
+					}
+				?>
+			</div>
 			<?php 
 				if(!isset($showEdit)){
 					$showEdit = false;

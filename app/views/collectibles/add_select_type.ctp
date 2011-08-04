@@ -1,36 +1,32 @@
-<?php echo $this->Html->script('collectible-add',array('inline'=>false)); ?>
-
 <div class="component" id="collectible-add-component">
   <div class="inside">
     <div class="component-title">
-      <h2><?php __('Add Collectible');?></h2>
+      <h2><?php __('Contribute');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
-      <div>Select which type of collectible you are adding.</div> 
+      <div>
+      	<p><?php __('Collection Stash is a community support database that gives its user\'s the ability to contribute to the growing collectible database.  By helping maintain this database you can add those collectibles to your personal stash.') ?></p>
+      	<p><?php __('We want to keep our data as complete an accurate as possible.  To accomplish this goal, we will give you the tools to be able to add as much information as you can.  Each collectible you submit will require approval by one of our administrators before you can add it to your stash.  This will help make sure that each collectible being added is unqiue and accurate.') ?></p>
+      	<p><?php __('To get started, we will need to know a little bit about the collectible you are trying to add.')?></p>
+      	
+      </div> 
     </div>
     <div class="component-view">
-      <?php echo $this->Form->create('Collectible');?>
-        <fieldset>
-          <ul class="form-fields">
-            <li>
-              <div class="label-wrapper">
-                <label for=""><?php __('What are you trying to add?') ?></label>
-                <a class="ui-icon ui-icon-info" title="<?php echo __('If you are adding an exclusive version or variant of a collectible, please select Collectible Variant.', true) ?>" alt="info"></a>
-              </div>
-              
-            <?php 
-            $options=array('C'=>'Collectible','V'=>'Collectible Variant');
-            echo $this->Form->select('addType',$options,null,array('empty'=>'Select')); ?>
-           </li>
-          </ul>
-        </fieldset>
-      
-        
-      <?php echo $this->Form->end('Continue', array('class'=>'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'));?>
+      	<p><?php __('Is the collectible you are adding Mass-Produced?') ?></p>
+		<dl>
+			<dt><?php __('Mass-Produced: '); ?></dt>
+			<dd><?php __('A mass-produced collectible is a collectible that is produced in large amounts for sale (i.e., more than one).'); ?></dd>
+		</dl>
+		<div class="links">
+	      	<?php echo $this->Form->create('Collectible');?>
+				<input type="hidden" name="data[Collectible][massProduced]" value="true" ?>
+	     	<?php echo $this->Form->end('Yes');?> 	 
+	     	<?php echo $this->Form->create('Collectible');?>
+				<input type="hidden" name="data[Collectible][massProduced]" value="false" ?>
+	     	<?php echo $this->Form->end('No');?>
+		</div>
+
     </div>    
   </div>
 </div>
-<script>
-  $(".ui-icon-info").tooltip({ position: 'center right', opacity: 0.7});
-</script>

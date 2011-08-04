@@ -1,16 +1,15 @@
     <?php      
 		echo $this->element('search_collectible',
-		array("searchUrl" => '/collectibles/addVariantSelectCollectible'));
+		array("searchUrl" => '/collectibles/variantSelectCollectible'));
 	?>
-
 <div class="component" id="collectibles-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php __('Add Collectible Variant');?></h2>
+      <h2><?php __('Contribute Variant - Select Collectible');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
-      <div>To add a variant to a collectible, first select a collectible below that you are adding a variant for.</div> 
+      <div><p><?php __('Search for the collectible you ');?></p></div> 
     </div>    
     <div class="component-view">
       <div class="collectibles view">

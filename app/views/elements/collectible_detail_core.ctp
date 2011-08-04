@@ -30,7 +30,6 @@
 					echo '</div>';			
 				} ?>
 			</div>
-
 			<dl>
 				<dt>
 					<?php __('Manufacture');?>

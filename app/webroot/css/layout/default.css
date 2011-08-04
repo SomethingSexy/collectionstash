@@ -433,7 +433,22 @@ a:active {
 	float: left;
 	background-color: #CCCCCC;
 }
+#manufactures-list-component {
+	width: 100%;
+}
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    float: left;
+    clear: both;
+    width: 100%;
+    border-bottom: 1px solid #FDB924;	
+}
 
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.collectibletypes li {
+	float: left;
+	margin-right: 10px;
+}
 
 /*#collectible-add-component*/
 #CollectibleProductWeight,
@@ -564,6 +579,19 @@ a:active {
 	margin-left: 1em;
 }
 
+#collectible-detail .component-view .collectible.tags {
+	float: left;
+	width: 100%;
+	overflow: hidden;
+	margin-top: 10px;
+}
+#collectible-detail .component-view .collectible.tags .tag {
+	font-size: 0.75em;
+    margin-left: 1em;
+    padding: 5px;
+    float: left;
+    background-color: #EAEAEA;
+}
 #collectible-detail .component-view .collectible.item {
 	width: 100%;
 	

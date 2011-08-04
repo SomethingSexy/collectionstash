@@ -17,6 +17,143 @@ class CollectiblesController extends AppController {
 		$this -> Wizard -> loginRequired = true;
 	}
 
+	function addSelectType() {
+		$this -> checkLogIn();
+		//Always delete this stuff, this could go in a better spot in the future
+		//Should probably update this so I set to show and not show different things, not put the biz logic in the view
+		$this -> Session -> delete('preSaveCollectible');
+		$this -> Session -> delete('uploadId');
+		$this -> Session -> delete('add.collectible.manufacture');
+
+		//TODO I shouldn't need these
+		$this -> Session -> delete('add.collectible.mode.collectible');
+		$this -> Session -> delete('add.collectible.mode.variant');
+		$this -> Session -> delete('edit.collectible.mode.collectible');
+		$this -> Session -> delete('edit.collectible.mode.variant');
+		$this -> Session -> delete('variant.add-id');
+		$this -> Session -> delete('variant.base-collectible');
+		$this -> Session -> delete('add.collectible.variant.collectible');
+		$this -> Session -> delete('addCollectibleId');
+		$this -> Wizard -> resetWizard();
+		//check to see if there is data submitted
+		if(!empty($this -> data)) {
+			debug($this -> data);
+			if($this -> data['Collectible']['massProduced'] === 'true') {
+				$this -> redirect( array('action' => 'massProduced'));
+
+				//$this -> Wizard -> branch('variant', true);
+				//$this -> redirect( array('action' => 'wizard/manufacture'));
+			} else if($this -> data['Collectible']['massProduced'] == 'false') {
+				$this -> redirect( array('action' => 'nonMassProduced'));
+				//$this -> Wizard -> branch('variant');
+				//$this -> Session -> write('add.collectible.mode.variant', true);
+
+				//$this -> redirect( array('action' => 'addVariantSelectCollectible', 'initial' => 'yes'));
+			} else {
+				$this -> Session -> setFlash(__('Please select Yes or No.', true), null, null, 'error');
+			}
+		}
+	}
+
+	function nonMassProduced() {
+		$this -> checkLogIn();
+	}
+
+	function massProduced() {
+		$this -> checkLogIn();
+		if(!empty($this -> data)) {
+			debug($this -> data);
+			if($this -> data['Collectible']['manufactured'] === 'true') {
+				$this -> redirect( array('action' => 'selectManufacturer'));
+			} else if($this -> data['Collectible']['manufactured'] == 'false') {
+				$this -> redirect( array('action' => 'nonManufactured'));
+			} else {
+				$this -> Session -> setFlash(__('Please select an option.', true), null, null, 'error');
+			}
+		}
+	}
+
+	function selectManufacturer($id =null) {
+		$this -> checkLogIn();
+		if($id && is_numeric($id)) {
+			$validManufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $id)));
+			if(!empty($validManufacture)) {
+				$this -> Session -> write('add.collectible.manufacture', $validManufacture);
+				$this -> redirect( array('action' => 'variant'));
+			} else {
+				$this -> Session -> setFlash(__('Please select a valid Manufacture', true), null, null, 'error');
+			}
+		}
+
+		$this -> paginate = array('order' => array('Manufacture.title' => 'ASC'), 'contain' => array('CollectibletypesManufacture' => 'Collectibletype'));
+		// $existingCollectibles = $this -> paginate('Collectible');
+		$manufactures = $this -> paginate('Manufacture');
+		debug($manufactures);
+		$this -> set('manufactures', $manufactures);
+	}
+
+	function variant() {
+		$this -> checkLogIn();
+		//At this point always check to make sure that the manufacture has been selected
+		if(!$this -> Session -> check('add.collectible.manufacture')){
+			//If it has not, start them over
+			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'addSelectType'));
+		}
+		
+		if(!empty($this -> data)) {
+			if($this -> data['Collectible']['variant'] === 'true') {
+				$this -> redirect( array('action' => 'variantSelectCollectible'));
+			} else if($this -> data['Collectible']['variant'] == 'false') {
+				$this -> redirect( array('action' => 'selectCollectibleType'));
+			} else {
+				$this -> Session -> setFlash(__('Please select Yes or No.', true), null, null, 'error');
+			}			
+		}
+	}
+	//TODO LEFT OFF HERE 8/3/11
+	function selectCollectibleType($id =null) {
+		$this -> checkLogIn();
+		//At this point always check to make sure that the manufacture has been selected
+		//They also should not be here if they selected variant
+		if(!$this -> Session -> check('add.collectible.manufacture') && $this -> Session -> check('add.collectible.variant')){
+			//If it has not, start them over
+			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
+			$this -> redirect( array('action' => 'addSelectType'));
+		}
+		if($id && is_numeric($id)) {
+			$validCollectibleType = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('first', array('conditions' => array('Manufacture.id' => $id)));
+			if(!empty($validManufacture)) {
+				$this -> Session -> write('add.collectible.manufacture', $validManufacture);
+				$this -> redirect( array('action' => 'variant'));
+			} else {
+				$this -> Session -> setFlash(__('Please select a valid Manufacture', true), null, null, 'error');
+			}
+		}
+		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
+		$this->loadModel('CollectibletypesManufacture');
+		$this -> paginate = array('conditions'=> array('CollectibletypesManufacture.manufacture_id'=> $manufactureId['Manufacture']['id']), 'contain' => array('Collectibletype' => array('order' => array('Collectibletype.name' => 'ASC'))));
+		$collectibleTypes = $this -> paginate('CollectibletypesManufacture');
+		debug($collectibleTypes);
+		$this->set(compact('collectibleTypes'));
+		$this->set('manufacturer', $manufactureId['Manufacture']['title']);
+	}
+
+	function variantSelectCollectible() {
+		$this -> checkLogIn();
+		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
+		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
+		$this -> searchCollectible( array('Collectible.variant' => '0', 'Manufacture.id'=>$manufactureId['Manufacture']['id']));
+	}
+
+	function nonManufactured() {
+		$this -> checkLogIn();
+	}
+	
+	
+	
+	
+
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
 		if(isset($id) && $id != null) {
@@ -450,7 +587,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect( array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 		debug($collectible);
 		$this -> set('collectible', $collectible);
 		$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
@@ -459,50 +596,6 @@ class CollectiblesController extends AppController {
 		if(!$collectible['Collectible']['variant']) {
 			$variants = $this -> Collectible -> getCollectibleVariants($id);
 			$this -> set('variants', $variants);
-		}
-	}
-
-	function addSelectType() {
-		if($this -> isLoggedIn()) {
-			//Always delete this stuff, this could go in a better spot in the future
-			//Should probably update this so I set to show and not show different things, not put the biz logic in the view
-			$this -> Session -> delete('preSaveCollectible');
-			$this -> Session -> delete('uploadId');
-			$this -> Session -> delete('add.collectible.mode.collectible');
-			$this -> Session -> delete('add.collectible.mode.variant');
-			$this -> Session -> delete('edit.collectible.mode.collectible');
-			$this -> Session -> delete('edit.collectible.mode.variant');
-			$this -> Session -> delete('variant.add-id');
-			$this -> Session -> delete('variant.base-collectible');
-			$this -> Session -> delete('add.collectible.variant.collectible');
-			$this -> Session -> delete('addCollectibleId');
-			$this -> Wizard -> resetWizard();
-			//check to see if there is data submitted
-			if(!empty($this -> data)) {
-				if($this -> data['Collectible']['addType'] == 'C') {
-					debug($this -> data);
-					$this -> Wizard -> branch('variant', true);
-					$this -> redirect( array('action' => 'wizard/manufacture'));
-				} else if($this -> data['Collectible']['addType'] == 'V') {
-					debug($this -> data);
-					$this -> Wizard -> branch('variant');
-					$this -> Session -> write('add.collectible.mode.variant', true);
-
-					$this -> redirect( array('action' => 'addVariantSelectCollectible', 'initial' => 'yes'));
-				} else {
-					$this -> Session -> setFlash(__('Please select an option to add.', true), null, null, 'error');
-				}
-			}
-
-		} else {
-			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
-		}
-	}
-
-	function addVariantSelectCollectible() {
-		if($this -> isLoggedIn()) {
-			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-			$this -> searchCollectible( array('Collectible.variant' => '0'));
 		}
 	}
 
@@ -567,7 +660,7 @@ class CollectiblesController extends AppController {
 			$this -> Collectible -> id = $id;
 			$history = $this -> Collectible -> revisions(null, true);
 			$this -> loadModel('User');
-			
+
 			//This is like the worst thing ever and needs to get cleaned up
 			//Making this by reference so we can modify it, is this proper in php?
 			foreach($history as $key => &$collectible) {
@@ -584,10 +677,9 @@ class CollectiblesController extends AppController {
 			$this -> set(compact('attributeHistory'));
 			debug($attributeHistory);
 			// foreach($attributeList as $attribute){
-				// $this -> Collectible-> AttributesCollectible -> id = $attribute;
-				// debug($this -> Collectible -> AttributesCollectible -> revisions(null, true));				
+			// $this -> Collectible-> AttributesCollectible -> id = $attribute;
+			// debug($this -> Collectible -> AttributesCollectible -> revisions(null, true));
 			// }
-
 
 		} else {
 			$this -> redirect($this -> referer());
