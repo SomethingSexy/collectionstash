@@ -27,7 +27,7 @@
 					'collectibletype' => $collectible['Collectibletype']
 				));?>
         	 <div class="links">
-				<?php echo $html->link('Select', array('action' => 'wizard', 'manufacture', $collectible['Collectible']['id'])); ?>
+				<?php echo $html->link('Select', array('action' => 'variantSelectCollectible', $collectible['Collectible']['id'])); ?>
         	 </div>
         	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'])); ?></div>
           </div>

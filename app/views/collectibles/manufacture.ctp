@@ -1,5 +1,5 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
-<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<?php if($this -> Session -> check('add.collectible.variant')) { ?>
 <?php      
 	echo $this->element('collectible_detail', array(
 		'title' => __('Base Collectible Details', true),
@@ -27,25 +27,32 @@
 		</div>
 		<div class="component-view">
 			<div class="collectible add">
-				<?php 
-					if(isset($collectible_action)) {
-						echo $this -> Form -> create('Collectible', array('url'=> $collectible_action , 'type' => 'file'));
-					} else {
-						echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/manufacture', 'type' => 'file'));
-					}
-					?>
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/manufacture', 'type' => 'file')); ?>
 				<fieldset>
 					<legend><?php __('Details');?></legend>
 					<ul class="form-fields">
-						<?php  if(!$this -> Session -> check('add.collectible.mode.variant')) { ?>
-							<li>
-								<div class="label-wrapper">
-									<label for="">
-										<?php __('Manufacture') ?>
-									</label>
-								</div>
-								<?php echo $this -> Form -> input('manufacture_id', array('div' => false, 'label' => false));?>
-							</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Manufacture') ?>
+								</label>
+							</div>	
+							<div class="static-field">
+								<?php echo $manufacturer['Manufacture']['title']; ?>	
+								<?php echo '<input type="hidden" id="CollectibleManufactureId" value="'.$manufacturer['Manufacture']['id'].'" />'; ?>
+							</div>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Collectible Type') ?>
+								</label>
+							</div>	
+							<div class="static-field">
+								<?php echo $collectibleType['Collectibletype']['name'] ?>	
+							</div>
+						</li>	
+						<?php  if(!$this -> Session -> check('add.collectible.variant')) { ?>
 							<?php
 								if(empty($licenses)) {
 									echo '<li class="hidden">';
@@ -75,21 +82,6 @@
 							</div>
 							<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
 							</li>
-		
-							<?php
-								if(empty($collectibletypes)) {
-									echo '<li class="hidden">';
-								} else {
-									echo '<li>';
-								}
-							?>
-							<div class="label-wrapper">
-								<label for="">
-									<?php __('What type of collectible is this?') ?>
-								</label>
-							</div>
-							<?php  echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));?>
-							</li>
 							<li>
 								<div class="label-wrapper">
 									<label for="scale">
@@ -100,10 +92,8 @@
 							</li>	
 					    <?php } else {
 								echo $this -> Form -> hidden('scale_id');
-								echo $this -> Form -> hidden('Collectible.collectibletype_id');
 								echo $this -> Form -> hidden('series_id');
 								echo $this -> Form -> hidden('license_id');
-								echo $this -> Form -> hidden('manufacture_id');
 								}
 							 ?>
 					    <li>

@@ -19,7 +19,7 @@
 					<span class="manufacture name"><?php echo $collectibleType['Collectibletype']['name'] ?></span>
 				</div>	
         		<div class="links">
-					<?php echo $html->link('Select', array('action' => 'selectManufacturer',$collectibleType['Collectibletype']['id'])); ?>
+					<?php echo $html->link('Select', array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?>
         	 	</div>
          </div>
         <?php endforeach; ?>

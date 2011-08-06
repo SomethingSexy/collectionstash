@@ -16,21 +16,22 @@ class Tag extends AppModel {
 				$tagResult = $this -> find("first", array('conditions' => array('Tag.tag' => strtolower($value['tag']))));
 				debug($tagResult);
 				if(!empty($tagResult)) {
-					array_push($processedTags, $tagResult['Tag']);		
+					array_push($processedTags, $tagResult['Tag']);
 				} else {
 					$value['active'] = 0;
 					$value['tag'] = strtolower($value['tag']);
-					if($this->save($value)) {
-						$tagId = $this->id;
-						$addedTag = $this->findById($tagId);	
-						array_push($processedTags, $addedTag['Tag']);	
+					$this -> create();
+					if($this -> save($value)) {
+						$tagId = $this -> id;
+						$addedTag = $this -> findById($tagId);
+						array_push($processedTags, $addedTag['Tag']);
 					}
 				}
 			}
 
 		}
 		debug($processedTags);
-		
+
 		return $processedTags;
 	}
 
