@@ -57,15 +57,25 @@ a:active {
 
 .component .component-info {
     clear:both;
-    margin: 5px 0 5px 0 ;
-    padding:0 1% 1.1em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    padding-bottom: 1em;
     color: #444444;
     font-size: 0.8em;
+}
+.component .component-info ul {
+	list-style-type: disc;
+	list-style-position: inside;
+	margin-bottom: 10px;
+}
+
+.component .component-info ul li {
+	margin-left: 10px;
 }
 .component .component-title {
     -moz-border-radius: 10px 10px 0 0;
 	border-radius: 10px 10px 0 0;
-	padding: 5px;
+	padding: 1em;
 }
 .component .component-title h2 {
     clear:both;
@@ -420,12 +430,32 @@ a:active {
 #collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .text-box {
 	clear:left;
 }
-#collectible-add-component .inside .component-view .collectible.add.tag .tag-list {
+
+#collectible-add-component .inside .component-view .question {
+	color:#444444;
+}
+#collectible-add-component .inside .component-view .question dl {
+	margin-left: 20px;
+	font-size: 0.80em;
+}
+
+#collectible-add-component .inside .component-view .question dl dt {
+	font-weight: bold;
+}
+
+#collectible-add-component .inside .component-view .links form {
+	float: left;	
+}
+
+
+
+
+/*#collectible-add-component .inside .component-view .collectible.add.tag*/ .tag-list {
 	overflow: hidden;
 	margin-bottom: 20px;
 }
 
-#collectible-add-component .inside .component-view .collectible.add.tag .tag-list .tag {
+/*#collectible-add-component .inside .component-view .collectible.add.tag*/ .tag-list .tag {
 	font-size: 0.75em;
 	display: inline;
 	margin-right: 1em;
@@ -433,10 +463,12 @@ a:active {
 	float: left;
 	background-color: #CCCCCC;
 }
+#collectibletypes-list-component,
 #manufactures-list-component {
 	width: 100%;
 }
-#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item {
+#collectibletypes-list-component .inside .component-view .view .item, 
+#manufactures-list-component .inside .component-view .view .item {
     padding-top: 20px;
     padding-bottom: 20px;
     float: left;
@@ -445,9 +477,33 @@ a:active {
     border-bottom: 1px solid #FDB924;	
 }
 
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.name {
+
+}
+#collectibletypes-list-component .inside .component-view .view .item .detail .name a, 
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.name a {
+	font-size: 1em;
+    font-weight: bold;
+	color: 	#656464;
+	text-decoration: none;	
+}
+#collectibletypes-list-component .inside .component-view .view .item .detail .name a:hover, 
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.name a:hover {
+	text-decoration: underline;
+}
+
+#manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.collectibletypes li {
+	font-size: 0.75em;
+	color: #999999;
+}
 #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.collectibletypes li {
 	float: left;
 	margin-right: 10px;
+}
+#collectibletypes-list-component .inside .component-view, 
+#manufactures-list-component .inside .component-view {
+	overflow: hidden;
+	padding-top: 0;
 }
 
 /*#collectible-add-component*/
@@ -579,13 +635,13 @@ a:active {
 	margin-left: 1em;
 }
 
-#collectible-detail .component-view .collectible.tags {
+/*#collectible-detail .component-view*/ .collectible.tags {
 	float: left;
 	width: 100%;
 	overflow: hidden;
 	margin-top: 10px;
 }
-#collectible-detail .component-view .collectible.tags .tag {
+/*#collectible-detail .component-view*/ .collectible.tags .tag {
 	font-size: 0.75em;
     margin-left: 1em;
     padding: 5px;
@@ -780,10 +836,14 @@ label {
     margin-bottom:3px;
 }
 .form-fields input, .form-fields textarea {
+	padding: 5px;
+}
+.form-fields .static-field, 
+.form-fields input, .form-fields textarea {
     clear: both;
     /*font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;*/
     /*	height: 26px;     off for now, is screwin up inptu buttons */
-    padding: 5px;
+
     width: 272px;
 }
 select {

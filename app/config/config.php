@@ -6,7 +6,7 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
   	'title' => 'My Application',
   	'registration' => true,
   	'Approval' => array (
-		'auto-approve' => 'false'
+		'auto-approve' => 'true'
   	),
   	'Stash' => array (
 		'total-allowed' => '1'

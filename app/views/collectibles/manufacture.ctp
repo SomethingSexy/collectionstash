@@ -10,7 +10,7 @@
 ?>
 <?php } ?>
 <div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacture', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'image'=>'Image', 'review'=> 'Review')); ?>	
+	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags', 'image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
@@ -52,6 +52,14 @@
 								<?php echo $collectibleType['Collectibletype']['name'] ?>	
 							</div>
 						</li>	
+						<li>
+							<div class="label-wrapper">
+								<label for="CollectibleName">
+									<?php __('Name') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('name', array('div' => false, 'label' => false));?>
+						</li>
 						<?php  if(!$this -> Session -> check('add.collectible.variant')) { ?>
 							<?php
 								if(empty($licenses)) {
@@ -96,22 +104,6 @@
 								echo $this -> Form -> hidden('license_id');
 								}
 							 ?>
-					    <li>
-							<div class="label-wrapper">
-								<label for="scale">
-									<?php __('Release Year') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> year('release', 1900, date('Y'));?>
-						</li>
-						<li>
-							<div class="label-wrapper">
-								<label for="CollectibleName">
-									<?php __('Name') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> input('name', array('div' => false, 'label' => false));?>
-						</li>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleDescription">
@@ -132,6 +124,14 @@
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('msrp', array('div' => false, 'label' => false));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="scale">
+									<?php __('Release Year') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> year('release', 1900, date('Y'));?>
 						</li>
 						<li>
 							<div class="label-wrapper">

@@ -16,15 +16,22 @@ class Tag extends AppModel {
 				$tagResult = $this -> find("first", array('conditions' => array('Tag.tag' => strtolower($value['tag']))));
 				debug($tagResult);
 				if(!empty($tagResult)) {
-					array_push($processedTags, $tagResult['Tag']);
+					$collectibleTag = array();
+					$collectibleTag['tag_id'] = $tagResult['Tag']['id'];
+					$collectibleTag['Tag'] = $tagResult['Tag'];
+					array_push($processedTags, $collectibleTag);
 				} else {
-					$value['active'] = 0;
+					//For now just set the active to true, later we might want to turn this back to not auto activate.
+					$value['active'] = 1;
 					$value['tag'] = strtolower($value['tag']);
 					$this -> create();
 					if($this -> save($value)) {
 						$tagId = $this -> id;
 						$addedTag = $this -> findById($tagId);
-						array_push($processedTags, $addedTag['Tag']);
+						$collectibleTag = array();
+						$collectibleTag['tag_id'] = $addedTag['Tag']['id'];
+						$collectibleTag['Tag'] = $addedTag['Tag'];
+						array_push($processedTags, $collectibleTag);
 					}
 				}
 			}

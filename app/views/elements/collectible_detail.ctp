@@ -27,13 +27,14 @@
 				?>
 			</div>
 			<div class="collectible tags">
+				<ul class="tag-list">
 				<?php 
 					foreach($collectibleDetail['CollectiblesTag'] as $tag) {
-						echo '<span class="tag">';
+						echo '<li class="tag">';
 						echo $tag['Tag']['tag'];
-						echo '</span>';
-					}
-				?>
+						echo '</li>';
+					} ?>
+				</ul>
 			</div>
 			<?php 
 				if(!isset($showEdit)){

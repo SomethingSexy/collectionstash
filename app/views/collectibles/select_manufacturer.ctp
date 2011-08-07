@@ -1,12 +1,12 @@
 <div class="component" id="manufactures-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php __('Contribute - Select Manufacture');?></h2>
+      <h2><?php __('Contribute - Select Manufacturer');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
       <div>
-      	<p><?php __('') ?></p>
+      	<p><?php __('Select from one of the supported Manufacturers below.') ?></p>
       </div> 
     </div>    
     <div class="component-view">
@@ -16,7 +16,7 @@
         ?>
         	<div class="manufacture item">
 				<div class="manufacture detail">
-					<span class="manufacture name"><?php echo $manufacture['Manufacture']['title'] ?></span>
+					<span class="manufacture name"><?php echo $html->link($manufacture['Manufacture']['title'], array('action' => 'selectManufacturer',$manufacture['Manufacture']['id'])); ?></span>
 					<ul class="manufacture collectibletypes">
 					<?php foreach ($manufacture['CollectibletypesManufacture'] as $collectibleTypes): 
 						echo '<li>';
@@ -25,9 +25,6 @@
 					endforeach; ?>
 					</ul>
 				</div>	
-        		<div class="links">
-					<?php echo $html->link('Select', array('action' => 'selectManufacturer',$manufacture['Manufacture']['id'])); ?>
-        	 	</div>
          </div>
         <?php endforeach; ?>
         <div class="paging">

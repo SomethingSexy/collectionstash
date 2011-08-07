@@ -1,4 +1,4 @@
-<div class="component" id="manufactures-list-component">
+<div class="component" id="collectibletypes-list-component">
   <div class="inside" >
      <div class="component-title">
       <h2><?php __('Contribute - Select Collectible Type');?></h2>
@@ -7,6 +7,7 @@
     <div class="component-info">
       <div>
       	<p><?php __('Select from the following collectible types for Manufacturer '); echo $manufacturer.'.'; ?></p>
+      	<p><?php __('Depending on the type selected, there might be different details you can add.'); ?></p>
       </div> 
     </div>    
     <div class="component-view">
@@ -14,12 +15,12 @@
         <?php  
         foreach ($collectibleTypes as $collectibleType):
         ?>
-        	<div class="manufacture item">
-				<div class="manufacture detail">
-					<span class="manufacture name"><?php echo $collectibleType['Collectibletype']['name'] ?></span>
+        	<div class="collectibletype item">
+				<div class="collectibletype detail">
+					<span class="collectibletype name"><?php echo $html->link($collectibleType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?></span>
 				</div>	
         		<div class="links">
-					<?php echo $html->link('Select', array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?>
+					
         	 	</div>
          </div>
         <?php endforeach; ?>

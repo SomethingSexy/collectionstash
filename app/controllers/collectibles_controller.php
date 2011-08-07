@@ -182,7 +182,7 @@ class CollectiblesController extends AppController {
 				//make sure that the collectible they selected is the same as the manufacture they selected...hackerz
 				if($variantCollectible['Collectible']['manufacture_id'] === $manufacturer['Manufacture']['id']) {
 					$this -> Session -> write('add.collectible.variant', $variantCollectible);
-					$this -> Session -> write('add.collectible.collectibleType', array('Collectibletype'=>$variantCollectible['Collectibletype']));
+					$this -> Session -> write('add.collectible.collectibleType', array('Collectibletype' => $variantCollectible['Collectibletype']));
 					$this -> Wizard -> branch('variant');
 					$this -> redirect( array('action' => 'wizard/manufacture'));
 				} else {
@@ -236,19 +236,19 @@ class CollectiblesController extends AppController {
 			debug($this -> Session -> read('add.collectible.variant'));
 			if($this -> Session -> check('add.collectible.variant')) {
 				// if(isset($this -> params['pass'][1])) {
-					//TODO store the collectible in the session for going back
-					$variantCollectible = $this -> Session -> read('add.collectible.variant');
-					$this -> set('collectible', $variantCollectible);
-					$this -> data = $variantCollectible;
-					// $variantCollectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $this -> params['pass'][1]), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
-					// $this -> Session -> write('add.collectible.variant.collectible', $variantCollectible);
-					// $this -> set('collectible', $variantCollectible);
-					// debug($variantCollectible);
-					// $this -> data = $variantCollectible;
+				//TODO store the collectible in the session for going back
+				$variantCollectible = $this -> Session -> read('add.collectible.variant');
+				$this -> set('collectible', $variantCollectible);
+				$this -> data = $variantCollectible;
+				// $variantCollectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $this -> params['pass'][1]), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+				// $this -> Session -> write('add.collectible.variant.collectible', $variantCollectible);
+				// $this -> set('collectible', $variantCollectible);
+				// debug($variantCollectible);
+				// $this -> data = $variantCollectible;
 				// } else {
-					// $variantCollectible = $this -> Session -> read('add.collectible.variant.collectible');
-					// debug($variantCollectible);
-					// $this -> set('collectible', $variantCollectible);
+				// $variantCollectible = $this -> Session -> read('add.collectible.variant.collectible');
+				// debug($variantCollectible);
+				// $this -> set('collectible', $variantCollectible);
 				// }
 			}
 			// $manufactureData = $this -> Collectible -> Manufacture -> getManufactureListData();
@@ -561,6 +561,10 @@ class CollectiblesController extends AppController {
 			}
 		}
 
+		if(isset($wizardData['tags']['CollectiblesTag'])) {
+			$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
+		}
+
 		if(isset($wizardData['image']['Upload'])) {
 			$collectible['Upload'][0] = $wizardData['image']['Upload'];
 		}
@@ -622,6 +626,18 @@ class CollectiblesController extends AppController {
 
 		$collectible['Collectible']['user_id'] = $this -> getUserId();
 		debug($collectible);
+
+		//If there are any newly created Tags, we need to remove them from the array or else cake won't add
+		//In the future we might want to update this to that we active tags
+		//if(Configure::read('Settings.Approval.auto-approve') == 'true') {
+		foreach($collectible['CollectiblesTag'] as &$tag) {
+			//unset($tag);
+			$tag['Tag'] = array();
+		}
+		//}
+
+		debug($collectible);
+
 		$this -> Collectible -> create();
 		if($this -> Collectible -> saveAll($collectible)) {
 			$id = $this -> Collectible -> id;
@@ -641,6 +657,7 @@ class CollectiblesController extends AppController {
 				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
 				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
 			}
+
 			$this -> Session -> write('addCollectibleId', $id);
 			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
