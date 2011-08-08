@@ -523,24 +523,27 @@ a:active {
 	clear: none;
 }
 */
+.list,
 .attributes-list {
 	float: left;
     width: 100%;
     margin-bottom: 10px;
 }
+.list ul,
 .attributes-list ul {
 
 	border-left: 1px solid #D8D8D8;
     border-right: 1px solid #D8D8D8;
     border-top: 1px solid #D8D8D8;
 }
-
+.list ul li,
 .attributes-list ul li {
 	overflow: hidden;
 	border-bottom: 1px solid #E1E1E1;
 	padding: 10px;
 	color: #606060;
 }
+.list ul li.title,
 .attributes-list ul li.title {
 	background-color: #EAEAEA;
 	border-bottom: 1px solid #D8D8D8;
@@ -572,12 +575,13 @@ a:active {
 	margin-right: 5px;
 	cursor: pointer;
 }
-
+.list.empty ul,
+.list.empty ul li,
 .attributes-list.empty ul,
 .attributes-list.empty ul li {
 	border: none;
 }
-
+.list.empty ul li,
 .attributes-list.empty ul li {
 	font-size: 0.75em;
 }
@@ -1351,3 +1355,50 @@ div.paging span a {
 .autocomplete .selected { background:#F0F0F0; }
 .autocomplete div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
 .autocomplete strong { font-weight:normal; color:#3399FF; }
+
+#account {
+	width: 100%;
+	overflow: hidden;
+	margin-top: 1em;
+}
+
+#account .inside {
+	padding: 1em;
+	overflow: hidden;
+}
+
+#account .inside .actions {
+	float: left;
+	width: 25%;
+}
+
+#account .inside .actions li {
+	margin-bottom: 10px;
+}
+	
+
+#account .inside .account.page {
+	float: left;
+	width: 75%;	
+}
+
+#account .inside .account.page .title {
+	border-bottom: 1px solid #656464;
+	overflow: hidden;
+}
+#account .inside .account.page .title h2 {
+	float: left;
+}
+#account .inside .account.page .title.link {
+	float: right;
+	font-size: 0.75em;
+}
+
+#account .inside .account.page .account.detail .account.detail.update {
+	display: none;
+}
+#account .inside .account.page .account.detail .account.directional {
+	font-size: 0.75em;
+	color: #606060;
+	margin-top: 10px;
+}

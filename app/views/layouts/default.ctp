@@ -96,6 +96,9 @@
 								<?php echo $html -> link('Home', array('controller' => '/'));?>
 							</li>
 							<li>
+								<?php echo $html -> link('Account', array('controller' => 'users', 'action'=>'account'));?>
+							</li>
+							<li>
 								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>
 							</li>
 							<?php  }
@@ -105,7 +108,7 @@
 							<li>
 								<a id='login-link' href="/users/login"><?php __('Login');?></a>
 							</li>
-							<?php if(Configure::read('Settings.registration')){
+							<?php if(Configure::read('Settings.registration.open')){
 								echo '<li>';
 								echo $html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
 								echo '</li>';

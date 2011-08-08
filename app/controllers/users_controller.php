@@ -79,109 +79,77 @@ class UsersController extends AppController {
 		}
 
 	}
+	
+	function home(){
+		
+	}
 
-	function home($username =null) {
-		$user;
-		$myCollection = false;
-		if($username) {
-			$user = $this -> User -> getUser($username);
-			//Check first to see if logged in and then if the user enter is your username
-
-		} else {
-			$myCollection = true;
-			$username = $this -> getUsername();
-			$user = $this -> getUser();
-			if(!$user) {
-				//TODO error
-			}
-
-		}
-
+	function account($view = null) {
+		$username = $this -> getUsername();
+		$user = $this -> getUser();
 		if($user) {
-			//$results = $this->User->findByUsername($username);
-			//do I need to store here, can I pull from session in view?
-			//$this->set('user', $user);
-
-			//Grab all of the collectibles for this user.  Not being used currently.
-			/* $this->paginate = array(
-			 'conditions'=>array('CollectiblesUser.user_id'=>$user['User']['id']),
-			 // 'limit' => 1,
-			 'contain'=>array(
-			 'Collectible' => array ( 'Manufacture','Collectibletype','Upload'))
-			 );
-			 $data = $this->paginate('CollectiblesUser');
-			 debug($data);     */
 			//Grab the number of collectibles for this user
 			$stashCount = $this -> User -> getNumberOfStashesByUser($username);
 			$stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
 			$this -> set('stashCount', $stashCount);
 			$this -> set('stashDetails', $stashDetails);
 			//Grab the number of pending submissions.
-			if($myCollection) {
-				$this -> loadModel('Collectible');
-				$submissionCount = $this -> Collectible -> getPendingCollectiblesByUserId($user['User']['id']);
-				$this -> set('submissionCount', $submissionCount);
 
-				$this -> paginate = array('conditions' => array('id' => $stashDetails[0]['Stash']['id']), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'License', 'Collectibletype', 'Upload'))));
+			$this -> loadModel('Collectible');
+			$submissionCount = $this -> Collectible -> getPendingCollectiblesByUserId($user['User']['id']);
+			$this -> set('submissionCount', $submissionCount);
 
-				$collectibleCount = $this -> User -> Stash -> getNumberOfCollectiblesInStash($stashDetails[0]['Stash']['id']);
-				$this -> set('collectibleCount', $collectibleCount);
-				$data = $this -> paginate('Stash');
-				$this -> set('myCollectibles', $data);
-				debug($data);
-			}
-			$this -> set('myCollection', $myCollection);
+			$this -> paginate = array('conditions' => array('id' => $stashDetails[0]['Stash']['id']), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'License', 'Collectibletype', 'Upload'))));
+
+			$collectibleCount = $this -> User -> Stash -> getNumberOfCollectiblesInStash($stashDetails[0]['Stash']['id']);
+			$this -> set('collectibleCount', $collectibleCount);
+			$data = $this -> paginate('Stash');
+			$this -> set('myCollectibles', $data);
+			debug($data);
+
+			$this -> set('myCollection', true);
 			//$this->set('collectibles',$data);
 		} else {
 			$this -> redirect( array('action' => 'login'), null, true);
 		}
 	}
 
-	function register() {
+	/**
+	 * Need to update this so that if the config is invites-only, then we have to check the email address to make
+	 * sure that it is one that is in the list.
+	 *
+	 * Also for helper, take the passed in email and put it in the $this->data
+	 */
+	function register($email =null) {
 		//Make sure the user name is not a list of specific ones...like any controller names :)
-		if(Configure::read('Settings.registration')) {
+		if(Configure::read('Settings.registration.open')) {
 			if(!empty($this -> data)) {
 				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 				$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
 				$this -> data['User']['admin'] = 0;
 				$this -> data['User']['status'] = 1;
+				//$this -> data['User']['profile_id'] = '';
+				$this -> data['Profile'] = array();
+				//Set the invites to 0, as they invite people we will increase this number
+				$this -> data['Profile']['invites'] = 0;
+				$this -> data['Stash'] = array();
+				$this -> data['Stash']['0'] = array();
+				$this -> data['Stash']['0']['name'] = 'Default';
+				$this -> data['Stash']['0']['total_count'] = 0;
 				debug($this -> data);
-				if($this -> User -> save($this -> data)) {
+				if($this -> User -> saveAll($this -> data)) {
 					$newUserId = $this -> User -> id;
-					$stashData = array();
-					$stashData['Stash']['name'] = 'Default';
-					$stashData['Stash']['user_id'] = $newUserId;
-					//Since this is a new user, the total_count for the stash for validation will start at 0
-					$stashData['Stash']['total_count'] = 0;
-					$this -> User -> Stash -> create();
-
-					if($this -> User -> Stash -> save($stashData)) {
-
-						$this -> User -> id = $newUserId;
-						$newUserStashid = $this -> User -> Stash -> id;
-						//since this is a new user we should be able to safetly just make it 1
-						$this -> User -> saveField('stash_user_count', '1');
-						$emailResult = $this -> __sendActivationEmail($this -> User -> id);
-						if($emailResult) {
-							$this -> Session -> setFlash('Your registration information was accepted');
-							$this -> render('registrationComplete');
-						} else {
-							//At this point sending the email failed, so we should roll it all back
-							$this -> User -> delete($newUserId);
-							$this -> User -> Stash -> delete($newUserStashid);
-							$this -> data['User']['password'] = '';
-							$this -> data['User']['new_password'] = '';
-							$this -> data['User']['confirm_password'] = '';
-							$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');
-						}
-						//$this->Session->write('user', $this->data);
-						//this of code sets up the newly registered user under the aco user
-						//$parent = $this -> Acl -> Aro -> findByAlias('Users');
-						//$aro = new Aro();
-						//$aro -> create();
-						//$aro -> save( array('alias' => $this -> data['User']['username'], 'model' => 'User', 'foreign_key' => $this -> User -> id, 'parent_id' => 2));
-						//$this -> Acl -> Aro -> save();
-						//$this->redirect(array('action' => 'index'), null, true);
+					$emailResult = $this -> __sendActivationEmail($this -> User -> id);
+					if($emailResult) {
+						$this -> Session -> setFlash('Your registration information was accepted');
+						$this -> render('registrationComplete');
+					} else {
+						//At this point sending the email failed, so we should roll it all back
+						$this -> User -> delete($newUserId);
+						$this -> data['User']['password'] = '';
+						$this -> data['User']['new_password'] = '';
+						$this -> data['User']['confirm_password'] = '';
+						$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');
 					}
 				} else {
 					$this -> data['User']['password'] = '';

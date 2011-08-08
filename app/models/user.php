@@ -3,7 +3,8 @@ class User extends AppModel
 {
   var $name = 'User';
   var $actsAs = array('ExtendAssociations', 'Containable');
-  var $hasMany = array('Stash', 'Approval', 'CollectiblesUser');   
+  var $hasMany = array('Stash', 'Approval', 'CollectiblesUser', 'Invite');   
+  var $hasOne = array('Profile'=> array('dependent'=> true));
   /* var $hasAndBelongsToMany = array(
         'Collectible' => array(
             'className' => 'Collectible',
