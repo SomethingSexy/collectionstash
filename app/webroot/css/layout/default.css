@@ -523,27 +523,27 @@ a:active {
 	clear: none;
 }
 */
-.list,
+.standard-list,
 .attributes-list {
 	float: left;
     width: 100%;
     margin-bottom: 10px;
 }
-.list ul,
+.standard-list ul,
 .attributes-list ul {
 
 	border-left: 1px solid #D8D8D8;
     border-right: 1px solid #D8D8D8;
     border-top: 1px solid #D8D8D8;
 }
-.list ul li,
+.standard-list ul li,
 .attributes-list ul li {
 	overflow: hidden;
 	border-bottom: 1px solid #E1E1E1;
 	padding: 10px;
 	color: #606060;
 }
-.list ul li.title,
+.standard-list ul li.title,
 .attributes-list ul li.title {
 	background-color: #EAEAEA;
 	border-bottom: 1px solid #D8D8D8;
@@ -575,13 +575,13 @@ a:active {
 	margin-right: 5px;
 	cursor: pointer;
 }
-.list.empty ul,
-.list.empty ul li,
+.standard-list.empty ul,
+.standard-list.empty ul li,
 .attributes-list.empty ul,
 .attributes-list.empty ul li {
 	border: none;
 }
-.list.empty ul li,
+.standard-list.empty ul li,
 .attributes-list.empty ul li {
 	font-size: 0.75em;
 }
@@ -1398,7 +1398,63 @@ div.paging span a {
 	display: none;
 }
 #account .inside .account.page .account.detail .account.directional {
-	font-size: 0.75em;
 	color: #606060;
 	margin-top: 10px;
+	font-size: 0.75em;
 }
+
+#account .inside .account.page .account.page.list {
+	
+}
+
+#account .inside .account.page .account.page.list li.page.list.item  {
+	width: 100%;
+	border-bottom: 1px solid #000;
+	color: #606060;
+	overflow: hidden;
+	margin-bottom: 0;
+}
+#account .inside .account.page .account.page.list li .header {
+	padding: 1em;
+	overflow: hidden;
+	font-size: 0.8em;
+}
+
+	
+#account .inside .account.page .account.page.list li .header span.page {
+	float: left;
+}
+#account .inside .account.page .account.page.list li .header span.action {
+	float: right;
+}
+
+#account .inside .account.page .account.page.list li .body {
+	width: 100%;
+	float: left;
+	display: none;
+}
+#account .inside .account.page .account.page.list li .body .account.detail.update,
+#account .inside .account.page .account.page.list li .body .account.detail.view {
+	display: none;
+	padding: 1em;
+	overflow: hidden;
+}
+
+#account .inside .account.page .account.page.list li .body .account.detail.view .list.empty ul li {
+	border: none;
+}
+
+#account .inside .account.page .account.page.list li.selected .header {
+	background-color: #555555;
+	color: #E9E9E9;
+	
+}
+
+#account-invites .body .account.detail.view .standard-list ul li span {
+	float: left;
+	width: 50%;
+	font-size: 0.75em;
+}
+
+
+

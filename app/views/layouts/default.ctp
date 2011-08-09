@@ -96,7 +96,7 @@
 								<?php echo $html -> link('Home', array('controller' => '/'));?>
 							</li>
 							<li>
-								<?php echo $html -> link('Account', array('controller' => 'users', 'action'=>'account'));?>
+								<?php echo $html -> link('Account', array('controller' => 'profiles'));?>
 							</li>
 							<li>
 								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>

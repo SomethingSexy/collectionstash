@@ -8,7 +8,7 @@ class Invite extends AppModel {
 	function beforeValidate() {
 		$valid = true;
 		if(!$this -> id) {
-			if($this -> find('count', array('conditions' => array('Invite.email' => $this -> data['User']['email']))) > 0) {
+			if($this -> find('count', array('conditions' => array('Invite.email' => $this -> data['Invite']['email']))) > 0) {
 				debug($valid);
 				$this -> invalidate('email', 'A person with that email address has already been invited.');
 				$valid = false;

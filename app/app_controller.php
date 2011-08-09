@@ -41,7 +41,8 @@ class AppController extends Controller {
 	}
 
 	public function isLoggedIn() {
-		if($this -> getUser()) {
+		$user = $this -> getUser();			
+		if(isset($user['User']) && !empty($user['User'])) {
 			return true;
 		} else {
 			return false;
@@ -94,7 +95,7 @@ class AppController extends Controller {
 	 */
 	public function checkLogIn() {
 		if(!$this -> isLoggedIn()) {
-			$this -> handleNotLoggedIn();
+			//$this -> handleNotLoggedIn();
 		}
 	}
 
