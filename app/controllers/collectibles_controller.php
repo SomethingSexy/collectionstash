@@ -175,7 +175,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect( array('action' => 'addSelectType'));
 		}
 		if($id && is_numeric($id)) {
-			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 
 			if(!empty($variantCollectible)) {
 				$manufacturer = $this -> Session -> read('add.collectible.manufacture');
@@ -204,7 +204,7 @@ class CollectiblesController extends AppController {
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
 		if(isset($id) && $id != null) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('addCollectibleId');
 		} else {
@@ -319,10 +319,10 @@ class CollectiblesController extends AppController {
 			if($validCollectible) {
 
 				//set pending to 2...this really needs to check if user is admin first TODO
-				$newCollectible['Approval']['state'] = 2;
+				$newCollectible['Collectible']['state'] = 2;
 				$userId = $this -> getUserId();
 				//set the id of the user who is adding this collectible
-				$newCollectible['Approval']['user_id'] = $userId;
+				//$newCollectible['Approval']['user_id'] = $userId;
 				//$newCollectible['Approval']['date_added'] = date("Y-m-d H:i:s", time());
 				//set the man id of this collectible
 				//$newCollectible['Collectible']['manufacture_id'] = $manufactureId;
@@ -618,12 +618,19 @@ class CollectiblesController extends AppController {
 			}
 			$collectible['Collectible']['variant'] = 1;
 		}
-		//set pending to 2...this really needs to check if user is admin first TODO
-		$collectible['Approval']['state'] = 2;
-		$userId = $this -> getUserId();
-		//set the id of the user who is adding this collectible
-		$collectible['Approval']['user_id'] = $userId;
+		/* Since they confirmed, now set to pending = 1.  I really don't like how
+		 this is setup right now but it works because of the image thing.
+		 A 1 means that this collectible needs to be approved by an admin first */
+		$pendingState = '1';
+		if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
+			$pendingState = '0';
+		}
 
+		$collectible['Collectible']['state'] = $pendingState;
+
+		$userId = $this -> getUserId();
+
+		//user id of the person who added this collectible
 		$collectible['Collectible']['user_id'] = $this -> getUserId();
 		debug($collectible);
 
@@ -641,18 +648,7 @@ class CollectiblesController extends AppController {
 		$this -> Collectible -> create();
 		if($this -> Collectible -> saveAll($collectible)) {
 			$id = $this -> Collectible -> id;
-			$collectible = $this -> Collectible -> findById($id);
-			$approvalId = $collectible['Collectible']['approval_id'];
-			$this -> loadModel('Approval');
-			$this -> Approval -> id = $approvalId;
-			/* Since they confirmed, now set to pending = 1.  I really don't like how
-			 this is setup right now but it works because of the image thing.
-			 A 1 means that this collectible needs to be approved by an admin first */
-			$pendingState = '1';
-			if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
-				$pendingState = '0';
-			}
-			$this -> Approval -> saveField('state', $pendingState);
+			// $collectible = $this -> Collectible -> findById($id);
 			if(isset($wizardData['image']['Upload'])) {
 				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
 				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
@@ -677,7 +673,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect( array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 		debug($collectible);
 		$this -> set('collectible', $collectible);
 		$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);

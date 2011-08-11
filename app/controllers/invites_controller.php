@@ -4,7 +4,7 @@ class InvitesController extends AppController {
 
 	var $name = 'Invites';
 	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload');
-	var $components = array('RequestHandler');
+	var $components = array('RequestHandler', 'Email');
 
 	public function view() {
 		if($this -> isLoggedIn()) {
@@ -18,7 +18,13 @@ class InvitesController extends AppController {
 			 */
 			$invites = $this -> Invite -> find("all", array('conditions' => array('Invite.user_id' => $user['User']['id']), 'contain' => false));
 			debug($invites);
-			$allowedInvites = Configure::read('Settings.Profile.total-invites-allowed');
+
+			if($this -> isUserAdmin()) {
+				$allowedInvites = Configure::read('Settings.Profile.total-admin-invites-allowed');
+			} else {
+				$allowedInvites = Configure::read('Settings.Profile.total-invites-allowed');
+			}
+
 			$invitesJson = array();
 			if(!empty($invites)) {
 				$invitesJson['Invites'] = $invites;
@@ -51,7 +57,13 @@ class InvitesController extends AppController {
 				 */
 				$user = $this -> getUser();
 				$addCount = $user['User']['invite_count'] + 1;
-				if($addCount > Configure::read('Settings.Profile.total-invites-allowed')) {
+				if($this -> isUserAdmin()) {
+					$totalAllowed = Configure::read('Settings.Profile.total-admin-invites-allowed');
+				} else {
+					$totalAllowed = Configure::read('Settings.Profile.total-invites-allowed');
+				}
+
+				if($addCount > $totalAllowed) {
 					$this -> set('aInvites', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array('0' => array('email' => 'You have reached your max number of invites.'))));
 				} else {
 					$this -> data = Sanitize::clean($this -> data);
@@ -63,6 +75,11 @@ class InvitesController extends AppController {
 						$count = $user['User']['invite_count'];
 						$count = $count + 1;
 						$user['User']['invite_count'] = $count;
+						if($this -> __sendActivationEmail($this -> data['Invite']['email'], $user['User']['username'])) {
+							$this -> log('Successfully sent invite email to address ' . $this -> data['Invite']['email'] . ' ' . date("Y-m-d H:i:s", time()), 'info');
+						} else {
+							$this -> log('Failed sending invite email to ' . $this -> data['Invite']['email'] . ' ' . date("Y-m-d H:i:s", time()), 'error');
+						}
 						$this -> Session -> write('user', $user);
 						$this -> set('aInvites', array('success' => array('isSuccess' => true, 'message' => __('You have successfully invited a user.', true))));
 					} else {
@@ -76,6 +93,37 @@ class InvitesController extends AppController {
 		} else {
 			$this -> set('aInvites', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
 		}
+	}
+
+	function __sendActivationEmail($email = null, $user_name = null) {
+		$return = true;
+		if($email) {
+			// Set data for the "view" of the Email
+			$this -> set('register_url', 'http://' . env('SERVER_NAME') . '/users/register/' . $email);
+			$this -> set('user_name', $user_name);
+			//$this -> set('username', $this -> data['User']['username']);
+
+			$this -> Email -> smtpOptions = array('port' => '25', 'timeout' => '30', 'host' => 'smtpout.secureserver.net', 'username' => 'admin@collectionstash.com', 'password' => 'oblivion1968'
+			// 'client' => 'smtp_helo_hostname'
+			);
+			$this -> Email -> delivery = 'smtp';
+			$this -> Email -> to = $email;
+			$this -> Email -> subject = 'You have been invited to Collection Stash!';
+			$this -> Email -> from = 'admin@collectionstash.com';
+			$this -> Email -> template = 'invite';
+			$this -> Email -> sendAs = 'text';
+			// you probably want to use both :)
+			$return = $this -> Email -> send();
+			$this -> set('smtp_errors', $this -> Email -> smtpError);
+			if(!empty($this -> Email -> smtpError)) {
+				$return = false;
+				$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $user_id, 'error');
+			}
+		} else {
+			$return = false;
+		}
+
+		return $return;
 	}
 
 }

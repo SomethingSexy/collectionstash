@@ -11,7 +11,7 @@ class HomeController extends AppController {
 		//$randomCollectibleIds = $this -> Collectible -> find('list', array('fields' => 'id', 'order' => 'RAND()', 'limit' => 5));
 		//debug($randomCollectibleIds);
 
-		$randomCollectibles = $this -> Collectible -> find('all', array('limit' => 5, 'conditions' => array('Approval.state' => '0'), 'contain' => array('Approval' => array(), 'Upload', 'Manufacture'), 'order' => array('Collectible.created' => 'desc')));
+		$randomCollectibles = $this -> Collectible -> find('all', array('limit' => 5, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture'), 'order' => array('Collectible.created' => 'desc')));
 
 		//$randomCollectibles = $this -> Collectible -> find('all', array('contain' => array('Upload', 'Manufacture'), 'conditions' => array('Collectible.id' => $randomCollectibleIds), 'order' => 'RAND()'));
 		debug($randomCollectibles);

@@ -7,20 +7,20 @@ class CollectiblesUser extends AppModel {
 	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'));
 
 	function beforeSave() {
-		$this->data['CollectiblesUser']['cost'] = str_replace('$','', $this->data['CollectiblesUser']['cost']);
-		$this->data['CollectiblesUser']['cost'] = str_replace(',','', $this->data['CollectiblesUser']['cost']);
-      
-      	return true;
-    } 
+		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
+		$this -> data['CollectiblesUser']['cost'] = str_replace(',', '', $this -> data['CollectiblesUser']['cost']);
+
+		return true;
+	}
 
 	function validateEditionSize($check) {
-		debug($this->data);	
-		$collectible_id = $this->data['CollectiblesUser']['collectible_id'];
+		debug($this -> data);
+		$collectible_id = $this -> data['CollectiblesUser']['collectible_id'];
 		debug($collectible_id);
 		//$this->loadModel('Collectible');
-		$this->Collectible->recursive = -1; 
-		$collectible = $this->Collectible->findById($collectible_id);	
-		debug($collectible);	
+		$this -> Collectible -> recursive = -1;
+		$collectible = $this -> Collectible -> findById($collectible_id);
+		debug($collectible);
 		$showUserEditionSize = $collectible['Collectible']['showUserEditionSize'];
 		$editionSize = trim($check['edition_size']);
 
@@ -32,9 +32,9 @@ class CollectiblesUser extends AppModel {
 				$collectibleEditionSize = intval($collectible['Collectible']['edition_size']);
 				//if the user entered edition size is greater than the collectible edition size, fail it
 				if($userEditionSize > $collectibleEditionSize) {
-					return false;	
+					return false;
 				} else {
-					return true;	
+					return true;
 				}
 			} else {
 				return false;
@@ -60,5 +60,4 @@ class CollectiblesUser extends AppModel {
 	}
 
 }
-
 ?>

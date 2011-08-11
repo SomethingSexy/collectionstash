@@ -4,7 +4,7 @@ class UploadEditController extends AppController {
 
 	var $name = 'UploadEdit';
 	var $helpers = array('Html', 'FileUpload.FileUpload');
-	
+
 	//TODO this should get moved to an upload edit
 	function edit($collectibleId =null, $id =null) {
 		$this -> checkLogIn();
@@ -13,17 +13,17 @@ class UploadEditController extends AppController {
 			//if collectible id is null and we didn't add it to the session already someone fucked up, redirect them
 			if(!is_null($collectibleId)) {
 				//If it is not null, then see if it was added to the session, if it was replace it, otherwise write it to the session
-				if($this -> Session -> check('Upload.Edit.collectibleId')){
+				if($this -> Session -> check('Upload.Edit.collectibleId')) {
 					$currentCollectibleId = $this -> Session -> read('Upload.Edit.collectibleId');
 					if($currentCollectibleId === $collectibleId) {
 						$this -> Session -> write('Upload.Edit.collectibleId', $collectibleId);
-					}					
+					}
 				} else {
-					$this -> Session -> write('Upload.Edit.collectibleId', $collectibleId);				
+					$this -> Session -> write('Upload.Edit.collectibleId', $collectibleId);
 				}
-			} else if(!$this -> Session -> check('Upload.Edit.collectibleId')){
-				$this->redirect('/');	
-			} 
+			} else if(!$this -> Session -> check('Upload.Edit.collectibleId')) {
+				$this -> redirect('/');
+			}
 			//Make sure the id is not null
 			if(!is_null($id)) {
 				//See if we already came in here
@@ -58,18 +58,18 @@ class UploadEditController extends AppController {
 				//If it is null and the data is empty that means there is no image
 				//TODO handle this scenario
 			}
-			$this->set('collectibleId',$this -> Session -> read('Upload.Edit.collectibleId'));
-			$this->set('addImage', !$this -> Session -> check('Upload.Edit.upload'));
+			$this -> set('collectibleId', $this -> Session -> read('Upload.Edit.collectibleId'));
+			$this -> set('addImage', !$this -> Session -> check('Upload.Edit.upload'));
 
 		} else {
 			/*
 			 * Ok we are submitting something, first check to the session to see if we added
 			 * an upload
 			 */
-			$this->set('collectibleId',$this -> Session -> read('Upload.Edit.collectibleId'));
-			$this->set('addImage', !$this -> Session -> check('Upload.Edit.upload'));
+			$this -> set('collectibleId', $this -> Session -> read('Upload.Edit.collectibleId'));
+			$this -> set('addImage', !$this -> Session -> check('Upload.Edit.upload'));
 			$this -> set('collectible', $this -> Session -> read('Upload.Edit.upload'));
-			
+
 			$this -> loadModel('Upload');
 			if($this -> Upload -> isValidUpload($this -> data)) {
 				$currentCollectibleId = $this -> Session -> read('Upload.Edit.collectibleId');
@@ -101,28 +101,28 @@ class UploadEditController extends AppController {
 					$uploadId = $this -> UploadEdit -> id;
 					//debug($upload);
 					//$this -> Session -> write('uploadId', $uploadId);
-					$newUpload = $this->UploadEdit ->findById($uploadId);
+					$newUpload = $this -> UploadEdit -> findById($uploadId);
 					debug($newUpload);
 					$collectible = array();
 					$collectible['Upload'] = $newUpload['UploadEdit'];
-					$this->set('collectible', $collectible);
-					
+					$this -> set('collectible', $collectible);
+
 					$this -> Session -> delete('Upload.Edit.collectibleId');
 					$this -> Session -> delete('Upload.Edit.upload');
-					$this->render('confirm');
-					return;
+					$this -> render('confirm');
+					return ;
 				} else {
 					debug($this -> UploadEdit -> validationErrors);
 					$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
 				}
 			} else {
-				$this -> Upload-> validationErrors['0']['file'] = 'Image is required.';
+				$this -> Upload -> validationErrors['0']['file'] = 'Image is required.';
 				debug($this -> Upload -> invalidFields());
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 			}
 		}
 
-		
 	}
+
 }
 ?>

@@ -10,6 +10,7 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
 	),
 	'Profile' => array (
 		'total-invites-allowed' => 5,
+		'total-admin-invites-allowed' => 9999,
 		'allow-invites' => true
 	),
   	'Approval' => array (

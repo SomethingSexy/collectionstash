@@ -8,7 +8,7 @@ class StashsController extends AppController {
 
 	var $components = array('RequestHandler');
 
-	function stats($id =null) {
+	function stats($id = null) {
 		//This is private stuff for sure make sure they are logged in
 		$this -> checkLogIn();
 
@@ -21,17 +21,19 @@ class StashsController extends AppController {
 				//CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.stash_id'=>$id), 'contain'=> false));
 				$this -> set(compact('stashStats'));
 			} else {
-				$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+				$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 			}
 
 		} else {
-			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 
 	}
 
-	//Use the id is the id of the stash we are viewing
-	function index($id =null) {
+	/**
+	 * 8.10.11 - Should I use this as the main entry point for a user stash?
+	 */
+	function index($id = null) {
 		//Add something in here that if they aren't logged in and they pass in an id, we return that users collection
 		$username = $this -> getUsername();
 		if($username) {
@@ -75,10 +77,10 @@ class StashsController extends AppController {
 				debug($data[0]['CollectiblesUser']);
 				$this -> set('collectibles', $data[0]['CollectiblesUser']);
 			} else {
-				$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+				$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 			}
 		} else {
-			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 	}
 
@@ -191,17 +193,17 @@ class StashsController extends AppController {
 					$this -> Stash -> id = $this -> data['Stash']['id'];
 					if($this -> Stash -> delete()) {
 						$this -> Session -> setFlash(__('You have successfully deleted stash ' . $stashForEdit['Stash']['name'] . '.', true), null, null, 'success');
-						$this -> redirect( array('controller' => 'users', 'action' => 'home'), null, true);
+						$this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
 					}
 				}
 			}
 		}
 
 		$this -> Session -> setFlash(__('There was a problem trying to delete your stash.', true), null, null, 'success');
-		$this -> redirect( array('controller' => 'users', 'action' => 'home'), null, true);
+		$this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
 	}
 
-	public function view($id =null) {
+	public function view($id = null) {
 		debug($id);
 		//debug($this->Stash->findById($id));
 

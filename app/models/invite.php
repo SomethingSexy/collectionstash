@@ -13,6 +13,12 @@ class Invite extends AppModel {
 				$this -> invalidate('email', 'A person with that email address has already been invited.');
 				$valid = false;
 			}
+			$this->loadModel('User');
+			if($this -> User-> find('count', array('conditions' => array('User.email' => $this -> data['Invite']['email']))) > 0) {
+				debug($valid);
+				$this -> invalidate('email', 'A person with that email address has already registered.');
+				$valid = false;
+			}
 		}
 
 		return $valid;

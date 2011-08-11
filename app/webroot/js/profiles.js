@@ -2,11 +2,12 @@ var inviteAccount = function() {
 
 	function _viewSuccess(data) {
 		$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').children().remove();
+		$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').removeClass('empty');	
 		if(!isNaN(parseFloat(data.responseData.remaining)) && isFinite(data.responseData.remaining)) {
 			$('#account-invites-left').text('You have ' + data.responseData.remaining + ' invites remaining.');
 		}
 		
-		if(data.responseData.remaining === 0){
+		if(data.responseData.remaining <= 0){
 			$('#invite-user').hide();
 		} else {
 			$('#invite-user').show();
@@ -19,7 +20,7 @@ var inviteAccount = function() {
 						// echo '<span class="attribute-description">'.__('Description', true).'</span>';
 						// echo '</li>';
 				$titleLi = $('<li></li>').addClass('title');
-				$titleLi.append($('<span></span>').text('Email')).append($('<span></span>').text('Status'));	
+				$titleLi.append($('<span></span>').text('Email')).append($('<span></span>').text('Status'));
 				$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').append($titleLi);
 				var $li;
 				$.each(data.responseData.Invites, function(key, value){
@@ -48,6 +49,8 @@ var inviteAccount = function() {
 	}
 
 	function invite() {
+		$('#account-invites').children('div.body').children('.account.detail.update').children('#ajax-loader').remove();
+		$('#account-invites').children('div.body').children('.account.detail.update').children().show();
 		$('#invite-email').next('.error-message').remove();
 		$('#account-invites').children('div.body').children('.account.detail.view').hide();
 		$('#account-invites').children('div.body').children('.account.detail.update').show();
@@ -83,16 +86,26 @@ var inviteAccount = function() {
 	function submitSuccess(data) {
 		$('#invite-email').next('.error-message').remove();
 		if(data.success.isSuccess) {
+			
 			viewInvites();
 		} else {
 			if(data.isTimeOut) {
 				window.location = "/users/login";
 			} else {
+				$('#account-invites').children('div.body').children('.account.detail.update').children('#ajax-loader').remove();
+				$('#account-invites').children('div.body').children('.account.detail.update').children().show();
 				if(data.errors[0]['email']) {
 					$('#invite-email').after('<div class="error-message">'+ data.errors[0]['email'] +'</div>');
 				}
 			}
 		}
+	}
+	
+	function beforeSubmit(formData, jqForm, options) {
+		$('#account-invites').children('div.body').children('.account.detail.update').children().hide();
+		$('#account-invites').children('div.body').children('.account.detail.update').append("<img id='ajax-loader' src='/img/ajax-loader.gif'/>");
+	
+		return true;
 	}
 
 	return {
@@ -107,7 +120,7 @@ var inviteAccount = function() {
 				// dataType identifies the expected content type of the server response
 				dataType:  'json',
 				url: '/invites/add.json',
-				//beforeSubmit:  showRequest,
+				beforeSubmit:  beforeSubmit,
 				// success identifies the function to invoke when the server response
 				// has been received
 				success: submitSuccess

@@ -3,6 +3,7 @@ class AppController extends Controller {
 
 	//var $components = array('RequestHandler');
 	public function beforeFilter() {
+		
 		if($this -> isLoggedIn()) {
 			$this -> set('isLoggedIn', true);
 			$this -> set('username', $this -> getUsername());
@@ -28,7 +29,7 @@ class AppController extends Controller {
 				}	
 			}			
 		}
-		$this -> set('request_params', $requestParams);
+		$this -> set(compact('request_params'), $requestParams);
 	}
 
 	public function getUser() {
@@ -95,7 +96,7 @@ class AppController extends Controller {
 	 */
 	public function checkLogIn() {
 		if(!$this -> isLoggedIn()) {
-			//$this -> handleNotLoggedIn();
+			$this -> handleNotLoggedIn();
 		}
 	}
 
@@ -219,18 +220,18 @@ class AppController extends Controller {
 			$this -> Session -> write('Collectibles.search', $search);
 			$this -> Session -> write('Collectibles.filters', $filters);
 			if($search == '') {
-				array_push($conditions, array('Approval.state' => '0'));
-				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'Approval', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				array_push($conditions, array('Collectible.state' => '0'));
+				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
-				array_push($conditions, array('Approval.state' => '0'));
+				array_push($conditions, array('Collectible.state' => '0'));
 				//Using like for now because switch to InnoDB
 				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
 				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
-				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'Approval', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
-			array_push($conditions, array('Approval.state' => '0'));
-			$this -> paginate = array("contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'Approval', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
+			array_push($conditions, array('Collectible.state' => '0'));
+			$this -> paginate = array("contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');

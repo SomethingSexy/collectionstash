@@ -3,23 +3,9 @@ class User extends AppModel
 {
   var $name = 'User';
   var $actsAs = array('ExtendAssociations', 'Containable');
-  var $hasMany = array('Stash', 'Approval', 'CollectiblesUser', 'Invite');   
+  var $hasMany = array('Stash', 'CollectiblesUser', 'Invite');   
   var $hasOne = array('Profile'=> array('dependent'=> true));
-  /* var $hasAndBelongsToMany = array(
-        'Collectible' => array(
-            'className' => 'Collectible',
-            'joinTable' => 'collectibles_users',
-            'foreignKey' => 'user_id',
-            'associationForeignKey' => 'collectible_id',
-        ),
-    );  */
-    
-  function beforeSave()
-  {
-     //$this->data['User']['password'] = $this->data['User']['new_passwd']; 
-     return true;
-  }
-  
+
   function beforeValidate() 
   {
     $valid = true;
@@ -47,7 +33,11 @@ class User extends AppModel
           'rule'=> 'alphaNumeric',
           'required' => true,
           'message' => 'Alphanumeric only.'
-        )
+        ),
+        'validLength' => array (
+			'rule' => array('maxLength', '40'),
+			'message' => 'Maximum 40 characters long'			
+		)
     ),
     'new_password' => array (
         'samePass' => array (
@@ -158,15 +148,7 @@ class User extends AppModel
 	      ));
 	    return $count['User']['stash_count'];
 	}
-  
-  //public function addCollectible($username, $id)
-  	public function addCollectible()
-  	{
-     //$result =  $this->findByUsername($username);
-     //$this->CollectiblesUser->bindModel(array('belongsTo' => array('User', 'Collectible')));
-     	$this->habtmAdd('Collectible', 1, 1); 
-     
-  	}	
+ 
   
 	public function getCollectibleByUser($username, $collectibleid) {
 		$result =  $this->findByUsername($username);
@@ -178,11 +160,11 @@ class User extends AppModel
 				'CollectiblesUser.user_id'=>$result['User']['id'],
 				'CollectiblesUser.id'=>$collectibleid),
 			'contain'=>array('Collectible')
-	//'Collectible.pending'=> 0
 		));
 
 		return $joinRecords;
 	}
+
   /**
    * Creates an activation hash for the current user.
    *

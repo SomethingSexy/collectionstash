@@ -7,11 +7,10 @@ class Manufacture extends AppModel {
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 	}
-	
+
 	public function getManufactures() {
 		return $this -> find('all', array('contain' => false, 'order' => array('Manufacture.title' => 'ASC')));
 	}
-	
 
 	public function getManufactureNameById($manufactureId) {
 		$manufacture = $this -> find('first', array('conditions' => array('Manufacture.id' => $manufactureId), 'fields' => array('Manufacture.title'), 'contain' => false));

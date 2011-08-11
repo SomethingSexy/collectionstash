@@ -11,7 +11,6 @@
             'className' => 'License','foreignKey'=>'license_id'),
         'Series' => array(
              'className' => 'Series','foreignKey'=>'series_id'),
-        'Approval',
         'Scale',
 		'Retailer');
 
@@ -293,7 +292,7 @@
     public function getPendingCollectibles()
     {
       $collectible = $this->find("all", array(
-        'conditions' => array('Approval.state'=> 1)
+        'conditions' => array('Collectible.state'=> 1)
       ));
       
       return $collectible;
@@ -302,7 +301,7 @@
     public function getNumberOfPendingCollectibles()
     {
       $count = $this->find("count", array(
-        'conditions' => array('Approval.state'=> 1)
+        'conditions' => array('Collectible.state'=> 1)
       ));
       
       return $count;
@@ -311,7 +310,7 @@
     public function getPendingCollectiblesByUserId($userId)
     {
       $count = $this->find("count",array(
-            'conditions'=>array('Approval.user_id'=>$userId, 'Approval.state'=> 1)
+            'conditions'=>array('Collectible.user_id'=>$userId, 'Collectible.state'=> 1)
         )); 
       return $count;     
     }   

@@ -79,12 +79,12 @@ class UsersController extends AppController {
 		}
 
 	}
-	
-	function home(){
-		
+
+	function home() {
+
 	}
 
-	function account($view = null) {
+	function account($view =null) {
 		$username = $this -> getUsername();
 		$user = $this -> getUser();
 		if($user) {
@@ -125,39 +125,60 @@ class UsersController extends AppController {
 		if(Configure::read('Settings.registration.open')) {
 			if(!empty($this -> data)) {
 				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-				$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
-				$this -> data['User']['admin'] = 0;
-				$this -> data['User']['status'] = 1;
-				//$this -> data['User']['profile_id'] = '';
-				$this -> data['Profile'] = array();
-				//Set the invites to 0, as they invite people we will increase this number
-				$this -> data['Profile']['invites'] = 0;
-				$this -> data['Stash'] = array();
-				$this -> data['Stash']['0'] = array();
-				$this -> data['Stash']['0']['name'] = 'Default';
-				$this -> data['Stash']['0']['total_count'] = 0;
-				debug($this -> data);
-				if($this -> User -> saveAll($this -> data)) {
-					$newUserId = $this -> User -> id;
-					$emailResult = $this -> __sendActivationEmail($this -> User -> id);
-					if($emailResult) {
-						$this -> Session -> setFlash('Your registration information was accepted');
-						$this -> render('registrationComplete');
+				$proceed = true;
+				$invitedUser = null;
+				//If invite only is turned on, first make sure that this user is invited
+				if(Configure::read('Settings.registration.invite-only')) {
+					$invitedUser = $this -> User -> Invite -> find("first", array('conditions' => array('Invite.email' => $this -> data['User']['email'])));
+					if(empty($invitedUser)) {
+						$proceed = false;
+						$this -> Session -> setFlash(__('Sorry for the inconvenience, Collection Stash is currently invite only.', true), null, null, 'error');
+					}
+				}
+				if($proceed) {
+					$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
+					$this -> data['User']['admin'] = 0;
+					$this -> data['User']['status'] = 1;
+					//$this -> data['User']['profile_id'] = '';
+					$this -> data['Profile'] = array();
+					//Set the invites to 0, as they invite people we will increase this number
+					$this -> data['Profile']['invites'] = 0;
+					$this -> data['Stash'] = array();
+					$this -> data['Stash']['0'] = array();
+					$this -> data['Stash']['0']['name'] = 'Default';
+					$this -> data['Stash']['0']['total_count'] = 0;
+					debug($this -> data);
+					if($this -> User -> saveAll($this -> data)) {
+						$newUserId = $this -> User -> id;
+						if(Configure::read('Settings.registration.invite-only')) {
+							$this -> User -> Invite -> id = $invitedUser['Invite']['id'];
+							$this -> User -> Invite -> saveField('registered','1',false);
+						}
+						$emailResult = $this -> __sendActivationEmail($this -> User -> id);
+						if($emailResult) {
+							$this -> Session -> setFlash('Your registration information was accepted');
+							$this -> render('registrationComplete');
+						} else {
+							//At this point sending the email failed, so we should roll it all back
+							$this -> User -> delete($newUserId);
+							$this -> data['User']['password'] = '';
+							$this -> data['User']['new_password'] = '';
+							$this -> data['User']['confirm_password'] = '';
+							$this -> Session -> setFlash(__('There was a problem registering this information.', true), null, null, 'error');
+						}
 					} else {
-						//At this point sending the email failed, so we should roll it all back
-						$this -> User -> delete($newUserId);
 						$this -> data['User']['password'] = '';
 						$this -> data['User']['new_password'] = '';
 						$this -> data['User']['confirm_password'] = '';
-						$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');
+						$this -> Session -> setFlash(__('There was a problem registering this information.', true), null, null, 'error');
 					}
-				} else {
-					$this -> data['User']['password'] = '';
-					$this -> data['User']['new_password'] = '';
-					$this -> data['User']['confirm_password'] = '';
-					$this -> Session -> setFlash(__('There was a problem saving this information.', true), null, null, 'error');
+				}
+			} else {
+				if($email) {
+					$this -> data['User']['email'] = $email;
 				}
 			}
+
 		} else {
 			$this -> redirect( array('action' => 'login'), null, true);
 		}

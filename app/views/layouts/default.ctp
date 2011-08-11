@@ -18,7 +18,6 @@
 	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>
 	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
 	<?php echo $scripts_for_layout; ?>
-	
 	<script>
 		$( function() {
 
@@ -65,6 +64,7 @@
 			$('#login-link').click(function(){
 				$('#UserUsername').val('');
 				$('#UserPassword').val('');
+				$('#UserLoginForm').find('#UserUsername').next('div.error-message').remove();
 				$('#login-dialog').dialog('open');
 				return false;
 			});		
@@ -90,7 +90,7 @@
 				<div class="box">
 					<ul class="nav">
 							<?php
-							if($isLoggedIn)
+							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 							<li>
 								<?php echo $html -> link('Home', array('controller' => '/'));?>
@@ -124,7 +124,7 @@
 					<div class="box">
 						<ul class="nav">
 							<?php
-							if($isLoggedIn)
+							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 							<li>
 								<?php echo $html -> link('My Stash', array('controller' => 'users', 'action' => 'home'));?>
@@ -208,7 +208,14 @@
             <?php echo $form->input('password', array('div' => false, 'label'=> false));?>
            </li>
           </ul>
-          <?php echo $form->hidden('fromPage', array('value'=> $this->here.$request_params)); ?>
+          <?php 
+          	if(isset($request_params)){
+          		echo $form->hidden('fromPage', array('value'=> $this->here.$request_params)); 	
+          	} else {
+          		echo $form->hidden('fromPage', array('value'=> $this->here)); 
+          	}	
+          	
+          ?>
         </fieldset>
       <?php echo $form->end();?>
       </div>
