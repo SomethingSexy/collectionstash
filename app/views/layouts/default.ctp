@@ -127,7 +127,10 @@
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 							<li>
-								<?php echo $html -> link('My Stash', array('controller' => 'users', 'action' => 'home'));?>
+								<?php 
+									$user = $session->read('user');
+									echo $html -> link('My Stash', array('controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
+								?>
 							</li>
 							<?php
 							if($isUserAdmin)

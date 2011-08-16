@@ -39,7 +39,7 @@ class UsersController extends AppController {
 						if(!empty($this -> data['User']['fromPage'])) {
 							$this -> redirect($this -> data['User']['fromPage'], null, true);
 						} else {
-							$this -> redirect( array('action' => 'home'), null, true);
+							$this -> redirect( array('controller'=>'stashs','action' => 'view', $results['User']['username']), null, true);
 						}
 					} else {
 						$this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');

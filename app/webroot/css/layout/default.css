@@ -591,16 +591,42 @@ a:active {
 }
 #my-stashes-component .inside .component-view {
 	overflow: hidden;
-	padding: 0;
-	padding-top: 10px;
+	padding-top: 0;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 1em;
 }
-#my-stashes-component .inside .component-view .actions {
+#my-stashes-component .inside .component-title {
+	overflow: hidden;
+}
+#my-stashes-component .inside .component-title h2 {
+	width: 50%;
+	clear: none;
 	float: left;
-	margin-right: 20px;
-	width: 10%;
 }
-#my-stashes-component .inside .component-view .actions li {
-	margin-bottom: 10px;
+#my-stashes-component .inside .component-title .actions {
+	float: right;
+	margin-right: 20px;
+	display: inline;
+}
+#my-stashes-component .inside .component-title .actions .link.glimpse-link ,
+#my-stashes-component .inside .component-title .actions .link.add-stash-link, 
+#my-stashes-component .inside .component-title .actions .link.detail-link {
+	background: none;
+}
+#my-stashes-component .inside .component-title .actions ul {
+	overflow: hidden;
+}
+#my-stashes-component .inside .component-title .actions ul li {
+	display: inline;
+	width: 16px;
+	position: relative;
+}
+#my-stashes-component .inside .component-title .actions ul li a{
+	border: none;
+	box-shadow: none;
+	padding: 0;
+	margin: 0;
 }
 #my-stashes-component .inside .component-view .glimpse {
 	float: left;

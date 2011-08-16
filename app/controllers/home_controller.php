@@ -14,18 +14,18 @@ class HomeController extends AppController {
 		$randomCollectibles = $this -> Collectible -> find('all', array('limit' => 5, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture'), 'order' => array('Collectible.created' => 'desc')));
 
 		//$randomCollectibles = $this -> Collectible -> find('all', array('contain' => array('Upload', 'Manufacture'), 'conditions' => array('Collectible.id' => $randomCollectibleIds), 'order' => 'RAND()'));
-		debug($randomCollectibles);
+		//debug($randomCollectibles);
 
 		$this -> set(compact('randomCollectibles'));
 
 		$this -> loadModel('Manufacture');
 
 		$manufactures = $this -> Manufacture -> getManufactures();
-		debug($manufactures);
+		//debug($manufactures);
 		$this -> set(compact('manufactures'));
 		$this -> loadModel('License');
 		$licenses = $this -> License -> getLicenses();
-		debug($licenses);
+		//debug($licenses);
 		$this -> set(compact('licenses'));
 	}
 
