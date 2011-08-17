@@ -20,5 +20,18 @@ class TagsController extends AppController {
 		//debug($tags);
 		$this -> set('aTags', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
 	}
+	
+	public function index(){
+		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain'=> false));	
+		debug($tags);
+		$this->set(compact('tags'));
+		$this -> loadModel('Manufacture');
+		$manufactures = $this -> Manufacture -> getManufactures();
+		debug($manufactures);
+		$this -> set(compact('manufactures'));
+		$this -> loadModel('Collectibletype');
+		$collectibletypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
+		$this -> set(compact('collectibletypes'));
+	}
 }
 ?>

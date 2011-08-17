@@ -89,12 +89,13 @@
 			<div class="header navigation">
 				<div class="box">
 					<ul class="nav">
-							<?php
-							if(isset($isLoggedIn) && $isLoggedIn === true)
-							{  ?>
 							<li>
 								<?php echo $html -> link('Home', array('controller' => '/'));?>
 							</li>
+							<?php
+							if(isset($isLoggedIn) && $isLoggedIn === true)
+							{  ?>
+
 							<li>
 								<?php echo $html -> link('Account', array('controller' => 'profiles'));?>
 							</li>
@@ -147,11 +148,15 @@
 								</ul>
 							</li>
 							<?php }?>
-							<li>
-								<?php echo $html -> link('Contribute', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
-							</li>
+
 							<?php  }
    							?>
+   							<li>
+								<?php echo $html -> link('Contribute', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
+							</li>
+   							<li>
+								<?php echo $html -> link('Tags', array('controller' => 'tags'));?>
+							</li>
 						</ul>
 						<div class="site-search">
 							<form method="get" action="/collectibles/search">

@@ -702,25 +702,37 @@ class CollectiblesController extends AppController {
 	}
 
 	function search() {
+		debug($this -> params['url']);
 		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
 		//Should update this if we want to pass multiple paramaters in
+		$this -> data['Search'] = array();
+		$this -> data['Search']['search'] = '';
 		if(isset($this -> params['url']['q'])) {
-			$this -> data['Search'] = array();
 			$this -> data['Search']['search'] = $this -> params['url']['q'];
-		} else if(isset($this -> params['url']['m'])) {
-			$this -> data['Search'] = array();
+		} 
+		if(isset($this -> params['url']['m'])) {
 			//find all of this license
-			$this -> data['Search']['search'] = '';
 			$this -> data['Search']['Manufacture'] = array();
 			$this -> data['Search']['Manufacture']['Filter'] = array();
 			$this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
-		} else if(isset($this -> params['url']['l'])) {
-			$this -> data['Search'] = array();
+		} 
+		if(isset($this -> params['url']['l'])) {
 			//find all of this license
-			$this -> data['Search']['search'] = '';
 			$this -> data['Search']['License'] = array();
 			$this -> data['Search']['License']['Filter'] = array();
 			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
+		}  
+		if(isset($this -> params['url']['ct'])) {
+			//find all of this license
+			$this -> data['Search']['CollectibleType'] = array();
+			$this -> data['Search']['CollectibleType']['Filter'] = array();
+			$this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
+		} 
+		if(isset($this -> params['url']['t'])) {
+			//find all of this license
+			$this -> data['Search']['Tag'] = array();
+			$this -> data['Search']['Tag']['Filter'] = array();
+			$this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
 		}
 		$this -> searchCollectible();
 	}

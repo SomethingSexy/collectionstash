@@ -459,9 +459,14 @@ a:active {
 	font-size: 0.75em;
 	display: inline;
 	margin-right: 1em;
+	margin-bottom: 1em;
 	padding: 10px;
 	float: left;
 	background-color: #CCCCCC;
+}
+.tag-list .tag a {
+	text-decoration: none;
+	color: #000;
 }
 #collectibletypes-list-component,
 #manufactures-list-component {
@@ -639,7 +644,19 @@ a:active {
     border-radius: 8px 8px 8px 8px;
     margin: 10px;
 }
-
+/*#collectible-detail .component-view*/ .collectible.tags {
+	float: left;
+	width: 100%;
+	overflow: hidden;
+	margin-top: 10px;
+}
+/*#collectible-detail .component-view*/ .collectible.tags .tag {
+	font-size: 0.75em;
+    margin-left: 1em;
+    padding: 5px;
+    float: left;
+    background-color: #EAEAEA;
+}
 #collectible-detail {
 	width: 100%;
 	margin-right: 0;
@@ -665,19 +682,7 @@ a:active {
 	margin-left: 1em;
 }
 
-/*#collectible-detail .component-view*/ .collectible.tags {
-	float: left;
-	width: 100%;
-	overflow: hidden;
-	margin-top: 10px;
-}
-/*#collectible-detail .component-view*/ .collectible.tags .tag {
-	font-size: 0.75em;
-    margin-left: 1em;
-    padding: 5px;
-    float: left;
-    background-color: #EAEAEA;
-}
+
 #collectible-detail .component-view .collectible.item {
 	width: 100%;
 	
@@ -702,6 +707,13 @@ a:active {
 	padding: 5px;
 	
 }
+#collectible-detail .component-view .collectible.tags .tag-list ,
+#collectible-detail .component-view .collectible.tags {
+	margin-top: 0px;
+	margin-bottom: 0px;
+
+}
+
 .collectible.statistics dl,
 .collectible.detail dl {
 	line-height: 2em;
