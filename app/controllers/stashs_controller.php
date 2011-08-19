@@ -225,7 +225,6 @@ class StashsController extends AppController {
 						$viewingMyStash = true;
 					}
 					$this->set('myStash', $viewingMyStash);
-					$this->set('myStashId', $stash['Stash']['id']);
 					$this->set('stashUsername', $userId);
 					if($stash['Stash']['privacy'] === '0') {
 						$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain'=>array('Collectible'=>array('Upload','Manufacture', 'License', 'Collectibletype'))));
