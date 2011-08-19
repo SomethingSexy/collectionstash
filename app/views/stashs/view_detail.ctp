@@ -6,7 +6,7 @@
     		<ul>
     			<?php 
     				if(isset($myStash) && $myStash) {
-    					echo '<li><a class="link add-stash-link" href="/collections/addSearch/initial:yes/stashId:'.$myStashId.'"><img src="/img/icon/add_stash_link.png"/></a></li>';
+    					echo '<li><a class="link add-stash-link" href="/collectibles/search/initial:yes/"><img src="/img/icon/add_stash_link.png"/></a></li>';
     				}
     			?>
     			<li><?php echo '<a class="link detail-link" href="/stashs/view/'.$stashUsername. '/view:detail"><img src="/img/icon/detail_link.png"/></a>';	?></li>

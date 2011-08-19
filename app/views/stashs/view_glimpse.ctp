@@ -6,7 +6,7 @@
     		<ul>
     			<?php 
     				if(isset($myStash) && $myStash) {
-    					echo '<li><a class="link add-stash-link" href="/collections/addSearch/initial:yes/stashId:'.$myStashId.'"><img src="/img/icon/add_stash_link.png"/></a></li>';
+    					echo '<li><a class="link add-stash-link" href="/collectibles/search/initial:yes/"><img src="/img/icon/add_stash_link.png"/></a></li>';
     				}
     			?>
     			<li><?php echo '<a class="link detail-link" href="/stashs/view/'.$stashUsername. '/view:detail"><img src="/img/icon/detail_link.png"/></a>';	?></li>
@@ -21,7 +21,7 @@
 				echo '<div class="glimpse">';
 				foreach($collectibles as $myCollectible) {
 					if (!empty($myCollectible['Collectible']['Upload'])) { 
-						echo '<a href="/collections/viewCollectible/'.$myCollectible['CollectiblesUser']['id']. '">'.$fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => '100')).'</a>';
+						echo '<a href="/collectiblesUser/view/'.$myCollectible['CollectiblesUser']['id']. '">'.$fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => '100')).'</a>';
 						echo '<div class="collectible image-fullsize hidden">';
 						echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 0));
 						echo '</div>';

@@ -22,7 +22,9 @@
 						'collectibletype' => $collectible['Collectibletype']
 					));?>
 					<div class="links">
-
+						<?php if($isLoggedIn){
+							echo '<a title="Add to stash" href="/collectiblesUser/add/'.$collectible['Collectible']['id']. '" class="add-to-collection">Add to Stash</a>';
+						} ?>
 					</div>
 					<div class="collectible actions">
 						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>

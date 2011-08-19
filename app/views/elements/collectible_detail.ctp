@@ -11,6 +11,15 @@
 			<h2>
 			<?php echo $title;?>
 			</h2>
+			<div class="actions">
+	    		<ul>
+	    			<?php 
+	    				if($isLoggedIn) {
+	    					echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectiblesUser/add/'.$collectibleDetail['Collectible']['id'].'"><img src="/img/icon/add_stash_link.png"/></a></li>';
+	    				}
+	    			?>
+	    		</ul>
+    		</div>	 
 		</div>
 		<div class="component-view">
 			<div class="collectible links">
