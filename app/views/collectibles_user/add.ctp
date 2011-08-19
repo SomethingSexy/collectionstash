@@ -1,10 +1,14 @@
 <div class="component">
 	<div class="inside" >
+	  <div class="component-title">
+	    <h2><?php __('Add to Stash') ?></h2> 
+	  </div>		
+		<?php echo $this -> element('flash');?>		
 	  <div class="component-info">
 	    <div><?php __('Tell us about your collectible.') ?></div> 
 	  </div>
 	  <div class="component-view">
-	    <?php echo $this->Form->create('CollectiblesUser');?>
+	    <?php echo $this->Form->create('CollectiblesUser', array('url'=>'/collectiblesUser/add'));?>
 	      <fieldset>
 	        <ul class="form-fields">
 	          <li>
@@ -34,7 +38,7 @@
 	          <?php echo $this->Form->hidden('CollectiblesUser.collectible_id');?>
 	        </ul>
 	      </fieldset>
-	    <?php echo $this->Form->end();?>          
+	    <?php echo $this->Form->end('Add');?>          
 	  </div>
 	</div>
 </div>

@@ -5,6 +5,7 @@
 			<?php __('Your Collectible Details');?>
 			</h2>
 		</div>
+		<?php echo $this -> element('flash');?>		
 		<div class="component-view">
 				<div class="collectible links">
 					<?php echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectible['Collectible']['id']));?>

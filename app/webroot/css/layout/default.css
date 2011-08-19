@@ -77,6 +77,22 @@ a:active {
 	border-radius: 10px 10px 0 0;
 	padding: 1em;
 }
+
+.component .inside .component-title {
+	overflow: hidden;
+}
+.component .inside .component-title .actions {
+	float: right;
+	margin-right: 20px;
+	display: inline;
+}
+.component .inside .component-title .actions ul li a {
+    background: none repeat scroll 0 0 transparent;
+    border: none;
+	box-shadow: none;
+	padding: 0;
+	margin: 0;
+}
 .component .component-title h2 {
     clear:both;
     font-weight: bold;
@@ -601,19 +617,13 @@ a:active {
 	padding-right: 1em;
 	padding-bottom: 1em;
 }
-#my-stashes-component .inside .component-title {
-	overflow: hidden;
-}
+
 #my-stashes-component .inside .component-title h2 {
 	width: 50%;
 	clear: none;
 	float: left;
 }
-#my-stashes-component .inside .component-title .actions {
-	float: right;
-	margin-right: 20px;
-	display: inline;
-}
+
 #my-stashes-component .inside .component-title .actions .link.glimpse-link ,
 #my-stashes-component .inside .component-title .actions .link.add-stash-link, 
 #my-stashes-component .inside .component-title .actions .link.detail-link {
@@ -627,12 +637,7 @@ a:active {
 	width: 16px;
 	position: relative;
 }
-#my-stashes-component .inside .component-title .actions ul li a{
-	border: none;
-	box-shadow: none;
-	padding: 0;
-	margin: 0;
-}
+
 #my-stashes-component .inside .component-view .glimpse {
 	float: left;
 	width: 80%;
@@ -662,9 +667,14 @@ a:active {
 	margin-right: 0;
 	
 }
-
+#collectible-detail .inside .component-title h2 {
+	clear: none;
+	width: 50%;
+	float: left;
+}
 #collectible-detail .component-view {
 	overflow: hidden; /* contain floats */
+	padding-top: 0;
 	
 }
 
@@ -676,6 +686,7 @@ a:active {
 #collectible-detail .component-view .links {
 	width: 100%;
 	text-align: left;
+	margin-bottom: 0.5em;
 }
 #collectible-detail .component-view .links a {
 	font-size: 0.75em;
@@ -1286,6 +1297,13 @@ div.paging span a {
 
 .add-to-collection {
   cursor: pointer;
+  background:url("/img/icon/add_stash_link_25x25.png") no-repeat left top;
+  width: 25px;
+  height: 27px;
+      background-repeat: no-repeat;
+    display: block;
+    overflow: hidden;
+    text-indent: -99999px;
 }
 
 

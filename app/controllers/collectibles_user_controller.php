@@ -50,8 +50,14 @@ class CollectiblesUserController extends AppController {
 			} else {
 				$this -> Session -> setFlash(__('Invalid collectible', true));
 				$this -> redirect($this -> referer());
-			}
+			}		
 		}
+		$conditions = $this -> CollectiblesUser -> Condition -> find("list", array('order'=>array('Condition.name'=>'ASC')));
+			
+		$merchants = $this -> CollectiblesUser -> Merchant -> find("list", array('order'=>array('Merchant.name'=>'ASC')));
+			
+		$this -> set(compact('conditions'));
+		$this -> set(compact('merchants'));
 	}
 
 	function edit($id = null) {
@@ -79,6 +85,7 @@ class CollectiblesUserController extends AppController {
 	}
 
 	function remove($id = null) {
+		$this -> checkLogIn();
 		if(!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
@@ -96,18 +103,13 @@ class CollectiblesUserController extends AppController {
 			}
 		}
 	}
-	
-	public function registry($id =null) {
-		if($this -> isLoggedIn()) {
-			if($id) {
-				$this -> loadModel('CollectiblesUser');
-				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id);
-				debug($usersWho);
-				$this -> set('usersWho', $usersWho);
-			}
 
-		} else {
-			$this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
+	public function registry($id = null) {
+		$this -> checkLogIn();
+		if($id) {
+			$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id);
+			debug($usersWho);
+			$this -> set('usersWho', $usersWho);
 		}
 	}
 
