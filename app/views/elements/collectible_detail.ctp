@@ -25,7 +25,7 @@
 			<div class="collectible links">
 				<?php
 				if($showWho) {
-					echo $html -> link('Who has it?', array('controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
+					echo $html -> link('Registry', array('controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
 				}
 				// if(isset($showEdit) && $showEdit) {
 					// echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));

@@ -4,7 +4,13 @@ class CollectiblesUser extends AppModel {
 	var $name = 'CollectiblesUser';
 	var $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User', 'Condition', 'Merchant');
 	var $actsAs = array('Revision', 'Containable');
-	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'));
+	var $validate = array(
+		'cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 
+		'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 
+		'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 
+		'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
+		'purchase_date' => array('rule' => array('date','mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.')
+		);
 
 	function beforeSave() {
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);

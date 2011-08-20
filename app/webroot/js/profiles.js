@@ -1,6 +1,7 @@
 var inviteAccount = function() {
 
 	function _viewSuccess(data) {
+		stashAccount.close();
 		$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').children().remove();
 		$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').removeClass('empty');	
 		if(!isNaN(parseFloat(data.responseData.remaining)) && isFinite(data.responseData.remaining)) {
@@ -45,6 +46,7 @@ var inviteAccount = function() {
 		$('#account-invites').children('div.body').children('.account.detail.view').show();
 		$('#account-invites').children('div.body').children('.account.detail.update').hide();
 		$('#account-invites').children('div.body').show();
+		$('#account-invites').children('.header').children('span.action').children('a').text('Close');
 		$('#account-invites').addClass('selected');
 	}
 
@@ -58,6 +60,7 @@ var inviteAccount = function() {
 	}
 
 	function viewInvites() {
+	
 		$.ajax({
 			type: "POST",
 			dataType:  'json',
@@ -107,11 +110,23 @@ var inviteAccount = function() {
 	
 		return true;
 	}
+	
+	function _close() {
+		$('#account-invites').children('div.body').children('.account.detail.view').hide();
+		$('#account-invites').children('div.body').children('.account.detail.update').hide();
+		$('#account-invites').children('div.body').hide();
+		$('#account-invites').children('.header').children('span.action').children('a').text('View');
+		$('#account-invites').removeClass('selected');			
+	}
 
 	return {
 		init : function() {
 			$('#account-invites').children('.header').children('span.action').children('a').click( function() {
-				viewInvites();
+				if($('#account-invites').hasClass('selected')){
+					_close();
+				} else {
+					viewInvites();	
+				}
 			});
 			$('#invite-user').click( function() {
 				invite();
@@ -141,9 +156,84 @@ var inviteAccount = function() {
 		},
 		update : function() {
 
+		},
+		close : function() {
+			_close();
 		}
 	};
 }();
+
+var stashAccount = function() {
+	
+	function _viewSuccess(data) {
+		inviteAccount.close();
+		
+		if(data.responseData.privacy) {
+			$('#stash-privacy').attr('checked', true);	
+		} else {
+			$('#stash-privacy').attr('checked', false);
+		}
+		
+		
+		$('#account-stash').children('div.body').children('.account.detail.update').show();
+		$('#account-stash').children('div.body').show();
+		$('#account-stash').children('.header').children('span.action').children('a').text('Close');
+		$('#account-stash').addClass('selected');		
+	}
+	
+	function viewStashDetails() { 
+		
+		$.ajax({
+			type: "POST",
+			dataType:  'json',
+			url: '/stashs/profileSettings.json',
+			//data: "name=John&location=Boston",
+			success: function(data, textStatus, XMLHttpRequest) {
+				if(data.success.isSuccess) {
+					_viewSuccess(data);
+				} else {
+					if(data.isTimeOut) {
+						window.location = "/users/login";
+					} else {
+			
+					}
+				}
+
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+
+			}
+		});		
+
+	}
+	
+	function _close(){
+		$('#account-stash').children('div.body').children('.account.detail.update').hide();
+		$('#account-stash').children('div.body').hide();	
+		$('#account-stash').children('.header').children('span.action').children('a').text('View');
+		$('#account-stash').removeClass('selected');	
+	}
+	
+	return {
+		init : function() {
+			$('#account-stash').children('.header').children('span.action').children('a').click( function() {
+				if($('#account-stash').hasClass('selected')){
+					_close();
+				} else {
+					viewStashDetails();	
+				}				
+			});
+		},
+		update : function() {
+
+		},
+		close : function() {
+			_close();
+		}
+	};
+}();
+
 $( function() {
 	inviteAccount.init();
+	stashAccount.init();
 });

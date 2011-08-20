@@ -82,9 +82,11 @@ a:active {
 	overflow: hidden;
 }
 .component .inside .component-title .actions {
-	float: right;
+	/*float: right;
 	margin-right: 20px;
-	display: inline;
+	display: inline;*/
+	position: absolute;
+	right: 20px;
 }
 .component .inside .component-title .actions ul li a {
     background: none repeat scroll 0 0 transparent;
@@ -103,28 +105,29 @@ a:active {
 
 .component .component-message {
   	clear:both;
-  	padding: .5em 0.5em .5em 0;
+  	padding-left: 1em;
+  	padding-bottom: 1em;
 
 }
 .component .component-message.error  {
-	color: #fff;
+	color: #C73E14;
 	font-weight: bold;
-	background: #c73e14;
+	/*background: #c73e14;*/
 }
 .component .component-message.warn  {
-	color: #fff;
+	color: #C73E14;
 	font-weight: bold;
-	background: #c73e14;
+	/*background: #c73e14;*/
 }
 .component .component-message.success  {
-	color: #fff;
+	color: green;
 	font-weight: bold;
-	background: green;
+	/*background: green;*/
 }
 
 .component .component-message span {
  	font-size: .90em;
- 	margin-left: 0.5em;
+ 	/*margin-left: 0.5em;*/
 }
 
 .component .component-view {
@@ -1028,10 +1031,10 @@ input[type=submit]:active {
     width: 262px;
     padding: 5px;
     clear: both;
-	color: #fff;
+	color: #c73e14;;
 	font-size: 100%;
 	font-weight: bold;
-	background: #c73e14;
+	/*background: #c73e14;*/
 }
 
 
@@ -1512,5 +1515,9 @@ div.paging span a {
 	font-size: 0.75em;
 }
 
-
-
+/*****************************
+ * collectible user add
+ */
+#CollectiblesUserPurchaseDate {
+	width: 75px;
+}

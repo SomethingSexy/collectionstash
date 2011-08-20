@@ -1,3 +1,5 @@
+
+
 <div class="component">
 	<div class="inside" >
 	  <div class="component-title">
@@ -34,6 +36,12 @@
 	              <label for="CollectiblesUserMerchantId"><?php __('Where did you purchase the collectible?') ?></label>
 	            </div> 
 	            <?php echo $this->Form->input('merchant_id', array('div' =>  false, 'label' => false));?>
+	          </li>
+	          <li>
+	            <div class="label-wrapper">
+	              <label for=""><?php __('When did you purchase this collectible?') ?></label>
+	            </div> 
+	            <?php echo $this->Form->input('purchase_date', array('div' =>  false, 'label' => false ,'maxLength'=>8));?>
 	          </li> 
 	          <?php echo $this->Form->hidden('CollectiblesUser.collectible_id');?>
 	        </ul>
@@ -42,3 +50,8 @@
 	  </div>
 	</div>
 </div>
+<script>
+	$(function() {
+		$( "#CollectiblesUserPurchaseDate" ).datepicker();
+	});
+</script>

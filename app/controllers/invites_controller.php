@@ -51,10 +51,6 @@ class InvitesController extends AppController {
 					Configure::write('debug', 0);
 					//$this->render('../json/add');
 				}
-				/*
-				 * TODO if admin, they get an unlimited amount of invites
-				 * Now I need to send email!
-				 */
 				$user = $this -> getUser();
 				$addCount = $user['User']['invite_count'] + 1;
 				if($this -> isUserAdmin()) {

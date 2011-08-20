@@ -43,7 +43,10 @@ class Stash extends AppModel {
 		return $valid;
 	}
 
-	var $validate = array('name' => array('validValues' => array('rule' => '/^[\\w\\s-]+$/', 'message' => 'Alphanumeric only'), 'length' => array('rule' => array('maxLength', 50), 'message' => 'Max length of 50.'), ));
+	var $validate = array(
+		'name' => array('validValues' => array('rule' => '/^[\\w\\s-]+$/', 'message' => 'Alphanumeric only'), 'length' => array('rule' => array('maxLength', 50), 'message' => 'Max length of 50.')),
+		'privacy' => array('rule'=>array('inList', array('0','1')), 'message' => 'That value does not seem right.')
+		);
 
 	public function getStashDetails($userId) {
 		$this -> Behaviors -> attach('Containable');

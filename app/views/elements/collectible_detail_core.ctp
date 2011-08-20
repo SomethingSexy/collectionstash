@@ -32,6 +32,18 @@
 			</div>
 			<dl>
 				<dt>
+					<?php __('Added By');?>
+				</dt>
+				<dd>
+					<?php echo $collectibleCore['User']['username'];?>
+				</dd>
+				<dt>
+					<?php __('Date Added');?>
+				</dt>
+				<dd>
+					<?php echo $collectibleCore['Collectible']['created'];?>
+				</dd>
+				<dt>
 					<?php __('Manufacture');?>
 				</dt>
 				<dd>

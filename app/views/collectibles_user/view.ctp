@@ -29,6 +29,12 @@
 					<div class="collectible detail">
 						<dl>
 							<dt>
+								<?php __('Date Added');?>
+							</dt>
+							<dd>
+								<?php echo $collectible['CollectiblesUser']['created'];?>
+							</dd>
+							<dt>
 								<?php __('Manufacture');?>
 							</dt>
 							<dd>

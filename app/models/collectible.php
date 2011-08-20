@@ -12,7 +12,8 @@
         'Series' => array(
              'className' => 'Series','foreignKey'=>'series_id'),
         'Scale',
-		'Retailer');
+		'Retailer',
+		'User' => array('counterCache' => true));
 
 	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible', 'CollectiblesTag');
 
