@@ -34,6 +34,16 @@
 				echo '<p class="">'. $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 			}
 			?>
+			<div class="paging">
+				<p>
+					<?php
+					echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+					?>
+				</p>
+				<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
+				<?php echo $this -> Paginator -> numbers();?>
+				<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+			</div>
     </div>    
   </div>
 </div>

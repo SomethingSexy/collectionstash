@@ -36,6 +36,8 @@ class AttributesCollectiblesController extends AppController {
 						//debug($this -> AttributesCollectible);
 						if($attribue['action'] === 'D') {
 							$this -> AttributesCollectible -> id = $attribue['id'];
+							//If we are deleting then set the active state to zero, I believe this is for history purposes.
+							//however, it looks like it is changing the originally added one...need to verify this.
 							if($this -> AttributesCollectible -> save(array('active'=>0), false, array('active'))) {
 
 							}

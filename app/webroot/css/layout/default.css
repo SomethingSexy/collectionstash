@@ -103,29 +103,29 @@ a:active {
 }
 /* messages, errors, success */
 
-.component .component-message {
+.component-message {
   	clear:both;
   	padding-left: 1em;
   	padding-bottom: 1em;
 
 }
-.component .component-message.error  {
+.component-message.error  {
 	color: #C73E14;
 	font-weight: bold;
 	/*background: #c73e14;*/
 }
-.component .component-message.warn  {
+.component-message.warn  {
 	color: #C73E14;
 	font-weight: bold;
 	/*background: #c73e14;*/
 }
-.component .component-message.success  {
+.component-message.success  {
 	color: green;
 	font-weight: bold;
 	/*background: green;*/
 }
 
-.component .component-message span {
+.component-message span {
  	font-size: .90em;
  	/*margin-left: 0.5em;*/
 }

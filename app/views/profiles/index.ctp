@@ -44,6 +44,7 @@
 		<div class="header"><span class="page"><?php __('Stash');?></span><span class="action"><a class="link"><?php __('View');?></a></span></div>
 		<div class="body">
 			<div class="account detail update">
+				<div class='component-message'><span></span></div>				
 				<div class="account directional">
 					<p><?php __('To make your stash private, please check the box below and submit.') ?></p>
 				</div>
@@ -55,7 +56,8 @@
 								<div class="label-wrapper">
 									<label for="stash-privacy"><?php __('Private Stash?') ?></label>
 								</div>
-								<input id="stash-privacy" type="checkbox" value="1" name="data[Stash][privacy]" value=""/>
+								<input id="stash-privacy" type="checkbox" value=""/>
+								<input id="stash-privacy-hidden" type="hidden" value="" name="data[Stash][privacy]" value=""/>
 							</li>
 						</ul>
 					</fieldset>

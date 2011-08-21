@@ -147,62 +147,62 @@ class StashsController extends AppController {
 
 	}
 
-	public function add() {
-		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-		$username = $this -> getUsername();
-		//TODO make sure the stash you are adding to is the same as the person logged in
-		if ($username) {
-			//check to see they passed in data for the add
-			if (!empty($this -> data)) {
+	// public function add() {
+	// $this -> data = Sanitize::clean($this -> data, array('encode' => false));
+	// $username = $this -> getUsername();
+	// //TODO make sure the stash you are adding to is the same as the person logged in
+	// if ($username) {
+	// //check to see they passed in data for the add
+	// if (!empty($this -> data)) {
+	//
+	// if ($this -> RequestHandler -> isAjax()) {
+	// Configure::write('debug', 0);
+	// }
+	//
+	// $userId = $this -> getUserId();
+	// $this -> loadModel('User');
+	// $this -> User -> id = $this -> getUserId();
+	// $this -> data['Stash']['user_id'] = $userId;
+	// $user = $this -> User -> find();
+	// $this -> data['Stash']['total_count'] = $user['User']['stash_count'];
+	// $this -> User -> Stash -> create();
+	// if ($this -> User -> Stash -> save($this -> data)) {
+	// $this -> set('aStash', array('success' => array('isSuccess' => true, 'message' => __('You have successfully created a new Stash.', true))));
+	// } else {
+	// $this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> User -> Stash -> validationErrors)));
+	// }
+	// } else {
+	// $this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
+	// }
+	// } else {
+	// $this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
+	// }
+	// }
 
-				if ($this -> RequestHandler -> isAjax()) {
-					Configure::write('debug', 0);
-				}
-
-				$userId = $this -> getUserId();
-				$this -> loadModel('User');
-				$this -> User -> id = $this -> getUserId();
-				$this -> data['Stash']['user_id'] = $userId;
-				$user = $this -> User -> find();
-				$this -> data['Stash']['total_count'] = $user['User']['stash_count'];
-				$this -> User -> Stash -> create();
-				if ($this -> User -> Stash -> save($this -> data)) {
-					$this -> set('aStash', array('success' => array('isSuccess' => true, 'message' => __('You have successfully created a new Stash.', true))));
-				} else {
-					$this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> User -> Stash -> validationErrors)));
-				}
-			} else {
-				$this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-			}
-		} else {
-			$this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-		}
-	}
-
-	public function remove() {
-		$this -> autoRender = false;
-		$username = $this -> getUsername();
-		if ($username) {
-			//check to see they passed in data for the add
-			if (!empty($this -> data)) {
-				//Grab the stash we are trying to remove
-				$stashForEdit = $this -> Stash -> findById($this -> data['Stash']['id']);
-
-				//Check to make sure that the user id tied to this stash is the one logged in
-				if ($stashForEdit['Stash']['user_id'] == $this -> getUserId()) {
-
-					$this -> Stash -> id = $this -> data['Stash']['id'];
-					if ($this -> Stash -> delete()) {
-						$this -> Session -> setFlash(__('You have successfully deleted stash ' . $stashForEdit['Stash']['name'] . '.', true), null, null, 'success');
-						$this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
-					}
-				}
-			}
-		}
-
-		$this -> Session -> setFlash(__('There was a problem trying to delete your stash.', true), null, null, 'success');
-		$this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
-	}
+	// public function remove() {
+	// $this -> autoRender = false;
+	// $username = $this -> getUsername();
+	// if ($username) {
+	// //check to see they passed in data for the add
+	// if (!empty($this -> data)) {
+	// //Grab the stash we are trying to remove
+	// $stashForEdit = $this -> Stash -> findById($this -> data['Stash']['id']);
+	//
+	// //Check to make sure that the user id tied to this stash is the one logged in
+	// if ($stashForEdit['Stash']['user_id'] == $this -> getUserId()) {
+	//
+	// $this -> Stash -> id = $this -> data['Stash']['id'];
+	// if ($this -> Stash -> delete()) {
+	// $this -> Session -> setFlash(__('You have successfully deleted stash ' . $stashForEdit['Stash']['name'] . '.', true), null, null, 'success');
+	// $this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
+	// }
+	// }
+	// }
+	// }
+	//
+	// $this -> Session -> setFlash(__('There was a problem trying to delete your stash.', true), null, null, 'success');
+	// $this -> redirect(array('controller' => 'users', 'action' => 'home'), null, true);
+	// }
 
 	public function profileSettings() {
 		if ($this -> isLoggedIn()) {
@@ -213,48 +213,45 @@ class StashsController extends AppController {
 
 			$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
 			$profileSettings = array();
-			if($stash['Stash']['privacy'] === '0') {
+			if ($stash['Stash']['privacy'] === '0') {
 				$profileSettings['privacy'] = false;
-			} else if ($stash['Stash']['privacy'] === '1'){
+			} else if ($stash['Stash']['privacy'] === '1') {
 				$profileSettings['privacy'] = true;
 			}
-			
+
 			$this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));
 		} else {
 			$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
 		}
 	}
-	
+
 	public function updateProfileSettings() {
 		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 		if ($this -> isLoggedIn()) {
 			if ($this -> RequestHandler -> isAjax()) {
 				Configure::write('debug', 0);
 			}
-			if(!empty($this -> data)) {
+			if (!empty($this -> data)) {
 				$user = $this -> getUser();
-	
+
 				$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
 
 				$this -> Stash -> id = $stash['Stash']['id'];
-				if(!isset($this -> data['Stash']['privacy'])) {
+				if (!isset($this -> data['Stash']['privacy'])) {
 					$this -> data['Stash']['privacy'] = 0;
 				}
-				if($this -> Stash -> saveField('privacy', $this -> data['Stash']['privacy'])) {
-					$this -> set('aProfileSettings', array('success' => array('isSuccess' => true, 'message' => __('You have successfully created a new Stash.', true))));
+				if ($this -> Stash -> saveField('privacy', $this -> data['Stash']['privacy'])) {
+					$this -> set('aProfileSettings', array('success' => array('isSuccess' => true, 'message' => __('You have successfully updated your settings.', true))));
 				} else {
 					$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> Stash -> validationErrors)));
 				}
-				
-				$this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));				
-				
 			} else {
 				$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'message' => array('There was an issue trying to save your settings.')));
 			}
 
 		} else {
 			$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-		}		
+		}
 	}
 
 	public function view($userId = null) {
@@ -278,12 +275,16 @@ class StashsController extends AppController {
 					}
 					$this -> set('myStash', $viewingMyStash);
 					$this -> set('stashUsername', $userId);
-					if ($stash['Stash']['privacy'] === '0') {
-						$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype'))));
+					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
+						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')),  'limit' => 25);
+						$collectibles = $this -> paginate('CollectiblesUser');
+							
+						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
 						debug($collectibles);
 						$this -> set(compact('collectibles'));
 					} else {
-						//TODO draw private stash
+						$this -> render('viewPrivate');
+						return;
 					}
 				} else {
 					//This is a fucking error

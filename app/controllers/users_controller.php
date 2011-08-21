@@ -71,19 +71,6 @@ class UsersController extends AppController {
 		$this -> redirect('/', null, true);
 	}
 
-	function index() {
-		if($this -> isLoggedIn()) {
-			$this -> set('knownusers', $this -> User -> find('all', array('id', 'username', 'first_name', 'last_name'), 'id DESC'));
-		} else {
-			$this -> redirect( array('action' => 'login'), null, true);
-		}
-
-	}
-
-	function home() {
-
-	}
-
 	function account($view =null) {
 		$username = $this -> getUsername();
 		$user = $this -> getUser();

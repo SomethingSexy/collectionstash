@@ -140,7 +140,9 @@ var inviteAccount = function() {
 				// has been received
 				success: submitSuccess
 			});
-
+			$('#invite-cancel').click( function() {
+				_close();
+			});
 			$('#invite-submit').click( function() {
 				$('#invite-form').submit();
 			})
@@ -170,8 +172,10 @@ var stashAccount = function() {
 		
 		if(data.responseData.privacy) {
 			$('#stash-privacy').attr('checked', true);	
+			$('#stash-privacy-hidden').val('1');
 		} else {
 			$('#stash-privacy').attr('checked', false);
+			$('#stash-privacy-hidden').val('0');
 		}
 		
 		
@@ -182,7 +186,7 @@ var stashAccount = function() {
 	}
 	
 	function viewStashDetails() { 
-		
+		$('#account-stash').children('div.body').children('.account.detail.update').children('.component-message').hide();
 		$.ajax({
 			type: "POST",
 			dataType:  'json',
@@ -207,10 +211,38 @@ var stashAccount = function() {
 
 	}
 	
+	function submitSuccess (data) {
+		$('#account-stash').children('div.body').children('.account.detail.update').children('#ajax-loader').remove();
+		$('#account-stash').children('div.body').children('.account.detail.update').children().show();
+		$('#account-stash').children('div.body').children('.account.detail.update').children('.component-message').removeClass('success').removeClass('error').children('span').text('');
+		if(data.success.isSuccess) {
+			$('#account-stash').children('div.body').children('.account.detail.update').children('.component-message').show().addClass('success').children('span').text(data.success.message);	
+
+		} else {
+			if(data.isTimeOut) {
+				window.location = "/users/login";
+			} else {
+				$('#account-invites').children('div.body').children('.account.detail.update').children('#ajax-loader').remove();
+				$('#account-invites').children('div.body').children('.account.detail.update').children().show();
+				if(data.errors[0]['email']) {
+					$('#invite-email').after('<div class="error-message">'+ data.errors[0]['email'] +'</div>');
+				}
+			}
+		}		
+	}
+	
+	function beforeSubmit () {
+		$('#account-stash').children('div.body').children('.account.detail.update').children().hide();
+		$('#account-stash').children('div.body').children('.account.detail.update').append("<img id='ajax-loader' src='/img/ajax-loader.gif'/>");
+	
+		return true;		
+	}
+	
 	function _close(){
 		$('#account-stash').children('div.body').children('.account.detail.update').hide();
 		$('#account-stash').children('div.body').hide();	
 		$('#account-stash').children('.header').children('span.action').children('a').text('View');
+		$('#account-stash').children('div.body').children('.account.detail.update').children('.component-message').hide().removeClass('success').removeClass('error').children('span').text('');
 		$('#account-stash').removeClass('selected');	
 	}
 	
@@ -223,6 +255,28 @@ var stashAccount = function() {
 					viewStashDetails();	
 				}				
 			});
+			$('#stash-form').ajaxForm({
+				// dataType identifies the expected content type of the server response
+				dataType:  'json',
+				url: '/stashs/updateProfileSettings.json',
+				beforeSubmit:  beforeSubmit,
+				// success identifies the function to invoke when the server response
+				// has been received
+				success: submitSuccess
+			});
+			$('#stash-submit').click( function() {
+				$('#stash-form').submit();
+			});
+			$('#stash-cancel').click( function() {
+				_close();
+			});
+			$('#stash-privacy').change(function(){
+				if($(this).is(':checked')){
+					$('#stash-privacy-hidden').val('1');
+				} else {
+					$('#stash-privacy-hidden').val('0');
+				}
+			})
 		},
 		update : function() {
 

@@ -620,7 +620,10 @@ class CollectiblesController extends AppController {
 		}
 		/* Since they confirmed, now set to pending = 1.  I really don't like how
 		 this is setup right now but it works because of the image thing.
-		 A 1 means that this collectible needs to be approved by an admin first */
+		 A 1 means that this collectible needs to be approved by an admin first 
+		 * 
+		 * TODO: If we are not auto approving, then do we need to make sure that attributes_collectible is set to not active?
+		 * */
 		$pendingState = '1';
 		if($this -> isUserAdmin() || Configure::read('Settings.Approval.auto-approve') == 'true') {
 			$pendingState = '0';
