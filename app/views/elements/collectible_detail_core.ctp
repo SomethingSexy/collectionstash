@@ -31,18 +31,22 @@
 				} ?>
 			</div>
 			<dl>
-				<dt>
-					<?php __('Added By');?>
-				</dt>
-				<dd>
-					<?php echo $collectibleCore['User']['username'];?>
-				</dd>
-				<dt>
-					<?php __('Date Added');?>
-				</dt>
-				<dd>
-					<?php echo $collectibleCore['Collectible']['created'];?>
-				</dd>
+				<?php if(isset($showAddedBy) && $showAddedBy) {
+					echo '<dt>';
+					echo __('Added By');
+					echo '</dt>';
+					echo '<dd>';
+					echo $collectibleCore['User']['username'];
+					echo '</dd>';					
+				} ?>
+				<?php if(isset($showAddedDate) && $showAddedDate) {
+					echo '<dt>';
+					echo __('Date Added');
+					echo '</dt>';
+					echo '<dd>';
+					echo $collectibleCore['Collectible']['created'];
+					echo '</dd>';					
+				} ?>
 				<dt>
 					<?php __('Manufacture');?>
 				</dt>

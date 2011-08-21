@@ -10,6 +10,8 @@
 			'showHistory' => true,
 			'showVariants' => true,
 			'setPageTitle' => true,
+			'showAddedBy' => true,
+			'showAddedDate' => true,
 			'collectibleDetail' => $collectible
 		));		
 		
@@ -21,6 +23,8 @@
 			'showEdit' => false,
 			'showVariants' => true,
 			'setPageTitle' => true,
+			'showAddedBy' => true,
+			'showAddedDate' => true,
 			'collectibleDetail' => $collectible
 		));			
 	}

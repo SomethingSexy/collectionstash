@@ -99,6 +99,13 @@
 							<li>
 								<?php echo $html -> link('Account', array('controller' => 'profiles'));?>
 							</li>
+							<?php
+							if($isUserAdmin)
+							{ ?>
+								<li>
+									<?php echo $html -> link('Admin', array('action' => 'index', 'controller' => 'adminCollectibles'));?>
+								</li>
+							<?php }?>
 							<li>
 								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>
 							</li>
@@ -133,22 +140,6 @@
 									echo $html -> link('My Stash', array('controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
 								?>
 							</li>
-							<?php
-							if($isUserAdmin)
-							{ ?>
-							<li>
-								<a class="parent-subnav">Admin</a>
-								<ul class="subnav">
-									<li>
-										<?php echo $html -> link('Pending Submissions', array('action' => 'index', 'controller' => 'adminCollectibles'));?>
-									</li>
-									<li>
-										<a href="#">Sub Nav Link</a>
-									</li>
-								</ul>
-							</li>
-							<?php }?>
-
 							<?php  }
    							?>
    							<li>

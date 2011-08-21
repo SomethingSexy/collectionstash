@@ -54,13 +54,21 @@
 				}
 				if(!isset($editManufactureUrl)){
 					$editManufactureUrl = '';
+				}	
+				if(!isset($showAddedBy)){
+					$showAddedBy = false;
+				}
+				if(!isset($showAddedDate)){
+					$showAddedDate = false;
 				}				
 				echo $this->element('collectible_detail_core', array(
 				'showEdit' => $showEdit,
 				'editImageUrl'=> $editImageUrl,
 				'editManufactureUrl' => $editManufactureUrl,
 				'showStatistics' => $showStatistics,
-				'collectibleCore' => $collectibleDetail
+				'collectibleCore' => $collectibleDetail,
+				'showAddedBy' => $showAddedBy,
+				'showAddedDate' => $showAddedDate,
 			));		?>	
 			
 		</div>
