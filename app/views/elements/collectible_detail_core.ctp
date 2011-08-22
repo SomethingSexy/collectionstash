@@ -44,7 +44,9 @@
 					echo __('Date Added');
 					echo '</dt>';
 					echo '<dd>';
-					echo $collectibleCore['Collectible']['created'];
+					$datetime = strtotime($collectibleCore['Collectible']['created']);
+					$mysqldate = date("m/d/y g:i A", $datetime);
+					echo $mysqldate;
 					echo '</dd>';					
 				} ?>
 				<dt>

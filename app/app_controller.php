@@ -99,6 +99,12 @@ class AppController extends Controller {
 			$this -> handleNotLoggedIn();
 		}
 	}
+	
+	public function checkAdmin() {
+		if(!$this -> isUserAdmin()) {
+			$this -> handleNotLoggedIn();
+		}
+	}
 
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code

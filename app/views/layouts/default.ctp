@@ -90,24 +90,24 @@
 				<div class="box">
 					<ul class="nav">
 							<li>
-								<?php echo $html -> link('Home', array('controller' => '/'));?>
+								<?php echo $html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
 							</li>
 							<?php
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 
 							<li>
-								<?php echo $html -> link('Account', array('controller' => 'profiles'));?>
+								<?php echo $html -> link('Account', array('admin'=> false, 'controller' => 'profiles'));?>
 							</li>
 							<?php
 							if($isUserAdmin)
 							{ ?>
 								<li>
-									<?php echo $html -> link('Admin', array('action' => 'index', 'controller' => 'adminCollectibles'));?>
+									<?php echo $html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
 								</li>
 							<?php }?>
 							<li>
-								<?php echo $html -> link('Logout', array('action' => 'logout', 'controller' => 'users'));?>
+								<?php echo $html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
 							</li>
 							<?php  }
 								else
@@ -137,16 +137,16 @@
 							<li>
 								<?php 
 									$user = $session->read('user');
-									echo $html -> link('My Stash', array('controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
+									echo $html -> link('My Stash', array('admin'=> false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
 								?>
 							</li>
 							<?php  }
    							?>
    							<li>
-								<?php echo $html -> link('Contribute', array('action' => 'addSelectType', 'controller' => 'collectibles'));?>
+								<?php echo $html -> link('Contribute', array('admin'=> false, 'action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
    							<li>
-								<?php echo $html -> link('Tags', array('controller' => 'tags'));?>
+								<?php echo $html -> link('Tags', array('admin'=> false, 'controller' => 'tags'));?>
 							</li>
 						</ul>
 						<div class="site-search">

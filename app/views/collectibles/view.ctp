@@ -12,7 +12,8 @@
 			'setPageTitle' => true,
 			'showAddedBy' => true,
 			'showAddedDate' => true,
-			'collectibleDetail' => $collectible
+			'collectibleDetail' => $collectible,
+			'showAddStash' => true
 		));		
 		
 	} else {

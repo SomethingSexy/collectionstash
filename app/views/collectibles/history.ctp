@@ -7,23 +7,41 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-	        <table class="history">
-	        	<tr>
-	        		<th><?php echo __('User');?></th>
-	        		<th><?php echo __('Time of Edit');?></th>
-	        	</tr>
-	        <?php  
-	        foreach ($history as $historyEntry):
-	        ?>
-				<tr>
-					<td><?php echo $historyEntry['Collectible']['user_name']; ?></td>
-					<td><?php 
-						$datetime = strtotime($historyEntry['Collectible']['version_created']);
-						$mysqldate = date("m/d/y g:i A", $datetime);
-					echo $html->link($mysqldate, array('action' => 'historyDetail', $historyEntry['Collectible']['id'], $historyEntry['Collectible']['version_id']));?></td>
-				</tr>
-	        <?php endforeach; ?>  
-	        </table>
+			<div class="collectible detail collectible-history">
+				<div class="detail title">
+					<h3><?php __('Collectible History'); ?></h3>
+				</div>
+				<div class="standard-list">
+			        <ul >
+			        	<li class="title">
+			        		<span class="user"><?php echo __('User');?></span>
+			        		<span class="date"><?php echo __('Date');?></span>
+			        		<span class="action"><?php echo __('Action');?></span>
+			        	</li>
+			        <?php  
+			        foreach ($history as $historyEntry):
+			        ?>
+						<li>
+							<span class="user"><?php echo $historyEntry['Collectible']['user_name']; ?></span>
+							<span class="date"><?php 
+								$datetime = strtotime($historyEntry['Collectible']['version_created']);
+								$mysqldate = date("m/d/y g:i A", $datetime);
+							echo $html->link($mysqldate, array('action' => 'historyDetail', $historyEntry['Collectible']['id'], $historyEntry['Collectible']['version_id']));?></span>
+							<span class="action"><?php 
+								if($historyEntry['Collectible']['action'] === 'A'){
+									echo __('Added');
+								} else if($historyEntry['Collectible']['action'] === 'E') {
+									echo __('Update');
+								} else if($historyEntry['Collectible']['action'] === 'D'){
+									echo __('Delete');
+								} else if($historyEntry['Collectible']['action'] === 'P'){
+									echo __('Approved');
+								}?></span>
+						</li>
+			        <?php endforeach; ?>  
+			        </ul>
+		        </div>
+	       	</div>
 	        <div class="collectible detail">
 			<div class="detail title">
 				<h3><?php __('Accessories/Features History'); ?></h3>

@@ -14,7 +14,7 @@
 			<div class="actions">
 	    		<ul>
 	    			<?php 
-	    				if($isLoggedIn) {
+	    				if(isset($showAddStash) && $showAddStash && $isLoggedIn) {
 	    					echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectiblesUser/add/'.$collectibleDetail['Collectible']['id'].'"><img src="/img/icon/add_stash_link.png"/></a></li>';
 	    				}
 	    			?>
@@ -25,7 +25,7 @@
 			<div class="collectible links">
 				<?php
 				if($showWho) {
-					echo $html -> link('Registry', array('controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
+					echo $html -> link('Registry', array('admin'=> false, 'controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
 				}
 				// if(isset($showEdit) && $showEdit) {
 					// echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));
@@ -70,7 +70,11 @@
 				'showAddedBy' => $showAddedBy,
 				'showAddedDate' => $showAddedDate,
 			));		?>	
-			
+			<?php if(isset($adminMode) && $adminMode){
+				echo $this -> Form -> create('Collectible', array('url' => '/admin/collectibles/approve/'.$collectibleDetail['Collectible']['id']));
+				echo $this -> Form -> end(__('Approve', true));
+	
+			}?>
 		</div>
 	</div>
 </div>

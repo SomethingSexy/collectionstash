@@ -14,7 +14,7 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
 		'allow-invites' => true
 	),
   	'Approval' => array (
-		'auto-approve' => 'true'
+		'auto-approve' => 'false'
   	),
   	'Stash' => array (
 		'total-allowed' => '1'

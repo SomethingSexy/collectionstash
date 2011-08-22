@@ -576,7 +576,8 @@ a:active {
 } 
 .attributes-list ul li .attribute-label,
 .attributes-list ul li .attribute-name,
-.attributes-list ul li .attribute-description {
+.attributes-list ul li .attribute-description,
+.attributes-list ul li .attribute-status {
 	float: left;
 	white-space: normal;
 }
@@ -710,7 +711,23 @@ a:active {
 #collectible-history-list-component {
 	width: 100%;
 }
-
+#collectible-history-list-component .inside .component-view .collectible.detail {
+	clear: both;
+	width: 500px;
+}
+#collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li span {
+	float: left;
+	 font-size: 0.75em;
+}
+#collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li .user {
+	width: 25%;	
+}
+#collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li .date {
+	width: 50%;	
+}
+#collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li .action {
+	width: 25%;	
+}
 #collectible-history-list-component .inside .component-view .history {
 	text-align: left;
 	font-size: 0.75em;

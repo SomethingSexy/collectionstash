@@ -157,6 +157,10 @@ class CollectibleEditController extends AppController {
 		}
 		$this -> loadModel('Collectible');
 		if(!empty($this -> data)) {
+			if(!$this -> Session -> check('collectible.edit-id')) {
+				//TODO figure out a better place to go, this is the case if some does a submit to this page without doing a GET first to setup all of the data
+				$this -> redirect('/');
+			}
 			$this -> data = Sanitize::clean($this -> data);
 			$this -> Collectible -> set($this -> data);
 			$validCollectible = true;
@@ -256,10 +260,12 @@ class CollectibleEditController extends AppController {
 		$this -> checkLogIn();
 		$newCollectible = $this -> Session -> read('preSaveCollectible');
 		debug($newCollectible);
+		//TODO this code needs to be refactored
 		if(!is_null($newCollectible)) {
 			if($this -> isUserAdmin() || Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
 				$this -> loadModel('Collectible');
-				$newCollectible['Collectible']['user_id'] = $this -> getUserId();
+				$newCollectible['Collectible']['edit_user_id'] = $this -> getUserId();
+				$newCollectible['Collectible']['action'] = 'E';
 				$this -> Collectible -> id = $newCollectible['Collectible']['collectible_id'];
 				if($this -> Collectible -> save($newCollectible, array('validate' => false))) {
 					$id = $this -> Collectible -> id;
@@ -276,7 +282,8 @@ class CollectibleEditController extends AppController {
 				}
 			} else {
 				$saveCollectible['CollectibleEdit'] = $newCollectible['Collectible'];
-				$saveCollectible['CollectibleEdit']['user_id'] = $this -> getUserId();
+				$saveCollectible['CollectibleEdit']['edit_user_id'] = $this -> getUserId();
+				$saveCollectible['CollectibleEdit']['action'] = 'E';
 				if(isset($newCollectible['AttributesCollectible'])) {
 					$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
 				}
