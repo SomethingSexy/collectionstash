@@ -642,12 +642,17 @@ a:active {
 	position: relative;
 }
 
-#my-stashes-component .inside .component-view .glimpse {
+.glimpse {
 	float: left;
 	width: 80%;
 }
-
-#my-stashes-component .inside .component-view .glimpse img {
+.glimpse div.line {
+	width: 100%;
+	float: left;
+}
+.glimpse a {
+}
+.glimpse a img {
 	padding: 10px;
 	border: 8px solid #333333;
     border-radius: 8px 8px 8px 8px;
@@ -771,7 +776,7 @@ a:active {
 }
 
 #home-components .random-collectibles {
-	width: 400px;
+	width: 100%;
 }
 #home-components .random-collectibles .inside .component-view {
 	overflow: hidden;

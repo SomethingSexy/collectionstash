@@ -839,12 +839,8 @@ class CollectiblesController extends AppController {
 				
 			}
 				
-		}	
-		
-		//$this -> redirect('index');	
-			
+		}		
 	}
-
 }
 ?>
 

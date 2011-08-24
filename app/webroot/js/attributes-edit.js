@@ -39,13 +39,23 @@ $( function() {
     
     $('.remove-attribute').live('click', function(){
     	var $li = $(this).parent('span').parent('li');
-    	var actionVal = $li.children('input.attribute.action').val();
-    	if(actionVal === 'N') {
-    		$li.remove();
+    	if($(this).text() === 'Remove') {
+	     	var actionVal = $li.children('input.attribute.action').val();
+	    	if(actionVal === 'N') {
+	    		$li.remove();
+	    	} else {
+	    		$li.children('input.attribute.action').val('D');
+	    		$li.css('border','solid 1px red');    	
+	    		$(this).parent('.attribute-action').children('.edit-attribute').hide();	
+	    		$(this).text('Cancel');  
+	    	}      			
     	} else {
-    		$li.children('input.attribute.action').val('D');
-    		$li.css('border','solid 1px red');    	
-    		$(this).parent('.attribute-action').children('.edit-attribute').hide();	
+    		$li.children('input.attribute.action').val('');
+    		$li.css('border','none');  
+    		$li.css('border-bottom','solid 1px #E1E1E1'); 
+    		
+    		$(this).parent('.attribute-action').children('.edit-attribute').show();	
+    		$(this).text('Remove');  
     	}
     });
     
@@ -54,6 +64,7 @@ $( function() {
 	    	var $li = $(this).parent('span').parent('li');
 	    	$li.children('.attribute-description').children('span').hide();
 	    	$li.children('.attribute-description').children('input').show();
+	    	$(this).parent('.attribute-action').children('.remove-attribute').hide();	
 	    	$(this).text('Save');    		
     	} else {
 	    	var $li = $(this).parent('span').parent('li');
@@ -62,6 +73,7 @@ $( function() {
 	    	$li.children('input[type=hidden].attribute.description').val($descriptionVal);
 	    	$li.children('.attribute-description').children('span').show();
 	    	$li.children('.attribute-description').children('input').hide();
+	    	$(this).parent('.attribute-action').children('.remove-attribute').show();
 	    	var $currentAction = $li.children('input.attribute.action').val();
 	    	if($currentAction !== 'D' && $currentAction !== 'N') {
 	    		$li.children('input.attribute.action').val('E');

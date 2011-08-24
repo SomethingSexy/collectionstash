@@ -25,12 +25,15 @@ class CollectiblesUserController extends AppController {
 		$this -> checkLogIn();
 		if(!empty($this -> data)) {
 			$this -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
-
+			$user = $this -> getUser();
+			$stash = $this -> CollectiblesUser -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
+			$this -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
 			$collectible_id = $this -> data['CollectiblesUser']['collectible_id'];
 			debug($this -> data);
-			$this -> loadModel('Collectible');
-			$this -> Collectible -> recursive = -1;
-			$collectible = $this -> Collectible -> findById($collectible_id);
+			//TODO should probably do this in the model
+			//$this -> loadModel('Collectible');
+			$this -> CollectiblesUser -> Collectible -> recursive = -1;
+			$collectible = $this -> CollectiblesUser -> Collectible -> findById($collectible_id);
 			debug($collectible);
 			//Save as a different name so the saveAll doesn't accidently save it
 			$this -> data['TempCollectible'] = $collectible['Collectible'];

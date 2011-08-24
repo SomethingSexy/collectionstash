@@ -67,16 +67,15 @@
 				$('#UserLoginForm').find('#UserUsername').next('div.error-message').remove();
 				$('#login-dialog').dialog('open');
 				return false;
-			});		
-		});
-		//TODO I don't like this here
-		$( function() {
-			$('.form-fields li input').focus( function() {
-				$(this).parent('li').addClass('focused');
+			});	
+			$('#q').focus(function(){
+				var firstTime = $('#q').data('firstTime');
+				if (typeof firstTime === "undefined") {
+					$('#q').val('');
+					$('#q').data('firstTime', false);
+				}
 			});
-			$('.form-fields li input').blur( function() {
-				$(this).parent('li').removeClass('focused');
-			});
+				
 		});
 	</script>
 </head>
@@ -151,7 +150,7 @@
 						</ul>
 						<div class="site-search">
 							<form method="get" action="/collectibles/search">
-								<input id="q" type="text" name="q">
+								<input id="q" type="text" name="q" value="Find By Name">
 							</form>								
 						</div>
 					</div>

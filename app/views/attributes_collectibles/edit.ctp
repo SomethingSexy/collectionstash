@@ -72,7 +72,7 @@
 
 				<?php echo $this -> Form -> end();?>
 				
-				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes' ,'id'=>'skip-attributes-form'));?>
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/collectibles/view/'.$collectibleId ,'id'=>'skip-attributes-form'));?>
 					<input type="hidden" name="data[skip]" value="true" />
 				</form>
 				<div class="links">

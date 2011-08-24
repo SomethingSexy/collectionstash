@@ -41,7 +41,7 @@
 	            <div class="label-wrapper">
 	              <label for=""><?php __('When did you purchase this collectible?') ?></label>
 	            </div> 
-	            <?php echo $this->Form->input('purchase_date', array('div' =>  false, 'label' => false ,'maxLength'=>8));?>
+	            <?php echo $this->Form->text('purchase_date', array('div' =>  false, 'label' => false ,'maxLength'=>8));?>
 	          </li> 
 	          <?php echo $this->Form->hidden('CollectiblesUser.collectible_id');?>
 	        </ul>
