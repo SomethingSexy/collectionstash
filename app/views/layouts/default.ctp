@@ -141,9 +141,11 @@
 							</li>
 							<?php  }
    							?>
+   							<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
    							<li>
 								<?php echo $html -> link('Contribute', array('admin'=> false, 'action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
+							<?php } ?>	
    							<li>
 								<?php echo $html -> link('Tags', array('admin'=> false, 'controller' => 'tags'));?>
 							</li>
