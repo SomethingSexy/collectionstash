@@ -24,6 +24,9 @@ class CollectiblesController extends AppController {
 	 */
 	function addSelectType() {
 		$this -> checkLogIn();
+		if(!Configure::read('Settings.Collectible.Contribute.allowed')) {
+			$this -> redirect('/', null, true);
+		}
 		//Always delete this stuff, this could go in a better spot in the future
 		//Should probably update this so I set to show and not show different things, not put the biz logic in the view
 		$this -> Session -> delete('preSaveCollectible');

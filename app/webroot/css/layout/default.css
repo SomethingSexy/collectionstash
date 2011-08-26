@@ -1437,40 +1437,41 @@ div.paging span a {
 .autocomplete div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
 .autocomplete strong { font-weight:normal; color:#3399FF; }
 
-#account {
+.two-column-page {
 	width: 100%;
 	overflow: hidden;
 	margin-top: 1em;
 }
 
-#account .inside {
+.two-column-page .inside {
 	padding: 1em;
 	overflow: hidden;
 }
 
-#account .inside .actions {
+.two-column-page .inside .actions {
 	float: left;
 	width: 25%;
 }
 
-#account .inside .actions li {
+.two-column-page .inside .actions li {
 	margin-bottom: 10px;
 }
 	
 
-#account .inside .account.page {
+.two-column-page .inside .page {
 	float: left;
 	width: 75%;	
 }
 
-#account .inside .account.page .title {
+.two-column-page .inside .page div.title {
 	border-bottom: 1px solid #656464;
 	overflow: hidden;
+	margin-bottom: 1em;
 }
-#account .inside .account.page .title h2 {
+.two-column-page .inside .page .title h2 {
 	float: left;
 }
-#account .inside .account.page .title.link {
+.two-column-page .inside .page .title.link {
 	float: right;
 	font-size: 0.75em;
 }
@@ -1535,6 +1536,12 @@ div.paging span a {
 	float: left;
 	width: 50%;
 	font-size: 0.75em;
+}
+
+#admin-edit .inside .page .standard-list ul li span {
+	width: 25%;
+	float: left;
+    font-size: 0.75em;
 }
 
 /*****************************

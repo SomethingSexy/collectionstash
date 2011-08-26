@@ -31,6 +31,9 @@
  * @subpackage    cake.app
  */
 class AppModel extends Model {
+	/**
+	 * This loops through each individual return entry after the find so we can more eaily maniulate it.
+	 */
 	public function afterFind($results, $primary =false) {
 		if(method_exists($this, 'doAfterFind')) {
 			if($primary) {

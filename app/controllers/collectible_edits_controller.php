@@ -1,113 +1,10 @@
 <?php
 App::import('Sanitize');
-class CollectibleEditController extends AppController {
-
-	var $name = 'CollectibleEdit';
+/**
+ * This is not a join table, this is the edit controllor for collectibles.  This is why it is named liked this.
+ */
+class CollectibleEditsController extends AppController {
 	var $helpers = array('Html', 'FileUpload.FileUpload');
-	// var $components = array('Wizard.Wizard');
-	//
-	// function beforeFilter() {
-	// parent::beforeFilter();
-	// $this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes','review');
-	// $this -> Wizard -> completeUrl = '/collectibles/confirm';
-	// $this -> Wizard -> loginRequired = true;
-	// }
-	//
-	// function confirm() {
-	// $id = $this -> Session -> read('addCollectibleId');
-	// if(isset($id) && $id != null) {
-	// $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Approval', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
-	// $this -> set('collectible', $collectible);
-	// $this -> Session -> delete('addCollectibleId');
-	// } else {
-	// $this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
-	// $this -> redirect( array('action' => 'addSelectType'));
-	// }
-	// }
-	//
-	// function wizard($step =null) {
-	// $this -> Wizard -> process($step, $this -> isLoggedIn());
-	// }
-	//
-	// function _prepareManufacture() {
-	// $this -> Session -> delete('collectible');
-	// $this -> set('collectible_title', __('Add Collectible', true));
-	// if(empty($this -> data)) {
-	// if(isset($this -> params['pass'][1])) {
-	// $id = $this -> params['pass'][1];
-	// $collectible = $this -> Collectible -> read(null, $id);
-	// //$this -> Session -> write('preSaveCollectible', $collectible);
-	// $this -> data = $collectible;
-	// $this -> Session -> write('collectible.edit-id', $id);
-	// }
-	//
-	//
-	// $manufactureData = $this -> Collectible -> Manufacture -> getManufactureListData();
-	// debug($manufactureData);
-	// $this -> set('manufactures', $manufactureData['manufactures']);
-	// $this -> set('licenses', $manufactureData['licenses']);
-	// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
-	//
-	//
-	// $scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-	// $this -> set(compact('scales'));
-	// } else {
-	// if($this -> Session -> check('add.collectible.mode.variant')) {
-	// $variantCollectible = $this -> Session -> read('add.collectible.variant.collectible');
-	// debug($variantCollectible);
-	// $this -> set('collectible', $variantCollectible);
-	// }
-	// $manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($this -> data['Collectible']['manufacture_id']);
-	// debug($manufactureData);
-	// $this -> set('manufactures', $manufactureData['manufactures']);
-	// $this -> set('licenses', $manufactureData['licenses']);
-	// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
-	//
-	// if(isset($wizardData['manufacture']['Collectible']['series_id'])) {
-	// $series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
-	// $this -> set('series', $series);
-	// }
-	//
-	// $scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-	// $this -> set(compact('scales'));
-	//
-	// }
-	// }
-	//
-	// function _processManufacture() {
-	// //check if user is logged in
-	// if($this -> isLoggedIn()) {
-	// debug($this -> data);
-	// $newCollectible = array();
-	// $this -> data = Sanitize::clean($this -> data);
-	// //Since this is a post, take the data that was submitted and set it to our variable
-	// $newCollectible = $this -> data;
-	// //set default to true
-	// $validCollectible = true;
-	//
-	//
-	// //First try and validate the collectible.
-	// $this -> Collectible -> set($newCollectible);
-	// if($this -> Collectible -> validates()) {
-	//
-	// } else {
-	// debug($this -> Collectible -> invalidFields());
-	// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-	// $validCollectible = false;
-	// }
-	//
-	// if($validCollectible) {
-	//
-	//
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// } else {
-	// $this -> redirect( array('controller' => 'users', 'action' => 'login'), null, true);
-	// }
-	// return false;
-	// }
 
 	/*
 	 * I think I will have a "collectibles_edit" table and potentially going to have to have edit tables for the other related tables.
@@ -131,7 +28,7 @@ class CollectibleEditController extends AppController {
 	 * The special variant details will have their own edit section
 	 *
 	 */
-	function manufacture($id = null) {
+	function edit($id = null) {
 		$this -> checkLogIn();
 		debug($id);
 		debug($this -> params['named']);
@@ -197,7 +94,7 @@ class CollectibleEditController extends AppController {
 			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 			$this -> set(compact('scales'));
 		}
-		
+
 		$currentCollectibleId = $this -> Session -> read('collectible.edit-id');
 		$this -> set(compact('currentCollectibleId'));
 	}
@@ -238,7 +135,8 @@ class CollectibleEditController extends AppController {
 		debug($newCollectible);
 		//TODO this code needs to be refactored
 		if (!is_null($newCollectible)) {
-			if ($this -> isUserAdmin() || Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
+			//if ($this -> isUserAdmin() || Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
+			if (Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
 				$this -> loadModel('Collectible');
 				$newCollectible['Collectible']['edit_user_id'] = $this -> getUserId();
 				$newCollectible['Collectible']['action'] = 'E';
@@ -252,7 +150,7 @@ class CollectibleEditController extends AppController {
 					$this -> Session -> delete('uploadId');
 					$this -> Session -> delete('collectible.edit-id');
 				} else {
-					debug($this -> CollectiblesEdit -> validationErrors);
+					debug($this -> Collectible -> validationErrors);
 					$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					$this -> redirect(array('action' => 'review'));
 				}
@@ -263,10 +161,24 @@ class CollectibleEditController extends AppController {
 				if (isset($newCollectible['AttributesCollectible'])) {
 					$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
 				}
-				$this -> loadModel('CollectibleEdit');
+
 				$this -> CollectibleEdit -> create();
 				if ($this -> CollectibleEdit -> saveAll($saveCollectible, array('validate' => false))) {
 					$id = $this -> CollectibleEdit -> id;
+					/*
+					 * Not sure how useful this will be in the end but I figured this would be a clean
+					 * way to store all edits in one table no matter what we are editing of the collectible.
+					 * 
+					 * This would also be a way in the future to link all edits to one edit at a time.
+					 */
+					$edit = array();
+					$edit['user_id'] = $this -> getUserId();
+					$edit['collectible_edit_id'] = $id;
+					$this -> loadModel('Edit');
+					if(!$this -> Edit -> save($edit)){
+						$this -> log('Failed to save the collectible edit into the edits table '. $id .' ' . date("Y-m-d H:i:s", time()), 'error');
+					}
+					
 					$editCollectible = $this -> CollectibleEdit -> findById($id);
 					$pendingState = '1';
 
@@ -279,7 +191,7 @@ class CollectibleEditController extends AppController {
 					$this -> Session -> delete('uploadId');
 					$this -> Session -> delete('collectible.edit-id');
 				} else {
-					debug($this -> CollectiblesEdit -> validationErrors);
+					debug($this -> CollectibleEdit -> validationErrors);
 					$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					$this -> redirect(array('action' => 'review'));
 				}
@@ -292,6 +204,16 @@ class CollectibleEditController extends AppController {
 		}
 
 	}
+	function admin_index() {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+
+		$this -> paginate = array("conditions" => array('state' => 1), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')));
+
+		$collectilbes = $this -> paginate('Collectible');
+		debug($collectilbes);
+		$this -> set('collectibles', $collectilbes);
+	}	
 
 }
 ?>

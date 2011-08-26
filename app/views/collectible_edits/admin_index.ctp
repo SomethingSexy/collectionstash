@@ -2,8 +2,8 @@
 	<div class="inside">
 	 	<div class="actions">
 			<ul>
-				<li><?php echo $html->link('New Collectibles', array('admin'=> true, 'controller' => 'collectibles')); ?></li>
-				<li><?php echo $html->link('Edits', array('admin'=> true, 'controller' => 'edits')); ?></li>
+				<li><?php echo $html->link('New Collectibles', array('controller' => 'profiles')); ?></li>
+				<li><?php echo $html->link('Edits', array('controller' => 'profiles')); ?></li>
 			</ul>	
 		</div>
 		<div class="page">

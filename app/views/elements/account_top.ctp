@@ -1,6 +1,6 @@
 <?php echo $this->Html->script('jquery.form',array('inline'=>false)); ?>
 <?php echo $this->Html->script('profiles',array('inline'=>false)); ?>
-<div id="account">
+<div id="account" class="two-column-page">
 	<div class="inside">
 	 	<div class="actions">
 			<ul>

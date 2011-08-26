@@ -2,6 +2,7 @@
 class CollectibleEdit extends AppModel {
 	var $name = 'CollectibleEdit';
 	var $actsAs = array('Containable');
+
 	var $belongsTo = array('Manufacture' => array('className' => 'Manufacture', 'foreignKey' => 'manufacture_id'), 'Collectibletype' => array('className' => 'Collectibletype', 'foreignKey' => 'collectibletype_id'), 'License' => array('className' => 'License', 'foreignKey' => 'license_id'), 'Series' => array('className' => 'Series', 'foreignKey' => 'series_id'), 'Scale');
 	function beforeSave() {
 		//Update Edition Size stuff
@@ -31,6 +32,5 @@ class CollectibleEdit extends AppModel {
 
 		return true;
 	}
-
 }
 ?>
