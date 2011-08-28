@@ -756,17 +756,21 @@ a:active {
 	margin: 0em 0em;
 }
 .collectible.statistics dt,
-.collectible.detail dt {
+.collectible.detail dl dt {
 	color: #606060;
 	/*padding-left: 4px;*/
 	vertical-align: top;
 }
 .collectible.statistics dd,
-.collectible.detail dd {
+.collectible.detail dl dd {
 	margin-left: 14em;
 	margin-top: -2em;
 	vertical-align: top;
 	color: #999999;
+}
+.collectible.detail dl dd.changed {
+	font-weight: bold;
+	color: red;
 }
 
 .dialog .component, 
@@ -1539,11 +1543,39 @@ div.paging span a {
 }
 
 #admin-edit .inside .page .standard-list ul li span {
-	width: 25%;
 	float: left;
     font-size: 0.75em;
 }
-
+#admin-edit .inside .page .standard-list.edit-list ul li span.collectible-id {
+	width: 20%;
+}
+#admin-edit .inside .page .standard-list.edit-list ul li span.name,
+#admin-edit .inside .page .standard-list.edit-list ul li span.action {
+	width: 40%;
+}
+#admin-edit .inside .page .standard-list.collectible-edit-list ul li span.collectible-id {
+	width: 10%;	
+}
+#admin-edit .inside .page .standard-list.collectible-edit-list ul li span.user-id {
+	width: 25%;	
+}
+#admin-edit .inside .page .standard-list.collectible-edit-list ul li span.type {
+	width: 20%;	
+}
+#admin-edit .inside .page .standard-list.collectible-edit-list ul li span.timestamp {
+	width: 25%;	
+}
+#admin-edit .inside .page .standard-list.collectible-edit-list ul li span.action {
+	width: 20%;	
+}
+#admin-edit .inside .page .collectible.item {
+	padding: 0;
+	width: 100%;
+	border-bottom: none;
+}
+#admin-edit .inside .page .collectible.item .collectible.detail {
+	width: 100%;
+}
 /*****************************
  * collectible user add
  */

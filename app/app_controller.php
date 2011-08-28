@@ -87,7 +87,7 @@ class AppController extends Controller {
 
 	public function handleNotLoggedIn() {
 		$this -> Session -> setFlash('Your session has timed out.');
-		$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
+		$this -> redirect(array('admin'=> false, 'controller' => 'users', 'action' => 'login'), null, true);
 	}
 
 	/**

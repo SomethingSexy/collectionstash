@@ -34,24 +34,24 @@ class AppModel extends Model {
 	/**
 	 * This loops through each individual return entry after the find so we can more eaily maniulate it.
 	 */
-	public function afterFind($results, $primary =false) {
-		if(method_exists($this, 'doAfterFind')) {
-			if($primary) {
-				foreach($results as $key => $val) {
-					if(isset($val[$this -> alias])) {
+	public function afterFind($results, $primary = false) {
+		if (method_exists($this, 'doAfterFind')) {
+			if ($primary) {
+				foreach ($results as $key => $val) {
+					if (isset($val[$this -> alias])) {
 						$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias]);
 					}
 				}
 			} else {
-				if(isset($results[$this -> primaryKey])) {
+				if (isset($results[$this -> primaryKey])) {
 					$results = $this -> doAfterFind($results);
 				} else {
-					foreach($results as $key => $val) {
-						if(isset($val[$this -> alias])) {
-							if(isset($val[$this -> alias][$this -> primaryKey])) {
+					foreach ($results as $key => $val) {
+						if (isset($val[$this -> alias])) {
+							if (isset($val[$this -> alias][$this -> primaryKey])) {
 								$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias]);
 							} else {
-								foreach($results[$key][$this->alias] as $key2 => $val2) {
+								foreach ($results[$key][$this->alias] as $key2 => $val2) {
 									$results[$key][$this -> alias][$key2] = $this -> doAfterFind($results[$key][$this -> alias][$key2]);
 								}
 							}
@@ -62,6 +62,36 @@ class AppModel extends Model {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Overriding paginateCount method to add in some extra code when doing paginate with a gorup by
+	 * 
+	 * This will correct the incorrect count by the core code
+	 */
+	public function paginateCount($conditions = null, $recursive = 0, $extra = array()) {
+		$parameters = compact('conditions', 'recursive');
+
+		if (isset($extra['group'])) {
+			$parameters['fields'] = $extra['group'];
+
+			if (is_string($parameters['fields'])) {
+				// pagination with single GROUP BY field
+				if (substr($parameters['fields'], 0, 9) != 'DISTINCT ') {
+					$parameters['fields'] = 'DISTINCT ' . $parameters['fields'];
+				}
+				unset($extra['group']);
+				$count = $this -> find('count', array_merge($parameters, $extra));
+			} else {
+				// resort to inefficient method for multiple GROUP BY fields
+				$count = $this -> find('count', array_merge($parameters, $extra));
+				$count = $this -> getAffectedRows();
+			}
+		} else {
+			// regular pagination
+			$count = $this -> find('count', array_merge($parameters, $extra));
+		}
+		return $count;
 	}
 
 }

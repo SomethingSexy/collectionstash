@@ -119,7 +119,7 @@
 								<label for="CollectibleUrl"> <?php __('URL')
 									?></label>
 							</div>
-							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false));?>
+							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false, 'escape'=>false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">

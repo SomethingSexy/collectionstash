@@ -4,7 +4,7 @@ App::import('Sanitize');
  * This is not a join table, this is the edit controllor for collectibles.  This is why it is named liked this.
  */
 class CollectibleEditsController extends AppController {
-	var $helpers = array('Html', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'FileUpload.FileUpload', 'CollectibleDetail');
 
 	/*
 	 * I think I will have a "collectibles_edit" table and potentially going to have to have edit tables for the other related tables.
@@ -106,6 +106,11 @@ class CollectibleEditsController extends AppController {
 		debug($collectible);
 		if (!is_null($collectible)) {
 			$this -> loadModel('Collectible');
+			//fuck you cake
+			if(isset($collectible['Collectible']['release']['year'])){
+				$collectible['Collectible']['release'] = $collectible['Collectible']['release']['year'];
+			}
+			
 			//Lets retrieve some data for display purposes
 			//TODO this may be redundant...should we save off later?
 			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
@@ -158,9 +163,9 @@ class CollectibleEditsController extends AppController {
 				$saveCollectible['CollectibleEdit'] = $newCollectible['Collectible'];
 				$saveCollectible['CollectibleEdit']['edit_user_id'] = $this -> getUserId();
 				$saveCollectible['CollectibleEdit']['action'] = 'E';
-				if (isset($newCollectible['AttributesCollectible'])) {
-					$saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
-				}
+				// if (isset($newCollectible['AttributesCollectible'])) {
+				// $saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
+				// }
 
 				$this -> CollectibleEdit -> create();
 				if ($this -> CollectibleEdit -> saveAll($saveCollectible, array('validate' => false))) {
@@ -168,17 +173,18 @@ class CollectibleEditsController extends AppController {
 					/*
 					 * Not sure how useful this will be in the end but I figured this would be a clean
 					 * way to store all edits in one table no matter what we are editing of the collectible.
-					 * 
+					 *
 					 * This would also be a way in the future to link all edits to one edit at a time.
 					 */
 					$edit = array();
 					$edit['user_id'] = $this -> getUserId();
 					$edit['collectible_edit_id'] = $id;
+					$edit['collectible_id'] = $newCollectible['Collectible']['collectible_id'];
 					$this -> loadModel('Edit');
-					if(!$this -> Edit -> save($edit)){
-						$this -> log('Failed to save the collectible edit into the edits table '. $id .' ' . date("Y-m-d H:i:s", time()), 'error');
+					if (!$this -> Edit -> save($edit)) {
+						$this -> log('Failed to save the collectible edit into the edits table ' . $id . ' ' . date("Y-m-d H:i:s", time()), 'error');
 					}
-					
+
 					$editCollectible = $this -> CollectibleEdit -> findById($id);
 					$pendingState = '1';
 
@@ -204,16 +210,34 @@ class CollectibleEditsController extends AppController {
 		}
 
 	}
-	function admin_index() {
+
+	function admin_approval($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
+		if ($id && is_numeric($id)) {
+			$this->set('editApprovalId', $id);
+			if (empty($this -> data)) {
+				//TODO this should probably be moved to a model
+				$collectibleEditVersion = $this -> CollectibleEdit -> find("first", array('conditions' => array('CollectibleEdit.id' => $id)));
+				if (!empty($collectibleEditVersion)) {
 
-		$this -> paginate = array("conditions" => array('state' => 1), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')));
+					$this -> CollectibleEdit -> compareEdit($collectibleEditVersion['CollectibleEdit'], $collectibleEditVersion['Collectible']);
+					debug($collectibleEditVersion);
+					$collectible = array();
+					$collectible = $collectibleEditVersion;
+					unset($collectible['CollectibleEdit']);
+					$collectible['Collectible'] = $collectibleEditVersion['CollectibleEdit'];
+					debug($collectible);
+					$this -> set('collectible', $collectible);
+				} else {
+					//uh fuck you
+				}
+			}
 
-		$collectilbes = $this -> paginate('Collectible');
-		debug($collectilbes);
-		$this -> set('collectibles', $collectilbes);
-	}	
+		} else {
+			$this -> redirect('/');
+		}
+	}
 
 }
 ?>

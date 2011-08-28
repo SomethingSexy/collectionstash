@@ -2,7 +2,7 @@
 class Edit extends AppModel {
 	var $name = 'Edit';
 	var $actsAs = array('Containable');
-	var $belongsTo = array('CollectibleEdit', 'User', 'UploadEdit');
+	var $belongsTo = array('CollectibleEdit', 'User', 'UploadEdit', 'Collectible');
 
 	// function doAfterFind($results) {
 // 

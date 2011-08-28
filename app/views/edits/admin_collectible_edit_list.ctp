@@ -12,11 +12,13 @@
 					<?php __('Edits');?>
 				</h2>				
 			</div>
-			<div class="standard-list edit-list">
+			<div class="standard-list collectible-edit-list">
 				<ul>
 					<li class="title">
 						<span class="collectible-id"><?php __('Id'); ?></span>
-						<span class="name"><?php __('Name'); ?></span>
+						<span class="user-id"><?php __('User Id'); ?></span>
+						<span class="type"><?php __('Type'); ?></span>
+						<span class="timestamp"><?php __('Timestamp'); ?></span>
 						<span class="action"><?php __('Action'); ?></span>
 					</li>
 					<?php foreach($edits as $edit){
@@ -24,11 +26,19 @@
 						echo '<span class="collectible-id">';
 						echo $html->link($edit['Edit']['collectible_id'], array('admin'=> false, 'controller' => 'collectibles', 'action'=> 'view', $edit['Edit']['collectible_id']));
 						echo '</span>';
-						echo '<span class="name">';
-						echo $edit['Collectible']['name'];
+						echo '<span class="user-id">';
+						echo $edit['User']['username'];
+						echo '</span>';
+						echo '<span class="type">';
+						echo $edit['type'];
+						echo '</span>';
+						echo '<span class="timestamp">';
+						$datetime = strtotime($edit['Edit']['created']);
+						$mysqldate = date("m/d/y g:i A", $datetime);
+						echo $mysqldate;
 						echo '</span>';
 						echo '<span class="action">';
-						echo $html->link('View', array('admin'=> true, 'action'=> 'collectibleEditList', $edit['Edit']['collectible_id']));
+						echo $html->link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval', $edit['Edit']['collectible_edit_id']));
 						echo '</span>';	
 						echo '</li>';																	
 					} ?>

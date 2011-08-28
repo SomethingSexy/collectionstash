@@ -10,8 +10,33 @@ class EditsController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 
-		$this -> paginate = array('contain' => array('UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
+		//$this -> paginate = array('group'=> array('Edit.collectible_id'), 'contain' => array('UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
+		$this -> paginate = array('group'=> array('Edit.collectible_id'), 'contain' => array('Collectible'=>array('fields'=>array('Collectible.id, Collectible.name'))), "limit" => 25);
 
+		$edits = $this -> paginate('Edit');
+		//TODO might want to think about doing a behavior of some sort for this
+		//TODO actually, for all edits, Upload and Attributes, I should always link up the collectible Id this is for
+		//add this to the edit model
+		foreach ($edits as &$edit) {
+			if (!empty($edit['CollectibleEdit']['id'])) {
+				$edit['type'] = __('Collectible', true);
+				$edit['type_id'] = $edit['CollectibleEdit']['id'];
+				unset($edit['UploadEdit']);
+			} else if (!empty($edit['UploadEdit']['id'])) {
+				$edit['type'] = __('Upload', true);
+				$edit['type_id'] = $edit['UploadEdit']['id'];
+				unset($edit['CollectibleEdit']);
+			}
+		}
+		debug($edits);
+		$this -> set('edits', $edits);
+	}
+
+	function admin_collectibleEditList($id = null){
+		$this -> checkLogIn();
+		$this -> checkAdmin();		
+		$this -> paginate = array('conditions'=> array('Edit.collectible_id' => $id), 'order' => array('Edit.created' => 'ASC'), 'contain' => array('UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
+	
 		$edits = $this -> paginate('Edit');
 		//TODO might want to think about doing a behavior of some sort for this
 		//TODO actually, for all edits, Upload and Attributes, I should always link up the collectible Id this is for

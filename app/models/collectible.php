@@ -156,6 +156,10 @@
           	} 
         }
 		$results['showUserEditionSize'] = $showEditionSize;
+		if(isset($results['release']) && $results['release'] === '0000'){
+			$results['release'] = '';	
+		}
+		
       	debug($results);
       	return $results;
     }

@@ -4,7 +4,7 @@ class CollectiblesController extends AppController {
 
 	var $name = 'Collectibles';
 
-	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail');
 
 	var $components = array('RequestHandler', 'Wizard.Wizard');
 
@@ -571,6 +571,11 @@ class CollectiblesController extends AppController {
 		if (isset($wizardData['image']['Upload'])) {
 			$collectible['Upload'][0] = $wizardData['image']['Upload'];
 		}
+		//fuck you cake
+		if(isset($collectible['Collectible']['release']['year'])){
+			$collectible['Collectible']['release'] = $collectible['Collectible']['release']['year'];
+		}
+
 		$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
 		$collectible['Manufacture'] = $manufacture['Manufacture'];
 

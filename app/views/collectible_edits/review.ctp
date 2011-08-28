@@ -22,6 +22,7 @@
 		<div class="component-view review">
 			<?php echo $this->element('collectible_detail_core', array(
 				'collectibleCore' => $collectibleReview,
+				'showImage' => false,
 				'showAttributes' => false
 			));	?>		
 			<div class="links review">
