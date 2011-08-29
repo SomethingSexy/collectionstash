@@ -243,13 +243,17 @@ class UsersController extends AppController {
 		$this -> set('activate_url', 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash());
 		$this -> set('username', $this -> data['User']['username']);
 
-		$this -> Email -> smtpOptions = array('port' => '25', 'timeout' => '30', 'host' => 'smtpout.secureserver.net', 'username' => 'admin@collectionstash.com', 'password' => 'oblivion1968'
-		// 'client' => 'smtp_helo_hostname'
+		$this -> Email -> smtpOptions = array(
+			'port' => Configure::read('Settings.Email.port'), 
+			'timeout' => Configure::read('Settings.Email.timeout'), 
+			'host' => Configure::read('Settings.Email.host'), 
+			'username' => Configure::read('Settings.Email.username'), 
+			'password' => Configure::read('Settings.Email.password')
 		);
 		$this -> Email -> delivery = 'smtp';
 		$this -> Email -> to = $user['User']['email'];
 		$this -> Email -> subject = env('SERVER_NAME') . '– Please confirm your email address';
-		$this -> Email -> from = 'admin@collectionstash.com';
+		$this -> Email -> from = Configure::read('Settings.Email.username');
 		$this -> Email -> template = 'user_confirm';
 		$this -> Email -> sendAs = 'text';
 		// you probably want to use both :)

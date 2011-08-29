@@ -36,7 +36,7 @@
 							</div>								
 						</div>	
 				<?php } ?>
-					<?php echo $this -> Form -> create('Collectible', array('url'=>'/uploadEdit/edit', 'id'=>'add-image-form', 'type' => 'file'));?>
+					<?php echo $this -> Form -> create('Collectible', array('url'=>'/upload_edits/edit', 'id'=>'add-image-form', 'type' => 'file'));?>
 					<fieldset>
 						<legend><?php 
 						if($addImage){

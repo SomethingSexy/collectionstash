@@ -30,7 +30,14 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
 		'Contribute' => array(
 			'allowed'=> true
 		)	
-  	)
+  	),
+  	'Email' => array(
+		'username' => 'admin@collectionstash.com',
+		'password' => 'oblivion1968',
+		'host' => 'smtpout.secureserver.net',
+		'port' => '25',
+		'timeout' => '30'
+	)
 ));
 
 ?>

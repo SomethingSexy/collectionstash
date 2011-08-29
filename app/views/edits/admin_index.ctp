@@ -12,6 +12,7 @@
 					<?php __('Edits');?>
 				</h2>				
 			</div>
+			<?php echo $this -> element('flash');?>
 			<div class="standard-list edit-list">
 				<ul>
 					<li class="title">

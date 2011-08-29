@@ -15,13 +15,11 @@
 				<h2><?php __('Approval');?></h2>
 			</div>
 			<?php echo $this -> element('flash');?>
-			<?php
-			echo $this -> element('collectible_detail_core', array('collectibleCore' => $collectible, 'showAttributes' => false, 'showImage' => false, 'showCompareFields' => true));
-			?>
+			<?php echo $fileUpload -> image($upload['Upload']['name'], array('width' => '0'));?>
 			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'approval-form'));?>
 				<input type="hidden" name="data[Approval][approve]" value="true" />
 			</form>
-			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/collectible_edits/approval/'.$editId, 'id'=>'deny-form'));?>
+			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/upload_edits/approval/'.$editId, 'id'=>'deny-form'));?>
 				<input type="hidden" name="data[Approval][approve]" value="false" />
 			</form>
 			<div class="links">

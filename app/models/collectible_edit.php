@@ -49,12 +49,29 @@ class CollectibleEdit extends AppModel {
 	function compareEdit(&$collectibleEdit, $collectible) {
 		foreach (static::$editCompareFields as $field) {
 			$editFieldValue = $collectibleEdit[$field];
-			$currentFieldValue = $collectible[$field]; 
-			if($editFieldValue !== $currentFieldValue){
-				$collectibleEdit[$field.'_changed'] = true;
+			$currentFieldValue = $collectible[$field];
+			if ($editFieldValue !== $currentFieldValue) {
+				$collectibleEdit[$field . '_changed'] = true;
 			}
 		}
 		debug($collectibleEdit);
+	}
+
+	/**
+	 * This will get the collectible reading for saving from an edit
+	 */
+	function getEditCollectible($collectibleEditId) {
+		//Grab out edit collectible
+		$collectibleEditVersion = $this -> find("first", array('conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
+		//reformat it for us, unsetting some stuff we do not need
+		$collectible = array();
+		$collectible['Collectible'] = $collectibleEditVersion['CollectibleEdit'];
+		unset($collectible['Collectible']['id']);
+		unset($collectible['Collectible']['created']);
+		unset($collectible['Collectible']['modified']);
+
+		return $collectible;
+
 	}
 
 }

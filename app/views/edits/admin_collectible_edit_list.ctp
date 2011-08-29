@@ -12,6 +12,7 @@
 					<?php __('Edits');?>
 				</h2>				
 			</div>
+			<?php echo $this -> element('flash');?>
 			<div class="standard-list collectible-edit-list">
 				<ul>
 					<li class="title">
@@ -38,7 +39,11 @@
 						echo $mysqldate;
 						echo '</span>';
 						echo '<span class="action">';
-						echo $html->link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval', $edit['Edit']['collectible_edit_id']));
+						if($edit['type'] === 'Collectible') {
+							echo $html->link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['collectible_edit_id']));
+						} else if ($edit['type'] === 'Upload'){
+							echo $html->link('Approve', array('admin'=> true, 'controller' => 'upload_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['upload_edit_id']));	
+						}
 						echo '</span>';	
 						echo '</li>';																	
 					} ?>
@@ -47,7 +52,7 @@
 			<div class="paging">
 				<p>
 					<?php
-					echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+					echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% edits out of %count% total.', true)));
 					?>
 				</p>
 				<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>

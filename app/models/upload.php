@@ -1,12 +1,9 @@
 <?php
 class Upload extends AppModel {
 	var $name = 'Upload';
-	var $actsAs = array('Revision', 'FileUpload.FileUpload'=> array(
-			'maxFileSize' => '2097152'
-		), 
-		'Containable');
+	var $actsAs = array('Revision', 'FileUpload.FileUpload' => array('maxFileSize' => '2097152'), 'Containable');
 	var $hasMany = array('Collectible');
-	
+
 	// [Upload] => Array
 	//       (
 	//           [0] => Array
@@ -25,13 +22,29 @@ class Upload extends AppModel {
 	public function isValidUpload($uploadData) {
 		$validUpload = false;
 		debug($uploadData);
-		if(count($uploadData['Upload']) == 1) {
-			if($uploadData['Upload']['0']['file']['name'] != '' || $uploadData['Upload']['0']['url'] != '') {
+		if (count($uploadData['Upload']) == 1) {
+			if ($uploadData['Upload']['0']['file']['name'] != '' || $uploadData['Upload']['0']['url'] != '') {
 				$validUpload = true;
 			}
 		}
 
 		return $validUpload;
+	}
+
+	function saveEdit($upload) {
+		//Grab the collectible id for the edit we are saving
+		$uploadId = $upload['Upload']['upload_id'];
+		//now remove it cause it is not necessary
+		unset($upload['Upload']['upload_id']);
+		debug($uploadId);
+		//save this bad boy
+		$this -> id = $uploadId;
+		if ($this -> save ($upload, array('validate' => false))) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

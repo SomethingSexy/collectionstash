@@ -5,7 +5,7 @@
 			'showStatistics' => true,
 			'showWho' => true,
 			'showEdit' => true,
-			'editImageUrl'=> '/uploadEdit/edit/',
+			'editImageUrl'=> '/upload_edits/edit/',
 			'editManufactureUrl' => '/collectible_edits/edit/',
 			'showHistory' => true,
 			'showVariants' => true,

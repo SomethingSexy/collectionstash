@@ -71,7 +71,7 @@ class InvitesController extends AppController {
 						$count = $user['User']['invite_count'];
 						$count = $count + 1;
 						$user['User']['invite_count'] = $count;
-						if($this -> __sendActivationEmail($this -> data['Invite']['email'], $user['User']['username'])) {
+						if($this -> __sendInviteEmail($this -> data['Invite']['email'], $user['User']['username'])) {
 							$this -> log('Successfully sent invite email to address ' . $this -> data['Invite']['email'] . ' ' . date("Y-m-d H:i:s", time()), 'info');
 						} else {
 							$this -> log('Failed sending invite email to ' . $this -> data['Invite']['email'] . ' ' . date("Y-m-d H:i:s", time()), 'error');
@@ -91,7 +91,7 @@ class InvitesController extends AppController {
 		}
 	}
 
-	function __sendActivationEmail($email = null, $user_name = null) {
+	function __sendInviteEmail($email = null, $user_name = null) {
 		$return = true;
 		if($email) {
 			// Set data for the "view" of the Email
@@ -99,13 +99,17 @@ class InvitesController extends AppController {
 			$this -> set('user_name', $user_name);
 			//$this -> set('username', $this -> data['User']['username']);
 
-			$this -> Email -> smtpOptions = array('port' => '25', 'timeout' => '30', 'host' => 'smtpout.secureserver.net', 'username' => 'admin@collectionstash.com', 'password' => 'oblivion1968'
-			// 'client' => 'smtp_helo_hostname'
+			$this -> Email -> smtpOptions = array(
+				'port' => Configure::read('Settings.Email.port'), 
+				'timeout' => Configure::read('Settings.Email.timeout'), 
+				'host' => Configure::read('Settings.Email.host'), 
+				'username' => Configure::read('Settings.Email.username'), 
+				'password' => Configure::read('Settings.Email.password')
 			);
 			$this -> Email -> delivery = 'smtp';
 			$this -> Email -> to = $email;
 			$this -> Email -> subject = 'You have been invited to Collection Stash!';
-			$this -> Email -> from = 'admin@collectionstash.com';
+			$this -> Email -> from = Configure::read('Settings.Email.username');
 			$this -> Email -> template = 'invite';
 			$this -> Email -> sendAs = 'text';
 			// you probably want to use both :)

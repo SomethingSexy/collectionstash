@@ -107,10 +107,10 @@ class CollectibleEditsController extends AppController {
 		if (!is_null($collectible)) {
 			$this -> loadModel('Collectible');
 			//fuck you cake
-			if(isset($collectible['Collectible']['release']['year'])){
+			if (isset($collectible['Collectible']['release']['year'])) {
 				$collectible['Collectible']['release'] = $collectible['Collectible']['release']['year'];
 			}
-			
+
 			//Lets retrieve some data for display purposes
 			//TODO this may be redundant...should we save off later?
 			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
@@ -211,14 +211,15 @@ class CollectibleEditsController extends AppController {
 
 	}
 
-	function admin_approval($id = null) {
+	function admin_approval($editId = null, $collectibleEditId =null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-		if ($id && is_numeric($id)) {
-			$this->set('editApprovalId', $id);
+		if ($editId && is_numeric($editId) && $collectibleEditId && is_numeric($collectibleEditId)) {
+			$this -> set('collectibleEditId', $collectibleEditId);
+			$this -> set('editId', $editId);
 			if (empty($this -> data)) {
 				//TODO this should probably be moved to a model
-				$collectibleEditVersion = $this -> CollectibleEdit -> find("first", array('conditions' => array('CollectibleEdit.id' => $id)));
+				$collectibleEditVersion = $this -> CollectibleEdit -> find("first", array('conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
 				if (!empty($collectibleEditVersion)) {
 
 					$this -> CollectibleEdit -> compareEdit($collectibleEditVersion['CollectibleEdit'], $collectibleEditVersion['Collectible']);
@@ -231,6 +232,7 @@ class CollectibleEditsController extends AppController {
 					$this -> set('collectible', $collectible);
 				} else {
 					//uh fuck you
+					$this -> redirect('/');
 				}
 			}
 
