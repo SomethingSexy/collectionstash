@@ -72,7 +72,7 @@ class UploadEditsController extends AppController {
 			if ($this -> Upload -> isValidUpload($this -> data)) {
 				$currentCollectibleId = $this -> Session -> read('Upload.Edit.collectibleId');
 				$this -> data['Upload'][0]['collectible_id'] = $currentCollectibleId;
-				$this -> data['Upload'][0]['user_id'] = $this -> getUserId();
+				$this -> data['Upload'][0]['edit_user_id'] = $this -> getUserId();
 				if ($this -> Session -> check('Upload.Edit.upload')) {
 					//If we have an image we are replacing, lets grab that uploadId, so we know which one is being replaced.
 					$originalUpload = $this -> Session -> read('Upload.Edit.upload');

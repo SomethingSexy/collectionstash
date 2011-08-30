@@ -81,15 +81,13 @@ class EditsController extends AppController {
 					} else if (!empty($edit['Edit']['upload_edit_id'])) {
 						$uploadEditId = $edit['Edit']['upload_edit_id'];
 						$uploadForSave = $this -> Edit -> UploadEdit -> getEditUpload($uploadEditId);
-						
-						$uploadForSave['Upload']['action'] = 'E';
 						$this -> loadModel('Upload');
 						debug($uploadForSave);
 						if ($this -> Upload -> saveEdit($uploadForSave)) {
 
 						} else {
 							$this -> Session -> setFlash(__('There was a problem saving the changes for the collectible.', true), null, null, 'error');
-							//$this -> redirect(array('admin' => true, 'controller' => 'collectible_edit', 'action' => 'admin_approval', $id, $collectibleEditId), null, true);
+							$this -> redirect(array('admin' => true, 'controller' => 'upload_edit', 'action' => 'admin_approval', $id, $uploadEditId), null, true);
 						}						
 						
 						
@@ -111,7 +109,7 @@ class EditsController extends AppController {
 
 					//ALso if there is a successful save, I should update the User edit success count
 					$this -> Session -> setFlash(__('The edit has been successfully approved.', true), null, null, 'success');
-					//$this -> redirect(array('action' => 'index'), null, true);
+					$this -> redirect(array('action' => 'index'), null, true);
 
 				} else {
 

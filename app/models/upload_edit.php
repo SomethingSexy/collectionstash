@@ -13,7 +13,7 @@ class UploadEdit extends AppModel {
 		unset($upload['Upload']['id']);
 		unset($upload['Upload']['created']);
 		unset($upload['Upload']['modified']);
-		unset($upload['Upload']['collectible_id']);
+		//unset($upload['Upload']['collectible_id']);
 		debug($upload);
 		return $upload;
 

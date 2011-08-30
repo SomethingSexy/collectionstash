@@ -24,7 +24,7 @@ class CollectiblesController extends AppController {
 	 */
 	function addSelectType() {
 		$this -> checkLogIn();
-		if(!Configure::read('Settings.Collectible.Contribute.allowed')) {
+		if (!Configure::read('Settings.Collectible.Contribute.allowed')) {
 			$this -> redirect('/', null, true);
 		}
 		//Always delete this stuff, this could go in a better spot in the future
@@ -572,7 +572,7 @@ class CollectiblesController extends AppController {
 			$collectible['Upload'][0] = $wizardData['image']['Upload'];
 		}
 		//fuck you cake
-		if(isset($collectible['Collectible']['release']['year'])){
+		if (isset($collectible['Collectible']['release']['year'])) {
 			$collectible['Collectible']['release'] = $collectible['Collectible']['release']['year'];
 		}
 
@@ -686,19 +686,19 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'index'));
 		}
 		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
-		
-		if(!empty($collectible) && $collectible['Collectible']['state'] === '0') {
+
+		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
 			debug($collectible);
 			$this -> set('collectible', $collectible);
 			$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
 			$this -> set('collectibleCount', $count);
-	
+
 			if (!$collectible['Collectible']['variant']) {
 				$variants = $this -> Collectible -> getCollectibleVariants($id);
 				$this -> set('variants', $variants);
-			}			
+			}
 		} else {
-			$this -> render ('viewMissing');
+			$this -> render('viewMissing');
 		}
 	}
 
@@ -764,14 +764,14 @@ class CollectiblesController extends AppController {
 			//This is like the worst thing ever and needs to get cleaned up
 			//Making this by reference so we can modify it, is this proper in php?
 			foreach ($history as $key => &$collectible) {
-				if($collectible['Collectible']['action'] !== 'A') {
-					$editUserDetails = $this -> User -> findById($collectible['Collectible']['edit_user_id'], array('contain' => false));	
-					$collectible['Collectible']['user_name'] = $editUserDetails['User']['username'];		
+				if ($collectible['Collectible']['action'] !== 'A') {
+					$editUserDetails = $this -> User -> findById($collectible['Collectible']['edit_user_id'], array('contain' => false));
+					$collectible['Collectible']['user_name'] = $editUserDetails['User']['username'];
 				} else {
 					$userId = $collectible['Collectible']['user_id'];
 					$userDetails = $this -> User -> findById($userId, array('contain' => false));
-					$collectible['Collectible']['user_name'] = $userDetails['User']['username'];					
-				}			
+					$collectible['Collectible']['user_name'] = $userDetails['User']['username'];
+				}
 			}
 
 			debug($history);
@@ -781,11 +781,25 @@ class CollectiblesController extends AppController {
 			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.variant' => 0)));
 			$this -> set(compact('attributeHistory'));
 			debug($attributeHistory);
-			// foreach($attributeList as $attribute){
-			// $this -> Collectible-> AttributesCollectible -> id = $attribute;
-			// debug($this -> Collectible -> AttributesCollectible -> revisions(null, true));
-			// }
+			//Update this in the future since we only allow one Upload for now
+			$collectibleUpload = $this -> Collectible -> Upload -> find("first", array('contain' => false, 'conditions' => array('Upload.collectible_id' => $id)));
 
+			$this ->  Collectible -> Upload -> id = $collectibleUpload['Upload']['id'];
+			$uploadHistory = $this ->  Collectible -> Upload -> revisions(null, true);
+			//This is like the worst thing ever and needs to get cleaned up
+			//Making this by reference so we can modify it, is this proper in php?
+			foreach ($uploadHistory as $key => &$upload) {
+				if ($upload['Upload']['action'] !== 'A') {
+					$editUserDetails = $this -> User -> findById($upload['Upload']['edit_user_id'], array('contain' => false));
+					$upload['Upload']['user_name'] = $editUserDetails['User']['username'];
+				} else {
+					$userId = $upload['Upload']['edit_user_id'];
+					$userDetails = $this -> User -> findById($userId, array('contain' => false));
+					$upload['Upload']['user_name'] = $userDetails['User']['username'];
+				}
+			}
+			debug($uploadHistory);
+			$this -> set(compact('uploadHistory'));
 		} else {
 			$this -> redirect($this -> referer());
 		}
@@ -817,38 +831,39 @@ class CollectiblesController extends AppController {
 		$this -> set('collectibles', $collectilbes);
 
 	}
-	
-	function admin_view($id =null) {
+
+	function admin_view($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-		
+
 		if (!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));		
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 		$this -> set('collectible', $collectible);
 	}
-	
-	function admin_approve($id = null){
+
+	function admin_approve($id = null) {
 		$this -> checkLogIn();
-		$this -> checkAdmin();	
-		
+		$this -> checkAdmin();
+
 		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 		debug($collectible);
-		if(!empty($collectible) && $collectible['Collectible']['state'] === '1'){
+		if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
 			$this -> Collectible -> id = $collectible['Collectible']['id'];
 			$data = array();
 			$data['Collectible'] = array();
 			$data['Collectible']['action'] = 'P';
 			$data['Collectible']['edit_user_id'] = $this -> getUserId();
 			$data['Collectible']['state'] = 0;
-			if($this -> Collectible -> save($data, false)){
-				
+			if ($this -> Collectible -> save($data, false)) {
+
 			}
-				
-		}		
+
+		}
 	}
+
 }
 ?>
 
