@@ -21,7 +21,7 @@
 			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'approval-form'));?>
 				<input type="hidden" name="data[Approval][approve]" value="true" />
 			</form>
-			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/collectible_edits/approval/'.$editId, 'id'=>'deny-form'));?>
+			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'deny-form'));?>
 				<input type="hidden" name="data[Approval][approve]" value="false" />
 			</form>
 			<div class="links">

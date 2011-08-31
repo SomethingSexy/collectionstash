@@ -47,6 +47,7 @@ class CollectibleEdit extends AppModel {
 	 *  - At some point, this is going to have to be based on collectible type...gonna have to roll that beast out
 	 */
 	function compareEdit(&$collectibleEdit, $collectible) {
+		//TODO update this so that the changes are in their own array and not mixed in.
 		foreach (static::$editCompareFields as $field) {
 			$editFieldValue = $collectibleEdit[$field];
 			$currentFieldValue = $collectible[$field];
@@ -59,19 +60,50 @@ class CollectibleEdit extends AppModel {
 
 	/**
 	 * This will get the collectible reading for saving from an edit
+	 *
+	 * If $includeChanges is true, then we will get the current version of the collectible
+	 * and check to see what is different.  This is going to show the differences between this edit
+	 * and the latest version of the collectible we are editing.  This should be fine for now but this behavior might need to
+	 * be updated in the future.  Not sure this is a good long term solution.  But at the time of someone editing this collectible
+	 * they will see what they are saving against...unless someone swoops in and does a save inbetween a user getting this object and doing
+	 * a save.
 	 */
-	function getEditCollectible($collectibleEditId) {
+	function getUpdateFields($collectibleEditId, $includeChanges = false) {
 		//Grab out edit collectible
-		$collectibleEditVersion = $this -> find("first", array('conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
+		$collectibleEditVersion = $this -> find("first", array('contain' => false, 'conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
+		debug($collectibleEditVersion);
+		if ($includeChanges) {
+			$currentVersionCollectible = $this -> Collectible -> find("first", array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleEditVersion['CollectibleEdit']['collectible_id'])));
+			debug($currentVersionCollectible);
+			$this -> compareEdit($collectibleEditVersion['CollectibleEdit'], $currentVersionCollectible['Collectible']);
+		}
+
 		//reformat it for us, unsetting some stuff we do not need
 		$collectible = array();
 		$collectible['Collectible'] = $collectibleEditVersion['CollectibleEdit'];
 		unset($collectible['Collectible']['id']);
 		unset($collectible['Collectible']['created']);
 		unset($collectible['Collectible']['modified']);
+		unset($collectible['Collectible']['collectible_id']);
+		/*
+		 * Lets build our update array based on what has changed from the latest version of the collectible(as of now:)) and the one we are editing.  We only
+		 * want to submit those changes, no need to update the rest.  We might overwrite changes here by accident.  If this becomes a problem then we will have
+		 * to indicate at the edit process, exactly what the user changed so we do not do any accidental updates...TODO
+		 */
+		$changedString = '_changed';
+		$updateFields = array();
+		foreach ($collectible['Collectible'] as $key => $value) {
+			if (substr_compare($key, $changedString, -strlen($changedString), strlen($changedString)) === 0) {
+				//product_width_changed
+				//0, 14
+				//total length - (_changed) length
+				$field = substr($key, 0, strlen($key) - strlen($changedString));
+				$updateFields[$field] = $collectible['Collectible'][$field];
+				// $updateFields['Collectible'][$field] = $collectible['Collectible'][$field];
+			}
+		}
 
-		return $collectible;
-
+		return $updateFields;
 	}
 
 }

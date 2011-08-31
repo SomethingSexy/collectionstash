@@ -16,30 +16,37 @@ class Collectible extends AppModel {
 		'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ), 'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'));
 
 	function beforeSave() {
+		debug($this -> data);
 		//Update Edition Size stuff
-		$editionSize = $this -> data['Collectible']['edition_size'];
-		$limited = $this -> data['Collectible']['edition_size'];
-
-		if (trim($editionSize) != '' && !$limited) {
-			$editionSize = '';
+		if (isset($this -> data['Collectible']['limited'])) {
+			$limited = $this -> data['Collectible']['limited'];
+			if (isset($this -> data['Collectible']['edition_size'])) {
+				$editionSize = $this -> data['Collectible']['edition_size'];
+				if (trim($editionSize) != '' && !$limited) {
+					$this -> data['Collectible']['edition_size'] = '';
+				}
+			}
 		}
+
 		//For whatever reason, cakephp year the put another array under the field
-		if (is_array($this -> data['Collectible']['release'])) {
+		if (isset($this -> data['Collectible']['release']) && is_array($this -> data['Collectible']['release'])) {
 			$year = $this -> data['Collectible']['release']['year'];
 			$this -> data['Collectible']['release'] = $year;
 		}
 
 		//Check to see if these are set, if they are not, default them to false
-		if (!isset($this -> data['Collectible']['exclusive'])) {
-			$this -> data['Collectible']['exclusive'] = 0;
+		//8-30-11 commented this out because of edit collectible overriding existing data
+		// if (!isset($this -> data['Collectible']['exclusive'])) {
+		// $this -> data['Collectible']['exclusive'] = 0;
+		// }
+		// if (!isset($this -> data['Collectible']['variant'])) {
+		// $this -> data['Collectible']['variant'] = 0;
+		// }
+		if (isset($this -> data['Collectible']['msrp'])) {
+			$this -> data['Collectible']['msrp'] = str_replace('$', '', $this -> data['Collectible']['msrp']);
+			$this -> data['Collectible']['msrp'] = str_replace(',', '', $this -> data['Collectible']['msrp']);
 		}
-		if (!isset($this -> data['Collectible']['variant'])) {
-			$this -> data['Collectible']['variant'] = 0;
-		}
-
-		$this -> data['Collectible']['msrp'] = str_replace('$', '', $this -> data['Collectible']['msrp']);
-		$this -> data['Collectible']['msrp'] = str_replace(',', '', $this -> data['Collectible']['msrp']);
-
+		debug($this -> data);
 		return true;
 	}
 
@@ -201,20 +208,39 @@ class Collectible extends AppModel {
 		return $collectibles;
 	}
 
-	function saveEdit($collectible) {
-		//Grab the collectible id for the edit we are saving
-		$collectibleId = $collectible['Collectible']['collectible_id'];
-		//now remove it cause it is not necessary
-		unset($collectible['Collectible']['collectible_id']);
-		//save this bad boy
-		$this -> id = $collectibleId;
-		if ($this -> save($collectible, array('validate' => false))) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
+	// /**
+	// * This method will get the fields that have been changed, given a Collectible being passed in.  It will return
+	// * an array of fields and their values that need to be updated for this collectible.
+	// */
+	// function getEditFields($collectible) {
+	// debug($collectible);
+	// //Grab the collectible id for the edit we are saving
+	// // $collectibleId = $collectible['Collectible']['collectible_id'];
+	//
+	// // $currentVersionCollectible = $this -> find("first", array('conditions' => array('Collectible.id' => $collectibleId)));
+	// //
+	// // //now remove it cause it is not necessary
+	// unset($collectible['Collectible']['collectible_id']);
+	// /*
+	// * Lets build our update array based on what has changed from the latest version of the collectible(as of now:)) and the one we are editing.  We only
+	// * want to submit those changes, no need to update the rest.  We might overwrite changes here by accident.  If this becomes a problem then we will have
+	// * to indicate at the edit process, exactly what the user changed so we do not do any accidental updates...TODO
+	// */
+	// $changedString = '_changed';
+	// $updateFields = array();
+	// foreach ($collectible['Collectible'] as $key => $value) {
+	// if (substr_compare($key, $changedString, -strlen($changedString), strlen($changedString)) === 0) {
+	// //product_width_changed
+	// //0, 14
+	// //total length - (_changed) length
+	// $field = substr($key, 0, strlen($key) - strlen($changedString));
+	// $updateFields['Collectible.'.$field] = $collectible['Collectible'][$field];
+	// }
+	// }
+	//
+	// debug($updateFields);
+	// return $updateFields;
+	// }
 
 }
 ?>

@@ -210,7 +210,16 @@ class CollectibleEditsController extends AppController {
 		}
 
 	}
-
+	/**
+	 * This method will display the collectible edit view of what is being approved.
+	 * 
+	 * This will compare the current version of the collectible to the one that is in the edit to see what is different.
+	 * 
+	 * I am not sure this is the best solution in the end but it will at least tell me what is different at the time of approval.  This will however,
+	 * not tell me exactly what the user changed...only what is different at the time...since I have time stamps of when the edits are this should be fine, however
+	 * I might want to update in the future that I only store what is being changed and not the whole collectible.
+	 * 
+	 */
 	function admin_approval($editId = null, $collectibleEditId =null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
