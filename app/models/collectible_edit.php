@@ -98,11 +98,12 @@ class CollectibleEdit extends AppModel {
 				//0, 14
 				//total length - (_changed) length
 				$field = substr($key, 0, strlen($key) - strlen($changedString));
-				$updateFields[$field] = $collectible['Collectible'][$field];
-				// $updateFields['Collectible'][$field] = $collectible['Collectible'][$field];
+				//$updateFields[$field] = $collectible['Collectible'][$field];
+				$updateFields['Collectible.'.$field] = '\''.$collectible['Collectible'][$field].'\'';
 			}
 		}
-
+		//Make sure I grab the user id that did this edit
+		$updateFields['Collectible.edit_user_id'] = '\''.$collectible['Collectible']['edit_user_id'].'\'';
 		return $updateFields;
 	}
 

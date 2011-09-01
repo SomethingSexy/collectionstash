@@ -60,7 +60,7 @@
 						echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 0));
 						echo '</div>';
 					} else {
-						echo '<a href="/collections/viewCollectible/' . $myCollectible['id'] . '"><img src="/img/silhouette_thumb.gif"/></a>';
+						echo '<a href="/collectiblesUser/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
 					}
 					if ($endline) {
 						echo '</div>';

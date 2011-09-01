@@ -94,6 +94,7 @@
 				<div class="detail title">
 					<h3><?php __('Upload History'); ?></h3>
 				</div>
+				<?php if(!empty($uploadHistory)){ ?>
 				<div class="standard-list">
 			        <ul >
 			        	<li class="title">
@@ -102,28 +103,36 @@
 			        		<span class="action"><?php echo __('Action');?></span>
 			        	</li>
 			        <?php  
-			        foreach ($uploadHistory as $uploadHistoryEntry):
-			        ?>
-						<li>
-							<span class="user"><?php echo $uploadHistoryEntry['Upload']['user_name']; ?></span>
-							<span class="date"><?php 
-								$datetime = strtotime($uploadHistoryEntry['Upload']['version_created']);
-								$mysqldate = date("m/d/y g:i A", $datetime);
-							echo $html->link($mysqldate, array('action' => 'historyDetail', $uploadHistoryEntry['Upload']['id'], $uploadHistoryEntry['Upload']['version_id']));?></span>
-							<span class="action"><?php 
-								if($uploadHistoryEntry['Upload']['action'] === 'A'){
-									echo __('Added');
-								} else if($uploadHistoryEntry['Upload']['action'] === 'E') {
-									echo __('Update');
-								} else if($uploadHistoryEntry['Upload']['action'] === 'D'){
-									echo __('Delete');
-								} else if($uploadHistoryEntry['Upload']['action'] === 'P'){
-									echo __('Approved');
-								}?></span>
-						</li>
-			        <?php endforeach; ?>  
+				        foreach ($uploadHistory as $uploadHistoryEntry):
+				        ?>
+							<li>
+								<span class="user"><?php echo $uploadHistoryEntry['Upload']['user_name']; ?></span>
+								<span class="date"><?php 
+									$datetime = strtotime($uploadHistoryEntry['Upload']['version_created']);
+									$mysqldate = date("m/d/y g:i A", $datetime);
+								echo $html->link($mysqldate, array('action' => 'historyDetail', $uploadHistoryEntry['Upload']['id'], $uploadHistoryEntry['Upload']['version_id']));?></span>
+								<span class="action"><?php 
+									if($uploadHistoryEntry['Upload']['action'] === 'A'){
+										echo __('Added');
+									} else if($uploadHistoryEntry['Upload']['action'] === 'E') {
+										echo __('Update');
+									} else if($uploadHistoryEntry['Upload']['action'] === 'D'){
+										echo __('Delete');
+									} else if($uploadHistoryEntry['Upload']['action'] === 'P'){
+										echo __('Approved');
+									}?></span>
+							</li>
+				        <?php endforeach;  ?>  
 			        </ul>
 		        </div>
+		        <?php } else {
+					echo '<div class="standard-list empty">';
+					echo '<ul>';
+					echo '<li>No images have been added.</li>';	
+					echo '</ul>';
+					echo '</div>';			        	
+					
+				} ?>
 	       	</div>					     	
 		</div>
 	</div>

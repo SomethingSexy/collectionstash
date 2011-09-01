@@ -783,21 +783,25 @@ class CollectiblesController extends AppController {
 			debug($attributeHistory);
 			//Update this in the future since we only allow one Upload for now
 			$collectibleUpload = $this -> Collectible -> Upload -> find("first", array('contain' => false, 'conditions' => array('Upload.collectible_id' => $id)));
-
-			$this ->  Collectible -> Upload -> id = $collectibleUpload['Upload']['id'];
-			$uploadHistory = $this ->  Collectible -> Upload -> revisions(null, true);
-			//This is like the worst thing ever and needs to get cleaned up
-			//Making this by reference so we can modify it, is this proper in php?
-			foreach ($uploadHistory as $key => &$upload) {
-				if ($upload['Upload']['action'] !== 'A') {
-					$editUserDetails = $this -> User -> findById($upload['Upload']['edit_user_id'], array('contain' => false));
-					$upload['Upload']['user_name'] = $editUserDetails['User']['username'];
-				} else {
-					$userId = $upload['Upload']['edit_user_id'];
-					$userDetails = $this -> User -> findById($userId, array('contain' => false));
-					$upload['Upload']['user_name'] = $userDetails['User']['username'];
+			debug($collectibleUpload);
+			$uploadHistory = array();
+			if (!empty($collectibleUpload)) {
+				$this -> Collectible -> Upload -> id = $collectibleUpload['Upload']['id'];
+				$uploadHistory = $this -> Collectible -> Upload -> revisions(null, true);
+				//This is like the worst thing ever and needs to get cleaned up
+				//Making this by reference so we can modify it, is this proper in php?
+				foreach ($uploadHistory as $key => &$upload) {
+					if ($upload['Upload']['action'] !== 'A') {
+						$editUserDetails = $this -> User -> findById($upload['Upload']['edit_user_id'], array('contain' => false));
+						$upload['Upload']['user_name'] = $editUserDetails['User']['username'];
+					} else {
+						$userId = $upload['Upload']['edit_user_id'];
+						$userDetails = $this -> User -> findById($userId, array('contain' => false));
+						$upload['Upload']['user_name'] = $userDetails['User']['username'];
+					}
 				}
 			}
+
 			debug($uploadHistory);
 			$this -> set(compact('uploadHistory'));
 		} else {

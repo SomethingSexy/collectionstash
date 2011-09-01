@@ -23,7 +23,7 @@ if (!empty($collectibleCore['Upload'])) {
 		<div class="collectible image-fullsize hidden">
 			<?php echo $fileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 0));?>
 		</div>
-		<?php } else {?><img src="/img/silhouette_thumb.gif"/>
+		<?php } else {?><img src="/img/silhouette_thumb.png"/>
 		<?php }?>
 		<?php
 		if (isset($showEdit) && $showEdit) {
@@ -139,7 +139,7 @@ if($showAttributes) {
 				<?php
 				if (isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
-					echo '<a href="/attributesCollectibles/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+					echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
 					echo '</div>';
 				}
 				?>

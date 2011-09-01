@@ -3,13 +3,24 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Edit Image');?>
+			<?php 		
+				if($addImage){
+					__('Add Image');
+				} else {
+					__('Change Image');
+				}?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">
 			<div>
-				<?php echo __('Thank you for updating the collectible image.  The update to the image will go live as soon as it is approved.  Click <a href="/collectibles/view/'.$collectibleId.'">here</a> to return to the collectible you are editing.');?>
+				<?php 
+				if($addImage){
+					echo __('Thank you for adding an image to this collectible.  The image will go live as soon as it is approved.  Click <a href="/collectibles/view/'.$collectibleId.'">here</a> to return to the collectible you are editing.');
+		
+				} else {
+					echo __('Thank you for updating the collectible image.  The update to the image will go live as soon as it is approved.  Click <a href="/collectibles/view/'.$collectibleId.'">here</a> to return to the collectible you are editing.');			
+				} ?>
 			</div>
 		</div>
 		<div class="component-view add-image">

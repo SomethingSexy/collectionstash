@@ -5,6 +5,6 @@
 		<?php echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));?>
 	</div>
 	<?php } else {?>
-	<img src="/img/silhouette_thumb.gif"/>
+	<img src="/img/silhouette_thumb.png"/>
 	<?php }?>
 </div>

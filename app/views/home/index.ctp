@@ -41,14 +41,14 @@
 						if (!empty($collectible['Upload'])) {
 							echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 100));
 						} else {
-							echo '<img src="/img/silhouette_thumb.gif"/>';
+							echo '<img src="/img/silhouette_thumb.png"/>';
 						}
 						echo '</a>';
 						echo '<div class="collectible image-fullsize hidden">';
 						echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));
 						echo '</div>';
 					} else {
-						echo '<a href="/collectibles/view/' . $collectible['Collectible']['id'] . '"><img src="/img/silhouette_thumb.gif"/></a>';
+						echo '<a href="/collectibles/view/' . $collectible['Collectible']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
 					}
 					if ($endline) {
 						echo '</div>';

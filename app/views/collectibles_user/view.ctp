@@ -20,7 +20,7 @@
 							</div>						
 							
 						<?php } else { ?>
-							<img src="/img/silhouette.gif"/>
+							<img src="/img/silhouette_thumb.png"/>
 						<?php } ?>
 						
 						

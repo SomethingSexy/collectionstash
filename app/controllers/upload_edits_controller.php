@@ -93,6 +93,11 @@ class UploadEditsController extends AppController {
 					$edit['Edit']['user_id'] = $this -> getUserId();
 					$edit['Edit']['upload_edit_id'] = $uploadEditId;
 					$edit['Edit']['collectible_id'] = $this -> Session -> read('Upload.Edit.collectibleId');
+					
+					if(isset($originalUpload)){
+						$edit['Edit']['upload_id'] = $originalUpload['Upload']['id'];
+					} 
+					
 					$this -> loadModel('Edit');
 					if (!$this -> Edit -> save($edit)) {
 						$this -> log('Failed to save the collectible edit into the edits table ' . $id . ' ' . date("Y-m-d H:i:s", time()), 'error');
@@ -115,7 +120,7 @@ class UploadEditsController extends AppController {
 					$collectible = array();
 					$collectible['Upload'] = $newUpload['UploadEdit'];
 					$this -> set('collectible', $collectible);
-
+					
 					$this -> Session -> delete('Upload.Edit.collectibleId');
 					$this -> Session -> delete('Upload.Edit.upload');
 					$this -> render('confirm');
