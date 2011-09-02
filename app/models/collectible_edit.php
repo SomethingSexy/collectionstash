@@ -68,7 +68,7 @@ class CollectibleEdit extends AppModel {
 	 * they will see what they are saving against...unless someone swoops in and does a save inbetween a user getting this object and doing
 	 * a save.
 	 */
-	function getUpdateFields($collectibleEditId, $includeChanges = false) {
+	function getUpdateFields($collectibleEditId, $includeChanges = false, $notes = null) {
 		//Grab out edit collectible
 		$collectibleEditVersion = $this -> find("first", array('contain' => false, 'conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
 		debug($collectibleEditVersion);
@@ -101,6 +101,10 @@ class CollectibleEdit extends AppModel {
 				//$updateFields[$field] = $collectible['Collectible'][$field];
 				$updateFields['Collectible.'.$field] = '\''.$collectible['Collectible'][$field].'\'';
 			}
+		}
+		$updateFields['Collectible.action'] = '\'E\'';
+		if(!is_null($notes)){
+			$updateFields['Collectible.notes'] = '\''.$notes.'\'';	
 		}
 		//Make sure I grab the user id that did this edit
 		$updateFields['Collectible.edit_user_id'] = '\''.$collectible['Collectible']['edit_user_id'].'\'';

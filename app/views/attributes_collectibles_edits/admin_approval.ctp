@@ -10,12 +10,36 @@
 				</li>
 			</ul>
 		</div>
-		<div class="page">
+		<div class="page attributes-approval">
 			<div class="title">
 				<h2><?php __('Approval');?></h2>
 			</div>
 			<?php echo $this -> element('flash');?>
-			<?php echo $fileUpload -> image($upload['Upload']['name'], array('width' => '0'));?>
+			<div class="collectible detail">
+			<?php
+				echo '<div class="attributes-list">';
+				echo '<ul>';
+				echo '<li class="title">';
+				echo '<span class="attribute-name">' . __('Part', true) . '</span>';
+				echo '<span class="attribute-description">' . __('Description', true) . '</span>';
+				echo '<span class="attribute-action">' . __('Action', true) . '</span>';
+				echo '</li>';
+				echo '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>' . '<span class="attribute-description">' . $attribute['AttributesCollectible']['description'] . '</span>'; 
+				echo '<span class="attribute-action">';
+				if($attribute['AttributesCollectible']['action'] === 'E'){
+					echo __('Edit', true);
+				} else if($attribute['AttributesCollectible']['action'] === 'D'){
+					echo __('Delete', true);
+				}else if($attribute['AttributesCollectible']['action'] === 'A'){
+					echo __('Add', true);
+				}	
+				echo '</span>';
+				echo '</li>';			
+				echo '</ul>';
+				echo '</div>';
+			?>
+			</div>
+
 			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'approval-form'));?>
 				<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
 				<fieldset>

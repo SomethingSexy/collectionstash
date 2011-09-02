@@ -41,7 +41,7 @@ $( function() {
     	var $li = $(this).parent('span').parent('li');
     	if($(this).text() === 'Remove') {
 	     	var actionVal = $li.children('input.attribute.action').val();
-	    	if(actionVal === 'N') {
+	    	if(actionVal === 'A') {
 	    		$li.remove();
 	    	} else {
 	    		$li.children('input.attribute.action').val('D');
@@ -75,7 +75,7 @@ $( function() {
 	    	$li.children('.attribute-description').children('input').hide();
 	    	$(this).parent('.attribute-action').children('.remove-attribute').show();
 	    	var $currentAction = $li.children('input.attribute.action').val();
-	    	if($currentAction !== 'D' && $currentAction !== 'N') {
+	    	if($currentAction !== 'D' && $currentAction !== 'A') {
 	    		$li.children('input.attribute.action').val('E');
 	    	}
 	    	
@@ -205,7 +205,7 @@ var DED = function() {
 	            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
 				var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
 				var $hiddenVariant = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][variant]').val('0');
-				var $hiddenAction = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][action]').val('N').addClass('attribute').addClass('action');
+				var $hiddenAction = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][action]').val('A').addClass('attribute').addClass('action');
 	
 	            $li.append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant).append($hiddenAction);
 	

@@ -52,7 +52,7 @@ class AttributesCollectiblesEditsController extends AppController {
 								if ($this -> AttributesCollectiblesEdit -> AttributesCollectible -> save(array('active' => 0), false, array('active'))) {
 
 								}
-							} else if ($attribue['action'] === 'N') {
+							} else if ($attribue['action'] === 'A') {
 								$attribue['collectible_id'] = $id;
 								$this -> AttributesCollectiblesEdit -> AttributesCollectible -> create();
 								$this -> AttributesCollectiblesEdit -> AttributesCollectible -> set($attribue);
@@ -80,7 +80,7 @@ class AttributesCollectiblesEditsController extends AppController {
 								if ($attribute['action'] === 'D') {
 									$attribute['attributes_collectible_id'] = $attribute['id'];
 
-								} else if ($attribute['action'] === 'N') {
+								} else if ($attribute['action'] === 'A') {
 
 								} else if ($attribute['action'] === 'E') {
 									$attribute['attributes_collectible_id'] = $attribute['id'];
@@ -131,7 +131,7 @@ class AttributesCollectiblesEditsController extends AppController {
 			$this -> set('collectibleId', $id);
 			$this -> Session -> write('collectible.edit-id', $id);
 			//Submit the deletes as deletes....then loop throuh each one to either delete or add
-			$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => 'Attribute'));
+			$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'fields' => array('id', 'attribute_id', 'collectible_id', 'description', 'variant', 'active'), 'contain' => array('Attribute' => array('fields' => array('name')))));
 			debug($attributes);
 			//$this -> set('attributes', $attributes);
 			$this -> data = $attributes;
@@ -139,6 +139,32 @@ class AttributesCollectiblesEditsController extends AppController {
 
 		$collectibleId = $this -> Session -> read('collectible.edit-id');
 		$this -> set(compact('collectibleId'));
+	}
+
+	function admin_approval($editId = null, $attributeEditId = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if ($editId && is_numeric($editId) && $attributeEditId && is_numeric($attributeEditId)) {
+			$this -> set('attributeEditId', $attributeEditId);
+			$this -> set('editId', $editId);
+			if (empty($this -> data)) {
+				$attributeEditVersion = $this -> AttributesCollectiblesEdit -> find("first", array('contain' => array('Attribute' => array('fields' => array('name'))), 'conditions' => array('AttributesCollectiblesEdit.id' => $attributeEditId)));
+				debug($attributeEditVersion);
+				if (!empty($attributeEditVersion)) {
+					$attribute = array();
+					$attribute['AttributesCollectible'] = $attributeEditVersion['AttributesCollectiblesEdit'];
+					$attribute['Attribute']['name'] = $attributeEditVersion['Attribute']['name'];
+					debug($attribute);
+					$this -> set('attribute', $attribute);
+				} else {
+					//uh fuck you
+					$this -> redirect('/');
+				}
+			}
+
+		} else {
+			$this -> redirect('/');
+		}
 	}
 
 }

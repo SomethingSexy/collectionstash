@@ -43,6 +43,8 @@
 							echo $html->link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['collectible_edit_id']));
 						} else if ($edit['type'] === 'Upload'){
 							echo $html->link('Approve', array('admin'=> true, 'controller' => 'upload_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['upload_edit_id']));	
+						} else if ($edit['type'] === 'Attribute'){
+							echo $html->link('Approve', array('admin'=> true, 'controller' => 'attributes_collectibles_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['attributes_collectibles_edit_id']));	
 						}
 						echo '</span>';	
 						echo '</li>';																	

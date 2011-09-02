@@ -1579,6 +1579,15 @@ div.paging span a {
 #admin-edit .inside .page .collectible.item .collectible.detail {
 	width: 100%;
 }
+
+#admin-edit .inside .page.attributes-approval .links {
+	width: 100%;
+	float: left;
+}
+#admin-edit .inside .page.collectibles-approval fieldset {
+	width: 100%;
+	float: left;
+}
 /*****************************
  * collectible user add
  */
