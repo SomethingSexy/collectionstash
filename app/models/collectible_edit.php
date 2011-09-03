@@ -81,10 +81,9 @@ class CollectibleEdit extends AppModel {
 		//reformat it for us, unsetting some stuff we do not need
 		$collectible = array();
 		$collectible['Collectible'] = $collectibleEditVersion['CollectibleEdit'];
-		unset($collectible['Collectible']['id']);
-		unset($collectible['Collectible']['created']);
-		unset($collectible['Collectible']['modified']);
-		unset($collectible['Collectible']['collectible_id']);
+		// unset($collectible['Collectible']['created']);
+		// unset($collectible['Collectible']['modified']);
+		// unset($collectible['Collectible']['collectible_id']);
 		/*
 		 * Lets build our update array based on what has changed from the latest version of the collectible(as of now:)) and the one we are editing.  We only
 		 * want to submit those changes, no need to update the rest.  We might overwrite changes here by accident.  If this becomes a problem then we will have
@@ -92,6 +91,7 @@ class CollectibleEdit extends AppModel {
 		 */
 		$changedString = '_changed';
 		$updateFields = array();
+		$changed = false;
 		foreach ($collectible['Collectible'] as $key => $value) {
 			if (substr_compare($key, $changedString, -strlen($changedString), strlen($changedString)) === 0) {
 				//product_width_changed
@@ -99,15 +99,22 @@ class CollectibleEdit extends AppModel {
 				//total length - (_changed) length
 				$field = substr($key, 0, strlen($key) - strlen($changedString));
 				//$updateFields[$field] = $collectible['Collectible'][$field];
-				$updateFields['Collectible.'.$field] = '\''.$collectible['Collectible'][$field].'\'';
+				//$updateFields['Collectible.'.$field] = '\''.$collectible['Collectible'][$field].'\'';
+				$updateFields['Collectible'][$field] = $collectible['Collectible'][$field];
+				$changed = true;
 			}
 		}
-		$updateFields['Collectible.action'] = '\'E\'';
-		if(!is_null($notes)){
-			$updateFields['Collectible.notes'] = '\''.$notes.'\'';	
+
+		if ($changed) {
+			$updateFields['Revision']['action'] = 'E';
+			if (!is_null($notes)) {
+				$updateFields['Revision']['notes'] = $notes;
+			}
+			//Make sure I grab the user id that did this edit
+			$updateFields['Revision']['user_id'] = $collectible['Collectible']['edit_user_id'];
+			$updateFields['Collectible']['id'] = $collectible['Collectible']['collectible_id'];
 		}
-		//Make sure I grab the user id that did this edit
-		$updateFields['Collectible.edit_user_id'] = '\''.$collectible['Collectible']['edit_user_id'].'\'';
+
 		return $updateFields;
 	}
 

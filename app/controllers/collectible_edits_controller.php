@@ -143,10 +143,10 @@ class CollectibleEditsController extends AppController {
 			//if ($this -> isUserAdmin() || Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
 			if (Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
 				$this -> loadModel('Collectible');
-				$newCollectible['Collectible']['edit_user_id'] = $this -> getUserId();
-				$newCollectible['Collectible']['action'] = 'E';
-				$this -> Collectible -> id = $newCollectible['Collectible']['collectible_id'];
-				if ($this -> Collectible -> save($newCollectible, array('validate' => false))) {
+				$newCollectible['Revision']['user_id'] = $this -> getUserId();
+				$newCollectible['Revision']['action'] = 'E';
+				$newCollectible['Collectible']['id'] = $newCollectible['Collectible']['collectible_id'];
+				if ($this -> Collectible -> saveAll($newCollectible, array('validate' => false))) {
 					$id = $this -> Collectible -> id;
 					$collectible = $this -> Collectible -> findById($id);
 					debug($collectible);
@@ -163,9 +163,6 @@ class CollectibleEditsController extends AppController {
 				$saveCollectible['CollectibleEdit'] = $newCollectible['Collectible'];
 				$saveCollectible['CollectibleEdit']['edit_user_id'] = $this -> getUserId();
 				$saveCollectible['CollectibleEdit']['action'] = 'E';
-				// if (isset($newCollectible['AttributesCollectible'])) {
-				// $saveCollectible['AttributesCollectible'] = $newCollectible['AttributesCollectible'];
-				// }
 
 				$this -> CollectibleEdit -> create();
 				if ($this -> CollectibleEdit -> saveAll($saveCollectible, array('validate' => false))) {
@@ -210,17 +207,18 @@ class CollectibleEditsController extends AppController {
 		}
 
 	}
+
 	/**
 	 * This method will display the collectible edit view of what is being approved.
-	 * 
+	 *
 	 * This will compare the current version of the collectible to the one that is in the edit to see what is different.
-	 * 
+	 *
 	 * I am not sure this is the best solution in the end but it will at least tell me what is different at the time of approval.  This will however,
 	 * not tell me exactly what the user changed...only what is different at the time...since I have time stamps of when the edits are this should be fine, however
 	 * I might want to update in the future that I only store what is being changed and not the whole collectible.
-	 * 
+	 *
 	 */
-	function admin_approval($editId = null, $collectibleEditId =null) {
+	function admin_approval($editId = null, $collectibleEditId = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 		if ($editId && is_numeric($editId) && $collectibleEditId && is_numeric($collectibleEditId)) {

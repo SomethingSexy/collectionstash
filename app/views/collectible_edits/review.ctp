@@ -8,7 +8,7 @@
 	));
 ?>
 <?php } ?>
-<div class="component" id="collectible-add-component">
+<div class="component" id="collectible-detail">
 	<div class="inside">
 		<div class="component-title">
 			<h2>

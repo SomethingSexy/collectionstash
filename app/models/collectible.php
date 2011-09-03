@@ -1,7 +1,7 @@
 <?php
 class Collectible extends AppModel {
 	var $name = 'Collectible';
-	var $belongsTo = array('Manufacture' => array('className' => 'Manufacture', 'foreignKey' => 'manufacture_id'), 'Collectibletype' => array('className' => 'Collectibletype', 'foreignKey' => 'collectibletype_id'), 'License' => array('className' => 'License', 'foreignKey' => 'license_id'), 'Series' => array('className' => 'Series', 'foreignKey' => 'series_id'), 'Scale', 'Retailer', 'User' => array('counterCache' => true));
+	var $belongsTo = array('Revision', 'Manufacture' => array('className' => 'Manufacture', 'foreignKey' => 'manufacture_id'), 'Collectibletype' => array('className' => 'Collectibletype', 'foreignKey' => 'collectibletype_id'), 'License' => array('className' => 'License', 'foreignKey' => 'license_id'), 'Series' => array('className' => 'Series', 'foreignKey' => 'series_id'), 'Scale', 'Retailer', 'User' => array('counterCache' => true));
 
 	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible', 'CollectiblesTag');
 

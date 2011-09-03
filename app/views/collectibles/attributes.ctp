@@ -16,7 +16,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo __('Collectible Attributes')?>
+			<?php echo __('Collectible Accessories/Features')?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -27,7 +27,7 @@
 		?>
 		<div class="component-info">
 			<div>
-				Fill out the following information to add the collectible.
+				<?php echo __('Add any accessories or features for this collectible.  This can be used to break out individual parts or specific features about this collectible.')?>
 			</div>
 		</div>
 		<div class="component-view">
@@ -35,7 +35,7 @@
 				<?php echo $this -> Form -> create('Collectible', array('id'=>'add-attributes-form', 'url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes', )); ?>
 				<fieldset>
 					<legend>
-						<?php __('Part Break Down');?>
+						<?php __('Accessories/Features');?>
 					</legend>
 					<div id="collectible-attributes-list" class="attributes-list">
 						<ul>

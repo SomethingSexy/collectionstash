@@ -5,41 +5,35 @@ class AttributesCollectiblesEdit extends AppModel {
 	var $belongsTo = array('AttributesCollectible', 'Attribute');
 	var $actsAs = array('Containable');
 
-	function getAddAttribute($attributeEditId, $notes = null) {
-		//Grab out edit attribute
-		$attributeEditVersion = $this -> find("first", array('conditions' => array('AttributesCollectiblesEdit.id' => $attributeEditId)));
-		//reformat it for us, unsetting some stuff we do not need
-		$attribute = array();
-		$attribute['AttributesCollectible'] = $attributeEditVersion['AttributesCollectiblesEdit'];
-		unset($attribute['AttributesCollectible']['id']);
-		unset($attribute['AttributesCollectible']['created']);
-		unset($attribute['AttributesCollectible']['modified']);
-		if (!is_null($notes)) {
-			$upload['AttributesCollectible']['notes'] = $notes;
-		}
-		debug($attribute);
-		return $attribute;
-	}
-
 	function getUpdateFields($attributeEditId, $notes = null) {
 		//Grab out edit collectible
 		$attributeEditVersion = $this -> find("first", array('contain' => false, 'conditions' => array('AttributesCollectiblesEdit.id' => $attributeEditId)));
 		//reformat it for us, unsetting some stuff we do not need
 
 		$attributeFields = array();
-		//At this point this only handles Deletes and Edits, add should not go through here
-		if ($attributeEditVersion['AttributesCollectiblesEdit']['action'] === 'D') {
+		if ($attributeEditVersion['AttributesCollectiblesEdit']['action'] === 'A') {
+			$attributeFields['AttributesCollectible']['description'] = $attributeEditVersion['AttributesCollectiblesEdit']['description'];
+			$attributeFields['AttributesCollectible']['active'] = 1;
+			$attributeFields['AttributesCollectible']['attribute_id'] = $attributeEditVersion['AttributesCollectiblesEdit']['attribute_id'];
+			$attributeFields['AttributesCollectible']['collectible_id'] = $attributeEditVersion['AttributesCollectiblesEdit']['collectible_id'];
+			$attributeFields['Revision']['action'] = 'A';
+		} else if ($attributeEditVersion['AttributesCollectiblesEdit']['action'] === 'D') {
 			//For deletes, lets set the status to 0, that means it is not active
-			$attributeFields['AttributesCollectible.active'] = '\'0\'';
-			$attributeFields['AttributesCollectible.action'] = '\'D\'';
+			$attributeFields['AttributesCollectible']['active'] = 0;
+			$attributeFields['AttributesCollectible']['id'] = $attributeEditVersion['AttributesCollectiblesEdit']['attributes_collectible_id'];
+			$attributeFields['Revision']['action'] = 'D';
 		} else if ($attributeEditVersion['AttributesCollectiblesEdit']['action'] === 'E') {
 			//The only thing we can edit right now is the description
-			$attributeFields['AttributesCollectible.description'] = '\'' . $attributeEditVersion['AttributesCollectiblesEdit']['description'] . '\'';
-			$attributeFields['AttributesCollectible.action'] = '\'E\'';
+			$attributeFields['AttributesCollectible']['description'] = $attributeEditVersion['AttributesCollectiblesEdit']['description'];
+			$attributeFields['AttributesCollectible']['id'] = $attributeEditVersion['AttributesCollectiblesEdit']['attributes_collectible_id'];
+			$attributeFields['Revision']['action'] = 'E';
 		}
+
 		if (!is_null($notes)) {
-			$upload['AttributesCollectible.notes'] = '\'' . $notes .'\'';
+			$attributeFields['Revision']['notes'] = $notes;
 		}
+		//Make sure I grab the user id that did this edit
+		$attributeFields['Revision']['user_id'] = $attributeEditVersion['AttributesCollectiblesEdit']['edit_user_id'];
 		return $attributeFields;
 	}
 
