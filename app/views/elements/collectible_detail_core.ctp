@@ -13,31 +13,14 @@ if (!isset($showCompareFields)) {
 
 <div class="collectible item">
 	<?php
-if($showImage) {
-	?>
-	<div class="collectible image">
-		<?php
-if (!empty($collectibleCore['Upload'])) {
-		?>
-		<?php echo $fileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => '100'));?>
-		<div class="collectible image-fullsize hidden">
-			<?php echo $fileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 0));?>
-		</div>
-		<?php } else {?><img src="/img/silhouette_thumb.png"/>
-		<?php }?>
-		<?php
-		if (isset($showEdit) && $showEdit) {
-			echo '<div class="image link">';
-			if (!empty($collectibleCore['Upload'])) {
-				echo '<a href="' . $editImageUrl . $collectibleCore['Collectible']['id'] . '/' . $collectibleCore['Upload'][0]['id'] . '">' . __('Edit', true) . '</a>';
-			} else {
-				echo '<a href="' . $editImageUrl . $collectibleCore['Collectible']['id'] . '/' . '">' . __('Edit', true) . '</a>';
-			}
-			echo '</div>';
+	if($showImage) {
+		if(isset($showEdit) && $showEdit){
+			echo $this->element('collectible_detail_upload', array('collectibleCore'=> $collectibleCore, 'editImageUrl'=> $editImageUrl, 'showEdit'=>$showEdit));	
+		} else {
+			echo $this->element('collectible_detail_upload', array('collectibleCore'=> $collectibleCore));
 		}
-		?>
-	</div>
-	<?php }?>
+				
+ 	}?>
 	<div class="collectible detail-wrapper">
 		<div class="collectible detail">
 			<div class="detail title">
@@ -130,149 +113,14 @@ if (!empty($collectibleCore['Upload'])) {
 			</dl>
 		</div>
 		<?php
-
-if($showAttributes) {
-		?>
-		<div class="collectible detail">
-			<div class="detail title">
-				<h3><?php __('Accessories/Features');?></h3>
-				<?php
-				if (isset($showEdit) && $showEdit) {
-					echo '<div class="title link">';
-					echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
-					echo '</div>';
-				}
-				?>
-			</div>
-			<?php
-			$lastKey = 0;
-			$attributeEmpty = empty($collectibleCore['AttributesCollectible']);
-			if ($attributeEmpty) {
-				echo '<div class="attributes-list empty">';
-				echo '<ul>';
-				echo '<li>No Accessories/Features have been added</li>';
-				echo '</ul>';
-				echo '</div>';
-			} else {
-				$outputAttribtes = '';
-				$added = false;
-				foreach ($collectibleCore['AttributesCollectible'] as $key => $attribute) {
-					if ($attribute['variant'] !== '1') {
-						$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>' . '<span class="attribute-description">' . $attribute['description'] . '</span>' . '</li>';
-						$added = true;
-					}
-				}
-
-				if ($added) {
-					echo '<div class="attributes-list">';
-					echo '<ul>';
-					echo '<li class="title">';
-					echo '<span class="attribute-name">' . __('Part', true) . '</span>';
-					echo '<span class="attribute-description">' . __('Description', true) . '</span>';
-					echo '</li>';
-					echo $outputAttribtes;
-					echo '</ul>';
-					echo '</div>';
-				} else {
-					echo '<div class="attributes-list empty">';
-					echo '<ul>';
-					echo '<li>No Accessories/Features have been added</li>';
-					echo '</ul>';
-					echo '</div>';
-				}
-			}
-			?>
-		</div>
-		<?php if(isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) {
-		?>
-		<div class="collectible detail">
-			<div class="detail title">
-				<h3><?php __('Variant Accessories/Features');?></h3>
-				<?php
-				if (isset($showEdit) && $showEdit) {
-					echo '<div class="title link">';
-					echo '<a href="/collectibles/wizard/attributes">Edit</a>';
-					echo '</div>';
-				}
-				?>
-			</div>
-			<?php
-			$lastKey = 0;
-			$attributeEmpty = empty($collectibleCore['AttributesCollectible']);
-			if ($attributeEmpty) {
-				echo '<div class="attributes-list empty">';
-				echo '<ul>';
-				echo '<li>No Accessories/Features have been added</li>';
-				echo '</ul>';
-				echo '</div>';
-			} else {
-				$outputAttribtes = '';
-				$added = false;
-				foreach ($collectibleCore['AttributesCollectible'] as $key => $attribute) {
-					if ($attribute['variant'] === '1') {
-						$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>' . '<span class="attribute-description">' . $attribute['description'] . '</span>' . '</li>';
-						$added = true;
-					}
-				}
-
-				if ($added) {
-					echo '<div class="attributes-list">';
-					echo '<ul>';
-					echo '<li class="title">';
-					echo '<span class="attribute-name">' . __('Part', true) . '</span>';
-					echo '<span class="attribute-description">' . __('Description', true) . '</span>';
-					echo '</li>';
-					echo $outputAttribtes;
-					echo '</ul>';
-					echo '</div>';
-				} else {
-					echo '<div class="attributes-list empty">';
-					echo '<ul>';
-					echo '<li>No Accessories/Features have been added</li>';
-					echo '</ul>';
-					echo '</div>';
-				}
-			}
-			?>
-		</div>
-		<?php }
-			if(isset($showTags) && $showTags === true) {
-		?>
-
-		<div class="collectible detail">
-			<div class="detail title">
-				<h3><?php __('Tags');?></h3>
-			</div>
-			<ul class="tag-list">
-				<?php
-				foreach ($collectibleCore['CollectiblesTag'] as $tag) {
-					echo '<li class="tag">';
-					echo $tag['Tag']['tag'];
-					echo '</li>';
-				}
-				?>
-			</ul>
-		</div>
-		<?php }
-
-			}//show attribute end
-		?>
-		<?php
-if(isset($showStatistics) && $showStatistics) {
-		?>
-		<div class="collectible detail statistics">
-			<div class="detail title">
-				<h3><?php __('Collectible Statistics');?></h3>
-			</div>
-			<dl>
-				<dt>
-					<?php __('Total owned: ');?>
-				</dt>
-				<dd>
-					<?php echo $collectibleCount;?>
-				</dd>
-			</dl>
-		</div>
-		<?php }?>
+		if($showAttributes) {
+			echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showVariant'=> false,'showEdit'=>$showEdit));
+			if(isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) {
+				echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showVariant'=> true,'showEdit'=>$showEdit));
+			 }
+		}
+		if(isset($showTags) && $showTags === true) {
+			echo $this->element('collectible_detail_tags', array('collectibleCore'=>$collectibleCore));			
+		}?>
 	</div>
 </div>

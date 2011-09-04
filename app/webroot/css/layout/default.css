@@ -137,7 +137,7 @@ a:active {
 }
 
 .component.component-dialog {
-	background-color: #FFFFFF;
+	/*background-color: #FFFFFF;*/
 }
 
 .component.component-dialog .component-info {
@@ -281,6 +281,12 @@ a:active {
 #search-component .component-view .component-search-filters .form-fields li,
 #search-component .component-view .component-search-input .form-fields li {
   padding: 0; 
+}
+
+#search-component .component-view .component-search-input .form-fields li input.button {
+ 	clear: none;
+    padding: 2px;
+    width: 50px;
 }
 
 #search-component .component-view .component-search-filters {
@@ -1071,101 +1077,6 @@ input[type=submit]:active {
 letter-spacing: 0;
 }
 
-/*
-.form-fields li .instruct {
-    background:none repeat scroll 0 0 #C5DBEC;
-    border:none;
-    left:0;
-    margin:0 0 0 8px;
-    padding:8px 10px 10px;
-    position:absolute;
-    top:0;
-    visibility:hidden;
-    width:45%;
-    z-index:1000;
-    font-size: .90em;
-}
-.form-fields li.focused .instruct, .form-fields li:hover .instruct {
-    left:100%;
-    visibility:visible;
-}
-form li.focused, form li:hover {
-    position:relative;
-    background-color:#DFEFFC;
-}*/
-/* gallery
-
-.gallery .item {
-border: 1px solid #330000;
-margin: 5px;
-padding: 10px;
-float: left;
-
-}
-.gallery .item p {
-font-size: 60%;
-text-align: center;
-margin: 0;
-}
-
-.gallery .item img {
-margin-right: auto;
-margin-left: auto;
-display: block;
-
-}
-*/
-/*
-.gallery {
-list-style:none outside none;
-margin:0;
-padding:0;
-}
-.gallery li {
-float:left;
-height:175px;
-margin:15px;
-padding:0;
-position:relative;
-width:212px;
-}
-
-.gallery em {
-background:url("/img/picture-frame.png") no-repeat scroll 0 0 transparent;
-display:block;
-font:100%/100% Georgia,"Times New Roman",Times,serif;
-height:30px;
-padding-top:145px;
-position:absolute;
-text-align:center;
-width:212px;
-}
-
-.gallery img {
-padding:20px 0 0 21px;
-}
-5_gall...e.html# (line 68)
-img {
-border:medium none;
-}
-
-*/
-
-/** containers **/
-/*
-div.form, div.index, div.view {
-    padding: 10px;
-}*/
-/*
-div.actions {
-    float:left;
-    width:16%;
-    padding:10px 1.5%;
-}
-div.actions h3 {
-    padding-top:0;
-    color:#777;
-}*/
 /* collectible-add */
 
 .standard-add, .non-standard-add {
@@ -1316,8 +1227,6 @@ div.paging span a {
 
 .dialog .component {
   margin: 0;
-  background-color: #FCFDFD;
-  
 }
 
 .ui-dialog .ui-dialog-buttonpane {
@@ -1366,7 +1275,7 @@ div.paging span a {
 .ui-dialog {
 	border: 8px solid #333333;
     border-radius: 8px 8px 8px 8px;
-	
+	background: #F8F8F8;
 }
 
 .ui-widget-header {
@@ -1376,7 +1285,9 @@ div.paging span a {
 
 	
 }
-
+.ui-dialog-buttonpane {
+	background: #F8F8F8;
+}
 .ui-tabs-nav.ui-widget-header {
 	background-color: #464646;	
 }
@@ -1409,6 +1320,8 @@ div.paging span a {
     color: #F6921E;
     font-weight: normal;	
 }
+
+
 
 #bread-crumbs {
 	width: 100%;
@@ -1587,6 +1500,14 @@ div.paging span a {
 #admin-edit .inside .page.collectibles-approval fieldset {
 	width: 100%;
 	float: left;
+}
+
+/*********************************
+ * Collectible Add 
+ */
+#base-collectible-variant .collectible.item {
+	padding: 0;
+	border: none;
 }
 /*****************************
  * collectible user add

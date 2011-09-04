@@ -1,13 +1,15 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
 <?php if($this -> Session -> check('add.collectible.variant')) { ?>
-<?php      
-	echo $this->element('collectible_detail', array(
-		'title' => __('Base Collectible Details', true),
-		'showStatistics' => false,
-		'showWho' => false,
-		'collectibleDetail' => $collectible
-	));
-?>
+<div id="base-collectible-variant" class="dialog">
+	<?php      
+		echo $this->element('collectible_detail_core', array(
+			'showEdit' => false,
+			'showImage' => false,
+			'showAttributes' => false,
+			'collectibleCore' => $collectible
+		));
+	?>
+</div>
 <?php } ?>
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags', 'image'=>'Image', 'review'=> 'Review')); ?>	
@@ -16,7 +18,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo $collectible_title ?>
+			<?php echo __('Add New Collectible', true); ?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -29,7 +31,7 @@
 			<div class="collectible add">
 				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/manufacture', 'type' => 'file')); ?>
 				<fieldset>
-					<legend><?php __('Details');?></legend>
+					<legend><?php __('Manufacturer Details');?></legend>
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
@@ -222,8 +224,19 @@
 	</div>
 </div>
 <script>
-	$(".ui-icon-info").tooltip({
-		position: 'center right',
-		opacity: 0.7
+	$(function(){
+		$(".ui-icon-info").tooltip({
+			position: 'center right',
+			opacity: 0.7
+		});
+		$('#base-collectible-variant').dialog({
+			'autoOpen' : true,
+			'width' : 700,
+			'height': 700,
+			'resizable': false,
+			'modal': true
+		});			
+		
 	});
+
 </script>

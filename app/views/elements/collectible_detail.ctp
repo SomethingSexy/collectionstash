@@ -27,24 +27,22 @@
 				if($showWho) {
 					echo $html -> link('Registry', array('admin'=> false, 'controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
 				}
-				// if(isset($showEdit) && $showEdit) {
-					// echo $html -> link('Edit', array('controller'=>'collectibleEdit', 'action' => 'edit', $collectible['Collectible']['id']));
-				// }
 				if(isset($showHistory) && $showHistory) {
 					echo $html -> link('History', array( 'action' => 'history', $collectibleDetail['Collectible']['id']));
 				}
 				?>
 			</div>
-			<div class="collectible tags">
-				<ul class="tag-list">
-				<?php 
+			<?php if(isset($collectibleDetail['CollectiblesTag']) && !empty($collectibleDetail['CollectiblesTag'])){
+				echo '<div class="collectible tags">';
+				echo '<ul class="tag-list">';
 					foreach($collectibleDetail['CollectiblesTag'] as $tag) {
 						echo '<li class="tag">';
 						echo $tag['Tag']['tag'];
 						echo '</li>';
-					} ?>
-				</ul>
-			</div>
+					} 
+				echo '</ul>';
+				echo '</div>';				
+			} ?>
 			<?php 
 				if(!isset($showEdit)){
 					$showEdit = false;
@@ -82,46 +80,5 @@
 
 <?php 
 	if(isset($showVariants) && $showVariants) {
-		if (!empty($variants)) { ?>
-		<div class="component" id="collectibles-list-component">
-		  <div class="inside" >
-		     <div class="component-title">
-		      <h2><?php __('Variants');?></h2>
-		    </div>
-		    <div class="component-view">
-		      <div class="collectibles view">
-		        <?php  
-		        foreach ($variants as $variant):
-		        ?>
-		        	<div class="collectible item">
-		            	<?php echo $this -> element('collectible_list_image', array(
-							'collectible' => $variant
-						));?>
-						<?php echo $this -> element('collectible_list_detail', array(
-							'collectible' => $variant['Collectible'],
-							'manufacture' => $variant['Manufacture'],
-							'license' => $variant['License'],
-							'collectibletype' => $variant['Collectibletype']
-						));?>
-		        	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
-		          </div>
-		        <?php endforeach; ?>      
-		      </div>
-		    </div>
-		  </div>
-		</div>	
-	<?php } else { ?>
-		<div class="component" id="collectibles-list-component">
-		  <div class="inside" >
-		     <div class="component-title">
-		      <h2><?php __('Variants');?></h2>
-		    </div>
-		    <div class="component-view">
-		      <div class="collectibles view empty">
-   				<p><?php __('This collectible has no variants.'); ?></p>	
-		      </div>
-		    </div>
-		  </div>
-		</div>		
-	<?php	  }
+		echo $this->element('collectible_variant_list', array());	
 } ?>

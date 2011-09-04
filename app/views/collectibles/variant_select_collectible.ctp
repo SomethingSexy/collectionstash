@@ -9,7 +9,7 @@
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
-      <div><p><?php __('Search for the collectible you ');?></p></div> 
+      <div><p><?php __('To add a variant, you need to find the collectible this will be a variant of.  Browser through the list or use the search to narrow the results.  Click select to continue.');?></p></div> 
     </div>    
     <div class="component-view">
       <div class="collectibles view">

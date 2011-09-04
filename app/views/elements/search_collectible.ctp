@@ -6,13 +6,13 @@
        <div class="component-search-input">
          <fieldset>
             <ul class="form-fields">
-              <li><?php echo $this->Form->input('Search.search', array('label' => false));?></li>
+              <li><?php echo $this->Form->input('Search.search', array('div'=> false, 'label' => false));?><input type="submit" class="button" value="Search"/></li>
             </ul>
           </fieldset>
         </div>
    		<div class="component-search-filters">
    			<div class="filter-title">
-   				<a>Filters</a>
+   				<!--<a>Filters</a>-->
    			</div>
    			<div class="filters">
 	   			<fieldset>
@@ -57,7 +57,7 @@
 	        	</fieldset>
         	</div>       	
        </div>     
-       <?php echo $this->Form->end(__('Search', true));?>      
+       <?php echo $this->Form->end();?>      
     </div>
   </div>
 </div>

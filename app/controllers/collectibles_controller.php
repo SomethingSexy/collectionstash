@@ -178,7 +178,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'addSelectType'));
 		}
 		if ($id && is_numeric($id)) {
-			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag'=>array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 
 			if (!empty($variantCollectible)) {
 				$manufacturer = $this -> Session -> read('add.collectible.manufacture');
@@ -222,7 +222,6 @@ class CollectiblesController extends AppController {
 
 	function _prepareManufacture() {
 		$this -> Session -> delete('collectible');
-		$this -> set('collectible_title', __('Add Collectible', true));
 		if (!$this -> Session -> check('add.collectible.manufacture') && !$this -> Session -> check('add.collectible.collectibleType')) {
 			//If it has not, start them over
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
@@ -333,8 +332,8 @@ class CollectiblesController extends AppController {
 	}
 
 	function _prepareAttributes() {
-		if ($this -> Session -> check('add.collectible.mode.variant')) {
-			$variantCollectible = $this -> Session -> read('add.collectible.variant.collectible');
+		if ($this -> Session -> check('add.collectible.variant')) {
+			$variantCollectible = $this -> Session -> read('add.collectible.variant');
 			debug($variantCollectible);
 			$this -> set('collectible', $variantCollectible);
 		}
@@ -374,6 +373,11 @@ class CollectiblesController extends AppController {
 		if (isset($wizardData['tags']['CollectiblesTag'])) {
 			$this -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
 		}
+		if ($this -> Session -> check('add.collectible.variant')) {
+			$variantCollectible = $this -> Session -> read('add.collectible.variant');
+			debug($variantCollectible);
+			$this -> set('collectible', $variantCollectible);
+		}
 
 	}
 
@@ -391,8 +395,8 @@ class CollectiblesController extends AppController {
 
 	function _prepareImage() {
 		$wizardData = $this -> Wizard -> read();
-		if ($this -> Session -> check('add.collectible.mode.variant')) {
-			$variantCollectible = $this -> Session -> read('add.collectible.variant.collectible');
+		if ($this -> Session -> check('add.collectible.variant')) {
+			$variantCollectible = $this -> Session -> read('add.collectible.variant');
 			debug($variantCollectible);
 			$this -> set('collectible', $variantCollectible);
 		}
@@ -482,7 +486,7 @@ class CollectiblesController extends AppController {
 			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
 		}
 
-		if ($this -> Session -> check('add.collectible.mode.variant')) {
+		if ($this -> Session -> check('add.collectible.variant')) {
 			if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
 				if (isset($collectible['AttributesCollectible'])) {
 					$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
@@ -551,7 +555,7 @@ class CollectiblesController extends AppController {
 		}
 		$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 
-		if ($this -> Session -> check('add.collectible.mode.variant')) {
+		if ($this -> Session -> check('add.collectible.variant')) {
 			if (!isset($collectible['AttributesCollectible'])) {
 				$collectible['AttributesCollectible'] = array();
 			}

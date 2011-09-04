@@ -16,7 +16,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo __('Collectible Attributes')?>
+			<?php echo __('Add New Collectible', true); ?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>

@@ -1,13 +1,12 @@
 <?php echo $this -> Html -> script('attributes-add', array('inline' => false));?>
-<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
+<?php if($this -> Session -> check('add.collectible.variant')) { ?>
+<div id="base-collectible-variant" class="dialog">
 <?php      
-	echo $this->element('collectible_detail', array(
-		'title' => __('Base Collectible Details', true),
-		'showStatistics' => false,
-		'showWho' => false,
-		'collectibleDetail' => $collectible
+	echo $this->element('collectible_detail_attributes', array(
+		'collectibleCore' => $collectible
 	));
 ?>
+</div>
 <?php } ?>
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags','image'=>'Image', 'review'=> 'Review')); ?>			
@@ -16,7 +15,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo __('Collectible Accessories/Features')?>
+			<?php echo __('Add New Collectible', true); ?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -94,7 +93,14 @@
 						});	
 						$('#skip-attributes-button').click(function(){
 							$('#skip-attributes-form').submit();	
-						});						
+						});	
+						$('#base-collectible-variant').dialog({
+							'autoOpen' : true,
+							'width' : 400,
+							'autoHeight': true,
+							'resizable': false,
+							'modal': true
+						});							
 					});
 
 				</script>
