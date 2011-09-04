@@ -31,7 +31,6 @@
 				$outputAttribtes = '';
 				$added = false;
 				foreach ($updatedAttributes as $key => $attribute) {
-					if ($attribute['variant'] !== '1') {
 						$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['name'] . '</span>' . '<span class="attribute-description">' . $attribute['description'] . '</span>'; 
 						$outputAttribtes .= '<span class="attribute-action">';
 						if($attribute['action'] === 'E'){
@@ -44,7 +43,6 @@
 						$outputAttribtes .= '</span>';
 						$outputAttribtes .= '</li>';
 						$added = true;
-					}
 				}
 
 				if ($added) {

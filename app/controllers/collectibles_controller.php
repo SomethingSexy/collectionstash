@@ -178,7 +178,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'addSelectType'));
 		}
 		if ($id && is_numeric($id)) {
-			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag'=>array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 
 			if (!empty($variantCollectible)) {
 				$manufacturer = $this -> Session -> read('add.collectible.manufacture');
@@ -486,17 +486,17 @@ class CollectiblesController extends AppController {
 			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
 		}
 
-		if ($this -> Session -> check('add.collectible.variant')) {
-			if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
-				if (isset($collectible['AttributesCollectible'])) {
-					$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
-				} else {
-					$result = $wizardData['variantFeatures']['AttributesCollectible'];
-				}
-				debug($result);
-				$collectible['AttributesCollectible'] = $result;
-			}
-		}
+		// if ($this -> Session -> check('add.collectible.variant')) {
+		// if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
+		// if (isset($collectible['AttributesCollectible'])) {
+		// $result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
+		// } else {
+		// $result = $wizardData['variantFeatures']['AttributesCollectible'];
+		// }
+		// debug($result);
+		// $collectible['AttributesCollectible'] = $result;
+		// }
+		// }
 
 		if (isset($collectible['AttributesCollectible'])) {
 			foreach ($collectible['AttributesCollectible'] as $key => &$value) {
@@ -556,15 +556,15 @@ class CollectiblesController extends AppController {
 		$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 
 		if ($this -> Session -> check('add.collectible.variant')) {
-			if (!isset($collectible['AttributesCollectible'])) {
-				$collectible['AttributesCollectible'] = array();
-			}
+			// if (!isset($collectible['AttributesCollectible'])) {
+				// $collectible['AttributesCollectible'] = array();
+			// }
 
-			if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
-				$result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
-				debug($result);
-				$collectible['AttributesCollectible'] = $result;
-			}
+			// if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
+			// $result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
+			// debug($result);
+			// $collectible['AttributesCollectible'] = $result;
+			// }
 			$collectible['Collectible']['variant'] = 1;
 		}
 		/* Since they confirmed, now set to pending = 1.  I really don't like how
@@ -628,7 +628,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'index'));
 		}
 		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
-
+		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
 			debug($collectible);
 			$this -> set('collectible', $collectible);

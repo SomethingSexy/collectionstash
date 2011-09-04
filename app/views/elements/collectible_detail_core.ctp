@@ -114,10 +114,7 @@ if (!isset($showCompareFields)) {
 		</div>
 		<?php
 		if($showAttributes) {
-			echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showVariant'=> false,'showEdit'=>$showEdit));
-			if(isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) {
-				echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showVariant'=> true,'showEdit'=>$showEdit));
-			 }
+			echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showEdit'=>$showEdit));
 		}
 		if(isset($showTags) && $showTags === true) {
 			echo $this->element('collectible_detail_tags', array('collectibleCore'=>$collectibleCore));			

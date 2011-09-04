@@ -131,7 +131,7 @@ class AttributesCollectiblesEditsController extends AppController {
 			$this -> set('collectibleId', $id);
 			$this -> Session -> write('collectible.edit-id', $id);
 			//Submit the deletes as deletes....then loop throuh each one to either delete or add
-			$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'fields' => array('id', 'attribute_id', 'collectible_id', 'description', 'variant', 'active'), 'contain' => array('Attribute' => array('fields' => array('name')))));
+			$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'fields' => array('id', 'attribute_id', 'collectible_id', 'description', 'active'), 'contain' => array('Attribute' => array('fields' => array('name')))));
 			debug($attributes);
 			//$this -> set('attributes', $attributes);
 			$this -> data = $attributes;

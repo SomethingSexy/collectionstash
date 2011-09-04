@@ -204,10 +204,9 @@ var DED = function() {
 	            var $hiddenId = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][attribute_id]').val(attributeId);
 	            var $hiddenDescription = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][description]').val(description);
 				var $hiddenName = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][name]').val(attributeName);
-				var $hiddenVariant = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][variant]').val('0');
 				var $hiddenAction = $('<input/>').attr('type','hidden').attr('name','data[AttributesCollectible][' + attributeNumber +'][action]').val('A').addClass('attribute').addClass('action');
 	
-	            $li.append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenVariant).append($hiddenAction);
+	            $li.append($attributeName).append($attributeDescription).append($attributeAction).append($hiddenId).append($hiddenDescription).append($hiddenName).append($hiddenAction);
 	
 	            $('#collectible-attributes-list').children('ul').append($li);
 	            

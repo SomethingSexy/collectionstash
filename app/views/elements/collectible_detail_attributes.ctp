@@ -1,12 +1,6 @@
 <div class="collectible detail">
 	<div class="detail title">
-		<h3><?php 
-			if(isset($showVariant) && $showVariant){
-				__('Variant Accessories/Features');
-			} else {
-				__('Accessories/Features');
-			}
-			?></h3>
+		<h3><?php echo __('Accessories/Features'); ?></h3>
 		<?php
 		if (isset($showEdit) && $showEdit) {
 			echo '<div class="title link">';
@@ -28,14 +22,8 @@
 		$outputAttribtes = '';
 		$added = false;
 		foreach ($collectibleCore['AttributesCollectible'] as $key => $attribute) {
-			$isVariant = '\'0\'';	
-			if(isset($showVariant) && $showVariant){
-				$isVariant = '\'1\'';
-			}	
-			if ($attribute['variant'] !== $isVariant) {
-				$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>' . '<span class="attribute-description">' . $attribute['description'] . '</span>' . '</li>';
-				$added = true;
-			}
+			$outputAttribtes .= '<li>' . '<span class="attribute-name">' . $attribute['Attribute']['name'] . '</span>' . '<span class="attribute-description">' . $attribute['description'] . '</span>' . '</li>';
+			$added = true;
 		}
 
 		if ($added) {
