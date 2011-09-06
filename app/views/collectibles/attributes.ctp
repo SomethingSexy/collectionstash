@@ -1,13 +1,4 @@
 <?php echo $this -> Html -> script('attributes-add', array('inline' => false));?>
-<?php if($this -> Session -> check('add.collectible.variant')) { ?>
-<div id="base-collectible-variant" class="dialog">
-<?php      
-	echo $this->element('collectible_detail_attributes', array(
-		'collectibleCore' => $collectible
-	));
-?>
-</div>
-<?php } ?>
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags','image'=>'Image', 'review'=> 'Review')); ?>			
 </div>
@@ -17,6 +8,15 @@
 			<h2>
 			<?php echo __('Add New Collectible', true); ?>
 			</h2>
+			<?php if($this -> Session -> check('add.collectible.variant')) { ?>
+			<div class="actions">
+				<ul>
+					<li>
+						<a id="base-collectible-link" class="link"><?php echo __('View Base Collectible'); ?></a>
+					</li>
+				</ul>
+			</div>
+			<?php } ?>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<?php 
@@ -41,29 +41,26 @@
 							<?php
 							$lastKey = 0;
 							echo '<li class="title">';
-							echo '<span class="attribute-name">'.__('Part', true).'</span>';
+							echo '<span class="attribute-name">'.__('Name', true).'</span>';
 							echo '<span class="attribute-description">'.__('Description', true).'</span>';
 							echo '<span class="attribute-action">'.__('Action', true).'</span>';
 							echo '</li>';
 							if(isset($this -> data['AttributesCollectible'])) {
-
 								foreach($this->data['AttributesCollectible'] as $key => $attribue) {
-									if($attribue['variant'] !== '1') {
-										echo '<li>';
-										echo '<span class="attribute-label">Part: </span>';
-										echo '<span class="attribute-name">';
-										echo $attribue['name'];
-										echo '</span>';
-										echo '<span class="attribute-description">';
-										echo $attribue['description'];
-										echo '</span>';
-										echo '<span class="attribute-action"><a class="remove-attribute">Remove</a></span>';
-										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
-										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
-										echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
-										echo '</li>';
-										$lastKey = $key;
-									}
+									echo '<li>';
+									echo '<span class="attribute-name">';
+									echo $attribue['name'];
+									echo '</span>';
+									echo '<span class="attribute-description">';
+									echo $attribue['description'];
+									echo '</span>';
+									echo '<span class="attribute-action"><a class="remove-attribute">Remove</a></span>';
+									echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][attribute_id]" value="' . $attribue['attribute_id'] . '"/>';
+									echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][description]" value="' . $attribue['description'] . '"/>';
+									echo '<input type="hidden" name="data[AttributesCollectible][' . $key . '][name]" value="' . $attribue['name'] . '"/>';
+									echo '</li>';
+									$lastKey = $key;
+
 								}
 								echo '<script>var lastAttributeKey =' . $lastKey . ';</script>';
 							}
@@ -84,34 +81,44 @@
 					<input type="button" id="add-attributes-button" class="button" value="Submit">
 					<input type="button" id="skip-attributes-button" class="button" value="Skip">
 				</div>
-				<script>
-					$(function(){
-						//Eh move this out of here
-						$('#add-attributes-button').click(function(){
-							$('#add-attributes-form').submit();	
-						});	
-						$('#skip-attributes-button').click(function(){
-							$('#skip-attributes-form').submit();	
-						});	
-						$('#base-collectible-variant').dialog({
-							'autoOpen' : true,
-							'width' : 400,
-							'autoHeight': true,
-							'resizable': false,
-							'modal': true
-						});							
-					});
-
-				</script>
 			</div>
 		</div>
 	</div>
 </div>
+<?php if($this -> Session -> check('add.collectible.variant')) { ?>
+<div id="base-collectible" class="dialog">
+<?php      
+	echo $this->element('collectible_detail_attributes', array(
+		'collectibleCore' => $collectible
+	));
+?>
+</div>
+<?php } ?>
 <script>
-	$(".ui-icon-info").tooltip({
-		position: 'center right',
-		opacity: 0.7
+	$(function(){
+		//Eh move this out of here
+		$(".ui-icon-info").tooltip({
+			position: 'center right',
+			opacity: 0.7
+		});
+		$('#add-attributes-button').click(function(){
+			$('#add-attributes-form').submit();	
+		});	
+		$('#skip-attributes-button').click(function(){
+			$('#skip-attributes-form').submit();	
+		});	
+		$('#base-collectible').dialog({
+			'autoOpen' : false,
+			'width' : 400,
+			'autoHeight': true,
+			'resizable': false,
+			'modal': true
+		});	
+		$('#base-collectible-link').click(function(){
+			$('#base-collectible').dialog('open');
+		});								
 	});
+
 </script>
 <div id="add-attribute-dialog" class="dialog" title="Add Attribute">
 	<div class="component">

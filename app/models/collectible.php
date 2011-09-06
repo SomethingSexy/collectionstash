@@ -203,44 +203,10 @@ class Collectible extends AppModel {
 	 * the given id.
 	 */
 	public function getCollectibleVariants($collectibleId) {
-		$collectibles = $this -> find('all', array('conditions' => array('Collectible.variant_collectible_id' => $collectibleId)));
+		$collectibles = $this -> find('all', array('conditions' => array('Collectible.variant_collectible_id' => $collectibleId, 'Collectible.state' => 0)));
 
 		return $collectibles;
 	}
-
-	// /**
-	// * This method will get the fields that have been changed, given a Collectible being passed in.  It will return
-	// * an array of fields and their values that need to be updated for this collectible.
-	// */
-	// function getEditFields($collectible) {
-	// debug($collectible);
-	// //Grab the collectible id for the edit we are saving
-	// // $collectibleId = $collectible['Collectible']['collectible_id'];
-	//
-	// // $currentVersionCollectible = $this -> find("first", array('conditions' => array('Collectible.id' => $collectibleId)));
-	// //
-	// // //now remove it cause it is not necessary
-	// unset($collectible['Collectible']['collectible_id']);
-	// /*
-	// * Lets build our update array based on what has changed from the latest version of the collectible(as of now:)) and the one we are editing.  We only
-	// * want to submit those changes, no need to update the rest.  We might overwrite changes here by accident.  If this becomes a problem then we will have
-	// * to indicate at the edit process, exactly what the user changed so we do not do any accidental updates...TODO
-	// */
-	// $changedString = '_changed';
-	// $updateFields = array();
-	// foreach ($collectible['Collectible'] as $key => $value) {
-	// if (substr_compare($key, $changedString, -strlen($changedString), strlen($changedString)) === 0) {
-	// //product_width_changed
-	// //0, 14
-	// //total length - (_changed) length
-	// $field = substr($key, 0, strlen($key) - strlen($changedString));
-	// $updateFields['Collectible.'.$field] = $collectible['Collectible'][$field];
-	// }
-	// }
-	//
-	// debug($updateFields);
-	// return $updateFields;
-	// }
 
 }
 ?>

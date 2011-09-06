@@ -12,7 +12,8 @@
 		<div class="component-view">
 			<div class="collectibles">
 				<?php echo $this->element('collectible_detail_core', array(
-					'collectibleCore' => $collectible
+					'collectibleCore' => $collectible,
+					'showTags' => true
 				));	?>	
 			</div>
 		</div>

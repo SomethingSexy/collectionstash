@@ -9,6 +9,9 @@ if (!isset($showAttributes)) {
 if (!isset($showCompareFields)) {
 	$showCompareFields = false;
 }
+if(!isset($showEdit)){
+	$showEdit = false;
+}
 ?>
 
 <div class="collectible item">

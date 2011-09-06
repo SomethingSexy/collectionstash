@@ -9,13 +9,13 @@ class Tag extends AppModel {
 	 */
 	public function processAddTags($tags) {
 		$processedTags = array();
-		foreach($tags as $key => $value) {
+		foreach ($tags as $key => $value) {
 			debug($key);
 			debug($value['tag']);
-			if(!empty($value['tag'])) {
+			if (!empty($value['tag'])) {
 				$tagResult = $this -> find("first", array('conditions' => array('Tag.tag' => strtolower($value['tag']))));
 				debug($tagResult);
-				if(!empty($tagResult)) {
+				if (!empty($tagResult)) {
 					$collectibleTag = array();
 					$collectibleTag['tag_id'] = $tagResult['Tag']['id'];
 					$collectibleTag['Tag'] = $tagResult['Tag'];
@@ -25,7 +25,7 @@ class Tag extends AppModel {
 					$value['active'] = 1;
 					$value['tag'] = strtolower($value['tag']);
 					$this -> create();
-					if($this -> save($value)) {
+					if ($this -> save($value)) {
 						$tagId = $this -> id;
 						$addedTag = $this -> findById($tagId);
 						$collectibleTag = array();

@@ -12,7 +12,8 @@ class CollectiblesController extends AppController {
 
 	function beforeFilter() {
 		parent::beforeFilter();
-		$this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'tags', 'image', 'review');
+		// $this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'tags', 'image', 'review');
+		$this -> Wizard -> steps = array('manufacture', 'attributes', 'tags', 'image', 'review');
 		$this -> Wizard -> completeUrl = '/collectibles/confirm';
 		$this -> Wizard -> loginRequired = true;
 	}
@@ -155,7 +156,7 @@ class CollectiblesController extends AppController {
 				/*
 				 * Now we can go to the wizard, turn variant off and go to the beginning
 				 */
-				$this -> Wizard -> branch('variant', true);
+				// $this -> Wizard -> branch('variant', true);
 				$this -> redirect(array('action' => 'wizard/manufacture'));
 			} else {
 				$this -> Session -> setFlash(__('Please select a valid Collectible Type', true), null, null, 'error');
@@ -186,7 +187,7 @@ class CollectiblesController extends AppController {
 				if ($variantCollectible['Collectible']['manufacture_id'] === $manufacturer['Manufacture']['id']) {
 					$this -> Session -> write('add.collectible.variant', $variantCollectible);
 					$this -> Session -> write('add.collectible.collectibleType', array('Collectibletype' => $variantCollectible['Collectibletype']));
-					$this -> Wizard -> branch('variant');
+					// $this -> Wizard -> branch('variant');
 					$this -> redirect(array('action' => 'wizard/manufacture'));
 				} else {
 					$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
@@ -267,6 +268,9 @@ class CollectiblesController extends AppController {
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 		$this -> set(compact('scales'));
 
+		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+		$this -> set('retailers', $retailers);
+
 	}
 
 	function _processManufacture() {
@@ -316,22 +320,36 @@ class CollectiblesController extends AppController {
 		return false;
 	}
 
-	function _processVariantFeatures() {
-		$this -> data = Sanitize::clean($this -> data);
-		return true;
-	}
-
-	function _prepareVariantFeatures() {
-		if ($this -> Session -> check('add.collectible.variant')) {
-			$variantCollectible = $this -> Session -> read('add.collectible.variant');
-			debug($variantCollectible);
-			$this -> set('collectible', $variantCollectible);
-		}
-		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
-		$this -> set('retailers', $retailers);
-	}
+	// function _processVariantFeatures() {
+	// $this -> data = Sanitize::clean($this -> data);
+	// return true;
+	// }
+	//
+	// function _prepareVariantFeatures() {
+	// if ($this -> Session -> check('add.collectible.variant')) {
+	// $variantCollectible = $this -> Session -> read('add.collectible.variant');
+	// debug($variantCollectible);
+	// $this -> set('collectible', $variantCollectible);
+	// }
+	//
+	// }
 
 	function _prepareAttributes() {
+		if (empty($this -> data)) {
+			if ($this -> Session -> check('add.collectible.variant')) {
+				//TODO store the collectible in the session for going back
+				$variantCollectible = $this -> Session -> read('add.collectible.variant');
+				$this -> set('collectible', $variantCollectible);
+				if (isset($variantCollectible['AttributesCollectible'])) {
+					foreach ($variantCollectible['AttributesCollectible'] as $key => &$value) {
+						$value['name'] = $value['Attribute']['name'];
+						debug($value);
+					}
+				}
+				$this -> data['AttributesCollectible'] = $variantCollectible['AttributesCollectible'];
+			}
+
+		}
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
 			debug($variantCollectible);
@@ -372,6 +390,11 @@ class CollectiblesController extends AppController {
 		debug($wizardData);
 		if (isset($wizardData['tags']['CollectiblesTag'])) {
 			$this -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
+		} else {
+			if ($this -> Session -> check('add.collectible.variant')) {
+				$variantCollectible = $this -> Session -> read('add.collectible.variant');
+				$this -> data['Tag'] = $variantCollectible['CollectiblesTag'];
+			}
 		}
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
@@ -382,15 +405,20 @@ class CollectiblesController extends AppController {
 	}
 
 	function _processTags() {
-		//TODO should validate
 		$this -> data = Sanitize::clean($this -> data);
 		debug($this -> data);
-		$this -> loadModel('Tag');
-		$processedTags = $this -> Tag -> processAddTags($this -> data['CollectiblesTag']);
-		$this -> data['CollectiblesTag'] = $processedTags;
+		//TODO clean up the validation
+		if (count($this -> data['CollectiblesTag']) <= 5) {
+			$this -> loadModel('Tag');
+			$processedTags = $this -> Tag -> processAddTags($this -> data['CollectiblesTag']);
+			$this -> data['CollectiblesTag'] = $processedTags;
+		} else {
+			$this -> Session -> setFlash(__('Only 5 tags allowed.', true), null, null, 'error');
+			return false;
+		}
+
 		debug($this -> data);
 		return true;
-
 	}
 
 	function _prepareImage() {
@@ -557,7 +585,7 @@ class CollectiblesController extends AppController {
 
 		if ($this -> Session -> check('add.collectible.variant')) {
 			// if (!isset($collectible['AttributesCollectible'])) {
-				// $collectible['AttributesCollectible'] = array();
+			// $collectible['AttributesCollectible'] = array();
 			// }
 
 			// if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {

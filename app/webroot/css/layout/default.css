@@ -24,7 +24,7 @@
 
 a {
    /* font-weight: bold;*/
-    text-decoration: underline;
+    text-decoration: none;
 }
 a:link,
 a.link {
@@ -34,7 +34,7 @@ a:visited {
 
 }
 a:hover {
-
+	text-decoration: underline;
 }
 a:active {
 
@@ -60,6 +60,7 @@ a:active {
     padding-left: 1.5em;
     padding-right: 1.5em;
     padding-bottom: 1em;
+    padding-top: 0.5em;
     color: #444444;
     font-size: 0.8em;
 }
@@ -94,6 +95,9 @@ a:active {
 	box-shadow: none;
 	padding: 0;
 	margin: 0;
+}
+.component .inside .component-title .actions ul li a.link {
+	font-size: 0.75em;
 }
 .component .component-title h2 {
     clear:both;
@@ -967,8 +971,7 @@ div.radio label {
 input[type=button].button,
 .ui-dialog .ui-dialog-buttonpane button,
 input[type=submit],
-div.actions ul li a,
-td.actions a {
+div.actions ul li a.button {
 	display: inline-block;
 	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
 	*display: inline;
@@ -1505,7 +1508,7 @@ div.paging span a {
 /*********************************
  * Collectible Add 
  */
-#base-collectible-variant .collectible.item {
+#base-collectible .collectible.item {
 	padding: 0;
 	border: none;
 }

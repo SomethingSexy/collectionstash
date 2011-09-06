@@ -85,11 +85,11 @@ function processJson(data) {
 			window.location = "/users/login";
 		} else {
 			if(data.errors[0]['edition_size']) {
-				$('#dialogEditionSize').after('<div class="error-message">'+ data.errors[0]['edition_size'] +'</div>')
+				$('#dialogEditionSize').after('<div class="error-message">'+ data.errors[0]['edition_size'] +'</div>');
 			}
 
 			if(data.errors[0]['cost']) {
-				$('#dialogCost').after('<div class="error-message">'+ data.errors[0]['cost'] +'</div>')
+				$('#dialogCost').after('<div class="error-message">'+ data.errors[0]['cost'] +'</div>');
 			}
 
 			$( "#add-collection-dialog" ).dialog({

@@ -1,16 +1,4 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
-<?php if($this -> Session -> check('add.collectible.variant')) { ?>
-<div id="base-collectible-variant" class="dialog">
-	<?php      
-		echo $this->element('collectible_detail_core', array(
-			'showEdit' => false,
-			'showImage' => false,
-			'showAttributes' => false,
-			'collectibleCore' => $collectible
-		));
-	?>
-</div>
-<?php } ?>
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags', 'image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
@@ -20,6 +8,15 @@
 			<h2>
 			<?php echo __('Add New Collectible', true); ?>
 			</h2>
+			<?php if($this -> Session -> check('add.collectible.variant')) { ?>
+			<div class="actions">
+				<ul>
+					<li>
+						<a id="base-collectible-link" class="link"><?php echo __('View Base Collectible'); ?></a>
+					</li>
+				</ul>
+			</div>
+			<?php } ?>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">
@@ -62,50 +59,69 @@
 							</div>
 							<?php echo $this -> Form -> input('name', array('div' => false, 'label' => false));?>
 						</li>
-						<?php  if(!$this -> Session -> check('add.collectible.variant')) { ?>
-							<?php
-								if(empty($licenses)) {
-									echo '<li class="hidden">';
-								} else {
-									echo '<li>';
-								}
-							?>
+						<?php
+							if(empty($licenses)) {
+								echo '<li class="hidden">';
+							} else {
+								echo '<li>';
+							}
+						?>
+						<div class="label-wrapper">
+							<label for="">
+								<?php __('Brand/License') ?>
+							</label>
+						</div>
+						<?php  
+						if(!$this -> Session -> check('add.collectible.variant')) {
+							echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));
+							
+						} else {
+							echo '<div class="static-field">';
+							echo $collectible['License']['name'];
+							echo $this -> Form -> hidden('license_id');
+							echo '</div>';							
+						}?>
+						</li>
+						<?php
+							if(empty($series)) {
+								echo '<li class="hidden">';
+							} else {
+								echo '<li>';
+							}
+						?>
+						<div class="label-wrapper">
+							<label for="">
+								<?php __('Category') ?>
+							</label>
+						</div>
+						<?php  
+						if(!$this -> Session -> check('add.collectible.variant')) {
+							echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));
+							
+						} else {
+							echo '<div class="static-field">';
+							echo $collectible['Series']['name'];
+							echo $this -> Form -> hidden('series_id');
+							echo '</div>';							
+						}?>
+						</li>
+						<li>
 							<div class="label-wrapper">
-								<label for="">
-									<?php __('Brand/License') ?>
+								<label for="scale">
+									<?php __('Scale') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));?>
-							</li>
-		
-							<?php
-								if(empty($series)) {
-									echo '<li class="hidden">';
-								} else {
-									echo '<li>';
-								}
-							?>
-							<div class="label-wrapper">
-								<label for="">
-									<?php __('Category') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
-							</li>
-							<li>
-								<div class="label-wrapper">
-									<label for="scale">
-										<?php __('Scale') ?>
-									</label>
-								</div>
-								<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
-							</li>	
-					    <?php } else {
+							<?php  
+							if(!$this -> Session -> check('add.collectible.variant')) {
+								echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));
+								
+							} else {
+								echo '<div class="static-field">';
+								echo $collectible['Scale']['scale'];
 								echo $this -> Form -> hidden('scale_id');
-								echo $this -> Form -> hidden('series_id');
-								echo $this -> Form -> hidden('license_id');
-								}
-							 ?>
+								echo '</div>';							
+							}?>
+						</li>	
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleDescription">
@@ -166,6 +182,22 @@
 						</li>
 						<li>
 							<div class="label-wrapper">
+								<label for="CollectibleExclusive">
+									<?php __('Exclusive') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
+						</li>	
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Exclusive Retailer') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
+						</li>	
+						<li>
+							<div class="label-wrapper">
 								<label for="CollectibleCode">
 									<?php __('Product Code') ?>
 								</label>
@@ -223,19 +255,34 @@
 		</div>
 	</div>
 </div>
+<?php if($this -> Session -> check('add.collectible.variant')) { ?>
+<div id="base-collectible" class="dialog">
+	<?php      
+		echo $this->element('collectible_detail_core', array(
+			'showEdit' => false,
+			'showImage' => false,
+			'showAttributes' => false,
+			'collectibleCore' => $collectible
+		));
+	?>
+</div>
+<?php } ?>
 <script>
 	$(function(){
 		$(".ui-icon-info").tooltip({
 			position: 'center right',
 			opacity: 0.7
 		});
-		$('#base-collectible-variant').dialog({
-			'autoOpen' : true,
+		$('#base-collectible').dialog({
+			'autoOpen' : false,
 			'width' : 700,
 			'height': 700,
 			'resizable': false,
 			'modal': true
-		});			
+		});	
+		$('#base-collectible-link').click(function(){
+			$('#base-collectible').dialog('open');
+		});		
 		
 	});
 
