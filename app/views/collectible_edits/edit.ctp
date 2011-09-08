@@ -144,6 +144,22 @@
 						</li>
 						<li>
 							<div class="label-wrapper">
+								<label for="CollectibleExclusive">
+									<?php __('Exclusive') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
+						</li>	
+						<li>
+							<div class="label-wrapper">
+								<label for="">
+									<?php __('Exclusive Retailer') ?>
+								</label>
+							</div>
+							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
+						</li>	
+						<li>
+							<div class="label-wrapper">
 								<label for="CollectibleCode"> <?php __('Product Code')
 									?></label>
 								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the item code or product code given by the manufacture.', true) ?>" alt="info"></a>

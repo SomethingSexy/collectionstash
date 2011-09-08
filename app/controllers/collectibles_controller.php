@@ -208,7 +208,7 @@ class CollectiblesController extends AppController {
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
 		if (isset($id) && $id != null) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('addCollectibleId');
 		} else {
@@ -630,10 +630,35 @@ class CollectiblesController extends AppController {
 		$this -> Collectible -> create();
 		if ($this -> Collectible -> saveAll($collectible)) {
 			$id = $this -> Collectible -> id;
-			// $collectible = $this -> Collectible -> findById($id);
+			$addCollectible = $this -> Collectible -> findById($id);
 			if (isset($wizardData['image']['Upload'])) {
-				$this -> Collectible -> Upload -> id = $wizardData['image']['Upload'];
-				$this -> Collectible -> Upload -> saveField('collectible_id', $id);
+				//Update the current one
+				//Doing this so that we will trigger the revision
+				$updateUpload = array();
+				$updateUpload['Upload']['id'] = $wizardData['image']['Upload']['id'];
+				$updateUpload['Upload']['collectible_id'] = $id;
+				$updateUpload['Upload']['revision_id'] = $addCollectible['Collectible']['revision_id'];
+				if ($this -> Collectible -> Upload -> saveAll($updateUpload, array('validate' => false))) {
+					//If it fails, let it pass but log the problem.
+					$this -> log('Failed to update the upload with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'] . ' and upload id ' . $addCollectible['Upload']['id'], 'error');
+				}
+			}
+			//If I did set some attributes, lets update the revision ids for them as well.
+			if (isset($addCollectible['AttributesCollectible']) && !empty($addCollectible['AttributesCollectible'])) {
+				foreach ($addCollectible['AttributesCollectible'] as $key => &$value) {
+					$value['revision_id'] = $addCollectible['Collectible']['revision_id'];
+					unset($value['attribute_id']);
+					unset($value['collectible_id']);
+					unset($value['description']);
+					unset($value['active']);
+					unset($value['created']);
+					unset($value['modified']);
+				}
+				//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
+				if ($this -> Collectible -> AttributesCollectible -> saveAll($addCollectible['AttributesCollectible'], array('validate' => false))) {
+					//If it fails, let it pass but log the problem.
+					$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'], 'error');
+				}
 			}
 
 			$this -> Session -> write('addCollectibleId', $id);
@@ -751,7 +776,7 @@ class CollectiblesController extends AppController {
 			$this -> set(compact('history'));
 			//Grab a list of all attributes associated with this collectible, or were associated with this collectible.  We will display a list of all
 			//of these attributes then we can go into further history detail if we need too
-			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.variant' => 0)));
+			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id)));
 			$this -> set(compact('attributeHistory'));
 			debug($attributeHistory);
 			//Update this in the future since we only allow one Upload for now
@@ -772,6 +797,14 @@ class CollectiblesController extends AppController {
 					$upload['Upload']['user_name'] = $editUserDetails['User']['username'];
 
 				}
+				//As of 9/7/11, because of the way we have to add an upload, the first revision is going to be bogus.
+				//Pop it off here until we can update the revision behavior so that we can specific a save to not add a revision.
+				$lastUpload = end($uploadHistory);
+				if($lastUpload['Upload']['revision_id'] === '0'){
+					array_pop($uploadHistory);	
+				}
+				reset($uploadHistory);
+				
 			}
 
 			debug($uploadHistory);
@@ -824,7 +857,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => false));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Upload', 'AttributesCollectible')));
 		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
 			$data = array();
@@ -834,7 +867,40 @@ class CollectiblesController extends AppController {
 			$data['Revision']['action'] = 'P';
 			$data['Revision']['user_id'] = $this -> getUserId();
 			if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
-				$this -> redirect(array('controller' => 'edits', 'action' => 'index'), null, true);
+				//Ugh need to get this again so I can get the Revision id
+				$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Upload', 'AttributesCollectible')));
+				//update with the new revision id
+				if (isset($collectible['Upload']) && !empty($collectible['Upload'])) {
+
+					$this -> Collectible -> Upload -> id = $collectible['Upload'][0]['id'];
+					if ($this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+						//If it fails, let it pass but log the problem.
+						$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
+					}
+				}
+				//If I did set some attributes, lets update the revision ids for them as well.
+				if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
+					foreach ($collectible['AttributesCollectible'] as $key => &$value) {
+						$value['revision_id'] = $collectible['Collectible']['revision_id'];
+						unset($value['attribute_id']);
+						unset($value['collectible_id']);
+						unset($value['description']);
+						unset($value['active']);
+						unset($value['created']);
+						unset($value['modified']);
+					}
+
+					//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
+					if ($this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
+						//If it fails, let it pass but log the problem.
+						$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $collectible['Collectible']['id'], 'error');
+					}
+				}
+				$this -> Session -> setFlash(__('The collectible was successfully approved.', true), null, null, 'success');
+				$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
+			} else {
+				$this -> Session -> setFlash(__('There was a problem approving the collectible.', true), null, null, 'error');
+				$this -> redirect(array('admin' => true, 'action' => 'view', $id), null, true);
 			}
 
 		}

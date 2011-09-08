@@ -52,17 +52,20 @@ class Collectible extends AppModel {
 
 	function doAfterFind($results) {
 		$showEditionSize = false;
+		//TODO not sure this is really needed anymore
 		if (isset($results['edition_size'])) {
 			if (!empty($results['edition_size'])) {
 				$showEditionSize = true;
 			}
 		}
+		//TODO figure out a better way to do this
 		$results['showUserEditionSize'] = $showEditionSize;
+		//Cleans up default no set years
 		if (isset($results['release']) && $results['release'] === '0000') {
 			$results['release'] = '';
 		}
 
-		//debug($results);
+
 		return $results;
 	}
 

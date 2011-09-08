@@ -16,8 +16,8 @@ class AttributesCollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			//TODO go somewhere
 			$this -> redirect($this -> referer());
-		} 
-		
+		}
+
 		if (!empty($this -> data)) {
 			debug($this -> data);
 			if (isset($this -> data['AttributesCollectible'])) {
@@ -29,14 +29,14 @@ class AttributesCollectiblesController extends AppController {
 						$this -> AttributesCollectible -> set($attribue);
 						//debug($this -> AttributesCollectible);
 						if ($this -> AttributesCollectible -> validates()) {
-	
+
 						} else {
 							//If one is invalid set it to false
 							$isValid = false;
 							debug($this -> AttributesCollectible -> invalidFields());
 							$this -> set('errors', $this -> AttributesCollectible -> validationErrors);
-						}						
-					}	
+						}
+					}
 				}
 				//if everything is valid, then lets do our updates
 				if ($isValid) {
@@ -90,7 +90,7 @@ class AttributesCollectiblesController extends AppController {
 			//$this -> set('attributes', $attributes);
 			$this -> data = $attributes;
 		}
-		
+
 		$collectibleId = $this -> Session -> read('collectible.edit-id');
 		$this -> set(compact('collectibleId'));
 	}
@@ -104,7 +104,13 @@ class AttributesCollectiblesController extends AppController {
 			//Date and timestamp of update and user who did the update
 			$this -> AttributesCollectible -> id = $id;
 			$history = $this -> AttributesCollectible -> revisions(null, true);
-
+			//As of 9/7/11, because of the way we have to add an attributes collectible, the first revision is going to be bogus.
+			//Pop it off here until we can update the revision behavior so that we can specific a save to not add a revision.
+			$lastHistory= end($history);
+			if ($lastHistory['AttributesCollectible']['revision_id'] === '0') {
+				array_pop($history);
+			}
+			reset($history);
 			debug($history);
 			$this -> set(compact('history'));
 

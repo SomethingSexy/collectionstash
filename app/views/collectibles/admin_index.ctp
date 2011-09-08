@@ -12,6 +12,7 @@
 					<?php __('Pending Collectibles');?>
 				</h2>				
 			</div>
+			<?php echo $this -> element('flash');?>
 			<div class="collectibles view">
 				<?php
 				foreach ($collectibles as $collectible):

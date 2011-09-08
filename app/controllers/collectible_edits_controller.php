@@ -74,6 +74,8 @@ class CollectibleEditsController extends AppController {
 				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
 				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 				$this -> set(compact('scales'));
+				$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+				$this -> set('retailers', $retailers);
 			}
 		} else {
 			//At this point $id should always be set
@@ -93,6 +95,8 @@ class CollectibleEditsController extends AppController {
 
 			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 			$this -> set(compact('scales'));
+			$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+			$this -> set('retailers', $retailers);
 		}
 
 		$currentCollectibleId = $this -> Session -> read('collectible.edit-id');
