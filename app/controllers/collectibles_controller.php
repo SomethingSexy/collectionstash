@@ -28,24 +28,7 @@ class CollectiblesController extends AppController {
 		if (!Configure::read('Settings.Collectible.Contribute.allowed')) {
 			$this -> redirect('/', null, true);
 		}
-		//Always delete this stuff, this could go in a better spot in the future
-		//Should probably update this so I set to show and not show different things, not put the biz logic in the view
-		$this -> Session -> delete('preSaveCollectible');
-		$this -> Session -> delete('uploadId');
-		$this -> Session -> delete('add.collectible.manufacture');
-		$this -> Session -> delete('add.collectible.collectibleType');
-		$this -> Session -> delete('add.collectible.variant');
-
-		//TODO I shouldn't need these
-		$this -> Session -> delete('add.collectible.mode.collectible');
-		$this -> Session -> delete('add.collectible.mode.variant');
-		$this -> Session -> delete('edit.collectible.mode.collectible');
-		$this -> Session -> delete('edit.collectible.mode.variant');
-		$this -> Session -> delete('variant.add-id');
-		$this -> Session -> delete('variant.base-collectible');
-		$this -> Session -> delete('add.collectible.variant.collectible');
-		$this -> Session -> delete('addCollectibleId');
-		$this -> Wizard -> resetWizard();
+		$this -> resetCollectibleAdd();
 		//check to see if there is data submitted
 		if (!empty($this -> data)) {
 			debug($this -> data);
@@ -203,6 +186,64 @@ class CollectiblesController extends AppController {
 
 	function nonManufactured() {
 		$this -> checkLogIn();
+	}
+
+	/**
+	 * This method will allow us to quick add a collectible from a selected collectible.
+	 * This method will base the new collectible off the manufacture and type that this collectible is.
+	 *
+	 * We will probably want to check against the type of collectible first in the future to know what
+	 * we are doing first.
+	 *
+	 * Use Cases:
+	 * 	- Add a similar collectible (collectible Id = xx, variant = false)
+	 *  - Add a variant collectible (collectible Id = xx, variant = true)
+	 *  - Add a similar collectible that is a variant of a base collectible (collectible Id = xx, variant = false)
+	 * 		- For this case, we will determine here IF the collectible we are copying from IS a variant, then we will use its base collectible as the base collectible for the new collectible
+	 *
+	 * $collectibleId - this is the id that we are "Copying"
+	 * $variant - this is a variant add?
+	 */
+	function quickAdd($collectibleId = null, $variant = false) {
+		$this -> checkLogIn();
+		if (!is_null($collectibleId) && is_numeric($collectibleId)) {
+			//reset anything so we are fresh
+			$this -> resetCollectibleAdd();
+			//Grab my collectible
+			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			//make sure this is a valid collectible
+			debug($collectible);
+			debug($variant);
+			if (!empty($collectible)) {
+
+				$this -> Session -> write('add.collectible.variant', $variantCollectible);
+				$manufacturer = array();
+				$manufacturer['Manufacture'] = $collectible['Manufacture'];
+				$this -> Session -> write('add.collectible.manufacture', $manufacturer);
+
+				$collectibleType = array();
+				$collectibleType['Collectibletype'] = $collectible['Collectibletype'];
+				$this -> Session -> write('add.collectible.collectibleType', $collectibleType);
+
+				if ($variant === 'true') {
+					//Variant add
+					$this -> Session -> write('add.collectible.variant', $collectible);
+				} else {
+					if ($collectible['Collectible']['variant']) {
+						//If the collectible we are copying is a variant itself, then grab its parent
+						//and set that as a parent and then this will be a variant of that collectible
+						$variantId = $collectible['Collectible']['variant_collectible_id'];
+						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+						$this -> Session -> write('add.collectible.variant', $collectible);
+					} 
+				}
+				$this -> redirect(array('action' => 'wizard/manufacture'));
+			} else {
+				$this -> redirect($this -> referer());
+			}
+		} else {
+			$this -> redirect($this -> referer());
+		}
 	}
 
 	function confirm() {
@@ -800,11 +841,11 @@ class CollectiblesController extends AppController {
 				//As of 9/7/11, because of the way we have to add an upload, the first revision is going to be bogus.
 				//Pop it off here until we can update the revision behavior so that we can specific a save to not add a revision.
 				$lastUpload = end($uploadHistory);
-				if($lastUpload['Upload']['revision_id'] === '0'){
-					array_pop($uploadHistory);	
+				if ($lastUpload['Upload']['revision_id'] === '0') {
+					array_pop($uploadHistory);
 				}
 				reset($uploadHistory);
-				
+
 			}
 
 			debug($uploadHistory);
@@ -904,6 +945,27 @@ class CollectiblesController extends AppController {
 			}
 
 		}
+	}
+
+	private function resetCollectibleAdd() {
+		//Always delete this stuff, this could go in a better spot in the future
+		//Should probably update this so I set to show and not show different things, not put the biz logic in the view
+		$this -> Session -> delete('preSaveCollectible');
+		$this -> Session -> delete('uploadId');
+		$this -> Session -> delete('add.collectible.manufacture');
+		$this -> Session -> delete('add.collectible.collectibleType');
+		$this -> Session -> delete('add.collectible.variant');
+
+		//TODO I shouldn't need these
+		$this -> Session -> delete('add.collectible.mode.collectible');
+		$this -> Session -> delete('add.collectible.mode.variant');
+		$this -> Session -> delete('edit.collectible.mode.collectible');
+		$this -> Session -> delete('edit.collectible.mode.variant');
+		$this -> Session -> delete('variant.add-id');
+		$this -> Session -> delete('variant.base-collectible');
+		$this -> Session -> delete('add.collectible.variant.collectible');
+		$this -> Session -> delete('addCollectibleId');
+		$this -> Wizard -> resetWizard();
 	}
 
 }

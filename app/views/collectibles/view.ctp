@@ -13,7 +13,8 @@
 			'showAddedBy' => true,
 			'showAddedDate' => true,
 			'collectibleDetail' => $collectible,
-			'showAddStash' => true
+			'showAddStash' => true,
+			'showQuickAdd' => true
 		));		
 		
 	} else {
@@ -26,7 +27,8 @@
 			'setPageTitle' => true,
 			'showAddedBy' => true,
 			'showAddedDate' => true,
-			'collectibleDetail' => $collectible
+			'collectibleDetail' => $collectible,
+			'showQuickAdd' => false
 		));			
 	}
 ?>
