@@ -12,6 +12,9 @@ if (!isset($showCompareFields)) {
 if(!isset($showEdit)){
 	$showEdit = false;
 }
+if(!isset($adminMode)){
+	$adminMode = false;
+}
 ?>
 
 <div class="collectible item">
@@ -31,7 +34,12 @@ if(!isset($showEdit)){
 				<?php
 				if (isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
-					echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+					if($adminMode){
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '">Edit</a>';
+					} else {
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/false'.'">Edit</a>';
+					}
+					
 					echo '</div>';
 				}
 				?>

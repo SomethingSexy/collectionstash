@@ -1,7 +1,7 @@
 <?php
 class Collectible extends AppModel {
 	var $name = 'Collectible';
-	var $belongsTo = array('Revision', 'Manufacture' => array('className' => 'Manufacture', 'foreignKey' => 'manufacture_id'), 'Collectibletype' => array('className' => 'Collectibletype', 'foreignKey' => 'collectibletype_id'), 'License' => array('className' => 'License', 'foreignKey' => 'license_id'), 'Series' => array('className' => 'Series', 'foreignKey' => 'series_id'), 'Scale', 'Retailer', 'User' => array('counterCache' => true));
+	var $belongsTo = array('Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer', 'User' => array('counterCache' => true));
 
 	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible', 'CollectiblesTag');
 
@@ -64,7 +64,6 @@ class Collectible extends AppModel {
 		if (isset($results['release']) && $results['release'] === '0000') {
 			$results['release'] = '';
 		}
-
 
 		return $results;
 	}

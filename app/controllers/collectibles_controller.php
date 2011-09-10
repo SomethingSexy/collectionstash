@@ -6,7 +6,7 @@ class CollectiblesController extends AppController {
 
 	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail');
 
-	var $components = array('RequestHandler', 'Wizard.Wizard');
+	var $components = array('RequestHandler', 'Wizard.Wizard', 'Email');
 
 	var $actsAs = array('Searchable.Searchable');
 
@@ -235,7 +235,7 @@ class CollectiblesController extends AppController {
 						$variantId = $collectible['Collectible']['variant_collectible_id'];
 						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 						$this -> Session -> write('add.collectible.variant', $collectible);
-					} 
+					}
 				}
 				$this -> redirect(array('action' => 'wizard/manufacture'));
 			} else {
@@ -898,7 +898,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Upload', 'AttributesCollectible')));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
 		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
 			$data = array();
@@ -909,12 +909,12 @@ class CollectiblesController extends AppController {
 			$data['Revision']['user_id'] = $this -> getUserId();
 			if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
 				//Ugh need to get this again so I can get the Revision id
-				$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Upload', 'AttributesCollectible')));
+				$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
 				//update with the new revision id
 				if (isset($collectible['Upload']) && !empty($collectible['Upload'])) {
 
 					$this -> Collectible -> Upload -> id = $collectible['Upload'][0]['id'];
-					if ($this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+					if (!$this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
 						//If it fails, let it pass but log the problem.
 						$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
 					}
@@ -932,11 +932,14 @@ class CollectiblesController extends AppController {
 					}
 
 					//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
-					if ($this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
+					if (!$this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
 						//If it fails, let it pass but log the problem.
 						$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $collectible['Collectible']['id'], 'error');
 					}
 				}
+				
+				$this -> __sendApprovalEmail(true, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);
+				
 				$this -> Session -> setFlash(__('The collectible was successfully approved.', true), null, null, 'success');
 				$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
 			} else {
@@ -945,6 +948,40 @@ class CollectiblesController extends AppController {
 			}
 
 		}
+	}
+
+	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null) {
+		$return = true;
+		if ($email) {
+			// Set data for the "view" of the Email
+			$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
+			$this -> set(compact('collectibleName'));
+			$this -> set(compact('username'));
+			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
+			$this -> Email -> delivery = 'smtp';
+			$this -> Email -> to = $email;
+
+			$this -> Email -> from = Configure::read('Settings.Email.username');
+			if ($approvedChange) {
+				$this -> Email -> template = 'add_approval';
+				$this -> Email -> subject = 'Your submission has been successfully approved!';
+			} else {
+				$this -> Email -> template = 'add_deny';
+				$this -> Email -> subject = 'Oh no! Your submission has been denied.';
+			}
+			$this -> Email -> sendAs = 'text';
+			// you probably want to use both :)
+			$return = $this -> Email -> send();
+			$this -> set('smtp_errors', $this -> Email -> smtpError);
+			if (!empty($this -> Email -> smtpError)) {
+				$return = false;
+				$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $email, 'error');
+			}
+		} else {
+			$return = false;
+		}
+
+		return $return;
 	}
 
 	private function resetCollectibleAdd() {

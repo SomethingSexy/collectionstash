@@ -70,10 +70,13 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 			if (!isset($showAddedDate)) {
 				$showAddedDate = false;
 			}
-			echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, ));
+			if(!isset($adminMode)){
+				$adminMode = false;
+			}
+			echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode ));
 			?>
 			<?php
-			if (isset($adminMode) && $adminMode) {
+			if ($adminMode) {
 				echo $this -> Form -> create('Collectible', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id']));
 				echo $this -> Form -> end(__('Approve', true));
 
