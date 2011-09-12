@@ -11,16 +11,16 @@
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags','image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
-<div class="component" id="collectible-add-component">
+<div class="component" id="collectible-detail">
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			    <h2><?php  __('Review Collectible');?></h2>
+			    <h2><?php  __('Review Collectible Submission');?></h2>
 			</h2>
 		</div>
 	    <?php echo $this->element('flash'); ?>
 	    <div class="component-info">
-	      	<div><?php __('Please review the collectible below.');?></div> 
+	      	<div><?php __('Please review the collectible you are submitting to Collection Stash.');?></div> 
 	    </div>
 		<div class="component-view review">
 

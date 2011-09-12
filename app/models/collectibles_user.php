@@ -57,12 +57,9 @@ class CollectiblesUser extends AppModel {
 	}
 
 	public function getListOfUsersWho($collectibleId) {
-		$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('Stash' => array('User' => array('fields' => array('id', 'username'))))));
-		$users = array();
-		foreach($data as $key => $user) {
-			$users[$key]['User'] = $user['Stash']['User'];
-		}
-		return $users;
+		$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'),'Stash'))));
+		debug($data);
+		return $data;
 	}
 
 }

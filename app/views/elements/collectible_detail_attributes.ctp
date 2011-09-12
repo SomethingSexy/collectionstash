@@ -1,10 +1,20 @@
+<?php
+if(!isset($adminMode)){
+	$adminMode = false;
+}
+?>
+
 <div class="collectible detail">
 	<div class="detail title">
 		<h3><?php echo __('Accessories/Features'); ?></h3>
 		<?php
 		if (isset($showEdit) && $showEdit) {
 			echo '<div class="title link">';
-			echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+			if($adminMode){
+				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/true' . '">Edit</a>';
+			} else {
+				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+			}
 			echo '</div>';
 		}
 		?>

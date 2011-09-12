@@ -9,24 +9,25 @@ if (!isset($showAttributes)) {
 if (!isset($showCompareFields)) {
 	$showCompareFields = false;
 }
-if(!isset($showEdit)){
+if (!isset($showEdit)) {
 	$showEdit = false;
 }
-if(!isset($adminMode)){
+if (!isset($adminMode)) {
 	$adminMode = false;
 }
 ?>
 
 <div class="collectible item">
 	<?php
-	if($showImage) {
-		if(isset($showEdit) && $showEdit){
-			echo $this->element('collectible_detail_upload', array('collectibleCore'=> $collectibleCore, 'editImageUrl'=> $editImageUrl, 'showEdit'=>$showEdit));	
+	if ($showImage) {
+		if (isset($showEdit) && $showEdit) {
+			echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleCore, 'editImageUrl' => $editImageUrl, 'showEdit' => $showEdit));
 		} else {
-			echo $this->element('collectible_detail_upload', array('collectibleCore'=> $collectibleCore));
+			echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleCore));
 		}
-				
- 	}?>
+
+	}
+	?>
 	<div class="collectible detail-wrapper">
 		<div class="collectible detail">
 			<div class="detail title">
@@ -34,12 +35,12 @@ if(!isset($adminMode)){
 				<?php
 				if (isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
-					if($adminMode){
+					if ($adminMode) {
 						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '">Edit</a>';
 					} else {
-						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/false'.'">Edit</a>';
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
 					}
-					
+
 					echo '</div>';
 				}
 				?>
@@ -79,56 +80,57 @@ if(!isset($adminMode)){
 				?>
 				<a target="_blank" href="<?php echo $collectibleCore['Manufacture']['url'];?>"> <?php echo $collectibleCore['Manufacture']['title'];?></a>
 				</dd> <?php
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Type', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Type', true), array('compare' => $showCompareFields));
 
-					if (isset($collectibleCore['Collectible']['exclusive']) && $collectibleCore['Collectible']['exclusive']) {
-						echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields, 'postValue' => __(' - Exclusive', true)));
-					} else {
-						echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields));
-					}
+				if (isset($collectibleCore['Collectible']['exclusive']) && $collectibleCore['Collectible']['exclusive']) {
+					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields, 'postValue' => __(' - Exclusive', true)));
+				} else {
+					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields));
+				}
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'name'), __('Scale', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'name'), __('Scale', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), __('Release Year', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), __('Release Year', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), __('Description', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), __('Description', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('Product UPC', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('Product UPC', true), array('compare' => $showCompareFields));
 
-					if (strstr($collectibleCore['Collectible']['msrp'], '$') === false) {
-						echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields, 'preValue' => '$'));
-					} else {
-						echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
-					}
+				if (strstr($collectibleCore['Collectible']['msrp'], '$') === false) {
+					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields, 'preValue' => '$'));
+				} else {
+					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
+				}
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'limited'), __('Limited Edition', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'limited'), __('Limited Edition', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Retailer', 'Field' => 'name'), __('Exclusive Retailer', true),array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Retailer', 'Field' => 'name'), __('Exclusive Retailer', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'edition_size'), __('Edition Size', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'edition_size'), __('Edition Size', true), array('compare' => $showCompareFields));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_weight'), __('Weight', true), array('compare' => $showCompareFields, 'postValue' => ' lbs'));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_weight'), __('Weight', true), array('compare' => $showCompareFields, 'postValue' => ' lbs'));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_length'), __('Length', true), array('compare' => $showCompareFields, 'postValue' => '"'));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_length'), __('Length', true), array('compare' => $showCompareFields, 'postValue' => '"'));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_width'), __('Width', true), array('compare' => $showCompareFields, 'postValue' => '"'));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_width'), __('Width', true), array('compare' => $showCompareFields, 'postValue' => '"'));
 
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_depth'), __('Depth', true), array('compare' => $showCompareFields, 'postValue' => '"'));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_depth'), __('Depth', true), array('compare' => $showCompareFields, 'postValue' => '"'));
 				?>
 			</dl>
 		</div>
 		<?php
-		if($showAttributes) {
-			echo $this->element('collectible_detail_attributes', array('collectibleCore'=>$collectibleCore,'showEdit'=>$showEdit));
+		if ($showAttributes) {
+			echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
 		}
-		if(isset($showTags) && $showTags === true) {
-			echo $this->element('collectible_detail_tags', array('collectibleCore'=>$collectibleCore));			
-		}?>
+		if (isset($showTags) && $showTags === true) {
+			echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleCore));
+		}
+		?>
 	</div>
 </div>

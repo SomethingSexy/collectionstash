@@ -9,7 +9,7 @@ class AttributesCollectiblesEditsController extends AppController {
 	 * In the future when doing this edits, we are going to have to make sure that these parts are not being
 	 * used in a custom when we delete them
 	 */
-	function edit($id = null) {
+	function edit($id = null, $adminMode = false) {
 		$this -> checkLogIn();
 
 		if (!$id && !is_numeric($id) && empty($this -> data)) {
@@ -41,7 +41,8 @@ class AttributesCollectiblesEditsController extends AppController {
 
 				//if everything is valid, then lets do our updates
 				if ($isValid) {
-					if (Configure::read('Settings.Collectible.Edit.auto-approve') === true) {
+					$adminMode = $this -> Session -> read('collectible.edit.admin-mode');
+					if (Configure::read('Settings.Collectible.Edit.auto-approve') === true || (isset($adminMode) && $adminMode && $this -> isUserAdmin())) {
 						//TODO move this to the model, validate we are removing the correct attributes?
 						foreach ($this -> data['AttributesCollectible'] as $key => $attribue) {
 							//debug($this -> AttributesCollectible);
@@ -128,6 +129,17 @@ class AttributesCollectiblesEditsController extends AppController {
 				}
 			}
 		} else {
+			if ($adminMode === 'true') {
+				if (!$this -> isUserAdmin()) {
+					$this -> Session -> write('collectible.edit.admin-mode', false);
+				} else {
+					$this -> Session -> write('collectible.edit.admin-mode', true);
+				}
+			} else {
+				$this -> Session -> write('collectible.edit.admin-mode', false);
+			}
+			debug($this -> Session -> read('collectible.edit.admin-mode'));
+
 			$this -> set('collectibleId', $id);
 			$this -> Session -> write('collectible.edit-id', $id);
 			//Submit the deletes as deletes....then loop throuh each one to either delete or add

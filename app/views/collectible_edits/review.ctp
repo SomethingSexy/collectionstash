@@ -12,12 +12,12 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			    <h2><?php  __('Review Collectible');?></h2>
+			    <h2><?php  __('Review Collectible Update');?></h2>
 			</h2>
 		</div>
 	    <?php echo $this->element('flash'); ?>
 	    <div class="component-info">
-	      	<div><?php __('Please review the collectible below.');?></div> 
+	      	<div><?php __('Please review the collectible you are updating below.');?></div> 
 	    </div>
 		<div class="component-view review">
 			<?php echo $this->element('collectible_detail_core', array(

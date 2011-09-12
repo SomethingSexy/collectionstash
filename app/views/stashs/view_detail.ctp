@@ -17,7 +17,7 @@
     <?php echo $this->element('flash'); ?>
     <div class="component-view">
 			<?php if(isset($collectibles) && !empty($collectibles)) {
-				
+				echo '<div class="collectibles view">';
 				foreach($collectibles as $myCollectible) {
 					echo '<div class="collectible item">';		
 					echo $this -> element('collectible_list_image', array(
@@ -29,8 +29,12 @@
 						'license' => $myCollectible['Collectible']['License'],
 						'collectibletype' => $myCollectible['Collectible']['Collectibletype']
 					));	
-					 echo '</div>'; 
+					echo '<div class="collectible actions">';
+					echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $myCollectible['Collectible']['id']));
+					echo '</div>';
+					echo '</div>'; 
 				}
+				echo '</div>'; 
 						
 			} else {
 				echo '<p class="">'. $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';

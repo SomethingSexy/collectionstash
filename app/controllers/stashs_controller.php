@@ -276,9 +276,9 @@ class StashsController extends AppController {
 					$this -> set('myStash', $viewingMyStash);
 					$this -> set('stashUsername', $userId);
 					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
-						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')),  'limit' => 25);
+						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 25);
 						$collectibles = $this -> paginate('CollectiblesUser');
-							
+
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
 						debug($collectibles);
 						$this -> set(compact('collectibles'));

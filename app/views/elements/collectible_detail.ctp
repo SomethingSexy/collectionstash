@@ -23,7 +23,7 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 			<div class="collectible links">
 				<?php
 				if ($showWho) {
-					echo $html -> link('Registry', array('admin' => false, 'controller' => 'collections', 'action' => 'who', $collectibleDetail['Collectible']['id']));
+					echo $html -> link('Registry', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'registry', $collectibleDetail['Collectible']['id']));
 				}
 				if (isset($showHistory) && $showHistory) {
 					echo $html -> link('History', array('action' => 'history', $collectibleDetail['Collectible']['id']));

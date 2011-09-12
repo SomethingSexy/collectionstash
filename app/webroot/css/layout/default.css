@@ -48,6 +48,7 @@ a:active {
     -moz-border-radius: 10px;
 	border-radius: 10px;
     float: left;
+    width: 100%;
 }
 
 .component .inside {
@@ -138,6 +139,7 @@ a:active {
  /* float: left;
   width: 100%;*/
   padding: 1em;
+  overflow: hidden;
 }
 
 .component.component-dialog {
@@ -1239,6 +1241,7 @@ div.paging span a {
 
 
 
+
 .add-to-collection {
   cursor: pointer;
   background:url("/img/icon/add_stash_link_25x25.png") no-repeat left top;
@@ -1511,6 +1514,13 @@ div.paging span a {
 #base-collectible .collectible.item {
 	padding: 0;
 	border: none;
+}
+#base-collectible .collectible.item .collectible.detail-wrapper {
+	float: none; 
+	width: 100%;
+}
+#base-collectible .collectible.item .collectible.detail-wrapper .collectible.detail {
+	width: 100%;
 }
 /*****************************
  * collectible user add
