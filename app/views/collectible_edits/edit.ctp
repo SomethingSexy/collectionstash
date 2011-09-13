@@ -142,6 +142,7 @@
 						</div>
 						<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
+						<?php if($this -> Session -> check('edit.collectible.variant')) { ?>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleExclusive">
@@ -157,7 +158,8 @@
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
-						</li>	
+						</li>
+						<?php } ?>	
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleCode"> <?php __('Product Code')

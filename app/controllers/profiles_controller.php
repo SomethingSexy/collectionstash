@@ -8,8 +8,12 @@ class ProfilesController extends AppController {
 
 	public function index() {
 		$this -> checkLogIn();
-	
-		$this -> set('allowInvites', Configure::read('Settings.Profile.allow-invites'));	
+		if($this->isUserAdmin()){
+			$this -> set('allowInvites', true);
+		} else {
+			$this -> set('allowInvites', Configure::read('Settings.Profile.allow-invites'));	
+		}
+			
 	}
 
 

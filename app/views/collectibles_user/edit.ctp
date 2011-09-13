@@ -25,7 +25,7 @@
             <?php } ?>
 			<li>
                 <div class="label-wrapper">
-                  <label for="dialogCost"><?php __('How much did you pay?') ?></label>
+                  <label for="dialogCost"><?php __('How much did you pay?') ?> (Retail: $<?php echo $collectible['Collectible']['msrp'] ?> )</label>
                 </div> 
                 <?php echo $this->Form->input('cost', array('id'=>'dialogCost','div' => false, 'label' => false));?>
               </li> 

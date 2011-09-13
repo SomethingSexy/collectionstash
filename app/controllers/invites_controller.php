@@ -5,7 +5,12 @@ class InvitesController extends AppController {
 	var $name = 'Invites';
 	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload');
 	var $components = array('RequestHandler', 'Email');
-
+	
+	/**
+	 * This will return the invites that the user has already invited
+	 * 
+	 * TODO: If invite is turned off, block this
+	 */
 	public function view() {
 		if($this -> isLoggedIn()) {
 			if($this -> RequestHandler -> isAjax()) {
@@ -42,7 +47,12 @@ class InvitesController extends AppController {
 		}
 
 	}
-
+	
+	/**
+	 * This will add an invite for this user
+	 * 
+	 * TODO: If invites are turned off, do not allow this action
+	 */
 	public function add() {
 		if($this -> isLoggedIn()) {
 			//TODO update invite count in session
@@ -109,7 +119,7 @@ class InvitesController extends AppController {
 			$this -> Email -> delivery = 'smtp';
 			$this -> Email -> to = $email;
 			$this -> Email -> subject = 'You have been invited to Collection Stash!';
-			$this -> Email -> from = Configure::read('Settings.Email.username');
+			$this -> Email -> from = Configure::read('Settings.Email.from');
 			$this -> Email -> template = 'invite';
 			$this -> Email -> sendAs = 'text';
 			// you probably want to use both :)

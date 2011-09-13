@@ -253,7 +253,7 @@ class UsersController extends AppController {
 		$this -> Email -> delivery = 'smtp';
 		$this -> Email -> to = $user['User']['email'];
 		$this -> Email -> subject = env('SERVER_NAME') . '– Please confirm your email address';
-		$this -> Email -> from = Configure::read('Settings.Email.username');
+		$this -> Email -> from = Configure::read('Settings.Email.from');
 		$this -> Email -> template = 'user_confirm';
 		$this -> Email -> sendAs = 'text';
 		// you probably want to use both :)

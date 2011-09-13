@@ -15,7 +15,9 @@
       </div> 
     </div>
     <div class="component-view">
-      	<p><?php __('Is the collectible you are adding a variant?') ?></p>
+    	<div class="question">
+      		<p><?php __('Is the collectible you are adding a variant?') ?></p>
+      	</div>
 		<div class="links">
 	      	<?php echo $this->Form->create('Collectible');?>
 				<input type="hidden" name="data[Collectible][variant]" value="true" ?>

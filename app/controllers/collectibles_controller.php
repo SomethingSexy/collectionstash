@@ -348,8 +348,6 @@ class CollectiblesController extends AppController {
 			}
 
 			if ($validCollectible) {
-				//set pending to 2...this really needs to check if user is admin first TODO
-				$newCollectible['Collectible']['state'] = 2;
 				$userId = $this -> getUserId();
 				return true;
 			} else {
@@ -897,80 +895,106 @@ class CollectiblesController extends AppController {
 	function admin_approve($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
+		if ($id && is_numeric($id) && isset($this -> data['Approval']['approve'])) {
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
+			$this -> data = Sanitize::clean($this -> data);
+			$notes = $this -> data['Approval']['notes'];
+			//Approve
+			if ($this -> data['Approval']['approve'] === 'true') {
+				debug($collectible);
+				if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
+					$data = array();
+					$data['Collectible'] = array();
+					$data['Collectible']['id'] = $collectible['Collectible']['id'];
+					$data['Collectible']['state'] = 0;
+					$data['Revision']['action'] = 'P';
+					$data['Revision']['user_id'] = $this -> getUserId();
+					$data['Revision']['notes'] = $this -> data['Approval']['notes'];
+					if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
+						//Ugh need to get this again so I can get the Revision id
+						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
+						//update with the new revision id
+						if (isset($collectible['Upload']) && !empty($collectible['Upload'])) {
 
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
-		debug($collectible);
-		if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
-			$data = array();
-			$data['Collectible'] = array();
-			$data['Collectible']['id'] = $collectible['Collectible']['id'];
-			$data['Collectible']['state'] = 0;
-			$data['Revision']['action'] = 'P';
-			$data['Revision']['user_id'] = $this -> getUserId();
-			if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
-				//Ugh need to get this again so I can get the Revision id
-				$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
-				//update with the new revision id
-				if (isset($collectible['Upload']) && !empty($collectible['Upload'])) {
+							$this -> Collectible -> Upload -> id = $collectible['Upload'][0]['id'];
+							if (!$this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+								//If it fails, let it pass but log the problem.
+								$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
+							}
+						}
+						//If I did set some attributes, lets update the revision ids for them as well.
+						if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
+							foreach ($collectible['AttributesCollectible'] as $key => &$value) {
+								$value['revision_id'] = $collectible['Collectible']['revision_id'];
+								unset($value['attribute_id']);
+								unset($value['collectible_id']);
+								unset($value['description']);
+								unset($value['active']);
+								unset($value['created']);
+								unset($value['modified']);
+							}
 
-					$this -> Collectible -> Upload -> id = $collectible['Upload'][0]['id'];
-					if (!$this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
-						//If it fails, let it pass but log the problem.
-						$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
+							//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
+							if (!$this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
+								//If it fails, let it pass but log the problem.
+								$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $collectible['Collectible']['id'], 'error');
+							}
+						}
+
+						$this -> __sendApprovalEmail(true, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);
+
+						$this -> Session -> setFlash(__('The collectible was successfully approved.', true), null, null, 'success');
+						$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
+					} else {
+						$this -> Session -> setFlash(__('There was a problem approving the collectible.', true), null, null, 'error');
+						$this -> redirect(array('admin' => true, 'action' => 'view', $id), null, true);
 					}
 				}
-				//If I did set some attributes, lets update the revision ids for them as well.
-				if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
-					foreach ($collectible['AttributesCollectible'] as $key => &$value) {
-						$value['revision_id'] = $collectible['Collectible']['revision_id'];
-						unset($value['attribute_id']);
-						unset($value['collectible_id']);
-						unset($value['description']);
-						unset($value['active']);
-						unset($value['created']);
-						unset($value['modified']);
-					}
-
-					//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
-					if (!$this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
-						//If it fails, let it pass but log the problem.
-						$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $collectible['Collectible']['id'], 'error');
-					}
-				}
-				
-				$this -> __sendApprovalEmail(true, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);
-				
-				$this -> Session -> setFlash(__('The collectible was successfully approved.', true), null, null, 'success');
-				$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
 			} else {
-				$this -> Session -> setFlash(__('There was a problem approving the collectible.', true), null, null, 'error');
-				$this -> redirect(array('admin' => true, 'action' => 'view', $id), null, true);
+				//fuck it, I am deleting it
+				if ($this -> Collectible -> delete($collectible['Collectible']['id'])) {
+					debug($collectible);
+					//If this fails oh well
+					//Have to do this because we have a belongsTo relationship on Collectible, probably should be a hasOne, fix at some point
+					$this -> Collectible -> Revision -> delete($collectible['Collectible']['revision_id']);
+					$this -> __sendApprovalEmail(false, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], null, $notes);
+					$this -> Session -> setFlash(__('The collectible was successfully denied.', true), null, null, 'success');
+					$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
+				} else {
+					$this -> Session -> setFlash(__('There was a problem denying the collectible.', true), null, null, 'error');
+					$this -> redirect(array('admin' => true, 'action' => 'view', $id), null, true);
+				}
+
 			}
 
+		} else {
+			$this -> Session -> setFlash(__('Invalid collectible.', true), null, null, 'error');
+			$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
 		}
+
 	}
 
-	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null) {
+	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
 		$return = true;
 		if ($email) {
 			// Set data for the "view" of the Email
-			$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
 			$this -> set(compact('collectibleName'));
 			$this -> set(compact('username'));
+			$this -> set(compact('notes'));
 			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
 			$this -> Email -> delivery = 'smtp';
 			$this -> Email -> to = $email;
 
-			$this -> Email -> from = Configure::read('Settings.Email.username');
+			$this -> Email -> from = Configure::read('Settings.Email.from');
 			if ($approvedChange) {
 				$this -> Email -> template = 'add_approval';
 				$this -> Email -> subject = 'Your submission has been successfully approved!';
+				$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
 			} else {
 				$this -> Email -> template = 'add_deny';
 				$this -> Email -> subject = 'Oh no! Your submission has been denied.';
 			}
-			$this -> Email -> sendAs = 'text';
-			// you probably want to use both :)
+			$this -> Email -> sendAs = 'both';
 			$return = $this -> Email -> send();
 			$this -> set('smtp_errors', $this -> Email -> smtpError);
 			if (!empty($this -> Email -> smtpError)) {
@@ -985,8 +1009,6 @@ class CollectiblesController extends AppController {
 	}
 
 	private function resetCollectibleAdd() {
-		//Always delete this stuff, this could go in a better spot in the future
-		//Should probably update this so I set to show and not show different things, not put the biz logic in the view
 		$this -> Session -> delete('preSaveCollectible');
 		$this -> Session -> delete('uploadId');
 		$this -> Session -> delete('add.collectible.manufacture');

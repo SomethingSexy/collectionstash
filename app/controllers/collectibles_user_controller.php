@@ -41,47 +41,50 @@ class CollectiblesUserController extends AppController {
 
 	}
 
+	/**
+	 * This method adds a collectible to a user's stash
+	 */
 	public function add($id = null) {
 		$this -> checkLogIn();
-		if (!empty($this -> data)) {
-			$this -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
-			$user = $this -> getUser();
-			$stash = $this -> CollectiblesUser -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
-			$this -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
-			$collectible_id = $this -> data['CollectiblesUser']['collectible_id'];
-			debug($this -> data);
-			//TODO should probably do this in the model
-			//$this -> loadModel('Collectible');
-			$this -> CollectiblesUser -> Collectible -> recursive = -1;
-			$collectible = $this -> CollectiblesUser -> Collectible -> findById($collectible_id);
+		debug($this -> data);
+		if (!is_null($id) && is_numeric($id)) {
+			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			debug($collectible);
-			//Save as a different name so the saveAll doesn't accidently save it
-			$this -> data['TempCollectible'] = $collectible['Collectible'];
+			if (!empty($this -> data)) {
+				if (isset($collectible) && !empty($collectible)) {
+					//$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
+					$user = $this -> getUser();
+					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
+					$this -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
+					$this -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
+					$this -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
+					if ($this -> CollectiblesUser -> saveAll($this -> data)) {
+						$collectibleUser = $this -> CollectiblesUser -> find("first", array('conditions'=>array('CollectiblesUser.id'=>$this -> CollectiblesUser -> id), 'contain'=> false));
+						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
+						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
+						return;
+					} else {
+						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+					}
 
-			debug($this -> data);
-			if ($this -> CollectiblesUser -> save($this -> data)) {
-				$collectibleUserId = $this -> CollectiblesUser -> id;
-				$this -> redirect(array('action' => 'view', $collectibleUserId), "null", true);
-				$this -> Session -> setFlash(__('Collectible was successfully added.', true), null, null, 'success');
-			} else {
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			}
+				} else {
+					$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
+					$this -> redirect($this -> referer(), null, true);
+					return;
+				}
+			} 
+			$this -> set('collectible', $collectible);
+			$this -> loadModel('Condition');
+			$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
+			$this -> loadModel('Merchant');
+			$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
+
 		} else {
-			if (!is_null($id) && is_numeric($id)) {
-				$this -> data['CollectiblesUser']['collectible_id'] = $id;
-
-			} else {
-				$this -> Session -> setFlash(__('Invalid collectible', true));
-				$this -> redirect($this -> referer());
-			}
+			$this -> Session -> setFlash(__('Invalid collectible', true));
+			$this -> redirect($this -> referer());
 		}
-		$conditions = $this -> CollectiblesUser -> Condition -> find("list", array('order' => array('Condition.name' => 'ASC')));
-
-		$merchants = $this -> CollectiblesUser -> Merchant -> find("list", array('order' => array('Merchant.name' => 'ASC')));
-
-		$this -> set(compact('conditions'));
-		$this -> set(compact('merchants'));
 	}
+
 	/**
 	 * This method edits a user's collectible.
 	 */

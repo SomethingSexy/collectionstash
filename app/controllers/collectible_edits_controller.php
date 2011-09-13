@@ -79,7 +79,12 @@ class CollectibleEditsController extends AppController {
 			$collectible = $this -> Collectible -> read(null, $id);
 			$this -> data = $collectible;
 			$this -> Session -> write('collectible.edit-id', $id);
-
+			if($collectible['Collectible']['variant']){
+				$this -> Session -> write('edit.collectible.variant', true);
+			} else {
+				$this -> Session -> delete('edit.collectible.variant');
+			}
+			
 			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
 			$this -> set('manufactures', $manufactureData['manufactures']);
 			$this -> set('licenses', $manufactureData['licenses']);
@@ -161,6 +166,7 @@ class CollectibleEditsController extends AppController {
 					$collectible = $this -> Collectible -> findById($id);
 					debug($collectible);
 					$this -> set('collectible', $collectible);
+					$this -> Session -> delete('edit.collectible.variant');
 					$this -> Session -> delete('preSaveCollectible');
 					$this -> Session -> delete('collectible.edit-id');
 					$this -> Session -> delete('collectible.edit.admin-mode');

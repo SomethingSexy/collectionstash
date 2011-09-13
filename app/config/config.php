@@ -33,6 +33,7 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
   	),
   	'Email' => array(
 		'username' => 'admin@collectionstash.com',
+		'from' => 'Collection Stash <admin@collectionstash.com>',
 		'password' => 'oblivion1968',
 		'host' => 'smtpout.secureserver.net',
 		'port' => '25',

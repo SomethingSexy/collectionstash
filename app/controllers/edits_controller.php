@@ -6,6 +6,9 @@ App::import('Sanitize');
  * 9/1/11 - TC: I decided that edit notes are going to go on the actually edit model, so I can keep a history of those notes for each approval.
  * 				I might consider in the future calling those approval_notes and having just a notes that is used for when a person is making an
  * 				edit and they want to write something.
+ * 9/13/11 - TC: The above note doesn't make sense anymore.  I am putting the notes on the revision model for sure because then when history is
+ * 				 shown we can also show the notes of each revision.  I am trying to decide what to do with collectible edits that are denied.  Do
+ * 				 I need to keep those around or do I not care?  Is a history of that necessary?
  */
 class EditsController extends AppController {
 
@@ -158,16 +161,18 @@ class EditsController extends AppController {
 				}
 
 				$successMessage = '';
-				$editUpdateFields = array();
+				
 				if ($approvedChange) {
 					$updateFields['Edit']['id'] = $id;
 					$updateFields['Edit']['status'] = 1;
+					$updateFields['Edit']['notes'] = $approvalNotes;
 					$successMessage = __('The edit has been successfully approved.', true);
 				} else {
 					//If we are denying the change, lets make sure that the update fields is clean so we do not accidently do something we don't want to
 					$updateFields = array();
 					$updateFields['Edit']['id'] = $id;
 					$updateFields['Edit']['status'] = 2;
+					$updateFields['Edit']['notes'] = $approvalNotes;
 					$successMessage = __('The edit has been denied.', true);
 				}
 				debug($updateFields);
@@ -188,14 +193,10 @@ class EditsController extends AppController {
 					$editUser = $this -> Edit -> User -> find("first", array('conditions' => array('User.id' => $userId), 'contain' => false));
 
 					//Grab the updated collectible
-					$updatedCollectible = $this -> Edit -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => false));
+					$updatedCollectible = $this -> Edit -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Revision')));	
 
-					$this -> __sendApprovalEmail($approvedChange, $editUser['User']['email'], $editUser['User']['username'], $updatedCollectible['Collectible']['name'], $edit['Edit']['collectible_id']);
-					//Or do I just say fuck it and the user can just see the collectible they changed and a link to the collectible and then they can look at the collectible history?
-					//Also need to decide where the description of the change should go...edit model or the collectible edit model? Do I want it to show up in the history or not?
+					$this -> __sendApprovalEmail($approvedChange, $editUser['User']['email'], $editUser['User']['username'], $updatedCollectible['Collectible']['name'], $edit['Edit']['collectible_id'], $approvalNotes);
 
-					//Edit Description goes on collectible model/collectible edit/collectible rev
-					//Updated Edit to say it is approved
 					$this -> Session -> setFlash($successMessage, null, null, 'success');
 				} else {
 					$this -> Session -> setFlash(__('There was a problem submitting the edit.', true), null, null, 'error');
@@ -210,18 +211,19 @@ class EditsController extends AppController {
 		}
 	}
 
-	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null) {
+	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
 		$return = true;
 		if ($email) {
 			// Set data for the "view" of the Email
 			$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
 			$this -> set(compact('collectibleName'));
 			$this -> set(compact('username'));
+			$this -> set(compact('notes'));
 			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
 			$this -> Email -> delivery = 'smtp';
 			$this -> Email -> to = $email;
 
-			$this -> Email -> from = Configure::read('Settings.Email.username');
+			$this -> Email -> from = Configure::read('Settings.Email.from');
 			if ($approvedChange) {
 				$this -> Email -> template = 'edit_approval';
 				$this -> Email -> subject = 'Your change has been successfully approved!';
@@ -229,7 +231,7 @@ class EditsController extends AppController {
 				$this -> Email -> template = 'edit_deny';
 				$this -> Email -> subject = 'Oh no! Your change has been denied.';
 			}
-			$this -> Email -> sendAs = 'text';
+			$this -> Email -> sendAs = 'both';
 			// you probably want to use both :)
 			$return = $this -> Email -> send();
 			$this -> set('smtp_errors', $this -> Email -> smtpError);

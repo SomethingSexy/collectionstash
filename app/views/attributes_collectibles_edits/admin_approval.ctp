@@ -2,13 +2,9 @@
 	<div class="inside">
 		<div class="actions">
 			<ul>
-				<li>
-					<?php echo $html -> link('New Collectibles', array('admin' => true, 'controller' => 'collectibles'));?>
-				</li>
-				<li>
-					<?php echo $html -> link('Edits', array('admin' => true, 'controller' => 'edits'));?>
-				</li>
-			</ul>
+				<li><?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class'=>'button')); ?></li>
+				<li><?php echo $this -> Html -> link('Edits','/admin/edits/index', array('class'=>'button')); ?></li>
+			</ul>	
 		</div>
 		<div class="page attributes-approval">
 			<div class="title">

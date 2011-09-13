@@ -3,7 +3,7 @@ class Collectible extends AppModel {
 	var $name = 'Collectible';
 	var $belongsTo = array('Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer', 'User' => array('counterCache' => true));
 
-	var $hasMany = array('CollectiblesUser', 'Upload', 'AttributesCollectible', 'CollectiblesTag');
+	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible'  => array('dependent' => true), 'CollectiblesTag'  => array('dependent' => true));
 
 	var $actsAs = array('Revision', 'ExtendAssociations', 'Containable');
 

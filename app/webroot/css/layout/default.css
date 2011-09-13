@@ -727,6 +727,11 @@ a:active {
 	width: 500px;
 	
 }
+#collectible-detail .component-view .approval-fields {
+	float: left;
+	width: 100%;
+}
+
 
 #collectible-history-list-component {
 	width: 100%;
@@ -828,6 +833,26 @@ a:active {
 #home-components .find-by .inside .component-view .search-types div ul li a {
 	font-size: 0.75em;
 }
+#home-components .welcome-component .inside .component-view img {
+	width: 150px;
+}
+#home-components .welcome-component .inside .component-view img{
+	float: left;
+	margin-right: 20px;
+	
+}
+#home-components .welcome-component .inside .component-view p {
+	color: #656464;
+	
+}
+#home-components .welcome-component .inside .component-view p.heading {
+	margin-top: 20px;
+}
+#home-components .welcome-component .inside .component-view p.body {
+	font-size: 0.9em;	
+}
+
+
 
 #registration-component {
 	width: 100%;
