@@ -88,7 +88,7 @@ class FileUploadBehavior extends ModelBehavior {
 		
 		$url = true;
 	}
-	
+debug($Model->data);	
 	//This checks to see if the file array is set in the data that is passed in.
     if(isset($Model->data[$Model->alias][$this->options[$Model->alias]['fileVar']])){
       //Here we are setting the $file variable to the data was that was passed into this model
@@ -119,6 +119,7 @@ class FileUploadBehavior extends ModelBehavior {
         unset($Model->data[$Model->alias]);
       }
     }
+debug($Model->data);
     return $Model->beforeSave();
   }
   
