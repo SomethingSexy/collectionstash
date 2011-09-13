@@ -82,48 +82,76 @@ class CollectiblesUserController extends AppController {
 		$this -> set(compact('conditions'));
 		$this -> set(compact('merchants'));
 	}
-
+	/**
+	 * This method edits a user's collectible.
+	 */
 	function edit($id = null) {
 		$this -> checkLogIn();
-		$this -> loadModel('User');
 		debug($this -> data);
-		debug($id);
+		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible')));
+		debug($collectiblesUser);
 		if (!empty($this -> data)) {
-			$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
-			if ($this -> User -> CollectiblesUser -> save($this -> data, true, $fieldList)) {
-				$this -> Session -> setFlash(__('Collectible was successfully updated.', true), null, null, 'success');
-				$this -> redirect(array('controller' => 'stashs', 'action' => 'index'), null, true);
-			} else {
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-			}
-		} else {
-			$username = $this -> getUsername();
-			$joinRecords = $this -> User -> getCollectibleByUser($username, $id);
-			$this -> loadModel('Condition');
-			$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
-			$this -> loadModel('Merchant');
-			$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
-			$this -> set('collectible', $joinRecords);
-		}
-	}
-
-	function remove($id = null) {
-		$this -> checkLogIn();
-		if (!$id) {
-			$this -> Session -> setFlash(__('Invalid collectible', true));
-			$this -> redirect(array('action' => 'index'));
-		} else {
-			$username = $this -> getUsername();
-			if ($username) {
-				$this -> loadModel('User');
-				if ($this -> User -> CollectiblesUser -> delete($id, false)) {
-					$this -> Session -> setFlash(__('Collectible was successfully removed.', true), null, null, 'success');
-					//WHERE DO I GO BACK TO?
-					$this -> redirect(array('controller' => 'stashs', 'action' => 'index'), null, true);
+			if (isset($collectiblesUser) && !empty($collectiblesUser)) {
+				$loggedInUserId = $this -> getUserId();
+				if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
+					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
+					$this -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
+					if ($this -> CollectiblesUser -> save($this -> data, true, $fieldList)) {
+						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');
+						$this -> redirect(array('controller' => 'collectibles_user', 'action' => 'view', $id), null, true);
+						return;
+					} else {
+						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+					}
+				} else {
+					$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
+					$this -> redirect('/', null, true);
+					return;
 				}
 			} else {
-				$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
+				$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
+				$this -> redirect($this -> referer(), null, true);
+				return;
 			}
+		} else {
+			$this -> data = $collectiblesUser;
+		}
+		$this -> set('collectible', $collectiblesUser);
+		$this -> loadModel('Condition');
+		$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
+		$this -> loadModel('Merchant');
+		$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
+	}
+
+	/**
+	 * Removes a user's collectible
+	 *
+	 */
+	function remove($id = null) {
+		$this -> checkLogIn();
+		if (!is_null($id) && is_numeric($id)) {
+			$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User')));
+			if (isset($collectiblesUser) && !empty($collectiblesUser)) {
+				$loggedInUserId = $this -> getUserId();
+				if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
+					if ($this -> CollectiblesUser -> delete($id)) {
+						$this -> Session -> setFlash(__('Your collectible has been successfully removed.', true), null, null, 'success');
+						$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $collectiblesUser['User']['username']), null, true);
+					} else {
+						$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
+						$this -> redirect(array('action' => 'view', $id), null, true);
+					}
+				} else {
+					$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
+					$this -> redirect($this -> referer(), null, true);
+				}
+			} else {
+				$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
+				$this -> redirect($this -> referer(), null, true);
+			}
+		} else {
+			$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
+			$this -> redirect($this -> referer(), null, true);
 		}
 	}
 

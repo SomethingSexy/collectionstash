@@ -256,7 +256,7 @@ class StashsController extends AppController {
 
 	public function view($userId = null) {
 		if (!is_null($userId)) {
-			$view = 'detail';
+			$view = 'glimpse';
 			if (isset($this -> params['named']['view'])) {
 				$view = $this -> params['named']['view'];
 			}

@@ -6,6 +6,12 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
+			<div class="collectible links">
+				<?php echo $html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
+				<?php echo $html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
+				<a class="link" id="remove-link"><?php echo __('Remove');?></a>
+				<form id="remove-form" action="/collectibles_user/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
+			</div>
 			<div class="collectible item">
 				<div class="collectible image">
 					<?php
@@ -46,28 +52,60 @@
 							<?php echo '$' . $collectible['CollectiblesUser']['cost'];?>
 						</dd>
 						<?php
-							if (isset($collectible['Condition']) && !empty($collectible['Condition'])) {
-								echo '<dt>';
-								echo __('Condition');
-								echo '</dt>';
-								echo '<dd>';
-								echo $collectible['Condition']['name'];
-								echo '</dd>';
-							}
+						if (isset($collectible['Condition']) && !empty($collectible['Condition'])) {
+							echo '<dt>';
+							echo __('Condition');
+							echo '</dt>';
+							echo '<dd>';
+							echo $collectible['Condition']['name'];
+							echo '</dd>';
+						}
 						?>
 						<?php
-							if (isset($collectible['Merchant']) && !empty($collectible['Merchant'])) {
-								echo '<dt>';
-								echo __('Purchased From');
-								echo '</dt>';
-								echo '<dd>';
-								echo $collectible['Merchant']['name'];
-								echo '</dd>';
-							}
+						if (isset($collectible['Merchant']) && !empty($collectible['Merchant'])) {
+							echo '<dt>';
+							echo __('Purchased From');
+							echo '</dt>';
+							echo '<dd>';
+							echo $collectible['Merchant']['name'];
+							echo '</dd>';
+						}
 						?>
 					</dl>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$( "#remove-dialog" ).dialog({
+		'autoOpen' : false,
+		'width' : 500,
+		'height': 'auto',
+		'resizable': false,
+		'modal': true,
+		'buttons': {
+			"Remove": function() {
+				$('#remove-form').submit();
+			}
+		}
+	});		
+	$('#remove-link').click(function(){
+		$('#remove-dialog').dialog('open');
+	});
+	
+});
+
+</script>
+<div id="remove-dialog" class="dialog" title="Remove Collectible">
+	<div class="component component-dialog">
+		<div class="inside" >
+		<div class="component-info">
+			<div>
+				<?php __('Are you sure you want to remove this collectible from your stash?') ?>
+			</div>
+		</div>
 		</div>
 	</div>
 </div>
