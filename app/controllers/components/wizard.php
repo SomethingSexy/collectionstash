@@ -158,7 +158,6 @@ class WizardComponent extends Object {
 	function initialize(&$controller, $settings = array()) {
 		$this -> controller = &$controller;
 		$this -> _set($settings);
-		debug($this -> Session -> check('Wizard.complete'));
 		$this -> _sessionKey = $this -> Session -> check('Wizard.complete') ? 'Wizard.complete' : 'Wizard.' . $controller -> name;
 		$this -> _configKey = 'Wizard.config';
 		$this -> _branchKey = 'Wizard.branches.' . $controller -> name;
@@ -171,7 +170,6 @@ class WizardComponent extends Object {
 	 * @access public
 	 */
 	function startup(&$controller) {
-		debug($this->steps);
 		$this -> steps = $this -> _parseSteps($this -> steps);
 
 		$this -> config('wizardAction', $this -> wizardAction);
@@ -224,7 +222,6 @@ class WizardComponent extends Object {
 				if(method_exists($this -> controller, '_afterComplete')) {
 					$completePass = $this -> controller -> _afterComplete();
 				}
-				debug($completePass);
 				if($completePass) {
 					$this -> reset();
 					$this -> controller -> redirect($this -> completeUrl);							

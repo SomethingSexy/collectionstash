@@ -1,13 +1,4 @@
-<?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
-<?php      
-	echo $this->element('collectible_detail', array(
-		'title' => __('Base Collectible Details', true),
-		'showStatistics' => false,
-		'showWho' => false,
-		'collectibleDetail' => $collectible
-	));
-?>
-<?php } ?>
+
 <div id="bread-crumbs">
 	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'variantFeatures'=>'Variant Features', 'attributes'=>'Accessories/Features', 'tags'=>'Tags','image'=>'Image', 'review'=> 'Review')); ?>	
 </div>

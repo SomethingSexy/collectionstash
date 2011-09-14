@@ -445,7 +445,6 @@ class CollectiblesController extends AppController {
 
 	function _processTags() {
 		$this -> data = Sanitize::clean($this -> data);
-		debug($this -> data);
 		//TODO clean up the validation
 		if (count($this -> data['CollectiblesTag']) <= 5) {
 			$this -> loadModel('Tag');
@@ -456,7 +455,6 @@ class CollectiblesController extends AppController {
 			return false;
 		}
 
-		debug($this -> data);
 		return true;
 	}
 
@@ -595,11 +593,11 @@ class CollectiblesController extends AppController {
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
 
-		debug($collectible);
-		debug($wizardData);
+		// debug($collectible);
+		// debug($wizardData);
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
-			debug($variantCollectible);
+			// debug($variantCollectible);
 			$this -> set('collectible', $variantCollectible);
 			$collectible['Collectible']['variant'] = 1;
 		}
