@@ -258,7 +258,7 @@ class AppController extends Controller {
 			$conditions = array();
 		}
 		$joins = array();
-		if($tagFilterSet) {
+		if(isset($tagFilterSet) && $tagFilterSet) {
 			array_push($joins,array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id'))); 
 			array_push($joins,array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
 		}

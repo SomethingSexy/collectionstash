@@ -46,7 +46,7 @@
 						</dd>
 						<?php }?>
 						<dt>
-							<?php __('Cost');?>
+							<?php __('Purchase Price');?>
 						</dt>
 						<dd>
 							<?php echo '$' . $collectible['CollectiblesUser']['cost'];?>

@@ -215,7 +215,7 @@ class CollectiblesController extends AppController {
 
 			if (!empty($collectible)) {
 
-				$this -> Session -> write('add.collectible.variant', $variantCollectible);
+				//$this -> Session -> write('add.collectible.variant', $variantCollectible);
 				$manufacturer = array();
 				$manufacturer['Manufacture'] = $collectible['Manufacture'];
 				$this -> Session -> write('add.collectible.manufacture', $manufacturer);
