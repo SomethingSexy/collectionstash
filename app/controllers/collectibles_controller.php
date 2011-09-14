@@ -31,7 +31,7 @@ class CollectiblesController extends AppController {
 		$this -> resetCollectibleAdd();
 		//check to see if there is data submitted
 		if (!empty($this -> data)) {
-			debug($this -> data);
+
 			if ($this -> data['Collectible']['massProduced'] === 'true') {
 				$this -> redirect(array('action' => 'massProduced'));
 
@@ -63,7 +63,7 @@ class CollectiblesController extends AppController {
 	function massProduced() {
 		$this -> checkLogIn();
 		if (!empty($this -> data)) {
-			debug($this -> data);
+
 			if ($this -> data['Collectible']['manufactured'] === 'true') {
 				$this -> redirect(array('action' => 'selectManufacturer'));
 			} else if ($this -> data['Collectible']['manufactured'] == 'false') {
@@ -94,7 +94,7 @@ class CollectiblesController extends AppController {
 		$this -> paginate = array('order' => array('Manufacture.title' => 'ASC'), 'contain' => array('CollectibletypesManufacture' => 'Collectibletype'));
 		// $existingCollectibles = $this -> paginate('Collectible');
 		$manufactures = $this -> paginate('Manufacture');
-		debug($manufactures);
+
 		$this -> set('manufactures', $manufactures);
 	}
 
@@ -149,7 +149,7 @@ class CollectiblesController extends AppController {
 		$this -> loadModel('CollectibletypesManufacture');
 		$this -> paginate = array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufactureId['Manufacture']['id']), 'contain' => array('Collectibletype' => array('order' => array('Collectibletype.name' => 'ASC'))));
 		$collectibleTypes = $this -> paginate('CollectibletypesManufacture');
-		debug($collectibleTypes);
+
 		$this -> set(compact('collectibleTypes'));
 		$this -> set('manufacturer', $manufactureId['Manufacture']['title']);
 	}
@@ -212,8 +212,7 @@ class CollectiblesController extends AppController {
 			//Grab my collectible
 			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 			//make sure this is a valid collectible
-			debug($collectible);
-			debug($variant);
+
 			if (!empty($collectible)) {
 
 				$this -> Session -> write('add.collectible.variant', $variantCollectible);
@@ -276,8 +275,7 @@ class CollectiblesController extends AppController {
 
 		//If data is empty then this is the first time we are coming here or a refresh or something.
 		if (empty($this -> data)) {
-			debug($this -> Session -> check('add.collectible.variant'));
-			debug($this -> Session -> read('add.collectible.variant'));
+
 			if ($this -> Session -> check('add.collectible.variant')) {
 				//TODO store the collectible in the session for going back
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
@@ -290,13 +288,13 @@ class CollectiblesController extends AppController {
 			//If data is not empty, then we submitted and it errored or we are coming back to edit
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-				debug($variantCollectible);
+
 				$this -> set('collectible', $variantCollectible);
 			}
 		}
 
 		$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($manufacturer['Manufacture']['id']);
-		debug($manufactureData);
+
 		$this -> set('manufactures', $manufactureData['manufactures']);
 		$this -> set('licenses', $manufactureData['licenses']);
 		// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
@@ -317,7 +315,7 @@ class CollectiblesController extends AppController {
 	function _processManufacture() {
 		//check if user is logged in
 		if ($this -> isLoggedIn()) {
-			debug($this -> data);
+
 			$newCollectible = array();
 			//First check to see if this is a post
 			// if(!empty($this -> data)) {
@@ -342,7 +340,6 @@ class CollectiblesController extends AppController {
 			if ($this -> Collectible -> validates()) {
 
 			} else {
-				debug($this -> Collectible -> invalidFields());
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 				$validCollectible = false;
 			}
@@ -382,7 +379,7 @@ class CollectiblesController extends AppController {
 				if (isset($variantCollectible['AttributesCollectible'])) {
 					foreach ($variantCollectible['AttributesCollectible'] as $key => &$value) {
 						$value['name'] = $value['Attribute']['name'];
-						debug($value);
+
 					}
 				}
 				$this -> data['AttributesCollectible'] = $variantCollectible['AttributesCollectible'];
@@ -391,7 +388,7 @@ class CollectiblesController extends AppController {
 		}
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
-			debug($variantCollectible);
+
 			$this -> set('collectible', $variantCollectible);
 		}
 
@@ -404,7 +401,7 @@ class CollectiblesController extends AppController {
 		} else {
 			$this -> data = Sanitize::clean($this -> data);
 			$this -> loadModel('AttributesCollectible');
-			debug($this -> data);
+
 			//Uh this doesn't make sense, do I need to loop through each of these to validate?
 			if (isset($this -> data['AttributesCollectible'])) {
 				foreach ($this -> data['AttributesCollectible'] as $key => $attribue) {
@@ -413,7 +410,7 @@ class CollectiblesController extends AppController {
 					if ($this -> AttributesCollectible -> validates()) {
 						return true;
 					} else {
-						debug($this -> AttributesCollectible -> invalidFields());
+
 						$this -> set('errors', $this -> AttributesCollectible -> validationErrors);
 						return false;
 					}
@@ -426,7 +423,7 @@ class CollectiblesController extends AppController {
 
 	function _prepareTags() {
 		$wizardData = $this -> Wizard -> read();
-		debug($wizardData);
+
 		if (isset($wizardData['tags']['CollectiblesTag'])) {
 			$this -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
 		} else {
@@ -437,7 +434,7 @@ class CollectiblesController extends AppController {
 		}
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
-			debug($variantCollectible);
+
 			$this -> set('collectible', $variantCollectible);
 		}
 
@@ -462,11 +459,11 @@ class CollectiblesController extends AppController {
 		$wizardData = $this -> Wizard -> read();
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
-			debug($variantCollectible);
+
 			$this -> set('collectible', $variantCollectible);
 		}
 		//debug($this -> Session -> read('Wizard.Collectibles.image'));
-		debug($wizardData);
+
 		$collectible = array();
 		// if(isset($wizardData['image']['Upload'])) {
 		// $collectible['Upload'] = $wizardData['image']['Upload'];
@@ -476,11 +473,11 @@ class CollectiblesController extends AppController {
 
 	function _processImage() {
 		if (!empty($this -> data)) {
-			debug($this -> data['remove']);
+
 			if (isset($this -> data['skip']) && $this -> data['skip'] === 'true') {
 				return true;
 			} else if (isset($this -> data['remove']) && $this -> data['remove'] === 'true') {
-				debug($this -> data);
+
 				$wizardData = $this -> Wizard -> read();
 				$uploadId = $this -> Session -> read('uploadId');
 				if (isset($wizardData['image']['Upload']) && !empty($uploadId)) {
@@ -510,13 +507,13 @@ class CollectiblesController extends AppController {
 							$this -> Session -> write('uploadId', $uploadId);
 							return true;
 						} else {
-							debug($this -> Collectible -> Upload -> validationErrors);
+
 							$this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
 							return false;
 						}
 					} else {
 						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
-						debug($this -> Collectible -> Upload -> invalidFields());
+
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 						return false;
 					}
@@ -543,7 +540,7 @@ class CollectiblesController extends AppController {
 	function _prepareReview() {
 
 		$wizardData = $this -> Wizard -> read();
-		debug($wizardData);
+
 		$collectible = array();
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
 		if (isset($wizardData['attributes']['AttributesCollectible'])) {
@@ -565,7 +562,7 @@ class CollectiblesController extends AppController {
 		if (isset($collectible['AttributesCollectible'])) {
 			foreach ($collectible['AttributesCollectible'] as $key => &$value) {
 				$value['Attribute']['name'] = $value['name'];
-				debug($value);
+	
 			}
 		}
 
@@ -650,7 +647,6 @@ class CollectiblesController extends AppController {
 		$collectible['Collectible']['user_id'] = $this -> getUserId();
 		$collectible['Revision']['action'] = 'A';
 		$collectible['Revision']['user_id'] = $this -> getUserId();
-		debug($collectible);
 
 		//If there are any newly created Tags, we need to remove them from the array or else cake won't add
 		//In the future we might want to update this to that we active tags
@@ -660,8 +656,6 @@ class CollectiblesController extends AppController {
 			$tag['Tag'] = array();
 		}
 		//}
-
-		debug($collectible);
 
 		$this -> Collectible -> create();
 		if ($this -> Collectible -> saveAll($collectible)) {
@@ -705,7 +699,6 @@ class CollectiblesController extends AppController {
 			$this -> Session -> delete('add.collectible.variant');
 			return true;
 		} else {
-			debug($this -> Collectible -> validationErrors);
 			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 			return false;
 		}
@@ -717,9 +710,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'index'));
 		}
 		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
-		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
-			debug($collectible);
 			$this -> set('collectible', $collectible);
 			$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
 			$this -> set('collectibleCount', $count);
@@ -735,7 +726,6 @@ class CollectiblesController extends AppController {
 
 	function cancel() {
 		$uploadId = $this -> Session -> read('uploadId');
-		debug($uploadId);
 
 		$upload = $this -> Collectible -> Upload -> findById($uploadId);
 		//if($this -> FileUpload -> removeFile($upload['Upload']['name'])) {
@@ -750,7 +740,6 @@ class CollectiblesController extends AppController {
 	}
 
 	function search() {
-		debug($this -> params['url']);
 		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
 		//Should update this if we want to pass multiple paramaters in
 		$this -> data['Search'] = array();
@@ -808,16 +797,13 @@ class CollectiblesController extends AppController {
 				}
 			}
 
-			debug($history);
 			$this -> set(compact('history'));
 			//Grab a list of all attributes associated with this collectible, or were associated with this collectible.  We will display a list of all
 			//of these attributes then we can go into further history detail if we need too
 			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id)));
 			$this -> set(compact('attributeHistory'));
-			debug($attributeHistory);
 			//Update this in the future since we only allow one Upload for now
 			$collectibleUpload = $this -> Collectible -> Upload -> find("first", array('contain' => false, 'conditions' => array('Upload.collectible_id' => $id)));
-			debug($collectibleUpload);
 			$uploadHistory = array();
 			if (!empty($collectibleUpload)) {
 				$this -> Collectible -> Upload -> id = $collectibleUpload['Upload']['id'];
@@ -826,7 +812,7 @@ class CollectiblesController extends AppController {
 				//Making this by reference so we can modify it, is this proper in php?
 				foreach ($uploadHistory as $key => &$upload) {
 					$uploadRevision = $this -> Collectible -> Revision -> findById($upload['Upload']['revision_id'], array('contain' => false));
-					debug($uploadRevision);
+
 					$upload['Upload']['action'] = $uploadRevision['Revision']['action'];
 
 					$editUserDetails = $this -> User -> findById($uploadRevision['Revision']['user_id'], array('contain' => false));
@@ -843,7 +829,6 @@ class CollectiblesController extends AppController {
 
 			}
 
-			debug($uploadHistory);
 			$this -> set(compact('uploadHistory'));
 		} else {
 			$this -> redirect($this -> referer());
@@ -852,12 +837,11 @@ class CollectiblesController extends AppController {
 
 	function historyDetail($id = null, $version_id = null) {
 		$this -> checkLogIn();
-		debug($id);
-		debug($version_id);
+
 		if ($id && $version_id && is_numeric($id) && is_numeric($version_id)) {
 			$this -> Collectible -> id = $id;
 			$collectible = $this -> Collectible -> revisions(array('conditions' => array('version_id' => $version_id)), true);
-			debug($collectible);
+
 			$this -> set(compact('collectible'));
 
 		} else {
@@ -872,7 +856,7 @@ class CollectiblesController extends AppController {
 		$this -> paginate = array("conditions" => array('state' => 1), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')));
 
 		$collectilbes = $this -> paginate('Collectible');
-		debug($collectilbes);
+
 		$this -> set('collectibles', $collectilbes);
 
 	}
@@ -898,7 +882,6 @@ class CollectiblesController extends AppController {
 			$notes = $this -> data['Approval']['notes'];
 			//Approve
 			if ($this -> data['Approval']['approve'] === 'true') {
-				debug($collectible);
 				if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
 					$data = array();
 					$data['Collectible'] = array();
@@ -950,7 +933,7 @@ class CollectiblesController extends AppController {
 			} else {
 				//fuck it, I am deleting it
 				if ($this -> Collectible -> delete($collectible['Collectible']['id'])) {
-					debug($collectible);
+
 					//If this fails oh well
 					//Have to do this because we have a belongsTo relationship on Collectible, probably should be a hasOne, fix at some point
 					$this -> Collectible -> Revision -> delete($collectible['Collectible']['revision_id']);
