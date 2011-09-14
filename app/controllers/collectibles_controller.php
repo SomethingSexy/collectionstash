@@ -509,7 +509,6 @@ class CollectiblesController extends AppController {
 							//it in our saving object.  This will allow us to display the details to the user in the
 							//review and confirm process.
 							$uploadId = $this -> Collectible -> Upload -> id;
-							debug($upload);
 							$this -> Session -> write('uploadId', $uploadId);
 							return true;
 						} else {
@@ -677,7 +676,7 @@ class CollectiblesController extends AppController {
 				$updateUpload['Upload']['id'] = $wizardData['image']['Upload']['id'];
 				$updateUpload['Upload']['collectible_id'] = $id;
 				$updateUpload['Upload']['revision_id'] = $addCollectible['Collectible']['revision_id'];
-				if ($this -> Collectible -> Upload -> saveAll($updateUpload, array('validate' => false))) {
+				if (!$this -> Collectible -> Upload -> saveAll($updateUpload, array('validate' => false))) {
 					//If it fails, let it pass but log the problem.
 					$this -> log('Failed to update the upload with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'] . ' and upload id ' . $addCollectible['Upload']['id'], 'error');
 				}
@@ -694,7 +693,7 @@ class CollectiblesController extends AppController {
 					unset($value['modified']);
 				}
 				//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
-				if ($this -> Collectible -> AttributesCollectible -> saveAll($addCollectible['AttributesCollectible'], array('validate' => false))) {
+				if (!$this -> Collectible -> AttributesCollectible -> saveAll($addCollectible['AttributesCollectible'], array('validate' => false))) {
 					//If it fails, let it pass but log the problem.
 					$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'], 'error');
 				}
