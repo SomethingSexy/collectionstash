@@ -4,13 +4,7 @@ class CollectiblesUser extends AppModel {
 	var $name = 'CollectiblesUser';
 	var $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User', 'Condition', 'Merchant');
 	var $actsAs = array('Revision', 'Containable');
-	var $validate = array(
-		'cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 
-		'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 
-		'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 
-		'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
-		'purchase_date' => array('rule' => array('date','mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.')
-		);
+	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'));
 
 	function beforeSave() {
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
@@ -31,19 +25,24 @@ class CollectiblesUser extends AppModel {
 		$editionSize = trim($check['edition_size']);
 
 		//first make sure this collectible shows edition size
-		if($showUserEditionSize == true) {
+		if ($showUserEditionSize == true) {
 			//check first to make sure it is numeric
-			if(is_numeric($editionSize) === true) {
-				$userEditionSize = intval($editionSize);
-				$collectibleEditionSize = intval($collectible['Collectible']['edition_size']);
-				//if the user entered edition size is greater than the collectible edition size, fail it
-				if($userEditionSize > $collectibleEditionSize) {
-					return false;
+			if (!empty($editionSize)) {
+				if (is_numeric($editionSize) === true) {
+					$userEditionSize = intval($editionSize);
+					$collectibleEditionSize = intval($collectible['Collectible']['edition_size']);
+					//if the user entered edition size is greater than the collectible edition size, fail it
+					if ($userEditionSize > $collectibleEditionSize) {
+						return false;
+					} else {
+						return true;
+					}
 				} else {
-					return true;
+					return false;
 				}
 			} else {
-				return false;
+				//If it is empty, let it through
+				return true;
 			}
 
 		} else {
@@ -57,7 +56,7 @@ class CollectiblesUser extends AppModel {
 	}
 
 	public function getListOfUsersWho($collectibleId) {
-		$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'),'Stash'))));
+		$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		debug($data);
 		return $data;
 	}
