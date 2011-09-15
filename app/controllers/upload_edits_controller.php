@@ -13,7 +13,7 @@ class UploadEditsController extends AppController {
 				//If it is not null, then see if it was added to the session, if it was replace it, otherwise write it to the session
 				if ($this -> Session -> check('Upload.Edit.collectibleId')) {
 					$currentCollectibleId = $this -> Session -> read('Upload.Edit.collectibleId');
-					if ($currentCollectibleId === $collectibleId) {
+					if ($currentCollectibleId !== $collectibleId) {
 						$this -> Session -> write('Upload.Edit.collectibleId', $collectibleId);
 					}
 				} else {
