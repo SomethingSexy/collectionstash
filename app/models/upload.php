@@ -22,11 +22,12 @@ class Upload extends AppModel {
 	public function isValidUpload($uploadData) {
 		$validUpload = false;
 		debug($uploadData);
-		if (count($uploadData['Upload']) == 1) {
-			if ($uploadData['Upload']['0']['file']['name'] != '' || $uploadData['Upload']['0']['url'] != '') {
-				$validUpload = true;
+		if (isset($uploadData['Upload']) && !empty($uploadData['Upload']) && isset($uploadData['Upload']['0']) && !empty($uploadData['Upload']['0']) && isset($uploadData['Upload']['0']['file']) && !empty($uploadData['Upload']['0']['file']))
+			if (count($uploadData['Upload']) == 1) {
+				if ($uploadData['Upload']['0']['file']['name'] != '' || $uploadData['Upload']['0']['url'] != '') {
+					$validUpload = true;
+				}
 			}
-		}
 
 		return $validUpload;
 	}
@@ -37,28 +38,27 @@ class Upload extends AppModel {
 		//now remove it cause it is not necessary
 		unset($upload['Upload']['upload_id']);
 		debug($uploadId);
-		
-		if($upload['Upload']['action'] === 'A'){
-			$this -> create();	
-			if ($this -> save ($upload, array('validate' => false))) {
+
+		if ($upload['Upload']['action'] === 'A') {
+			$this -> create();
+			if ($this -> save($upload, array('validate' => false))) {
 				return true;
 			} else {
 				return false;
-			}			
+			}
 		} else if ($upload['Upload']['action'] === 'E') {
 			//At this point should I delete the old image?
 			//save this bad boy
 			$this -> id = $uploadId;
-			if ($this -> save ($upload, array('validate' => false))) {
+			if ($this -> save($upload, array('validate' => false))) {
 				return true;
 			} else {
 				return false;
-			}			
+			}
 		} else {
 			//not supported action yet
 			return false;
 		}
-
 
 	}
 

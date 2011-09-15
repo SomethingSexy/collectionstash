@@ -38,7 +38,7 @@
 			});	
 			$('#deny-button').click(function(){
 				$('#approve-input').val('false');
-				$('#deny-form').submit();	
+				$('#approval-form').submit();	
 			});	
 		</script>
 		</div>
