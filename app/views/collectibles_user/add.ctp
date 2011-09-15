@@ -13,12 +13,17 @@
 	    <?php echo $this->Form->create('CollectiblesUser', array('url'=>'/collectibles_user/add/'.$collectible['Collectible']['id']));?>
 	      <fieldset>
 	        <ul class="form-fields">
-	          <li>
-	            <div class="label-wrapper">
-	              <label for="dialogEditionSize"><?php __('Edition Number') ?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
-	            </div> 
-	            <?php echo $this->Form->input('edition_size', array('id'=>'dialogEditionSize','div' => false, 'label' => false)); ?>
-	          </li>
+          	<?php 
+          		$editionSize = $collectible['Collectible']['edition_size'];
+				if($collectible['Collectible']['showUserEditionSize'])
+				{ ?>
+	            <li>
+	              <div class="label-wrapper">
+	                <label for="collectibleType"><?php __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
+	              </div>
+	              <?php  echo $this->Form->input('edition_size', array('div' => false, 'label'=>false));  ?>
+	            </li>
+	            <?php } ?>
 	          <li>
 	            <div class="label-wrapper">
 	              <label for="dialogCost"><?php __('How much did you pay? (USD)') ?> (Retail: $<?php echo $collectible['Collectible']['msrp'] ?> )</label>

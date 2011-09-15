@@ -33,7 +33,7 @@ class UsersController extends AppController {
 					if($results['User']['password'] == Security::hash($this -> data['User']['password'])) {
 						$this -> User -> id = $results['User']['id'];
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
-						$this -> log($results);
+						$this -> log($results, 'info');
 						$this -> Session -> write('user', $results);
 						$this -> log('User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()), 'info');
 						if(!empty($this -> data['User']['fromPage'])) {
