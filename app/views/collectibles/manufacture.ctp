@@ -50,6 +50,33 @@
 							<div class="static-field">
 								<?php echo $collectibleType['Collectibletype']['name'] ?>	
 							</div>
+						</li>
+						</li>
+						<?php
+							if(!isset($specializedTypes)){
+								$specializedTypes = array();	
+							}
+							if(empty($specializedTypes)) {
+								echo '<li class="hidden">';
+							} else {
+								echo '<li>';
+							}
+						?>
+						<div class="label-wrapper">
+							<label for="">
+								<?php __('Manufacturer Collectible Type') ?>
+							</label>
+						</div>
+						<?php  
+						if(!$this -> Session -> check('add.collectible.variant')) {
+							echo $this -> Form -> input('specialized_type_id', array('empty' => true, 'div' => false, 'label' => false));
+							
+						} else {
+							echo '<div class="static-field">';
+							echo $collectible['SpecializedType']['name'];
+							echo $this -> Form -> hidden('specialized_type_id');
+							echo '</div>';							
+						}?>
 						</li>	
 						<li>
 							<div class="label-wrapper">

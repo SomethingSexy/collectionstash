@@ -19,7 +19,7 @@ class AppController extends Controller {
 		//Since this gets set for every request, setting this here for the default
 		$this -> set('title_for_layout', 'Collection Stash');
 		$this -> set('description_for_layout', 'Your collectible database and storage system.');
-		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible, action figure, toy, database, stash, storage');
+		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible databse, action figure, toy, stash, storage');
 		//This stores off any request parameters per request, can be used to recreate urls later
 		$requestParams = '?';
 		if(isset($this -> params['url'])) {
@@ -315,17 +315,17 @@ class AppController extends Controller {
 				// );
 				// $data = $this -> paginate('CollectiblesTag');
 				// debug($data);
-				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				array_push($conditions, array('Collectible.state' => '0'));
 				//Using like for now because switch to InnoDB
 				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
 				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
-				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
 			array_push($conditions, array('Collectible.state' => '0'));
-			$this -> paginate = array("joins"=> $joins, "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
+			$this -> paginate = array("joins"=> $joins, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');

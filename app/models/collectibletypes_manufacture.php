@@ -2,6 +2,7 @@
 class CollectibletypesManufacture extends AppModel {
 	var $name = 'CollectibletypesManufacture';
 	var $belongsTo = array('Manufacture', 'Collectibletype');
+	var $hasMany = array('CollectibletypesManufactureSpecializedType');
 	var $actsAs = array('Containable');
 
 	public function getCollectibleTypeByManufactureId($manufacutre_id) {

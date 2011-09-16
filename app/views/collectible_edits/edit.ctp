@@ -74,6 +74,23 @@
 						</div>
 						<?php  echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));?>
 						</li>
+						<?php
+						if(!isset($specializedTypes)){
+							$specializedTypes = array();	
+						}
+						
+						if (empty($specializedTypes)) {
+							echo '<li class="hidden">';
+						} else {
+							echo '<li>';
+						}
+						?>
+						<div class="label-wrapper">
+							<label for=""> <?php __('Manufacturer Type')
+								?></label>
+						</div>
+						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, null, array('label' => false, 'empty' => true));?>
+						</li>
 						<li>
 							<div class="label-wrapper">
 								<label for="scale"> <?php __('Scale')

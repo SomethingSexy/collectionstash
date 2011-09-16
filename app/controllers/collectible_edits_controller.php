@@ -79,16 +79,21 @@ class CollectibleEditsController extends AppController {
 			$collectible = $this -> Collectible -> read(null, $id);
 			$this -> data = $collectible;
 			$this -> Session -> write('collectible.edit-id', $id);
-			if($collectible['Collectible']['variant']){
+			if ($collectible['Collectible']['variant']) {
 				$this -> Session -> write('edit.collectible.variant', true);
 			} else {
 				$this -> Session -> delete('edit.collectible.variant');
 			}
-			
+
 			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
 			$this -> set('manufactures', $manufactureData['manufactures']);
 			$this -> set('licenses', $manufactureData['licenses']);
 			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+			
+			if (isset($collectible['Collectible']['specialized_type_id']) && is_numeric($collectible['Collectible']['specialized_type_id'])) {
+				$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['collectibletype_id']);
+				$this -> set('specializedTypes', $specializedTypes);
+			}
 
 			if (isset($collectible['Collectible']['series_id'])) {
 				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['license_id']);
@@ -99,6 +104,7 @@ class CollectibleEditsController extends AppController {
 			$this -> set(compact('scales'));
 			$retailers = $this -> Collectible -> Retailer -> getRetailerList();
 			$this -> set('retailers', $retailers);
+
 		}
 
 		$currentCollectibleId = $this -> Session -> read('collectible.edit-id');
@@ -131,6 +137,11 @@ class CollectibleEditsController extends AppController {
 			$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
 			$collectible['License'] = $license['License'];
 
+			if (isset($collectible['Collectible']['specialized_type_id'])) {
+				$specializedType = $this -> Collectible -> SpecializedType -> find('first', array('conditions' => array('SpecializedType.id' => $collectible['Collectible']['specialized_type_id']), 'fields' => array('SpecializedType.name'), 'contain' => false));
+				$collectible['SpecializedType'] = $specializedType['SpecializedType'];
+			}
+
 			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 			$collectible['Scale'] = $scale['Scale'];
 
@@ -154,7 +165,7 @@ class CollectibleEditsController extends AppController {
 			 * If I am editing and I am in admin mode, which means I am editing a collectible that is being submitted for approval, and double check
 			 * to make sure I am admin user, automatically update this collectible.  This will update the current collectible being added, create a new
 			 * rev and then save off one the original user added.  This will keep the full circle of what was originally submitted plus whatever changes
-			 * the admin makes. 
+			 * the admin makes.
 			 * */
 			if (Configure::read('Settings.Collectible.Edit.auto-approve') === true || (isset($adminMode) && $adminMode && $this -> isUserAdmin())) {
 				$this -> loadModel('Collectible');

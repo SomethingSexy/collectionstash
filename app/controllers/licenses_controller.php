@@ -39,13 +39,13 @@ class LicensesController extends AppController {
 		//
 		// }
 
-		for ($i = 1; $i <= 56; $i++) {
-			$licenses = array();
-			$licenses['manufacture_id'] = 1;
-			$licenses['license_id'] = $i;
-			$this -> License -> LicensesManufacture -> create();
-			$this -> License -> LicensesManufacture -> saveAll($licenses, array('validate' => false));
-		}
+		// for ($i = 1; $i <= 56; $i++) {
+			// $licenses = array();
+			// $licenses['manufacture_id'] = 1;
+			// $licenses['license_id'] = $i;
+			// $this -> License -> LicensesManufacture -> create();
+			// $this -> License -> LicensesManufacture -> saveAll($licenses, array('validate' => false));
+		// }
 
 	}
 

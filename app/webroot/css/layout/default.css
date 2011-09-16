@@ -527,11 +527,13 @@ a:active {
 #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.name a:hover {
 	text-decoration: underline;
 }
-
+#collectibletypes-list-component .inside .component-view .manufactures.view .collectibletype.item .collectibletype.detail .collectibletype.specialized-types li,
 #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.collectibletypes li {
 	font-size: 0.75em;
 	color: #999999;
 }
+
+#collectibletypes-list-component .inside .component-view .manufactures.view .collectibletype.item .collectibletype.detail .collectibletype.specialized-types li,
 #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.collectibletypes li {
 	float: left;
 	margin-right: 10px;

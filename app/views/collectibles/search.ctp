@@ -15,12 +15,26 @@
 					<?php echo $this -> element('collectible_list_image', array(
 						'collectible' => $collectible
 					));?>
-					<?php echo $this -> element('collectible_list_detail', array(
-						'collectible' => $collectible['Collectible'],
-						'manufacture' => $collectible['Manufacture'],
-						'license' => $collectible['License'],
-						'collectibletype' => $collectible['Collectibletype']
-					));?>
+					<?php 
+						if(isset($collectible['SpecializedType']) && !empty($collectible['SpecializedType']['name'])){
+							echo $this -> element('collectible_list_detail', array(
+							'collectible' => $collectible['Collectible'],
+							'manufacture' => $collectible['Manufacture'],
+							'license' => $collectible['License'],
+							'collectibletype' => $collectible['Collectibletype'],
+							'speciazliedType' => $collectible['SpecializedType']
+							));			
+						} else {
+							echo $this -> element('collectible_list_detail', array(
+							'collectible' => $collectible['Collectible'],
+							'manufacture' => $collectible['Manufacture'],
+							'license' => $collectible['License'],
+							'collectibletype' => $collectible['Collectibletype'],
+							));
+						}
+					
+
+					?>
 					<div class="links">
 						<?php if($isLoggedIn){
 							echo '<a title="Add to stash" href="/collectibles_user/add/'.$collectible['Collectible']['id']. '" class="add-to-collection">Add to Stash</a>';

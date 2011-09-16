@@ -147,9 +147,9 @@ class CollectiblesController extends AppController {
 		}
 		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
 		$this -> loadModel('CollectibletypesManufacture');
-		$this -> paginate = array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufactureId['Manufacture']['id']), 'contain' => array('Collectibletype' => array('order' => array('Collectibletype.name' => 'ASC'))));
+		$this -> paginate = array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufactureId['Manufacture']['id']), 'contain' => array('CollectibletypesManufactureSpecializedType' => array('SpecializedType'), 'Collectibletype' => array('order' => array('Collectibletype.name' => 'ASC'))));
 		$collectibleTypes = $this -> paginate('CollectibletypesManufacture');
-
+		debug($collectibleTypes);
 		$this -> set(compact('collectibleTypes'));
 		$this -> set('manufacturer', $manufactureId['Manufacture']['title']);
 	}
@@ -248,7 +248,7 @@ class CollectiblesController extends AppController {
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
 		if (isset($id) && $id != null) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('addCollectibleId');
 		} else {
@@ -293,6 +293,8 @@ class CollectiblesController extends AppController {
 			}
 		}
 
+		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
+		$this -> set('specializedTypes', $specializedTypes);
 		$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($manufacturer['Manufacture']['id']);
 
 		$this -> set('manufactures', $manufactureData['manufactures']);
@@ -305,6 +307,7 @@ class CollectiblesController extends AppController {
 		}
 
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+
 		$this -> set(compact('scales'));
 
 		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
@@ -562,7 +565,7 @@ class CollectiblesController extends AppController {
 		if (isset($collectible['AttributesCollectible'])) {
 			foreach ($collectible['AttributesCollectible'] as $key => &$value) {
 				$value['Attribute']['name'] = $value['name'];
-	
+
 			}
 		}
 
@@ -578,11 +581,17 @@ class CollectiblesController extends AppController {
 			$collectible['Collectible']['release'] = $collectible['Collectible']['release']['year'];
 		}
 
+		//TODO: All of this code between this and the collectible_edit controller is redundant
 		$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
 		$collectible['Manufacture'] = $manufacture['Manufacture'];
 
 		$collectibleType = $this -> Collectible -> Collectibletype -> find('first', array('conditions' => array('Collectibletype.id' => $collectible['Collectible']['collectibletype_id']), 'fields' => array('Collectibletype.name'), 'contain' => false));
 		$collectible['Collectibletype'] = $collectibleType['Collectibletype'];
+
+		if (isset($collectible['Collectible']['specialized_type_id'])) {
+			$specializedType = $this -> Collectible -> SpecializedType -> find('first', array('conditions' => array('SpecializedType.id' => $collectible['Collectible']['specialized_type_id']), 'fields' => array('SpecializedType.name'), 'contain' => false));
+			$collectible['SpecializedType'] = $specializedType['SpecializedType'];
+		}
 
 		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
 		$collectible['License'] = $license['License'];
@@ -598,7 +607,7 @@ class CollectiblesController extends AppController {
 			$this -> set('collectible', $variantCollectible);
 			$collectible['Collectible']['variant'] = 1;
 		}
-
+		debug($collectible);
 		$this -> set('collectibleReview', $collectible);
 
 	}
@@ -709,7 +718,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
 			$this -> set('collectible', $collectible);
 			$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
@@ -869,7 +878,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 		$this -> set('collectible', $collectible);
 	}
 

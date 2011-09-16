@@ -18,6 +18,13 @@
         	<div class="collectibletype item">
 				<div class="collectibletype detail">
 					<span class="collectibletype name"><?php echo $html->link($collectibleType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?></span>
+					<ul class="collectibletype specialized-types">
+					<?php foreach ($collectibleType['CollectibletypesManufactureSpecializedType'] as $specializedType): 
+						echo '<li>';
+						echo $specializedType['SpecializedType']['name'];		
+						echo '</li>';	
+					endforeach; ?>
+					</ul>
 				</div>	
         		<div class="links">
 					

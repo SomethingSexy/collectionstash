@@ -39,5 +39,14 @@
 		<dd>
 			<?php echo $collectibletype['name'];?>
 		</dd>
+		<?php 
+		if(isset($speciazliedType)) { ?> 
+		<dt>
+			Manufacturer Type:
+		</dt>
+		<dd>
+			<?php echo $speciazliedType['name'];?>
+		</dd>
+		<?php } ?>
 	</dl>
 </div>

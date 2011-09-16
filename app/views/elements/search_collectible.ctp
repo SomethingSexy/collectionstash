@@ -18,10 +18,10 @@
 	   			<fieldset>
 		  			<ul class="form-fields">
 		              <?php 
-		              $filters = $session->read('Collectibles.filters');
-					  $userSearchFields = $session->read('Collectibles.userSearchFields');
+		              $filters = $this -> Session ->read('Collectibles.filters');
+					  $userSearchFields = $this -> Session ->read('Collectibles.userSearchFields');
 					  
-					  $manufactures = $session->read('Manufacture_Search.filter');
+					  $manufactures = $this -> Session ->read('Manufacture_Search.filter');
 		              foreach ($manufactures as $manufacture):
 						$checked = false;
 						if($userSearchFields)
@@ -37,7 +37,7 @@
 		            </ul>
 		            <ul class="form-fields">
 		              <?php 
-		              $collectibleTypes = $session->read('CollectibleType_Search.filter');
+		              $collectibleTypes = $this -> Session ->read('CollectibleType_Search.filter');
 		              
 		              
 		              foreach ($collectibleTypes as $collectibleType):
