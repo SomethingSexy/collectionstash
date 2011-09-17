@@ -24,7 +24,7 @@ class Manufacture extends AppModel {
 		return $manufactures;
 	}
 
-	public function getManufactureData($manufactureId) {
+	public function getManufactureData($manufactureId, $collectibleTypeId = null) {
 		$returnData = array();
 
 		$manufactures = $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
@@ -34,12 +34,42 @@ class Manufacture extends AppModel {
 		$this -> set(compact('licenses'));
 
 		//grab all collectible types for this manufacture
+
+		//This will get all main level collectible types for this manufacture
 		$collectibletypes = $this -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($manufactureId);
+		//Update this to say collectibletypes_level1
+		$returnData['collectibletypes'] = $collectibletypes;
+		
+		if (!is_null($collectibleTypeId)) {
+			$returnData['selectedTypes'] = array();
+			//If we have a collectible type set, then we need to find the path for that type, and make sure that
+			//we return the main list and what is set
+			//TODO: At some point this should be recusrive, but this might actually be pretty automated to handle all sorts of levels in the future
+			//Loop through each level, and get the children of that level.
+			//We will store these as collectibletypes_level1, .._level2, and so on
+			//We will also store what id of that level should be selected so we know how to go back
+			$paths = $this -> CollectibletypesManufacture -> Collectibletype -> getpath($collectibleTypeId);
+			debug($paths);
+			//This lists out paths in order, the first being the high level
+			foreach ($paths as $key => $value) {
+				$returnData['selectedTypes']['L'.$key] = $value['Collectibletype']['id'];
+				if (!is_null($value['Collectibletype']['parent_id'])) {
+					$levelTypes = $this -> CollectibletypesManufacture -> Collectibletype -> children($value['Collectibletype']['parent_id']);
+					$levelListTypes = array();
+					foreach ($levelTypes as $levelKey => $levelvalue) {
+						$levelListTypes[$levelKey] = $levelvalue['Collectibletype']['name'];
+					}
+					
+					$returnData['collectibletypes_L'.$key] = $levelListTypes;
+				}
+			}
+			
+		}
+
 		$returnData['manufactures'] = $manufactures;
 		$returnData['licenses'] = $licenses;
 		// $returnData['series'] = $series;
-		$returnData['collectibletypes'] = $collectibletypes;
-
+		debug($returnData);
 		return $returnData;
 	}
 

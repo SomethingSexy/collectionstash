@@ -10,7 +10,7 @@ class CollectibletypesController extends AppController {
 		if ($this -> RequestHandler -> isAjax()) {
 			Configure::write('debug', 0);
 		}
-
+		//TODO update this to return the levels and lists
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($this -> data['manufacture_id']);
@@ -31,6 +31,22 @@ class CollectibletypesController extends AppController {
 		} else {
 			$this -> set('aCollectibleTypesData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
 		}
+	}
+
+	public function add() {
+		// $data = array('Figure', 'Diorama', 'Prop Replica', 'Bust', 'Maquette', 'Ornament', 'Statue');
+		// foreach ($data as $key => $value) {
+		// $data['Collectibletype']['name'] = $value;
+		// $this -> Collectibletype -> create();
+		// $this -> Collectibletype -> save($data);
+		// // }
+		// $data = array();
+		// $data['Collectibletype']['parent_id'] = '1';
+		// $data['Collectibletype']['name'] = 'Figure Accessory';
+		// $this -> Collectibletype -> create();
+		// $this -> Collectibletype -> save($data);
+// 
+		// $this -> render(false);
 	}
 
 }

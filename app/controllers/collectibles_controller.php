@@ -146,10 +146,24 @@ class CollectiblesController extends AppController {
 			}
 		}
 		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
-		$this -> loadModel('CollectibletypesManufacture');
-		$this -> paginate = array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufactureId['Manufacture']['id']), 'contain' => array('CollectibletypesManufactureSpecializedType' => array('SpecializedType'), 'Collectibletype' => array('order' => array('Collectibletype.name' => 'ASC'))));
-		$collectibleTypes = $this -> paginate('CollectibletypesManufacture');
-		debug($collectibleTypes);
+
+		/*
+		 * For now, get threaded which will return all collectible types and children.  If this grows
+		 * we could do a find all, where parent_id = null, paginate on that then once they select
+		 * the main type, we could go into the sub types.
+		 */
+		$collectibleTypes = $this -> Collectible -> Collectibletype -> find('threaded',array('contain'=> false));	
+		
+		//Now grab all of the manufacture collectible types so we can filter
+		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture-> find('all', array('conditions'=>array('CollectibletypesManufacture.manufacture_id'=> $manufactureId['Manufacture']['id']), 'contain'=> false));	
+		$manColTypeList = array();
+		//Create a list of just ids, I am sure there is a way to do this specifically with cake.
+		//Also right now this is assuming that if you have a subtype added you also have the main type added
+		foreach ($manufacturerCollectibletypes as $key => $value) {
+			array_push($manColTypeList, $value['CollectibletypesManufacture']['collectibletype_id']);	
+		}
+
+		$this -> set('manufacturerCollectibletypes', $manColTypeList);
 		$this -> set(compact('collectibleTypes'));
 		$this -> set('manufacturer', $manufactureId['Manufacture']['title']);
 	}
@@ -299,7 +313,6 @@ class CollectiblesController extends AppController {
 
 		$this -> set('manufactures', $manufactureData['manufactures']);
 		$this -> set('licenses', $manufactureData['licenses']);
-		// $this -> set('collectibletypes', $manufactureData['collectibletypes']);
 
 		if (isset($wizardData['manufacture']['Collectible']['series_id'])) {
 			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);

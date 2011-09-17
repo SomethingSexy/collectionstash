@@ -13,35 +13,30 @@
     <div class="component-view">
       <div class="manufactures view">
         <?php  
-        foreach ($collectibleTypes as $collectibleType):
+        foreach ($collectibleTypes as $collectibleType){
+			if(in_array($collectibleType['Collectibletype']['id'], $manufacturerCollectibletypes)) {
         ?>
+        	
         	<div class="collectibletype item">
 				<div class="collectibletype detail">
 					<span class="collectibletype name"><?php echo $html->link($collectibleType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?></span>
 					<ul class="collectibletype specialized-types">
-					<?php foreach ($collectibleType['CollectibletypesManufactureSpecializedType'] as $specializedType): 
-						echo '<li>';
-						echo $specializedType['SpecializedType']['name'];		
-						echo '</li>';	
-					endforeach; ?>
+					<?php foreach ($collectibleType['children'] as $specializedType) {
+						if(in_array($specializedType['Collectibletype']['id'], $manufacturerCollectibletypes)) { 
+							echo '<li>';
+							echo $html->link($specializedType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$specializedType['Collectibletype']['id']));
+							echo '</li>';	
+						}
+					}?>
 					</ul>
 				</div>	
         		<div class="links">
 					
         	 	</div>
          </div>
-        <?php endforeach; ?>
-        <div class="paging">
-          <p>
-          <?php
-           echo $this->Paginator->counter(array(
-           'format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)
-           ));
-          ?>  </p>
-          <?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
-          <?php echo $this->Paginator->numbers();?>
-          <?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
-        </div>
+        <?php 
+        	}
+        } ?>
       </div>
     </div>
   </div>

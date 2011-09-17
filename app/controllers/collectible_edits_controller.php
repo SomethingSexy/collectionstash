@@ -85,10 +85,15 @@ class CollectibleEditsController extends AppController {
 				$this -> Session -> delete('edit.collectible.variant');
 			}
 
-			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id']);
+			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['collectibletype_id']);
 			$this -> set('manufactures', $manufactureData['manufactures']);
 			$this -> set('licenses', $manufactureData['licenses']);
 			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
+			//Hardcoded at level 2 right now but change when we support more
+			if(isset($manufactureData['collectibletypes_L2'])){
+				$this -> set('collectibletypes_L2', $manufactureData['collectibletypes_L2']);
+			}
+			$this -> set('selectedTypes', $manufactureData['selectedTypes']);
 			
 			if (isset($collectible['Collectible']['specialized_type_id']) && is_numeric($collectible['Collectible']['specialized_type_id'])) {
 				$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['collectibletype_id']);

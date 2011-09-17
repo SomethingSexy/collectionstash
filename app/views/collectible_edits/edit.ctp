@@ -69,10 +69,21 @@
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('What type of collectible is this?')
+							<label for=""> <?php __('Collectible Type')
 								?></label>
 						</div>
-						<?php  echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));?>
+						<?php  
+							//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
+							//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
+							//page that determine which one is selected to put in teh input field...
+							//OR
+							//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
+							//logic will be similar.  
+							//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
+							//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
+						
+							echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
+						?>
 						</li>
 						<?php
 						if(!isset($specializedTypes)){
