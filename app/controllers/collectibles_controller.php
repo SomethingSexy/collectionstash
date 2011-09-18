@@ -82,7 +82,7 @@ class CollectiblesController extends AppController {
 	function selectManufacturer($id = null) {
 		$this -> checkLogIn();
 		if ($id && is_numeric($id)) {
-			$validManufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $id)));
+			$validManufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
 			if (!empty($validManufacture)) {
 				$this -> Session -> write('add.collectible.manufacture', $validManufacture);
 				$this -> redirect(array('action' => 'variant'));
@@ -112,7 +112,7 @@ class CollectiblesController extends AppController {
 
 		if (!empty($this -> data)) {
 			if ($this -> data['Collectible']['variant'] === 'true') {
-				$this -> redirect(array('action' => 'variantSelectCollectible'));
+				$this -> redirect(array('action' => 'variantSelectCollectible', 'initial'=>'yes'));
 			} else if ($this -> data['Collectible']['variant'] == 'false') {
 				$this -> redirect(array('action' => 'selectCollectibleType'));
 			} else {
@@ -152,15 +152,15 @@ class CollectiblesController extends AppController {
 		 * we could do a find all, where parent_id = null, paginate on that then once they select
 		 * the main type, we could go into the sub types.
 		 */
-		$collectibleTypes = $this -> Collectible -> Collectibletype -> find('threaded',array('contain'=> false));	
-		
+		$collectibleTypes = $this -> Collectible -> Collectibletype -> find('threaded', array('contain' => false));
+
 		//Now grab all of the manufacture collectible types so we can filter
-		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture-> find('all', array('conditions'=>array('CollectibletypesManufacture.manufacture_id'=> $manufactureId['Manufacture']['id']), 'contain'=> false));	
+		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufactureId['Manufacture']['id']), 'contain' => false));
 		$manColTypeList = array();
 		//Create a list of just ids, I am sure there is a way to do this specifically with cake.
 		//Also right now this is assuming that if you have a subtype added you also have the main type added
 		foreach ($manufacturerCollectibletypes as $key => $value) {
-			array_push($manColTypeList, $value['CollectibletypesManufacture']['collectibletype_id']);	
+			array_push($manColTypeList, $value['CollectibletypesManufacture']['collectibletype_id']);
 		}
 
 		$this -> set('manufacturerCollectibletypes', $manColTypeList);
@@ -170,13 +170,14 @@ class CollectiblesController extends AppController {
 
 	function variantSelectCollectible($id = null) {
 		$this -> checkLogIn();
+		
 		if (!$this -> Session -> check('add.collectible.manufacture')) {
 			//If it has not, start them over
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
 			$this -> redirect(array('action' => 'addSelectType'));
 		}
 		if ($id && is_numeric($id)) {
-			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
+			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute'))));
 
 			if (!empty($variantCollectible)) {
 				$manufacturer = $this -> Session -> read('add.collectible.manufacture');
@@ -195,6 +196,7 @@ class CollectiblesController extends AppController {
 
 		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
+		debug($manufactureId);
 		$this -> searchCollectible(array('Collectible.variant' => '0', 'Manufacture.id' => $manufactureId['Manufacture']['id']));
 	}
 
@@ -309,10 +311,10 @@ class CollectiblesController extends AppController {
 
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
 		$this -> set('specializedTypes', $specializedTypes);
-		$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($manufacturer['Manufacture']['id']);
 
-		$this -> set('manufactures', $manufactureData['manufactures']);
-		$this -> set('licenses', $manufactureData['licenses']);
+		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($manufacturer['Manufacture']['id']);
+
+		$this -> set('licenses', $licenses);
 
 		if (isset($wizardData['manufacture']['Collectible']['series_id'])) {
 			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
@@ -820,6 +822,7 @@ class CollectiblesController extends AppController {
 			}
 
 			$this -> set(compact('history'));
+			debug($history);
 			//Grab a list of all attributes associated with this collectible, or were associated with this collectible.  We will display a list of all
 			//of these attributes then we can go into further history detail if we need too
 			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id)));

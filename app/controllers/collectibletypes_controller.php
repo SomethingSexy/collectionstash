@@ -13,12 +13,14 @@ class CollectibletypesController extends AppController {
 		//TODO update this to return the levels and lists
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
-			$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($this -> data['manufacture_id']);
-			$specializedTypes = array();
-			if (!empty($collectibletypes)) {
-				reset($collectibletypes);
-				$firstColType = key($collectibletypes);
-				$specializedTypes = $this -> Collectibletype -> CollectibletypesManufacture -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($this -> data['manufacture_id'], $firstColType);
+			$manufacturerId = $this -> data['manufacture_id'];
+			$collectibleTypeId = $this -> data['collectibletype_id'];
+			if ($this -> data['init'] === 'true') {
+				//This should return arrays of each level of collectibles types from the path of the given collectible type id.  It
+				//will also return the collectible that is selected in the array
+				$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesPaths($manufacturerId, $collectibleTypeId);
+			} else {
+				$collectibleTypes = $this -> Collectibletype -> children($collectibleTypeId, true, array('Collectibletype.id', 'Collectibletype.name'));
 			}
 
 			$data = array();
@@ -26,7 +28,7 @@ class CollectibletypesController extends AppController {
 			$data['isTimeOut'] = false;
 			$data['data'] = array();
 			$data['data']['collectibleTypes'] = $collectibleTypes;
-			$data['data']['specializedTypes'] = $specializedTypes;
+			// $data['data']['specializedTypes'] = $specializedTypes;
 			$this -> set('aCollectibleTypesData', $data);
 		} else {
 			$this -> set('aCollectibleTypesData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
@@ -40,12 +42,12 @@ class CollectibletypesController extends AppController {
 		// $this -> Collectibletype -> create();
 		// $this -> Collectibletype -> save($data);
 		// // }
-		// $data = array();
+		$data = array();
 		// $data['Collectibletype']['parent_id'] = '1';
-		// $data['Collectibletype']['name'] = 'Figure Accessory';
-		// $this -> Collectibletype -> create();
-		// $this -> Collectibletype -> save($data);
-// 
+		$data['Collectibletype']['name'] = 'Print';
+		$this -> Collectibletype -> create();
+		$this -> Collectibletype -> save($data);
+		//
 		// $this -> render(false);
 	}
 

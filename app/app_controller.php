@@ -111,7 +111,9 @@ class AppController extends Controller {
 		$this -> loadModel('Collectible');
 		debug($this -> data);
 		$this -> setSearchData();
-
+		//This is my way of resetting the search, better way?
+		//If you fail to reset the search you might get unreliable results, depending on what
+		//you previously searched on
 		if(!empty($this -> params['named']['initial'])) {
 			if($this -> params['named']['initial'] == 'yes') {
 				$this -> Session -> delete('Collectibles.search');
@@ -171,7 +173,7 @@ class AppController extends Controller {
 					}
 				}
 			}
-
+			debug($typeFilters);
 			if($collectibletypeFilterSet) {
 				array_push($filters, $typeFilters);
 			}
@@ -266,6 +268,7 @@ class AppController extends Controller {
 		$listSize = Configure::read('Settings.Search.list-size');
 		debug($listSize);
 		if(isset($search)) {
+			//I believe I did this for pagnation and saving off what I search on?
 			$this -> Session -> write('Collectibles.search', $search);
 			$this -> Session -> write('Collectibles.filters', $filters);
 			if($search == '') {
@@ -315,6 +318,9 @@ class AppController extends Controller {
 				// );
 				// $data = $this -> paginate('CollectiblesTag');
 				// debug($data);
+				debug($conditions);
+				debug($joins);
+				debug($filters);
 				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				array_push($conditions, array('Collectible.state' => '0'));
@@ -324,6 +330,7 @@ class AppController extends Controller {
 				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
+			
 			array_push($conditions, array('Collectible.state' => '0'));
 			$this -> paginate = array("joins"=> $joins, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
 		}

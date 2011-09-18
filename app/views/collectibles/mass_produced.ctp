@@ -17,7 +17,7 @@
     </div>
     <div class="component-view">
     	<div class="question">
-      		<p><?php __('Add by Manufacture?') ?></p>     	
+      		<p><?php __('Add by Manufacturer?') ?></p>     	
       	</div>
 		<div class="links">
 	      	<?php echo $this->Form->create('Collectible');?>

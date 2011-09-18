@@ -22,7 +22,7 @@ class CollectibleEditsController extends AppController {
 			//TODO go somewhere
 			$this -> redirect($this -> referer());
 		}
-
+		debug(empty($this -> data));
 		$this -> loadModel('Collectible');
 		if (!empty($this -> data)) {
 			if (!$this -> Session -> check('collectible.edit-id')) {
@@ -37,31 +37,24 @@ class CollectibleEditsController extends AppController {
 
 			} else {
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+				debug($this -> Collectible -> validationErrors);
 				$validCollectible = false;
 			}
 
 			if ($validCollectible) {
 				$this -> data['Collectible']['collectible_id'] = $this -> Session -> read('collectible.edit-id');
 				$this -> Session -> write('preSaveCollectible', $this -> data);
-
 				$this -> redirect(array('action' => 'review'));
+				//return so we do not call useless data
+				return;
 			} else {
-				$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($this -> data['Collectible']['manufacture_id']);
-
-				$this -> set('manufactures', $manufactureData['manufactures']);
-				$this -> set('licenses', $manufactureData['licenses']);
-
-				if (isset($newCollectible['Collectible']['series_id'])) {
-					$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
-					$this -> set('series', $series);
+				//Redundant but reget this collectible now for some display purposes (for stuff that does not change)
+				$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $this -> Session -> read('collectible.edit-id')), 'contain' => array('Manufacture')));
+				$licenseId = $this -> data['Collectible']['license_id'];
+				$collectibleTypeId = $this -> data['Collectible']['collectibletype_id'];
+				if (isset($this -> data['Collectible']['series_id'])) {
+					$seriesId = $this -> data['Collectible']['series_id'];
 				}
-
-				// $this -> set('series', $manufactureData['series']);
-				$this -> set('collectibletypes', $manufactureData['collectibletypes']);
-				$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-				$this -> set(compact('scales'));
-				$retailers = $this -> Collectible -> Retailer -> getRetailerList();
-				$this -> set('retailers', $retailers);
 			}
 		} else {
 			if ($adminMode === 'true') {
@@ -76,7 +69,10 @@ class CollectibleEditsController extends AppController {
 			debug($this -> Session -> read('collectible.edit.admin-mode'));
 
 			//At this point $id should always be set
-			$collectible = $this -> Collectible -> read(null, $id);
+			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture')));
+			$licenseId = $collectible['Collectible']['license_id'];
+			$collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
+			$seriesId = $collectible['Collectible']['series_id'];
 			$this -> data = $collectible;
 			$this -> Session -> write('collectible.edit-id', $id);
 			if ($collectible['Collectible']['variant']) {
@@ -84,33 +80,32 @@ class CollectibleEditsController extends AppController {
 			} else {
 				$this -> Session -> delete('edit.collectible.variant');
 			}
-
-			$manufactureData = $this -> Collectible -> Manufacture -> getManufactureData($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['collectibletype_id']);
-			$this -> set('manufactures', $manufactureData['manufactures']);
-			$this -> set('licenses', $manufactureData['licenses']);
-			$this -> set('collectibletypes', $manufactureData['collectibletypes']);
-			//Hardcoded at level 2 right now but change when we support more
-			if(isset($manufactureData['collectibletypes_L2'])){
-				$this -> set('collectibletypes_L2', $manufactureData['collectibletypes_L2']);
-			}
-			$this -> set('selectedTypes', $manufactureData['selectedTypes']);
-			
-			if (isset($collectible['Collectible']['specialized_type_id']) && is_numeric($collectible['Collectible']['specialized_type_id'])) {
-				$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['collectibletype_id']);
-				$this -> set('specializedTypes', $specializedTypes);
-			}
-
-			if (isset($collectible['Collectible']['series_id'])) {
-				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $collectible['Collectible']['license_id']);
-				$this -> set('series', $series);
-			}
-
-			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-			$this -> set(compact('scales'));
-			$retailers = $this -> Collectible -> Retailer -> getRetailerList();
-			$this -> set('retailers', $retailers);
-
 		}
+
+		//Set the Manufacturer, this never changes
+		$this -> set('manufacturer', $collectible);
+		//Find and set the collectible type for the UI
+		$collectibleType = $this -> Collectible -> Collectibletype -> find("first", array('conditions' => array('Collectibletype.id' => $collectibleTypeId)));
+		$this -> set('collectibleType', $collectibleType);
+		//Grab this to get the licenses data
+		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($collectible['Collectible']['manufacture_id']);
+		//Set the licenses for this manufacturer for the drop down
+		$this -> set('licenses', $licenses);
+		//Now get and set the list of specialized types for this collectible id type, if it has any
+		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectibleTypeId);
+		$this -> set('specializedTypes', $specializedTypes);
+
+		//grab series
+		if (isset($seriesId) && !is_null($seriesId)) {
+			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
+			$this -> set('series', $series);
+		}
+		//grab scales
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+		$this -> set(compact('scales'));
+		//grabs retailers
+		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+		$this -> set('retailers', $retailers);
 
 		$currentCollectibleId = $this -> Session -> read('collectible.edit-id');
 		$this -> set(compact('currentCollectibleId'));

@@ -31,7 +31,51 @@
 								<label for=""> <?php __('Manufacture')
 									?></label>
 							</div>
-							<?php echo $this -> Form -> input('manufacture_id', array('div' => false, 'label' => false));?>
+							<?php
+								echo '<div class="static-field">';
+								echo $manufacturer['Manufacture']['title'];
+								echo $this -> Form -> hidden('manufacture_id');
+								echo '</div>';	
+							?>
+						</li>
+						<?php echo '<li>'; ?>
+						<div class="label-wrapper">
+							<label for=""> <?php __('Collectible Type')
+								?></label>
+						</div>
+						<?php  
+							//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
+							//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
+							//page that determine which one is selected to put in teh input field...
+							//OR
+							//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
+							//logic will be similar.  
+							//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
+							//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
+						
+							//echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
+							echo '<div class="static-field">';
+							echo '<a class="link" id="change-collectibletype-link">'.$collectibleType['Collectibletype']['name'].'</a>';
+							echo $this -> Form -> hidden('collectibletype_id');
+							echo '</div>';	
+						?>
+						</li>
+						<?php
+						if(!isset($specializedTypes)){
+							$specializedTypes = array();	
+						}
+						
+						if (empty($specializedTypes)) {
+							echo '<li class="hidden">';
+						} else {
+							echo '<li>';
+						}
+						?>
+						<div class="label-wrapper">
+							<label for=""> <?php __('Manufacturer Type')
+								?></label>
+						</div>
+						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, null, array('label' => false, 'empty' => true));?>
 						</li>
 						<?php
 						if (empty($licenses)) {
@@ -59,48 +103,6 @@
 								?></label>
 						</div>
 						<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
-						</li>
-
-						<?php
-						if (empty($collectibletypes)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<div class="label-wrapper">
-							<label for=""> <?php __('Collectible Type')
-								?></label>
-						</div>
-						<?php  
-							//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
-							//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
-							//page that determine which one is selected to put in teh input field...
-							//OR
-							//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
-							//logic will be similar.  
-							//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
-							//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
-						
-							echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
-						?>
-						</li>
-						<?php
-						if(!isset($specializedTypes)){
-							$specializedTypes = array();	
-						}
-						
-						if (empty($specializedTypes)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<div class="label-wrapper">
-							<label for=""> <?php __('Manufacturer Type')
-								?></label>
-						</div>
-						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, null, array('label' => false, 'empty' => true));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -265,3 +267,21 @@
 	});
 
 </script>
+<div id="edit-collectibletype-dialog" class="dialog" title="Edit Collectible Type">
+	<div class="component">
+		<div class="inside" >
+			<div class="component-info">
+				<div>
+					<?php __('Select from the types below to change.  Some types might have sub-types you can choose from.') ?>
+				</div>
+			</div>
+			<div class="component-view">
+				<fieldset>
+					<ul id="edit-collectibletype-dialog-fields" class="form-fields">
+
+					</ul>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1295,9 +1295,7 @@ div.paging span a {
 
 #add-attribute-dialog #add-attribute-dialog-fields select {
   float: left;
-  clear: both;
-  margin-bottom: 10px;
-  
+  clear: both;  
 }
 
 #stash-list-container .stash-list-details {

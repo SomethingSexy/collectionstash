@@ -187,13 +187,17 @@ var DED = function() {
              * 		</li>
              * </ul>
              */
+            $('#add-attribute-dialog').find('.error-message').remove();
             var attributeId = $('#attributeLevel' + attributeLevel,'#add-attribute-dialog').val();
             var attributeName = $('#attributeLevel' + attributeLevel +' option[value="' + attributeId +'"]','#add-attribute-dialog').text();
             var description = $('#attributeDescription','#add-attribute-dialog').val();
 			if (attributeId === '-1') {
 				//<div class="error-message"></div>	
 				$('#attributeLevel' + attributeLevel,'#add-attribute-dialog').after('<div class="error-message">Please select a category.</div>');
-				successful = false;				
+				successful = false;
+			} else if(description === ''){
+				$('#attributeDescription','#add-attribute-dialog').after('<div class="error-message">Please enter a description.</div>');
+				successful = false;							
 			} else {
 				var $li = $('<li></li>');
 	            var $attributeName = $('<span></span>').text(attributeName).addClass('attribute-name');
