@@ -20,6 +20,8 @@
 			<div class="collectible add">
 				<?php
 				echo $this -> Form -> create('Collectible', array('id' => 'edit-manufacture-form', 'url' => '/collectible_edits/edit/'));
+				echo $this -> Form -> hidden('variant');
+				echo $this -> Form -> hidden('variant_collectible_id');
 				?>
 				<fieldset>
 					<legend>

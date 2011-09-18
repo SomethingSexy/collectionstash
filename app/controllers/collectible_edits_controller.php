@@ -14,15 +14,12 @@ class CollectibleEditsController extends AppController {
 	function edit($id = null, $adminMode = false) {
 		$this -> checkLogIn();
 
-		debug($id);
-		debug($this -> params['named']);
-
 		if (!$id && !is_numeric($id) && empty($this -> data)) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			//TODO go somewhere
 			$this -> redirect($this -> referer());
 		}
-		debug(empty($this -> data));
+
 		$this -> loadModel('Collectible');
 		if (!empty($this -> data)) {
 			if (!$this -> Session -> check('collectible.edit-id')) {
