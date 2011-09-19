@@ -250,10 +250,10 @@ class AppController extends Controller {
 		$joins = array();
 		//Do some special logic here for tags because of how they are setup.
 		//For now adding this everytime but if I don't set a tag id as a condition I don't think it matters
-		//if (isset($tagFilterSet) && $tagFilterSet) {
+		if (isset($tagFilterSet) && $tagFilterSet) {
 			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
 			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
-		//}
+		}
 		debug($joins);
 		$listSize = Configure::read('Settings.Search.list-size');
 		debug($listSize);
