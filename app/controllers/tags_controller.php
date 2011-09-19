@@ -22,7 +22,7 @@ class TagsController extends AppController {
 	}
 	
 	public function index(){
-		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain'=> false));	
+		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain'=> false, 'order' => array('Tag.tag' => 'ASC')));	
 		debug($tags);
 		$this->set(compact('tags'));
 		$this -> loadModel('Manufacture');

@@ -112,7 +112,7 @@ class CollectiblesController extends AppController {
 
 		if (!empty($this -> data)) {
 			if ($this -> data['Collectible']['variant'] === 'true') {
-				$this -> redirect(array('action' => 'variantSelectCollectible', 'initial'=>'yes'));
+				$this -> redirect(array('action' => 'variantSelectCollectible', 'initial' => 'yes'));
 			} else if ($this -> data['Collectible']['variant'] == 'false') {
 				$this -> redirect(array('action' => 'selectCollectibleType'));
 			} else {
@@ -170,7 +170,7 @@ class CollectiblesController extends AppController {
 
 	function variantSelectCollectible($id = null) {
 		$this -> checkLogIn();
-		
+
 		if (!$this -> Session -> check('add.collectible.manufacture')) {
 			//If it has not, start them over
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
@@ -766,9 +766,10 @@ class CollectiblesController extends AppController {
 	function search() {
 		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
 		//Should update this if we want to pass multiple paramaters in
-		$this -> data['Search'] = array();
-		$this -> data['Search']['search'] = '';
+
 		if (isset($this -> params['url']['q'])) {
+			$this -> data['Search'] = array();
+			$this -> data['Search']['search'] = '';
 			$this -> data['Search']['search'] = $this -> params['url']['q'];
 		}
 		if (isset($this -> params['url']['m'])) {

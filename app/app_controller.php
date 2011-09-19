@@ -4,10 +4,10 @@ class AppController extends Controller {
 	//var $components = array('RequestHandler');
 	public function beforeFilter() {
 
-		if($this -> isLoggedIn()) {
+		if ($this -> isLoggedIn()) {
 			$this -> set('isLoggedIn', true);
 			$this -> set('username', $this -> getUsername());
-			if($this -> isUserAdmin()) {
+			if ($this -> isUserAdmin()) {
 				$this -> set('isUserAdmin', true);
 			} else {
 				$this -> set('isUserAdmin', false);
@@ -22,9 +22,9 @@ class AppController extends Controller {
 		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible databse, action figure, toy, stash, storage');
 		//This stores off any request parameters per request, can be used to recreate urls later
 		$requestParams = '?';
-		if(isset($this -> params['url'])) {
-			foreach($this->params['url'] as $key => $value) {
-				if($key !== 'ext' && $key !== 'url') {
+		if (isset($this -> params['url'])) {
+			foreach ($this->params['url'] as $key => $value) {
+				if ($key !== 'ext' && $key !== 'url') {
 					$requestParams = $requestParams . $key . '=' . $value;
 				}
 			}
@@ -43,7 +43,7 @@ class AppController extends Controller {
 
 	public function isLoggedIn() {
 		$user = $this -> getUser();
-		if(isset($user['User']) && !empty($user['User'])) {
+		if (isset($user['User']) && !empty($user['User'])) {
 			return true;
 		} else {
 			return false;
@@ -53,7 +53,7 @@ class AppController extends Controller {
 	public function isUserAdmin() {
 		$user = $this -> getUser();
 
-		if($user['User']['admin'] == 1) {
+		if ($user['User']['admin'] == 1) {
 			return true;
 		} else {
 			return false;
@@ -68,7 +68,7 @@ class AppController extends Controller {
 	public function setSearchData() {
 		$manufactures = $this -> Session -> read('Manufacture_Search.filter');
 
-		if(!isset($manufactures)) {
+		if (!isset($manufactures)) {
 			$this -> loadModel('Manufacture');
 			$manufactures = $this -> Manufacture -> getManufactureSearchData();
 			$this -> Session -> write('Manufacture_Search.filter', $manufactures);
@@ -78,7 +78,7 @@ class AppController extends Controller {
 
 		$collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
 
-		if(!isset($collectibleTypes)) {
+		if (!isset($collectibleTypes)) {
 			$this -> loadModel('Collectibletype');
 			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
@@ -87,7 +87,7 @@ class AppController extends Controller {
 
 	public function handleNotLoggedIn() {
 		$this -> Session -> setFlash('Your session has timed out.');
-		$this -> redirect(array('admin'=> false, 'controller' => 'users', 'action' => 'login'), null, true);
+		$this -> redirect(array('admin' => false, 'controller' => 'users', 'action' => 'login'), null, true);
 	}
 
 	/**
@@ -95,13 +95,13 @@ class AppController extends Controller {
 	 * auto redirect them.
 	 */
 	public function checkLogIn() {
-		if(!$this -> isLoggedIn()) {
+		if (!$this -> isLoggedIn()) {
 			$this -> handleNotLoggedIn();
 		}
 	}
-	
+
 	public function checkAdmin() {
-		if(!$this -> isUserAdmin()) {
+		if (!$this -> isUserAdmin()) {
 			$this -> handleNotLoggedIn();
 		}
 	}
@@ -109,21 +109,32 @@ class AppController extends Controller {
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
 		$this -> loadModel('Collectible');
-		debug($this -> data);
+	debug($this->data);
 		$this -> setSearchData();
 		//This is my way of resetting the search, better way?
 		//If you fail to reset the search you might get unreliable results, depending on what
 		//you previously searched on
-		if(!empty($this -> params['named']['initial'])) {
-			if($this -> params['named']['initial'] == 'yes') {
+		if (!empty($this -> params['named']['initial'])) {
+			if ($this -> params['named']['initial'] == 'yes') {
 				$this -> Session -> delete('Collectibles.search');
 				$this -> Session -> delete('Collectibles.filters');
 				$this -> Session -> delete('Collectibles.userSearchFields');
+				debug($this->data);
 			}
+		} else if(!empty($this -> params['url']['initial'])){
+			if ($this -> params['url']['initial'] == 'yes') {
+				$this -> Session -> delete('Collectibles.search');
+				$this -> Session -> delete('Collectibles.filters');
+				$this -> Session -> delete('Collectibles.userSearchFields');
+				debug($this->data);
+			}			
 		}
-
-		if(!empty($this -> data)) {
-			$search = $this -> data['Search']['search'];
+		//Means I probably didn't post an actual search
+		if (!empty($this -> data)) {
+			if (isset($this -> data['Search']['search'])){
+				$search = $this -> data['Search']['search'];	
+			}
+			
 			//    array(
 			//       'OR'=>array(
 			//          array('Company.status' => 'active'),
@@ -145,9 +156,9 @@ class AppController extends Controller {
 			array_push($manFilters[0]['AND'], array('OR' => array()));
 			$filtersSet = false;
 			$manufactureFilterSet = false;
-			if(isset($this -> data['Search']['Manufacture'])) {
-				foreach($this->data['Search']['Manufacture']['Filter'] as $key => $value) {
-					if($value != 0) {
+			if (isset($this -> data['Search']['Manufacture'])) {
+				foreach ($this->data['Search']['Manufacture']['Filter'] as $key => $value) {
+					if ($value != 0) {
 						array_push($manFilters[0]['AND'][0]['OR'], array('Collectible.manufacture_id' => $key));
 						$filtersSet = true;
 						$manufactureFilterSet = true;
@@ -155,7 +166,7 @@ class AppController extends Controller {
 				}
 			}
 
-			if($manufactureFilterSet) {
+			if ($manufactureFilterSet) {
 				array_push($filters, $manFilters);
 			}
 			debug($filters);
@@ -164,9 +175,9 @@ class AppController extends Controller {
 			array_push($typeFilters, array('AND' => array()));
 			array_push($typeFilters[0]['AND'], array('OR' => array()));
 			$collectibletypeFilterSet = false;
-			if(isset($this -> data['Search']['CollectibleType'])) {
-				foreach($this->data['Search']['CollectibleType']['Filter'] as $key => $value) {
-					if($value != 0) {
+			if (isset($this -> data['Search']['CollectibleType'])) {
+				foreach ($this->data['Search']['CollectibleType']['Filter'] as $key => $value) {
+					if ($value != 0) {
 						array_push($typeFilters[0]['AND'][0]['OR'], array('Collectible.collectibletype_id' => $key));
 						$filtersSet = true;
 						$collectibletypeFilterSet = true;
@@ -174,7 +185,7 @@ class AppController extends Controller {
 				}
 			}
 			debug($typeFilters);
-			if($collectibletypeFilterSet) {
+			if ($collectibletypeFilterSet) {
 				array_push($filters, $typeFilters);
 			}
 			debug($filters);
@@ -183,16 +194,16 @@ class AppController extends Controller {
 			array_push($licenseFilters, array('AND' => array()));
 			array_push($licenseFilters[0]['AND'], array('OR' => array()));
 			$licenseFilterSet = false;
-			if(isset($this -> data['Search']['License'])) {
-				foreach($this->data['Search']['License']['Filter'] as $key => $value) {
-					if($value != 0) {
+			if (isset($this -> data['Search']['License'])) {
+				foreach ($this->data['Search']['License']['Filter'] as $key => $value) {
+					if ($value != 0) {
 						array_push($licenseFilters[0]['AND'][0]['OR'], array('Collectible.license_id' => $key));
 						$filtersSet = true;
 						$licenseFilterSet = true;
 					}
 				}
 			}
-			if($licenseFilterSet) {
+			if ($licenseFilterSet) {
 				array_push($filters, $licenseFilters);
 			}
 			debug($filters);
@@ -201,138 +212,71 @@ class AppController extends Controller {
 			//array_push($tagFilters, array('AND' => array()));
 			//array_push($tagFilters[0]['AND'], array('OR' => array()));
 			$tagFilterSet = false;
-			if(isset($this -> data['Search']['Tag'])) {
-				foreach($this->data['Search']['Tag']['Filter'] as $key => $value) {
-					if($value != 0) {
+			if (isset($this -> data['Search']['Tag'])) {
+				foreach ($this->data['Search']['Tag']['Filter'] as $key => $value) {
+					if ($value != 0) {
 						array_push($tagFilters, array('Tag.id' => $key));
 						$filtersSet = true;
 						$tagFilterSet = true;
 					}
 				}
 			}
-			if($tagFilterSet) {
+			if ($tagFilterSet) {
 				array_push($filters, $tagFilters);
 			}
 			debug($filters);
-
-			// //These two if checks make sure that we are not setting arrays if there
-			// //is nothing being searched on.  This stops offset database issue and
-			// //database issues when there is no left join
-			// debug($filters);
-			// if(!$licenseFilterSet) {
-			// array_pop($filters);
-			//
-			// }
-			// debug($filters);
-			// //Not sure this is going to work like I think it will
-			// if(!$collectibletypeFilterSet && $manufactureFilterSet) {
-			// //$filters = array_reverse($filters);
-			// array_pop($filters);
-			// //$filters = array_reverse($filters);
-			// } else if(!$collectibletypeFilterSet && !$manufactureFilterSet) {
-			// $filters = array_reverse($filters);
-			// array_pop($filters);
-			// $filters = array_reverse($filters);
-			// }
-			// debug($filters);
-			// if(!$manufactureFilterSet) {
-			// $filters = array_reverse($filters);
-			// array_pop($filters);
-			// $filters = array_reverse($filters);
-			// }
-			//
-			//
-			//
-			// if(!$filtersSet) {
-			// $filters = array();
-			// }
-			debug($filters);
 			$this -> Session -> write('Collectibles.userSearchFields', $this -> data['Search']);
 			debug($this -> data['Search']);
-
-		} else if($this -> Session -> check('Collectibles.search')) {
-			$search = $this -> Session -> read('Collectibles.search');
-			$filters = $this -> Session -> read('Collectibles.filters');
+		} else {
+			if ($this -> Session -> check('Collectibles.search')) {
+				$search = $this -> Session -> read('Collectibles.search');
+			}
+			if ($this -> Session -> check('Collectibles.filters')) {
+				$filters = $this -> Session -> read('Collectibles.filters');
+			}
 		}
 
+		if (!isset($filters)) {
+			$filters = array();
+		}
+		debug($filters);
+		//Save off my filters, does this make sense here?
+		$this -> Session -> write('Collectibles.filters', $filters);
+
 		//Some conditions were added
-		if(!is_array($conditions)) {
+		if (!is_array($conditions)) {
 			$conditions = array();
 		}
 		$joins = array();
-		if(isset($tagFilterSet) && $tagFilterSet) {
-			array_push($joins,array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id'))); 
-			array_push($joins,array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
-		}
+		//Do some special logic here for tags because of how they are setup.
+		//For now adding this everytime but if I don't set a tag id as a condition I don't think it matters
+		//if (isset($tagFilterSet) && $tagFilterSet) {
+			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
+			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
+		//}
 		debug($joins);
 		$listSize = Configure::read('Settings.Search.list-size');
 		debug($listSize);
-		if(isset($search)) {
-			//I believe I did this for pagnation and saving off what I search on?
+		array_push($conditions, array('Collectible.state' => '0'));
+		//See if a search was set
+		if (isset($search)) {
+			//This saves off the filters, and the search query for pagination
 			$this -> Session -> write('Collectibles.search', $search);
-			$this -> Session -> write('Collectibles.filters', $filters);
-			if($search == '') {
-				array_push($conditions, array('Collectible.state' => '0'));
-
-				// $options['joins'] = array(
-				// array('table' => 'collectibles_tags',
-				// 'alias' => 'CollectiblesTag',
-				// 'type' => 'inner',
-				// 'conditions' => array(
-				// 'Collectible.id = CollectiblesTag.collectible_id'
-				// )
-				// ),
-				// array('table' => 'tags',
-				// 'alias' => 'Tag',
-				// 'type' => 'inner',
-				// 'conditions' => array(
-				// 'CollectiblesTag.tag_id = Tag.id'
-				// )
-				// )
-				// );
-				// $options['conditions'] = array(
-				// 'Tag.id' => 3
-				// );
-				// $options['contain'] = array(
-				// 'Manufacture',
-				// 'Collectibletype',
-				// 'License',
-				// 'Upload',
-				// 'CollectiblesTag'
-				// );
-				// debug($options);
-				// $this -> paginate = $options;
-				// $data = $this -> paginate('Collectible');
-				// debug($data);
-				//$this->loadModel('Collectible');
-				// $books = $this->Collectible->find('all', $options);
-				// debug($books);
-				// $this -> paginate = array(
-				// "conditions" => array(
-				// "CollectiblesTag.tag_id" => 4
-				// ),
-				// "contain" => array (
-				// 'Tag',
-				// 'Collectible'
-				// )
-				// );
-				// $data = $this -> paginate('CollectiblesTag');
-				// debug($data);
+			//Is the search an empty string?
+			if ($search == '') {
 				debug($conditions);
 				debug($joins);
 				debug($filters);
-				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
-				array_push($conditions, array('Collectible.state' => '0'));
 				//Using like for now because switch to InnoDB
 				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
 				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
-				$this -> paginate = array("joins"=> $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
-			
-			array_push($conditions, array('Collectible.state' => '0'));
-			$this -> paginate = array("joins"=> $joins, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions), 'limit' => $listSize);
+			//This a search based on filters, not a search string
+			$this -> paginate = array("joins" => $joins, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');
