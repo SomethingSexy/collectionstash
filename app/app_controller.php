@@ -109,7 +109,7 @@ class AppController extends Controller {
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
 		$this -> loadModel('Collectible');
-	debug($this->data);
+		debug($this -> data);
 		$this -> setSearchData();
 		//This is my way of resetting the search, better way?
 		//If you fail to reset the search you might get unreliable results, depending on what
@@ -119,22 +119,24 @@ class AppController extends Controller {
 				$this -> Session -> delete('Collectibles.search');
 				$this -> Session -> delete('Collectibles.filters');
 				$this -> Session -> delete('Collectibles.userSearchFields');
-				debug($this->data);
+				$this -> Session -> delete('Collectibles.tagFilter');
+				debug($this -> data);
 			}
-		} else if(!empty($this -> params['url']['initial'])){
+		} else if (!empty($this -> params['url']['initial'])) {
 			if ($this -> params['url']['initial'] == 'yes') {
 				$this -> Session -> delete('Collectibles.search');
 				$this -> Session -> delete('Collectibles.filters');
 				$this -> Session -> delete('Collectibles.userSearchFields');
-				debug($this->data);
-			}			
+				$this -> Session -> delete('Collectibles.tagFilter');
+				debug($this -> data);
+			}
 		}
 		//Means I probably didn't post an actual search
 		if (!empty($this -> data)) {
-			if (isset($this -> data['Search']['search'])){
-				$search = $this -> data['Search']['search'];	
+			if (isset($this -> data['Search']['search'])) {
+				$search = $this -> data['Search']['search'];
 			}
-			
+
 			//    array(
 			//       'OR'=>array(
 			//          array('Company.status' => 'active'),
@@ -218,11 +220,15 @@ class AppController extends Controller {
 						array_push($tagFilters, array('Tag.id' => $key));
 						$filtersSet = true;
 						$tagFilterSet = true;
+
 					}
 				}
 			}
 			if ($tagFilterSet) {
 				array_push($filters, $tagFilters);
+				$this -> Session -> write('Collectibles.tagFilter', true);
+			} else {
+				$this -> Session -> delete('Collectibles.tagFilter');
 			}
 			debug($filters);
 			$this -> Session -> write('Collectibles.userSearchFields', $this -> data['Search']);
@@ -233,6 +239,9 @@ class AppController extends Controller {
 			}
 			if ($this -> Session -> check('Collectibles.filters')) {
 				$filters = $this -> Session -> read('Collectibles.filters');
+			}
+			if ($this -> Session -> check('Collectibles.tagFilter')) {
+				$tagFilterSet = true;
 			}
 		}
 
