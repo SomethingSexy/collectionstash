@@ -142,6 +142,11 @@ class CollectibleEditsController extends AppController {
 			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 			$collectible['Scale'] = $scale['Scale'];
 
+			if (isset($collectible['Collectible']['retailer_id'])) {
+				$retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
+				$collectible['Retailer'] = $retailer['Retailer'];
+			}
+
 			debug($collectible);
 			$this -> set('collectibleReview', $collectible);
 			return;

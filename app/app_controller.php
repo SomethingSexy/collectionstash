@@ -224,6 +224,12 @@ class AppController extends Controller {
 					}
 				}
 			}
+			/*
+			 * If this is set, write it to the session so that we know
+			 * we are using a tag filter to search on.  We need to make
+			 * sure the search is correct when this is happening.  If it is not
+			 * set, make sure we delete it.
+			 */
 			if ($tagFilterSet) {
 				array_push($filters, $tagFilters);
 				$this -> Session -> write('Collectibles.tagFilter', true);
@@ -258,7 +264,6 @@ class AppController extends Controller {
 		}
 		$joins = array();
 		//Do some special logic here for tags because of how they are setup.
-		//For now adding this everytime but if I don't set a tag id as a condition I don't think it matters
 		if (isset($tagFilterSet) && $tagFilterSet) {
 			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
 			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
