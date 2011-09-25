@@ -16,23 +16,21 @@
         foreach ($collectibleTypes as $collectibleType){
 			if(in_array($collectibleType['Collectibletype']['id'], $manufacturerCollectibletypes)) {
         ?>
-        	
         	<div class="collectibletype item">
 				<div class="collectibletype detail">
 					<span class="collectibletype name"><?php echo $html->link($collectibleType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?></span>
-					<ul class="collectibletype specialized-types">
-					<?php foreach ($collectibleType['children'] as $specializedType) {
+					<?php if(!empty($collectibleType['children'])){
+					echo '<ul class="collectibletype specialized-types">';
+					foreach ($collectibleType['children'] as $specializedType) {
 						if(in_array($specializedType['Collectibletype']['id'], $manufacturerCollectibletypes)) { 
 							echo '<li>';
 							echo $html->link($specializedType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$specializedType['Collectibletype']['id']));
 							echo '</li>';	
 						}
+					}
+					echo '</ul>';							
 					}?>
-					</ul>
 				</div>	
-        		<div class="links">
-					
-        	 	</div>
          </div>
         <?php 
         	}

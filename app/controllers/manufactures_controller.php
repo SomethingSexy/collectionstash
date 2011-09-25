@@ -49,5 +49,52 @@ class ManufacturesController extends AppController {
 		}
 	}
 
+	public function view($id = null) {
+		if (isset($id) && is_numeric($id)) {
+			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
+			if (!empty($manufacture)) {
+				//TODO: update this to use counter cache once I can add from the app
+				$licenseCount = $this -> Manufacture -> LicensesManufacture -> getLicenseCount($id);
+				$manufacture['Manufacture']['license_count'] = $licenseCount;
+				$collectibletypeCount = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibletypeCount($id);
+				$manufacture['Manufacture']['collectibletype_count'] = $collectibletypeCount;
+				$totalCollectibles = $this -> Manufacture -> Collectible -> getCollectibleCount();
+			
+				if (is_numeric($totalCollectibles) && $totalCollectibles > 0) {
+					$manCollectibleCount = $manufacture['Manufacture']['collectible_count'];
+					$percentage = round($manCollectibleCount * 100 / $totalCollectibles) . '%';
+					$manufacture['Manufacture']['percentage_of_total'] = $percentage;
+				}
+				
+
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($id);
+				$this -> set(compact('licenses'));
+
+				$manufacturerCollectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $id)));
+
+				$highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
+				$lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
+				$manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
+				$manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
+				
+				$lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
+				$highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
+				if(!empty($lowestEditionCollectible)){
+					$manufacture['Manufacture']['lowest_edition_size'] = $lowestEditionCollectible['Collectible']['edition_size'];
+				}
+				if(!empty($highestEditionCollectible)) {
+					$manufacture['Manufacture']['highest_edition_size'] = $highestEditionCollectible['Collectible']['edition_size'];
+				}
+	
+				$this -> set(compact('manufacture'));
+			} else {
+				$this -> redirect("/");
+			}
+
+		} else {
+			$this -> redirect("/");
+		}
+	}
+
 }
 ?>

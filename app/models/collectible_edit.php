@@ -33,7 +33,22 @@ class CollectibleEdit extends AppModel {
 		$this -> data['CollectibleEdit']['msrp'] = str_replace('$', '', $this -> data['CollectibleEdit']['msrp']);
 		$this -> data['CollectibleEdit']['msrp'] = str_replace(',', '', $this -> data['CollectibleEdit']['msrp']);
 
+		//It always should be but just double check
+		//Trim the white space away from beginning and end, since this is a core search field, keep it clean
+		if (isset($this -> data['Collectible']['name'])) {
+			$this -> data['Collectible']['name'] = trim($this -> data['Collectible']['name']);
+		}
+
 		return true;
+	}
+
+	function doAfterFind($results) {
+		//Cleans up default no set years
+		if (isset($results['release']) && $results['release'] === '0000') {
+			$results['release'] = '';
+		}
+
+		return $results;
 	}
 
 	/**

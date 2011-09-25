@@ -78,7 +78,7 @@ if (!isset($adminMode)) {
 					echo '<dd>';
 				}
 				?>
-				<a target="_blank" href="<?php echo $collectibleCore['Manufacture']['url'];?>"> <?php echo $collectibleCore['Manufacture']['title'];?></a>
+				<a href="<?php echo '/manufactures/view/'.$collectibleCore['Manufacture']['id'];?>"> <?php echo $collectibleCore['Manufacture']['title'];?></a>
 				</dd> <?php
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
 

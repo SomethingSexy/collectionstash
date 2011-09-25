@@ -23,6 +23,7 @@ class CollectiblesUserController extends AppController {
 						$viewMyCollectible = true;
 					}
 				}
+				$this -> set(compact('viewMyCollectible'));
 				if ($collectiblesUser['Stash']['privacy'] === '0' || $viewMyCollectible) {
 					//You are looking at your collectible, well then BAM, show that shit
 					$this -> set('collectible', $collectiblesUser);
@@ -59,7 +60,7 @@ class CollectiblesUserController extends AppController {
 					$this -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
 					$this -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
 					if ($this -> CollectiblesUser -> saveAll($this -> data)) {
-						$collectibleUser = $this -> CollectiblesUser -> find("first", array('conditions'=>array('CollectiblesUser.id'=>$this -> CollectiblesUser -> id), 'contain'=> false));
+						$collectibleUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $this -> CollectiblesUser -> id), 'contain' => false));
 						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
 						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
 						return;
@@ -72,7 +73,7 @@ class CollectiblesUserController extends AppController {
 					$this -> redirect($this -> referer(), null, true);
 					return;
 				}
-			} 
+			}
 			$this -> set('collectible', $collectible);
 			$this -> loadModel('Condition');
 			$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
@@ -92,11 +93,11 @@ class CollectiblesUserController extends AppController {
 		$this -> checkLogIn();
 		debug($this -> data);
 		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible')));
-		debug($collectiblesUser);
-		if (!empty($this -> data)) {
-			if (isset($collectiblesUser) && !empty($collectiblesUser)) {
-				$loggedInUserId = $this -> getUserId();
-				if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
+		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
+			$loggedInUserId = $this -> getUserId();
+			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
+				debug($collectiblesUser);
+				if (!empty($this -> data)) {
 					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
 					$this -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
 					if ($this -> CollectiblesUser -> save($this -> data, true, $fieldList)) {
@@ -106,24 +107,26 @@ class CollectiblesUserController extends AppController {
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					}
+
 				} else {
-					$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
-					$this -> redirect('/', null, true);
-					return;
+					$this -> data = $collectiblesUser;
 				}
+				$this -> set('collectible', $collectiblesUser);
+				$this -> loadModel('Condition');
+				$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
+				$this -> loadModel('Merchant');
+				$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
+
 			} else {
-				$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
-				$this -> redirect($this -> referer(), null, true);
+				$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
+				$this -> redirect('/', null, true);
 				return;
 			}
 		} else {
-			$this -> data = $collectiblesUser;
+			$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
+			$this -> redirect($this -> referer(), null, true);
+			return;
 		}
-		$this -> set('collectible', $collectiblesUser);
-		$this -> loadModel('Condition');
-		$this -> set('conditions', $this -> Condition -> find('list', array('order' => 'name')));
-		$this -> loadModel('Merchant');
-		$this -> set('merchants', $this -> Merchant -> find('list', array('order' => 'name')));
 	}
 
 	/**
@@ -160,10 +163,19 @@ class CollectiblesUserController extends AppController {
 
 	public function registry($id = null) {
 		$this -> checkLogIn();
-		if ($id) {
-			$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id);
-			debug($usersWho);
-			$this -> set('registry', $usersWho);
+		if (!is_null($id) && is_numeric($id)) {
+			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions'=>array('Collectible.id'=>$id), 'contain'=> false));
+			if(!empty($collectible)){
+				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id, $collectible['Collectible']['showUserEditionSize']);
+				debug($usersWho);
+				$this -> set('showEditionSize', $collectible['Collectible']['showUserEditionSize']);
+				$this -> set('registry', $usersWho);				
+			} else {
+				$this -> redirect("/", null, true);
+			}
+
+		} else {
+			$this -> redirect("/", null, true);
 		}
 	}
 

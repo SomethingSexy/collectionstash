@@ -26,7 +26,7 @@
 			<?php 
 				foreach($manufactures as $manufacturer) {
 					echo '<li class="tag">';
-					echo '<a href="/collectibles/search?m='.$manufacturer['Manufacture']['id'].'&initial=yes"';
+					echo '<a href="/manufactures/view/'.$manufacturer['Manufacture']['id'].'"';
 					echo '>'.$manufacturer['Manufacture']['title'].'</a>';
 					echo '</li>';
 				} ?>

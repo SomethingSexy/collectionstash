@@ -465,6 +465,12 @@ class CollectiblesController extends AppController {
 			$this -> loadModel('Tag');
 			$processedTags = $this -> Tag -> processAddTags($this -> data['CollectiblesTag']);
 			$this -> data['CollectiblesTag'] = $processedTags;
+			//If there are any errors returned from the processing, set them here and return false
+			//so the user knows they fucked something
+			if(!empty($this -> Tag-> validationErrors)){
+				$this -> set('errors', $this -> Tag -> validationErrors);
+				return false;	
+			}
 		} else {
 			$this -> Session -> setFlash(__('Only 5 tags allowed.', true), null, null, 'error');
 			return false;

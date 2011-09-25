@@ -43,7 +43,7 @@ a:active {
 
 /* base component view */
 .component {
-    margin: 20px 0px 0 0;
+    margin: 10px 0px 0 0;
    	background-color: #F8F8F8;
     -moz-border-radius: 10px;
 	border-radius: 10px;
@@ -129,10 +129,15 @@ a:active {
 	font-weight: bold;
 	/*background: green;*/
 }
-
+.component-message ul li, 
 .component-message span {
  	font-size: .90em;
  	/*margin-left: 0.5em;*/
+}
+
+.component-message ul {
+	margin-top: 10px;
+	margin-left: 10px;
 }
 
 .component .component-view {
@@ -215,6 +220,7 @@ a:active {
 	padding: 5px;
 }
 .collectible.detail .attributes-list ul li span,
+.stats dl,
 .collectible.statistics dl,
 .collectible.detail dl {
     font-size: 0.75em;
@@ -341,6 +347,7 @@ a:active {
 
 #collectibles-list-component  .component-view {
 	overflow: hidden; /*used to contain float*/
+	padding-top: 0;
 }
 
 #collectibles-list-component  .collectibles.view {
@@ -494,6 +501,12 @@ a:active {
 	padding: 10px;
 	float: left;
 	background-color: #CCCCCC;
+	border-bottom: 1px solid #666666;
+    border-right: 1px solid #666666;
+}
+
+.tag-list .tag:hover {
+	background-color: #FDB924;
 }
 .tag-list .tag a {
 	text-decoration: none;
@@ -684,9 +697,9 @@ a:active {
 /*#collectible-detail .component-view*/ .collectible.tags .tag {
 	font-size: 0.75em;
     margin-left: 1em;
-    padding: 5px;
+
     float: left;
-    background-color: #EAEAEA;
+    /*background-color: #EAEAEA;*/
 }
 #collectible-detail {
 	width: 100%;
@@ -718,13 +731,11 @@ a:active {
 	font-size: 0.75em;
 	margin-left: 1em;
 }
-
-
 #collectible-detail .component-view .collectible.item {
 	width: 100%;
-	
+	padding: 0;	
+	margin-top: 5px;
 }
-
 #collectible-detail .component-view .collectible.item  .collectible.detail {
 	width: 500px;
 	
@@ -733,8 +744,6 @@ a:active {
 	float: left;
 	width: 100%;
 }
-
-
 #collectible-history-list-component {
 	width: 100%;
 }
@@ -771,18 +780,20 @@ a:active {
 	margin-bottom: 0px;
 
 }
-
+.stats dl,
 .collectible.statistics dl,
 .collectible.detail dl {
 	line-height: 2em;
 	margin: 0em 0em;
 }
+.stats dl dt,
 .collectible.statistics dt,
 .collectible.detail dl dt {
 	color: #606060;
 	/*padding-left: 4px;*/
 	vertical-align: top;
 }
+.stats dl dd,
 .collectible.statistics dd,
 .collectible.detail dl dd {
 	margin-left: 14em;
@@ -1552,4 +1563,41 @@ div.paging span a {
  */
 #CollectiblesUserPurchaseDate {
 	width: 75px;
+}
+
+/***********************************
+ * Manufacture Profile
+ * 
+ */
+
+#manufacturer-profile .inside .component-view .licenses .tag-list .tag {
+	display: block;
+	clear: both;
+}
+
+#manufacturer-profile .inside .component-view .stats dl dd {
+	margin-left: 18em;
+}
+
+/***********************************
+ * Registry component
+ */
+#registry-component .inside .component-view .standard-list {
+	width: 250px;
+}
+#registry-component .inside .component-view .standard-list.edition-size {
+	width: 500px;
+}
+#registry-component .inside .component-view .standard-list ul li span {
+	float: left;
+	font-size: 0.75em;	
+}
+#registry-component .inside .component-view .standard-list ul li span.username {
+	width: 100%;	
+}
+#registry-component .inside .component-view .standard-list.edition-size ul li span.username {
+	width: 50%;	
+}
+#registry-component .inside .component-view .standard-list.edition-size ul li span.edition-size {
+	width: 50%;	
 }

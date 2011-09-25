@@ -8,9 +8,11 @@
 		<div class="component-view">
 			<div class="collectible links">
 				<?php echo $html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
-				<?php echo $html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
-				<a class="link" id="remove-link"><?php echo __('Remove');?></a>
-				<form id="remove-form" action="/collectibles_user/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
+				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) { ?>
+					<?php echo $html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
+					<a class="link" id="remove-link"><?php echo __('Remove');?></a>
+					<form id="remove-form" action="/collectibles_user/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
+			  	<?php } ?>
 			</div>
 			<div class="collectible item">
 				<div class="collectible image">
@@ -30,7 +32,12 @@
 							<?php __('Date Added');?>
 						</dt>
 						<dd>
-							<?php echo $collectible['CollectiblesUser']['created'];?>
+							<?php 
+								$datetime = strtotime($collectible['CollectiblesUser']['created']);
+								$mysqldate = date("m/d/y g:i A", $datetime);
+								echo $mysqldate;
+							
+							?>
 						</dd>
 						<?php
 						$editionSize = $collectible['Collectible']['edition_size'];

@@ -55,8 +55,17 @@ class CollectiblesUser extends AppModel {
 		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Collectible' => array('Manufacture', 'Collectibletype', 'Upload', 'License', 'Scale'))));
 	}
 
-	public function getListOfUsersWho($collectibleId) {
-		$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+	/**
+	 * This method will return a list of users who have this collectible
+	 * in their stash
+	 */
+	public function getListOfUsersWho($collectibleId, $editionSize = false) {
+		if ($editionSize) {
+			$data = $this -> find("all", array('order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+		} else {
+			$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+		}
+
 		debug($data);
 		return $data;
 	}

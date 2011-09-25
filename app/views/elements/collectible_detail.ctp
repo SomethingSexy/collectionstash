@@ -47,7 +47,8 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 				echo '<ul class="tag-list">';
 				foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
 					echo '<li class="tag">';
-					echo $tag['Tag']['tag'];
+					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'&initial=yes"';
+					echo '>'.$tag['Tag']['tag'].'</a>';
 					echo '</li>';
 				}
 				echo '</ul>';
@@ -114,7 +115,7 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 	</div>
 </div>
 <?php
-if (isset($showVariants) && $showVariants) {
+if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['variant']) {
 	echo $this -> element('collectible_variant_list', array());
 }
 ?>

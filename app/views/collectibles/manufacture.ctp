@@ -159,7 +159,7 @@
 								$data = str_replace('\n', "\n", $this->data['Collectible']['description']);
         						$data = str_replace('\r', "\r", $data);
 							
-								echo $this -> Form -> input('description', array('div' => false, 'label' => false, 'value'=> $data));	
+								echo $this -> Form -> input('description', array('escape' => false, 'div' => false, 'label' => false, 'value'=> $data));	
 							?>
 						</li>
 						<li>
@@ -176,7 +176,7 @@
 									<?php __('Release Year') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> year('release', 1900, date('Y'));?>
+							<?php echo $this -> Form -> year('release', 1900, 2012, date('Y'));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -184,7 +184,7 @@
 									<?php __('URL') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('url', array('div' => false, 'label' => false));?>
+							<?php echo $this -> Form -> input('url', array('escape' => false, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">

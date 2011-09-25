@@ -23,7 +23,7 @@
 			Manufacture:
 		</dt>
 		<dd>
-			<a target="_blank" href="<?php echo $manufacture['url'];?>">
+			<a href="<?php echo '/manufactures/view/'.$manufacture['id'];?>">
 			<?php echo $manufacture['title'];?>
 			</a>
 		</dd>

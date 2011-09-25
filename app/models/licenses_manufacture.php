@@ -25,6 +25,14 @@ class LicensesManufacture extends AppModel {
 		
 		return $series;
 	}
+	/**
+	 * This method will return a count of the licenses that the given
+	 * manufacture has.
+	 */
+	public function getLicenseCount($manufactureId){
+		$licenseCount = $this -> find("count", array('conditions'=>array('Manufacture.id' => $manufactureId)));
+		return $licenseCount;
+	}
 }
 
 ?>

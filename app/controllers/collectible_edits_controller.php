@@ -26,7 +26,9 @@ class CollectibleEditsController extends AppController {
 				//TODO figure out a better place to go, this is the case if some does a submit to this page without doing a GET first to setup all of the data
 				$this -> redirect('/');
 			}
+			debug($this->data);
 			$this -> data = Sanitize::clean($this -> data);
+			debug($this->data);
 			$this -> Collectible -> set($this -> data);
 			$validCollectible = true;
 

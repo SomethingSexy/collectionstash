@@ -106,6 +106,11 @@ class AppController extends Controller {
 		}
 	}
 
+	/**
+	 * This is the insane search method to search on a collectible.
+	 * 
+	 * Enhancements: Determine what filters might be set so we only do the contains on necessary ones, not all
+	 */
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
 		$this -> loadModel('Collectible');
@@ -135,6 +140,8 @@ class AppController extends Controller {
 		if (!empty($this -> data)) {
 			if (isset($this -> data['Search']['search'])) {
 				$search = $this -> data['Search']['search'];
+				$search = ltrim($search);
+				$search = rtrim($search);
 			}
 
 			//    array(
@@ -240,6 +247,7 @@ class AppController extends Controller {
 			$this -> Session -> write('Collectibles.userSearchFields', $this -> data['Search']);
 			debug($this -> data['Search']);
 		} else {
+			//If I did not post a search, grab the data out of the session for the current search
 			if ($this -> Session -> check('Collectibles.search')) {
 				$search = $this -> Session -> read('Collectibles.search');
 			}
@@ -284,7 +292,15 @@ class AppController extends Controller {
 				$this -> paginate = array("joins" => $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
-				array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
+				$test = array();
+				array_push($test, array('AND' => array()));
+				array_push($test[0]['AND'], array('OR' => array()));
+				array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
+				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
+				
+				array_push($conditions, $test);
+				//array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
+
 				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
 				$this -> paginate = array("joins" => $joins, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}

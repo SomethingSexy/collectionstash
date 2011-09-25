@@ -49,25 +49,23 @@ class CollectibletypesManufacture extends AppModel {
 			if (!is_null($value['Collectibletype']['parent_id'])) {
 				$levelTypes = $this -> Collectibletype -> children($value['Collectibletype']['parent_id']);
 				$levelListTypes = array();
-				//return this as a simple id/name
-				// foreach ($levelTypes as $levelKey => $levelvalue) {
-					// $levelListTypes[$levelvalue['Collectibletype']['id']] = $levelvalue['Collectibletype']['name'];
-				// }
-
 				$returnData['collectibletypes_L' . $key] = $levelTypes;
 			}
 			$lastValue = $key;
 		}
 		//finally get the children , if any of the one that was selected.
 		$returnChildren = $this -> Collectibletype -> children($collectibleTypeId);
-		// $levelListTypes = array();
-		// foreach ($returnChildren as $levelKey => $levelvalue) {
-			// $levelListTypes[$levelvalue['Collectibletype']['id']] = $levelvalue['Collectibletype']['name'];
-		// }
-
 		$returnData['collectibletypes_L' . ++$lastValue] = $returnChildren;
 
 		return $returnData;
+	}
+
+	/**
+	 * This method will return the number of collectible types that this manufacture has.
+	 */
+	public function getCollectibletypeCount($manufactureId) {
+		$collectibletypeCount = $this -> find("count", array('conditions' => array('Manufacture.id' => $manufactureId)));
+		return $collectibletypeCount;
 	}
 
 }

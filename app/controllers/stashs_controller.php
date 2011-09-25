@@ -291,7 +291,8 @@ class StashsController extends AppController {
 					$this -> redirect('/', null, true);
 				}
 			} else {
-				//TODO draw no user id page
+				$this -> render('viewNoExist');
+				return;
 			}
 
 		} else {
