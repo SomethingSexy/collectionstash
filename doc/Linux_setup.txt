@@ -1,0 +1,5 @@
+Location of SVN repository: /srv/svn/project_collectionstash
+
+Location of my scripts: /usr/local/bin/svn_backup.sh
+
+Location of backups: /var/backups/project_collectionstash
