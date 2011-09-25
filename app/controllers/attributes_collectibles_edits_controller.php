@@ -103,6 +103,7 @@ class AttributesCollectiblesEditsController extends AppController {
 									}
 
 									$this -> loadModel('Edit');
+									$this -> Edit -> create();
 									if (!$this -> Edit -> save($edit)) {
 										$this -> log('Failed to save the collectible edit into the edits table ' . $id . ' ' . date("Y-m-d H:i:s", time()), 'error');
 									}
