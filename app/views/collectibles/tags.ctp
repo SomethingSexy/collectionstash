@@ -40,7 +40,7 @@
 						</li>
 					</ul>
 				</fieldset>
-				<ul id="add-tag-list" class="tag-list">
+				<ul id="add-tag-list" class="tag-list no-link">
 					<?php
 					$lastKey = 0;
 					if (isset($this -> data['Tag'])) {

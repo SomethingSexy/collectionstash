@@ -504,9 +504,11 @@ a:active {
 	border-bottom: 1px solid #666666;
     border-right: 1px solid #666666;
 }
-
 .tag-list .tag:hover {
 	background-color: #FDB924;
+}
+.tag-list.no-link .tag:hover {
+	background-color: #CCCCCC;
 }
 .tag-list .tag a {
 	text-decoration: none;

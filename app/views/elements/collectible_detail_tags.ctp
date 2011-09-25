@@ -2,7 +2,7 @@
 	<div class="detail title">
 		<h3><?php __('Tags');?></h3>
 	</div>
-	<ul class="tag-list">
+	<ul class="tag-list no-link">
 		<?php
 		foreach ($collectibleCore['CollectiblesTag'] as $tag) {
 			echo '<li class="tag">';
