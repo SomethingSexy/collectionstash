@@ -176,7 +176,10 @@
 									<?php __('Release Year') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> year('release', 1900, 2012, date('Y'));?>
+							<?php 
+							    $current_year = date('Y');
+    							$max_year = $current_year + 2;
+								echo $this -> Form -> year('release', 1900, $max_year, true);?>
 						</li>
 						<li>
 							<div class="label-wrapper">
