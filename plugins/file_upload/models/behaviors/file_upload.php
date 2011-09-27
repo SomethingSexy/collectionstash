@@ -71,7 +71,7 @@ class FileUploadBehavior extends ModelBehavior {
 		//$tmpDir = ini_get('upload_tmp_dir');
 		$tmpDir = sys_get_temp_dir();
 		debug(PATH_SEPARATOR);
-		$this->log($tmpDir, 'error');
+		//$this->log($tmpDir, 'error');
 		$fp = fopen($tmpDir. DIRECTORY_SEPARATOR .$urlFile, 'wb');
 		curl_setopt($ch, CURLOPT_FILE, $fp);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
