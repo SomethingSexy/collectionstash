@@ -38,6 +38,7 @@ class UploadEditsController extends AppController {
 						$collectible = $upload;
 						debug($collectible);
 						$this -> Session -> write('Upload.Edit.upload', $collectible);
+						$this -> set('collectible', $collectible);
 					}
 				} else {
 					//If it does not exist in the session, lets load that bitch
