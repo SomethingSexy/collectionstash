@@ -8,6 +8,8 @@ class AttributesCollectiblesController extends AppController {
 	/*
 	 * In the future when doing this edits, we are going to have to make sure that these parts are not being
 	 * used in a custom when we delete them
+	 * 
+	 * TODO I am not sure this is being used anymore
 	 */
 	function edit($id = null) {
 		$this -> checkLogIn();

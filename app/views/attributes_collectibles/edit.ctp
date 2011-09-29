@@ -119,7 +119,7 @@
 									<?php __('Description') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('description', array('maxlength' => 50, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>
+							<?php echo $this -> Form -> input('description', array('maxlength' => 100, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>
 						</li>
 					</ul>
 				</fieldset>

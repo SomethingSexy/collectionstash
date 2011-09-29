@@ -1,6 +1,6 @@
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
-	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['Collectible']['name']);
+	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' .$collectibleDetail['License']['name']. ' - '. $collectibleDetail['Collectible']['name']);
 }
 $this -> set('description_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name']);
 $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);

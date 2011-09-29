@@ -35,21 +35,26 @@ class CollectibletypesController extends AppController {
 		}
 	}
 
-	public function add() {
-		// $data = array('Figure', 'Diorama', 'Prop Replica', 'Bust', 'Maquette', 'Ornament', 'Statue');
-		// foreach ($data as $key => $value) {
-		// $data['Collectibletype']['name'] = $value;
-		// $this -> Collectibletype -> create();
-		// $this -> Collectibletype -> save($data);
-		// // }
-		$data = array();
-		// $data['Collectibletype']['parent_id'] = '1';
-		$data['Collectibletype']['name'] = 'Print';
-		$this -> Collectibletype -> create();
-		$this -> Collectibletype -> save($data);
-		//
-		// $this -> render(false);
-	}
+	// public function add() {
+	// // $data = array('Figure', 'Diorama', 'Prop Replica', 'Bust', 'Maquette', 'Ornament', 'Statue');
+	// // foreach ($data as $key => $value) {
+	// // $data['Collectibletype']['name'] = $value;
+	// // $this -> Collectibletype -> create();
+	// // $this -> Collectibletype -> save($data);
+	// // // }
+	// $data = array();
+	// // $data['Collectibletype']['parent_id'] = '1';
+	// // $data['Collectibletype']['name'] = 'Replica';
+	// // $this -> Collectibletype -> create();
+	// // $this -> Collectibletype -> save($data);
+	//
+	// $this -> Collectibletype -> id = 3;
+	// $this -> Collectibletype -> save(array('parent_id' => 11));
+	//
+	//
+	// //
+	// // $this -> render(false);
+	// }
 
 }
 ?>

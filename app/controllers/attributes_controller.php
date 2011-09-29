@@ -27,16 +27,16 @@ class AttributesController extends AppController {
 		$this -> Attribute -> getAttributeList();
 	}
 
-	function add() {
+	// function add() {
+	//
+	// $data['Attribute']['parent_id'] = '9';
+	// $data['Attribute']['name'] = 'Armour';
+	// $this -> Attribute -> save($data);
+	// $this -> render(false);
+	// }
 
-		$data['Attribute']['parent_id'] = '9';
-		$data['Attribute']['name'] = 'Belt';
-		$this -> Attribute -> save($data);
-		$this -> render(false);
-	}
-
-	public function getAttributeList($id =null) {
-		if($this -> RequestHandler -> isAjax()) {
+	public function getAttributeList($id = null) {
+		if ($this -> RequestHandler -> isAjax()) {
 			Configure::write('debug', 0);
 			//$this->render('../json/add');
 		}
