@@ -17,8 +17,8 @@ class Attribute extends AppModel {
          * We will need to convert the current level list to a key/value pair list.
          */
         $allChildren = $this -> generatetreelist( array('Attribute.parent_id' => $id), null, null, '...');
-        debug($allChildren);
-
+        asort($allChildren);
+		
         return $allChildren;
 
         // $data = $this->find('threaded');

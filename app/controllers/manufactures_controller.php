@@ -72,13 +72,13 @@ class ManufacturesController extends AppController {
 
 				$manufacturerCollectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $id)));
 
-				$highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
-				$lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
+				$highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.state' => '0','Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
+				$lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.state' => '0','Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
 				$manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
 				$manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
 				
-				$lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
-				$highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
+				$lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.state' => '0','Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
+				$highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.state' => '0','Manufacture.id' => $id, "not" => array ( 'Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
 				if(!empty($lowestEditionCollectible)){
 					$manufacture['Manufacture']['lowest_edition_size'] = $lowestEditionCollectible['Collectible']['edition_size'];
 				}

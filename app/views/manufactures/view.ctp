@@ -68,7 +68,7 @@
 							<?php
 							foreach ($licenses as $key => $value) {
 								echo '<li class="tag">';
-								echo '<a href="/collectibles/search?m='.$manufacture['Manufacture']['id'].'&l='.$key.'&initial=yes">'.$value.'</a>';
+								echo '<a href="/collectibles/search?m='.$manufacture['Manufacture']['id'].'&l='.$key.'">'.$value.'</a>';
 								echo '</li>';
 							}
 							?>

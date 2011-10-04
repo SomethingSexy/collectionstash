@@ -8,7 +8,7 @@ class SeriesController extends AppController {
 	function add() {
 
 		$data['Series']['parent_id'] = null;
-		$data['Series']['name'] = 'Gallery Collection';
+		$data['Series']['name'] = 'Phase IV';
 		$this -> Series -> save($data);
 		$this -> render(false);
 	}

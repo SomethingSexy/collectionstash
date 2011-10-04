@@ -2,17 +2,17 @@
 <div class="component" id="search-component">
   <div class="inside">
     <div class="component-view">
-      <?php echo $this->Form->create(false , array('url' => $searchUrl));?>
+      <?php echo $this->Form->create(false , array('type' => 'get','url' => $searchUrl));?>
        <div class="component-search-input">
          <fieldset>
             <ul class="form-fields">
-              <li><?php echo $this->Form->input('Search.search', array('div'=> false, 'label' => false));?><input type="submit" class="button" value="Search"/></li>
+              <li><?php echo $this->Form->input('Search.search', array('name'=> 'q','div'=> false, 'label' => false));?><input type="submit" class="button"  value="Search"/></li>
             </ul>
           </fieldset>
         </div>
-   		<div class="component-search-filters">
+   	<!--	<div class="component-search-filters">
    			<div class="filter-title">
-   				<!--<a>Filters</a>-->
+   				<!--<a>Filters</a>
    			</div>
    			<div class="filters">
 	   			<fieldset>
@@ -56,7 +56,7 @@
 		            </ul>        	
 	        	</fieldset>
         	</div>       	
-       </div>     
+       </div>  -->   
        <?php echo $this->Form->end();?>      
     </div>
   </div>

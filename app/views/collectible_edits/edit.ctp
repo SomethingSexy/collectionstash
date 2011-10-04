@@ -101,10 +101,10 @@
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Category')
+							<label for=""> <?php __('Series')
 								?></label>
 						</div>
-						<?php echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));?>
+						<?php echo $this -> Form -> input('series_id', array('empty' => true, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -177,7 +177,6 @@
 						</div>
 						<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
-						<?php if($this -> Session -> check('edit.collectible.variant')) { ?>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleExclusive">
@@ -194,7 +193,6 @@
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
 						</li>
-						<?php } ?>	
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleCode"> <?php __('Product Code')
@@ -242,7 +240,7 @@
 					</ul>
 				</fieldset>
 				<?php echo $this -> Form -> end();?>
-				<?php echo $this -> Form -> create('Collectible', array('url' => '/collectibles/view/'.$currentCollectibleId, 'id' => 'skip-manufacture-form'));?>
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/admin/collectibles/view/'.$currentCollectibleId, 'id' => 'skip-manufacture-form'));?>
 					<input type="hidden" name="data[skip]" value="true" />
 				</form>
 				<div class="links">

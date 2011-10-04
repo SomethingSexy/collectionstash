@@ -8,7 +8,7 @@
 			<?php 
 				foreach($tags as $tag) {
 					echo '<li class="tag">';
-					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'&initial=yes"';
+					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'"';
 					echo '>'.$tag['Tag']['tag'].'</a>';
 					echo '</li>';
 				} ?>
@@ -44,7 +44,7 @@
 			<?php 
 				foreach($collectibletypes as $collectibletype) {
 					echo '<li class="tag">';
-					echo '<a href="/collectibles/search?ct='.$collectibletype['Collectibletype']['id'].'&initial=yes"';
+					echo '<a href="/collectibles/search?ct='.$collectibletype['Collectibletype']['id'].'"';
 					echo '>'.$collectibletype['Collectibletype']['name'].'</a>';
 					echo '</li>';
 				} ?>

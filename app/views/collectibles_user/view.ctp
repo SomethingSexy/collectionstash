@@ -41,7 +41,7 @@
 						</dd>
 						<?php
 						$editionSize = $collectible['Collectible']['edition_size'];
-						if($collectible['Collectible']['showUserEditionSize'])
+						if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['CollectiblesUser']['edition_size']))
 						{
 						?>
 

@@ -47,7 +47,7 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 				echo '<ul class="tag-list">';
 				foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
 					echo '<li class="tag">';
-					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'&initial=yes"';
+					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'"';
 					echo '>'.$tag['Tag']['tag'].'</a>';
 					echo '</li>';
 				}

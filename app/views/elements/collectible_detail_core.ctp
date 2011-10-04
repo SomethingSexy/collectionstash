@@ -81,6 +81,8 @@ if (!isset($adminMode)) {
 				<a href="<?php echo '/manufactures/view/'.$collectibleCore['Manufacture']['id'];?>"> <?php echo $collectibleCore['Manufacture']['title'];?></a>
 				</dd> <?php
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
+				
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Series', 'Field' => 'name'), __('Series', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Type', true), array('compare' => $showCompareFields));
 				
@@ -94,7 +96,7 @@ if (!isset($adminMode)) {
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'name'), __('Scale', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'scale'), __('Scale', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), __('Release Year', true), array('compare' => $showCompareFields));
 
@@ -118,7 +120,7 @@ if (!isset($adminMode)) {
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_weight'), __('Weight', true), array('compare' => $showCompareFields, 'postValue' => ' lbs'));
 
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_length'), __('Length', true), array('compare' => $showCompareFields, 'postValue' => '"'));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_length'), __('Height', true), array('compare' => $showCompareFields, 'postValue' => '"'));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_width'), __('Width', true), array('compare' => $showCompareFields, 'postValue' => '"'));
 

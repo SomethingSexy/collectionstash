@@ -112,7 +112,7 @@ class CollectiblesController extends AppController {
 
 		if (!empty($this -> data)) {
 			if ($this -> data['Collectible']['variant'] === 'true') {
-				$this -> redirect(array('action' => 'variantSelectCollectible', 'initial' => 'yes'));
+				$this -> redirect(array('action' => 'variantSelectCollectible'));
 			} else if ($this -> data['Collectible']['variant'] == 'false') {
 				$this -> redirect(array('action' => 'selectCollectibleType'));
 			} else {
@@ -313,13 +313,22 @@ class CollectiblesController extends AppController {
 		$this -> set('specializedTypes', $specializedTypes);
 
 		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($manufacturer['Manufacture']['id']);
-
+		debug($licenses);
 		$this -> set('licenses', $licenses);
 
-		if (isset($wizardData['manufacture']['Collectible']['series_id'])) {
-			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($this -> data['Collectible']['manufacture_id'], $this -> data['Collectible']['license_id']);
-			$this -> set('series', $series);
+		//Determine where to get the license id from
+		if (isset($wizardData['manufacture']['Collectible']['license_id'])) {
+			$licensesId = $wizardData['manufacture']['Collectible']['license_id'];
+		} else {
+			//Safety - sets pointer to top of array
+			reset($licenses);
+			//Grab the first if the license has not be set already
+			$licensesId = key($licenses);
 		}
+		//Now get any series for this license
+		$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $licensesId);
+		debug($series);
+		$this -> set('series', $series);
 
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 
@@ -467,9 +476,9 @@ class CollectiblesController extends AppController {
 			$this -> data['CollectiblesTag'] = $processedTags;
 			//If there are any errors returned from the processing, set them here and return false
 			//so the user knows they fucked something
-			if(!empty($this -> Tag-> validationErrors)){
+			if (!empty($this -> Tag -> validationErrors)) {
 				$this -> set('errors', $this -> Tag -> validationErrors);
-				return false;	
+				return false;
 			}
 		} else {
 			$this -> Session -> setFlash(__('Only 5 tags allowed.', true), null, null, 'error');
@@ -616,6 +625,9 @@ class CollectiblesController extends AppController {
 
 		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
 		$collectible['License'] = $license['License'];
+
+		$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
+		$collectible['Series'] = $series['Series'];
 
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
@@ -778,35 +790,35 @@ class CollectiblesController extends AppController {
 		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
 		//Should update this if we want to pass multiple paramaters in
 
-		if (isset($this -> params['url']['q'])) {
-			$this -> data['Search'] = array();
-			$this -> data['Search']['search'] = '';
-			$this -> data['Search']['search'] = $this -> params['url']['q'];
-		}
-		if (isset($this -> params['url']['m'])) {
-			//find all of this license
-			$this -> data['Search']['Manufacture'] = array();
-			$this -> data['Search']['Manufacture']['Filter'] = array();
-			$this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
-		}
-		if (isset($this -> params['url']['l'])) {
-			//find all of this license
-			$this -> data['Search']['License'] = array();
-			$this -> data['Search']['License']['Filter'] = array();
-			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
-		}
-		if (isset($this -> params['url']['ct'])) {
-			//find all of this license
-			$this -> data['Search']['CollectibleType'] = array();
-			$this -> data['Search']['CollectibleType']['Filter'] = array();
-			$this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
-		}
-		if (isset($this -> params['url']['t'])) {
-			//find all of this license
-			$this -> data['Search']['Tag'] = array();
-			$this -> data['Search']['Tag']['Filter'] = array();
-			$this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
-		}
+		// if (isset($this -> params['url']['q'])) {
+		// $this -> data['Search'] = array();
+		// $this -> data['Search']['search'] = '';
+		// $this -> data['Search']['search'] = $this -> params['url']['q'];
+		// }
+		// if (isset($this -> params['url']['m'])) {
+		// //find all of this license
+		// $this -> data['Search']['Manufacture'] = array();
+		// $this -> data['Search']['Manufacture']['Filter'] = array();
+		// $this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
+		// }
+		// if (isset($this -> params['url']['l'])) {
+		// //find all of this license
+		// $this -> data['Search']['License'] = array();
+		// $this -> data['Search']['License']['Filter'] = array();
+		// $this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
+		// }
+		// if (isset($this -> params['url']['ct'])) {
+		// //find all of this license
+		// $this -> data['Search']['CollectibleType'] = array();
+		// $this -> data['Search']['CollectibleType']['Filter'] = array();
+		// $this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
+		// }
+		// if (isset($this -> params['url']['t'])) {
+		// //find all of this license
+		// $this -> data['Search']['Tag'] = array();
+		// $this -> data['Search']['Tag']['Filter'] = array();
+		// $this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
+		// }
 		$this -> searchCollectible();
 	}
 
@@ -966,6 +978,9 @@ class CollectiblesController extends AppController {
 						$this -> Session -> setFlash(__('There was a problem approving the collectible.', true), null, null, 'error');
 						$this -> redirect(array('admin' => true, 'action' => 'view', $id), null, true);
 					}
+				} else {
+					$this -> Session -> setFlash(__('The collectible has been approved already.', true), null, null, 'error');
+					$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
 				}
 			} else {
 				//fuck it, I am deleting it

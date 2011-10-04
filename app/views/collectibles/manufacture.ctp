@@ -118,12 +118,12 @@
 						?>
 						<div class="label-wrapper">
 							<label for="">
-								<?php __('Category') ?>
+								<?php __('Series') ?>
 							</label>
 						</div>
 						<?php  
 						if(!$this -> Session -> check('add.collectible.variant')) {
-							echo $this -> Form -> input('series_id', array('div' => false, 'label' => false));
+							echo $this -> Form -> input('series_id', array('empty' => true, 'div' => false, 'label' => false));
 							
 						} else {
 							echo '<div class="static-field">';
@@ -210,7 +210,6 @@
 							</div>
 							<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
-						<?php if($this -> Session -> check('add.collectible.variant')) { ?>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleExclusive">
@@ -227,7 +226,6 @@
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
 						</li>
-						<?php } ?>	
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleCode">

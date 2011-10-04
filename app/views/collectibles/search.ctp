@@ -51,7 +51,13 @@
 						echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
 						?>
 					</p>
-					<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
+					<?php 
+				
+					$urlparams = $this->params['url'];
+					unset($urlparams['url']); 
+					$this->Paginator->options(array('url' => array('?' => http_build_query($urlparams))));
+					
+					echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
 					<?php echo $this -> Paginator -> numbers();?>
 					<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 				</div>

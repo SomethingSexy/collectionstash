@@ -94,11 +94,11 @@ class CollectibleEditsController extends AppController {
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectibleTypeId);
 		$this -> set('specializedTypes', $specializedTypes);
 
-		//grab series
-		if (isset($seriesId) && !is_null($seriesId)) {
+		//grab series..doesn't matter if the collectible has one set or not, it depends on if the manufacture license allows it
+		//if (isset($seriesId) && !is_null($seriesId)) {
 			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
 			$this -> set('series', $series);
-		}
+		//}
 		//grab scales
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 		$this -> set(compact('scales'));
