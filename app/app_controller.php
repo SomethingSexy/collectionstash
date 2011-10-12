@@ -66,8 +66,15 @@ class AppController extends Controller {
 	}
 
 	public function setSearchData() {
+		/*
+		 * This data is read off of the search.ctp to draw the filter boxes, if you update
+		 * this make sure you update the corresponding search.ctp files
+		 * 
+		 * TODO: Need to update this so that if a specific manufacture is selected
+		 * we only return those collectible types
+		 */
 		$manufactures = $this -> Session -> read('Manufacture_Search.filter');
-
+	
 		if (!isset($manufactures)) {
 			$this -> loadModel('Manufacture');
 			$manufactures = $this -> Manufacture -> getManufactureSearchData();
@@ -83,6 +90,8 @@ class AppController extends Controller {
 			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
 		}
+		
+		debug($collectibleTypes);
 	}
 
 	public function handleNotLoggedIn() {
@@ -138,7 +147,7 @@ class AppController extends Controller {
 		// }
 		//Means I probably didn't post an actual search
 		// if (!empty($this -> data)) {
-
+		$saveSearchFilters = array();
 		if (isset($this -> params['url']['q'])) {
 			$this -> data['Search'] = array();
 			$this -> data['Search']['search'] = '';
@@ -149,6 +158,7 @@ class AppController extends Controller {
 			$this -> data['Search']['Manufacture'] = array();
 			$this -> data['Search']['Manufacture']['Filter'] = array();
 			$this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
+			$saveSearchFilters['manufacturer'] = $this -> params['url']['m'];
 		}
 		if (isset($this -> params['url']['l'])) {
 			//find all of this license
@@ -161,6 +171,7 @@ class AppController extends Controller {
 			$this -> data['Search']['CollectibleType'] = array();
 			$this -> data['Search']['CollectibleType']['Filter'] = array();
 			$this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
+			$saveSearchFilters['collectibletype'] = $this -> params['url']['ct'];
 		}
 		if (isset($this -> params['url']['t'])) {
 			//find all of this license
@@ -174,6 +185,8 @@ class AppController extends Controller {
 			$search = ltrim($search);
 			$search = rtrim($search);
 		}
+		
+		$this -> set(compact('saveSearchFilters'));
 
 		//    array(
 		//       'OR'=>array(

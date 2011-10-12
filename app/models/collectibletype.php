@@ -5,7 +5,7 @@ class Collectibletype extends AppModel {
 	var $actsAs = array('Tree','Containable');
 
 	public function getCollectibleTypeSearchData() {
-		$collectibleTypes = $this -> find("all", array('contain' => false));
+		$collectibleTypes = $this -> find("all", array('order' => array('Collectibletype.name' => 'ASC'), 'contain' => false));
 		debug($collectibleTypes);
 		return $collectibleTypes;
 	}

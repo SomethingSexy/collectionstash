@@ -19,7 +19,7 @@ class Manufacture extends AppModel {
 	}
 
 	public function getManufactureSearchData() {
-		$manufactures = $this -> find("all", array('contain' => false));
+		$manufactures = $this -> find("all", array('order' => array('Manufacture.title' => 'ASC'),'contain' => false));
 		debug($manufactures);
 		return $manufactures;
 	}

@@ -84,7 +84,7 @@
 									<?php __('Name') ?>
 								</label>
 							</div>
-							<?php echo $this -> Form -> input('name', array('div' => false, 'label' => false));?>
+							<?php echo $this -> Form -> input('name', array('escape' => false,'div' => false, 'label' => false));?>
 						</li>
 						<?php
 							if(empty($licenses)) {
