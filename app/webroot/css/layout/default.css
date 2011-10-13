@@ -1611,6 +1611,11 @@ div.paging span a {
 	float: left;
 	width: 100%;
 }
+#filters .search-query {
+	color: #656464;
+	font-size: 1em;
+	padding-bottom: 0.5em;
+}
 #filters .filter {
     background-color: #E9F0F4;
     border: 1px solid #B3CCE2;
@@ -1628,9 +1633,15 @@ div.paging span a {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 12px;
+    float: left;
 }
 #filters .filter .filter-name span {
-
+	float: left;
+}
+#filters .filter .filter-name a {
+	float: left;
+	position: relative;
+    top: -2px;
 }
 #filters .filter .filter-list {
     border-radius: 4px 4px 4px 4px;

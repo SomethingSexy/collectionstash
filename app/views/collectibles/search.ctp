@@ -10,13 +10,74 @@
 			echo 'var typeFilter = '.$saveSearchFilters['collectibletype'].';';
 		} else {
 			echo 'var typeFilter = null;';
+		} 	
+		if(isset($saveSearchFilters['search'])){
+			echo 'var searchFilter = "'.$saveSearchFilters['search'].'";';
+		} else {
+			echo 'var searchFilter = null;';
 		} 		
 		?>
 		
-		
-		$('#filters').children('.filter').click(function(){
+		//This is for clicking and opening up the filter box
+		$('#filters').children('.filter').children('.filter-name').children('span').click(function(){
 			$('#filters').children('.filter').children('.filter-list').hide();                                                                                                                                                                                                                                             
-			$(this).children('.filter-list').show();
+			$(this).parent('.filter-name').parent('.filter').children('.filter-list').show();
+		});
+		
+		//This is for clicking anywhere else but the filter box and closing them
+		$('body').bind('click', function(e){
+        	if(!$(e.target).parent().is('.filter-name') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')){
+         		$('#filters').children('.filter').children('.filter-list').hide();  	
+        	}
+       	});
+       	
+       	//This is for clicking a specific filter
+		$('#filters').children('.filter').children('.filter-list').children('ol').children('li').children('.filter-links').click(function(){
+			var selectedType = $(this).attr('data-type');
+			var selectedFilter = $(this).attr('data-filter');
+			//When they select a new one we will refresh the page to add the new filters
+			//but we need to make sure to pass the existing ones as well
+			//Right now we only allow one filter per type but this could be updated later
+			
+			if (searchFilter !== null){
+				searchFilter = '&q=' + searchFilter;
+			} else {
+				searchFilter = '';
+			}
+			
+			if(selectedType === 'm'){
+				//If manufacture is clicked, we will restart everything cause they might not have valid types
+				//This kind of seems like a hack 
+				window.location.href = "/collectibles/search?m=" + selectedFilter + searchFilter;	
+			} else if (selectedType === 'ct'){
+				if(manFilter !== null) {
+					window.location.href = "/collectibles/search?m=" + manFilter + "&ct=" + selectedFilter + searchFilter;	
+				} else {
+					window.location.href = "/collectibles/search?ct=" + selectedFilter + searchFilter;	
+				}
+			}
+		});
+		
+		$('#filters').children('.filter').children('.filter-name').children('.ui-icon-close').click(function(){
+			var selectedType = $(this).attr('data-type');
+
+				
+			if(selectedType === 'm'){
+				//If manufacture is clicked, we will restart everything cause they might not have valid types
+				//This kind of seems like a hack 
+				
+				if (searchFilter !== null){
+					window.location.href = "/collectibles/search?q=" + searchFilter;
+				} else {
+					window.location.href = "/collectibles/search";
+				}
+			} else if (selectedType === 'ct'){
+				if(manFilter !== null) {
+					window.location.href = "/collectibles/search?m=" + manFilter;	
+				} else {
+					window.location.href = "/collectibles/search";	
+				}
+			}	
 		});
 	});
 	
@@ -31,8 +92,14 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
+
 			<div id="filters">
-				<div class="filter">
+				<div class="search-query"><?php 
+				if(isset($saveSearchFilters['search'])) {
+					echo $saveSearchFilters['search'];
+				}
+				?></div>
+				<div class="filter manufacturer">
 					<?php
 						//First lets get all of the filters, cause we might need the name of one for the title
 						$manufacturers = $this -> Session -> read('Manufacture_Search.filter');
@@ -45,19 +112,26 @@
 							} else {
 								$manfilters .='<li>';
 							}
-							$manfilters .='<a data-type="m" data-filer="'.$value['Manufacture']['id'].'" href="/collectibles/search?m='.$value['Manufacture']['id']. '">';
+							$manfilters .='<a class="filter-links" data-type="m" data-filter="'.$value['Manufacture']['id'].'">';
 							$manfilters .=$value['Manufacture']['title'];
 							$manfilters .='</a>';
 							$manfilters .='</li>';	
 						}
 						
-						echo '<div class="filter-name"><span>';
+						echo '<div class="filter-name">';
 						if(isset($selectedMan)){
+							echo '<span>';
 							echo $selectedMan;
+							echo '</span>';
+							echo '<a data-type="m" class="ui-icon ui-icon-close"></a>';
 						} else {
+							echo '<span>';
 							echo  __('Manufacturer', true);
+							echo '</span>';
+							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
 						}
-						echo '</span></div>';
+				
+						echo '</div>';
 						echo '<div class="filter-list">';
 						echo '<ol>';
 						echo $manfilters;
@@ -67,7 +141,7 @@
 				</div>
 				
 				
-				<div class="filter">
+				<div class="filter type">
 					<?php
 						//First lets get all of the filters, cause we might need the name of one for the title
 						$collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
@@ -80,19 +154,25 @@
 							} else {
 								$typefilters .='<li>';	
 							}
-							$typefilters .='<a data-type="ct" data-filer="'.$value['Collectibletype']['id'].'" href="/collectibles/search?ct='.$value['Collectibletype']['id']. '">';
+							$typefilters .='<a class="filter-links" data-type="ct" data-filter="'.$value['Collectibletype']['id'].'">';
 							$typefilters .=$value['Collectibletype']['name'];
 							$typefilters .='</a>';
 							$typefilters .='</li>';	
 						}
 						
-						echo '<div class="filter-name"><span>';
+						echo '<div class="filter-name">';
 						if(isset($selectedType)){
+							echo '<span>';
 							echo $selectedType;
+							echo '</span>';
+							echo '<a data-type="ct" class="ui-icon ui-icon-close"></a>';
 						} else {
+							echo '<span>';
 							echo  __('Type', true);
+							echo '</span>';
+							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
 						}
-						echo '</span></div>';
+						echo '</div>';
 						echo '<div class="filter-list">';
 						echo '<ol>';
 						echo $typefilters;

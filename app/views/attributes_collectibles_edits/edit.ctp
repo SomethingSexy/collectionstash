@@ -63,7 +63,7 @@
 						</ul>
 					</div>
 					<div>
-						<a class="add-attribute">Add Attribute</a>
+						<a class="add-attribute link">Add Attribute</a>
 					</div>
 				</fieldset>	
 

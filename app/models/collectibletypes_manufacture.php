@@ -26,6 +26,11 @@ class CollectibletypesManufacture extends AppModel {
 		return $collectibleTypes;
 	}
 
+	public function getAllCollectibleTypeByManufactureId($manufacutre_id) {
+		$manColTypes = $this -> find("all", array('fields' => array('CollectibletypesManufacture.collectibletype_id', 'Collectibletype.name', 'Collectibletype.id'), 'conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufacutre_id), 'recursive' => 0, 'order' => array('Collectibletype.name' => 'ASC')));
+		return $manColTypes;
+	}
+
 	/**
 	 * This will return arrays of each level of collectibles types from the path of the given collectible type id.  It
 	 *  will also return the collectible that is selected in the array
