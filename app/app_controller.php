@@ -69,12 +69,12 @@ class AppController extends Controller {
 		/*
 		 * This data is read off of the search.ctp to draw the filter boxes, if you update
 		 * this make sure you update the corresponding search.ctp files
-		 * 
+		 *
 		 * TODO: Need to update this so that if a specific manufacture is selected
 		 * we only return those collectible types
 		 */
 		$manufactures = $this -> Session -> read('Manufacture_Search.filter');
-	
+
 		if (!isset($manufactures)) {
 			$this -> loadModel('Manufacture');
 			$manufactures = $this -> Manufacture -> getManufactureSearchData();
@@ -83,23 +83,36 @@ class AppController extends Controller {
 
 		debug($manufactures);
 
-		$collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
-		
+		// $collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
+
 		//For now, we allow one manufacture filter, if that is set regardless lets also
 		//reget the types
-		if(isset($this->data['Search']['Manufacture']['Filter'])) {
+		if (isset($this -> data['Search']['Manufacture']['Filter'])) {
 			$this -> loadModel('CollectibletypesManufacture');
-			reset($this->data['Search']['Manufacture']['Filter']); // make sure array pointer is at first element
-			$firstKey = key($this->data['Search']['Manufacture']['Filter']); 
+			//Since we only allow one, for now but the interface is setup to handle multiple do this
+			reset($this -> data['Search']['Manufacture']['Filter']);
+			// make sure array pointer is at first element
+			$firstKey = key($this -> data['Search']['Manufacture']['Filter']);
 			$collectibleTypes = $this -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($firstKey);
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-		}
-		else if (!isset($collectibleTypes)) {
+		} else if (!isset($collectibleTypes)) {
 			$this -> loadModel('Collectibletype');
 			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
 		}
-		
+
+		if (isset($this -> data['Search']['Tag']['Filter'])) {
+			reset($this -> data['Search']['Tag']['Filter']);
+			// make sure array pointer is at first element
+			$firstKey = key($this -> data['Search']['Tag']['Filter']);
+			$this -> loadModel('Tag');
+			$tag = $this -> Tag -> find("first", array('conditions' => array('Tag.id' => $firstKey)));
+			$this -> Session -> write('Tag_Search.filter', $tag);
+		} else {
+			//If a tag is not set on this search, remove this from the session to be safe
+			$this -> Session -> delete('Tag_Search.filter');
+		}
+
 		debug($collectibleTypes);
 	}
 
@@ -164,6 +177,7 @@ class AppController extends Controller {
 			$this -> data['Search']['Tag'] = array();
 			$this -> data['Search']['Tag']['Filter'] = array();
 			$this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
+			$saveSearchFilters['tag'] = $this -> params['url']['t'];
 		}
 
 		if (isset($this -> data['Search']['search'])) {
@@ -172,7 +186,7 @@ class AppController extends Controller {
 			$search = rtrim($search);
 			$saveSearchFilters['search'] = $search;
 		}
-		
+
 		$this -> set(compact('saveSearchFilters'));
 		$this -> setSearchData();
 		//    array(

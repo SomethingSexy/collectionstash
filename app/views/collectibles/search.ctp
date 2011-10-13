@@ -19,14 +19,41 @@
 		?>
 		
 		//This is for clicking and opening up the filter box
-		$('#filters').children('.filter').children('.filter-name').children('span').click(function(){
-			$('#filters').children('.filter').children('.filter-list').hide();                                                                                                                                                                                                                                             
-			$(this).parent('.filter-name').parent('.filter').children('.filter-list').show();
+		$('#filters').children('.filter').click(function(e){
+			if($(e.target).hasClass('ui-icon-close')){
+				var selectedType = $(e.target).attr('data-type');
+	
+				if (searchFilter !== null){
+					searchFilter = 'q=' + searchFilter;
+				} else {
+					searchFilter = '';
+				}
+					
+				if(selectedType === 'm'){
+					//If manufacture is clicked, we will restart everything cause they might not have valid types
+					//This kind of seems like a hack 
+					window.location.href = "/collectibles/search?" + searchFilter;
+				} else if (selectedType === 'ct'){
+					if(manFilter !== null) {
+						window.location.href = "/collectibles/search?m=" + manFilter + '&' + searchFilter;	
+					} else {
+						window.location.href = "/collectibles/search?" + searchFilter;	
+					}
+				}					
+			} else {
+				$('#filters').children('.filter').children('.filter-list').hide();                                                                                                                                                                                                                                             
+				var $node = $(e.target);
+				if($(e.target).hasClass('name') || $(e.target).hasClass('ui-icon')){
+					$node = $(e.target).parent('.filter-name').parent('.filter');
+				}
+				
+				$node.find('.filter-list').show();				
+			}
 		});
 		
 		//This is for clicking anywhere else but the filter box and closing them
 		$('body').bind('click', function(e){
-        	if(!$(e.target).parent().is('.filter-name') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')){
+        	if(!$(e.target).parent().is('.filter-name') && !$(e.target).is('div.filter') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')){
          		$('#filters').children('.filter').children('.filter-list').hide();  	
         	}
        	});
@@ -58,27 +85,9 @@
 			}
 		});
 		
-		$('#filters').children('.filter').children('.filter-name').children('.ui-icon-close').click(function(){
-			var selectedType = $(this).attr('data-type');
-
-				
-			if(selectedType === 'm'){
-				//If manufacture is clicked, we will restart everything cause they might not have valid types
-				//This kind of seems like a hack 
-				
-				if (searchFilter !== null){
-					window.location.href = "/collectibles/search?q=" + searchFilter;
-				} else {
-					window.location.href = "/collectibles/search";
-				}
-			} else if (selectedType === 'ct'){
-				if(manFilter !== null) {
-					window.location.href = "/collectibles/search?m=" + manFilter;	
-				} else {
-					window.location.href = "/collectibles/search";	
-				}
-			}	
-		});
+		// $('#filters').children('.filter').children('.filter-name').children('.ui-icon-close').click(function(){
+// 
+		// });
 	});
 	
 </script>
@@ -97,6 +106,10 @@
 				<div class="search-query"><?php 
 				if(isset($saveSearchFilters['search'])) {
 					echo $saveSearchFilters['search'];
+				} else if(isset($saveSearchFilters['tag'])){
+					//Check to see if we did a tag search, if so then grab it from the saved tag
+					$tag = $this -> Session -> read('Tag_Search.filter');
+					echo $tag['Tag']['tag'];
 				}
 				?></div>
 				<div class="filter manufacturer">
@@ -120,12 +133,12 @@
 						
 						echo '<div class="filter-name">';
 						if(isset($selectedMan)){
-							echo '<span>';
+							echo '<span class="name">';
 							echo $selectedMan;
 							echo '</span>';
 							echo '<a data-type="m" class="ui-icon ui-icon-close"></a>';
 						} else {
-							echo '<span>';
+							echo '<span class="name">';
 							echo  __('Manufacturer', true);
 							echo '</span>';
 							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
@@ -162,12 +175,12 @@
 						
 						echo '<div class="filter-name">';
 						if(isset($selectedType)){
-							echo '<span>';
+							echo '<span class="name">';
 							echo $selectedType;
 							echo '</span>';
 							echo '<a data-type="ct" class="ui-icon ui-icon-close"></a>';
 						} else {
-							echo '<span>';
+							echo '<span class="name">';
 							echo  __('Type', true);
 							echo '</span>';
 							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
