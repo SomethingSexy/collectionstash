@@ -1643,7 +1643,7 @@ div.paging span a {
 	position: relative;
     top: -2px;
 }
-#filters .filter .filter-list {
+#filters .filter .filter-list-container {
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 0 3px #CCCCCC;
   	display: none;
@@ -1651,13 +1651,21 @@ div.paging span a {
     top: 42px;
     z-index: 100;
     background-color: #656464;
+    /*overflow:-moz-scrollbars-vertical!important;!overflow:hidden;*/
+ 
+}
+#filters .filter .filter-list-container .filter-list {
+    margin: 10px;
+}
+
+#filters .filter.license .filter-list-container .filter-list {
+    overflow:-moz-scrollbars-vertical!important;!overflow:hidden;
+    max-height: 420px;
 }
  
 #filters .filter .filter-list ol {
     background-color: white;
-    border-radius: 4px 4px 4px 4px;
     list-style: none outside none;
-    margin: 10px;
     padding: 0;
 }   
 #filters .filter .filter-list ol li:first-child {

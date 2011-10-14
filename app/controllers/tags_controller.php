@@ -25,13 +25,6 @@ class TagsController extends AppController {
 		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain'=> false, 'order' => array('Tag.tag' => 'ASC')));	
 		debug($tags);
 		$this->set(compact('tags'));
-		$this -> loadModel('Manufacture');
-		$manufactures = $this -> Manufacture -> getManufactures();
-		debug($manufactures);
-		$this -> set(compact('manufactures'));
-		$this -> loadModel('Collectibletype');
-		$collectibletypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
-		$this -> set(compact('collectibletypes'));
 	}
 }
 ?>

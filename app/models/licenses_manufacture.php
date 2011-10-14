@@ -5,6 +5,9 @@ class LicensesManufacture extends AppModel {
 	var $actsAs = array('Containable');
 	var $hasMany = array('LicensesManufacturesSeries');
 	
+	/**
+	 * This returns a "list" of licenses by manufacturer, so the key is the id
+	 */
 	public function getLicensesByManufactureId($manufactureId) {
 		$licenses = $this -> find('all', array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id'), 'order'=>array('License.name'=>'ASC')));
 		$licenseList = array();
@@ -15,6 +18,14 @@ class LicensesManufacture extends AppModel {
 
 		return $licenseList;
 	}
+	/**
+	 * This returns the full license object
+	 */
+	public function getFullLicensesByManufactureId($manufactureId) {
+		$licenses = $this -> find('all', array('contain'=> array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id'), 'order'=>array('License.name'=>'ASC')));
+
+		return $licenses;
+	}	
 	
 	public function getSeries($manufactureId, $licenseId) {
 		$license = $this -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId, 'LicensesManufacture.license_id' => $licenseId), 'order'=>array('License.name'=>'ASC')));

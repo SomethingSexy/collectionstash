@@ -15,74 +15,97 @@
 			echo 'var searchFilter = "'.$saveSearchFilters['search'].'";';
 		} else {
 			echo 'var searchFilter = null;';
-		} 		
+		} 
+		if(isset($saveSearchFilters['tag'])){
+			echo 'var tagFilter = "'.$saveSearchFilters['tag'].'";';
+		} else {
+			echo 'var tagFilter = null;';
+		} 
+		if(isset($saveSearchFilters['license'])){
+			echo 'var licenseFilter = "'.$saveSearchFilters['license'].'";';
+		} else {
+			echo 'var licenseFilter = null;';
+		} 				
 		?>
-		
+
 		//This is for clicking and opening up the filter box
-		$('#filters').children('.filter').click(function(e){
+		$('#filters').find('.filter').click(function(e){
 			if($(e.target).hasClass('ui-icon-close')){
 				var selectedType = $(e.target).attr('data-type');
 	
+				var queryString = '';
 				if (searchFilter !== null){
-					searchFilter = 'q=' + searchFilter;
+					queryString += 'q=' + searchFilter + '&';
+				} 
+				if (tagFilter !== null){
+					queryString += 't=' + tagFilter + '&';
+				} 
+				
+				if(selectedType === 'm') {
+				
 				} else {
-					searchFilter = '';
-				}
-					
-				if(selectedType === 'm'){
-					//If manufacture is clicked, we will restart everything cause they might not have valid types
-					//This kind of seems like a hack 
-					window.location.href = "/collectibles/search?" + searchFilter;
-				} else if (selectedType === 'ct'){
 					if(manFilter !== null) {
-						window.location.href = "/collectibles/search?m=" + manFilter + '&' + searchFilter;	
-					} else {
-						window.location.href = "/collectibles/search?" + searchFilter;	
+						queryString += 'm=' + manFilter + '&';	
 					}
-				}					
+				}
+				
+				if(queryString !== ''){
+					queryString = queryString.substring(0, queryString.length-1);
+				}
+	
+				window.location.href = "/collectibles/search?" + queryString;		
+					
 			} else {
-				$('#filters').children('.filter').children('.filter-list').hide();                                                                                                                                                                                                                                             
+				$('#filters').children('.filter').children('.filter-list-container').hide();                                                                                                                                                                                                                                             
 				var $node = $(e.target);
 				if($(e.target).hasClass('name') || $(e.target).hasClass('ui-icon')){
 					$node = $(e.target).parent('.filter-name').parent('.filter');
 				}
 				
-				$node.find('.filter-list').show();				
+				$node.find('.filter-list-container').show();				
 			}
 		});
 		
 		//This is for clicking anywhere else but the filter box and closing them
 		$('body').bind('click', function(e){
-        	if(!$(e.target).parent().is('.filter-name') && !$(e.target).is('div.filter') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')){
-         		$('#filters').children('.filter').children('.filter-list').hide();  	
+        	if(!$(e.target).parent().is('.filter-name') && !$(e.target).is('div.filter') && !$(e.target).is('.filter-list-container') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')){
+         		$('#filters').children('.filter').children('.filter-list-container').hide();  	
         	}
        	});
        	
        	//This is for clicking a specific filter
-		$('#filters').children('.filter').children('.filter-list').children('ol').children('li').children('.filter-links').click(function(){
+		$('#filters').children('.filter').children('.filter-list-container').children('.filter-list').children('ol').children('li').children('.filter-links').click(function(){
 			var selectedType = $(this).attr('data-type');
 			var selectedFilter = $(this).attr('data-filter');
 			//When they select a new one we will refresh the page to add the new filters
 			//but we need to make sure to pass the existing ones as well
 			//Right now we only allow one filter per type but this could be updated later
-			
+			var queryString = '';
 			if (searchFilter !== null){
-				searchFilter = '&q=' + searchFilter;
-			} else {
-				searchFilter = '';
-			}
+				queryString += 'q=' + searchFilter + '&';
+			} 
+			if (tagFilter !== null){
+				queryString += 't=' + tagFilter + '&';
+			} 
 			
-			if(selectedType === 'm'){
-				//If manufacture is clicked, we will restart everything cause they might not have valid types
-				//This kind of seems like a hack 
-				window.location.href = "/collectibles/search?m=" + selectedFilter + searchFilter;	
-			} else if (selectedType === 'ct'){
+			if(selectedType === 'm') {
+				queryString += 'm=' + selectedFilter + '&';
+			} else {
 				if(manFilter !== null) {
-					window.location.href = "/collectibles/search?m=" + manFilter + "&ct=" + selectedFilter + searchFilter;	
-				} else {
-					window.location.href = "/collectibles/search?ct=" + selectedFilter + searchFilter;	
+					queryString += 'm=' + manFilter + '&';	
 				}
 			}
+			
+			if (selectedType === 'ct'){
+				queryString += 'ct=' + selectedFilter + '&';
+			}
+			
+			if(queryString !== ''){
+				queryString = queryString.substring(0, queryString.length-1);
+			}
+
+			window.location.href = "/collectibles/search?" + queryString;	
+
 		});
 		
 		// $('#filters').children('.filter').children('.filter-name').children('.ui-icon-close').click(function(){
@@ -145,10 +168,12 @@
 						}
 				
 						echo '</div>';
+						echo '<div class="filter-list-container">';
 						echo '<div class="filter-list">';
 						echo '<ol>';
 						echo $manfilters;
 						echo '</ol>';
+					echo '</div>';
 						echo '</div>';
 					?>
 				</div>
@@ -186,10 +211,55 @@
 							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
 						}
 						echo '</div>';
+						echo '<div class="filter-list-container">';
 						echo '<div class="filter-list">';
 						echo '<ol>';
 						echo $typefilters;
 						echo '</ol>';
+						echo '</div>';
+						echo '</div>';
+					?>
+				</div>
+				
+				<div class="filter license">
+					<?php
+						//First lets get all of the filters, cause we might need the name of one for the title
+						$licenses = $this -> Session -> read('License_Search.filter');
+						$typefilters = '';
+						$selectedType = '';
+						foreach ($licenses as $key => $value) {
+							if(isset($saveSearchFilters['license']) && $saveSearchFilters['license'] == $value['License']['id']){
+								$typefilters .='<li class="selected">';
+								//if this is the name then grab the name
+								$selectedType = $value['License']['name'];
+							} else {
+								$typefilters .='<li>';	
+							}
+							$typefilters .='<a class="filter-links" data-type="l" data-filter="'.$value['License']['id'].'">';
+							$typefilters .=$value['License']['name'];
+							$typefilters .='</a>';
+							$typefilters .='</li>';	
+						}
+						
+						echo '<div class="filter-name">';
+						if(isset($selectedType) && $selectedType !== ''){
+							echo '<span class="name">';
+							echo $selectedType;
+							echo '</span>';
+							echo '<a data-type="l" class="ui-icon ui-icon-close"></a>';
+						} else {
+							echo '<span class="name">';
+							echo  __('License', true);
+							echo '</span>';
+							echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
+						}
+						echo '</div>';
+						echo '<div class="filter-list-container">';
+						echo '<div class="filter-list">';
+						echo '<ol>';
+						echo $typefilters;
+						echo '</ol>';
+						echo '</div>';
 						echo '</div>';
 					?>
 				</div>

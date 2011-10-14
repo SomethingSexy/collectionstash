@@ -93,13 +93,26 @@ class AppController extends Controller {
 			reset($this -> data['Search']['Manufacture']['Filter']);
 			// make sure array pointer is at first element
 			$firstKey = key($this -> data['Search']['Manufacture']['Filter']);
+			
 			$collectibleTypes = $this -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($firstKey);
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-		} else if (!isset($collectibleTypes)) {
+			
+			$this -> loadModel('LicensesManufacture');
+			
+			$licenses = $this -> LicensesManufacture -> getFullLicensesByManufactureId($firstKey);
+			debug($licenses);
+			$this -> Session -> write('License_Search.filter', $licenses);
+			
+		} else {
 			$this -> loadModel('Collectibletype');
 			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
+			
+			$this -> loadModel('License');
+			$licenses = $this -> License -> getLicenses();
+			$this -> Session -> write('License_Search.filter', $licenses);
 		}
+		
 
 		if (isset($this -> data['Search']['Tag']['Filter'])) {
 			reset($this -> data['Search']['Tag']['Filter']);
@@ -164,6 +177,7 @@ class AppController extends Controller {
 			$this -> data['Search']['License'] = array();
 			$this -> data['Search']['License']['Filter'] = array();
 			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
+			$saveSearchFilters['license'] = $this -> params['url']['l'];
 		}
 		if (isset($this -> params['url']['ct'])) {
 			//find all of this license
@@ -180,7 +194,7 @@ class AppController extends Controller {
 			$saveSearchFilters['tag'] = $this -> params['url']['t'];
 		}
 
-		if (isset($this -> data['Search']['search'])) {
+		if (isset($this -> data['Search']['search']) && $this -> data['Search']['search'] !== '') {
 			$search = $this -> data['Search']['search'];
 			$search = ltrim($search);
 			$search = rtrim($search);
