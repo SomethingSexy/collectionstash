@@ -3,7 +3,7 @@ App::import('Sanitize');
 class LicensesController extends AppController {
 
 	var $name = 'Licenses';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	public function getLicenseData() {

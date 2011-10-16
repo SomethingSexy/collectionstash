@@ -3,7 +3,7 @@ App::import('Sanitize');
 class InvitesController extends AppController {
 
 	var $name = 'Invites';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 	var $components = array('RequestHandler', 'Email');
 	
 	/**

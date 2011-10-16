@@ -4,7 +4,7 @@ App::import('Sanitize');
 class StashsController extends AppController {
 	var $name = 'Stashs';
 
-	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	var $components = array('RequestHandler');
 

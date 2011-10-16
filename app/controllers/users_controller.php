@@ -3,18 +3,18 @@ App::import('Sanitize');
 class UsersController extends AppController {
 	var $name = 'Users';
 
-	var $helpers = array('Html', 'Form', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	var $components = array('Email');
 
 	function login() {
 		$message = null;
 		$messageType = null;
-		if($this -> Session -> check('Message.error')) {
+		if ($this -> Session -> check('Message.error')) {
 			$message = $this -> Session -> read('Message.error');
 			$message = $message['message'];
 			$messageType = 'error';
-		} else if($this -> Session -> check('Message.success')) {
+		} else if ($this -> Session -> check('Message.success')) {
 			$message = $this -> Session -> read('Message.success');
 			$message = $message['message'];
 			$messageType = 'success';
@@ -24,22 +24,22 @@ class UsersController extends AppController {
 		debug($message);
 		$this -> Session -> setFlash($message, null, null, $messageType);
 		$success = true;
-		if($this -> data) {
+		if ($this -> data) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$this -> User -> recursive = 0;
 			$results = $this -> User -> getUser($this -> data['User']['username']);
-			if($results) {
-				if($results['User']['status'] == 0) {
-					if($results['User']['password'] == Security::hash($this -> data['User']['password'])) {
+			if ($results) {
+				if ($results['User']['status'] == 0) {
+					if ($results['User']['password'] == Security::hash($this -> data['User']['password'])) {
 						$this -> User -> id = $results['User']['id'];
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
 						$this -> log($results, 'info');
 						$this -> Session -> write('user', $results);
 						$this -> log('User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()), 'info');
-						if(!empty($this -> data['User']['fromPage'])) {
+						if (!empty($this -> data['User']['fromPage'])) {
 							$this -> redirect($this -> data['User']['fromPage'], null, true);
 						} else {
-							$this -> redirect( array('controller'=>'stashs','action' => 'view', $results['User']['username']), null, true);
+							$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
 						}
 					} else {
 						$this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
@@ -55,7 +55,7 @@ class UsersController extends AppController {
 			}
 		}
 
-		if(!$success) {
+		if (!$success) {
 			$this -> data['User']['password'] = '';
 			$this -> data['User']['new_password'] = '';
 			$this -> data['User']['confirm_password'] = '';
@@ -71,10 +71,10 @@ class UsersController extends AppController {
 		$this -> redirect('/', null, true);
 	}
 
-	function account($view =null) {
+	function account($view = null) {
 		$username = $this -> getUsername();
 		$user = $this -> getUser();
-		if($user) {
+		if ($user) {
 			//Grab the number of collectibles for this user
 			$stashCount = $this -> User -> getNumberOfStashesByUser($username);
 			$stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
@@ -97,7 +97,7 @@ class UsersController extends AppController {
 			$this -> set('myCollection', true);
 			//$this->set('collectibles',$data);
 		} else {
-			$this -> redirect( array('action' => 'login'), null, true);
+			$this -> redirect(array('action' => 'login'), null, true);
 		}
 	}
 
@@ -107,22 +107,22 @@ class UsersController extends AppController {
 	 *
 	 * Also for helper, take the passed in email and put it in the $this->data
 	 */
-	function register($email =null) {
+	function register($email = null) {
 		//Make sure the user name is not a list of specific ones...like any controller names :)
-		if(Configure::read('Settings.registration.open')) {
-			if(!empty($this -> data)) {
+		if (Configure::read('Settings.registration.open')) {
+			if (!empty($this -> data)) {
 				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 				$proceed = true;
 				$invitedUser = null;
 				//If invite only is turned on, first make sure that this user is invited
-				if(Configure::read('Settings.registration.invite-only')) {
+				if (Configure::read('Settings.registration.invite-only')) {
 					$invitedUser = $this -> User -> Invite -> find("first", array('conditions' => array('Invite.email' => $this -> data['User']['email'])));
-					if(empty($invitedUser)) {
+					if (empty($invitedUser)) {
 						$proceed = false;
 						$this -> Session -> setFlash(__('Sorry for the inconvenience, Collection Stash is currently invite only.', true), null, null, 'error');
 					}
 				}
-				if($proceed) {
+				if ($proceed) {
 					$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
 					$this -> data['User']['admin'] = 0;
 					$this -> data['User']['status'] = 1;
@@ -135,14 +135,14 @@ class UsersController extends AppController {
 					$this -> data['Stash']['0']['name'] = 'Default';
 					$this -> data['Stash']['0']['total_count'] = 0;
 					debug($this -> data);
-					if($this -> User -> saveAll($this -> data)) {
+					if ($this -> User -> saveAll($this -> data)) {
 						$newUserId = $this -> User -> id;
-						if(Configure::read('Settings.registration.invite-only')) {
+						if (Configure::read('Settings.registration.invite-only')) {
 							$this -> User -> Invite -> id = $invitedUser['Invite']['id'];
-							$this -> User -> Invite -> saveField('registered','1',false);
+							$this -> User -> Invite -> saveField('registered', '1', false);
 						}
 						$emailResult = $this -> __sendActivationEmail($this -> User -> id);
-						if($emailResult) {
+						if ($emailResult) {
 							$this -> Session -> setFlash('Your registration information was accepted');
 							$this -> render('registrationComplete');
 						} else {
@@ -161,13 +161,13 @@ class UsersController extends AppController {
 					}
 				}
 			} else {
-				if($email) {
+				if ($email) {
 					$this -> data['User']['email'] = $email;
 				}
 			}
 
 		} else {
-			$this -> redirect( array('action' => 'login'), null, true);
+			$this -> redirect(array('action' => 'login'), null, true);
 		}
 	}
 
@@ -177,11 +177,11 @@ class UsersController extends AppController {
 	 *  @param Int $user_id User.id to activate
 	 *  @param String $in_hash Incoming Activation Hash from the email
 	 */
-	function activate($user_id =null, $in_hash =null) {
+	function activate($user_id = null, $in_hash = null) {
 		$this -> User -> id = $user_id;
-		if($this -> User -> exists()) {
-			if($this -> User -> field('status') != 0) {
-				if($in_hash == $this -> User -> getActivationHash()) {
+		if ($this -> User -> exists()) {
+			if ($this -> User -> field('status') != 0) {
+				if ($in_hash == $this -> User -> getActivationHash()) {
 					// Update the active flag in the database
 					$this -> User -> saveField('status', 0);
 
@@ -203,13 +203,13 @@ class UsersController extends AppController {
 		// Activation failed, render ‘/views/user/activate.ctp’ which should tell the user.
 	}
 
-	function resendActivation($user_id =null) {
-		if($user_id) {
+	function resendActivation($user_id = null) {
+		if ($user_id) {
 			$this -> User -> id = $user_id;
-			if($this -> User -> exists()) {
-				if($this -> User -> field('status') != 0) {
+			if ($this -> User -> exists()) {
+				if ($this -> User -> field('status') != 0) {
 					$emailResult = $this -> __sendActivationEmail($this -> User -> id);
-					if($emailResult) {
+					if ($emailResult) {
 						//do nothing
 					} else {
 						//Do what?
@@ -232,9 +232,9 @@ class UsersController extends AppController {
 	 *  @return Boolean indicates success
 	 */
 	function __sendActivationEmail($user_id) {
-		$user = $this -> User -> find( array('User.id' => $user_id), array('User.id', 'User.email', 'User.username'), null, false);
+		$user = $this -> User -> find(array('User.id' => $user_id), array('User.id', 'User.email', 'User.username'), null, false);
 		debug($user);
-		if($user === false) {
+		if ($user === false) {
 			debug(__METHOD__ . " failed to retrieve User data for user.id: {$user_id}");
 			return false;
 		}
@@ -243,13 +243,7 @@ class UsersController extends AppController {
 		$this -> set('activate_url', 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash());
 		$this -> set('username', $this -> data['User']['username']);
 
-		$this -> Email -> smtpOptions = array(
-			'port' => Configure::read('Settings.Email.port'), 
-			'timeout' => Configure::read('Settings.Email.timeout'), 
-			'host' => Configure::read('Settings.Email.host'), 
-			'username' => Configure::read('Settings.Email.username'), 
-			'password' => Configure::read('Settings.Email.password')
-		);
+		$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
 		$this -> Email -> delivery = 'smtp';
 		$this -> Email -> to = $user['User']['email'];
 		$this -> Email -> subject = env('SERVER_NAME') . '– Please confirm your email address';
@@ -259,7 +253,7 @@ class UsersController extends AppController {
 		// you probably want to use both :)
 		$return = $this -> Email -> send();
 		$this -> set('smtp_errors', $this -> Email -> smtpError);
-		if(!empty($this -> Email -> smtpError)) {
+		if (!empty($this -> Email -> smtpError)) {
 			$return = false;
 			$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $user_id, 'error');
 		}

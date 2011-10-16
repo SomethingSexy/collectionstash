@@ -13,7 +13,7 @@ App::import('Sanitize');
 class EditsController extends AppController {
 
 	var $name = 'Edits';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler', 'Email');
 
 	function admin_index() {
@@ -161,7 +161,7 @@ class EditsController extends AppController {
 				}
 
 				$successMessage = '';
-				
+
 				if ($approvedChange) {
 					$updateFields['Edit']['id'] = $id;
 					$updateFields['Edit']['status'] = 1;
@@ -193,7 +193,7 @@ class EditsController extends AppController {
 					$editUser = $this -> Edit -> User -> find("first", array('conditions' => array('User.id' => $userId), 'contain' => false));
 
 					//Grab the updated collectible
-					$updatedCollectible = $this -> Edit -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Revision')));	
+					$updatedCollectible = $this -> Edit -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Revision')));
 
 					$this -> __sendApprovalEmail($approvedChange, $editUser['User']['email'], $editUser['User']['username'], $updatedCollectible['Collectible']['name'], $edit['Edit']['collectible_id'], $approvalNotes);
 

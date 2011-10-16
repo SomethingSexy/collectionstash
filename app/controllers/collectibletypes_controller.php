@@ -3,7 +3,7 @@ App::import('Sanitize');
 class CollectibletypesController extends AppController {
 
 	var $name = 'Collectibletypes';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	public function getCollectibletypesData() {
@@ -20,7 +20,8 @@ class CollectibletypesController extends AppController {
 				//will also return the collectible that is selected in the array
 				$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesPaths($manufacturerId, $collectibleTypeId);
 			} else {
-				$collectibleTypes = $this -> Collectibletype -> children($collectibleTypeId, true, array('Collectibletype.id', 'Collectibletype.name'));
+				$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesChildren($manufacturerId, $collectibleTypeId);
+				//$collectibleTypes = $this -> Collectibletype -> children($collectibleTypeId, true, array('Collectibletype.id', 'Collectibletype.name'));
 			}
 
 			$data = array();
@@ -33,6 +34,10 @@ class CollectibletypesController extends AppController {
 		} else {
 			$this -> set('aCollectibleTypesData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
 		}
+	}
+
+	public function test(){
+		$collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesPaths('2', '1');
 	}
 
 	public function add() {

@@ -2,7 +2,7 @@
 class AttributesController extends AppController {
 
 	var $name = 'Attributes';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 	function index() {
 		//$this->data = $this->Attribute->generatetreelist(null, null, null, '&nbsp;&nbsp;&nbsp;');

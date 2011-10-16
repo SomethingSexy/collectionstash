@@ -3,7 +3,7 @@ App::import('Sanitize');
 class SpecializedTypesController extends AppController {
 
 	var $name = 'SpecializedTypes';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	public function getSpecializedTypesData() {
@@ -24,5 +24,6 @@ class SpecializedTypesController extends AppController {
 			$this -> set('aSpecializedTypesData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
 		}
 	}
+
 }
 ?>

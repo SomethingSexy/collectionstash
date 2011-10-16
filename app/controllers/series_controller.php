@@ -2,7 +2,7 @@
 class SeriesController extends AppController {
 
 	var $name = 'Series';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	function add() {
@@ -12,5 +12,6 @@ class SeriesController extends AppController {
 		$this -> Series -> save($data);
 		$this -> render(false);
 	}
+
 }
 ?>

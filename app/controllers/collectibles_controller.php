@@ -4,7 +4,7 @@ class CollectiblesController extends AppController {
 
 	var $name = 'Collectibles';
 
-	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail');
+	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify.Minify');
 
 	var $components = array('RequestHandler', 'Wizard.Wizard', 'Email');
 
@@ -197,7 +197,8 @@ class CollectiblesController extends AppController {
 		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
 		debug($manufactureId);
-		$this -> searchCollectible(array('Collectible.variant' => '0', 'Manufacture.id' => $manufactureId['Manufacture']['id']));
+		$this -> params['url']['m'] = $manufactureId['Manufacture']['id'];
+		$this -> searchCollectible(array('Collectible.variant' => '0'));
 	}
 
 	function nonManufactured() {

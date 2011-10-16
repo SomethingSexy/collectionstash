@@ -5,18 +5,21 @@
 	<?php echo $this -> Html -> meta('icon'); ?>
 	<?php if(isset($description_for_layout)){ echo "<meta name='description' content='".$description_for_layout."' />"; } ?>
 	<?php if(isset($keywords_for_layout)){ echo "<meta name='keywords' content='".$keywords_for_layout."' />"; } ?>
-	<link rel="stylesheet" type="text/css" href="/css/layout/index.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.core.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.theme.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.dialog.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ui.tabs.css" />
-	<link rel="stylesheet" type="text/css" href="/css/redmond.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/default.css" />
-	<link rel="stylesheet" type="text/css" href="/css/layout/non_msie.css" />
-	<script type="text/javascript" src="/js/jquery-1.6.1.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui-1.8.5.js"></script>
-	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
+	<?php
+		$this -> Minify -> css(array('css/layout/index'));
+		$this -> Minify -> css(array('css/layout/layout'));
+		$this -> Minify -> css(array('css/jquery.ui.core'));
+		$this -> Minify -> css(array('css/jquery.ui.theme'));
+		$this -> Minify -> css(array('css/jquery.ui.dialog'));
+		$this -> Minify -> css(array('css/jquery.ui.tabs'));
+		$this -> Minify -> css(array('css/redmond'));
+		$this -> Minify -> css(array('css/layout/default'));	
+		$this -> Minify -> css(array('css/layout/non_msie'));
+		
+		$this -> Minify -> js(array('js/jquery-1.6.4'));
+		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));
+		$this -> Minify -> js(array('js/jquery-plugins'));
+	?>
 	<?php echo $scripts_for_layout; ?>
 	<script>
 		$( function() {

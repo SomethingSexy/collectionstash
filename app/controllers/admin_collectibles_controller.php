@@ -5,7 +5,7 @@ class AdminCollectiblesController extends AppController {
 
 	var $name = 'AdminCollectibles';
 
-	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'Minify.Minify');
 
 	var $components = array('Email');
 

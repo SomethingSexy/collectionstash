@@ -3,7 +3,7 @@ App::import('Sanitize');
 class CollectiblesUserController extends AppController {
 
 	var $name = 'CollectiblesUser';
-	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	public function view($id = null) {

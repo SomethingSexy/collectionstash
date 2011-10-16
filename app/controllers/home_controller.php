@@ -2,7 +2,7 @@
 class HomeController extends AppController {
 
 	var $name = 'Home';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 	var $uses = array();
 
 	public function index() {

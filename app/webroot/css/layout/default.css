@@ -44,7 +44,7 @@ a:active {
 /* base component view */
 .component {
     margin: 10px 0px 0 0;
-   	background-color: #F8F8F8;
+   	background-color: #FFF;
     -moz-border-radius: 10px;
 	border-radius: 10px;
     float: left;
@@ -191,7 +191,7 @@ a:active {
     margin-left: 10px;
     width: 350px;
 
-	background-color: #F8F8F8;	
+	background-color: #FFF;	
     margin-bottom: 20px;
 }
 .collectible.detail .detail.title {
@@ -274,59 +274,44 @@ a:active {
 
 /* search component */
 
-#search-component {
-  border: none;
-  /*float: right;*/
-  /*width: 380px;*/
-  width: 100%;
-}
 
-#search-component .component-view {
-  float: left;
-  
-}
-
-#search-component .component-view .component-search-input {
+.component-search-input {
   float: left;
 }
 
-#search-component .component-view .component-search-filters .form-fields li,
-#search-component .component-view .component-search-input .form-fields li {
-  padding: 0; 
+.component-search-input form {
+    background: -moz-linear-gradient(center top , #FFFFFF, #EDEDED) repeat scroll 0 0 transparent;
+    border: 1px solid #D2D2D2;
+    /*border-radius: 2em 2em 2em 2em;*/
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    padding: 3px 5px;
 }
 
-#search-component .component-view .component-search-input .form-fields li input.button {
- 	clear: none;
-    padding: 2px;
-    width: 50px;
+.component-search-input form .searchfield {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #BCBBBB;
+    /*border-radius: 2em 2em 2em 2em;*/
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+    outline: medium none;
+    padding: 6px 6px 6px 8px;
+    width: 202px;
 }
 
-#search-component .component-view .component-search-filters {
-  float: right;
+.component-search-input form input {
+    font: 12px/100%;
 }
 
-#search-component .component-view .component-search-filters .filter-title {
-  color: #000;
-  margin-left: 1em;
-  font-size: 0.75em;
-  vertical-align: bottom;
+.component-search-input form .searchbutton {
+    background: -moz-linear-gradient(center top , #9E9E9E, #454545) repeat scroll 0 0 transparent;
+    border: 1px solid #494949;
+    /*border-radius: 2em 2em 2em 2em;*/
+    color: #FFFFFF;
+    font-size: 11px;
+    height: 27px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
 
-#search-component .component-view .component-search-filters .filters {
-  display: none;
-}
-
-
-
-#search-component .component-view .submit {
-  float: left; 
-  clear: none;
-  margin:0;
-}
-#search-component .component-view .submit input {
-  -moz-border-radius: 0;
-  font-size: 100%;
-}
 
 /* collectibles view component */
 
@@ -494,25 +479,31 @@ a:active {
 	margin-bottom: 20px;
 }
 
-/*#collectible-add-component .inside .component-view .collectible.add.tag*/ .tag-list .tag {
+/*#collectible-add-component .inside .component-view .collectible.add.tag*/ .tag {
 	font-size: 0.75em;
 	display: inline;
 	margin-right: 1em;
 	margin-bottom: 1em;
-	padding: 10px;
+	padding: 5px;
 	float: left;
-	background-color: #CCCCCC;
+	background-color: #E0EAF1;
 	border-bottom: 1px solid #666666;
     border-right: 1px solid #666666;
 }
 .tag-list .tag:hover {
 	background-color: #FDB924;
+	color: #000;
 }
+
+
 .tag-list.no-link .tag:hover {
 	background-color: #CCCCCC;
 }
 .tag-list .tag a {
 	text-decoration: none;
+	color: #656464;
+}
+.tag-list .tag:hover a {
 	color: #000;
 }
 #collectibletypes-list-component,
@@ -1108,6 +1099,15 @@ input[type=submit]:active {
 .form-fields li input {
   float: left;
 }
+.form-fields li select,
+.form-fields li textarea,
+.form-fields li input {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #BCBBBB;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+    outline: medium none;	
+}
+
 .form-fields li .error-message {
     width: 262px;
     padding: 5px;
@@ -1320,7 +1320,7 @@ div.paging span a {
 .ui-dialog {
 	border: 8px solid #333333;
     border-radius: 8px 8px 8px 8px;
-	background: #F8F8F8;
+	background: #FFF;
 }
 
 .ui-widget-header {
@@ -1331,14 +1331,14 @@ div.paging span a {
 	
 }
 .ui-dialog-buttonpane {
-	background: #F8F8F8;
+	background: #FFF;
 }
 .ui-tabs-nav.ui-widget-header {
 	background-color: #464646;	
 }
 .ui-tabs{
 	border: none;
-	background-color: #F8F8F8;
+	background-color: #FFF;
 }
 
 .ui-tabs .ui-state-default {
@@ -1354,7 +1354,7 @@ div.paging span a {
 	font-weight: normal;	
 }
 .ui-tabs .ui-state-active {
-    background: #F8F8F8;
+    background: #FFF;
     border: 1px solid #666666;
 
     outline: medium none;
@@ -1615,6 +1615,7 @@ div.paging span a {
 	color: #656464;
 	font-size: 1em;
 	padding-bottom: 0.5em;
+	overflow: hidden;
 }
 #filters .filter {
     background-color: #E9F0F4;
@@ -1628,6 +1629,11 @@ div.paging span a {
     border-radius: 5px 5px 5px 5px;
     float: left;
 } 
+
+#filters .filter.lock {
+	color: #AAA;
+	cursor: default;
+}
 
 #filters .filter .filter-name {
     text-overflow: ellipsis;
@@ -1659,7 +1665,8 @@ div.paging span a {
 }
 
 #filters .filter.license .filter-list-container .filter-list {
-    overflow:-moz-scrollbars-vertical!important;!overflow:hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 420px;
 }
  

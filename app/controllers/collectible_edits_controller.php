@@ -4,7 +4,7 @@ App::import('Sanitize');
  * This is not a join table, this is the edit controllor for collectibles.  This is why it is named liked this.
  */
 class CollectibleEditsController extends AppController {
-	var $helpers = array('Html', 'FileUpload.FileUpload', 'CollectibleDetail');
+	var $helpers = array('Html', 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify.Minify');
 
 	/*
 	 * Ok, need to accept an admin mode parameter.  If it is admin mode and the user is an admin then we can do the edit basically
@@ -26,9 +26,9 @@ class CollectibleEditsController extends AppController {
 				//TODO figure out a better place to go, this is the case if some does a submit to this page without doing a GET first to setup all of the data
 				$this -> redirect('/');
 			}
-			debug($this->data);
+			debug($this -> data);
 			$this -> data = Sanitize::clean($this -> data);
-			debug($this->data);
+			debug($this -> data);
 			$this -> Collectible -> set($this -> data);
 			$validCollectible = true;
 
@@ -96,8 +96,8 @@ class CollectibleEditsController extends AppController {
 
 		//grab series..doesn't matter if the collectible has one set or not, it depends on if the manufacture license allows it
 		//if (isset($seriesId) && !is_null($seriesId)) {
-			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
-			$this -> set('series', $series);
+		$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
+		$this -> set('series', $series);
 		//}
 		//grab scales
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));

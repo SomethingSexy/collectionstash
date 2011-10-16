@@ -194,7 +194,7 @@ class AppController extends Controller {
 			$saveSearchFilters['tag'] = $this -> params['url']['t'];
 		}
 
-		if (isset($this -> data['Search']['search']) && $this -> data['Search']['search'] !== '') {
+		if (isset($this -> data['Search']['search']) && trim($this -> data['Search']['search']) !== '') {
 			$search = $this -> data['Search']['search'];
 			$search = ltrim($search);
 			$search = rtrim($search);

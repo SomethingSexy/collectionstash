@@ -2,11 +2,11 @@
 class TagsController extends AppController {
 
 	var $name = 'Tags';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	public function getTagList() {
-		if($this -> RequestHandler -> isAjax()) {
+		if ($this -> RequestHandler -> isAjax()) {
 			Configure::write('debug', 0);
 			//$this->render('../json/add');
 		}
@@ -20,11 +20,12 @@ class TagsController extends AppController {
 		//debug($tags);
 		$this -> set('aTags', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
 	}
-	
-	public function index(){
-		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain'=> false, 'order' => array('Tag.tag' => 'ASC')));	
+
+	public function index() {
+		$tags = $this -> Tag -> find('all', array('conditions' => array('Tag.active' => 1), 'contain' => false, 'order' => array('Tag.tag' => 'ASC')));
 		debug($tags);
-		$this->set(compact('tags'));
+		$this -> set(compact('tags'));
 	}
+
 }
 ?>

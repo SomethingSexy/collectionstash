@@ -4,18 +4,17 @@ App::import('Sanitize');
 class ProfilesController extends AppController {
 
 	var $name = 'Profiles';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload');
+	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	public function index() {
 		$this -> checkLogIn();
-		if($this->isUserAdmin()){
+		if ($this -> isUserAdmin()) {
 			$this -> set('allowInvites', true);
 		} else {
-			$this -> set('allowInvites', Configure::read('Settings.Profile.allow-invites'));	
+			$this -> set('allowInvites', Configure::read('Settings.Profile.allow-invites'));
 		}
-			
-	}
 
+	}
 
 }
 ?>

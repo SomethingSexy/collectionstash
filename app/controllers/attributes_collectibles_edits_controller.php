@@ -2,7 +2,7 @@
 class AttributesCollectiblesEditsController extends AppController {
 
 	var $name = 'AttributesCollectiblesEdits';
-	var $helpers = array('Html', 'Ajax');
+	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('RequestHandler');
 
 	/*

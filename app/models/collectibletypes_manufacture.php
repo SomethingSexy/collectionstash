@@ -30,12 +30,41 @@ class CollectibletypesManufacture extends AppModel {
 		$manColTypes = $this -> find("all", array('fields' => array('CollectibletypesManufacture.collectibletype_id', 'Collectibletype.name', 'Collectibletype.id'), 'conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufacutre_id), 'recursive' => 0, 'order' => array('Collectibletype.name' => 'ASC')));
 		return $manColTypes;
 	}
+	/**
+	 * This method will return all of the valid children for the given collectible type and manufacturer.
+	 * 
+	 * It will make sure that all of the children of this collectible type are valid for this manufacturer
+	 */
+	public function getCollectibleTypesChildren($manufactureId, $collectibleTypeId) {
+		$manSpecificTypes = $this -> getAllCollectibleTypeByManufactureId($manufactureId);
+		$collectibleTypes = $this -> Collectibletype -> children($collectibleTypeId, true, array('Collectibletype.id', 'Collectibletype.name'));
+		$processedReturnChildren = array();
+		//Loop through all of these children and make sure they are valid, there HAS to be a better way to do this
+		foreach ($collectibleTypes as $key => $collectibleType) {	
+			$typeId = $collectibleType['Collectibletype']['id'];	
+			$isValid = false;
+			foreach ($manSpecificTypes as $key => $manType) {
+				if($manType['Collectibletype']['id'] === $typeId) {
+					$isValid = true;
+				}	
+			}
+			
+			if($isValid){
+				array_push($processedReturnChildren, $collectibleType);
+			}
+		}
+		
+		return $processedReturnChildren;
+	}
 
 	/**
 	 * This will return arrays of each level of collectibles types from the path of the given collectible type id.  It
 	 *  will also return the collectible that is selected in the array
 	 */
 	public function getCollectibleTypesPaths($manufactureId, $collectibleTypeId) {
+		//Grab all of the manufacture specific types	
+		$manSpecificTypes = $this -> getAllCollectibleTypeByManufactureId($manufactureId);
+	
 		//This will get all main level collectible types for this manufacture
 		$collectibletypes = $this -> getCollectibleTypeByManufactureId($manufactureId);
 		//Set the baseline as L0, there should ALWAYS be a L0.
@@ -60,7 +89,22 @@ class CollectibletypesManufacture extends AppModel {
 		}
 		//finally get the children , if any of the one that was selected.
 		$returnChildren = $this -> Collectibletype -> children($collectibleTypeId);
-		$returnData['collectibletypes_L' . ++$lastValue] = $returnChildren;
+		$processedReturnChildren = array();
+		//Loop through all of these children and make sure they are valid, there HAS to be a better way to do this
+		foreach ($returnChildren as $key => $collectibleType) {	
+			$typeId = $collectibleType['Collectibletype']['id'];	
+			$isValid = false;
+			foreach ($manSpecificTypes as $key => $manType) {
+				if($manType['Collectibletype']['id'] === $typeId) {
+					$isValid = true;
+				}	
+			}
+			
+			if($isValid){
+				array_push($processedReturnChildren, $collectibleType);
+			}
+		}
+		$returnData['collectibletypes_L' . ++$lastValue] = $processedReturnChildren;
 
 		return $returnData;
 	}
