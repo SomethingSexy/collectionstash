@@ -1,5 +1,5 @@
 <?php if (!empty($variants)) { ?>
-	<div class="component" id="collectibles-list-component">
+	<div class="component variant-list" id="collectibles-list-component">
 	  <div class="inside" >
 	     <div class="component-title">
 	      <h2><?php __('Variants');?></h2>
@@ -27,7 +27,7 @@
 	  </div>
 	</div>	
 <?php } else { ?>
-	<div class="component" id="collectibles-list-component">
+	<div class="component variant-list" id="collectibles-list-component">
 	  <div class="inside" >
 	     <div class="component-title">
 	      <h2><?php __('Variants');?></h2>
