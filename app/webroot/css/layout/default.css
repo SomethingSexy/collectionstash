@@ -333,7 +333,7 @@ a:active {
 #collectibles-list-component  .component-view {
 	overflow: hidden; /*used to contain float*/
 	padding-top: 0;
-	min-height: 500px; /* This is here for the search filter drop down */
+	min-height: 600px; /* This is here for the search filter drop down */
 }
 
 #collectibles-list-component  .collectibles.view {
