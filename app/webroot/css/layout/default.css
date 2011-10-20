@@ -29,12 +29,14 @@ a {
 a:link,
 a.link {
 	cursor: pointer;
+	color: #606060;
+	text-decoration: underline;
 }
 a:visited {
-
+	color: #606060;
 }
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 a:active {
 
@@ -447,15 +449,15 @@ a:active {
 	float: left;
 	clear: both;
 }
-#collectible-add-component .inside .component-view .collectible.add.tag fieldset {
+#collectible-add-component .inside .component-view .collectible.add.add-tag fieldset {
 	margin-bottom: 0;
 }
-#collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .button {
+#collectible-add-component .inside .component-view .collectible.add.add-tag fieldset .form-fields li .button {
 	width: 50px;
 	clear: none;
 	padding: 2px;
 }
-#collectible-add-component .inside .component-view .collectible.add.tag fieldset .form-fields li .text-box {
+#collectible-add-component .inside .component-view .collectible.add.add-tag fieldset .form-fields li .text-box {
 	clear:left;
 }
 
@@ -501,7 +503,7 @@ a:active {
 
 
 .tag-list.no-link .tag:hover {
-	background-color: #CCCCCC;
+	background-color: #E0EAF1;
 }
 .tag-list .tag a {
 	text-decoration: none;
@@ -599,6 +601,17 @@ a:active {
     color: #999999;
     
 } 
+
+.standard-list ul li.title span a.asc {
+    background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
+    padding-right: 20px;	
+}
+
+.standard-list ul li.title span a.desc {
+    background: url("/img/icon/triangle_down.png") no-repeat scroll right center transparent;
+    padding-right: 20px;	
+}
+
 /* TODO it would make sense to have a common class for these repeats */
 .attributes-list ul li .attribute-action,
 .attributes-list ul li .attribute-label,
@@ -607,18 +620,6 @@ a:active {
 .attributes-list ul li .attribute-status {
 	float: left;
 	white-space: normal;
-}
-.attributes-list ul li .attribute-label {
-	width: 25%;
-	
-}
-.attributes-list ul li .attribute-action,
-.attributes-list ul li .attribute-name {
-	width: 25%;
-}
-
-.attributes-list ul li .attribute-description {
-	width: 50%;
 }
 .attributes-list ul li .attribute-description .edit.attribute.description {
 	display: none;
@@ -638,6 +639,33 @@ a:active {
 .attributes-list.empty ul li {
 	font-size: 0.75em;
 }
+/**
+ * 	This is the new list code where we put the padding
+ * on the spans instead of the li so the text doesn't run
+ * together
+ */
+.attributes-list {
+    width: 500px;
+}
+.attributes-list ul li {
+	padding: 0;
+}
+.attributes-list ul li span.attribute-label,
+.attributes-list ul li span.attribute-action,
+.attributes-list ul li span.attribute-name,
+.attributes-list ul li span.attribute-description {
+	padding: 10px;
+}
+.attributes-list ul li .attribute-label ,
+.attributes-list ul li .attribute-action,
+.attributes-list ul li .attribute-name {
+	width: 100px;
+}
+
+.attributes-list ul li .attribute-description {
+	width: 200px;
+}
+
 
 #my-stashes-component {
 	width: 100%;
@@ -1445,6 +1473,11 @@ div.paging span a {
 	font-size: 0.75em;
 }
 
+/**
+ * 	Account/Profile Settings
+ */
+
+
 #account .inside .account.page .account.detail .account.detail.update {
 	display: none;
 }
@@ -1455,7 +1488,7 @@ div.paging span a {
 }
 
 #account .inside .account.page .account.page.list {
-	
+	width: 100%;
 }
 
 #account .inside .account.page .account.page.list li.page.list.item  {
@@ -1494,19 +1527,34 @@ div.paging span a {
 #account .inside .account.page .account.page.list li .body .account.detail.view .list.empty ul li {
 	border: none;
 }
-
+#account .inside .account.page .account.page.list li.selected .header .action .link,
 #account .inside .account.page .account.page.list li.selected .header {
 	background-color: #555555;
 	color: #E9E9E9;
 	
 }
-
 #account-invites .body .account.detail.view .standard-list ul li span {
 	float: left;
 	width: 50%;
 	font-size: 0.75em;
 }
-
+#account .inside .page .standard-list.collectible-history-list ul li {
+	padding: 0;
+}
+#account .inside .page .standard-list.collectible-history-list ul li span {
+	float: left;
+    font-size: 0.75em;
+    padding: 10px;
+}
+#account .inside .page .standard-list.collectible-history-list {
+	width: 743px;
+}
+#account .inside .page .standard-list.collectible-history-list ul li span {
+	width: 128px;
+}
+/**
+ * 	Admin section
+ */
 #admin-edit .inside .page .standard-list ul li span {
 	float: left;
     font-size: 0.75em;
@@ -1569,7 +1617,7 @@ div.paging span a {
  * collectible user add
  */
 #CollectiblesUserPurchaseDate {
-	width: 75px;
+	width: 80px;
 }
 
 /***********************************

@@ -50,7 +50,7 @@
 								echo '<input type="hidden" name="data[remove]" value="true" />';
 								echo $this -> Form -> end(); 
 							?>
-							<a id="remove-image-submit">Change Image</a> <a id="skip-image-button">Continue</a>
+							<a class="link" id="remove-image-submit">Change Image</a> <a class="link" id="skip-image-button">Continue</a>
 						</div>
 				<?php } else { ?>
 					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' , 'id'=>'add-image-form', 'type' => 'file'));?>

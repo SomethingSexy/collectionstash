@@ -10,7 +10,24 @@ class CollectiblesUser extends AppModel {
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
 		$this -> data['CollectiblesUser']['cost'] = str_replace(',', '', $this -> data['CollectiblesUser']['cost']);
 
+		if (isset($this -> data['CollectiblesUser']['purchase_date'])) {
+			if (empty($this -> data['CollectiblesUser']['purchase_date'])) {
+				unset($this -> data['CollectiblesUser']['purchase_date']);
+			} else {
+				$this -> data['CollectiblesUser']['purchase_date'] = date('Y-m-d', strtotime($this -> data['CollectiblesUser']['purchase_date']));
+			}
+		}
+
 		return true;
+	}
+
+	function afterFind($results) {
+		// Create a dateOnly pseudofield using date field.
+		foreach ($results as $key => $val) {
+			if (isset($val['CollectiblesUser']['purchase_date'] ))
+				$results[$key]['CollectiblesUser']['purchase_date']  = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));
+		}
+		return $results;
 	}
 
 	function validateEditionSize($check) {

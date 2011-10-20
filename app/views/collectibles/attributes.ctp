@@ -109,7 +109,7 @@
 		});	
 		$('#base-collectible').dialog({
 			'autoOpen' : false,
-			'width' : 400,
+			'width' : 525,
 			'autoHeight': true,
 			'resizable': false,
 			'modal': true

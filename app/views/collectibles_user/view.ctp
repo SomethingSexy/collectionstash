@@ -41,7 +41,7 @@
 						</dd>
 						<?php
 						$editionSize = $collectible['Collectible']['edition_size'];
-						if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['CollectiblesUser']['edition_size']))
+						if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['CollectiblesUser']['edition_size']) && !empty($collectible['CollectiblesUser']['edition_size']))
 						{
 						?>
 
@@ -75,6 +75,16 @@
 							echo '</dt>';
 							echo '<dd>';
 							echo $collectible['Merchant']['name'];
+							echo '</dd>';
+						}
+						?>
+						<?php
+						if (isset($collectible['CollectiblesUser']['purchase_date']) && !empty($collectible['CollectiblesUser']['purchase_date'])) {
+							echo '<dt>';
+							echo __('Date Purchased');
+							echo '</dt>';
+							echo '<dd>';
+							echo $collectible['CollectiblesUser']['purchase_date'];
 							echo '</dd>';
 						}
 						?>

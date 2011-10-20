@@ -899,6 +899,19 @@ class CollectiblesController extends AppController {
 		}
 	}
 
+	/**
+	 * This function right now will return the history of the collectibles the user has submitted.
+	 */
+	function userHistory() {
+		//Make sure the user is logged in
+		$this -> checkLogIn();
+		//Grab the user id of the person logged in
+		$userId = $this -> getUserId();
+		$this -> paginate = array('conditions' => array('Collectible.user_id' => $userId), 'contain' => array('Collectibletype', 'Manufacture'), 'limit' => 25);
+		$collectibles = $this -> paginate('Collectible');
+		$this -> set(compact('collectibles'));
+	}
+
 	function admin_index() {
 		$this -> checkLogIn();
 		$this -> checkAdmin();

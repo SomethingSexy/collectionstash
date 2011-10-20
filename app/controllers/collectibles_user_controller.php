@@ -98,7 +98,7 @@ class CollectiblesUserController extends AppController {
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 				debug($collectiblesUser);
 				if (!empty($this -> data)) {
-					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
+					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date');
 					$this -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
 					if ($this -> CollectiblesUser -> save($this -> data, true, $fieldList)) {
 						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');

@@ -2,17 +2,18 @@
 class User extends AppModel {
 	var $name = 'User';
 	var $actsAs = array('ExtendAssociations', 'Containable');
-	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite');//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
+	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite');
+	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
 	var $hasOne = array('Profile' => array('dependent' => true));
 
 	function beforeValidate() {
 		$valid = true;
-		if(!$this -> id) {
-			if($this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username']))) > 0) {
+		if (!$this -> id) {
+			if ($this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username']))) > 0) {
 				$this -> invalidate('username_unique');
 				$valid = false;
 			}
-			if($this -> find('count', array('conditions' => array('User.email' => $this -> data['User']['email']))) > 0) {
+			if ($this -> find('count', array('conditions' => array('User.email' => $this -> data['User']['email']))) > 0) {
 				debug($valid);
 				$this -> invalidate('email', 'A user with that email already exists.');
 				$valid = false;
@@ -26,7 +27,7 @@ class User extends AppModel {
 
 	function validateSamePassword() {
 		$valid = true;
-		if(strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
+		if (strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
 			$valid = false;
 			debug($valid);
 		}
@@ -35,7 +36,7 @@ class User extends AppModel {
 
 	function validatePasswordChars() {
 		$valid = true;
-		if(!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
+		if (!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
 			//doesnt mneet our 1 upper, one lower, 1 digit or special character require,ent
 			$valid = false;
 
@@ -57,7 +58,7 @@ class User extends AppModel {
 		$this -> CollectiblesUser -> recursive = 2;
 		$this -> CollectiblesUser -> bindModel(array('belongsTo' => array('User', 'Collectible')));
 
-		if($result['User']['admin']) {
+		if ($result['User']['admin']) {
 			$joinRecords = $this -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.user_id' => $result['User']['id'])));
 		} else {
 			$joinRecords = $this -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.user_id' => $result['User']['id'], 'Collectible.pending' => 0)));
@@ -71,10 +72,6 @@ class User extends AppModel {
 		$count = $this -> find("first", array('conditions' => array('User.id' => $result['User']['id']), 'fields' => array('User.stash_count'), 'contain' => false));
 
 		return $count['User']['stash_count'];
-	}
-
-	public function getUserNamesWhoHaveCollectible($collectibleId) {
-
 	}
 
 	public function getNumberOfCollectiblesByUser($username) {
@@ -93,6 +90,17 @@ class User extends AppModel {
 		return $joinRecords;
 	}
 
+	// /**
+	 // * This function will return all of the collectibles that this
+	 // * user submited.  It will return them whether they have been accepted
+	 // * or not
+	 // */
+	// public function getCollectiblesHistory($userId) {
+		// $results = $this -> CollectiblesUser -> Collectible -> find("all", array('conditions' => array('Collectible.user_id' => $userId), 'contain' => false));
+// 		
+		// return $results;
+	// }
+
 	/**
 	 * Creates an activation hash for the current user.
 	 *
@@ -100,7 +108,7 @@ class User extends AppModel {
 	 *      @return String activation hash.
 	 */
 	function getActivationHash() {
-		if(!isset($this -> id)) {
+		if (!isset($this -> id)) {
 			return false;
 		}
 		return substr(Security::hash(Configure::read('Security.salt') . $this -> field('created') . date('Ymd')), 0, 8);

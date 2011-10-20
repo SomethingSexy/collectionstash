@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="component-view">
-			<div class="collectible add tag">
+			<div class="collectible add add-tag">
 				<?php echo $this -> Form -> create('Tag', array('url' => '/' . $this -> params['controller'] . '/' . $this -> action . '/tags', ));?>
 				<fieldset>
 					<legend>

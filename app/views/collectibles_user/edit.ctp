@@ -41,6 +41,12 @@
                 </div> 
                 <?php echo $this->Form->input('merchant_id', array('div' =>  false, 'label' => false));?>
               </li> 
+	          <li>
+	            <div class="label-wrapper">
+	              <label for=""><?php __('When did you purchase this collectible?') ?></label>
+	            </div> 
+	            <?php echo $this->Form->text('purchase_date', array('div' =>  false, 'label' => false ,'maxLength'=>8));?>
+	          </li>               
           </ul>
           <input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
         </fieldset>
@@ -48,3 +54,8 @@
           </div>    
   </div>
 </div>
+<script>
+	$(function() {
+		$( "#CollectiblesUserPurchaseDate" ).datepicker();
+	});
+</script>

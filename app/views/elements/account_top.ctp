@@ -5,10 +5,10 @@
 		<div class="actions">
 			<ul>
 				<li>
-					<?php echo $this -> Html -> link('Account Settings', '', array('class' => 'button', 'controller' => 'profiles'));?>
+					<?php echo $this -> Html -> link('Account Settings', '/profiles/index', array('class' => 'button'));?>
 				</li>
 				<li>
-					<?php //echo $html->link('Invites', array('controller' => 'invites', 'action'=> 'view'));?>
+					<?php echo $this -> Html ->link('History', '/collectibles/userHistory', array('class' => 'button'));?>
 				</li>
 				<li>
 					<?php //echo $html->link('Stats', array('controller' => 'stashs','action'=>'stats'));?>
