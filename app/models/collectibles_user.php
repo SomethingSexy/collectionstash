@@ -24,8 +24,13 @@ class CollectiblesUser extends AppModel {
 	function afterFind($results) {
 		// Create a dateOnly pseudofield using date field.
 		foreach ($results as $key => $val) {
-			if (isset($val['CollectiblesUser']['purchase_date'] ))
-				$results[$key]['CollectiblesUser']['purchase_date']  = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));
+			if (isset($val['CollectiblesUser']['purchase_date']))
+				if($val['CollectiblesUser']['purchase_date'] !== '0000-00-00'){
+					$results[$key]['CollectiblesUser']['purchase_date']  = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));	
+				} else {
+					$results[$key]['CollectiblesUser']['purchase_date'] = '';
+				}
+				
 		}
 		return $results;
 	}
