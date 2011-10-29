@@ -717,7 +717,7 @@ a:active {
     height: 150px;
     width: 150px;
     text-align: center;
-    background-color: gray;
+    background-color: #DDD;
 }
 .glimpse div.image a {
 	overflow: hidden;
