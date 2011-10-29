@@ -1,9 +1,14 @@
 <div id="admin-edit" class="two-column-page">
 	<div class="inside">
-		<div class="actions">
+	 	<div class="actions">
 			<ul>
-				<li><?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class'=>'button')); ?></li>
-				<li><?php echo $this -> Html -> link('Edits','/admin/edits/index', array('class'=>'button')); ?></li>
+				<li>
+					<h3><?php echo __('Admin');?></h3>
+					<ul>
+						<li><?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class'=>'link')); ?></li>
+						<li><?php echo $this -> Html -> link('Edits','/admin/edits/index', array('class'=>'link')); ?></li>							
+					</ul>
+				</li>
 			</ul>	
 		</div>
 		<div class="page collectibles-approval">

@@ -24,11 +24,21 @@
 			<div>
 				<?php 
 					if (isset($collectible['Upload'])) { 
-						echo __('The following image has been added for this collectible.  You can change the image if you want or select continue to keep this image.');
+						echo '<p>'.__('The following image has been added for this collectible.  You can change the image if you want or select continue to keep this image.').'</p>';
 					} else {
-						echo __('To add an image to the collectible, either select an image from your computer or enter in a URL that contains the image you wish to attach to this collectible.');	
+						echo '<p>'.__('To add an image to the collectible, either select an image from your computer or enter in a URL that contains the image you wish to attach to this collectible.').'</p>';	
 					}		
 					?>
+					<p><?php echo __('Image requirements:');?></p>
+					<ul>
+						<li><?php echo __('The image must be less than 2MB.');?></li>
+					</ul>
+					<p><?php echo __('Image recommendations:');?></p>
+					<ul>
+						<li><?php echo __('The image should be at least 150 x 150 pixels.');?></li>
+						<li><?php echo __('This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it\'s width.');?></li>
+						<li><?php echo __('Please try and use a professionally shot photo.');?></li>
+					</ul>
 			</div>
 		</div>
 		<div class="component-view add-image">

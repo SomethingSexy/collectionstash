@@ -158,7 +158,7 @@ class AppController extends Controller {
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
 		$this -> loadModel('Collectible');
-		debug($this -> data);
+		// debug($this -> data);
 		$saveSearchFilters = array();
 		if (isset($this -> params['url']['q'])) {
 			$this -> data['Search'] = array();
@@ -335,9 +335,9 @@ class AppController extends Controller {
 			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
 			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
 		}
-		debug($joins);
+		// debug($joins);
 		$listSize = Configure::read('Settings.Search.list-size');
-		debug($listSize);
+		// debug($listSize);
 		array_push($conditions, array('Collectible.state' => '0'));
 		//See if a search was set
 		if (isset($search)) {
@@ -345,9 +345,9 @@ class AppController extends Controller {
 			// $this -> Session -> write('Collectibles.search', $search);
 			//Is the search an empty string?
 			if ($search == '') {
-				debug($conditions);
-				debug($joins);
-				debug($filters);
+				// debug($conditions);
+				// debug($joins);
+				// debug($filters);
 				$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
@@ -369,7 +369,7 @@ class AppController extends Controller {
 		}
 
 		$data = $this -> paginate('Collectible');
-		debug($data);
+		// debug($data);
 		$this -> set('collectibles', $data);
 	}
 

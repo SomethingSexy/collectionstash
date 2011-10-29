@@ -127,7 +127,7 @@ class CollectibleEditsController extends AppController {
 
 			//Lets retrieve some data for display purposes
 			//TODO this may be redundant...should we save off later?
-			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url'), 'contain' => false));
+			$manufacture = $this -> Collectible -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $collectible['Collectible']['manufacture_id']), 'fields' => array('Manufacture.title', 'Manufacture.url', 'Manufacture.id'), 'contain' => false));
 			$collectible['Manufacture'] = $manufacture['Manufacture'];
 
 			$collectibleType = $this -> Collectible -> Collectibletype -> find('first', array('conditions' => array('Collectibletype.id' => $collectible['Collectible']['collectibletype_id']), 'fields' => array('Collectibletype.name'), 'contain' => false));

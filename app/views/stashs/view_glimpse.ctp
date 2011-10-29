@@ -55,12 +55,11 @@
 						echo '<div class="line">';
 					}
 					if (!empty($myCollectible['Collectible']['Upload'])) {
-						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => '100')) . '</a>';
-						echo '<div class="collectible image-fullsize hidden">';
-						echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 0));
+						echo '<div class="image">';
+						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 150, 'height'=> 150)) . '</a>';
 						echo '</div>';
 					} else {
-						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
+						echo '<div class="image"><a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
 					}
 					if ($endline) {
 						echo '</div>';

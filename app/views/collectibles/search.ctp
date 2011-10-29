@@ -43,7 +43,7 @@
 						} ?>
 					</div>
 					<div class="collectible actions">
-						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
+						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));?>
 					</div>
 				</div>
 				<?php endforeach;?>

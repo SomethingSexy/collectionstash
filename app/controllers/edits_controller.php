@@ -210,7 +210,38 @@ class EditsController extends AppController {
 			}
 		}
 	}
+	/**
+	 * This function right now will return the history of the collectibles the user has submitted.
+	 */
+	function userHistory() {
+		$this -> checkLogIn();
+		$userId = $this -> getUserId();
+		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), 'contain' => array('Collectible'=> array('fields' => array('id','name')), 'AttributesCollectiblesEdit' => array('fields' => array('id')), 'UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
 
+		$edits = $this -> paginate('Edit');
+		debug($edits);
+		foreach ($edits as &$edit) {
+			if (!empty($edit['CollectibleEdit']['id'])) {
+				$edit['type'] = __('Collectible', true);
+				$edit['type_id'] = $edit['CollectibleEdit']['id'];
+				unset($edit['UploadEdit']);
+				unset($edit['AttributesCollectiblesEdit']);
+			} else if (!empty($edit['UploadEdit']['id'])) {
+				$edit['type'] = __('Upload', true);
+				$edit['type_id'] = $edit['UploadEdit']['id'];
+				unset($edit['CollectibleEdit']);
+				unset($edit['AttributesCollectiblesEdit']);
+			} else if (!empty($edit['AttributesCollectiblesEdit']['id'])) {
+				$edit['type'] = __('Attribute', true);
+				$edit['type_id'] = $edit['AttributesCollectiblesEdit']['id'];
+				unset($edit['CollectibleEdit']);
+				unset($edit['UploadEdit']);
+			}
+		}
+		debug($edits);
+		$this -> set('edits', $edits);
+	}
+	
 	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
 		$return = true;
 		if ($email) {

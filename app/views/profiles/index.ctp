@@ -1,4 +1,7 @@
 <?php echo $this->element('account_top'); ?>
+<div class="title">
+	<h2><?php echo __('Settings');?></h2>
+</div>
 <ul class="account page list">
 	<li class="page list item" id="account-profile">
 		<div class="header"><span class="page"><?php __('Profile');?></span><span class="action"><a class="link"><?php __('View');?></a></span></div>

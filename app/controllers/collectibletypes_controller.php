@@ -48,8 +48,8 @@ class CollectibletypesController extends AppController {
 	// $this -> Collectibletype -> save($data);
 	// // }
 	$data = array();
-	$data['Collectibletype']['parent_id'] = null;
-	$data['Collectibletype']['name'] = 'Vinyl Figure';
+	$data['Collectibletype']['parent_id'] = 7;
+	$data['Collectibletype']['name'] = 'Statue Accessory';
 	$this -> Collectibletype -> create();
 	$this -> Collectibletype -> save($data);
 // 	

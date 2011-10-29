@@ -48,19 +48,16 @@
 						echo '<div class="line">';
 					}
 					if (!empty($collectible['Upload'])) {
-						echo '<a href="/collectibles/view/' . $collectible['Collectible']['id'] . '">';
+						echo '<div class="image"><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/'. $collectible['Collectible']['slugField']. '">';
 
 						if (!empty($collectible['Upload'])) {
-							echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 100));
+							echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height'=> 150));
 						} else {
 							echo '<img src="/img/silhouette_thumb.png"/>';
 						}
-						echo '</a>';
-						echo '<div class="collectible image-fullsize hidden">';
-						echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));
-						echo '</div>';
+						echo '</a></div>';
 					} else {
-						echo '<a href="/collectibles/view/' . $collectible['Collectible']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
+						echo '<div class="image"><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/'. $collectible['Collectible']['slugField'].'"><img src="/img/silhouette_thumb.png"/></a></div>';
 					}
 					if ($endline) {
 						echo '</div>';
