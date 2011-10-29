@@ -31,7 +31,7 @@
 					<ul>
 						<li><?php echo __('The image should be at least 150 x 150 pixels.');?></li>
 						<li><?php echo __('This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it\'s width.');?></li>
-						<li><?php echo __('Please try and use a professional shot photo.');?></li>
+						<li><?php echo __('Please try and use a professionally shot photo.');?></li>
 					</ul>
 			</div>
 		</div>

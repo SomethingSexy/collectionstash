@@ -180,6 +180,7 @@ a:active {
 }
 .collectible.image {
     float: left;
+    width: 150px;
 }
 .collectible.image .image.link {
 	padding-top: 5px;
@@ -850,6 +851,10 @@ a:active {
 }
 #home-components .random-collectibles .inside .component-view {
 	overflow: hidden;
+}
+
+#home-components .random-collectibles .inside .component-view .glimpse {
+	width: 90%;
 }
 
 #home-components .random-collectibles .inside .component-view .collectibles .collectible {
