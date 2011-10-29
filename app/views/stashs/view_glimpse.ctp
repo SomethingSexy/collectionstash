@@ -35,7 +35,7 @@
 						$count += $count + 1;
 					} else {
 						//If not first, check to see if we are on the 5th one or not
-						if ($count % 5 != 0) {
+						if ($count % 4 != 0) {
 							//if we are not, lets increase
 							$count += $count + 1;
 						} else {

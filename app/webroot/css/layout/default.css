@@ -702,7 +702,7 @@ a:active {
 
 .glimpse {
 	float: left;
-	width: 80%;
+	width: 90%;
 }
 .glimpse div.line {
 	width: 100%;
@@ -715,6 +715,9 @@ a:active {
     border-radius: 8px 8px 8px 8px;
     margin: 10px;
     height: 150px;
+    width: 150px;
+    text-align: center;
+    background-color: gray;
 }
 .glimpse div.image a {
 	overflow: hidden;
