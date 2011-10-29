@@ -34,7 +34,7 @@ class Collectible extends AppModel {
 		),
 		'showPrimary' => false,
 	    // 'slugField' => 'theNameOfYourSlugVirtualField',
-	    'replacement' => '_' //the char to implode the words in entry name...
+	    'replacement' => '-' //the char to implode the words in entry name...
 	));
 
 	var $validate = array('name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'), 'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'), 'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'), 'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'), 'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Must be a valid category.'), 'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')), 'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'), 'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), 'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')), 'product_length' => array(
