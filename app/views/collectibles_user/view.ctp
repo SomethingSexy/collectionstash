@@ -19,7 +19,7 @@
 					<?php
 					if (!empty($collectible['Collectible']['Upload'])) {
 					?>
-					<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '100'));?>
+					<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '150', 'height' => '150'));?>
 					<div class="collectible image-fullsize hidden">
 						<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
 					</div>
