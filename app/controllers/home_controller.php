@@ -12,7 +12,7 @@ class HomeController extends AppController {
 		//debug($randomCollectibleIds);
 		
 		//Updated to use modified desc, instead of created so I will get the latest ones added.
-		$randomCollectibles = $this -> Collectible -> find('all', array('limit' => 5, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture'), 'order' => array('Collectible.modified' => 'desc')));
+		$randomCollectibles = $this -> Collectible -> find('all', array('limit' => 5, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture', 'Collectibletype', 'License'), 'order' => array('Collectible.modified' => 'desc')));
 
 		//$randomCollectibles = $this -> Collectible -> find('all', array('contain' => array('Upload', 'Manufacture'), 'conditions' => array('Collectible.id' => $randomCollectibleIds), 'order' => 'RAND()'));
 		debug($randomCollectibles);
