@@ -94,6 +94,15 @@
 </script>
 </head>
 <body>
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) {return;}
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	
 	<div id="container">
 		<div id="header" class="clearfix">
 			<div class="header title">
@@ -178,10 +187,12 @@
 		</div>	
 		<div id="footer">					
 			<div class="logo">
-				<?php echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash'))?>
+				<?php //echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash'))?>
 			</div>
 			<span class="links">
 				<ul>
+					<li><a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a></li>
+					<li><div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-colorscheme="dark"></div></li>
 					<li>&copy; Collection Stash</li>
 					<li>About Us</li>
 					<li>Contact Us</li>
@@ -189,7 +200,6 @@
 					<li>Report a Bug</li>
 					<li>Milestones</li>
 					<li>Request a Feature</li>
-					<li><a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a></li>
 				</ul>
 			</span>
 			
