@@ -111,7 +111,7 @@
 								<label for="scale"> <?php __('Scale')
 									?></label>
 							</div>
-							<?php echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));?>
+							<?php echo $this -> Form -> input('scale_id', array('empty' => true, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">

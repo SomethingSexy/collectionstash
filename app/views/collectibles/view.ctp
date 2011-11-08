@@ -1,7 +1,7 @@
 <?php      
 	if(isset($isLoggedIn) && $isLoggedIn) {
 		echo $this->element('collectible_detail', array(
-			'title' => __('Collectible Details', true),
+			'title' => $collectible['Collectible']['name'],
 			'showStatistics' => true,
 			'showWho' => true,
 			'showEdit' => true,
@@ -19,7 +19,7 @@
 		
 	} else {
 		echo $this->element('collectible_detail', array(
-			'title' => __('Collectible Details', true),
+			'title' => $collectible['Collectible']['name'],
 			'showStatistics' => false,
 			'showWho' => false,
 			'showEdit' => false,

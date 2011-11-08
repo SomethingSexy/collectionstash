@@ -4,5 +4,8 @@ class Series extends AppModel {
 	var $useTable = 'series';
 	var $hasMany = array('Collectible', 'LicensesManufacturesSeries');
 	var $actsAs = array('Tree','Containable');
+	
+	
+
 }
 ?>

@@ -19,6 +19,10 @@ class LicensesController extends AppController {
 			$data['success'] = array('isSuccess' => true);
 			$data['isTimeOut'] = false;
 			$data['data'] = array();
+			/*
+			 * At this point we are changing license data, so we need to reset the series. We will determine if there are
+			 * any series for this license and return a flag so the UI knows it can add a series
+			 */
 			$data['data']['series'] = $series;
 			$this -> set('aLicenseData', $data);
 		} else {

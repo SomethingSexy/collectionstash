@@ -123,7 +123,19 @@
 						</div>
 						<?php  
 						if(!$this -> Session -> check('add.collectible.variant')) {
-							echo $this -> Form -> input('series_id', array('empty' => true, 'div' => false, 'label' => false));
+							if(isset($this->data['Collectible']['series_id'])){
+								echo '<div class="static-field">';
+								echo '<a class="link" id="change-series-link">Change</a>';
+								echo $this -> Form -> hidden('series_id');
+								echo '</div>';									
+							} else {
+								echo '<div class="static-field">';
+								echo '<a class="link" id="change-series-link">Add</a>';
+								echo $this -> Form -> hidden('series_id');
+								echo '</div>';									
+							}	
+								
+
 							
 						} else {
 							echo '<div class="static-field">';
@@ -140,7 +152,7 @@
 							</div>
 							<?php  
 							if(!$this -> Session -> check('add.collectible.variant')) {
-								echo $this -> Form -> input('scale_id', array('div' => false, 'label' => false));
+								echo $this -> Form -> input('scale_id', array('empty' => true, 'div' => false, 'label' => false));
 								
 							} else {
 								echo '<div class="static-field">';
@@ -285,6 +297,28 @@
 		</div>
 	</div>
 </div>
+<div id="edit-series-dialog" class="dialog" title="Series">
+	<div class="component">
+		<div class="inside" >
+			<div class="component-info">
+				<div>
+					<?php __('Select from the series below to change.  Some series might have sub-series you can choose from.') ?>
+				</div>
+			</div>
+			<div class="component-view">
+				<fieldset>
+					<ul id="edit-series-dialog-fields" class="form-fields">
+
+					</ul>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
 <?php if($this -> Session -> check('add.collectible.variant')) { ?>
 <div id="base-collectible" class="dialog">
 	<?php      

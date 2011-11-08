@@ -747,6 +747,7 @@ a:active {
 	clear: none;
 	width: 50%;
 	float: left;
+	font-size: 1.2em;
 }
 #collectible-detail .component-view {
 	overflow: hidden; /* contain floats */
@@ -847,6 +848,10 @@ a:active {
 .dialog .component {
   border: none;
   margin: 0;
+}
+
+.dialog .component .inside .component-view {
+	padding-top: 0;
 }
 
 #home-components .random-collectibles {

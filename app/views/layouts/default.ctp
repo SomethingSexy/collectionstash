@@ -16,7 +16,7 @@
 		$this -> Minify -> css(array('css/layout/default'));	
 		$this -> Minify -> css(array('css/layout/non_msie'));
 		
-		$this -> Minify -> js(array('js/jquery-1.6.4'));
+		$this -> Minify -> js(array('js/jquery-1.7'));
 		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));
 		$this -> Minify -> js(array('js/jquery-plugins'));
 	?>

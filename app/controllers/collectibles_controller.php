@@ -327,6 +327,10 @@ class CollectiblesController extends AppController {
 			$licensesId = key($licenses);
 		}
 		//Now get any series for this license
+		/*
+		 * We will get the list, to determine if there is something for this license.  We will not display the list initially,
+		 * just the series name if they want to change it.  This way we know if a series exists for this collectible. 
+		 */
 		$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $licensesId);
 		debug($series);
 		$this -> set('series', $series);
@@ -788,38 +792,9 @@ class CollectiblesController extends AppController {
 	}
 
 	function search() {
-		//Ok so the core search checks post data, but this is being passed in via get data so hack for now
-		//Should update this if we want to pass multiple paramaters in
-
-		// if (isset($this -> params['url']['q'])) {
-		// $this -> data['Search'] = array();
-		// $this -> data['Search']['search'] = '';
-		// $this -> data['Search']['search'] = $this -> params['url']['q'];
-		// }
-		// if (isset($this -> params['url']['m'])) {
-		// //find all of this license
-		// $this -> data['Search']['Manufacture'] = array();
-		// $this -> data['Search']['Manufacture']['Filter'] = array();
-		// $this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
-		// }
-		// if (isset($this -> params['url']['l'])) {
-		// //find all of this license
-		// $this -> data['Search']['License'] = array();
-		// $this -> data['Search']['License']['Filter'] = array();
-		// $this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
-		// }
-		// if (isset($this -> params['url']['ct'])) {
-		// //find all of this license
-		// $this -> data['Search']['CollectibleType'] = array();
-		// $this -> data['Search']['CollectibleType']['Filter'] = array();
-		// $this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
-		// }
-		// if (isset($this -> params['url']['t'])) {
-		// //find all of this license
-		// $this -> data['Search']['Tag'] = array();
-		// $this -> data['Search']['Tag']['Filter'] = array();
-		// $this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
-		// }
+		/*
+		 * Call the parent method now, that method handles pretty much everything now
+		 */ 
 		$this -> searchCollectible();
 	}
 

@@ -93,26 +93,25 @@ class AppController extends Controller {
 			reset($this -> data['Search']['Manufacture']['Filter']);
 			// make sure array pointer is at first element
 			$firstKey = key($this -> data['Search']['Manufacture']['Filter']);
-			
+
 			$collectibleTypes = $this -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($firstKey);
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-			
+
 			$this -> loadModel('LicensesManufacture');
-			
+
 			$licenses = $this -> LicensesManufacture -> getFullLicensesByManufactureId($firstKey);
 			debug($licenses);
 			$this -> Session -> write('License_Search.filter', $licenses);
-			
+
 		} else {
 			$this -> loadModel('Collectibletype');
 			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-			
+
 			$this -> loadModel('License');
 			$licenses = $this -> License -> getLicenses();
 			$this -> Session -> write('License_Search.filter', $licenses);
 		}
-		
 
 		if (isset($this -> data['Search']['Tag']['Filter'])) {
 			reset($this -> data['Search']['Tag']['Filter']);
@@ -277,8 +276,6 @@ class AppController extends Controller {
 		debug($filters);
 
 		$tagFilters = array();
-		//array_push($tagFilters, array('AND' => array()));
-		//array_push($tagFilters[0]['AND'], array('OR' => array()));
 		$tagFilterSet = false;
 		if (isset($this -> data['Search']['Tag'])) {
 			foreach ($this->data['Search']['Tag']['Filter'] as $key => $value) {
@@ -298,32 +295,11 @@ class AppController extends Controller {
 		 */
 		if ($tagFilterSet) {
 			array_push($filters, $tagFilters);
-			// $this -> Session -> write('Collectibles.tagFilter', true);
-		} else {
-			// $this -> Session -> delete('Collectibles.tagFilter');
-		}
-		debug($filters);
-		// $this -> Session -> write('Collectibles.userSearchFields', $this -> data['Search']);
-		debug($this -> data['Search']);
-		// } else {
-		// //If I did not post a search, grab the data out of the session for the current search
-		// if ($this -> Session -> check('Collectibles.search')) {
-		// $search = $this -> Session -> read('Collectibles.search');
-		// }
-		// if ($this -> Session -> check('Collectibles.filters')) {
-		// $filters = $this -> Session -> read('Collectibles.filters');
-		// }
-		// if ($this -> Session -> check('Collectibles.tagFilter')) {
-		// $tagFilterSet = true;
-		// }
-		// }
 
+		}
 		if (!isset($filters)) {
 			$filters = array();
 		}
-		debug($filters);
-		//Save off my filters, does this make sense here?
-		// $this -> Session -> write('Collectibles.filters', $filters);
 
 		//Some conditions were added
 		if (!is_array($conditions)) {
@@ -335,19 +311,14 @@ class AppController extends Controller {
 			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
 			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
 		}
-		// debug($joins);
+
 		$listSize = Configure::read('Settings.Search.list-size');
-		// debug($listSize);
+
 		array_push($conditions, array('Collectible.state' => '0'));
 		//See if a search was set
 		if (isset($search)) {
-			//This saves off the filters, and the search query for pagination
-			// $this -> Session -> write('Collectibles.search', $search);
 			//Is the search an empty string?
 			if ($search == '') {
-				// debug($conditions);
-				// debug($joins);
-				// debug($filters);
 				$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
@@ -358,9 +329,6 @@ class AppController extends Controller {
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
-				//array_push($conditions, array('Collectible.name LIKE' => '%' . $search . '%'));
-
-				//array_push($conditions, array("MATCH(Collectible.name) AGAINST('{$search}' IN BOOLEAN MODE)"));
 				$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
@@ -369,7 +337,6 @@ class AppController extends Controller {
 		}
 
 		$data = $this -> paginate('Collectible');
-		// debug($data);
 		$this -> set('collectibles', $data);
 	}
 
