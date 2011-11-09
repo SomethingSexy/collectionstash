@@ -23,6 +23,21 @@ class LicensesManufacturesSeries extends AppModel {
 	}
 
 	/**
+	 * This method will return whether or not this LicenseManfuacturer has a series
+	 */
+	public function hasSeries($licenseManufactureId) {
+		$count = $this -> find('count', array('conditions' => array('LicensesManufacturesSeries.licenses_manufacture_id' => $licenseManufactureId), 'contain' => false));
+		debug($count);
+		$hasSeries = false;
+
+		if ($count > 0) {
+			$hasSeries = true;
+		}
+
+		return $hasSeries;
+	}
+
+	/**
 	 *
 	 */
 	public function getSeriesLevels($manufactureId, $licenseId, $seriesId = null) {
@@ -36,8 +51,8 @@ class LicensesManufacturesSeries extends AppModel {
 		$returnData['selected'] = array();
 		/*
 		 * Check to make sure we returned something, or something was found
-		 * 
-		 * 
+		 *
+		 *
 		 * We are returning the level count so it is easier for the front end to
 		 * handle this
 		 */
@@ -51,7 +66,7 @@ class LicensesManufacturesSeries extends AppModel {
 				 * Since we are returning the top layer, set it as series L0
 				 */
 				$returnData['L0'] = $series;
-				
+
 				$returnData['levelCount'] = 1;
 			} else {
 				/*

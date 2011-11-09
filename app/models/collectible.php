@@ -6,35 +6,17 @@ class Collectible extends AppModel {
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
 	var $actsAs = array('Revision', 'ExtendAssociations', 'Containable', 'Sluggable' => array(
-		/**
-		 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
-		 * have to worry about updates and shit...
-		 * 
-		 * The problem is, the slug I want to build for this one has associations i want to bind,
-		 * so I am thinking I set those below like so to grab those associations.  If the first one
-		 * in the arry is not "Model", then do it on the model alias
-		 */
-	    'displayField' => array(
-	    	'field1' => array(
-			 	'Model' => 'Manufacture',
-	    		'Field' => 'title'
-			),	    	
-			'field2' => array(
-	    		'Model' => 'License',
-	    		'Field' => 'name'
-			 ),
-	    	'field3' => array(
-	    		'Model' => 'Collectible',
-	    		'Field' => 'name'
-			 ),
-			'field4' => array(
-	    		'Model' => 'Collectibletype',
-	    		'Field' => 'name'
-			 )
-		),
-		'showPrimary' => false,
-	    // 'slugField' => 'theNameOfYourSlugVirtualField',
-	    'replacement' => '-' //the char to implode the words in entry name...
+	/**
+	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
+	 * have to worry about updates and shit...
+	 *
+	 * The problem is, the slug I want to build for this one has associations i want to bind,
+	 * so I am thinking I set those below like so to grab those associations.  If the first one
+	 * in the arry is not "Model", then do it on the model alias
+	 */
+		'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title'), 'field2' => array('Model' => 'License', 'Field' => 'name'), 'field3' => array('Model' => 'Collectible', 'Field' => 'name'), 'field4' => array('Model' => 'Collectibletype', 'Field' => 'name')), 'showPrimary' => false,
+	// 'slugField' => 'theNameOfYourSlugVirtualField',
+		'replacement' => '-' //the char to implode the words in entry name...
 	));
 
 	var $validate = array('name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'), 'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'), 'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'), 'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'), 'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Must be a valid category.'), 'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')), 'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'), 'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), 'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')), 'product_length' => array(
@@ -78,7 +60,7 @@ class Collectible extends AppModel {
 		}
 		//It always should be but just double check
 		//Trim the white space away from beginning and end, since this is a core search field, keep it clean
-		if(isset($this -> data['Collectible']['name'])){
+		if (isset($this -> data['Collectible']['name'])) {
 			$this -> data['Collectible']['name'] = trim($this -> data['Collectible']['name']);
 		}
 
@@ -180,17 +162,31 @@ class Collectible extends AppModel {
 	 * TODO This will have to get updated when we allow more than one series
 	 */
 	function validateSeriesId($check) {
-		debug($check);
 		//Is not required but if it is entered make sure it is valid
 		if (isset($check['series_id']) && !empty($check['series_id'])) {
-			$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $this -> data['Collectible']['license_id']), 'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id' => $check['series_id'])))));
+			/*
+			 * To validate this we need to get the parent of this series and see if the parent matches in the database
+			 *
+			 * If the getparentnode call, returns nothing, that means we are at the top level already
+			 */
+			$paths = $this -> Series -> getpath($check['series_id']);
 
-			debug($result);
-			if (!empty($result['LicensesManufacturesSeries'])) {
-				return true;
+			if (!empty($paths)) {
+				reset($paths);
+				$parentNode = current($paths);
+				$parentSeriesId = $parentNode['Series']['id'];
+				//Now query to see if this is a valid hierarchy
+				$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $this -> data['Collectible']['license_id']), 'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id' => $parentSeriesId)))));
+
+				if (!empty($result['LicensesManufacturesSeries'])) {
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
+
 		} else {
 			return true;
 
@@ -245,11 +241,11 @@ class Collectible extends AppModel {
 
 		return $collectibles;
 	}
-	
+
 	/**
 	 * This method will return a count of all collectibles that have been approved
 	 */
-	public function getCollectibleCount(){
+	public function getCollectibleCount() {
 		$collectiblesCount = $this -> find('count', array('conditions' => array('Collectible.state' => 0)));
 		return $collectiblesCount;
 	}

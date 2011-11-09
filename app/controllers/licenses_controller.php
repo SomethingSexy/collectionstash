@@ -14,7 +14,7 @@ class LicensesController extends AppController {
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$license = $this -> License -> LicensesManufacture -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['manufacture_id'], 'LicensesManufacture.license_id' => $this -> data['license_id'])));
-			$series = $this -> License -> LicensesManufacture -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
+			$hasSeries = $this -> License -> LicensesManufacture -> LicensesManufacturesSeries -> hasSeries($license['LicensesManufacture']['id']);
 			$data = array();
 			$data['success'] = array('isSuccess' => true);
 			$data['isTimeOut'] = false;
@@ -23,7 +23,7 @@ class LicensesController extends AppController {
 			 * At this point we are changing license data, so we need to reset the series. We will determine if there are
 			 * any series for this license and return a flag so the UI knows it can add a series
 			 */
-			$data['data']['series'] = $series;
+			$data['data']['hasSeries'] = $hasSeries;
 			$this -> set('aLicenseData', $data);
 		} else {
 			$this -> set('aLicenseData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));

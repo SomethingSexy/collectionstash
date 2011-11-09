@@ -69,6 +69,7 @@ class CollectibleEditsController extends AppController {
 
 			//At this point $id should always be set
 			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture')));
+
 			$licenseId = $collectible['Collectible']['license_id'];
 			$collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
 			$seriesId = $collectible['Collectible']['series_id'];
@@ -94,10 +95,26 @@ class CollectibleEditsController extends AppController {
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($collectible['Collectible']['manufacture_id'], $collectibleTypeId);
 		$this -> set('specializedTypes', $specializedTypes);
 
-		//grab series..doesn't matter if the collectible has one set or not, it depends on if the manufacture license allows it
-		//if (isset($seriesId) && !is_null($seriesId)) {
-		$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
-		$this -> set('series', $series);
+		/*
+		 * Ok now lets figure out the series.  If a series is added, lets get the name and then set
+		 * that we have a series for this license.  If we don't have one added, we just need to check to see if a series
+		 * exists for the license and manufacture combo to tell the user that they can add one.
+		 */
+		if (isset($seriesId) && !empty($seriesId)) {
+			$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($seriesId);
+			$this -> data['Collectible']['series_name'] = $seriesPathName;
+			$this -> set('hasSeries', true);
+		} else {
+			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
+			$hasSeries = false;
+			if (count($series) > 0) {
+				$hasSeries = true;
+			} else {
+
+			}
+			$this -> set('hasSeries', $series);
+		}
+
 		//}
 		//grab scales
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
@@ -140,7 +157,9 @@ class CollectibleEditsController extends AppController {
 				$specializedType = $this -> Collectible -> SpecializedType -> find('first', array('conditions' => array('SpecializedType.id' => $collectible['Collectible']['specialized_type_id']), 'fields' => array('SpecializedType.name'), 'contain' => false));
 				$collectible['SpecializedType'] = $specializedType['SpecializedType'];
 			}
-
+			$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
+			$collectible['Series'] = $series['Series'];
+			
 			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 			$collectible['Scale'] = $scale['Scale'];
 

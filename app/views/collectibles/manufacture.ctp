@@ -110,7 +110,7 @@
 						}?>
 						</li>
 						<?php
-							if(empty($series)) {
+							if(empty($hasSeries)) {
 								echo '<li class="hidden">';
 							} else {
 								echo '<li>';
@@ -123,9 +123,9 @@
 						</div>
 						<?php  
 						if(!$this -> Session -> check('add.collectible.variant')) {
-							if(isset($this->data['Collectible']['series_id'])){
+							if(isset($this->data['Collectible']['series_id']) && !empty($this->data['Collectible']['series_id'])){
 								echo '<div class="static-field">';
-								echo '<a class="link" id="change-series-link">Change</a>';
+								echo '<a class="link" id="change-series-link">'.$this->data['Collectible']['series_name'].'</a>';
 								echo $this -> Form -> hidden('series_id');
 								echo '</div>';									
 							} else {
@@ -134,9 +134,6 @@
 								echo $this -> Form -> hidden('series_id');
 								echo '</div>';									
 							}	
-								
-
-							
 						} else {
 							echo '<div class="static-field">';
 							echo $collectible['Series']['name'];

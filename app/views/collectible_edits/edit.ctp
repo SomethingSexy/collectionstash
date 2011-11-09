@@ -94,17 +94,30 @@
 						</li>
 
 						<?php
-						if (empty($series)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
+							if(empty($hasSeries)) {
+								echo '<li class="hidden">';
+							} else {
+								echo '<li>';
+							}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Series')
-								?></label>
+							<label for="">
+								<?php __('Series') ?>
+							</label>
 						</div>
-						<?php echo $this -> Form -> input('series_id', array('empty' => true, 'div' => false, 'label' => false));?>
+						<?php  
+							if(isset($this->data['Collectible']['series_id']) && !empty($this->data['Collectible']['series_id'])){
+								echo '<div class="static-field">';
+								echo '<a class="link" id="change-series-link">'.$this->data['Collectible']['series_name'].'</a>';
+								echo $this -> Form -> hidden('series_id');
+								echo '</div>';									
+							} else {
+								echo '<div class="static-field">';
+								echo '<a class="link" id="change-series-link">Add</a>';
+								echo $this -> Form -> hidden('series_id');
+								echo '</div>';									
+							}	
+						?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -270,6 +283,24 @@
 	});
 
 </script>
+<div id="edit-series-dialog" class="dialog" title="Series">
+	<div class="component">
+		<div class="inside" >
+			<div class="component-info">
+				<div>
+					<?php __('Select from the series below to change.  Some series might have sub-series you can choose from.') ?>
+				</div>
+			</div>
+			<div class="component-view">
+				<fieldset>
+					<ul id="edit-series-dialog-fields" class="form-fields">
+
+					</ul>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="edit-collectibletype-dialog" class="dialog" title="Edit Collectible Type">
 	<div class="component">
 		<div class="inside" >

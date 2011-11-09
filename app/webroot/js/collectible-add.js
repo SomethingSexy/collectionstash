@@ -17,23 +17,13 @@ var collectibleAdd = function() {
 			success : function(data, textStatus, XMLHttpRequest) {
 				var success = data.success.isSuccess;
 
-				if(success) {
-					if(data.data.series.length !== 0) {
-						var output = [];
-						$.each(data.data.series, function(key, value) {
-							output.push('<option value="' + key + '">' + value + '</option>');
-						});
-						//TODO: If the license changes, then basically reset the series...this should return
-						//something to tell us if we have series avaliable to choose from
-						$('#CollectibleSeriesId').find('option').remove().end().append(output.join(''));
-
-						$('#CollectibleSeriesId').parent('li').show();
-						//.append('<option value="whatever">text</option>')
-						//.val('whatever');
-
+				if(success) {	
+					$('#CollectibleSeriesId').val('');			
+					if(data.data.hasSeries) {
+						$('#change-series-link').text('Add');
+						$('#CollectibleSeriesId').parent('.static-field').parent('li').show();
 					} else {
-						$('#CollectibleSeriesId').find('option').remove();
-						$('#CollectibleSeriesId').parent('li').hide();
+						$('#CollectibleSeriesId').parent('.static-field').parent('li').hide();
 					}
 				} else {
 
@@ -284,18 +274,33 @@ var collectibleAdd = function() {
 		 */
 		if($('#seriesLevel' + _currentSeriesLevel + ' option:selected').length != 0 && $('#seriesLevel' + _currentSeriesLevel + ' option:selected').val() !== '-1') {
 			collectibleTypeId = $('#seriesLevel' + _currentSeriesLevel + ' option:selected').val();
-			collectibleText = $('#seriesLevel' + _currentSeriesLevel + ' option:selected').text();
+		
 		} else {
-			$('#seriesLevel' + _currentSeriesLevel + ' option:selected').after('<div class="error-message">Please select a series.</div>');
+			$('#seriesLevel' + _currentSeriesLevel).after('<div class="error-message">Please select a series.</div>');
 			success = false;			
 		}
 
 		if(success) {
 			$('#CollectibleSeriesId').val(collectibleTypeId);
-			$('#change-series-link').text(collectibleText);
+			//Lets build the text so it lists out the entire series
+			var text = '';
+			var i = 0; 
+			for(i;i <= _currentSeriesLevel; i++){
+				text +=  $('#seriesLevel' + i + ' option:selected').text();
+				if(i != _currentSeriesLevel){
+					text += '/';
+				}
+			}
+				
+			$('#change-series-link').text(text);
 		}		
 		
 		return success;
+	}
+	
+	function removeSeries(){
+		$('#CollectibleSeriesId').val('');					
+		$('#change-series-link').text('Add');		
 	}
 
 	function buildSelect(data) {
@@ -310,7 +315,6 @@ var collectibleAdd = function() {
 			var currentLevelList = data.data['L' + i];
 			var output = [];
 			output.push('<option value="-1">Select</option>');
-			//TODO need to wrap this in the LI and setup the label tags appropriately for each level
 			var $select = $('<select></select>').attr('id', 'seriesLevel' + i).data('level', i).on('change',function() {
 				//handleChange(this)
 				handleSeriesSelect(this);
@@ -337,7 +341,7 @@ var collectibleAdd = function() {
 			//html += '<li>' + $li.html() + '</li>';
 		}
 		
-		return $html;
+		return $html.children();
 	}
 
 	/**
@@ -482,9 +486,13 @@ var collectibleAdd = function() {
 							$('#edit-series-dialog').dialog("close");
 						}
 					},
-					Cancel : function() {
+					Remove : function() {
+						removeSeries();
 						$(this).dialog("close");
 
+					},
+					Cancel : function() {
+						$(this).dialog("close");
 					}
 				},
 				close : function(event, ui) {

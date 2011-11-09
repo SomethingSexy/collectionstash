@@ -290,6 +290,10 @@ class CollectiblesController extends AppController {
 		$this -> set(compact('manufacturer'));
 		$this -> set(compact('collectibleType'));
 
+		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($manufacturer['Manufacture']['id']);
+		debug($licenses);
+		$this -> set('licenses', $licenses);
+
 		//If data is empty then this is the first time we are coming here or a refresh or something.
 		if (empty($this -> data)) {
 
@@ -301,39 +305,51 @@ class CollectiblesController extends AppController {
 			}
 			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 			$this -> set(compact('scales'));
+
+			//Now get any series for this license
+			/*
+			 * We will get the list, to determine if there is something for this license.  We will not display the list initially,
+			 * just the series name if they want to change it.  This way we know if a series exists for this collectible.
+			 *
+			 * TODO: At this point, we will also need to know how to draw this if we return
+			 */
+			reset($licenses);
+			$licensesId = key($licenses);
+			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $licensesId);
+			debug($series);
+			$hasSeries = false;
+			if (count($series) > 0) {
+				$hasSeries = true;
+			} else {
+
+			}
+			$this -> set('hasSeries', $series);
 		} else {
 			//If data is not empty, then we submitted and it errored or we are coming back to edit
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-
 				$this -> set('collectible', $variantCollectible);
+			}
+
+			if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
+				$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($this -> data['Collectible']['series_id']);
+				$this -> data['Collectible']['series_name'] = $seriesPathName;
+				$this -> set('hasSeries', true);
+			} else {
+				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $this -> data['Collectible']['license_id']);
+				debug($series);
+				$hasSeries = false;
+				if (count($series) > 0) {
+					$hasSeries = true;
+				} else {
+
+				}
+				$this -> set('hasSeries', $series);
 			}
 		}
 
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
 		$this -> set('specializedTypes', $specializedTypes);
-
-		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($manufacturer['Manufacture']['id']);
-		debug($licenses);
-		$this -> set('licenses', $licenses);
-
-		//Determine where to get the license id from
-		if (isset($wizardData['manufacture']['Collectible']['license_id'])) {
-			$licensesId = $wizardData['manufacture']['Collectible']['license_id'];
-		} else {
-			//Safety - sets pointer to top of array
-			reset($licenses);
-			//Grab the first if the license has not be set already
-			$licensesId = key($licenses);
-		}
-		//Now get any series for this license
-		/*
-		 * We will get the list, to determine if there is something for this license.  We will not display the list initially,
-		 * just the series name if they want to change it.  This way we know if a series exists for this collectible. 
-		 */
-		$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $licensesId);
-		debug($series);
-		$this -> set('series', $series);
 
 		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 
@@ -387,20 +403,6 @@ class CollectiblesController extends AppController {
 		}
 		return false;
 	}
-
-	// function _processVariantFeatures() {
-	// $this -> data = Sanitize::clean($this -> data);
-	// return true;
-	// }
-	//
-	// function _prepareVariantFeatures() {
-	// if ($this -> Session -> check('add.collectible.variant')) {
-	// $variantCollectible = $this -> Session -> read('add.collectible.variant');
-	// debug($variantCollectible);
-	// $this -> set('collectible', $variantCollectible);
-	// }
-	//
-	// }
 
 	function _prepareAttributes() {
 		if (empty($this -> data)) {
@@ -585,18 +587,6 @@ class CollectiblesController extends AppController {
 			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
 		}
 
-		// if ($this -> Session -> check('add.collectible.variant')) {
-		// if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
-		// if (isset($collectible['AttributesCollectible'])) {
-		// $result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
-		// } else {
-		// $result = $wizardData['variantFeatures']['AttributesCollectible'];
-		// }
-		// debug($result);
-		// $collectible['AttributesCollectible'] = $result;
-		// }
-		// }
-
 		if (isset($collectible['AttributesCollectible'])) {
 			foreach ($collectible['AttributesCollectible'] as $key => &$value) {
 				$value['Attribute']['name'] = $value['name'];
@@ -629,12 +619,13 @@ class CollectiblesController extends AppController {
 		}
 
 		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
-		$collectible['License'] = $license['License'];
+		$collectible['License'] = $license['License' ];
 
-		$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
-		$collectible['Series'] = $series['Series'];
+			$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
+			$collectible['Series'] = $series['Series'];
 
-		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
+			$scale = $this -> Collectible -> Scale -> find(
+		'first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
 
 		if (isset($collectible['Collectible']['retailer_id'])) {
@@ -794,7 +785,7 @@ class CollectiblesController extends AppController {
 	function search() {
 		/*
 		 * Call the parent method now, that method handles pretty much everything now
-		 */ 
+		 */
 		$this -> searchCollectible();
 	}
 
