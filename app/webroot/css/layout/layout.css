@@ -1,33 +1,25 @@
-html {
-	height: 100%;
-}
 body {
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 100.1%;
-    letter-spacing:0.01em;
-  /*  margin:17px 0 15px;*/
-    text-rendering:optimizelegibility;
-    background: #656464;
-    height: 100%;
-
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 100.1%;
+	letter-spacing: 0.01em;
+	text-rendering: optimizelegibility;
+	background: #656464;
+	/*height: 100%;*/
 }
 #container {
-    /*-moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.2);*/
-    position:relative;
-    text-align:left;
-    font-size: 100%;
-    overflow: hidden;
+	position: relative;
+	text-align: left;
+	font-size: 100%;
+	overflow: hidden;
 	min-height: 100%;
-	margin:0 auto;
-    width:900px;
-    background:  #656464;
-    padding:0;
+	margin: 0 auto;
+	width: 900px;
+	background: #656464;
+	padding: 0;
 }
-
 #container, #bottom {
-    width:1024px;
+	width: 1024px;
 }
-
 #header {
 	position: relative;
 	margin: 20px 0;
@@ -36,41 +28,35 @@ body {
 #header .header.title {
 	float: left;
 }
-#header .header.title h1{
+#header .header.title h1 {
 	background-color: #656464;
 	color: #CCC;
 	text-indent: 0;
-	
 }
 #header .header.navigation ul.nav {
-	    float: right;
-	
+	float: right;
 }
 #stage {
 	background-color: #FFF;
-    float: left;
-    width: 100%;
-    padding-bottom: 1em;
-    min-height: 600px;
+	float: left;
+	width: 100%;
+	padding-bottom: 1em;
+	min-height: 600px;
 }
-
 #stage .main-navigation {
 	width: 100%;
 	background-color: #FDB924;
 	margin-top: 5px;
 	/*float: left;*/
 }
-
 #stage .main-navigation .inside {
 	overflow: hidden;
 }
-
 #stage .main-navigation .inside .nav {
 	float: left;
 }
-
 #stage .main-navigation .inside .nav li {
-    border-right: solid 1px #FFF;  	
+	border-right: solid 1px #FFF;
 }
 #stage .main-navigation .inside .nav li a {
 	padding: 10px;
@@ -80,191 +66,114 @@ body {
 	line-height: 2;
 }
 #stage .main-navigation .inside .site-search form input#q {
-    background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
-    border: 0 none;
-    color: #9E9FA4;
-    height: 31px;
-    padding: 0 0 0 30px;
-    width: 229px;
+	background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
+	border: 0 none;
+	color: #9E9FA4;
+	height: 31px;
+	padding: 0 0 0 30px;
+	width: 229px;
 }
-
-/*
-#header {
-   /* height: 173px;
-    margin-bottom: 8px;
-   /* overflow: hidden;
-    width: 100%;
-   /* -moz-border-radius: 15px;
-	border-radius: 15px;
-	background-color: #F8F8F8;
-}
-
-#header #header-top {
-    border-bottom: 1px solid #FFFFFF;
-    font-size: 12px;
-    font-weight: bold;
-   /* height: 32px;*
-    background-color: #FDB924;
-}
-
-#header .wrapper {
-    margin: 0 auto;
-   /* overflow: hidden; */
-   /* width: 1000px;*
-}
-#header #header-top .box {
-    float: right;
-   /* margin-top: 6px; */
-   /* overflow: hidden;
-    margin-right: 10px;
-}
-#header #header-top .box li {
-    float: left;
-}
-#header #header-top .box ul {
-    float: left;
-    list-style: none outside none;
-    margin: 0;
-  /*  overflow: hidden;
-    padding: 0;
-}
-#header #header-top .box ul li {
-    /*padding: 0 0 0 5px;
-    line-height: 1.5;
-}
-
-.box ul.nav li.selected a{
-	background-color: #444444;
-}
-
-.box ul.nav li a {
-    color: #000000;
-    text-decoration: none;
-}
-
-
-
-#header #header-bottom {
-  /*  height: 131px;
-}
-#header #header-bottom .logo {
-    float: left;
-    margin: 13px 0 0 13px;
-}
-
-#header #header-bottom ul.nav {
-  /*margin-top: 4em;
-  margin-right: 2em;
-  
-}
-*/
-
 ul.nav {
-    list-style: none;
-    /*  padding: 0 20px;*/
-    margin: 0;
-    /*  width: 920px; */
-    /*  background: #222; */
-    /*  font-size: 1.2em;
-    background: url(topnav_bg.gif) repeat-x;*/
-   /* background: #b60002; */
+	list-style: none;
+	/*  padding: 0 20px;*/
+	margin: 0;
+	/*  width: 920px; */
+	/*  background: #222; */
+	/*  font-size: 1.2em;
+	 background: url(topnav_bg.gif) repeat-x;*/
+	/* background: #b60002; */
 }
 ul.nav li {
-    float: left;
-    margin: 0;
-   /* padding: 0 15px 0 0; */
-    position: relative; /*--Declare X and Y axis base for sub navigation--*/
-
+	float: left;
+	margin: 0;
+	/* padding: 0 15px 0 0; */
+	position: relative; /*--Declare X and Y axis base for sub navigation--*/
 }
 ul.nav li a {
-    padding: 10px 5px;
-   /* color: #fff;*/
-    display: block;
-    text-decoration: none;
-    float: left;
-    color: #fff;  
-   /* border-right: solid 1px #990000;  */
+	padding: 10px 5px;
+	/* color: #fff;*/
+	display: block;
+	text-decoration: none;
+	float: left;
+	color: #fff;
+	/* border-right: solid 1px #990000;  */
 }
 ul.nav li a:hover {
-    /*  background: url(topnav_hover.gif) no-repeat center top; */
-    text-decoration: underline;
+	/*  background: url(topnav_hover.gif) no-repeat center top; */
+	text-decoration: underline;
 }
 ul.nav li span { /*--Drop down trigger styles--*/
-    width: 17px;
-    height: 35px;
-    float: left;
-    background: url(subnav_btn.gif) no-repeat center top;
+	width: 17px;
+	height: 35px;
+	float: left;
+	background: url(subnav_btn.gif) no-repeat center top;
 }
 ul.nav li span.subhover {
-    background-position: center bottom;
-    cursor: pointer;
-} /*--Hover effect for trigger--*/
+	background-position: center bottom;
+	cursor: pointer;
+}/*--Hover effect for trigger--*/
 ul.nav li ul.subnav {
-    list-style: none;
-    position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
-    left: 0;
-    top: 35px;
-    background: #333;
-    margin: 0;
-    padding: 0;
-    display: none;
-    float: left;
-   /* width: 170px; it is on the li, do I need it here?*/
-    border-left: 1px solid #111;
-    border-right: 1px solid #111;
-    border-bottom: 1px solid #111;
-    z-index: 10000;
+	list-style: none;
+	position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
+	left: 0;
+	top: 35px;
+	background: #333;
+	margin: 0;
+	padding: 0;
+	display: none;
+	float: left;
+	/* width: 170px; it is on the li, do I need it here?*/
+	border-left: 1px solid #111;
+	border-right: 1px solid #111;
+	border-bottom: 1px solid #111;
+	z-index: 10000;
 }
 ul.nav li ul.subnav li {
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid #252525; /*--Create bevel effect--*/
-    border-bottom: 1px solid #444; /*--Create bevel effect--*/
-    clear: both;
-    width: 170px;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid #252525; /*--Create bevel effect--*/
+	border-bottom: 1px solid #444; /*--Create bevel effect--*/
+	clear: both;
+	width: 170px;
 }
 html ul.nav li ul.subnav li a {
-    float: left;
-    width: 145px;
-    background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
-    padding-left: 20px;
+	float: left;
+	width: 145px;
+	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
+	padding-left: 20px;
 }
 html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
-    background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
+	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
 }
 #footer {
-    clear: both;
-    padding: 10px 0px 10px 0px;
-    text-align: right;
-    color: #CCCCCC;
-    float: left;
-    width: 100%;
+	clear: both;
+	padding: 10px 0px 10px 0px;
+	text-align: right;
+	color: #CCCCCC;
+	float: left;
+	width: 100%;
 }
 #footer .logo {
 	float: right;
 }
 #footer .version {
-    padding-left: 20px;
-    float: left;
+	padding-left: 20px;
+	float: left;
 }
-
 #footer .links {
-    padding-left: 20px;
-    float: left;
+	padding-left: 20px;
+	float: left;
 }
 #footer .links ul li {
 	font-size: 0.8em;
 	padding: 5px;
 	display: inline-block;
-	 vertical-align:top; 
+	vertical-align: top;
 }
 #footer .copyright {
-    float: right;
-    padding-right: 20px;
+	float: right;
+	padding-right: 20px;
 }
-
-
 .inside {
-    padding: 5px;
-
+	padding: 5px;
 }

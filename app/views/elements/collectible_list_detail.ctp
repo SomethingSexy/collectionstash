@@ -1,3 +1,9 @@
+<?php 
+if(!isset($showStatus)){
+	$showStatus = false;	
+}
+?>
+
 <div class="collectible detail">
 	<dl>
 		<dt>
@@ -48,5 +54,19 @@
 			<?php echo $speciazliedType['name'];?>
 		</dd>
 		<?php } ?>
+		<?php 
+			if($showStatus){
+				echo '<dt>';
+				echo __('Status');
+				echo '</dt>';
+				echo '<dd>';
+				if($collectible['state'] == 0) {
+					echo __('Approved');
+				} else {
+					echo __('Pending Approval');
+				}
+				echo '</dd>';
+			}
+		?>
 	</dl>
 </div>

@@ -194,9 +194,8 @@ a:active {
     float: left;
     margin-left: 10px;
     width: 350px;
-
 	background-color: #FFF;	
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 .collectible.detail .detail.title {
 	
@@ -371,10 +370,6 @@ a:active {
 #collectible-add-component .component-view {
  	overflow: hidden;
 }
-#collectible-add-component .component-view .collectible.item {
-	border-bottom: none;
-	padding: 0;
-}
 #collectible-add-component .inside .component-view .collectible.add {
 	float: left;
 }
@@ -478,7 +473,14 @@ a:active {
 #collectible-add-component .inside .component-view .links form {
 	float: left;	
 }
-
+#collectible-add-component .component-view .links {
+	float: left;
+	width: 100%;
+	margin-top: 10px;
+}
+#collectible-add-component .component-view .links .submit {
+	float: left;
+}
 
 
 
@@ -1008,9 +1010,9 @@ form .required label:after {
     display:inline;
 }
 form div.submit {
-    border: 0;
+    /*border: 0;
     clear: both;
-    margin-top: 10px;
+    margin-top: 10px;*/
 }
 label {
     display: block;

@@ -80,7 +80,7 @@ class WizardComponent extends Object {
 	 * @access public
 	 */
 	var $cancelUrl = '/';
-	
+
 	var $loginRequired = false;
 	/**
 	 * Url to be redirected to after 'Draft' submit button has been pressed by user.
@@ -175,7 +175,7 @@ class WizardComponent extends Object {
 		$this -> config('wizardAction', $this -> wizardAction);
 		$this -> config('steps', $this -> steps);
 
-		if(!in_array('Wizard.Wizard', $this -> controller -> helpers) && !array_key_exists('Wizard.Wizard', $this -> controller -> helpers)) {
+		if (!in_array('Wizard.Wizard', $this -> controller -> helpers) && !array_key_exists('Wizard.Wizard', $this -> controller -> helpers)) {
 			$this -> controller -> helpers[] = 'Wizard.Wizard';
 		}
 	}
@@ -192,21 +192,21 @@ class WizardComponent extends Object {
 		// debug($this->_currentStep);
 		// debug($this->config('expectedStep'));
 		// debug($this -> _getExpectedStep());
-		
-		if($this -> loginRequired && !$loggedIn) {
+
+		if ($this -> loginRequired && !$loggedIn) {
 			$this -> controller -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
-			
+
 		}
 
-		if(isset($this -> controller -> params['form']['Cancel'])) {
-			if(method_exists($this -> controller, '_beforeCancel')) {
+		if (isset($this -> controller -> params['form']['Cancel'])) {
+			if (method_exists($this -> controller, '_beforeCancel')) {
 				$this -> controller -> _beforeCancel($this -> _getExpectedStep());
 			}
 			$this -> reset();
 			$this -> controller -> redirect($this -> cancelUrl);
 		}
-		if(isset($this -> controller -> params['form']['Draft'])) {
-			if(method_exists($this -> controller, '_saveDraft')) {
+		if (isset($this -> controller -> params['form']['Draft'])) {
+			if (method_exists($this -> controller, '_saveDraft')) {
 				$draft = array('_draft' => array('current' => array('step' => $step, 'data' => $this -> controller -> data)));
 				$this -> controller -> _saveDraft(array_merge_recursive((array)$this -> read(), $draft));
 			}
@@ -215,20 +215,20 @@ class WizardComponent extends Object {
 			$this -> controller -> redirect($this -> draftUrl);
 		}
 
-		if(empty($step)) {
-			if($this -> Session -> check('Wizard.complete')) {
-					
-				$completePass = true;	
-				if(method_exists($this -> controller, '_afterComplete')) {
+		if (empty($step)) {
+			if ($this -> Session -> check('Wizard.complete')) {
+
+				$completePass = true;
+				if (method_exists($this -> controller, '_afterComplete')) {
 					$completePass = $this -> controller -> _afterComplete();
 				}
-				if($completePass) {
+				if ($completePass) {
 					$this -> reset();
-					$this -> controller -> redirect($this -> completeUrl);							
+					$this -> controller -> redirect($this -> completeUrl);
 				} else {
 					prev($this -> steps);
 					// debug($this->_currentStep);
-					$this->_setCurrentStep('review');
+					$this -> _setCurrentStep('review');
 					$this -> config('expectedStep', 'review');
 					$this -> Session -> delete("Wizard.Collectibles.review");
 					$this -> Session -> delete("Wizard.complete.review");
@@ -237,40 +237,40 @@ class WizardComponent extends Object {
 					// debug($this->Session->check('Wizard.complete'));
 					$this -> redirect(current($this -> steps));
 				}
-			
+
 			}
 
 			$this -> autoReset = false;
-		} elseif($step == 'reset') {
-			if(!$this -> lockdown) {
+		} elseif ($step == 'reset') {
+			if (!$this -> lockdown) {
 				$this -> reset();
 			}
 		} else {
-			if($this -> _validStep($step)) {
+			if ($this -> _validStep($step)) {
 
 				$this -> _setCurrentStep($step);
-							
-				if(!empty($this -> controller -> data) && !isset($this -> controller -> params['form']['Previous'])) {
+
+				if (!empty($this -> controller -> data) && !isset($this -> controller -> params['form']['Previous'])) {
 					$proceed = false;
 					$processCallback = '_' . Inflector::variable('process_' . $this -> _currentStep);
-					if(method_exists($this -> controller, $processCallback)) {
+					if (method_exists($this -> controller, $processCallback)) {
 						$proceed = $this -> controller -> $processCallback();
-					} elseif($this -> autoValidate) {
+					} elseif ($this -> autoValidate) {
 						$proceed = $this -> _validateData();
 					} else {
 						trigger_error(sprintf(__('Process Callback not found. Please create Controller::%s', true), $processCallback), E_USER_WARNING);
 					}
 
-					if($proceed) {
+					if ($proceed) {
 						$saveCallback = '_' . Inflector::variable('save_' . $this -> _currentStep);
-						if(method_exists($this -> controller, $saveCallback)) {
+						if (method_exists($this -> controller, $saveCallback)) {
 							$this -> controller -> $saveCallback();
 						} else {
 							$this -> save();
-						}						
+						}
 						//If not next exists, then we know we are done and we can go to complete
-						if(next($this -> steps)) {
-							if($this -> autoAdvance) {
+						if (next($this -> steps)) {
+							if ($this -> autoAdvance) {
 								$this -> redirect();
 							}
 							$this -> redirect(current($this -> steps));
@@ -282,25 +282,25 @@ class WizardComponent extends Object {
 							$this -> controller -> redirect($this -> wizardAction);
 						}
 					}
-				} elseif(isset($this -> controller -> params['form']['Previous']) && prev($this -> steps)) {
-					
+				} elseif (isset($this -> controller -> params['form']['Previous']) && prev($this -> steps)) {
+
 					$this -> redirect(current($this -> steps));
-				} elseif($this -> Session -> check("$this->_sessionKey._draft.current")) {
-					
+				} elseif ($this -> Session -> check("$this->_sessionKey._draft.current")) {
+
 					$this -> controller -> data = $this -> read('_draft.current.data');
 					$this -> Session -> delete("$this->_sessionKey._draft.current");
-				} elseif($this -> Session -> check("$this->_sessionKey.$this->_currentStep")) {
+				} elseif ($this -> Session -> check("$this->_sessionKey.$this->_currentStep")) {
 					$this -> controller -> data = $this -> read($this -> _currentStep);
 				}
 
 				$prepareCallback = '_' . Inflector::variable('prepare_' . $this -> _currentStep);
-				if(method_exists($this -> controller, $prepareCallback)) {
+				if (method_exists($this -> controller, $prepareCallback)) {
 					$this -> controller -> $prepareCallback();
 				}
 
 				$this -> config('activeStep', $this -> _currentStep);
 
-				if($this -> nestedViews) {
+				if ($this -> nestedViews) {
 					$this -> controller -> viewPath .= '/' . $this -> wizardAction;
 				}
 
@@ -310,7 +310,7 @@ class WizardComponent extends Object {
 			}
 		}
 
-		if($step != 'reset' && $this -> autoReset) {
+		if ($step != 'reset' && $this -> autoReset) {
 			$this -> reset();
 		}
 
@@ -324,14 +324,14 @@ class WizardComponent extends Object {
 	 * @param boolean $skip Branch will be skipped instead of included if true.
 	 * @access public
 	 */
-	function branch($name, $skip =false) {
+	function branch($name, $skip = false) {
 		$branches = array();
 
-		if($this -> Session -> check($this -> _branchKey)) {
+		if ($this -> Session -> check($this -> _branchKey)) {
 			$branches = $this -> Session -> read($this -> _branchKey);
 		}
 
-		if(isset($branches[$name])) {
+		if (isset($branches[$name])) {
 			unset($branches[$name]);
 		}
 
@@ -350,8 +350,8 @@ class WizardComponent extends Object {
 	 * @return mixed
 	 * @access public
 	 */
-	function config($name, $value =null) {
-		if($value == null) {
+	function config($name, $value = null) {
+		if ($value == null) {
 			return $this -> Session -> read("$this->_configKey.$name");
 		}
 		$this -> Session -> write("$this->_configKey.$name", $value);
@@ -365,7 +365,7 @@ class WizardComponent extends Object {
 	 * @access public
 	 */
 	function loadDraft($draft = array()) {
-		if(!empty($draft['_draft']['current']['step'])) {
+		if (!empty($draft['_draft']['current']['step'])) {
 			$this -> restore($draft);
 			$this -> redirect($draft['_draft']['current']['step']);
 		}
@@ -379,8 +379,8 @@ class WizardComponent extends Object {
 	 * @return mixed The value of the session variable
 	 * @access public
 	 */
-	function read($key =null) {
-		if($key == null) {
+	function read($key = null) {
+		if ($key == null) {
 			return $this -> Session -> read($this -> _sessionKey);
 		} else {
 			$wizardData = $this -> Session -> read("$this->_sessionKey.$key");
@@ -397,8 +397,8 @@ class WizardComponent extends Object {
 	 * @see Controller::redirect()
 	 * @access public
 	 */
-	function redirect($step =null, $status =null, $exit =true) {
-		if($step == null) {
+	function redirect($step = null, $status = null, $exit = true) {
+		if ($step == null) {
 			$step = $this -> _getExpectedStep();
 		}
 		$url = array('controller' => Inflector::underscore($this -> controller -> name), 'action' => $this -> wizardAction, $step);
@@ -424,8 +424,8 @@ class WizardComponent extends Object {
 		$this -> Session -> delete($this -> _branchKey);
 		$this -> Session -> delete($this -> _sessionKey);
 	}
-	
-	function resetBranch(){
+
+	function resetBranch() {
 		$this -> Session -> delete($this -> _branchKey);
 	}
 
@@ -448,11 +448,11 @@ class WizardComponent extends Object {
 	 *
 	 * @access public
 	 */
-	function save($step =null, $data =null) {
-		if(is_null($step)) {
+	function save($step = null, $data = null) {
+		if (is_null($step)) {
 			$step = $this -> _currentStep;
 		}
-		if(is_null($data)) {
+		if (is_null($data)) {
 			$data = $this -> controller -> data;
 		}
 		$this -> Session -> write("$this->_sessionKey.$step", $data);
@@ -475,11 +475,11 @@ class WizardComponent extends Object {
 	 * @access protected
 	 */
 	function _getExpectedStep() {
-		foreach($this->steps as $step) {
+		foreach ($this->steps as $step) {
 			// debug($step);
 			// debug($this->_sessionKey);
 			// debug($this -> Session -> check("$this->_sessionKey.$step"));
-			if(!$this -> Session -> check("$this->_sessionKey.$step")) {
+			if (!$this -> Session -> check("$this->_sessionKey.$step")) {
 				$this -> config('expectedStep', $step);
 				return $step;
 			}
@@ -494,7 +494,7 @@ class WizardComponent extends Object {
 	 * @access protected
 	 */
 	function _branchType($branch) {
-		if($this -> Session -> check("$this->_branchKey.$branch")) {
+		if ($this -> Session -> check("$this->_branchKey.$branch")) {
 			return $this -> Session -> read("$this->_branchKey.$branch");
 		}
 		return false;
@@ -511,22 +511,22 @@ class WizardComponent extends Object {
 	function _parseSteps($steps) {
 		$parsed = array();
 
-		foreach($steps as $key => $name) {
-			if(is_array($name)) {
-				foreach($name as $branchName => $step) {
+		foreach ($steps as $key => $name) {
+			if (is_array($name)) {
+				foreach ($name as $branchName => $step) {
 					$branchType = $this -> _branchType($branchName);
 
-					if($branchType) {
-						if($branchType !== 'skip') {
+					if ($branchType) {
+						if ($branchType !== 'skip') {
 							$branch = $branchName;
 						}
-					} elseif(empty($branch) && $this -> defaultBranch) {
+					} elseif (empty($branch) && $this -> defaultBranch) {
 						$branch = $branchName;
 					}
 				}
 
-				if(!empty($branch)) {
-					if(is_array($name[$branch])) {
+				if (!empty($branch)) {
+					if (is_array($name[$branch])) {
 						$parsed = array_merge($parsed, $this -> _parseSteps($name[$branch]));
 					} else {
 						$parsed[] = $name[$branch];
@@ -548,7 +548,7 @@ class WizardComponent extends Object {
 	function _setCurrentStep($step) {
 		$this -> _currentStep = reset($this -> steps);
 
-		while(current($this -> steps) != $step) {
+		while (current($this -> steps) != $step) {
 			$this -> _currentStep = next($this -> steps);
 		}
 		// debug($this->_currentStep);
@@ -565,11 +565,11 @@ class WizardComponent extends Object {
 	function _validateData() {
 		$controller = &$this -> controller;
 
-		foreach($controller->data as $model => $data) {
-			if(in_array($model, $controller -> uses)) {
+		foreach ($controller->data as $model => $data) {
+			if (in_array($model, $controller -> uses)) {
 				$controller -> {$model} -> set($data);
 
-				if(!$controller -> {$model} -> validates()) {
+				if (!$controller -> {$model} -> validates()) {
 					return false;
 				}
 			}
@@ -590,9 +590,9 @@ class WizardComponent extends Object {
 		// debug($step);
 		// debug($this -> steps);
 		// debug($this -> _getExpectedStep());
-		if(in_array($step, $this -> steps)) {
+		if (in_array($step, $this -> steps)) {
 			// debug($this -> lockdown);
-			if($this -> lockdown) {
+			if ($this -> lockdown) {
 				// debug(array_search($step, $this -> steps) == array_search($this -> _getExpectedStep(), $this -> steps));
 				return (array_search($step, $this -> steps) == array_search($this -> _getExpectedStep(), $this -> steps));
 			}

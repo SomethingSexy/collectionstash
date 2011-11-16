@@ -13,7 +13,7 @@ class CollectiblesController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 		// $this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'tags', 'image', 'review');
-		$this -> Wizard -> steps = array('manufacture', 'attributes', 'tags', 'image', 'review');
+		$this -> Wizard -> steps = array('manufacture', array('similar' => 'similarCollectibles'), 'attributes', 'tags', 'image', 'review');
 		$this -> Wizard -> completeUrl = '/collectibles/confirm';
 		$this -> Wizard -> loginRequired = true;
 	}
@@ -34,15 +34,8 @@ class CollectiblesController extends AppController {
 
 			if ($this -> data['Collectible']['massProduced'] === 'true') {
 				$this -> redirect(array('action' => 'massProduced'));
-
-				//$this -> Wizard -> branch('variant', true);
-				//$this -> redirect( array('action' => 'wizard/manufacture'));
 			} else if ($this -> data['Collectible']['massProduced'] == 'false') {
 				$this -> redirect(array('action' => 'nonMassProduced'));
-				//$this -> Wizard -> branch('variant');
-				//$this -> Session -> write('add.collectible.mode.variant', true);
-
-				//$this -> redirect( array('action' => 'addVariantSelectCollectible', 'initial' => 'yes'));
 			} else {
 				$this -> Session -> setFlash(__('Please select Yes or No.', true), null, null, 'error');
 			}
@@ -382,10 +375,31 @@ class CollectiblesController extends AppController {
 			$newCollectible = $this -> data;
 			//set default to true
 			$validCollectible = true;
-
+			$similarCollectibles = $this -> Collectible -> doesCollectibleExist($newCollectible);
 			//First try and validate the collectible.
 			$this -> Collectible -> set($newCollectible);
 			if ($this -> Collectible -> validates()) {
+				/*
+				 * OK at this point we need to test to see if this collectible has been added already
+				 * We could reuse the collectible search logic but I think this should be a model call
+				 * so that that business logic stays in the model
+				 *
+				 * Check
+				 * 		if (UPC) OR (Manufacturer AND Product Code) OR (Manufacturer AND License AND CollectibleType AND LIKE Name)
+				 *
+				 * 		Notes: For the last one, I will not check a series or a manufacturer specialized type, incase they left it off
+				 * 		Should only be required fields for that one.
+				 *
+				 *
+				 */
+				$similarCollectibles = $this -> Collectible -> doesCollectibleExist($newCollectible);
+				if (!empty($similarCollectibles)) {
+					$this -> Session -> write('add.collectible.similar', $similarCollectibles);
+					$this -> Wizard -> branch('similar');
+				} else {
+					$this -> Session -> delete('add.collectible.similar');
+					$this -> Wizard -> branch('similar', true);
+				}
 
 			} else {
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -402,6 +416,16 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 		}
 		return false;
+	}
+
+	function _prepareSimilarCollectibles() {
+		$similarCollectibles = $this -> Session -> read('add.collectible.similar');
+
+		$this -> set(compact('similarCollectibles'));
+	}
+
+	function _processSimilarCollectibles() {
+
 	}
 
 	function _prepareAttributes() {
@@ -523,8 +547,6 @@ class CollectiblesController extends AppController {
 				if (isset($wizardData['image']['Upload']) && !empty($uploadId)) {
 					$imageId = $uploadId;
 					if ($this -> Collectible -> Upload -> delete($imageId)) {
-						//unset($collectible['Upload']);
-						//$this -> Session -> write('preSaveCollectible', $collectible);
 						$this -> Session -> delete('Wizard.Collectibles.image');
 						return false;
 					} else {
@@ -558,14 +580,12 @@ class CollectiblesController extends AppController {
 						return false;
 					}
 				} else {
-					$collectible = $this -> Session -> read('preSaveCollectible');
-					$this -> set(compact('collectible'));
+
 				}
 
 			}
 		} else {
-			$collectible = $this -> Session -> read('preSaveCollectible');
-			$this -> set(compact('collectible'));
+
 		}
 
 		return false;
@@ -619,13 +639,12 @@ class CollectiblesController extends AppController {
 		}
 
 		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
-		$collectible['License'] = $license['License' ];
+		$collectible['License'] = $license['License'];
 
-			$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
-			$collectible['Series'] = $series['Series'];
+		$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
+		$collectible['Series'] = $series['Series'];
 
-			$scale = $this -> Collectible -> Scale -> find(
-		'first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
+		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
 
 		if (isset($collectible['Collectible']['retailer_id'])) {
@@ -735,11 +754,11 @@ class CollectiblesController extends AppController {
 			}
 
 			$this -> Session -> write('addCollectibleId', $id);
-			$this -> Session -> delete('preSaveCollectible');
 			$this -> Session -> delete('uploadId');
 			$this -> Session -> delete('add.collectible.manufacture');
 			$this -> Session -> delete('add.collectible.collectibleType');
 			$this -> Session -> delete('add.collectible.variant');
+			$this -> Session -> delete('add.collectible.similar');
 			return true;
 		} else {
 			$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -776,7 +795,6 @@ class CollectiblesController extends AppController {
 		//} else {
 		//	$this->log('Failed to remove file: ' . $upload['Upload']['name'] . ' linked to id '. $uploadId);
 		//}
-		$this -> Session -> delete('preSaveCollectible');
 		$this -> Session -> delete('uploadId');
 		$this -> redirect(array('action' => 'addSelectType'));
 
@@ -1021,21 +1039,23 @@ class CollectiblesController extends AppController {
 	}
 
 	private function resetCollectibleAdd() {
-		$this -> Session -> delete('preSaveCollectible');
 		$this -> Session -> delete('uploadId');
 		$this -> Session -> delete('add.collectible.manufacture');
 		$this -> Session -> delete('add.collectible.collectibleType');
 		$this -> Session -> delete('add.collectible.variant');
+		$this -> Session -> delete('add.collectible.similar');
+		$this -> Session -> delete('addCollectibleId');
+		$this -> Session -> delete('add.collectible.similar');
 
 		//TODO I shouldn't need these
-		$this -> Session -> delete('add.collectible.mode.collectible');
-		$this -> Session -> delete('add.collectible.mode.variant');
-		$this -> Session -> delete('edit.collectible.mode.collectible');
-		$this -> Session -> delete('edit.collectible.mode.variant');
-		$this -> Session -> delete('variant.add-id');
-		$this -> Session -> delete('variant.base-collectible');
-		$this -> Session -> delete('add.collectible.variant.collectible');
-		$this -> Session -> delete('addCollectibleId');
+		// $this -> Session -> delete('add.collectible.mode.collectible');
+		// $this -> Session -> delete('add.collectible.mode.variant');
+		// $this -> Session -> delete('edit.collectible.mode.collectible');
+		//$this -> Session -> delete('edit.collectible.mode.variant');
+		// $this -> Session -> delete('variant.add-id');
+		// $this -> Session -> delete('variant.base-collectible');
+		// $this -> Session -> delete('add.collectible.variant.collectible');
+
 		$this -> Wizard -> resetWizard();
 	}
 
