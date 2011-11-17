@@ -9,7 +9,7 @@ class User extends AppModel {
 	function beforeValidate() {
 		$valid = true;
 		if (!$this -> id) {
-			if ($this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username']))) > 0) {
+			if (isset($this -> data['User']['username']) && $this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username']))) > 0) {
 				$this -> invalidate('username_unique');
 				$valid = false;
 			}
@@ -25,6 +25,9 @@ class User extends AppModel {
 
 	var $validate = array('username' => array('validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
 
+	/**
+	 * This validates to make sure the new and confirm password are the same
+	 */
 	function validateSamePassword() {
 		$valid = true;
 		if (strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
@@ -34,6 +37,9 @@ class User extends AppModel {
 		return $valid;
 	}
 
+	/**
+	 * This validates to make sure that the password follows our rules
+	 */
 	function validatePasswordChars() {
 		$valid = true;
 		if (!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
@@ -43,6 +49,25 @@ class User extends AppModel {
 		}
 
 		return $valid;
+	}
+
+	/**
+	 * This method returns true or false if the given email address
+	 * is a valid user's email address
+	 */
+	public function isValidUserEmail($user) {
+		if ($this -> find('count', array('conditions' => array('User.email' => $user['User']['email']))) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will return the User Model given a email address.
+	 */
+	public function getUserByEmail($user) {
+		return $this -> find("first", array('conditions' => array('User.email' => $user['User']['email']), 'contain' => false));
 	}
 
 	public function getUser($username) {
@@ -89,17 +114,6 @@ class User extends AppModel {
 
 		return $joinRecords;
 	}
-
-	// /**
-	 // * This function will return all of the collectibles that this
-	 // * user submited.  It will return them whether they have been accepted
-	 // * or not
-	 // */
-	// public function getCollectiblesHistory($userId) {
-		// $results = $this -> CollectiblesUser -> Collectible -> find("all", array('conditions' => array('Collectible.user_id' => $userId), 'contain' => false));
-// 		
-		// return $results;
-	// }
 
 	/**
 	 * Creates an activation hash for the current user.

@@ -6,7 +6,10 @@
   	</div>
   	<?php echo $this->element('flash'); ?>
     <div class="component-info">
-      <div>Welcome to Collection Stash, please log in.</div> 
+      <div>
+      	<p><?php echo __('Welcome to Collection Stash, please log in.');?></p>
+      	<p><?php echo $html -> link('Forgot Password?', array('admin'=> false, 'action' => 'forgotPassword', 'controller' => 'forgotten_requests'));?></p>
+      </div> 
     </div>
     <div class="component-view">
       <?php echo $form->create('User', array('action' => 'login')); ?>
