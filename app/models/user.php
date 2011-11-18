@@ -62,12 +62,28 @@ class User extends AppModel {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * This method will return the User Model given a email address.
 	 */
 	public function getUserByEmail($user) {
 		return $this -> find("first", array('conditions' => array('User.email' => $user['User']['email']), 'contain' => false));
+	}
+
+	/**
+	 * This method will change the users password given the standard 'new_passowrd' and 'confirm_password', right
+	 * now this method assumes you have validated the data.  Returns true if the update was successful
+	 */
+	public function changePassword($user) {
+		//Let's has the password first
+		$user['User']['password'] = Security::hash($user['User']['new_password']);
+		$this -> id = $user['User']['id'];
+		if ($this -> saveField('password', $user['User']['password'], false)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	public function getUser($username) {

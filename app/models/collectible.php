@@ -265,36 +265,34 @@ class Collectible extends AppModel {
 			/**
 			 * To Handle an OR situation it needs to be organized like so
 			 * array('OR'=>array(blah=>blah,blah=>blah),id=>blah,id=>blah)
-			 * 
+			 *
 			 * Anything inside of an array inside of an OR will automatically be AND for you
 			 */
 			//First check to see if we have a UPC
 			if (isset($collectible['Collectible']['upc']) && !empty($collectible['Collectible']['upc'])) {
-				$upcConditions = array();
 				array_push($orConditions, array('Collectible.upc' => $collectible['Collectible']['upc']));
-				//array_push($conditions, $upcConditions);
 			}
 
 			//If we have a product code lets check against that too
 			if (isset($collectible['Collectible']['code']) && !empty($collectible['Collectible']['code'])) {
-				$codeConditions = array();
 				array_push($orConditions, array('Collectible.code' => $collectible['Collectible']['code'], 'Collectible.manufacture_id' => $collectible['Collectible']['manufacture_id']));
-				//array_push($conditions, $codeConditions);
 			}
 
 			//Always add this last one:
 			//(Manufacturer AND License AND CollectibleType AND LIKE Name
-			$nameConditions = array();
 			array_push($orConditions, array('Collectible.manufacture_id' => $collectible['Collectible']['manufacture_id'], 'Collectible.license_id' => $collectible['Collectible']['license_id'], 'Collectible.collectibletype_id' => $collectible['Collectible']['collectibletype_id'], 'Collectible.name LIKE' => '%' . $collectible['Collectible']['name'] . '%'));
-			array_push($conditions, array('OR'=>$orConditions));
+			//Now add all these to an OR
+			array_push($conditions, array('OR' => $orConditions));
+			/*
+			 * Check to see if this is a variant, if it is variant then lets only return
+			 * collectibles that they are the same variant of
+			 */
+			if (isset($collectible['Collectible']['variant']) && $collectible['Collectible']['variant']) {
+				array_push($conditions, array('AND' => array('Collectible.variant_collectible_id' => $collectible['Collectible']['variant_collectible_id'])));
+			}
 			debug($conditions);
 
 			$returnList = $this -> find("all", array("conditions" => array($conditions), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload')));
-			// $returnList = $this -> find("all", array("conditions" => array(
-				// 'OR' => array( 
-					// array('Collectible.manufacture_id' => $collectible['Collectible']['manufacture_id'], 'Collectible.license_id' => $collectible['Collectible']['license_id'], 'Collectible.collectibletype_id' => $collectible['Collectible']['collectibletype_id'], 'Collectible.name LIKE' => '%' . $collectible['Collectible']['name'] . '%'), 
-					// 'Collectible.upc' => $collectible['Collectible']['upc'])
-				// ), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload')));
 		}
 
 		return $returnList;

@@ -27,7 +27,13 @@ class ForgottenRequestsController extends AppController {
 				if ($this -> ForgottenRequest -> saveAll($forgottenModel)) {
 					//If it is successful, well then lets shoot off an email
 					$forgottenId = $this -> ForgottenRequest -> id;
-					$this -> __sendForgottenEmail($forgottenUser, $forgottenId);
+					if($this -> __sendForgottenEmail($forgottenUser, $forgottenId)){
+						// $this -> Session -> setFlash(__('An email as been sent with instructions on how to reset your password.', true), null, null, 'success');
+						$this -> render('forgotPasswordComplete');
+					} else {
+						
+					}
+					
 				} else {
 
 				}

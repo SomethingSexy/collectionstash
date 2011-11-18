@@ -227,6 +227,59 @@ class UsersController extends AppController {
 	}
 
 	/**
+	 * This method is called when a user recieved a link to reset their password
+	 */
+	function resetPassword($id = null) {
+		if (!is_null($id)) {
+			$this -> loadModel('ForgottenRequest');
+			$forgottenRequest = $this -> ForgottenRequest -> find("first", array('conditions' => array('ForgottenRequest.id' => $id)));
+			if (!empty($forgottenRequest)) {
+				$createdDate = $forgottenRequest['ForgottenRequest']['created'];
+				/**
+				 * Check to make sure that the created date is less than 24 hours, this is to
+				 * make sure we do not have stale requests out there.
+				 */
+				if (time() <= strtotime($createdDate) + 86400) {
+					/*
+					 * Checking here now to see if something was submitted, I think to stay as secure
+					 * as possible we will need to go through this process everytime
+					 */
+					if (!empty($this -> data)) {
+						$this -> User -> set($this -> data);
+						/*
+						 * Validate JUST the new_password and the confirm_password
+						 */
+						if ($this -> User -> validates(array('fieldList' => array('new_password', 'confirm_password')))) {
+							$this -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
+							if($this -> User -> changePassword($this->data)){
+								$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
+								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');	
+								$this -> redirect('login');
+							}
+						} else {
+							$this -> data['User']['password'] = '';
+							$this -> data['User']['new_password'] = '';
+							$this -> data['User']['confirm_password'] = '';
+							$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+						}
+					}
+				} else {
+					//If it is expired, lets delete cause it is not needed out there
+					$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
+					$this -> Session -> setFlash(__('The key to reset your password as expired, please resubmit the request.', true), null, null, 'error');
+					$this -> redirect(array('controller' => 'forgotten_requests', 'action' => 'forgotPassword'));
+				}
+			} else {
+				$this -> Session -> setFlash(__('Your request to reset your password was not found, if you need to reset your password select the link below.', true), null, null, 'error');
+				$this -> redirect('login');
+			}
+		} else {
+			$this -> Session -> setFlash(__('Invalid request to reset your password.', true), null, null, 'error');
+			$this -> redirect('login');
+		}
+	}
+
+	/**
 	 * Send out an activation email to the user.id specified by $user_id
 	 *  @param Int $user_id User to send activation email to
 	 *  @return Boolean indicates success

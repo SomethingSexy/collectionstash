@@ -375,7 +375,6 @@ class CollectiblesController extends AppController {
 			$newCollectible = $this -> data;
 			//set default to true
 			$validCollectible = true;
-			$similarCollectibles = $this -> Collectible -> doesCollectibleExist($newCollectible);
 			//First try and validate the collectible.
 			$this -> Collectible -> set($newCollectible);
 			if ($this -> Collectible -> validates()) {
@@ -400,7 +399,6 @@ class CollectiblesController extends AppController {
 					$this -> Session -> delete('add.collectible.similar');
 					$this -> Wizard -> branch('similar', true);
 				}
-
 			} else {
 				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 				$validCollectible = false;
@@ -420,12 +418,11 @@ class CollectiblesController extends AppController {
 
 	function _prepareSimilarCollectibles() {
 		$similarCollectibles = $this -> Session -> read('add.collectible.similar');
-
 		$this -> set(compact('similarCollectibles'));
 	}
 
 	function _processSimilarCollectibles() {
-
+		return true;
 	}
 
 	function _prepareAttributes() {
@@ -765,6 +762,18 @@ class CollectiblesController extends AppController {
 			return false;
 		}
 	}
+	/**
+	 * This is called when cancelling during the contribute process
+	 */
+	function cancel() {
+		//If there is an upload, delete it
+		$uploadId = $this -> Session -> read('uploadId');
+		$upload = $this -> Collectible -> Upload -> findById($uploadId);
+		$this -> Collectible -> Upload -> delete($uploadId);
+		//reset and then redirect
+		$this -> resetCollectibleAdd();
+		$this -> redirect(array('action' => 'addSelectType'));
+	}
 
 	function view($id = null) {
 		if (!$id) {
@@ -784,20 +793,6 @@ class CollectiblesController extends AppController {
 		} else {
 			$this -> render('viewMissing');
 		}
-	}
-
-	function cancel() {
-		$uploadId = $this -> Session -> read('uploadId');
-
-		$upload = $this -> Collectible -> Upload -> findById($uploadId);
-		//if($this -> FileUpload -> removeFile($upload['Upload']['name'])) {
-		$this -> Collectible -> Upload -> delete($uploadId);
-		//} else {
-		//	$this->log('Failed to remove file: ' . $upload['Upload']['name'] . ' linked to id '. $uploadId);
-		//}
-		$this -> Session -> delete('uploadId');
-		$this -> redirect(array('action' => 'addSelectType'));
-
 	}
 
 	function search() {

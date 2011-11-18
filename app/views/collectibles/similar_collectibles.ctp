@@ -49,8 +49,9 @@
 				<?php echo $this->Form->create(null, array('url'=> $this->here));?>
 					<input type="hidden" name="data[addAnyway]"	value="true" />
 				<?php echo $this->Form->end(array('label'=>__('Submit Anyway!', true), 'value'=> __('Submit Anyway!', true), 'name'=>'submit'));?>
+				<?php echo $this->Form->create(null, array('url'=>'/collectibles/wizard/manufacture'));?>
+				<?php echo $this->Form->end(array('label'=>__('Edit', true), 'value'=> __('Cancel', true), 'name'=>'submit'));?>
 				<?php echo $this->Form->create(null, array('url'=>'/collectibles/cancel'));?>
-				
 				<?php echo $this->Form->end(array('label'=>__('Cancel', true), 'value'=> __('Cancel', true), 'name'=>'submit'));?>
 				
 			</div>			

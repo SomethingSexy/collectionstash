@@ -1,7 +1,7 @@
 <?php echo $this -> Html -> script('jquery.autocomplete.js', array('inline' => false));?>
 <?php echo $this -> Html -> script('tags', array('inline' => false));?>
 <div id="bread-crumbs">
-	<?php echo $this -> Wizard -> progressMenu(array('manufacture' => 'Manufacturer Details', 'variantFeatures' => 'Variant Features', 'attributes' => 'Accessories/Features', 'tags'=> 'Tags', 'image' => 'Image', 'review' => 'Review'));?>
+	<?php echo $this -> Wizard -> progressMenu(array('manufacture' => 'Manufacturer Details', 'attributes' => 'Accessories/Features', 'tags'=> 'Tags', 'image' => 'Image', 'review' => 'Review'));?>
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">

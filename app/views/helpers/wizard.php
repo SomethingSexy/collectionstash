@@ -23,12 +23,12 @@ class WizardHelper extends AppHelper {
 	 * @param string $key optional key to retrieve the existing value
 	 * @return mixed data at config key (if key is passed)
 	 */
-	function config($key =null) {
-		if($key == null) {
+	function config($key = null) {
+		if ($key == null) {
 			return $this -> Session -> read('Wizard.config');
 		} else {
 			$wizardData = $this -> Session -> read('Wizard.config.' . $key);
-			if(!empty($wizardData)) {
+			if (!empty($wizardData)) {
 				return $wizardData;
 			} else {
 				return null;
@@ -46,8 +46,8 @@ class WizardHelper extends AppHelper {
 	 * @param string $escapeTitle
 	 * @return string link to a specific step
 	 */
-	function link($title, $step =null, $htmlAttributes = array(), $confirmMessage =false, $escapeTitle =true) {
-		if($step == null) {
+	function link($title, $step = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+		if ($step == null) {
 			$step = $title;
 		}
 		$wizardAction = $this -> config('wizardAction');
@@ -62,14 +62,14 @@ class WizardHelper extends AppHelper {
 	 * @param string $shiftIndex optional offset of returned array index. Default 1
 	 * @return string step number. Returns false if not found
 	 */
-	function stepNumber($step =null, $shiftIndex =1) {
-		if($step == null) {
+	function stepNumber($step = null, $shiftIndex = 1) {
+		if ($step == null) {
 			$step = $this -> config('activeStep');
 		}
 
 		$steps = $this -> config('steps');
 
-		if(in_array($step, $steps)) {
+		if (in_array($step, $steps)) {
 			return array_search($step, $steps) + $shiftIndex;
 		} else {
 			return false;
@@ -86,31 +86,34 @@ class WizardHelper extends AppHelper {
 	 * @param string $escapeTitle
 	 * @return string
 	 */
-	function progressMenu($titles = array(), $attributes = array(), $htmlAttributes = array(), $confirmMessage =false, $escapeTitle =true) {
+	function progressMenu($titles = array(), $attributes = array(), $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
 		$wizardConfig = $this -> config();
 		extract($wizardConfig);
 
-		$attributes = array_merge( array('wrap' => 'div'), $attributes);
+		$attributes = array_merge(array('wrap' => 'div'), $attributes);
 		extract($attributes);
 
 		$incomplete = null;
 
-		foreach($steps as $title => $step) {
-			$title = empty($titles[$step]) ? $step : $titles[$step];
-			if(!$incomplete) {
-				if($step == $expectedStep) {
-					$incomplete = true;
-					$class = 'expected';
+		foreach ($steps as $title => $step) {
+			$title = empty($titles[$step]) ? null : $titles[$step];
+			if (!is_null($title)) {
+				if (!$incomplete) {
+					if ($step == $expectedStep) {
+						$incomplete = true;
+						$class = 'expected';
+					} else {
+						$class = 'complete';
+					}
+					if ($step == $activeStep) {
+						$class .= ' active';
+					}
+					$this -> output .= "<$wrap class='$class'>" . $this -> Html -> link($title, array('action' => $wizardAction, $step), $htmlAttributes, $confirmMessage, $escapeTitle) . "</$wrap>";
 				} else {
-					$class = 'complete';
+					$this -> output .= "<$wrap class='incomplete'>" . $title . "</$wrap>";
 				}
-				if($step == $activeStep) {
-					$class .= ' active';
-				}
-				$this -> output .= "<$wrap class='$class'>" . $this -> Html -> link($title, array('action' => $wizardAction, $step), $htmlAttributes, $confirmMessage, $escapeTitle) . "</$wrap>";
-			} else {
-				$this -> output .= "<$wrap class='incomplete'>" . $title . "</$wrap>";
 			}
+
 		}
 
 		return $this -> output;
