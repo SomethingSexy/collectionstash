@@ -1,0 +1,26 @@
+TC1:
+http://www.dccomics.com/dcdirect/?dc...ew&cat=STATUES
+
+Manufacturer: DC Direct
+License: DC Comics
+Type: Statue
+Series Level 1: Cover Girls of DC
+
+TC2:
+http://www.dccomics.com/dcdirect/?dc...ew&cat=STATUES
+
+Manufacturer: DC Direct
+License: DC Comics
+Type: Bust
+Series Level 1: WOMEN OF THE DC UNIVERSE
+Series Level 2: SERIES 3
+
+TC3:
+http://www.dccomics.com/dcdirect/?dc...ACTION+FIGURES
+
+Manufacturer: DC Direct
+License: DC Comics
+Type: Action Figure
+Series Level 1: JUSTICE LEAGUE
+Series Level 2: HEROES & FOES
+Series Level 3: SERIES 1

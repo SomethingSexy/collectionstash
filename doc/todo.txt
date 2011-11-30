@@ -1,0 +1,57 @@
+Approval compare, rework for associated model changing - ie, collectibletype_id
+
+Pagination->search from a tag/collectibletype is broken
+
+
+
+the confirm page for contribute doesn't have all the same information as review
+
+Need to make sure all views are consistent -> scale
+
+
+
+Think about adding an approval table back in -> go in later
+
+Registry -> just make simple for now
+
+Exclusive - retailer? How about Exlcuisve by? Comic Con, Celebration IV -> Go in later
+
+Collectible Approve Edit -> This is done for collectible, need to add for upload
+
+
+When add image fails, it looks goofy
+
+make sure that tags are not added with commas
+
+Tag editing needs to happen
+
+There is a weird thing going on with ' and amp encoding for textbox
+
+ampersand encoding and url too
+
+
+
+Create a list of names you cannot register
+
+
+
+attributes -> clothing -> cloak
+attributes -> clothing -> boots
+
+
+
+
+Think about making attribute description not required
+
+Image upload error message size not coming through
+
+
+git://github.com/cakephp/cakephp.git
+
+
+/var/www/collectionstash/cake
+
+282
+
+
+

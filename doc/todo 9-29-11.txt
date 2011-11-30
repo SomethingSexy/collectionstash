@@ -1,0 +1,11 @@
+Variants can have variants?
+
+URL on Collectible view - not sure how I want to display this yet
+
+Large image link
+
+Clean up the tag page
+
+Finish the collectible history
+- should it move to the collectible controller?
+- Add arrows to the links for asc and dsc

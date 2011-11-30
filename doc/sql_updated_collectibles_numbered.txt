@@ -1,0 +1,3 @@
+UPDATE `collectibles`
+SET numbered = '1'
+WHERE edition_size IS NOT NULL AND edition_size != '0'  
