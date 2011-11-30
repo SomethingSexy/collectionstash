@@ -461,8 +461,10 @@ var collectibleAdd = function() {
 			$('#CollectibleLimited').change(function() {
 				if($(this).is(':checked')) {
 					$('#CollectibleEditionSize').parent('li').show();
+					$('#CollectibleNumbered').parent('li').show();
 				} else {
 					$('#CollectibleEditionSize').val('').parent('li').hide();
+					$('#CollectibleNumbered').removeAttr('checked').parent('li').hide();
 				}
 			});
 			$('#CollectibleMsrp').blur(function() {

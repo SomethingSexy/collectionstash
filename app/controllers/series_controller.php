@@ -47,13 +47,12 @@ class SeriesController extends AppController {
 		}
 	}
 
-	// function add() {
+ // function add() {
 	//
-	// $data['Series']['parent_id'] = 30;
-	// $data['Series']['name'] = 'Series 1';
+	// $data['Series']['parent_id'] = '30';
+	// $data['Series']['name'] = 'Blackest Night';
 	// $this -> Series -> save($data);
 	// $this -> render(false);
 	// }
-
 }
 ?>

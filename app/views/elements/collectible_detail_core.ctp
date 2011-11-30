@@ -118,6 +118,8 @@ if (!isset($adminMode)) {
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'edition_size'), __('Edition Size', true), array('compare' => $showCompareFields));
 
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'numbered'), __('Numbered', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_weight'), __('Weight', true), array('compare' => $showCompareFields, 'postValue' => ' lbs'));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'product_length'), __('Height', true), array('compare' => $showCompareFields, 'postValue' => '"'));

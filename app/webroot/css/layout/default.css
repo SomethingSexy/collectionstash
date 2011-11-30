@@ -1710,6 +1710,25 @@ div.paging span a {
 #registry-component .inside .component-view .standard-list.edition-size ul li span.edition-size {
 	width: 50%;	
 }
+
+/***********************************
+ * User List component
+ */
+#user-list-component .inside .component-view .standard-list {
+	width: 100%;
+}
+#user-list-component .inside .component-view .standard-list ul li span {
+	float: left;
+	font-size: 0.75em;	
+}
+#user-list-component .inside .component-view .standard-list ul li span {
+	width: 32%;	
+	text-align: center;
+}
+#user-list-component .inside .component-view .standard-list ul li span.username {
+	text-align: left;
+}
+
 /***************************************
  * Search filters
  */

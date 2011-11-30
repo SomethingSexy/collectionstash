@@ -2,7 +2,7 @@
 <?php if($this -> Session -> check('edit.collectible.mode.variant')) {
 ?>
 <?php
-	echo $this -> element('collectible_detail', array('title' => __('Base Collectible Details', true), 'showStatistics' => false, 'showWho' => false, 'collectibleDetail' => $collectible));
+echo $this -> element('collectible_detail', array('title' => __('Base Collectible Details', true), 'showStatistics' => false, 'showWho' => false, 'collectibleDetail' => $collectible));
 ?>
 <?php }?>
 <div class="component" id="collectible-add-component">
@@ -34,39 +34,39 @@
 									?></label>
 							</div>
 							<?php
-								echo '<div class="static-field">';
-								echo $manufacturer['Manufacture']['title'];
-								echo $this -> Form -> hidden('manufacture_id');
-								echo '</div>';	
+							echo '<div class="static-field">';
+							echo $manufacturer['Manufacture']['title'];
+							echo $this -> Form -> hidden('manufacture_id');
+							echo '</div>';
 							?>
 						</li>
-						<?php echo '<li>'; ?>
+						<?php echo '<li>';?>
 						<div class="label-wrapper">
 							<label for=""> <?php __('Collectible Type')
 								?></label>
 						</div>
-						<?php  
-							//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
-							//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
-							//page that determine which one is selected to put in teh input field...
-							//OR
-							//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
-							//logic will be similar.  
-							//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
-							//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
-						
-							//echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
-							echo '<div class="static-field">';
-							echo '<a class="link" id="change-collectibletype-link">'.$collectibleType['Collectibletype']['name'].'</a>';
-							echo $this -> Form -> hidden('collectibletype_id');
-							echo '</div>';	
+						<?php
+						//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
+						//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
+						//page that determine which one is selected to put in teh input field...
+						//OR
+						//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
+						//logic will be similar.
+						//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
+						//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
+
+						//echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
+						echo '<div class="static-field">';
+						echo '<a class="link" id="change-collectibletype-link">' . $collectibleType['Collectibletype']['name'] . '</a>';
+						echo $this -> Form -> hidden('collectibletype_id');
+						echo '</div>';
 						?>
 						</li>
 						<?php
-						if(!isset($specializedTypes)){
-							$specializedTypes = array();	
+						if (!isset($specializedTypes)) {
+							$specializedTypes = array();
 						}
-						
+
 						if (empty($specializedTypes)) {
 							echo '<li class="hidden">';
 						} else {
@@ -94,29 +94,28 @@
 						</li>
 
 						<?php
-							if(empty($hasSeries)) {
-								echo '<li class="hidden">';
-							} else {
-								echo '<li>';
-							}
+						if (empty($hasSeries)) {
+							echo '<li class="hidden">';
+						} else {
+							echo '<li>';
+						}
 						?>
 						<div class="label-wrapper">
-							<label for="">
-								<?php __('Series') ?>
-							</label>
+							<label for=""> <?php __('Series')
+								?></label>
 						</div>
-						<?php  
-							if(isset($this->data['Collectible']['series_id']) && !empty($this->data['Collectible']['series_id'])){
-								echo '<div class="static-field">';
-								echo '<a class="link" id="change-series-link">'.$this->data['Collectible']['series_name'].'</a>';
-								echo $this -> Form -> hidden('series_id');
-								echo '</div>';									
-							} else {
-								echo '<div class="static-field">';
-								echo '<a class="link" id="change-series-link">Add</a>';
-								echo $this -> Form -> hidden('series_id');
-								echo '</div>';									
-							}	
+						<?php
+						if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
+							echo '<div class="static-field">';
+							echo '<a class="link" id="change-series-link">' . $this -> data['Collectible']['series_name'] . '</a>';
+							echo $this -> Form -> hidden('series_id');
+							echo '</div>';
+						} else {
+							echo '<div class="static-field">';
+							echo '<a class="link" id="change-series-link">Add</a>';
+							echo $this -> Form -> hidden('series_id');
+							echo '</div>';
+						}
 						?>
 						</li>
 						<li>
@@ -131,17 +130,18 @@
 								<label for="scale"> <?php __('Release Year')
 									?></label>
 							</div>
-							<?php 
-							    $current_year = date('Y');
-    							$max_year = $current_year + 2;
-								echo $this -> Form -> year('release', 1900, $max_year, true);?>
+							<?php
+							$current_year = date('Y');
+							$max_year = $current_year + 2;
+							echo $this -> Form -> year('release', 1900, $max_year, true);
+							?>
 						</li>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleName"> <?php __('Name')
 									?></label>
 							</div>
-							<?php echo $this -> Form -> input('name', array('escape' => false,'div' => false, 'label' => false));?>
+							<?php echo $this -> Form -> input('name', array('escape' => false, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -167,7 +167,7 @@
 								<label for="CollectibleUrl"> <?php __('URL')
 									?></label>
 							</div>
-							<?php echo $this -> Form -> input('url', array('escape' => false, 'div' => false, 'label' => false, 'escape'=>false));?>
+							<?php echo $this -> Form -> input('url', array('escape' => false, 'div' => false, 'label' => false, 'escape' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -177,11 +177,11 @@
 							<?php echo $this -> Form -> input('limited', array('div' => false, 'label' => false));?>
 						</li>
 						<?php
-							if ($this -> data['Collectible']['limited']) {
-								echo '<li>';
-							} else {
-								echo '<li class="hidden">';
-							}
+						if ($this -> data['Collectible']['limited']) {
+							echo '<li>';
+						} else {
+							echo '<li class="hidden">';
+						}
 						?>
 						<div class="label-wrapper">
 							<label for="CollectibleEditionSize"> <?php __('Edition Size')
@@ -190,19 +190,31 @@
 						</div>
 						<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
+						<?php
+							if ($this -> data['Collectible']['limited']) {
+								echo '<li>';
+							} else {
+								echo '<li class="hidden">';
+							}
+						?>
+						<div class="label-wrapper">
+							<label for="CollectibleNumbered"> <?php __('Numbered')
+								?></label>
+							<a class="ui-icon ui-icon-info" title="<?php echo __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) ?>" alt="info"></a>
+						</div>
+						<?php echo $this -> Form -> input('numbered', array('div' => false, 'label' => false));?>
+						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleExclusive">
-									<?php __('Exclusive') ?>
-								</label>
+								<label for="CollectibleExclusive"> <?php __('Exclusive')
+									?></label>
 							</div>
 							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
-						</li>	
+						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="">
-									<?php __('Exclusive Retailer') ?>
-								</label>
+								<label for=""> <?php __('Exclusive Retailer')
+									?></label>
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
 						</li>
@@ -253,8 +265,8 @@
 					</ul>
 				</fieldset>
 				<?php echo $this -> Form -> end();?>
-				<?php echo $this -> Form -> create('Collectible', array('url' => '/admin/collectibles/view/'.$currentCollectibleId, 'id' => 'skip-manufacture-form'));?>
-					<input type="hidden" name="data[skip]" value="true" />
+				<?php echo $this -> Form -> create('Collectible', array('url' => '/admin/collectibles/view/' . $currentCollectibleId, 'id' => 'skip-manufacture-form'));?>
+				<input type="hidden" name="data[skip]" value="true" />
 				</form>
 				<div class="links">
 					<input type="button" id="edit-manufacture-button" class="button" value="Submit">
@@ -288,14 +300,13 @@
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Select from the series below to change.  Some series might have sub-series you can choose from.') ?>
+					<?php __('Select from the series below to change.  Some series might have sub-series you can choose from.')
+					?>
 				</div>
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-series-dialog-fields" class="form-fields">
-
-					</ul>
+					<ul id="edit-series-dialog-fields" class="form-fields"></ul>
 				</fieldset>
 			</div>
 		</div>
@@ -306,14 +317,13 @@
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Select from the types below to change.  Some types might have sub-types you can choose from.') ?>
+					<?php __('Select from the types below to change.  Some types might have sub-types you can choose from.')
+					?>
 				</div>
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-collectibletype-dialog-fields" class="form-fields">
-
-					</ul>
+					<ul id="edit-collectibletype-dialog-fields" class="form-fields"></ul>
 				</fieldset>
 			</div>
 		</div>

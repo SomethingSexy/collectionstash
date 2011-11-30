@@ -219,6 +219,19 @@
 							</div>
 							<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
+						<?php if($this->data['Collectible']['limited']) { 
+							echo '<li>';
+						} else { 
+							echo '<li class="hidden">';
+						 } ?>
+							<div class="label-wrapper">
+								<label for="CollectibleNumbered">
+									<?php __('Numbered') ?>
+								</label>
+								<a class="ui-icon ui-icon-info" title="<?php echo __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) ?>" alt="info"></a>
+							</div>
+							<?php echo $this -> Form -> input('numbered', array('div' => false, 'label' => false));?>
+						</li>
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleExclusive">

@@ -19,17 +19,42 @@ class Collectible extends AppModel {
 		'replacement' => '-' //the char to implode the words in entry name...
 	));
 
-	var $validate = array('name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'), 'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'), 'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'), 'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'), 'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Must be a valid category.'), 'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')), 'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'), 'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), 'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')), 'product_length' => array(
+	var $validate = array(
+	//name field
+		'name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
+	//manufacture field
+		'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
+	//collectible type field
+		'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
+	//license filed
+		'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'),
+	//series field
+		'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Must be a valid category.'),
+	//description field
+		'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
+	//msrp
+		'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
+	//edition_size
+		'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'),
+	//upc
+		'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
+	//product code
+		'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
 	//This should be decmial or blank
-		'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid height.'), 'product_width' => array('validValues' => array(
+		'product_length' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid height.'),
 	//This should be decmial or blank
-		'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid width.'), ), 'product_depth' => array('validValues' => array(
+		'product_width' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid width.'), ),
 	//This should be decmial or blank
-		'rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ), 'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'));
+		'product_depth' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ),
+	//url
+		'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
+	//numbered
+		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'));
 
 	function beforeSave() {
 		debug($this -> data);
 		//Update Edition Size stuff
+		//This just makes sure that if limited is not set, we clear out the edition size
 		if (isset($this -> data['Collectible']['limited'])) {
 			$limited = $this -> data['Collectible']['limited'];
 			if (isset($this -> data['Collectible']['edition_size'])) {
@@ -96,6 +121,15 @@ class Collectible extends AppModel {
 		}
 	}
 
+	function validateNumbered($check) {
+		debug($this -> data['Collectible']['limited'] === '1');
+		if (isset($check['numbered']) && $check['numbered'] === '1' && isset($this -> data['Collectible']['limited']) && $this -> data['Collectible']['limited'] === '1' && empty($this -> data['Collectible']['edition_size'])) {
+			return false;
+		}
+
+		return true;
+	}
+
 	function validateEditionSize($check) {
 		$isValid = false;
 		$isInt = false;
@@ -103,18 +137,14 @@ class Collectible extends AppModel {
 
 		//If it is unknown leave empty, which will eventually be a zero.
 		if ($editionSize == '') {
-			debug($test = 'empty');
 			return true;
 		}
 
 		// First check if it's a numeric value as either a string or number
 		if (is_numeric($editionSize) === TRUE) {
-			debug($test = 'isnumeric');
 			// It's a number, but it has to be an integer
 			if ((int)$editionSize == $editionSize) {
-				debug($test = 'isint');
 				if ($editionSize > 0) {
-					debug($test = 'isgreaterthanzero');
 					return TRUE;
 				}
 				// return $isInt;
@@ -122,11 +152,6 @@ class Collectible extends AppModel {
 			}
 			// Not a number
 		}
-		// else if ( (strcasecmp($editionSize, "TBD") == 0) || (strcasecmp($editionSize, "None") == 0) )
-		// {
-		// debug($test='istbdnone');
-		// return TRUE;
-		// }
 
 		return false;
 	}

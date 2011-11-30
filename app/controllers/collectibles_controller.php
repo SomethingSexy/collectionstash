@@ -344,7 +344,7 @@ class CollectiblesController extends AppController {
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
 		$this -> set('specializedTypes', $specializedTypes);
 
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'),'order'=> array('Scale.scale' => 'ASC')));
 
 		$this -> set(compact('scales'));
 
@@ -1041,15 +1041,6 @@ class CollectiblesController extends AppController {
 		$this -> Session -> delete('add.collectible.similar');
 		$this -> Session -> delete('addCollectibleId');
 		$this -> Session -> delete('add.collectible.similar');
-
-		//TODO I shouldn't need these
-		// $this -> Session -> delete('add.collectible.mode.collectible');
-		// $this -> Session -> delete('add.collectible.mode.variant');
-		// $this -> Session -> delete('edit.collectible.mode.collectible');
-		//$this -> Session -> delete('edit.collectible.mode.variant');
-		// $this -> Session -> delete('variant.add-id');
-		// $this -> Session -> delete('variant.base-collectible');
-		// $this -> Session -> delete('add.collectible.variant.collectible');
 
 		$this -> Wizard -> resetWizard();
 	}

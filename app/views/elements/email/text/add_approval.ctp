@@ -1,5 +1,5 @@
 
-<?php echo $username ?>, we have approved the following collectible you submitted a change to.
+<?php echo $username ?>, we have approved the following collectible you submitted.  
 
 <?php echo $collectibleName ?>
 

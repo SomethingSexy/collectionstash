@@ -6,6 +6,17 @@ class UsersController extends AppController {
 	var $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	var $components = array('Email');
+	
+	/**
+	 * This is the main index into this controller, it will display a list of users.
+	 */
+	function index() {
+		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => ASC), 'limit' => 50);
+
+		$users = $this -> paginate('User');
+
+		$this -> set(compact('users'));
+	}
 
 	function login() {
 		$message = null;
@@ -71,35 +82,35 @@ class UsersController extends AppController {
 		$this -> redirect('/', null, true);
 	}
 
-	function account($view = null) {
-		$username = $this -> getUsername();
-		$user = $this -> getUser();
-		if ($user) {
-			//Grab the number of collectibles for this user
-			$stashCount = $this -> User -> getNumberOfStashesByUser($username);
-			$stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
-			$this -> set('stashCount', $stashCount);
-			$this -> set('stashDetails', $stashDetails);
-			//Grab the number of pending submissions.
-
-			$this -> loadModel('Collectible');
-			$submissionCount = $this -> Collectible -> getPendingCollectiblesByUserId($user['User']['id']);
-			$this -> set('submissionCount', $submissionCount);
-
-			$this -> paginate = array('conditions' => array('id' => $stashDetails[0]['Stash']['id']), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'License', 'Collectibletype', 'Upload'))));
-
-			$collectibleCount = $this -> User -> Stash -> getNumberOfCollectiblesInStash($stashDetails[0]['Stash']['id']);
-			$this -> set('collectibleCount', $collectibleCount);
-			$data = $this -> paginate('Stash');
-			$this -> set('myCollectibles', $data);
-			debug($data);
-
-			$this -> set('myCollection', true);
-			//$this->set('collectibles',$data);
-		} else {
-			$this -> redirect(array('action' => 'login'), null, true);
-		}
-	}
+	// function account($view = null) {
+	// $username = $this -> getUsername();
+	// $user = $this -> getUser();
+	// if ($user) {
+	// //Grab the number of collectibles for this user
+	// $stashCount = $this -> User -> getNumberOfStashesByUser($username);
+	// $stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
+	// $this -> set('stashCount', $stashCount);
+	// $this -> set('stashDetails', $stashDetails);
+	// //Grab the number of pending submissions.
+	//
+	// $this -> loadModel('Collectible');
+	// $submissionCount = $this -> Collectible -> getPendingCollectiblesByUserId($user['User']['id']);
+	// $this -> set('submissionCount', $submissionCount);
+	//
+	// $this -> paginate = array('conditions' => array('id' => $stashDetails[0]['Stash']['id']), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'License', 'Collectibletype', 'Upload'))));
+	//
+	// $collectibleCount = $this -> User -> Stash -> getNumberOfCollectiblesInStash($stashDetails[0]['Stash']['id']);
+	// $this -> set('collectibleCount', $collectibleCount);
+	// $data = $this -> paginate('Stash');
+	// $this -> set('myCollectibles', $data);
+	// debug($data);
+	//
+	// $this -> set('myCollection', true);
+	// //$this->set('collectibles',$data);
+	// } else {
+	// $this -> redirect(array('action' => 'login'), null, true);
+	// }
+	// }
 
 	/**
 	 * Need to update this so that if the config is invites-only, then we have to check the email address to make
@@ -251,9 +262,9 @@ class UsersController extends AppController {
 						 */
 						if ($this -> User -> validates(array('fieldList' => array('new_password', 'confirm_password')))) {
 							$this -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
-							if($this -> User -> changePassword($this->data)){
+							if ($this -> User -> changePassword($this -> data)) {
 								$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
-								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');	
+								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');
 								$this -> redirect('login');
 							}
 						} else {

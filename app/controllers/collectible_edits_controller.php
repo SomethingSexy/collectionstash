@@ -117,7 +117,7 @@ class CollectibleEditsController extends AppController {
 
 		//}
 		//grab scales
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'),'order'=> array('Scale.scale' => 'ASC')));
 		$this -> set(compact('scales'));
 		//grabs retailers
 		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
