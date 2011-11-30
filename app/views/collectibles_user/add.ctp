@@ -15,7 +15,7 @@
 	        <ul class="form-fields">
           	<?php 
           		$editionSize = $collectible['Collectible']['edition_size'];
-				if($collectible['Collectible']['showUserEditionSize'])
+				if($collectible['Collectible']['numbered'])
 				{ ?>
 	            <li>
 	              <div class="label-wrapper">
