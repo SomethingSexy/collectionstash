@@ -178,7 +178,7 @@
 						</ul>
 						<div class="site-search">
 							<form method="get" action="/collectibles/search">
-								<input id="q" type="text" name="q" value="Find By Name">
+								<input id="q" type="text" name="q" value="Find a Collectible">
 							</form>								
 						</div>
 					</div>

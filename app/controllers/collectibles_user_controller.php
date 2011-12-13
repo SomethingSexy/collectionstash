@@ -164,12 +164,12 @@ class CollectiblesUserController extends AppController {
 	public function registry($id = null) {
 		$this -> checkLogIn();
 		if (!is_null($id) && is_numeric($id)) {
-			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions'=>array('Collectible.id'=>$id), 'contain'=> false));
-			if(!empty($collectible)){
+			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
+			if (!empty($collectible)) {
 				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id, $collectible['Collectible']['numbered']);
 				debug($usersWho);
 				$this -> set('showEditionSize', $collectible['Collectible']['numbered']);
-				$this -> set('registry', $usersWho);				
+				$this -> set('registry', $usersWho);
 			} else {
 				$this -> redirect("/", null, true);
 			}

@@ -1820,6 +1820,48 @@ div.paging span a {
 }
 
 #filters .filter .filter-list ol li a {
-     color: #0055A4;
+    color: #0055A4;
     text-decoration: none;
+}
+/***************************************
+ * User Uploads Component
+ */
+#user-uploads-component .inside .component-view .images .image {
+	width: 100px;
+	padding: 20px;
+	float: left;
+	margin: 1px;
+}
+#user-uploads-component .inside .component-view .images .image.image-loader {
+	text-align: center;	
+}
+
+.upload-component {
+	text-align: right;
+    width: 100%;
+}
+
+.upload-component form {
+    background: -moz-linear-gradient(center top , #FFFFFF, #EDEDED) repeat scroll 0 0 transparent;
+    border: 1px solid #D2D2D2;
+    /*border-radius: 2em 2em 2em 2em;*/
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    padding: 3px 5px;
+}
+.upload-component form label {
+	display: inline-block;
+}
+.upload-component form input {
+    font: 12px/100%;
+}
+
+.upload-component form .add-button {
+    background: -moz-linear-gradient(center top , #9E9E9E, #454545) repeat scroll 0 0 transparent;
+    border: 1px solid #494949;
+    /*border-radius: 2em 2em 2em 2em;*/
+    color: #FFFFFF;
+    font-size: 11px;
+    height: 27px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }

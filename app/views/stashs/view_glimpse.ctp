@@ -21,6 +21,18 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
+			
+				 <?php
+				if (isset($userUploads) && !empty($userUploads)) {
+					echo '<div id="gallery">';
+					foreach ($userUploads as $key => $userUpload) {
+						echo $fileUpload -> image($userUpload['name'], array('title'=>$userUpload['title'], 'alt'=>$userUpload['description'],'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id']));
+						
+					}
+					echo '</div>';
+				}
+				?>
+			
 			<?php
 			if (isset($collectibles) && !empty($collectibles)) {
 				echo '<div class="glimpse">';
@@ -56,8 +68,9 @@
 					}
 					if (!empty($myCollectible['Collectible']['Upload'])) {
 						echo '<div class="image">';
-						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 150, 'height'=> 150)) . '</a>';
+						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 150, 'height' => 150)) . '</a>';
 						echo '</div>';
+						//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 					} else {
 						echo '<div class="image"><a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
 					}
@@ -83,3 +96,14 @@
 		</div>
 	</div>
 </div>
+<?php echo $this -> Html -> script('galleria-1.2.5', array('inline' => false));?>
+<script>
+	Galleria.loadTheme('/js/galleria.classic.js');
+	$("#gallery").galleria({
+		width : 700,
+		height : 500,
+		lightbox : true,
+
+	});
+
+</script>

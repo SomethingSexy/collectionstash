@@ -262,7 +262,8 @@ class StashsController extends AppController {
 			}
 
 			$userId = Sanitize::clean($userId, array('encode' => false));
-			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash')));
+			//Also retrieve the UserUploads at this point, so we do not have to do it later
+			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUploads')));
 			debug($user);
 			//Ok we have a user, although this seems kind of inefficent but it works for now
 			if (!empty($user)) {
@@ -281,6 +282,7 @@ class StashsController extends AppController {
 
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
 						debug($collectibles);
+						$this -> set('userUploads', $user['UserUploads']);
 						$this -> set(compact('collectibles'));
 					} else {
 						$this -> render('viewPrivate');

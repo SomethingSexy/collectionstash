@@ -38,6 +38,13 @@ $config['Settings'] = Set::merge(ife(empty($config['Settings']), array(), $confi
 		'host' => 'smtpout.secureserver.net',
 		'port' => '25',
 		'timeout' => '30'
+	),
+	'User' => array(
+		'uploads' => array(
+			'allowed' => true,
+			'root-folder' => 'user_uploads',
+			'total-allowed' => 50
+		)
 	)
 ));
 
