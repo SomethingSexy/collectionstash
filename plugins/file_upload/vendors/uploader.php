@@ -86,6 +86,36 @@ class Uploader {
 		debug($fileName);
 		return $fileName;
 	}
+	
+	/**
+	 * Preform requested callbacks on the upload director
+	 *
+	 * @var string chosen upload directory
+	 * @return string of resulting upload directory
+	 * @access private
+	 */
+	function __handleUploadDirCallback($uploadDirectory) {
+		if ($this -> options['uploadDirFunction']) {
+			if ($this -> options['fileModel']) {
+				$Model = ClassRegistry::init($this -> options['fileModel']);
+				if (method_exists($Model, $this -> options['uploadDirFunction'])) {
+					$uploadDirectory = $Model -> {$this->options['uploadDirFunction']}($uploadDirectory);
+				} elseif (function_exists($this -> options['uploadDirFunction'])) {
+					$uploadDirectory = call_user_func($this -> options['uploadDirFunction'], $uploadDirectory);
+				}
+			} else {
+				if (function_exists($this -> options['uploadDirFunction'])) {
+					$uploadDirectory = call_user_func($this -> options['uploadDirFunction'], $uploadDirectory);
+				}
+			}
+
+			if (!$uploadDirectory) {
+				$this -> _error('No filename resulting after parsing. Function: ' . $this -> options['uploadDirFunction']);
+			}
+		}
+		debug($uploadDirectory);
+		return $uploadDirectory;
+	}
 
 	/**
 	 * Preform requested target patch checks depending on the unique setting
@@ -128,7 +158,6 @@ class Uploader {
 	 */
 	function processFile($file = null) {
 		$this -> setFile($file);
-
 		//check if we have a file and if we allow the type, return false otherwise.
 		if (!$this -> checkFile() || !$this -> checkType() || !$this -> checkSize()) {
 			return false;
@@ -136,6 +165,16 @@ class Uploader {
 
 		//make sure the file doesn't already exist, if it does, add an itteration to it
 		$up_dir = $this -> options['uploadDir'];
+		$up_dir = $this -> __handleUploadDirCallback($up_dir);
+		debug($up_dir);
+		if(!is_dir($up_dir)){
+			mkdir($up_dir, 0777, true);
+		}
+		
+		if(!is_dir($up_dir . DS . 'resized')){
+			mkdir($up_dir . DS . 'resized', 0777, true);
+		}
+		
 		debug($this -> file['name']);
 		//Check for any updates with the file name from a call back
 		$fileName = $this -> __handleFileNameCallback($this -> file['name']);
