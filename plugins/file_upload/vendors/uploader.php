@@ -86,7 +86,7 @@ class Uploader {
 		debug($fileName);
 		return $fileName;
 	}
-	
+
 	/**
 	 * Preform requested callbacks on the upload director
 	 *
@@ -128,8 +128,8 @@ class Uploader {
 		if ($this -> options['unique']) {
 			//If it is set to make unique, now we are create a UUID to make this file unique
 			debug($fileName);
-			
-			if($this -> options['randomFileName']) {
+
+			if ($this -> options['randomFileName']) {
 				$fileName = String::uuid() . $this -> _ext();
 				debug($fileName);
 			} else {
@@ -138,9 +138,9 @@ class Uploader {
 				// //temp path without the ext
 				// $i = 1;
 				// while (file_exists($target_path)) {
-					// $target_path = $temp_path . "-" . $i . $this -> _ext();
-					// $i++;
-				// }				
+				// $target_path = $temp_path . "-" . $i . $this -> _ext();
+				// $i++;
+				// }
 			}
 
 		}
@@ -167,14 +167,14 @@ class Uploader {
 		$up_dir = $this -> options['uploadDir'];
 		$up_dir = $this -> __handleUploadDirCallback($up_dir);
 		debug($up_dir);
-		if(!is_dir($up_dir)){
+		if (!is_dir($up_dir)) {
 			mkdir($up_dir, 0777, true);
 		}
-		
-		if(!is_dir($up_dir . DS . 'resized')){
+
+		if (!is_dir($up_dir . DS . 'resized')) {
 			mkdir($up_dir . DS . 'resized', 0777, true);
 		}
-		
+
 		debug($this -> file['name']);
 		//Check for any updates with the file name from a call back
 		$fileName = $this -> __handleFileNameCallback($this -> file['name']);
@@ -361,10 +361,19 @@ class Uploader {
 		}
 
 		$up_dir = $this -> options['uploadDir'];
+		$up_dir = $this -> __handleUploadDirCallback($up_dir);
 		$target_path = $up_dir . DS . $name;
 
 		//delete main image -- $name
 		if (@unlink($target_path)) {
+			//If we delete the main image, find any resized and delete
+			$tempName = substr($name, 0, strrpos($name, '.'));
+			$files = glob($up_dir . DS . 'resized' . DS . $tempName . '*');
+			foreach ($files as $key => $value) {
+				//delete each one of these, if for some reason they do not delete, ignore we will use a script to clean up old files
+				@unlink($value);
+			}
+
 			return true;
 		} else {
 			return false;
