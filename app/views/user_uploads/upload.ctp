@@ -1,8 +1,7 @@
-<?php echo $this -> Html -> script('jquery.form', array('inline' => false));?>
-<div id="user-uploads-component" class="component">
+<div id="user-upload-component" class="component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo $username . '\'s' .__(' uploads', true)
+			<h2><?php echo $username . '\'s' .__(' upload', true)
 			?></h2>
 			<div class="actions">
 				<ul></ul>
@@ -10,81 +9,104 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<div class="upload-component">
-				<form enctype="multipart/form-data" method="POST" action="/user_uploads/addUpload.json" id="uploadForm" encoding="multipart/form-data">
-					<label>Image:</label>
-					<input type="hidden" value="2097152" name="MAX_FILE_SIZE">
-					<input id="upload-add-field" class="image-field" type="file" name="data[UserUpload][file]">
-					<input id="upload-add-button" class="add-button" type="submit" value="Add">
-				</form>
-				<div id="upload-error" class="upload-error">
-					<span class="error-message"></span>
-				</div>
-			</div>
-			<div id="images" class="images">
-				<?php
+			<?php
+			echo '<div class="image" data-name="' . $userUpload['UserUpload']['name'] . '" data-id="' . $userUpload['UserUpload']['id'] . '">';
+			echo '<div class="image-container">';
+			echo $fileUpload -> image($userUpload['UserUpload']['name'], array('width' => 500, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['UserUpload']['user_id']));
+			echo '</div>';
+			if (empty($userUpload['UserUpload']['title'])) {
+				echo '<div data-type="title" class="metadata title empty">';
+				echo '<a class="link">Click here to add title.</a>';
+				echo '</div>';
+			} else {
+				echo '<div data-type="title" class="metadata title">';
+				echo '<a class="link">' . $userUpload['UserUpload']['title'] . '</a>';
+				echo '</div>';
+			}
+			if (empty($userUpload['UserUpload']['description'])) {
+				echo '<div data-type="description" class="metadata description empty">';
+				echo '<a class="link">Click here to add description.</a>';
+				echo '</div>';
+			} else {
+				echo '<div data-type="description" class="metadata description">';
+				echo '<a class="link">' . $userUpload['UserUpload']['description'] . '</a>';
+				echo '</div>';
+			}
 
-				foreach ($uploads as $key => $value) {
-					echo '<div class="image">';
-					echo $fileUpload -> image($value['UserUpload']['name'], array('width' => 100, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id']));
-					echo '</div>';
-				}
-				?>
-			</div>
+			echo '</div>';
+			?>
 		</div>
 	</div>
 </div>
 <script>
 	$(function() {
 		var biggestHeight = 0;
-		$('#images .image img').each(function() {
-			var imgHeight = $(this).height();
-			if(imgHeight > biggestHeight) {
-				biggestHeight = imgHeight;
+		$('#user-upload-component .inside .component-view .image .metadata a').on('click', function(event) {
+			$(this).hide();
+			var $inputWrapper = $('<div></div>').addClass('metadata-update');
+			var type = $(this).parent('.metadata').attr('data-type');
+			var length = '50';
+			if(type === 'description'){
+				length = '150';
 			}
+			var $input = $('<input></input>').addClass('metadata-input').attr('type', 'input').attr('maxlength', length);
+			if(!$(this).parent('div.metadata').hasClass('empty')){
+				$input.val($(this).text());
+			}
+			var $addButton = $('<input></input>').addClass('add-button').attr('type', 'button').val('Submit');
+			var $cancelButton = $('<input></input>').addClass('cancel-button').attr('type', 'button').val('Cancel');
+			$inputWrapper.append($input).append($addButton).append($cancelButton);
+			$(this).parent().append($inputWrapper);
 		});
-		$('#images .image').css('min-height', biggestHeight);
-		$('#uploadForm').ajaxForm({
-			dataType : 'json',
-			beforeSubmit : function(a, f, o) {
-				$('#upload-error').children('span.error-message').text('');
-				if($('#upload-add-field').val() === '') {
-					return false;
-				} else {
-					var $img = $('<img></img').attr('src', '/img/ajax-loader-circle.gif');
-					var $imgWrapper = $('<div></div>').addClass('image-loader').addClass('image');
-					$imgWrapper.append($img);
-					$('#images').prepend($imgWrapper);
-					$('#upload-add-button').attr('disabled', 'disabled');
-					return true;
-				}
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				//console.log("errors");
-			},
-			success : function(data) {
-				if(data.success.isSuccess) {
-					var $out = $('#uploadOutput');
-					var $img = $('<img></img').attr('src', data.data.imageLocation);
-					if(data.data.imageHeight > biggestHeight){
-						$('#images .image').css('min-height', data.data.imageHeight);	
-					}
-					
-					$('#images div:first-child').children().remove();
-					$('#images div:first-child').prepend($img);
-				} else {
-					if(data.isTimeout) {
-						window.location = '/users/login';
+		$(document).on('click', '#user-upload-component .inside .component-view .image .metadata .metadata-update .cancel-button', function(event) {
+			var $title = $(this).parent().parent();
+			$(this).parent().remove();
+			$title.children('a.link').show();
+		});
+		$(document).on('click', '#user-upload-component .inside .component-view .image .metadata .metadata-update .add-button', function(event) {
+			/*
+			 * For this one, I think I will submit in the background and not have it be
+			 * active.  If it fails, it fails for now. Or if it fails, post some sort of top level
+			 * error message
+			 */
+			var $eventTag = $(this);
+			var $eventInput = $(this).parent('.metadata-update').children('.metadata-input');
+			var $eventLink = $(this).parent('.metadata-update').parent('.metadata').children('a.link');
+			var type = $(this).parent('.metadata-update').parent('.metadata').attr('data-type');
+			var requestData = 'data[UserUpload][name]=' + $('.image', '#user-upload-component .inside .component-view').attr('data-name');
+			requestData += '&data[UserUpload][data]=' + $eventInput.val();
+			requestData += '&data[UserUpload][type]=' + type;
+			
+			$.ajax({
+				url : '/user_uploads/update.json',
+				data : requestData,
+				dataType : 'json',
+				type : 'POST',
+				beforeSend : function(xhr) {
+
+				},
+				success : function(data) {
+					if(data.success.isSuccess) {
+						$eventLink.text($eventInput.val());
+						$eventTag.parent('.metadata-update').remove();
+						$eventLink.show();
+						$eventTag.parent('.metadata-update').parent('.metadata').removeClass('empty');
 					} else {
-						var errorMessage = data.errors[0].file;
-						$('#upload-error').children('span.error-message').text(errorMessage);
-						$('#images div:first-child').remove();
+						if(data.isTimeout) {
+							window.location = '/users/login';
+						} else {
+							var errorMessage = data.errors[0][type];
+							$eventInput.after($('<span></span>').addClass('error-message').text(errorMessage));
+						}
 					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+
+				},
+				complete : function(jqXHR, textStatus) {
+
 				}
-			},
-			complete : function() {
-				$('#upload-add-button').removeAttr('disabled');
-			}
+			});
 		});
 	});
 

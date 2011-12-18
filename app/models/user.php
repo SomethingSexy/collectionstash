@@ -2,7 +2,7 @@
 class User extends AppModel {
 	var $name = 'User';
 	var $actsAs = array('ExtendAssociations', 'Containable');
-	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite', 'UserUploads');
+	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite', 'UserUpload');
 	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
 	var $hasOne = array('Profile' => array('dependent' => true));
 

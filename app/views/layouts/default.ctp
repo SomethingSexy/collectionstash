@@ -175,6 +175,9 @@
    							<li>
 								<?php echo $html -> link('Community', array('admin'=> false, 'controller' => 'users'));?>
 							</li>
+   							<li>
+								<?php echo $html -> link('Catalog', array('admin'=> false, 'controller' => 'collectibles','action'=>'search'));?>
+							</li>
 						</ul>
 						<div class="site-search">
 							<form method="get" action="/collectibles/search">

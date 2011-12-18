@@ -8,6 +8,8 @@
     position: relative;
     overflow: hidden;
     background: #000;
+    margin-left: auto;
+    margin-right: auto;
 }
 .galleria-container img {
     -moz-user-select: none;

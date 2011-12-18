@@ -146,7 +146,7 @@ a:active {
 .component .component-view {
  /* float: left;
   width: 100%;*/
-  padding: 0 1em 1em 1em;
+  padding: 0 2em 2em 2em;
   overflow: hidden;
 }
 
@@ -701,7 +701,9 @@ a:active {
 	width: 16px;
 	position: relative;
 }
-
+#gallery {
+	margin-top: 50px;
+}
 .glimpse {
 	float: left;
 	width: 90%;
@@ -1826,19 +1828,77 @@ div.paging span a {
 /***************************************
  * User Uploads Component
  */
+.image div.metadata {
+	font-size: 0.6em;
+	margin-bottom: 5px;
+}
+.image div.metadata a {
+	cursor: pointer;
+	text-align: center;	
+}
+.image div.metadata input.metadata-input {
+	text-align: left;
+}
+.image div.metadata {
+	font-size: 0.6em;
+	margin-bottom: 5px;
+}
+.image div.metadata a {
+	cursor: pointer;
+	text-align: center;	
+}
+.image div.metadata input.metadata-input {
+	text-align: left;
+}
+.image div.metadata.empty,
+.image div.metadata.empty {
+	color: #AAA;
+}
+.image div.actions {
+	font-size: 0.6em;
+	visibility: hidden;
+}
+.image:hover div.actions {
+	visibility: visible;
+}
+#user-upload-component .inside .component-view {
+
+}
+#user-upload-component .inside .component-view .image div.metadata,
+#user-upload-component .inside .component-view .image div.metadata {
+	margin-top: 1em;
+	font-size: 0.8em;
+	text-decoration: none;
+}
+#user-upload-component .inside .component-view .image div.metadata a,
+#user-upload-component .inside .component-view .image div.metadata a {
+	text-decoration: none;
+}
+
 #user-uploads-component .inside .component-view .images .image {
 	width: 100px;
-	padding: 20px;
+	margin: 30px;
 	float: left;
-	margin: 1px;
+	position: relative;
+	z-index: 190;
+	margin: 30px;
+	height: 200px;
+}
+#user-uploads-component .inside .component-view .images .image .image-container {
+	text-align: center;	
 }
 #user-uploads-component .inside .component-view .images .image.image-loader {
-	text-align: center;	
+	
 }
 
 .upload-component {
 	text-align: right;
     width: 100%;
+}
+
+.upload-component .stats {
+	float: left;
+	font-size: 0.6em;
 }
 
 .upload-component form {
@@ -1855,7 +1915,41 @@ div.paging span a {
 .upload-component form input {
     font: 12px/100%;
 }
+#user-upload-component .inside .component-view .images .image div.metadata  div.metadata-update {
+	position: absolute;
+	z-index: 1000;
+}
+#user-upload-component .inside .component-view .image div.description {
+	width: 250px;
+}
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.metadata-input {
+	display: block;
+	margin-bottom: 2px;
+	width: 250px;
+}
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update .error-message {
+	display: block;
+}
 
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.cancel-button {
+	margin-left: 5px;
+}
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.cancel-button,
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.add-button {
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: inline-block;
+    font: 14px/100% Arial,Helvetica,sans-serif;
+    outline: medium none;
+    padding: 0.5em 2em 0.55em;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: baseline;
+    width: 20px;
+}
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.cancel-button,
+#user-upload-component .inside .component-view .image div.metadata div.metadata-update input.add-button,
 .upload-component form .add-button {
     background: -moz-linear-gradient(center top , #9E9E9E, #454545) repeat scroll 0 0 transparent;
     border: 1px solid #494949;

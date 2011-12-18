@@ -100,7 +100,7 @@
 <script>
 	Galleria.loadTheme('/js/galleria.classic.js');
 	$("#gallery").galleria({
-		width : 700,
+		width : 900,
 		height : 500,
 		lightbox : true,
 
