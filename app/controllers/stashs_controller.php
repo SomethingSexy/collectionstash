@@ -263,7 +263,7 @@ class StashsController extends AppController {
 
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later
-			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUploads')));
+			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
 			debug($user);
 			//Ok we have a user, although this seems kind of inefficent but it works for now
 			if (!empty($user)) {
@@ -277,12 +277,13 @@ class StashsController extends AppController {
 					$this -> set('myStash', $viewingMyStash);
 					$this -> set('stashUsername', $userId);
 					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
+						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
 						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24);
 						$collectibles = $this -> paginate('CollectiblesUser');
 
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
 						debug($collectibles);
-						$this -> set('userUploads', $user['UserUploads']);
+						$this -> set('userUploads', $user['UserUpload']);
 						$this -> set(compact('collectibles'));
 					} else {
 						$this -> render('viewPrivate');

@@ -682,6 +682,12 @@ a:active {
 	padding-bottom: 1em;
 }
 
+#my-stashes-component .inside .component-view .glimpse {
+   margin-top: 50px;
+}
+
+
+
 #my-stashes-component .inside .component-title h2 {
 	width: 50%;
 	clear: none;
@@ -705,8 +711,11 @@ a:active {
 	margin-top: 50px;
 }
 .glimpse {
-	float: left;
-	width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+
+    position: relative;
+    width: 850px;
 }
 .glimpse div.line {
 	width: 100%;
@@ -728,6 +737,9 @@ a:active {
 }
 .glimpse div.image a img {
 
+}
+.glimpse div.links {
+	text-align: right;
 }
 /*#collectible-detail .component-view*/ .collectible.tags {
 	float: left;

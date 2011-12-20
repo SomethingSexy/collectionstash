@@ -7,7 +7,8 @@
 				<ul>
 					<?php
 					if (isset($myStash) && $myStash) {
-						echo '<li><a class="link add-stash-link" href="/collectibles/search/initial:yes/"><img src="/img/icon/add_stash_link.png"/></a></li>';
+						echo '<li><a class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link.png"/></a></li>';
+						echo '<li><a class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_link.png"/></a></li>';
 					}
 					?>
 					<li>
@@ -68,7 +69,7 @@
 					}
 					if (!empty($myCollectible['Collectible']['Upload'])) {
 						echo '<div class="image">';
-						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('width' => 150, 'height' => 150)) . '</a>';
+						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('uploadDir'=> 'files','width' => 150, 'height' => 150)) . '</a>';
 						echo '</div>';
 						//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 					} else {
@@ -78,20 +79,24 @@
 						echo '</div>';
 					}
 				}
+				echo '<div class="links">';
+				echo '<a href="/stashs/view/' . $stashUsername . '/view:detail">See more collectibles</a>';
+				echo '</div>';
 				echo '</div>';
 			} else {
 				echo '<p class="">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 			}
 			?>
+
 			<div class="paging">
 				<p>
 					<?php
-					echo $this -> Paginator -> counter(array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+					//$this -> Paginator -> counter(array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
 					?>
 				</p>
-				<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
-				<?php echo $this -> Paginator -> numbers();?>
-				<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+				<?php //$this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
+				<?php //$this -> Paginator -> numbers();?>
+				<?php //$this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 			</div>
 		</div>
 	</div>
