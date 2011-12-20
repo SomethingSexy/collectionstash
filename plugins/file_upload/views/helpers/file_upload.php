@@ -112,12 +112,12 @@ class FileUploadHelper extends AppHelper {
 		} elseif (is_int($name)) {
 			$img = $this -> _getImageById();
 		}
-
+		
 		if ($img) {
 			return $img;
 		}
 
-		$this -> log("Unable to find $img");
+		$this -> log("Unable to find image ". $name);
 		return false;
 	}
 
@@ -265,7 +265,7 @@ class FileUploadHelper extends AppHelper {
 		} else {
 			$image = $this -> _getImagePath();
 		}
-
+		
 		$options = $this -> options;
 		//copy
 		//unset the default options
