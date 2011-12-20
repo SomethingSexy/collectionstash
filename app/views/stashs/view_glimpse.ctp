@@ -8,7 +8,9 @@
 					<?php
 					if (isset($myStash) && $myStash) {
 						echo '<li><a class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link.png"/></a></li>';
-						echo '<li><a class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_link.png"/></a></li>';
+						if(Configure::read('Settings.User.uploads.allowed')){
+							echo '<li><a class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_link.png"/></a></li>';
+						}	
 					}
 					?>
 					<li>

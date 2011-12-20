@@ -11,12 +11,17 @@ class UserUploadsController extends AppController {
 	 */
 	public function uploads() {
 		$this -> checkLogIn();
-		$uploads = $this -> UserUpload -> find('all', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
-		//This is fucking bullshit but counter cache is not working right now
-		$uploadCount = $this -> UserUpload -> find('count', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
-		$this -> set(compact('uploads'));
-		$this -> set(compact('uploadCount'));
-		$this -> set('username', $this -> getUsername());
+		if (Configure::read('Settings.User.uploads.allowed')) {
+			$uploads = $this -> UserUpload -> find('all', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
+			//This is fucking bullshit but counter cache is not working right now
+			$uploadCount = $this -> UserUpload -> find('count', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
+			$this -> set(compact('uploads'));
+			$this -> set(compact('uploadCount'));
+			$this -> set('username', $this -> getUsername());
+		} else {
+			$this -> viewPath = 'errors';
+			$this -> render('invalid_request');
+		}
 
 	}
 
