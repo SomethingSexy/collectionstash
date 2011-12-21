@@ -28,7 +28,7 @@
 			if (isset($userUploads) && !empty($userUploads)) {
 				echo '<div id="gallery">';
 				foreach ($userUploads as $key => $userUpload) {
-					echo $fileUpload -> image($userUpload['name'], array('title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id']));
+					echo '<a href="'. $fileUpload -> image($userUpload['name'], array('imagePathOnly'=> true,'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '">'.$fileUpload -> image($userUpload['name'], array('imagePathOnly'=> false,'height'=> 40,'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])). '</a>';
 
 				}
 				echo '</div>';
