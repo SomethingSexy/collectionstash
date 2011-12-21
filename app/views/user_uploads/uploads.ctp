@@ -12,7 +12,7 @@
 		<div class="component-view">
 			<div class="upload-component">
 				<div class="stats">
-					<span class="count"><?php echo __('Images') .': <span id="user-count">'.$uploadCount. '</span>/'. Configure::read('Settings.User.uploads.total-allowed'); ?></span>
+					<span class="count"><?php echo __('Images') . ': <span id="user-count">' . $uploadCount . '</span>/' . Configure::read('Settings.User.uploads.total-allowed');?></span>
 				</div>
 				<form enctype="multipart/form-data" method="POST" action="/user_uploads/add.json" id="uploadForm" encoding="multipart/form-data">
 					<label>Image:</label>
@@ -75,7 +75,7 @@
 				},
 				success : function(data) {
 					if(data.success.isSuccess) {
-						//This saves me a DB call 
+						//This saves me a DB call
 						$('#user-count').text(parseInt($('#user-count').text()) - 1);
 						$image.remove();
 					} else {
@@ -141,9 +141,11 @@
 						$('#images div.image:first-child').remove();
 						if(data.errors[0]['totalAllowed']) {
 							$('#upload-error').children('span.error-message').text(data.errors[0]['totalAllowed']);
+						} else if(data.errors[0]['file']) {
+							$('#upload-error').children('span.error-message').text(data.errors[0]['file']);
 						} else {
 							$('#upload-error').children('span.error-message').text('Sorry, there was a problem with your upload.');
-						}		
+						}
 					}
 				}
 			},
