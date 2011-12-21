@@ -10,6 +10,7 @@
 					<span class="username"><?php echo $this->Paginator->sort('User Name', 'username'); ?></span>
 					<span class="join-date"><?php echo $this->Paginator->sort('Join Date', 'created'); ?></span>
 					<span class="count"><?php echo $this->Paginator->sort('Collectible Count', 'collectibles_user_count'); ?></span>
+					<span class="upload-count"><?php echo $this->Paginator->sort('Upload count', 'user_upload_count'); ?></span>
 				</li>
 				<?php foreach($users as $user){
 					echo '<li>';
@@ -23,7 +24,10 @@
 					echo '</span>';
 					echo '<span class="count">';
 					echo $user['User']['collectibles_user_count'];
-					echo '</span>';			
+					echo '</span>';		
+					echo '<span class="upload-count">';
+					echo $user['User']['user_upload_count'];
+					echo '</span>';		
 					echo '</li>';																	
 				} ?>
 			</ul>

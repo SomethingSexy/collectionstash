@@ -1736,7 +1736,7 @@ div.paging span a {
 	font-size: 0.75em;	
 }
 #user-list-component .inside .component-view .standard-list ul li span {
-	width: 32%;	
+	width: 25%;	
 	text-align: center;
 }
 #user-list-component .inside .component-view .standard-list ul li span.username {

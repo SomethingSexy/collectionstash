@@ -15,7 +15,6 @@ Galleria.requires(1.25, 'This version of Classic theme requires Galleria 1.2.5 o
 Galleria.addTheme({
     name: 'classic',
     author: 'Galleria',
-    css: 'galleria.classic.css',
     defaults: {
         transition: 'slide',
         thumbCrop:  'height',
