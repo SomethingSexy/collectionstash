@@ -24,17 +24,7 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<?php
-			if (isset($userUploads) && !empty($userUploads)) {
-				echo '<div id="gallery">';
-				foreach ($userUploads as $key => $userUpload) {
-					echo '<a href="'. $fileUpload -> image($userUpload['name'], array('width'=> 0,'imagePathOnly'=> true,'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '">'.$fileUpload -> image($userUpload['name'], array('imagePathOnly'=> false,'height'=> 40,'width'=> 41,'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])). '</a>';
-
-				}
-				echo '</div>';
-			}
-			?>
-
+			<div id="gallery"></div>
 			<?php
 			if (isset($collectibles) && !empty($collectibles)) {
 				echo '<div class="glimpse">';
@@ -105,4 +95,32 @@
 <?php echo $this -> Html -> script('galleria-1.2.5', array('inline' => false));?>
 <?php echo $this -> Html -> script('galleria.classic.js', array('inline' => false));?>
 <?php echo $this -> Html -> css('galleria.classic');?>
-<?php echo $this -> Html -> script('stash-view.js', array('inline' => false));?>
+
+<script>
+	$(function() {
+
+var data = [<?php
+if (isset($userUploads) && !empty($userUploads)) {
+
+	foreach ($userUploads as $key => $userUpload) {
+		echo '{';
+		echo 'image : "' . $fileUpload -> image($userUpload['name'], array('width' => 0, 'imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+		echo 'thumb : "' . $fileUpload -> image($userUpload['name'], array('imagePathOnly' => true, 'height' => 40, 'width' => 41, 'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+		echo 'title : "' . $userUpload['title'] . '",';
+		echo 'description : "' . $userUpload['description'] . '"';
+		echo '}';
+		if ($key != (count($pages) - 1)) {
+			echo ',';
+		}
+	}
+}
+?>
+	];
+	$("#gallery").galleria({
+		width : 900,
+		height : 500,
+		lightbox : true,
+		data_source : data
+	});
+	});
+</script>
