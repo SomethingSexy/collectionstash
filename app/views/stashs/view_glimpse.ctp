@@ -116,11 +116,13 @@ if (isset($userUploads) && !empty($userUploads)) {
 }
 ?>
 	];
-	$("#gallery").galleria({
-		width : 900,
-		height : 500,
-		lightbox : true,
-		data_source : data
-	});
+	if(0 < data.length) {
+		$("#gallery").galleria({
+			width : 900,
+			height : 500,
+			lightbox : true,
+			data_source : data
+		});
+	}
 	});
 </script>
