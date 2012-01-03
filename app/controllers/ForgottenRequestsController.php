@@ -1,9 +1,8 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class ForgottenRequestsController extends AppController {
 
-	var $name = 'ForgottenRequests';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
+	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	var $components = array('Email');
 
 	public function forgotPassword() {

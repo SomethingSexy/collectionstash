@@ -1,12 +1,10 @@
 <?php
 class TagsController extends AppController {
 
-	var $name = 'Tags';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
+	public $helpers = array('Html', 'Js', 'Minify.Minify');
 
 	public function getTagList() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 			//$this->render('../json/add');
 		}

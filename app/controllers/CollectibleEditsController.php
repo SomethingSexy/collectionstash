@@ -1,10 +1,11 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 /**
  * This is not a join table, this is the edit controllor for collectibles.  This is why it is named liked this.
  */
 class CollectibleEditsController extends AppController {
-	var $helpers = array('Html', 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify.Minify');
+		
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify');
 
 	/*
 	 * Ok, need to accept an admin mode parameter.  If it is admin mode and the user is an admin then we can do the edit basically
@@ -14,22 +15,22 @@ class CollectibleEditsController extends AppController {
 	function edit($id = null, $adminMode = false) {
 		$this -> checkLogIn();
 
-		if (!$id && !is_numeric($id) && empty($this -> data)) {
+		if (!$id && !is_numeric($id) && empty($this -> request -> data)) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			//TODO go somewhere
 			$this -> redirect($this -> referer());
 		}
 
 		$this -> loadModel('Collectible');
-		if (!empty($this -> data)) {
+		if (!empty($this -> request -> data)) {
 			if (!$this -> Session -> check('collectible.edit-id')) {
 				//TODO figure out a better place to go, this is the case if some does a submit to this page without doing a GET first to setup all of the data
 				$this -> redirect('/');
 			}
-			debug($this -> data);
-			$this -> data = Sanitize::clean($this -> data);
-			debug($this -> data);
-			$this -> Collectible -> set($this -> data);
+			debug($this -> request -> data);
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			debug($this -> request -> data);
+			$this -> Collectible -> set($this -> request -> data);
 			$validCollectible = true;
 
 			if ($this -> Collectible -> validates()) {
@@ -41,18 +42,18 @@ class CollectibleEditsController extends AppController {
 			}
 
 			if ($validCollectible) {
-				$this -> data['Collectible']['collectible_id'] = $this -> Session -> read('collectible.edit-id');
-				$this -> Session -> write('preSaveCollectible', $this -> data);
+				$this -> request -> data['Collectible']['collectible_id'] = $this -> Session -> read('collectible.edit-id');
+				$this -> Session -> write('preSaveCollectible', $this -> request -> data);
 				$this -> redirect(array('action' => 'review'));
 				//return so we do not call useless data
 				return;
 			} else {
 				//Redundant but reget this collectible now for some display purposes (for stuff that does not change)
 				$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $this -> Session -> read('collectible.edit-id')), 'contain' => array('Manufacture')));
-				$licenseId = $this -> data['Collectible']['license_id'];
-				$collectibleTypeId = $this -> data['Collectible']['collectibletype_id'];
-				if (isset($this -> data['Collectible']['series_id'])) {
-					$seriesId = $this -> data['Collectible']['series_id'];
+				$licenseId = $this -> request -> data['Collectible']['license_id'];
+				$collectibleTypeId = $this -> request -> data['Collectible']['collectibletype_id'];
+				if (isset($this -> request -> data['Collectible']['series_id'])) {
+					$seriesId = $this -> request -> data['Collectible']['series_id'];
 				}
 			}
 		} else {
@@ -73,7 +74,7 @@ class CollectibleEditsController extends AppController {
 			$licenseId = $collectible['Collectible']['license_id'];
 			$collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
 			$seriesId = $collectible['Collectible']['series_id'];
-			$this -> data = $collectible;
+			$this -> request -> data = $collectible;
 			$this -> Session -> write('collectible.edit-id', $id);
 			if ($collectible['Collectible']['variant']) {
 				$this -> Session -> write('edit.collectible.variant', true);
@@ -102,7 +103,7 @@ class CollectibleEditsController extends AppController {
 		 */
 		if (isset($seriesId) && !empty($seriesId)) {
 			$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($seriesId);
-			$this -> data['Collectible']['series_name'] = $seriesPathName;
+			$this -> request -> data['Collectible']['series_name'] = $seriesPathName;
 			$this -> set('hasSeries', true);
 		} else {
 			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
@@ -117,7 +118,7 @@ class CollectibleEditsController extends AppController {
 
 		//}
 		//grab scales
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'),'order'=> array('Scale.scale' => 'ASC')));
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
 		$this -> set(compact('scales'));
 		//grabs retailers
 		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
@@ -159,7 +160,7 @@ class CollectibleEditsController extends AppController {
 			}
 			$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
 			$collectible['Series'] = $series['Series'];
-			
+
 			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 			$collectible['Scale'] = $scale['Scale'];
 
@@ -274,7 +275,7 @@ class CollectibleEditsController extends AppController {
 		if ($editId && is_numeric($editId) && $collectibleEditId && is_numeric($collectibleEditId)) {
 			$this -> set('collectibleEditId', $collectibleEditId);
 			$this -> set('editId', $editId);
-			if (empty($this -> data)) {
+			if (empty($this -> request -> data)) {
 				//TODO this should probably be moved to a model
 				$collectibleEditVersion = $this -> CollectibleEdit -> find("first", array('conditions' => array('CollectibleEdit.id' => $collectibleEditId)));
 				if (!empty($collectibleEditVersion)) {

@@ -1,16 +1,13 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class SeriesController extends AppController {
 
-	var $name = 'Series';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
-
+	public $helpers = array('Html','Js', 'Minify');
 	/**
 	 * TODO update this so that it returns the series data in levels
 	 */
 	public function getSeriesData() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 
@@ -47,12 +44,12 @@ class SeriesController extends AppController {
 		}
 	}
 
- // function add() {
-	//
-	// $data['Series']['parent_id'] = '30';
-	// $data['Series']['name'] = 'Blackest Night';
-	// $this -> Series -> save($data);
-	// $this -> render(false);
-	// }
+ function add() {
+	
+	$data['Series']['parent_id'] = '30';
+	$data['Series']['name'] = 'Blackest Night';
+	$this -> Series -> save($data);
+	$this -> render(false);
+	}
 }
 ?>

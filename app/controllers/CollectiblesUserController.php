@@ -1,10 +1,8 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class CollectiblesUserController extends AppController {
 
-	var $name = 'CollectiblesUser';
-	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
-	var $components = array('RequestHandler');
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
 
 	public function view($id = null) {
 		if (!is_null($id) && is_numeric($id)) {
@@ -47,19 +45,19 @@ class CollectiblesUserController extends AppController {
 	 */
 	public function add($id = null) {
 		$this -> checkLogIn();
-		debug($this -> data);
+		debug($this -> request -> data);
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			debug($collectible);
-			if (!empty($this -> data)) {
+			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
 					//$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
 					$user = $this -> getUser();
 					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
-					$this -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
-					$this -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
-					$this -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
-					if ($this -> CollectiblesUser -> saveAll($this -> data)) {
+					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
+					$this -> request -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
+					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
+					if ($this -> CollectiblesUser -> saveAll($this -> request -> data)) {
 						$collectibleUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $this -> CollectiblesUser -> id), 'contain' => false));
 						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
 						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
@@ -91,16 +89,16 @@ class CollectiblesUserController extends AppController {
 	 */
 	function edit($id = null) {
 		$this -> checkLogIn();
-		debug($this -> data);
+		debug($this -> request -> data);
 		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible')));
 		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 			$loggedInUserId = $this -> getUserId();
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 				debug($collectiblesUser);
-				if (!empty($this -> data)) {
+				if (!empty($this -> request -> data)) {
 					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date');
-					$this -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
-					if ($this -> CollectiblesUser -> save($this -> data, true, $fieldList)) {
+					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
+					if ($this -> CollectiblesUser -> save($this -> request -> data, true, $fieldList)) {
 						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');
 						$this -> redirect(array('controller' => 'collectibles_user', 'action' => 'view', $id), null, true);
 						return;
@@ -109,7 +107,7 @@ class CollectiblesUserController extends AppController {
 					}
 
 				} else {
-					$this -> data = $collectiblesUser;
+					$this -> request -> data = $collectiblesUser;
 				}
 				$this -> set('collectible', $collectiblesUser);
 				$this -> loadModel('Condition');

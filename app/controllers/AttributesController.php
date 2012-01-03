@@ -1,14 +1,13 @@
 <?php
 class AttributesController extends AppController {
 
-	var $name = 'Attributes';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
+	public $helpers = array('Html', 'Minify');
+	
 	function index() {
 		//$this->data = $this->Attribute->generatetreelist(null, null, null, '&nbsp;&nbsp;&nbsp;');
 
 		//$this->Attribute->reorder(array('field' => 'Attribute.name', 'order' =>'ASC'));
-		$this -> data = $this -> Attribute -> find('threaded');
+		$this -> request -> data = $this -> Attribute -> find('threaded');
 
 		// $this->data = $this->Attribute->find('list',
 		//   array(
@@ -22,7 +21,7 @@ class AttributesController extends AppController {
 		//
 		//
 
-		debug($this -> data);
+		debug($this -> request -> data);
 
 		$this -> Attribute -> getAttributeList();
 	}
@@ -36,7 +35,7 @@ class AttributesController extends AppController {
 	// }
 
 	public function getAttributeList($id = null) {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 			//$this->render('../json/add');
 		}

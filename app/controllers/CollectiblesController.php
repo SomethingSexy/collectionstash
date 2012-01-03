@@ -1,12 +1,10 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class CollectiblesController extends AppController {
 
-	var $name = 'Collectibles';
+	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify');
 
-	var $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify.Minify');
-
-	var $components = array('RequestHandler', 'Wizard.Wizard', 'Email');
+	var $components = array('Wizard', 'Email');
 
 	var $actsAs = array('Searchable.Searchable');
 

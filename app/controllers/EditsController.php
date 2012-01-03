@@ -1,5 +1,6 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 /**
  * TODO definitely think about making this edit stuff a behavior for a model
  *
@@ -10,11 +11,10 @@ App::import('Sanitize');
  * 				 shown we can also show the notes of each revision.  I am trying to decide what to do with collectible edits that are denied.  Do
  * 				 I need to keep those around or do I not care?  Is a history of that necessary?
  */
+
 class EditsController extends AppController {
 
-	var $name = 'Edits';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler', 'Email');
+	public $helpers = array('Html', 'Minify');
 
 	function admin_index() {
 		$this -> checkLogIn();
@@ -66,12 +66,12 @@ class EditsController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 		if ($id && is_numeric($id)) {
-			if (isset($this -> data['Approval']['approve'])) {
-				$this -> data = Sanitize::clean($this -> data);
+			if (isset($this -> request -> data['Approval']['approve'])) {
+				$this -> request -> data = Sanitize::clean($this -> request -> data);
 				$approvedChange = false;
 				$approvalNotes = '';
-				if (isset($this -> data['Approval']['notes'])) {
-					$approvalNotes = $this -> data['Approval']['notes'];
+				if (isset($this -> request -> data['Approval']['notes'])) {
+					$approvalNotes = $this -> request -> data['Approval']['notes'];
 				}
 				//Grab the Edit array we are going to approve
 				$edit = $this -> Edit -> find("first", array('conditions' => array('Edit.id' => $id)));
@@ -86,7 +86,7 @@ class EditsController extends AppController {
 				// $updateType = '';
 				// //This tells us what mode we are doing, (E)dit, (A)dd...add is really going to be for the has many relationships
 				// $mode = 'E';
-				if ($this -> data['Approval']['approve'] === 'true') {
+				if ($this -> request -> data['Approval']['approve'] === 'true') {
 					$failRedirect = array();
 					//Check what type of collectible data we are editing
 					if (!empty($edit['Edit']['collectible_edit_id'])) {
@@ -210,13 +210,14 @@ class EditsController extends AppController {
 			}
 		}
 	}
+
 	/**
 	 * This function right now will return the history of the collectibles the user has submitted.
 	 */
 	function userHistory() {
 		$this -> checkLogIn();
 		$userId = $this -> getUserId();
-		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), 'contain' => array('Collectible'=> array('fields' => array('id','name')), 'AttributesCollectiblesEdit' => array('fields' => array('id')), 'UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
+		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), 'contain' => array('Collectible' => array('fields' => array('id', 'name')), 'AttributesCollectiblesEdit' => array('fields' => array('id')), 'UploadEdit' => array('fields' => array('id')), 'User', 'CollectibleEdit' => array('fields' => array('id'))), "limit" => 25);
 
 		$edits = $this -> paginate('Edit');
 		debug($edits);
@@ -241,7 +242,7 @@ class EditsController extends AppController {
 		debug($edits);
 		$this -> set('edits', $edits);
 	}
-	
+
 	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
 		$return = true;
 		if ($email) {
@@ -250,6 +251,8 @@ class EditsController extends AppController {
 			$this -> set(compact('collectibleName'));
 			$this -> set(compact('username'));
 			$this -> set(compact('notes'));
+			
+			
 			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
 			$this -> Email -> delivery = 'smtp';
 			$this -> Email -> to = $email;

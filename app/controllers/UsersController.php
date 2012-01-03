@@ -1,12 +1,11 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class UsersController extends AppController {
-	var $name = 'Users';
-
-	var $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify.Minify');
+		
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
 
 	var $components = array('Email');
-	
+
 	/**
 	 * This is the main index into this controller, it will display a list of users.
 	 */
@@ -35,20 +34,20 @@ class UsersController extends AppController {
 		debug($message);
 		$this -> Session -> setFlash($message, null, null, $messageType);
 		$success = true;
-		if ($this -> data) {
-			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
+		if ($this -> request -> data) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 			$this -> User -> recursive = 0;
-			$results = $this -> User -> getUser($this -> data['User']['username']);
+			$results = $this -> User -> getUser($this -> request -> data['User']['username']);
 			if ($results) {
 				if ($results['User']['status'] == 0) {
-					if ($results['User']['password'] == Security::hash($this -> data['User']['password'])) {
+					if ($results['User']['password'] == Security::hash($this -> request -> data['User']['password'])) {
 						$this -> User -> id = $results['User']['id'];
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
 						$this -> log($results, 'info');
 						$this -> Session -> write('user', $results);
 						$this -> log('User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()), 'info');
-						if (!empty($this -> data['User']['fromPage'])) {
-							$this -> redirect($this -> data['User']['fromPage'], null, true);
+						if (!empty($this -> request -> data['User']['fromPage'])) {
+							$this -> redirect($this -> request -> data['User']['fromPage'], null, true);
 						} else {
 							$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
 						}
@@ -67,10 +66,10 @@ class UsersController extends AppController {
 		}
 
 		if (!$success) {
-			$this -> data['User']['password'] = '';
-			$this -> data['User']['new_password'] = '';
-			$this -> data['User']['confirm_password'] = '';
-			$this -> log('User ' . $this -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()), 'error');
+			$this -> request -> data['User']['password'] = '';
+			$this -> request -> data['User']['new_password'] = '';
+			$this -> request -> data['User']['confirm_password'] = '';
+			$this -> log('User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()), 'error');
 		}
 
 	}
@@ -121,32 +120,32 @@ class UsersController extends AppController {
 	function register($email = null) {
 		//Make sure the user name is not a list of specific ones...like any controller names :)
 		if (Configure::read('Settings.registration.open')) {
-			if (!empty($this -> data)) {
-				$this -> data = Sanitize::clean($this -> data, array('encode' => false));
+			if (!empty($this -> request -> data)) {
+				$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 				$proceed = true;
 				$invitedUser = null;
 				//If invite only is turned on, first make sure that this user is invited
 				if (Configure::read('Settings.registration.invite-only')) {
-					$invitedUser = $this -> User -> Invite -> find("first", array('conditions' => array('Invite.email' => $this -> data['User']['email'])));
+					$invitedUser = $this -> User -> Invite -> find("first", array('conditions' => array('Invite.email' => $this -> request -> data['User']['email'])));
 					if (empty($invitedUser)) {
 						$proceed = false;
 						$this -> Session -> setFlash(__('Sorry for the inconvenience, Collection Stash is currently invite only.', true), null, null, 'error');
 					}
 				}
 				if ($proceed) {
-					$this -> data['User']['password'] = Security::hash($this -> data['User']['new_password']);
-					$this -> data['User']['admin'] = 0;
-					$this -> data['User']['status'] = 1;
-					//$this -> data['User']['profile_id'] = '';
-					$this -> data['Profile'] = array();
+					$this -> request -> data['User']['password'] = Security::hash($this -> request -> data['User']['new_password']);
+					$this -> request -> data['User']['admin'] = 0;
+					$this -> request -> data['User']['status'] = 1;
+					//$this->request->data['User']['profile_id'] = '';
+					$this -> request -> data['Profile'] = array();
 					//Set the invites to 0, as they invite people we will increase this number
-					$this -> data['Profile']['invites'] = 0;
-					$this -> data['Stash'] = array();
-					$this -> data['Stash']['0'] = array();
-					$this -> data['Stash']['0']['name'] = 'Default';
-					$this -> data['Stash']['0']['total_count'] = 0;
-					debug($this -> data);
-					if ($this -> User -> saveAll($this -> data)) {
+					$this -> request -> data['Profile']['invites'] = 0;
+					$this -> request -> data['Stash'] = array();
+					$this -> request -> data['Stash']['0'] = array();
+					$this -> request -> data['Stash']['0']['name'] = 'Default';
+					$this -> request -> data['Stash']['0']['total_count'] = 0;
+					debug($this -> request -> data);
+					if ($this -> User -> saveAll($this -> request -> data)) {
 						$newUserId = $this -> User -> id;
 						if (Configure::read('Settings.registration.invite-only')) {
 							$this -> User -> Invite -> id = $invitedUser['Invite']['id'];
@@ -159,21 +158,21 @@ class UsersController extends AppController {
 						} else {
 							//At this point sending the email failed, so we should roll it all back
 							$this -> User -> delete($newUserId);
-							$this -> data['User']['password'] = '';
-							$this -> data['User']['new_password'] = '';
-							$this -> data['User']['confirm_password'] = '';
+							$this -> request -> data['User']['password'] = '';
+							$this -> request -> data['User']['new_password'] = '';
+							$this -> request -> data['User']['confirm_password'] = '';
 							$this -> Session -> setFlash(__('There was a problem registering this information.', true), null, null, 'error');
 						}
 					} else {
-						$this -> data['User']['password'] = '';
-						$this -> data['User']['new_password'] = '';
-						$this -> data['User']['confirm_password'] = '';
+						$this -> request -> data['User']['password'] = '';
+						$this -> request -> data['User']['new_password'] = '';
+						$this -> request -> data['User']['confirm_password'] = '';
 						$this -> Session -> setFlash(__('There was a problem registering this information.', true), null, null, 'error');
 					}
 				}
 			} else {
 				if ($email) {
-					$this -> data['User']['email'] = $email;
+					$this -> request -> data['User']['email'] = $email;
 				}
 			}
 
@@ -255,22 +254,22 @@ class UsersController extends AppController {
 					 * Checking here now to see if something was submitted, I think to stay as secure
 					 * as possible we will need to go through this process everytime
 					 */
-					if (!empty($this -> data)) {
-						$this -> User -> set($this -> data);
+					if (!empty($this -> request -> data)) {
+						$this -> User -> set($this -> request -> data);
 						/*
 						 * Validate JUST the new_password and the confirm_password
 						 */
 						if ($this -> User -> validates(array('fieldList' => array('new_password', 'confirm_password')))) {
-							$this -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
-							if ($this -> User -> changePassword($this -> data)) {
+							$this -> request -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
+							if ($this -> User -> changePassword($this -> request -> data)) {
 								$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
 								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');
 								$this -> redirect('login');
 							}
 						} else {
-							$this -> data['User']['password'] = '';
-							$this -> data['User']['new_password'] = '';
-							$this -> data['User']['confirm_password'] = '';
+							$this -> request -> data['User']['password'] = '';
+							$this -> request -> data['User']['new_password'] = '';
+							$this -> request -> data['User']['confirm_password'] = '';
 							$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 						}
 					}
@@ -305,7 +304,7 @@ class UsersController extends AppController {
 
 		// Set data for the "view" of the Email
 		$this -> set('activate_url', 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash());
-		$this -> set('username', $this -> data['User']['username']);
+		$this -> set('username', $this -> request -> data['User']['username']);
 
 		$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
 		$this -> Email -> delivery = 'smtp';

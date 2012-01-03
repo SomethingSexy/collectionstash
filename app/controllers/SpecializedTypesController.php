@@ -1,13 +1,11 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class SpecializedTypesController extends AppController {
 
-	var $name = 'SpecializedTypes';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
+	public $helpers = array('Html', 'Js', 'Minify.Minify');
 
 	public function getSpecializedTypesData() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 

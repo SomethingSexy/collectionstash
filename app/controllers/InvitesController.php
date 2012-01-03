@@ -1,10 +1,9 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class InvitesController extends AppController {
 
-	var $name = 'Invites';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
-	var $components = array('RequestHandler', 'Email');
+	public $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
+	var $components = array('Email');
 	
 	/**
 	 * This will return the invites that the user has already invited
@@ -13,7 +12,7 @@ class InvitesController extends AppController {
 	 */
 	public function view() {
 		if($this -> isLoggedIn()) {
-			if($this -> RequestHandler -> isAjax()) {
+			if($this -> request -> isAjax()) {
 				Configure::write('debug', 0);
 			}
 			$user = $this -> getUser();
@@ -57,7 +56,7 @@ class InvitesController extends AppController {
 		if($this -> isLoggedIn()) {
 			//TODO update invite count in session
 			if(!empty($this -> data)) {
-				if($this -> RequestHandler -> isAjax()) {
+				if($this -> request -> isAjax()) {
 					Configure::write('debug', 0);
 					//$this->render('../json/add');
 				}

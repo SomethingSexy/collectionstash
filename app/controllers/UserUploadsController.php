@@ -1,8 +1,8 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class UserUploadsController extends AppController {
-	var $helpers = array('Html', 'Form', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
-	var $components = array('RequestHandler', 'Image');
+		
+	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify');
 
 	/**
 	 * This will display all uploads for the user logged in, since this is not a publically visible page
@@ -42,7 +42,7 @@ class UserUploadsController extends AppController {
 	}
 
 	public function update() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 		$data = array();
@@ -103,7 +103,7 @@ class UserUploadsController extends AppController {
 	 * if they are logged in here and nothing else since we are using the session data
 	 */
 	public function add() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 		$data = array();
@@ -167,7 +167,7 @@ class UserUploadsController extends AppController {
 	}
 
 	public function delete() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 		$data = array();

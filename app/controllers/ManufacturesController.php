@@ -1,13 +1,11 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class ManufacturesController extends AppController {
 
-	var $name = 'Manufactures';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
-
+	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
+	
 	public function getManufactureData() {
-		if ($this -> RequestHandler -> isAjax()) {
+		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);
 		}
 

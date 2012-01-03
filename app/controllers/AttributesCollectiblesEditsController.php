@@ -1,9 +1,6 @@
 <?php
 class AttributesCollectiblesEditsController extends AppController {
-
-	var $name = 'AttributesCollectiblesEdits';
-	var $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('RequestHandler');
+	public $helpers = array('Html', 'Ajax', 'Minify');
 
 	/*
 	 * In the future when doing this edits, we are going to have to make sure that these parts are not being
@@ -12,18 +9,18 @@ class AttributesCollectiblesEditsController extends AppController {
 	function edit($id = null, $adminMode = false) {
 		$this -> checkLogIn();
 
-		if (!$id && !is_numeric($id) && empty($this -> data)) {
+		if (!$id && !is_numeric($id) && empty($this -> request -> data)) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			//TODO go somewhere
 			$this -> redirect($this -> referer());
 		}
 
-		if (!empty($this -> data)) {
-			debug($this -> data);
-			if (isset($this -> data['AttributesCollectible'])) {
+		if (!empty($this -> request -> data)) {
+			debug($this -> request -> data);
+			if (isset($this -> request -> data['AttributesCollectible'])) {
 				$isValid = true;
 				//TODO this does not seem right
-				foreach ($this -> data['AttributesCollectible'] as $key => $attribue) {
+				foreach ($this->request->data['AttributesCollectible'] as $key => $attribue) {
 					//If it is being deleted, I do not care to validate it.
 					if ($attribue['action'] !== 'D') {
 						$this -> AttributesCollectiblesEdit -> AttributesCollectible -> set($attribue);
@@ -44,7 +41,7 @@ class AttributesCollectiblesEditsController extends AppController {
 					$adminMode = $this -> Session -> read('collectible.edit.admin-mode');
 					if (Configure::read('Settings.Collectible.Edit.auto-approve') === true || (isset($adminMode) && $adminMode && $this -> isUserAdmin())) {
 						//TODO move this to the model, validate we are removing the correct attributes?
-						foreach ($this -> data['AttributesCollectible'] as $key => $attribue) {
+						foreach ($this->request->data['AttributesCollectible'] as $key => $attribue) {
 							//debug($this -> AttributesCollectible);
 							if ($attribue['action'] === 'D') {
 								$this -> AttributesCollectiblesEdit -> AttributesCollectible -> id = $attribue['id'];
@@ -68,11 +65,11 @@ class AttributesCollectiblesEditsController extends AppController {
 							}
 						}
 						$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => 'Attribute'));
-						$this -> data = $attributes;
+						$this -> request -> data = $attributes;
 						$this -> Session -> setFlash(__('You have succesfully updated the attributes.', true), null, null, 'success');
 					} else {
 						$updatedAttributes = array();
-						foreach ($this -> data['AttributesCollectible'] as $key => $attribute) {
+						foreach ($this->request->data['AttributesCollectible'] as $key => $attribute) {
 							if (isset($attribute['action']) && $attribute['action'] !== '') {
 								array_push($updatedAttributes, $attribute);
 
@@ -126,7 +123,7 @@ class AttributesCollectiblesEditsController extends AppController {
 						array_push($errorAttributes, $attributesCollectible);
 					}
 					debug($errorAttributes);
-					$this -> data = $errorAttributes;
+					$this -> request -> data = $errorAttributes;
 				}
 			}
 		} else {
@@ -147,7 +144,7 @@ class AttributesCollectiblesEditsController extends AppController {
 			$attributes = $this -> AttributesCollectiblesEdit -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'fields' => array('id', 'attribute_id', 'collectible_id', 'description', 'active'), 'contain' => array('Attribute' => array('fields' => array('name')))));
 			debug($attributes);
 			//$this -> set('attributes', $attributes);
-			$this -> data = $attributes;
+			$this -> request -> data = $attributes;
 		}
 
 		$collectibleId = $this -> Session -> read('collectible.edit-id');
@@ -160,7 +157,7 @@ class AttributesCollectiblesEditsController extends AppController {
 		if ($editId && is_numeric($editId) && $attributeEditId && is_numeric($attributeEditId)) {
 			$this -> set('attributeEditId', $attributeEditId);
 			$this -> set('editId', $editId);
-			if (empty($this -> data)) {
+			if (empty($this -> request -> data)) {
 				$attributeEditVersion = $this -> AttributesCollectiblesEdit -> find("first", array('contain' => array('Attribute' => array('fields' => array('name'))), 'conditions' => array('AttributesCollectiblesEdit.id' => $attributeEditId)));
 				debug($attributeEditVersion);
 				if (!empty($attributeEditVersion)) {

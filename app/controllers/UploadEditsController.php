@@ -1,7 +1,8 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 class UploadEditsController extends AppController {
-	var $helpers = array('Html', 'FileUpload.FileUpload', 'Minify.Minify');
+		
+	public $helpers = array('Html', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	//TODO this should get moved to an upload edit
 	function edit($collectibleId = null, $id = null) {

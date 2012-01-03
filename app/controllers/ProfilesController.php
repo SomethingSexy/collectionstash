@@ -1,10 +1,9 @@
 <?php
-App::import('Sanitize');
+App::uses('Sanitize', 'Utility');
 //TODO this could get renamed account
 class ProfilesController extends AppController {
 
-	var $name = 'Profiles';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
+	public $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
 
 	public function index() {
 		$this -> checkLogIn();

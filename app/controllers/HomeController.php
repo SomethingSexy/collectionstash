@@ -1,9 +1,8 @@
 <?php
+App::uses('Sanitize', 'Utility');
 class HomeController extends AppController {
 
-	var $name = 'Home';
-	var $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
-	var $uses = array();
+	public $helpers = array('Html','FileUpload.FileUpload', 'Minify');
 
 	public function index() {
 		//Note: This page is displaying goofy when it gets an image that is already width 200...doesn't work...which then causes the rest of the images not to resize..still a defect in that resize code
