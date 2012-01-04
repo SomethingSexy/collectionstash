@@ -2,7 +2,12 @@
 class AppController extends Controller {
 
 	public function beforeFilter() {
-
+		if ($this -> request -> isAjax()) {
+			Configure::write('debug', 0);
+			$this -> layout = 'ajax';
+		} else {
+			$this -> layout = 'default';
+		}
 		if ($this -> isLoggedIn()) {
 			$this -> set('isLoggedIn', true);
 			$this -> set('username', $this -> getUsername());
@@ -21,14 +26,15 @@ class AppController extends Controller {
 		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible databse, action figure, toy, stash, storage');
 		//This stores off any request parameters per request, can be used to recreate urls later
 		$requestParams = '?';
-		if (isset($this -> params['url'])) {
-			foreach ($this->params['url'] as $key => $value) {
+		debug($this -> request -> query);
+		if (isset($this -> request -> query)) {
+			foreach ($this->request->query as $key => $value) {
 				if ($key !== 'ext' && $key !== 'url') {
 					$requestParams = $requestParams . $key . '=' . $value;
 				}
 			}
 		}
-		$this -> set(compact('request_params'), $requestParams);
+		$this -> set(compact('requestParams'));
 	}
 
 	public function getUser() {
@@ -86,12 +92,12 @@ class AppController extends Controller {
 
 		//For now, we allow one manufacture filter, if that is set regardless lets also
 		//reget the types
-		if (isset($this -> data['Search']['Manufacture']['Filter'])) {
+		if (isset($this -> request -> data['Search']['Manufacture']['Filter'])) {
 			$this -> loadModel('CollectibletypesManufacture');
 			//Since we only allow one, for now but the interface is setup to handle multiple do this
-			reset($this -> data['Search']['Manufacture']['Filter']);
+			reset($this -> request -> data['Search']['Manufacture']['Filter']);
 			// make sure array pointer is at first element
-			$firstKey = key($this -> data['Search']['Manufacture']['Filter']);
+			$firstKey = key($this -> request -> data['Search']['Manufacture']['Filter']);
 
 			$collectibleTypes = $this -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($firstKey);
 			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
@@ -112,10 +118,10 @@ class AppController extends Controller {
 			$this -> Session -> write('License_Search.filter', $licenses);
 		}
 
-		if (isset($this -> data['Search']['Tag']['Filter'])) {
-			reset($this -> data['Search']['Tag']['Filter']);
+		if (isset($this -> request -> data['Search']['Tag']['Filter'])) {
+			reset($this -> request -> data['Search']['Tag']['Filter']);
 			// make sure array pointer is at first element
-			$firstKey = key($this -> data['Search']['Tag']['Filter']);
+			$firstKey = key($this -> request -> data['Search']['Tag']['Filter']);
 			$this -> loadModel('Tag');
 			$tag = $this -> Tag -> find("first", array('conditions' => array('Tag.id' => $firstKey)));
 			$this -> Session -> write('Tag_Search.filter', $tag);
@@ -156,44 +162,44 @@ class AppController extends Controller {
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
 		$this -> loadModel('Collectible');
-		// debug($this -> data);
+		// debug($this->request->data);
 		$saveSearchFilters = array();
 		if (isset($this -> params['url']['q'])) {
-			$this -> data['Search'] = array();
-			$this -> data['Search']['search'] = '';
-			$this -> data['Search']['search'] = $this -> params['url']['q'];
+			$this -> request -> data['Search'] = array();
+			$this -> request -> data['Search']['search'] = '';
+			$this -> request -> data['Search']['search'] = $this -> params['url']['q'];
 		}
 		if (isset($this -> params['url']['m'])) {
 			//find all of this license
-			$this -> data['Search']['Manufacture'] = array();
-			$this -> data['Search']['Manufacture']['Filter'] = array();
-			$this -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
+			$this -> request -> data['Search']['Manufacture'] = array();
+			$this -> request -> data['Search']['Manufacture']['Filter'] = array();
+			$this -> request -> data['Search']['Manufacture']['Filter'][$this -> params['url']['m']] = 1;
 			$saveSearchFilters['manufacturer'] = $this -> params['url']['m'];
 		}
 		if (isset($this -> params['url']['l'])) {
 			//find all of this license
-			$this -> data['Search']['License'] = array();
-			$this -> data['Search']['License']['Filter'] = array();
-			$this -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
+			$this -> request -> data['Search']['License'] = array();
+			$this -> request -> data['Search']['License']['Filter'] = array();
+			$this -> request -> data['Search']['License']['Filter'][$this -> params['url']['l']] = 1;
 			$saveSearchFilters['license'] = $this -> params['url']['l'];
 		}
 		if (isset($this -> params['url']['ct'])) {
 			//find all of this license
-			$this -> data['Search']['CollectibleType'] = array();
-			$this -> data['Search']['CollectibleType']['Filter'] = array();
-			$this -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
+			$this -> request -> data['Search']['CollectibleType'] = array();
+			$this -> request -> data['Search']['CollectibleType']['Filter'] = array();
+			$this -> request -> data['Search']['CollectibleType']['Filter'][$this -> params['url']['ct']] = 1;
 			$saveSearchFilters['collectibletype'] = $this -> params['url']['ct'];
 		}
 		if (isset($this -> params['url']['t'])) {
 			//find all of this license
-			$this -> data['Search']['Tag'] = array();
-			$this -> data['Search']['Tag']['Filter'] = array();
-			$this -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
+			$this -> request -> data['Search']['Tag'] = array();
+			$this -> request -> data['Search']['Tag']['Filter'] = array();
+			$this -> request -> data['Search']['Tag']['Filter'][$this -> params['url']['t']] = 1;
 			$saveSearchFilters['tag'] = $this -> params['url']['t'];
 		}
 
-		if (isset($this -> data['Search']['search']) && trim($this -> data['Search']['search']) !== '') {
-			$search = $this -> data['Search']['search'];
+		if (isset($this -> request -> data['Search']['search']) && trim($this -> request -> data['Search']['search']) !== '') {
+			$search = $this -> request -> data['Search']['search'];
 			$search = ltrim($search);
 			$search = rtrim($search);
 			$saveSearchFilters['search'] = $search;
@@ -222,7 +228,7 @@ class AppController extends Controller {
 		array_push($manFilters[0]['AND'], array('OR' => array()));
 		$filtersSet = false;
 		$manufactureFilterSet = false;
-		if (isset($this -> data['Search']['Manufacture'])) {
+		if (isset($this -> request -> data['Search']['Manufacture'])) {
 			foreach ($this->data['Search']['Manufacture']['Filter'] as $key => $value) {
 				if ($value != 0) {
 					array_push($manFilters[0]['AND'][0]['OR'], array('Collectible.manufacture_id' => $key));
@@ -241,7 +247,7 @@ class AppController extends Controller {
 		array_push($typeFilters, array('AND' => array()));
 		array_push($typeFilters[0]['AND'], array('OR' => array()));
 		$collectibletypeFilterSet = false;
-		if (isset($this -> data['Search']['CollectibleType'])) {
+		if (isset($this -> request -> data['Search']['CollectibleType'])) {
 			foreach ($this->data['Search']['CollectibleType']['Filter'] as $key => $value) {
 				if ($value != 0) {
 					array_push($typeFilters[0]['AND'][0]['OR'], array('Collectible.collectibletype_id' => $key));
@@ -260,7 +266,7 @@ class AppController extends Controller {
 		array_push($licenseFilters, array('AND' => array()));
 		array_push($licenseFilters[0]['AND'], array('OR' => array()));
 		$licenseFilterSet = false;
-		if (isset($this -> data['Search']['License'])) {
+		if (isset($this -> request -> data['Search']['License'])) {
 			foreach ($this->data['Search']['License']['Filter'] as $key => $value) {
 				if ($value != 0) {
 					array_push($licenseFilters[0]['AND'][0]['OR'], array('Collectible.license_id' => $key));
@@ -276,7 +282,7 @@ class AppController extends Controller {
 
 		$tagFilters = array();
 		$tagFilterSet = false;
-		if (isset($this -> data['Search']['Tag'])) {
+		if (isset($this -> request -> data['Search']['Tag'])) {
 			foreach ($this->data['Search']['Tag']['Filter'] as $key => $value) {
 				if ($value != 0) {
 					array_push($tagFilters, array('Tag.id' => $key));

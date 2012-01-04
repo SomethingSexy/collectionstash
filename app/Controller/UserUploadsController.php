@@ -1,9 +1,10 @@
 <?php
 App::uses('Sanitize', 'Utility');
 class UserUploadsController extends AppController {
-		
-	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify');
 
+	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify');
+	
+	public $components = array('Image');
 	/**
 	 * This will display all uploads for the user logged in, since this is not a publically visible page
 	 * to share photos, we are just going to use who is logged in at the time. Might want to change this later
@@ -47,10 +48,10 @@ class UserUploadsController extends AppController {
 		}
 		$data = array();
 		$this -> checkLogIn();
-		$this -> data = Sanitize::clean($this -> data);
-		debug($this -> data);
+		$this -> request -> data = Sanitize::clean($this -> request -> data);
+		debug($this -> request -> data);
 		//Grab the user name from the request
-		$uploadName = $this -> data['UserUpload']['name'];
+		$uploadName = $this -> request -> data['UserUpload']['name'];
 		//TODO: update the error, so it doesn't log the user out,
 		if (!empty($uploadName)) {
 			$userUpload = $this -> UserUpload -> findByName($uploadName);
@@ -59,8 +60,8 @@ class UserUploadsController extends AppController {
 				if ($userUpload['UserUpload']['user_id'] === $this -> getUserId()) {
 					$this -> UserUpload -> id = $userUpload['UserUpload']['id'];
 
-					if (isset($this -> data['UserUpload']['type']) && ($this -> data['UserUpload']['type'] === 'title' || $this -> data['UserUpload']['type'] === 'description')) {
-						if ($this -> UserUpload -> saveField($this -> data['UserUpload']['type'], $this -> data['UserUpload']['data'], true)) {
+					if (isset($this -> request -> data['UserUpload']['type']) && ($this -> request -> data['UserUpload']['type'] === 'title' || $this -> request -> data['UserUpload']['type'] === 'description')) {
+						if ($this -> UserUpload -> saveField($this -> request -> data['UserUpload']['type'], $this -> request -> data['UserUpload']['data'], true)) {
 							$data['success'] = array('isSuccess' => true);
 							$data['isTimeOut'] = false;
 							$data['data'] = array();
@@ -103,21 +104,18 @@ class UserUploadsController extends AppController {
 	 * if they are logged in here and nothing else since we are using the session data
 	 */
 	public function add() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
 		$data = array();
 		if ($this -> isLoggedIn()) {
-			debug($this -> data);
-			$this -> data['UserUpload']['user_id'] = $this -> getUserId();
+			debug($this -> request -> data);
+			$this -> request -> data['UserUpload']['user_id'] = $this -> getUserId();
 
 			//Seriously, need counter cache to work
 			//Grab the count, if the current count is less than the total allowed, allow this one
 			$uploadCount = $this -> UserUpload -> find('count', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
 			if ($uploadCount < Configure::read('Settings.User.uploads.total-allowed')) {
-				if ($this -> UserUpload -> isValidUpload($this -> data)) {
+				if ($this -> UserUpload -> isValidUpload($this -> request -> data)) {
 
-					if ($this -> UserUpload -> saveAll($this -> data['UserUpload'])) {
+					if ($this -> UserUpload -> saveAll($this -> request -> data['UserUpload'])) {
 						//Grab the user id of the upload that was just added
 						$id = $this -> UserUpload -> id;
 						$userUpload = $this -> UserUpload -> findById($id);
@@ -172,14 +170,14 @@ class UserUploadsController extends AppController {
 		}
 		$data = array();
 		$this -> checkLogIn();
-		$this -> data = Sanitize::clean($this -> data);
-		debug($this -> data);
+		$this -> request -> data = Sanitize::clean($this -> request -> data);
+		debug($this -> request -> data);
 		//Grab the user name from the request
-		$uploadName = $this -> data['UserUpload']['name'];
+		$uploadName = $this -> request -> data['UserUpload']['name'];
 		//TODO: update the error, so it doesn't log the user out,
 		if (!empty($uploadName)) {
 			$userUpload = $this -> UserUpload -> findByName($uploadName);
-			$this -> data = $userUpload;
+			$this -> request -> data = $userUpload;
 			debug($userUpload);
 			if (!empty($userUpload)) {
 				if ($userUpload['UserUpload']['user_id'] === $this -> getUserId()) {

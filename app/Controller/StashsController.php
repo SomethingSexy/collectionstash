@@ -1,7 +1,7 @@
 <?php
 App::uses('Sanitize', 'Utility');
 class StashsController extends AppController {
-
+	public $name = 'Stashs';
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
 
 	function stats($id = null) {
@@ -246,8 +246,8 @@ class StashsController extends AppController {
 	public function view($userId = null) {
 		if (!is_null($userId)) {
 			$view = 'glimpse';
-			if (isset($this -> params['named']['view'])) {
-				$view = $this -> params['named']['view'];
+			if (isset($this -> request -> params['named']['view'])) {
+				$view = $this -> request -> params['named']['view'];
 			}
 
 			$userId = Sanitize::clean($userId, array('encode' => false));
@@ -275,7 +275,7 @@ class StashsController extends AppController {
 						$this -> set('userUploads', $user['UserUpload']);
 						$this -> set(compact('collectibles'));
 					} else {
-						$this -> render('viewPrivate');
+						$this -> render('view_private');
 						return;
 					}
 				} else {
@@ -283,7 +283,7 @@ class StashsController extends AppController {
 					$this -> redirect('/', null, true);
 				}
 			} else {
-				$this -> render('viewNoExist');
+				$this -> render('view_no_exist');
 				return;
 			}
 
@@ -292,9 +292,9 @@ class StashsController extends AppController {
 		}
 
 		if ($view === 'glimpse') {
-			$this -> render('viewGlimpse');
+			$this -> render('view_glimpse');
 		} else {
-			$this -> render('viewDetail');
+			$this -> render('view_detail');
 		}
 
 		//TODO save for future use

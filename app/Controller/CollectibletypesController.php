@@ -5,9 +5,7 @@ class CollectibletypesController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify');
 
 	public function getCollectibletypesData() {
-		if ($this -> request  -> isAjax()) {
-			Configure::write('debug', 0);
-		}
+		//$this -> render('get_collectibletypes_data', 'json');
 		//TODO update this to return the levels and lists
 		if (!empty($this -> request -> data)) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
@@ -32,10 +30,11 @@ class CollectibletypesController extends AppController {
 		} else {
 			$this -> set('aCollectibleTypesData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
 		}
+
 	}
 
 	// public function test() {
-		// $collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesPaths('2', '1');
+	// $collectibleTypes = $this -> Collectibletype -> CollectibletypesManufacture -> getCollectibleTypesPaths('2', '1');
 	// }
 
 	public function add() {
