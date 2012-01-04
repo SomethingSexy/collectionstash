@@ -7,9 +7,9 @@
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
 			<div class="collectible links">
-				<?php echo $html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
+				<?php echo $this -> Html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
 				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) { ?>
-					<?php echo $html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
+					<?php echo $this -> Html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
 					<a class="link" id="remove-link"><?php echo __('Remove');?></a>
 					<form id="remove-form" action="/collectibles_user/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
 			  	<?php } ?>
@@ -19,9 +19,9 @@
 					<?php
 					if (!empty($collectible['Collectible']['Upload'])) {
 					?>
-					<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '150', 'height' => '150'));?>
+					<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '150', 'height' => '150'));?>
 					<div class="collectible image-fullsize hidden">
-						<?php echo $fileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
+						<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0));?>
 					</div>
 					<?php } else {?><img src="/img/silhouette_thumb.png"/>
 					<?php }?>
@@ -46,14 +46,14 @@
 						?>
 
 						<dt>
-							<?php __('Edition Size');?>
+							<?php echo __('Edition Size');?>
 						</dt>
 						<dd>
 							<?php echo $collectible['CollectiblesUser']['edition_size'] . '/' . $collectible['Collectible']['edition_size'];?>
 						</dd>
 						<?php }?>
 						<dt>
-							<?php __('Purchase Price');?>
+							<?php echo __('Purchase Price');?>
 						</dt>
 						<dd>
 							<?php echo '$' . $collectible['CollectiblesUser']['cost'];?>
