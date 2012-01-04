@@ -69,7 +69,7 @@ if (!isset($adminMode)) {
 				}
 				?>
 				<dt>
-					<?php __('Manufacture');?>
+					<?php echo __('Manufacture');?>
 				</dt>
 				<?php
 				if ($showCompareFields && isset($collectibleCore['Collectible']['manufacture_id_changed']) && $collectibleCore['Collectible']['manufacture_id_changed']) {

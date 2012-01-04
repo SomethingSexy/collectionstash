@@ -112,35 +112,35 @@
 				<div class="box">
 					<ul class="nav">
 							<li>
-								<?php echo $html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
+								<?php echo $this -> Html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
 							</li>
 							<?php
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 
 							<li>
-								<?php echo $html -> link('Account', array('admin'=> false, 'controller' => 'profiles'));?>
+								<?php echo $this -> Html -> link('Account', array('admin'=> false, 'controller' => 'profiles'));?>
 							</li>
 							<?php
 							if($isUserAdmin)
 							{ ?>
 								<li>
-									<?php echo $html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
+									<?php echo $this -> Html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
 								</li>
 							<?php }?>
 							<li>
-								<?php echo $html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
+								<?php echo $this -> Html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
 							</li>
 							<?php  }
 								else
 								{
    							?>
 							<li>
-								<a id='login-link' href="/users/login"><?php __('Login');?></a>
+								<a id='login-link' href="/users/login"><?php echo __('Login');?></a>
 							</li>
 							<?php if(Configure::read('Settings.registration.open')){
 								echo '<li>';
-								echo $html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
+								echo $this -> Html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
 								echo '</li>';
 								} 
 							}?>					
@@ -158,25 +158,25 @@
 							{  ?>
 							<li>
 								<?php 
-									$user = $session->read('user');
-									echo $html -> link('My Stash', array('admin'=> false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
+									$user = $this -> Session ->read('user');
+									echo $this -> Html -> link('My Stash', array('admin'=> false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
 								?>
 							</li>
 							<?php  }
    							?>
    							<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
    							<li>
-								<?php echo $html -> link('Contribute', array('admin'=> false, 'action' => 'addSelectType', 'controller' => 'collectibles'));?>
+								<?php echo $this -> Html -> link('Contribute', array('admin'=> false, 'action' => 'addSelectType', 'controller' => 'collectibles'));?>
 							</li>
 							<?php } ?>	
    							<li>
-								<?php echo $html -> link('Tags', array('admin'=> false, 'controller' => 'tags'));?>
+								<?php echo $this -> Html -> link('Tags', array('admin'=> false, 'controller' => 'tags'));?>
 							</li>
    							<li>
-								<?php echo $html -> link('Community', array('admin'=> false, 'controller' => 'users'));?>
+								<?php echo $this -> Html -> link('Community', array('admin'=> false, 'controller' => 'users','action'=>'index'));?>
 							</li>
    							<li>
-								<?php echo $html -> link('Catalog', array('admin'=> false, 'controller' => 'collectibles','action'=>'search'));?>
+								<?php echo $this -> Html -> link('Catalog', array('admin'=> false, 'controller' => 'collectibles','action'=>'search'));?>
 							</li>
 						</ul>
 						<div class="site-search">
@@ -222,32 +222,32 @@
   <div class="component component-dialog">
     <div class="inside" >
       <div class="component-view">
-      <?php echo $form->create('User', array('action' => 'login')); ?>
+      <?php echo $this -> Form -> create('User', array('action' => 'login')); ?>
         <fieldset>
           <ul class="form-fields">
             <li>
               <div class="label-wrapper">
-                <label for=""><?php __('Username') ?></label>
+                <label for=""><?php echo __('Username') ?></label>
               </div>
-            <?php echo $form->input('username', array('div' => false,'label'=> false));?>
+            <?php echo $this -> Form -> input('username', array('div' => false,'label'=> false));?>
            </li>
            <li>
               <div class="label-wrapper">
-                <label for=""><?php __('Password') ?></label>
+                <label for=""><?php echo __('Password') ?></label>
               </div>           
-            <?php echo $form->input('password', array('div' => false, 'label'=> false));?>
+            <?php echo $this -> Form -> input('password', array('div' => false, 'label'=> false));?>
            </li>
           </ul>
           <?php 
           	if(isset($request_params)){
-          		echo $form->hidden('fromPage', array('value'=> $this->here.$request_params)); 	
+          		echo $this -> Form -> hidden('fromPage', array('value'=> $this->here.$request_params)); 	
           	} else {
-          		echo $form->hidden('fromPage', array('value'=> $this->here)); 
+          		echo $this -> Form -> hidden('fromPage', array('value'=> $this->here)); 
           	}	
           	
           ?>
         </fieldset>
-      <?php echo $form->end();?>
+      <?php echo $this -> Form -> end();?>
       </div>
     </div>
   </div>

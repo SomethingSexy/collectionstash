@@ -1,6 +1,6 @@
 <div class="collectible image">
 	<?php if (!empty($collectible['Upload'])) {?>
-	<?php echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height' => 150));?>
+	<?php echo $this -> FileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height' => 150));?>
 	<!--<div class="collectible image-fullsize hidden">
 		<?php //echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 0));?>
 	</div> -->

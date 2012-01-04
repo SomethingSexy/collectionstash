@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aCollectibleTypesData);
+echo $this -> Js -> object($aCollectibleTypesData);
 ?>

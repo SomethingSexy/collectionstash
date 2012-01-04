@@ -18,9 +18,9 @@ if(!isset($showStatus)){
 		<?php
 		if($collectible['variant']) {
 			echo '<dt>';
-			__('Variant:');
+			echo __('Variant:');
 			echo '</dt><dd>';
-			__('Yes');
+			echo __('Yes');
 			echo '</dd>';
 	
 		}

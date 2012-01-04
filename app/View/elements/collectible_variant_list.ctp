@@ -19,7 +19,7 @@
 						'license' => $variant['License'],
 						'collectibletype' => $variant['Collectibletype']
 					));?>
-	        	 <div class="collectible actions"><?php echo $html->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
+	        	 <div class="collectible actions"><?php echo $this -> Html ->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
 	          </div>
 	        <?php endforeach; ?>      
 	      </div>

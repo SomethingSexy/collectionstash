@@ -3,7 +3,7 @@
 	<div class="component welcome-component">
 		<div class="inside" >
 			<div class="component-view">	
-				<?php echo $html->image('logo/collection_stash_logo_christmas.png', array('alt' => 'Collection Stash'));?>
+				<?php echo $this -> Html -> image('logo/collection_stash_logo_christmas.png', array('alt' => 'Collection Stash'));?>
 			
 					<p class="heading">Welcome to Collection Stash</p>
    					<p class="body"> This site was designed to provide collectors with the ability to record and catalogue their prized possessions and connect with others who share a similar passion.  By becoming a member, you can track all details of items in your collection: manufacturer, artist, purchase date, edition size, and more.   We welcome your feedback on the site and look forward to making improvements in the future.</p>
@@ -51,7 +51,7 @@
 						echo '<div class="image"><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/'. $collectible['Collectible']['slugField']. '">';
 
 						if (!empty($collectible['Upload'])) {
-							echo $fileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height'=> 150));
+							echo $this -> FileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height'=> 150));
 						} else {
 							echo '<img src="/img/silhouette_thumb.png"/>';
 						}
