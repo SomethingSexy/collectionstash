@@ -60,7 +60,7 @@
 					}
 					if (!empty($myCollectible['Collectible']['Upload'])) {
 						echo '<div class="image">';
-						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
+						echo '<a href="/collectibles_user/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
 						echo '</div>';
 						//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 					} else {
@@ -104,8 +104,8 @@ if (isset($userUploads) && !empty($userUploads)) {
 
 	foreach ($userUploads as $key => $userUpload) {
 		echo '{';
-		echo 'image : "' . $fileUpload -> image($userUpload['name'], array('width' => 0, 'imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
-		echo 'thumb : "' . $fileUpload -> image($userUpload['name'], array('imagePathOnly' => true, 'height' => 40, 'width' => 41, 'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+		echo 'image : "' . $this -> FileUpload -> image($userUpload['name'], array('width' => 0, 'imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+		echo 'thumb : "' . $this -> FileUpload -> image($userUpload['name'], array('imagePathOnly' => true, 'height' => 40, 'width' => 41, 'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
 		echo 'title : "' . $userUpload['title'] . '",';
 		echo 'description : "' . $userUpload['description'] . '"';
 		echo '}';
