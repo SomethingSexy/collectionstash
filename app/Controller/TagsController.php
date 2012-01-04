@@ -1,7 +1,7 @@
 <?php
 class TagsController extends AppController {
 
-	public $helpers = array('Html', 'Js', 'Minify.Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 
 	public function getTagList() {
 		if ($this -> request -> isAjax()) {
