@@ -30,7 +30,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
-								<label for=""> <?php __('Manufacture')
+								<label for=""> <?php echo __('Manufacture')
 									?></label>
 							</div>
 							<?php
@@ -42,7 +42,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<?php echo '<li>';?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Collectible Type')
+							<label for=""> <?php echo __('Collectible Type');
 								?></label>
 						</div>
 						<?php
@@ -74,10 +74,10 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Manufacturer Type')
+							<label for=""> <?php echo __('Manufacturer Type')
 								?></label>
 						</div>
-						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, null, array('label' => false, 'empty' => true));?>
+						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
 						</li>
 						<?php
 						if (empty($licenses)) {
@@ -87,7 +87,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Brand/License')
+							<label for=""> <?php echo __('Brand/License')
 								?></label>
 						</div>
 						<?php echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));?>
@@ -101,7 +101,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php __('Series')
+							<label for=""> <?php echo __('Series')
 								?></label>
 						</div>
 						<?php
@@ -120,32 +120,32 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="scale"> <?php __('Scale')
+								<label for="scale"> <?php echo __('Scale')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('scale_id', array('empty' => true, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="scale"> <?php __('Release Year')
+								<label for="scale"> <?php echo __('Release Year')
 									?></label>
 							</div>
 							<?php
 							$current_year = date('Y');
 							$max_year = $current_year + 2;
-							echo $this -> Form -> year('release', 1900, $max_year, true);
+							echo $this -> Form -> year('release', 1900, $max_year);
 							?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleName"> <?php __('Name')
+								<label for="CollectibleName"> <?php echo __('Name')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('name', array('escape' => false, 'div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleDescription"> <?php __('Description')
+								<label for="CollectibleDescription"> <?php echo __('Description')
 									?></label>
 							</div>
 							<?php
@@ -157,21 +157,21 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleMsrp"> <?php __('Original Retail Price (USD)')
+								<label for="CollectibleMsrp"> <?php echo __('Original Retail Price (USD)')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('msrp', array('div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleUrl"> <?php __('URL')
+								<label for="CollectibleUrl"> <?php echo __('URL')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('url', array('escape' => false, 'div' => false, 'label' => false, 'escape' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleEditionSize"> <?php __('Limited Edition?')
+								<label for="CollectibleEditionSize"> <?php echo __('Limited Edition?')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('limited', array('div' => false, 'label' => false));?>
@@ -184,7 +184,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						}
 						?>
 						<div class="label-wrapper">
-							<label for="CollectibleEditionSize"> <?php __('Edition Size')
+							<label for="CollectibleEditionSize"> <?php echo __('Edition Size')
 								?></label>
 							<a class="ui-icon ui-icon-info" title="<?php echo __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true) ?>" alt="info"></a>
 						</div>
@@ -198,7 +198,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 							}
 						?>
 						<div class="label-wrapper">
-							<label for="CollectibleNumbered"> <?php __('Numbered')
+							<label for="CollectibleNumbered"> <?php echo __('Numbered')
 								?></label>
 							<a class="ui-icon ui-icon-info" title="<?php echo __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) ?>" alt="info"></a>
 						</div>
@@ -206,21 +206,21 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleExclusive"> <?php __('Exclusive')
+								<label for="CollectibleExclusive"> <?php echo __('Exclusive')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for=""> <?php __('Exclusive Retailer')
+								<label for=""> <?php echo __('Exclusive Retailer')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleCode"> <?php __('Product Code')
+								<label for="CollectibleCode"> <?php echo __('Product Code')
 									?></label>
 								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the item code or product code given by the manufacture.', true) ?>" alt="info"></a>
 							</div>
@@ -228,14 +228,14 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleUpc"> <?php __('Product UPC')
+								<label for="CollectibleUpc"> <?php echo __('Product UPC')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('upc', array('div' => false, 'label' => false));?>
 						</li>
 						<li>
 							<div class="label-wrapper">
-								<label for="CollectibleProductWeight"> <?php __('Weight (lbs)')
+								<label for="CollectibleProductWeight"> <?php echo __('Weight (lbs)')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('product_weight', array('div' => false, 'label' => false));?>
@@ -243,21 +243,21 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						<!--<div class="dimensions"><?php echo $this -> Form -> input('product_length', array('div' => false, 'size'=> '10', 'label' => false, 'id' => 'collectibleHeight'));?><span> x </span><?php echo $this -> Form -> input('product_width', array('div' => false, 'label' => false, 'id' => 'collectibleWidth'));?><span> x </span><?php echo $this -> Form -> input('product_depth', array('div' => false, 'label' => false, 'id' => 'collectibleDepth'));?></div>-->
 						<li>
 							<div class="label-wrapper">
-								<label for="collectibleHeight"> <?php __('Height (inches)')
+								<label for="collectibleHeight"> <?php echo __('Height (inches)')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('product_length', array('div' => false, 'label' => false, 'id' => 'collectibleHeight'));?>
 						</li>
 						<li id="widthWrapper">
 							<div class="label-wrapper">
-								<label for="collectibleWidth"> <?php __('Width (inches)')
+								<label for="collectibleWidth"> <?php echo __('Width (inches)')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('product_width', array('div' => false, 'label' => false, 'id' => 'collectibleWidth'));?>
 						</li>
 						<li id="depthWrapper">
 							<div class="label-wrapper">
-								<label for="collectibleDepth"> <?php __('Depth (inches)')
+								<label for="collectibleDepth"> <?php echo __('Depth (inches)')
 									?></label>
 							</div>
 							<?php echo $this -> Form -> input('product_depth', array('div' => false, 'label' => false, 'id' => 'collectibleDepth'));?>
