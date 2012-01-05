@@ -17,13 +17,13 @@
           <ul class="form-fields">
             <li>
               <div class="label-wrapper">
-                <label for=""><?php __('Username') ?></label>
+                <label for=""><?php echo __('Username') ?></label>
               </div>
             <?php echo $this -> Form -> input('username', array('div' => false,'label'=> false));?>
            </li>
            <li>
               <div class="label-wrapper">
-                <label for=""><?php __('Password') ?></label>
+                <label for=""><?php echo __('Password') ?></label>
               </div>           
             <?php echo $this -> Form -> input('password', array('div' => false, 'label'=> false));?>
            </li>

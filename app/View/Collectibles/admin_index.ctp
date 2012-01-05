@@ -14,7 +14,7 @@
 		<div class="page">
 			<div class="title">
 				<h2>
-					<?php __('Pending Collectibles');?>
+					<?php echo __('Pending Collectibles');?>
 				</h2>				
 			</div>
 			<?php echo $this -> element('flash');?>
@@ -43,7 +43,7 @@
 				<div class="paging">
 					<p>
 						<?php
-						echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+						echo $this -> Paginator -> counter( array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 						?>
 					</p>
 					<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>

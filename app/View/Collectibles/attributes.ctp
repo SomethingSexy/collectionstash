@@ -34,7 +34,7 @@
 				<?php echo $this -> Form -> create('Collectible', array('id'=>'add-attributes-form', 'url' => '/'.$this->params['controller']. '/'.$this->action.'/attributes', )); ?>
 				<fieldset>
 					<legend>
-						<?php __('Accessories/Features');?>
+						<?php echo __('Accessories/Features');?>
 					</legend>
 					<div id="collectible-attributes-list" class="attributes-list">
 						<ul>

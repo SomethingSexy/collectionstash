@@ -5,9 +5,9 @@
 			<h2>
 			<?php 		
 				if($addImage){
-					__('Add Image');
+					echo __('Add Image');
 				} else {
-					__('Change Image');
+					echo __('Change Image');
 				}?>
 			</h2>
 		</div>
@@ -28,9 +28,9 @@
 				<?php 
 					if (isset($collectible['Upload'])) { ?>
 						<div class="collectible image">
-							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '0'));?>
+							<?php echo $this -> FileUpload -> image($collectible['Upload']['name'], array('width' => '0'));?>
 							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
+								<?php echo $this -> FileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
 							</div>								
 						</div>	
 				<?php } ?>

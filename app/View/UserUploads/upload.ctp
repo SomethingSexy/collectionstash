@@ -12,7 +12,7 @@
 			<?php
 			echo '<div class="image" data-name="' . $userUpload['UserUpload']['name'] . '" data-id="' . $userUpload['UserUpload']['id'] . '">';
 			echo '<div class="image-container">';
-			echo $fileUpload -> image($userUpload['UserUpload']['name'], array('width' => 500, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['UserUpload']['user_id']));
+			echo $this -> FileUpload -> image($userUpload['UserUpload']['name'], array('width' => 500, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['UserUpload']['user_id']));
 			echo '</div>';
 			if (empty($userUpload['UserUpload']['title'])) {
 				echo '<div data-type="title" class="metadata title empty">';

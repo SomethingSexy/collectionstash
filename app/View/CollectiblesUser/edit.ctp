@@ -2,7 +2,7 @@
 <div class="component" id="collectible-add-component">
   <div class="inside">
     <div class="component-title">
-      <h2><?php __('Edit Your Collectible');?></h2>
+      <h2><?php echo __('Edit Your Collectible');?></h2>
     </div>
     <?php echo $this -> element('flash');?>
     <div class="component-info">
@@ -18,32 +18,32 @@
 				{ ?>
             <li>
               <div class="label-wrapper">
-                <label for="collectibleType"><?php __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
+                <label for="collectibleType"><?php echo __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
               </div>
               <?php  echo $this->Form->input('edition_size', array('div' => false, 'label'=>false));  ?>
             </li>
             <?php } ?>
 			<li>
                 <div class="label-wrapper">
-                  <label for="dialogCost"><?php __('How much did you pay?') ?> (Retail: $<?php echo $collectible['Collectible']['msrp'] ?> )</label>
+                  <label for="dialogCost"><?php echo __('How much did you pay?') ?> (Retail: $<?php echo $collectible['Collectible']['msrp'] ?> )</label>
                 </div> 
                 <?php echo $this->Form->input('cost', array('id'=>'dialogCost','div' => false, 'label' => false));?>
               </li> 
               <li>
                 <div class="label-wrapper">
-                  <label for="CollectiblesUserConditionId"><?php __('Condition') ?></label>
+                  <label for="CollectiblesUserConditionId"><?php echo __('Condition') ?></label>
                 </div> 
                 <?php echo $this->Form->input('condition_id', array('div' =>  false, 'label' => false));?>
               </li> 
               <li>
                 <div class="label-wrapper">
-                  <label for="CollectiblesUserMerchantId"><?php __('Where did you purchase the collectible?') ?></label>
+                  <label for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?') ?></label>
                 </div> 
                 <?php echo $this->Form->input('merchant_id', array('div' =>  false, 'label' => false));?>
               </li> 
 	          <li>
 	            <div class="label-wrapper">
-	              <label for=""><?php __('When did you purchase this collectible?') ?></label>
+	              <label for=""><?php echo __('When did you purchase this collectible?') ?></label>
 	            </div> 
 	            <?php echo $this->Form->text('purchase_date', array('div' =>  false, 'label' => false ,'maxLength'=>8));?>
 	          </li>               

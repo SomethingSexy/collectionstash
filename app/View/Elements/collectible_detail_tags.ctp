@@ -1,6 +1,6 @@
 <div class="collectible detail">
 	<div class="detail title">
-		<h3><?php __('Tags');?></h3>
+		<h3><?php echo __('Tags');?></h3>
 	</div>
 	<ul class="tag-list no-link">
 		<?php

@@ -2,7 +2,7 @@
 	<div class="component variant-list" id="collectibles-list-component">
 	  <div class="inside" >
 	     <div class="component-title">
-	      <h2><?php __('Variants');?></h2>
+	      <h2><?php echo __('Variants');?></h2>
 	    </div>
 	    <div class="component-view">
 	      <div class="collectibles view">
@@ -30,11 +30,11 @@
 	<div class="component variant-list" id="collectibles-list-component">
 	  <div class="inside" >
 	     <div class="component-title">
-	      <h2><?php __('Variants');?></h2>
+	      <h2><?php echo __('Variants');?></h2>
 	    </div>
 	    <div class="component-view">
 	      <div class="collectibles view empty">
-			<p><?php __('This collectible has no variants.'); ?></p>	
+			<p><?php echo __('This collectible has no variants.'); ?></p>	
 	      </div>
 	    </div>
 	  </div>

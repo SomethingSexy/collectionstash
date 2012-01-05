@@ -2,20 +2,20 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Your Stash Stats');?>
+			<?php echo __('Your Stash Stats');?>
 			</h2>
 		</div>
 		<div class="component-view">
 			<div class="collectible statistics">
 				<dl>
 					<dt>
-						<?php __('Total in Stash: ');?>
+						<?php echo __('Total in Stash: ');?>
 					</dt>
 					<dd>
 						<?php echo $stashStats['StashStats']['count'];?>
 					</dd>
 					<dt>
-						<?php __('Total Cost of Stash: ');?>
+						<?php echo __('Total Cost of Stash: ');?>
 					</dt>
 					<dd>
 						<?php echo $stashStats['StashStats']['cost_total'];?>

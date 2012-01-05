@@ -42,7 +42,7 @@
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
-								<label for=""> <?php __('Notes')
+								<label for=""> <?php echo __('Notes')
 									?></label>
 							</div>
 							<textarea rows="6" cols="30" name="data[Approval][notes]"></textarea>

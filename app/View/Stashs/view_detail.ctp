@@ -33,7 +33,7 @@
 						'collectibletype' => $myCollectible['Collectible']['Collectibletype']
 					));	
 					echo '<div class="collectible actions">';
-					echo $html -> link('Details', array('controller' => 'collectibles_user', 'action' => 'view', $myCollectible['CollectiblesUser']['id']));
+					echo $this -> Html -> link('Details', array('controller' => 'collectibles_user', 'action' => 'view', $myCollectible['CollectiblesUser']['id']));
 					echo '</div>';
 					echo '</div>'; 
 				}
@@ -46,7 +46,7 @@
 			<div class="paging">
 				<p>
 					<?php
-					echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+					echo $this -> Paginator -> counter( array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 					?>
 				</p>
 				<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>

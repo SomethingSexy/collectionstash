@@ -6,12 +6,12 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			    <h2><?php  __('Review Collectible Submission');?></h2>
+			    <h2><?php  echo __('Review Collectible Submission');?></h2>
 			</h2>
 		</div>
 	    <?php echo $this->element('flash'); ?>
 	    <div class="component-info">
-	      	<div><?php __('Please review the collectible you are submitting to Collection Stash.');?></div> 
+	      	<div><?php echo __('Please review the collectible you are submitting to Collection Stash.');?></div> 
 	    </div>
 		<div class="component-view review">
 

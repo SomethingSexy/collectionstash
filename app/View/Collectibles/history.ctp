@@ -44,7 +44,7 @@
 	       	</div>
 	        <div class="collectible detail">
 			<div class="detail title">
-				<h3><?php __('Accessories/Features History'); ?></h3>
+				<h3><?php echo __('Accessories/Features History'); ?></h3>
 			</div>
 			<?php
 					$lastKey = 0;
@@ -92,7 +92,7 @@
 			</div>   
 			<div class="collectible detail collectible-history">
 				<div class="detail title">
-					<h3><?php __('Upload History'); ?></h3>
+					<h3><?php echo __('Upload History'); ?></h3>
 				</div>
 				<?php if(!empty($uploadHistory)){ ?>
 				<div class="standard-list">

@@ -30,7 +30,7 @@
 				foreach ($uploads as $key => $value) {
 					echo '<div class="image" data-name="' . $value['UserUpload']['name'] . '" data-id="' . $value['UserUpload']['id'] . '">';
 					echo '<div class="image-container">';
-					echo '<a href="/user_uploads/upload/' . $value['UserUpload']['name'] . '">' . $fileUpload -> image($value['UserUpload']['name'], array('width' => 100, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'])) . '</a>';
+					echo '<a href="/user_uploads/upload/' . $value['UserUpload']['name'] . '">' . $this -> FileUpload -> image($value['UserUpload']['name'], array('width' => 100, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'])) . '</a>';
 					echo '</div>';
 					// echo '<div class="metadata">';
 					// echo $value['UserUpload']['title'];

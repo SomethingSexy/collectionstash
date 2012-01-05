@@ -6,7 +6,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php echo __('Add New Collectible', true); ?>
+			<?php echo __('Add New Collectible'); ?>
 			</h2>
 			<?php if($this -> Session -> check('add.collectible.variant')) { ?>
 			<div class="actions">
@@ -33,7 +33,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="">
-									<?php __('Manufacture') ?>
+									<?php echo __('Manufacture') ?>
 								</label>
 							</div>	
 							<div class="static-field">
@@ -44,7 +44,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="">
-									<?php __('Collectible Type') ?>
+									<?php echo __('Collectible Type') ?>
 								</label>
 							</div>	
 							<div class="static-field">
@@ -64,7 +64,7 @@
 						?>
 						<div class="label-wrapper">
 							<label for="">
-								<?php __('Manufacturer Collectible Type') ?>
+								<?php echo __('Manufacturer Collectible Type') ?>
 							</label>
 						</div>
 						<?php  
@@ -81,7 +81,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleName">
-									<?php __('Name') ?>
+									<?php echo __('Name') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('name', array('escape' => false,'div' => false, 'label' => false));?>
@@ -95,7 +95,7 @@
 						?>
 						<div class="label-wrapper">
 							<label for="">
-								<?php __('Brand/License') ?>
+								<?php echo __('Brand/License') ?>
 							</label>
 						</div>
 						<?php  
@@ -118,7 +118,7 @@
 						?>
 						<div class="label-wrapper">
 							<label for="">
-								<?php __('Series') ?>
+								<?php echo __('Series') ?>
 							</label>
 						</div>
 						<?php  
@@ -144,7 +144,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="scale">
-									<?php __('Scale') ?>
+									<?php echo __('Scale') ?>
 								</label>
 							</div>
 							<?php  
@@ -161,7 +161,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleDescription">
-									<?php __('Description') ?>
+									<?php echo __('Description') ?>
 								</label>
 							</div>
 							<?php 
@@ -174,7 +174,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleMsrp">
-									<?php __('Original Retail Price (USD)') ?>
+									<?php echo __('Original Retail Price (USD)') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('msrp', array('div' => false, 'label' => false));?>
@@ -182,7 +182,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="scale">
-									<?php __('Release Year') ?>
+									<?php echo __('Release Year') ?>
 								</label>
 							</div>
 							<?php 
@@ -193,7 +193,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleUrl">
-									<?php __('URL') ?>
+									<?php echo __('URL') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('url', array('escape' => false, 'div' => false, 'label' => false));?>
@@ -201,7 +201,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleEditionSize">
-									<?php __('Limited Edition?') ?>
+									<?php echo __('Limited Edition?') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('limited', array('div' => false, 'label' => false));?>
@@ -213,7 +213,7 @@
 						 } ?>
 							<div class="label-wrapper">
 								<label for="CollectibleEditionSize">
-									<?php __('Edition Size') ?>
+									<?php echo __('Edition Size') ?>
 								</label>
 								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true) ?>" alt="info"></a>
 							</div>
@@ -226,7 +226,7 @@
 						 } ?>
 							<div class="label-wrapper">
 								<label for="CollectibleNumbered">
-									<?php __('Numbered') ?>
+									<?php echo __('Numbered') ?>
 								</label>
 								<a class="ui-icon ui-icon-info" title="<?php echo __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) ?>" alt="info"></a>
 							</div>
@@ -235,7 +235,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleExclusive">
-									<?php __('Exclusive') ?>
+									<?php echo __('Exclusive') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('exclusive', array('div' => false, 'label' => false));?>
@@ -243,7 +243,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="">
-									<?php __('Exclusive Retailer') ?>
+									<?php echo __('Exclusive Retailer') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('retailer_id', array('div' => false, 'label' => false, 'empty' => true));?>
@@ -251,7 +251,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleCode">
-									<?php __('Product Code') ?>
+									<?php echo __('Product Code') ?>
 								</label>
 								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the item code or product code given by the manufacture.', true) ?>" alt="info"></a>
 							</div>
@@ -260,7 +260,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleUpc">
-									<?php __('Product UPC') ?>
+									<?php echo __('Product UPC') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('upc', array('div' => false, 'label' => false));?>
@@ -269,7 +269,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="CollectibleProductWeight">
-									<?php __('Weight (lbs)') ?>
+									<?php echo __('Weight (lbs)') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('product_weight', array('div' => false, 'label' => false));?>
@@ -279,7 +279,7 @@
 						<li>
 							<div class="label-wrapper">
 								<label for="collectibleHeight">
-									<?php __('Height (inches)') ?>
+									<?php echo __('Height (inches)') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('product_length', array('div' => false, 'label' => false, 'id' => 'collectibleHeight'));?>
@@ -287,7 +287,7 @@
 						<li id="widthWrapper">
 							<div class="label-wrapper">
 								<label for="collectibleWidth">
-									<?php __('Width (inches)') ?>
+									<?php echo __('Width (inches)') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('product_width', array('div' => false, 'label' => false, 'id' => 'collectibleWidth'));?>
@@ -295,7 +295,7 @@
 						<li id="depthWrapper">
 							<div class="label-wrapper">
 								<label for="collectibleDepth">
-									<?php __('Depth (inches)') ?>
+									<?php echo __('Depth (inches)') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('product_depth', array('div' => false, 'label' => false, 'id' => 'collectibleDepth'));?>

@@ -8,7 +8,7 @@
 		</div>
 		<div class="page">
 			<div class="title">
-				<h2><?php __('Approval');?></h2>
+				<h2><?php echo __('Approval');?></h2>
 			</div>
 			<?php echo $this -> element('flash');?>
 			<?php echo $fileUpload -> image($upload['Upload']['name'], array('width' => '0'));?>

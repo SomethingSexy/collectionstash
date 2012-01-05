@@ -11,7 +11,7 @@ if(!isset($showStatus)){
 		</dt>
 		<dd>
 			<?php echo $collectible['name'];?><?php
-			if($collectible['exclusive']) { __(' - Exclusive');
+			if($collectible['exclusive']) { echo __(' - Exclusive');
 			}
 			?>
 		</dd>

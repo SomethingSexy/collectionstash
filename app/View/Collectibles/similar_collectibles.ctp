@@ -9,7 +9,7 @@
 		</div>
 		<div class="component-info">
 			<div>
-				<?php __('Oh no!  It looks like the collectible you are trying to add might have been added already.  Please review the existing collectibles below.  If it doesn\'t exist then click the big button.') ?>
+				<?php echo __('Oh no!  It looks like the collectible you are trying to add might have been added already.  Please review the existing collectibles below.  If it doesn\'t exist then click the big button.') ?>
 			</div>
 		</div>
 		<div class="component-view">
@@ -40,7 +40,7 @@
 					?>
 					</div>-->
 					<div class="collectible actions">
-						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
+						<?php echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
 					</div>
 				</div>
 				<?php endforeach;?>

@@ -1,12 +1,12 @@
 <div class="component" id="manufactures-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php __('Contribute - Select Manufacturer');?></h2>
+      <h2><?php echo __('Contribute - Select Manufacturer');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
       <div>
-      	<p><?php __('Select from one of the supported Manufacturers below.') ?></p>
+      	<p><?php echo __('Select from one of the supported Manufacturers below.') ?></p>
       </div> 
     </div>    
     <div class="component-view">
@@ -31,7 +31,7 @@
           <p>
           <?php
            echo $this->Paginator->counter(array(
-           'format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)
+           'format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)
            ));
           ?>  </p>
           <?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>

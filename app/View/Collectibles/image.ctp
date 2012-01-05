@@ -16,7 +16,7 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Add Image');?>
+			<?php echo __('Add Image');?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>

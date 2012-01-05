@@ -2,12 +2,12 @@
 	<div class="inside">
 		<div class="component-title">
 			<h2>
-			<?php __('Invalid Request');?>
+			<?php echo __('Invalid Request');?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<p><?php __('The URL or request you are trying to access is invalid.'); ?></p>
+			<p><?php echo __('The URL or request you are trying to access is invalid.'); ?></p>
 		</div>
 	</div>
 </div>

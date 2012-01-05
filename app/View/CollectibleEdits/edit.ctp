@@ -25,7 +25,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				?>
 				<fieldset>
 					<legend>
-						<?php __('Details');?>
+						<?php echo __('Details');?>
 					</legend>
 					<ul class="form-fields">
 						<li>
@@ -300,7 +300,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Select from the series below to change.  Some series might have sub-series you can choose from.')
+					<?php echo __('Select from the series below to change.  Some series might have sub-series you can choose from.')
 					?>
 				</div>
 			</div>
@@ -317,7 +317,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Select from the types below to change.  Some types might have sub-types you can choose from.')
+					<?php echo __('Select from the types below to change.  Some types might have sub-types you can choose from.')
 					?>
 				</div>
 			</div>

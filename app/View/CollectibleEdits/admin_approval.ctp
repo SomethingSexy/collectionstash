@@ -13,7 +13,7 @@
 		</div>
 		<div class="page collectibles-approval">
 			<div class="title">
-				<h2><?php __('Approval');?></h2>
+				<h2><?php echo __('Approval');?></h2>
 			</div>
 			<?php echo $this -> element('flash');?>
 			<?php
@@ -26,7 +26,7 @@
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
-								<label for=""> <?php __('Notes')
+								<label for=""> <?php echo __('Notes')
 									?></label>
 							</div>
 							<textarea rows="6" cols="30" name="data[Approval][notes]"></textarea>
