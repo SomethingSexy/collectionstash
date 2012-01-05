@@ -35,11 +35,6 @@ class AttributesController extends AppController {
 	// }
 
 	public function getAttributeList($id = null) {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-			//$this->render('../json/add');
-		}
-
 		$attributes = $this -> Attribute -> getAttributeList($id);
 
 		$this -> set('aAttributes', $attributes);

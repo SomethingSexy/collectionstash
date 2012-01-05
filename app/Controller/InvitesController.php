@@ -12,9 +12,6 @@ class InvitesController extends AppController {
 	 */
 	public function view() {
 		if($this -> isLoggedIn()) {
-			if($this -> request -> isAjax()) {
-				Configure::write('debug', 0);
-			}
 			$user = $this -> getUser();
 			//debug($user);
 			/*
@@ -56,10 +53,6 @@ class InvitesController extends AppController {
 		if($this -> isLoggedIn()) {
 			//TODO update invite count in session
 			if(!empty($this -> data)) {
-				if($this -> request -> isAjax()) {
-					Configure::write('debug', 0);
-					//$this->render('../json/add');
-				}
 				$user = $this -> getUser();
 				$addCount = $user['User']['invite_count'] + 1;
 				if($this -> isUserAdmin()) {

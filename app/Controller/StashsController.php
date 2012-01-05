@@ -85,10 +85,6 @@ class StashsController extends AppController {
 		$username = $this -> getUsername();
 		if ($username) {//check to see they passed in data for the add
 			if (!empty($this -> request -> data)) {
-				if ($this -> request -> isAjax()) {
-					Configure::write('debug', 0);
-				}
-
 				//Grab the stash we are trying to edit
 				$stashForEdit = $this -> Stash -> findById($this -> request -> data['Stash']['id']);
 				debug($stashForEdit);
@@ -120,9 +116,6 @@ class StashsController extends AppController {
 	}
 
 	public function stashList() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
 		$username = $this -> getUsername();
 		if ($username) {
 			$user = $this -> getUser();
@@ -195,9 +188,6 @@ class StashsController extends AppController {
 
 	public function profileSettings() {
 		if ($this -> isLoggedIn()) {
-			if ($this -> request -> isAjax()) {
-				Configure::write('debug', 0);
-			}
 			$user = $this -> getUser();
 
 			$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
@@ -217,9 +207,6 @@ class StashsController extends AppController {
 	public function updateProfileSettings() {
 		$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 		if ($this -> isLoggedIn()) {
-			if ($this -> request -> isAjax()) {
-				Configure::write('debug', 0);
-			}
 			if (!empty($this -> request -> data)) {
 				$user = $this -> getUser();
 

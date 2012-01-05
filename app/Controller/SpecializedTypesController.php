@@ -5,10 +5,6 @@ class SpecializedTypesController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify.Minify');
 
 	public function getSpecializedTypesData() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
-
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$specializedTypes = $this -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($this -> data['manufacture_id'], $this -> data['collectibletype_id']);
