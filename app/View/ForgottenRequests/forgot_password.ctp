@@ -1,7 +1,7 @@
 <div class="component" id="forgot-password-component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php __('Forgot Password');?></h2>
+			<h2><?php echo __('Forgot Password');?></h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">

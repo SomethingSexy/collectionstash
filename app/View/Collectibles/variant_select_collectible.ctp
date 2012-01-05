@@ -2,13 +2,13 @@
 <div class="component" id="collectibles-list-component">
 	<div class="inside" >
 		<div class="component-title">
-			<h2><?php __('Contribute Variant - Select Collectible');?></h2>
+			<h2><?php echo __('Contribute Variant - Select Collectible');?></h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">
 			<div>
 				<p>
-					<?php __('To add a variant, you need to find the collectible this will be a variant of.  Browser through the list or use the search to narrow the results.  Click select to continue.');?>
+					<?php echo __('To add a variant, you need to find the collectible this will be a variant of.  Browser through the list or use the search to narrow the results.  Click select to continue.');?>
 				</p>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 				<div class="paging">
 					<p>
 						<?php
-						echo $this -> Paginator -> counter(array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+						echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 						?>
 					</p>
 					<?php

@@ -15,7 +15,7 @@
 			<?php foreach($edits as $edit){
 				echo '<li>';
 				echo '<span class="collectible-name">';
-				echo $html->link($edit['Collectible']['name'], array('admin'=> false, 'controller' => 'collectibles', 'action'=> 'view', $edit['Collectible']['id']));
+				echo $this -> Html -> link($edit['Collectible']['name'], array('admin'=> false, 'controller' => 'collectibles', 'action'=> 'view', $edit['Collectible']['id']));
 				echo '</span>';
 				echo '<span class="type">';
 				echo $edit['type'];
@@ -42,7 +42,7 @@
 	<div class="paging">
 		<p>
 			<?php
-			echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% edits out of %count% total.', true)));
+			echo $this -> Paginator -> counter( array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 			?>
 		</p>
 		<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>

@@ -109,7 +109,7 @@ if (isset($userUploads) && !empty($userUploads)) {
 		echo 'title : "' . $userUpload['title'] . '",';
 		echo 'description : "' . $userUpload['description'] . '"';
 		echo '}';
-		if ($key != (count($pages) - 1)) {
+		if ($key != (count($userUploads) - 1)) {
 			echo ',';
 		}
 	}

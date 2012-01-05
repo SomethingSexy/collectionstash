@@ -120,7 +120,7 @@ $(function(){
 		<div class="inside" >
 		<div class="component-info">
 			<div>
-				<?php __('Are you sure you want to remove this collectible from your stash?') ?>
+				<?php echo __('Are you sure you want to remove this collectible from your stash?') ?>
 			</div>
 		</div>
 		</div>

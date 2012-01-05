@@ -22,7 +22,7 @@
 				<?php echo $this -> Form -> create('Collectible', array('id'=>'add-attributes-form', 'url'=>'/attributes_collectibles_edits/edit/'.$collectibleId)); ?>
 				<fieldset>
 					<legend>
-						<?php __('Part Break Down');?>
+						<?php echo __('Part Break Down');?>
 					</legend>
 					<div id="collectible-attributes-list" class="attributes-list">
 						<ul>
@@ -103,7 +103,7 @@
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Fill out the information below to add an Attribute to this collectible.') ?>
+					<?php echo __('Fill out the information below to add an Attribute to this collectible.') ?>
 				</div>
 			</div>
 			<div class="component-view">
@@ -113,7 +113,7 @@
 						<li id="description-field">
 							<div class="label-wrapper">
 								<label for="CollectibleName">
-									<?php __('Description') ?>
+									<?php echo __('Description') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('description', array('maxlength' => 100, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>

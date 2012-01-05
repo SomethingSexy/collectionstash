@@ -1,13 +1,13 @@
 <div class="component" id="collectibletypes-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php __('Contribute - Select Collectible Type');?></h2>
+      <h2><?php echo __('Contribute - Select Collectible Type');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
       <div>
-      	<p><?php __('Select from the following collectible types for Manufacturer '); echo $manufacturer.'.'; ?></p>
-      	<p><?php __('Depending on the type selected, there might be different details you can add.'); ?></p>
+      	<p><?php echo __('Select from the following collectible types for Manufacturer '); echo $manufacturer.'.'; ?></p>
+      	<p><?php echo __('Depending on the type selected, there might be different details you can add.'); ?></p>
       </div> 
     </div>    
     <div class="component-view">

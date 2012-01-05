@@ -5,9 +5,9 @@
 			<h2>
 				<?php 
 				if($addImage){
-					__('Add Image');
+					echo __('Add Image');
 				} else {
-					__('Change Image');
+					echo __('Change Image');
 				}
 				
 				?>
@@ -40,9 +40,9 @@
 				<?php 
 					if (isset($collectible['Upload'])) { ?>
 						<div class="collectible image">
-							<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => '0'));?>
+							<?php echo $this -> FileUpload -> image($collectible['Upload']['name'], array('width' => '0'));?>
 							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
+								<?php echo $this -> FileUpload -> image($collectible['Upload']['name'], array('width' => 0));?>
 							</div>								
 						</div>	
 				<?php } ?>
@@ -50,9 +50,9 @@
 					<fieldset>
 						<legend><?php 
 						if($addImage){
-							__('Add Image');
+							echo __('Add Image');
 						} else {
-							__('Change Image');
+							echo __('Change Image');
 						}
 						
 						?></legend>
@@ -61,7 +61,7 @@
 							<li>
 								<div class="label-wrapper">
 									<label for="Upload0File">
-										<?php __('Upload image from your computer') ?>
+										<?php echo __('Upload image from your computer') ?>
 									</label>
 								</div>
 								<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>

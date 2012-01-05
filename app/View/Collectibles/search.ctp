@@ -2,7 +2,7 @@
 	<div class="inside" >
 		<div class="component-title">
 			<h2>
-			<?php __('Search Results');?>
+			<?php echo __('Search Results');?>
 			</h2>
 		</div>
 		<?php echo $this -> element('flash');?>
@@ -43,19 +43,20 @@
 						} ?>
 					</div>
 					<div class="collectible actions">
-						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));?>
+						<?php echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));?>
 					</div>
 				</div>
 				<?php endforeach;?>
 				<div class="paging">
 					<p>
 						<?php
-						echo $this -> Paginator -> counter( array('format' => __('Page %page% of %pages%, showing %current% collectibles out of %count% total.', true)));
+						echo $this -> Paginator -> counter( array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 						?>
 					</p>
 					<?php 
 				
-					$urlparams = $this->params['url'];
+					
+					$urlparams = $this->request->query;
 					unset($urlparams['url']); 
 					$this->Paginator->options(array('url' => array('?' => http_build_query($urlparams))));
 					

@@ -1,7 +1,7 @@
 <div class="component" id="registry-component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><h2><?php  __('Registry');?></h2></h2>
+			<h2><h2><?php  echo __('Registry');?></h2></h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">

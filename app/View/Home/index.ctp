@@ -15,7 +15,7 @@
 	<div class="component random-collectibles">
 		<div class="inside" >
 			<div class="component-title">
-				<h2><?php __('Recently Added Collectibles');?></h2>
+				<h2><?php echo __('Recently Added Collectibles');?></h2>
 			</div>
 			<div class="component-view">
 				<?php
