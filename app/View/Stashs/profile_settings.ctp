@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aProfileSettings);
+echo $this -> Js -> object($aProfileSettings);
 ?>

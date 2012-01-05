@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aStash);
+echo $this -> Js -> object($aStash);
 ?>

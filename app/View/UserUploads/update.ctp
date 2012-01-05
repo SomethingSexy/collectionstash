@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aMetadata);
+echo $this -> Js -> object($aMetadata);
 ?>

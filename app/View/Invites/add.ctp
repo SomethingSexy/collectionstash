@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aInvites);
+echo $this -> Js -> object($aInvites);
 ?>

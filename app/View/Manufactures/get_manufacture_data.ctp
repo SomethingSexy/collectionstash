@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aManufactureData);
+echo $this -> Js -> object($aManufactureData);
 ?>
