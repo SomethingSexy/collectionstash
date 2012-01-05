@@ -43,9 +43,6 @@ class UserUploadsController extends AppController {
 	}
 
 	public function update() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
 		$data = array();
 		$this -> checkLogIn();
 		$this -> request -> data = Sanitize::clean($this -> request -> data);
@@ -165,9 +162,6 @@ class UserUploadsController extends AppController {
 	}
 
 	public function delete() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
 		$data = array();
 		$this -> checkLogIn();
 		$this -> request -> data = Sanitize::clean($this -> request -> data);

@@ -7,10 +7,6 @@ class SeriesController extends AppController {
 	 * TODO update this so that it returns the series data in levels
 	 */
 	public function getSeriesData() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
-
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 

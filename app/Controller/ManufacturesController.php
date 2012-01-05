@@ -5,10 +5,6 @@ class ManufacturesController extends AppController {
 	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
 	
 	public function getManufactureData() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
-
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			//Grab all licenses for this manufacture

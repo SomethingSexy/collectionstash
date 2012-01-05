@@ -5,10 +5,6 @@ class LicensesController extends AppController {
 	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
 
 	public function getLicenseData() {
-		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-		}
-
 		if (!empty($this -> data)) {
 			$this -> data = Sanitize::clean($this -> data, array('encode' => false));
 			$license = $this -> License -> LicensesManufacture -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['manufacture_id'], 'LicensesManufacture.license_id' => $this -> data['license_id'])));
