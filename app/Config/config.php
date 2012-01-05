@@ -31,14 +31,6 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 			'allowed'=> true
 		)	
   	),
-  	'Email' => array(
-		'username' => 'admin@collectionstash.com',
-		'from' => 'Collection Stash <admin@collectionstash.com>',
-		'password' => 'oblivion1968',
-		'host' => 'smtpout.secureserver.net',
-		'port' => '25',
-		'timeout' => '30'
-	),
 	'User' => array(
 		'uploads' => array(
 			'allowed' => true,
