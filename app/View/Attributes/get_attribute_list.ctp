@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aAttributes);
+echo $this -> Js -> object($aAttributes);
 ?>

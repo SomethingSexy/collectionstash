@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aSpecializedTypesData);
+echo $this -> Js -> object($aSpecializedTypesData);
 ?>

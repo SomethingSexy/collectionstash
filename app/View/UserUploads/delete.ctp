@@ -1,3 +1,3 @@
 <?php
-  echo $javascript->object($aUpload);
+echo $this -> Js -> object($aUpload);
 ?>
