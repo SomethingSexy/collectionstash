@@ -73,7 +73,7 @@ class CollectibletypesManufacture extends AppModel {
 		$returnData['selectedTypes'] = array();
 		//Now check for the path of this collectible type, we do this to get all of the potential paths we want to, to select this collectible
 		//Right now we are assuming that when this manufacturer was setup, that if they added a child type, the parent type was added
-		$paths = $this -> Collectibletype -> getpath($collectibleTypeId);
+		$paths = $this -> Collectibletype -> getPath($collectibleTypeId);
 		$lastValue = 0;
 		//This lists out paths in order, the first being the high level
 		//Loop through each path, and grab the parent of the children to get that data, we will add subsequent children as L1, L2, L3.

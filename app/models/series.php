@@ -12,7 +12,7 @@ class Series extends AppModel {
 	 * the name representation
 	 */
 	public function buildSeriesPathName($seriesId){	
-		$paths = $this -> getpath($seriesId);
+		$paths = $this -> getPath($seriesId);
 		$seriesPathName = '';
 		$totalPaths = count($paths);
 		foreach ($paths as $key => $value) {

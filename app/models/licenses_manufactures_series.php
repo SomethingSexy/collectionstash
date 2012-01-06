@@ -72,7 +72,8 @@ class LicensesManufacturesSeries extends AppModel {
 				/*
 				 * If it is not null then we need to get the level
 				 */
-				$paths = $this -> Series -> getpath($seriesId);
+				debug($seriesId);
+				$paths = $this -> Series -> getPath($seriesId, array(),true);
 				$lastKey = 0;
 				debug($paths);
 				foreach ($paths as $key => $value) {
