@@ -194,7 +194,7 @@ class Collectible extends AppModel {
 			 *
 			 * If the getparentnode call, returns nothing, that means we are at the top level already
 			 */
-			$paths = $this -> Series -> getpath($check['series_id']);
+			$paths = $this -> Series -> getPath($check['series_id']);
 
 			if (!empty($paths)) {
 				reset($paths);
