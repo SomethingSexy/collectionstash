@@ -11,7 +11,7 @@ $( function() {
     $( "#add-attribute-dialog" ).dialog({
         'autoOpen' : false,
         'width' : 500,
-        'height': 425,
+        'height': 'auto',
         'modal': true,
         'resizable': false,
         'buttons': {

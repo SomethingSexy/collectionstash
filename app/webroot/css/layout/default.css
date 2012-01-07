@@ -654,10 +654,14 @@ a:active {
 .attributes-list ul li {
 	padding: 0;
 }
+.attributes-list.empty ul li {
+	padding: 10px;
+}
 .attributes-list ul li span.attribute-label,
 .attributes-list ul li span.attribute-action,
 .attributes-list ul li span.attribute-name,
-.attributes-list ul li span.attribute-description {
+.attributes-list ul li span.attribute-description,
+.attributes-list ul li span.attribute-status {
 	padding: 10px;
 }
 .attributes-list ul li .attribute-label ,
@@ -1680,6 +1684,7 @@ div.paging span a {
 }
 #base-collectible .collectible.item .collectible.detail-wrapper .collectible.detail {
 	width: 100%;
+	margin-left: 0;
 }
 /*****************************
  * collectible user add
