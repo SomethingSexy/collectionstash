@@ -10,7 +10,7 @@
 	    <div><?php echo __('Tell us about your collectible.') ?></div> 
 	  </div>
 	  <div class="component-view">
-	    <?php echo $this->Form->create('CollectiblesUser', array('url'=>'/collectibles_user/add/'.$collectible['Collectible']['id']));?>
+	    <?php echo $this->Form->create('CollectiblesUser', array('action'=>'add'));?>
 	      <fieldset>
 	        <ul class="form-fields">
           	<?php 
