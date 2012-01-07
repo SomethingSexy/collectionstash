@@ -15,7 +15,7 @@
 				<?php foreach($users as $user){
 					echo '<li>';
 					echo '<span class="username">';
-					echo $html->link($user['User']['username'], array('admin'=> false, 'controller' => 'stashs', 'action'=> 'view', $user['User']['username']));
+					echo $this->Html->link($user['User']['username'], array('admin'=> false, 'controller' => 'stashs', 'action'=> 'view', $user['User']['username']));
 					echo '</span>';
 					echo '<span class="join-date">';
 					$datetime = strtotime($user['User']['created']);
