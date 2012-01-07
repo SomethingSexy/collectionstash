@@ -91,11 +91,6 @@
  * 1.2.6 => 1.2.7
  * 	 - api change: removed shadow(), changed revertToDate() to only recurse into related models that
  *     are dependent when cascade is true
- * 
- * 
- * TODO update this so that I can pass in a flag that says to NOT save a revision.  I want this ability 
- * in case there is a specific update or save that I KNOW I do not want to rev.  An example of where I would
- * use this is when I am doing my first initially add for the collectible associated models
  *
  * @author Ronny Vindenes
  * @author Alexander 'alkemann' Morland
@@ -509,6 +504,12 @@ class RevisionBehavior extends ModelBehavior {
 		if ($cascade) {
 			$associated = array_merge($Model -> hasMany, $Model -> hasOne);
 			foreach ($associated as $assoc => $data) {
+
+				/* Continue with next association if no shadow model */
+				if (empty($Model -> $assoc -> ShadowModel)) {
+					continue;
+				}
+
 				$ids = array();
 
 				$cascade = false;
@@ -768,6 +769,10 @@ class RevisionBehavior extends ModelBehavior {
 	 * @return boolean
 	 */
 	public function afterSave(&$Model, $created) {
+		/*
+		 * Need to set this back to fix an issue outlined in the createShadowModel method.
+		 */
+		$Model -> ShadowModel -> alias = $Model -> alias;	
 		if ($this -> settings[$Model -> alias]['auto'] === false) {
 			return true;
 		}
@@ -797,7 +802,6 @@ class RevisionBehavior extends ModelBehavior {
 			}
 		}
 		$data = $Model -> find('first', array('contain' => $habtm, 'conditions' => array($Model -> alias . '.' . $Model -> primaryKey => $Model -> id)));
-
 		$changeDetected = false;
 		foreach ($data[$Model->alias] as $key => $value) {
 			if (isset($data[$Model -> alias][$Model -> primaryKey]) && !empty($this -> oldData[$Model -> alias]) && isset($this -> oldData[$Model -> alias][$Model -> alias][$key])) {
@@ -806,8 +810,6 @@ class RevisionBehavior extends ModelBehavior {
 			} else {
 				$old_value = '';
 			}
-			// debug($this -> settings[$Model -> alias]['ignore']);
-			// debug($key);
 			if ($value != $old_value && !in_array($key, $this -> settings[$Model -> alias]['ignore'])) {
 				$changeDetected = true;
 			}
@@ -838,7 +840,6 @@ class RevisionBehavior extends ModelBehavior {
 			return true;
 		}
 		$Model -> ShadowModel -> set('version_created', date('Y-m-d H:i:s'));
-		$Model -> ShadowModel -> save();
 		$Model -> version_id = $Model -> ShadowModel -> id;
 		if (is_numeric($this -> settings[$Model -> alias]['limit'])) {
 			$conditions = array('conditions' => array($Model -> alias . '.' . $Model -> primaryKey => $Model -> id));
@@ -847,7 +848,7 @@ class RevisionBehavior extends ModelBehavior {
 				$conditions['order'] = $Model -> alias . '.version_created ASC, ' . $Model -> alias . '.version_id ASC';
 				$oldest = $Model -> ShadowModel -> find('first', $conditions);
 				$Model -> ShadowModel -> id = null;
-				$Model -> ShadowModel -> del($oldest[$Model -> alias][$Model -> ShadowModel -> primaryKey]);
+				$Model -> ShadowModel -> delete($oldest[$Model -> alias][$Model -> ShadowModel -> primaryKey]);
 			}
 		}
 		return true;
@@ -891,6 +892,7 @@ class RevisionBehavior extends ModelBehavior {
 			return true;
 		}
 		$Model -> ShadowModel -> create();
+			
 		if (!isset($Model -> data[$Model -> alias][$Model -> primaryKey]) && !$Model -> id) {
 			return true;
 		}
@@ -902,7 +904,6 @@ class RevisionBehavior extends ModelBehavior {
 			}
 		}
 		$this -> oldData[$Model -> alias] = $Model -> find('first', array('contain' => $habtm, 'conditions' => array($Model -> alias . '.' . $Model -> primaryKey => $Model -> id)));
-
 		return true;
 	}
 
@@ -942,7 +943,16 @@ class RevisionBehavior extends ModelBehavior {
 		if ($Model -> tablePrefix) {
 			$Model -> ShadowModel -> tablePrefix = $Model -> tablePrefix;
 		}
-		$Model -> ShadowModel -> alias = $Model -> alias;
+		/*
+		 * Updated 1/7/12 after cakephp 2.0 upgrade, this was done
+		 * because this shadow model gets added as an associated
+		 * model and the alias was the same name, so when validations
+		 * where being done and passing the validations to
+		 * the view, it was overwriting the validations (this is done
+		 * in controller when calling the render)
+		 * 
+		 */
+		$Model -> ShadowModel -> alias = $Model -> alias.'Revs';
 		$Model -> ShadowModel -> primaryKey = 'version_id';
 		$Model -> ShadowModel -> order = 'version_created DESC, version_id DESC';
 		return true;
