@@ -1,7 +1,7 @@
 <?php
 class User extends AppModel {
 	var $name = 'User';
-	var $actsAs = array('ExtendAssociations', 'Containable');
+	var $actsAs = array('Containable');
 	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite', 'UserUpload');
 	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
 	var $hasOne = array('Profile' => array('dependent' => true));
@@ -23,7 +23,16 @@ class User extends AppModel {
 		return $valid;
 	}
 
-	var $validate = array('username' => array('validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
+	var $validate = array(
+		'username' => array(
+			'validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 
+			'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 
+			'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 
+		'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 
+			'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 
+		'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 
+		'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 
+		'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
 
 	/**
 	 * This validates to make sure the new and confirm password are the same

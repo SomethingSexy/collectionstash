@@ -8,7 +8,6 @@ class Stash extends AppModel {
 
 	function beforeValidate() {
 		$valid = true;
-
 		$totalCount = $this -> data['Stash']['total_count'];
 		//Add one because we are adding it.
 		$totalCount = $totalCount + 1;
@@ -18,27 +17,28 @@ class Stash extends AppModel {
 		if($totalCount > $totalAllowed) {
 			$this -> validationErrors['totalAllowed'] = 'You have reached your max number of stashes.';
 			$valid = false;
-		} else {
-			debug($totalAllowed);
-			if(true) {
-				debug($stashName);
-				if($this -> find('count', array('conditions' => array('Stash.name' => $stashName, 'Stash.user_id' => $this -> data['Stash']['user_id']))) > 0) {
-					debug($stashName);
-					$this -> invalidate('name', 'A stash with that name already exists.');
-					$valid = false;
-				} else {
-
-					$stashName = trim($stashName);
-					debug($stashName);
-					if(empty($stashName)) {
-						debug($stashName);
-						$valid = false;
-						$this -> invalidate('name', 'You must enter a stash name.');
-					}
-
-				}
-			}
-		}
+		} 
+		// else {
+			// debug($totalAllowed);
+			// if(true) {
+				// debug($stashName);
+				// if($this -> find('count', array('conditions' => array('Stash.name' => $stashName, 'Stash.user_id' => $this -> data['Stash']['user_id']))) > 0) {
+					// debug($stashName);
+					// $this -> invalidate('name', 'A stash with that name already exists.');
+					// $valid = false;
+				// } else {
+// 
+					// $stashName = trim($stashName);
+					// debug($stashName);
+					// if(empty($stashName)) {
+						// debug($stashName);
+						// $valid = false;
+						// $this -> invalidate('name', 'You must enter a stash name.');
+					// }
+// 
+				// }
+			// }
+		// }
 
 		return $valid;
 	}

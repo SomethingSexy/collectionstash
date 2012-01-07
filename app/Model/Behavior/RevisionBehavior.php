@@ -617,6 +617,10 @@ class RevisionBehavior extends ModelBehavior {
 	 * @return array
 	 */
 	public function revisions(&$Model, $options = array(), $include_current = false) {
+		/*
+		 * Need to set this back to fix an issue outlined in the createShadowModel method.
+		 */
+		$Model -> ShadowModel -> alias = $Model -> alias;
 		if (!$Model -> id) {
 			trigger_error('RevisionBehavior: Model::id must be set', E_USER_WARNING);
 			return null;
@@ -772,7 +776,7 @@ class RevisionBehavior extends ModelBehavior {
 		/*
 		 * Need to set this back to fix an issue outlined in the createShadowModel method.
 		 */
-		$Model -> ShadowModel -> alias = $Model -> alias;	
+		$Model -> ShadowModel -> alias = $Model -> alias;
 		if ($this -> settings[$Model -> alias]['auto'] === false) {
 			return true;
 		}
@@ -814,7 +818,9 @@ class RevisionBehavior extends ModelBehavior {
 				$changeDetected = true;
 			}
 		}
+		debug($data);
 		$Model -> ShadowModel -> create($data);
+		debug($Model -> ShadowModel);
 		if (!empty($habtm)) {
 			foreach ($habtm as $assocAlias) {
 				if (in_array($assocAlias, $this -> settings[$Model -> alias]['ignore'])) {
@@ -840,6 +846,7 @@ class RevisionBehavior extends ModelBehavior {
 			return true;
 		}
 		$Model -> ShadowModel -> set('version_created', date('Y-m-d H:i:s'));
+		$Model -> ShadowModel -> save();
 		$Model -> version_id = $Model -> ShadowModel -> id;
 		if (is_numeric($this -> settings[$Model -> alias]['limit'])) {
 			$conditions = array('conditions' => array($Model -> alias . '.' . $Model -> primaryKey => $Model -> id));
@@ -892,7 +899,7 @@ class RevisionBehavior extends ModelBehavior {
 			return true;
 		}
 		$Model -> ShadowModel -> create();
-			
+
 		if (!isset($Model -> data[$Model -> alias][$Model -> primaryKey]) && !$Model -> id) {
 			return true;
 		}
@@ -904,6 +911,7 @@ class RevisionBehavior extends ModelBehavior {
 			}
 		}
 		$this -> oldData[$Model -> alias] = $Model -> find('first', array('contain' => $habtm, 'conditions' => array($Model -> alias . '.' . $Model -> primaryKey => $Model -> id)));
+
 		return true;
 	}
 
@@ -950,9 +958,9 @@ class RevisionBehavior extends ModelBehavior {
 		 * where being done and passing the validations to
 		 * the view, it was overwriting the validations (this is done
 		 * in controller when calling the render)
-		 * 
+		 *
 		 */
-		$Model -> ShadowModel -> alias = $Model -> alias.'Revs';
+		$Model -> ShadowModel -> alias = $Model -> alias . 'Revs';
 		$Model -> ShadowModel -> primaryKey = 'version_id';
 		$Model -> ShadowModel -> order = 'version_created DESC, version_id DESC';
 		return true;
