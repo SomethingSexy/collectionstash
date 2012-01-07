@@ -1,5 +1,3 @@
-
-
 <div class="component">
 	<div class="inside" >
 	  <div class="component-title">

@@ -9,7 +9,7 @@
       <div><?php __('Edit the information about the collectible in your personal collection.  This update will not change the base collectible but just he one linked in your collection.');?></div> 
     </div>
     <div class="component-view">
-      <?php echo $this->Form->create('CollectiblesUser' , array('url' => array('controller'=>'collectibles_user','action'=>'edit', $collectible['CollectiblesUser']['id'])));?>
+      <?php echo $this->Form->create('CollectiblesUser',array('action'=>'edit'));?>
         <fieldset>
           <ul class="form-fields">
           	<?php 

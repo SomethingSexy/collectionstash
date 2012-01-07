@@ -9,9 +9,9 @@
 			<div class="collectible links">
 				<?php echo $this -> Html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
 				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) { ?>
-					<?php echo $this -> Html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_user', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
+					<?php echo $this -> Html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_users', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
 					<a class="link" id="remove-link"><?php echo __('Remove');?></a>
-					<form id="remove-form" action="/collectibles_user/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
+					<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
 			  	<?php } ?>
 			</div>
 			<div class="collectible item">
@@ -29,7 +29,7 @@
 				<div class="collectible detail">
 					<dl>
 						<dt>
-							<?php __('Date Added');?>
+							<?php echo __('Date Added');?>
 						</dt>
 						<dd>
 							<?php 
