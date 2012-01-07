@@ -6,7 +6,7 @@ $config['Settings'] = Set::merge($config['Settings'], array(
   	'title' => 'My Application',
   	'registration' => array(
   		'open' => true,
-  		'invite-only' => true
+  		'invite-only' => false
 	),
 	'Profile' => array (
 		'total-invites-allowed' => 5,
