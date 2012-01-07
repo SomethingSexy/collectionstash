@@ -1,6 +1,6 @@
 <?php
 App::uses('Sanitize', 'Utility');
-class CollectiblesUserController extends AppController {
+class CollectiblesUsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
 
@@ -45,6 +45,7 @@ class CollectiblesUserController extends AppController {
 	 */
 	public function add($id = null) {
 		$this -> checkLogIn();
+		debug($id);
 		debug($this -> request -> data);
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
@@ -82,6 +83,7 @@ class CollectiblesUserController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect($this -> referer());
 		}
+		debug($this->CollectiblesUser->validationErrors);
 	}
 
 	/**
@@ -100,7 +102,7 @@ class CollectiblesUserController extends AppController {
 					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
 					if ($this -> CollectiblesUser -> save($this -> request -> data, true, $fieldList)) {
 						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');
-						$this -> redirect(array('controller' => 'collectibles_user', 'action' => 'view', $id), null, true);
+						$this -> redirect(array('controller' => 'collectibles_users', 'action' => 'view', $id), null, true);
 						return;
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -175,6 +177,10 @@ class CollectiblesUserController extends AppController {
 		} else {
 			$this -> redirect("/", null, true);
 		}
+	}
+	
+	public function beforeRender(){
+		debug($this->validationErrors);	
 	}
 
 }

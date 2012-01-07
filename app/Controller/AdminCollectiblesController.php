@@ -1,11 +1,9 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 //8.10.11 Update because Approval does not exist anymore
 class AdminCollectiblesController extends AppController {
 	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'Minify.Minify');
-
-	var $components = array('Email');
-
 	//var $uses = array();
 
 	//TODO this needs to be updated to use the new approval stuff
@@ -70,7 +68,19 @@ class AdminCollectiblesController extends AppController {
 					//set user id who is doing the approving
 					$this -> Approval -> set(array('state' => '0', 'date_approved' => date("Y-m-d H:i:s", time()), 'notes' => $this -> request -> data['Approval']['notes'], 'approved_by_user_id' => $this -> getUserId()));
 					if ($this -> Approval -> save()) {
-						$this -> __sendApprovedEmail($approval['Approval']['user_id'], $collectibleid);
+						$this -> loadModel('User');
+						$user = $this -> User -> find(array('User.id' => $approval['Approval']['user_id']), array('User.id', 'User.email', 'User.username'), null, false);
+
+						$this -> loadModel('Collectible');
+						$collectibleName = $this -> Collectible -> getCollectibleNameById($collectibleId);
+
+						$email = new CakeEmail('smtp');
+						$email -> emailFormat('text');
+						$email -> template('collectible_approved', 'simple');
+						$email -> to($user['User']['email']);
+						$email -> subject('Your collectible has been approved!');
+						$email -> viewVars(array('collectibleName' => $collectibleName, 'username' => $user['User']['username']));
+						$email -> send();
 						$this -> Session -> setFlash(__('Collectible has been approved.', true));
 						$this -> redirect(array('action' => 'pending'), null, true);
 
@@ -98,37 +108,6 @@ class AdminCollectiblesController extends AppController {
 		} else {
 			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
 		}
-	}
-
-	function __sendApprovedEmail($user_id, $collectibleId) {
-		$this -> loadModel('User');
-		$user = $this -> User -> find(array('User.id' => $user_id), array('User.id', 'User.email', 'User.username'), null, false);
-		debug($user);
-		if ($user === false) {
-			debug(__METHOD__ . " failed to retrieve User data for user.id: {$user_id}");
-			return false;
-		}
-		$this -> loadModel('Collectible');
-		$collectibleName = $this -> Collectible -> getCollectibleNameById($collectibleId);
-		debug($collectibleName);
-		// Set data for the "view" of the Email
-		$this -> set('collectibleName', $collectibleName);
-		$this -> set('username', $user['User']['username']);
-
-		$this -> Email -> smtpOptions = array('port' => '25', 'timeout' => '30', 'host' => 'smtpout.secureserver.net', 'username' => 'admin@collectionstash.com', 'password' => 'oblivion1968',
-		// 'client' => 'smtp_helo_hostname'
-		);
-		$this -> Email -> delivery = 'smtp';
-		$this -> Email -> to = $user['User']['email'];
-		$this -> Email -> subject = 'Your collectible has been approved!';
-		$this -> Email -> from = 'admin@collectionstash.com';
-		$this -> Email -> template = 'collectible_approved';
-		$this -> Email -> sendAs = 'text';
-		// you probably want to use both :)
-		$return = $this -> Email -> send();
-		$this -> set('smtp_errors', $this -> Email -> smtpError);
-		debug($this -> Email -> smtpError);
-		return $return;
 	}
 
 }

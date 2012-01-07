@@ -243,36 +243,21 @@ class EditsController extends AppController {
 		$this -> set('edits', $edits);
 	}
 
-	function __sendApprovalEmail($approvedChange = true, $email = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
+	function __sendApprovalEmail($approvedChange = true, $userEmail = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
 		$return = true;
-		if ($email) {
-			// Set data for the "view" of the Email
-			$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
-			$this -> set(compact('collectibleName'));
-			$this -> set(compact('username'));
-			$this -> set(compact('notes'));
-			
-			
-			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
-			$this -> Email -> delivery = 'smtp';
-			$this -> Email -> to = $email;
-
-			$this -> Email -> from = Configure::read('Settings.Email.from');
+		if ($userEmail) {
+			$email = new CakeEmail('smtp');
+			$email -> emailFormat('both');
+			$email -> to($userEmail);
+			$email -> viewVars(array('collectibleName' => $collectibleName, 'username' => $username,'notes'=> $notes,'collectible_url' => 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId));
 			if ($approvedChange) {
-				$this -> Email -> template = 'edit_approval';
-				$this -> Email -> subject = 'Your change has been successfully approved!';
+				$email -> template('edit_approval', 'simple');
+				$email -> subject('Your change has been successfully approved!');
 			} else {
-				$this -> Email -> template = 'edit_deny';
-				$this -> Email -> subject = 'Oh no! Your change has been denied.';
+				$email -> template('edit_deny', 'simple');
+				$email -> subject('Oh no! Your change has been denied.');
 			}
-			$this -> Email -> sendAs = 'both';
-			// you probably want to use both :)
-			$return = $this -> Email -> send();
-			$this -> set('smtp_errors', $this -> Email -> smtpError);
-			if (!empty($this -> Email -> smtpError)) {
-				$return = false;
-				$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $email, 'error');
-			}
+			$email -> send();
 		} else {
 			$return = false;
 		}

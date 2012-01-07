@@ -1,9 +1,9 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 class InvitesController extends AppController {
 
-	public $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
-	var $components = array('Email');
+	public $helpers = array('Html', 'Js', 'FileUpload.FileUpload', 'Minify');
 	
 	/**
 	 * This will return the invites that the user has already invited

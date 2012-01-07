@@ -1,7 +1,7 @@
 <?php
 class AttributesController extends AppController {
 
-	public $helpers = array('Html', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 	
 	function index() {
 		//$this->data = $this->Attribute->generatetreelist(null, null, null, '&nbsp;&nbsp;&nbsp;');
@@ -36,7 +36,7 @@ class AttributesController extends AppController {
 
 	public function getAttributeList($id = null) {
 		$attributes = $this -> Attribute -> getAttributeList($id);
-
+		debug($attributes);
 		$this -> set('aAttributes', $attributes);
 	}
 
