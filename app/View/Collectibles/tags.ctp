@@ -25,7 +25,7 @@
 				<?php echo $this -> Form -> create('Tag', array('url' => '/' . $this -> params['controller'] . '/' . $this -> action . '/tags', ));?>
 				<fieldset>
 					<legend>
-						<?php __('Tags')
+						<?php echo __('Tags')
 						?>
 					</legend>
 					<ul class="form-fields">

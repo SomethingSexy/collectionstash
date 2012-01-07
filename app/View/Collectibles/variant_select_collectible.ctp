@@ -23,10 +23,10 @@
 					<?php echo $this -> element('collectible_list_image', array('collectible' => $collectible));?>
 					<?php echo $this -> element('collectible_list_detail', array('collectible' => $collectible['Collectible'], 'manufacture' => $collectible['Manufacture'], 'license' => $collectible['License'], 'collectibletype' => $collectible['Collectibletype']));?>
 					<div class="links">
-						<?php echo $html -> link('Select', array('action' => 'variantSelectCollectible', $collectible['Collectible']['id']));?>
+						<?php echo $this -> Html -> link('Select', array('action' => 'variantSelectCollectible', $collectible['Collectible']['id']));?>
 					</div>
 					<div class="collectible actions">
-						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));?>
+						<?php echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));?>
 					</div>
 				</div>
 				<?php endforeach;?>
@@ -37,7 +37,7 @@
 						?>
 					</p>
 					<?php
-					$urlparams = $this -> params['url'];
+					$urlparams = $this -> request -> query;
 					unset($urlparams['url']);
 					$this -> Paginator -> options(array('url' => array('?' => http_build_query($urlparams))));
 					echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));

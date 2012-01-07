@@ -36,7 +36,7 @@
 
 					</div>
 					<div class="collectible actions">
-						<?php echo $html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
+						<?php echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
 					</div>
 				</div>
 				<?php endforeach;?>

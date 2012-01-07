@@ -21,11 +21,11 @@
 			<div class="standard-list collectible-edit-list">
 				<ul>
 					<li class="title">
-						<span class="collectible-id"><?php __('Id'); ?></span>
-						<span class="user-id"><?php __('User Id'); ?></span>
-						<span class="type"><?php __('Type'); ?></span>
-						<span class="timestamp"><?php __('Timestamp'); ?></span>
-						<span class="action"><?php __('Action'); ?></span>
+						<span class="collectible-id"><?php echo __('Id'); ?></span>
+						<span class="user-id"><?php echo __('User Id'); ?></span>
+						<span class="type"><?php echo __('Type'); ?></span>
+						<span class="timestamp"><?php echo __('Timestamp'); ?></span>
+						<span class="action"><?php echo __('Action'); ?></span>
 					</li>
 					<?php foreach($edits as $edit){
 						echo '<li>';

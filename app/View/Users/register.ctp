@@ -15,7 +15,7 @@
               <div class="label-wrapper">
                 <label for="UserUsername"><?php echo __('User Name') ?></label>
               </div>
-              <?php echo $this->Form->input('username', array('div' => false, 'label' => false, 'after' => $form->error('username_unique', 'The username is taken. Please try again.')));  ?>
+              <?php echo $this->Form->input('username', array('div' => false, 'label' => false, 'after' => $this->Form->error('username_unique', 'The username is taken. Please try again.')));  ?>
             </li>
             <li>
               <div class="label-wrapper">

@@ -14,16 +14,16 @@
 		<div class="page">
 			<div class="title">
 				<h2>
-					<?php __('Edits');?>
+					<?php echo __('Edits');?>
 				</h2>				
 			</div>
 			<?php echo $this -> element('flash');?>
 			<div class="standard-list edit-list">
 				<ul>
 					<li class="title">
-						<span class="collectible-id"><?php __('Id'); ?></span>
-						<span class="name"><?php __('Name'); ?></span>
-						<span class="action"><?php __('Action'); ?></span>
+						<span class="collectible-id"><?php echo __('Id'); ?></span>
+						<span class="name"><?php echo __('Name'); ?></span>
+						<span class="action"><?php echo __('Action'); ?></span>
 					</li>
 					<?php foreach($edits as $edit){
 						echo '<li>';

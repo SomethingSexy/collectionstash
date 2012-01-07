@@ -39,7 +39,7 @@
 					?>
 					<div class="links">
 						<?php if($isLoggedIn){
-							echo '<a title="Add to stash" href="/collectibles_user/add/'.$collectible['Collectible']['id']. '" class="add-to-collection">Add to Stash</a>';
+							echo '<a title="Add to stash" href="/collectibles_users/add/'.$collectible['Collectible']['id']. '" class="add-to-collection">Add to Stash</a>';
 						} ?>
 					</div>
 					<div class="collectible actions">

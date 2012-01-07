@@ -26,7 +26,7 @@
 							<span class="date"><?php 
 								$datetime = strtotime($historyEntry['Collectible']['version_created']);
 								$mysqldate = date("m/d/y g:i A", $datetime);
-							echo $html->link($mysqldate, array('action' => 'historyDetail', $historyEntry['Collectible']['id'], $historyEntry['Collectible']['version_id']));?></span>
+							echo $this -> Html -> link($mysqldate, array('action' => 'historyDetail', $historyEntry['Collectible']['id'], $historyEntry['Collectible']['version_id']));?></span>
 							<span class="action"><?php 
 								if($historyEntry['Collectible']['action'] === 'A'){
 									echo __('Added');
@@ -110,7 +110,7 @@
 								<span class="date"><?php 
 									$datetime = strtotime($uploadHistoryEntry['Upload']['version_created']);
 									$mysqldate = date("m/d/y g:i A", $datetime);
-								echo $html->link($mysqldate, array('action' => 'historyDetail', $uploadHistoryEntry['Upload']['id'], $uploadHistoryEntry['Upload']['version_id']));?></span>
+								echo $this -> Html ->link($mysqldate, array('action' => 'historyDetail', $uploadHistoryEntry['Upload']['id'], $uploadHistoryEntry['Upload']['version_id']));?></span>
 								<span class="action"><?php 
 									if($uploadHistoryEntry['Upload']['action'] === 'A'){
 										echo __('Added');

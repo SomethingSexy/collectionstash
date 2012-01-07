@@ -1,6 +1,6 @@
 <?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
 <div id="bread-crumbs">
-	<?php echo $this->Wizard->progressMenu(array('manufacture'=>'Manufacturer Details', 'attributes'=>'Accessories/Features', 'tags'=>'Tags', 'image'=>'Image', 'review'=> 'Review')); ?>	
+	<?php echo $this -> Wizard -> progressMenu(array('manufacture'=>'Manufacturer Details', 'attributes'=>'Accessories/Features', 'tags'=>'Tags', 'image'=>'Image', 'review'=> 'Review')); ?>	
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
@@ -28,7 +28,7 @@
 			<div class="collectible add">
 				<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/manufacture', 'type' => 'file')); ?>
 				<fieldset>
-					<legend><?php __('Manufacturer Details');?></legend>
+					<legend><?php echo __('Manufacturer Details');?></legend>
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
@@ -165,8 +165,12 @@
 								</label>
 							</div>
 							<?php 
-								$data = str_replace('\n', "\n", $this->data['Collectible']['description']);
-        						$data = str_replace('\r', "\r", $data);
+								$data = '';
+								if(isset($this -> request -> data['Collectible']['description'])){
+									$data = str_replace('\n', "\n", $this -> request -> data['Collectible']['description']);
+        							$data = str_replace('\r', "\r", $data);
+								}
+								
 							
 								echo $this -> Form -> input('description', array('escape' => false, 'div' => false, 'label' => false, 'value'=> $data));	
 							?>
@@ -186,9 +190,9 @@
 								</label>
 							</div>
 							<?php 
-							    $current_year = date('Y');
-    							$max_year = $current_year + 2;
-								echo $this -> Form -> year('release', 1900, $max_year, true);?>
+							$current_year = date('Y');
+							$max_year = $current_year + 2;
+							echo $this -> Form -> year('release', 1900, $max_year);?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -206,7 +210,7 @@
 							</div>
 							<?php echo $this -> Form -> input('limited', array('div' => false, 'label' => false));?>
 						</li>
-						<?php if($this->data['Collectible']['limited']) { 
+						<?php if(isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) { 
 							echo '<li>';
 						} else { 
 							echo '<li class="hidden">';
@@ -219,7 +223,7 @@
 							</div>
 							<?php echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false));?>
 						</li>
-						<?php if($this->data['Collectible']['limited']) { 
+						<?php if(isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) { 
 							echo '<li>';
 						} else { 
 							echo '<li class="hidden">';
@@ -349,8 +353,8 @@
 		});
 		$('#base-collectible').dialog({
 			'autoOpen' : false,
-			'width' : 700,
-			'height': 700,
+			'width' : 750,
+			'height': 'auto',
 			'resizable': false,
 			'modal': true
 		});	

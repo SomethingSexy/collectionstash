@@ -125,7 +125,7 @@
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php __('Fill out the information below to add an Attribute to this variant.') ?>
+					<?php echo __('Fill out the information below to add an Attribute to this variant.') ?>
 				</div>
 			</div>
 			<div class="component-view">
@@ -135,7 +135,7 @@
 						<li id="description-field">
 							<div class="label-wrapper">
 								<label for="CollectibleName">
-									<?php __('Description') ?>
+									<?php echo __('Description') ?>
 								</label>
 							</div>
 							<?php echo $this -> Form -> input('description', array('maxlength' => 100, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>
