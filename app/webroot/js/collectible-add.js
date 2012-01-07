@@ -479,7 +479,7 @@ var collectibleAdd = function() {
 			$("#edit-series-dialog").dialog({
 				'autoOpen' : false,
 				'width' : 500,
-				'height' : 375,
+				'height' : 'auto',
 				'modal' : true,
 				'resizable' : false,
 				'buttons' : {
@@ -505,7 +505,7 @@ var collectibleAdd = function() {
 			$("#edit-collectibletype-dialog").dialog({
 				'autoOpen' : false,
 				'width' : 500,
-				'height' : 325,
+				'height' : 'auto',
 				'modal' : true,
 				'resizable' : false,
 				'buttons' : {
