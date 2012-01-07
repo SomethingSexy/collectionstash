@@ -32,11 +32,10 @@ class CollectibleEditsController extends AppController {
 			debug($this -> request -> data);
 			$this -> Collectible -> set($this -> request -> data);
 			$validCollectible = true;
-
 			if ($this -> Collectible -> validates()) {
 
 			} else {
-				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
+				$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), 'default', array(), 'error');
 				debug($this -> Collectible -> validationErrors);
 				$validCollectible = false;
 			}
@@ -47,7 +46,7 @@ class CollectibleEditsController extends AppController {
 				$this -> redirect(array('action' => 'review'));
 				//return so we do not call useless data
 				return;
-			} else {
+			} else {			
 				//Redundant but reget this collectible now for some display purposes (for stuff that does not change)
 				$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $this -> Session -> read('collectible.edit-id')), 'contain' => array('Manufacture')));
 				$licenseId = $this -> request -> data['Collectible']['license_id'];

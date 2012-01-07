@@ -1,10 +1,11 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 class CollectiblesController extends AppController {
 
-	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify');
+	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Wizard');
 
-	var $components = array('Wizard', 'Email');
+	public $components = array('Wizard');
 
 	var $actsAs = array('Searchable.Searchable');
 
@@ -28,11 +29,11 @@ class CollectiblesController extends AppController {
 		}
 		$this -> resetCollectibleAdd();
 		//check to see if there is data submitted
-		if (!empty($this -> data)) {
+		if (!empty($this -> request -> data)) {
 
-			if ($this -> data['Collectible']['massProduced'] === 'true') {
+			if ($this -> request -> data['Collectible']['massProduced'] === 'true') {
 				$this -> redirect(array('action' => 'massProduced'));
-			} else if ($this -> data['Collectible']['massProduced'] == 'false') {
+			} else if ($this -> request -> data['Collectible']['massProduced'] == 'false') {
 				$this -> redirect(array('action' => 'nonMassProduced'));
 			} else {
 				$this -> Session -> setFlash(__('Please select Yes or No.', true), null, null, 'error');
@@ -53,11 +54,11 @@ class CollectiblesController extends AppController {
 	 */
 	function massProduced() {
 		$this -> checkLogIn();
-		if (!empty($this -> data)) {
+		if (!empty($this -> request -> data)) {
 
-			if ($this -> data['Collectible']['manufactured'] === 'true') {
+			if ($this -> request -> data['Collectible']['manufactured'] === 'true') {
 				$this -> redirect(array('action' => 'selectManufacturer'));
-			} else if ($this -> data['Collectible']['manufactured'] == 'false') {
+			} else if ($this -> request -> data['Collectible']['manufactured'] == 'false') {
 				$this -> redirect(array('action' => 'nonManufactured'));
 			} else {
 				$this -> Session -> setFlash(__('Please select an option.', true), null, null, 'error');
@@ -101,10 +102,10 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'addSelectType'));
 		}
 
-		if (!empty($this -> data)) {
-			if ($this -> data['Collectible']['variant'] === 'true') {
+		if (!empty($this -> request -> data)) {
+			if ($this -> request -> data['Collectible']['variant'] === 'true') {
 				$this -> redirect(array('action' => 'variantSelectCollectible'));
-			} else if ($this -> data['Collectible']['variant'] == 'false') {
+			} else if ($this -> request -> data['Collectible']['variant'] == 'false') {
 				$this -> redirect(array('action' => 'selectCollectibleType'));
 			} else {
 				$this -> Session -> setFlash(__('Please select Yes or No.', true), null, null, 'error');
@@ -185,10 +186,10 @@ class CollectiblesController extends AppController {
 			}
 		}
 
-		$this -> data = Sanitize::clean($this -> data, array('encode' => false));
+		$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 		$manufactureId = $this -> Session -> read('add.collectible.manufacture');
 		debug($manufactureId);
-		$this -> params['url']['m'] = $manufactureId['Manufacture']['id'];
+		$this -> request -> query['m'] = $manufactureId['Manufacture']['id'];
 		$this -> searchCollectible(array('Collectible.variant' => '0'));
 	}
 
@@ -286,13 +287,13 @@ class CollectiblesController extends AppController {
 		$this -> set('licenses', $licenses);
 
 		//If data is empty then this is the first time we are coming here or a refresh or something.
-		if (empty($this -> data)) {
+		if (empty($this -> request -> data)) {
 
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
 				debug($variantCollectible);
 				$this -> set('collectible', $variantCollectible);
-				$this -> data = $variantCollectible;
+				$this -> request -> data = $variantCollectible;
 			}
 			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
 			$this -> set(compact('scales'));
@@ -322,12 +323,12 @@ class CollectiblesController extends AppController {
 				$this -> set('collectible', $variantCollectible);
 			}
 
-			if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
-				$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($this -> data['Collectible']['series_id']);
-				$this -> data['Collectible']['series_name'] = $seriesPathName;
+			if (isset($this -> request -> data['Collectible']['series_id']) && !empty($this -> request -> data['Collectible']['series_id'])) {
+				$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($this -> request -> data['Collectible']['series_id']);
+				$this -> request -> data['Collectible']['series_name'] = $seriesPathName;
 				$this -> set('hasSeries', true);
 			} else {
-				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $this -> data['Collectible']['license_id']);
+				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $this -> request -> data['Collectible']['license_id']);
 				debug($series);
 				$hasSeries = false;
 				if (count($series) > 0) {
@@ -342,7 +343,7 @@ class CollectiblesController extends AppController {
 		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
 		$this -> set('specializedTypes', $specializedTypes);
 
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'),'order'=> array('Scale.scale' => 'ASC')));
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
 
 		$this -> set(compact('scales'));
 
@@ -357,20 +358,20 @@ class CollectiblesController extends AppController {
 
 			$newCollectible = array();
 			//First check to see if this is a post
-			// if(!empty($this -> data)) {
-			$this -> data = Sanitize::clean($this -> data);
+			// if(!empty($this->request->data)) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$manufacturer = $this -> Session -> read('add.collectible.manufacture');
 			$collectibleType = $this -> Session -> read('add.collectible.collectibleType');
-			$this -> data['Collectible']['manufacture_id'] = $manufacturer['Manufacture']['id'];
-			$this -> data['Collectible']['collectibletype_id'] = $collectibleType['Collectibletype']['id'];
+			$this -> request -> data['Collectible']['manufacture_id'] = $manufacturer['Manufacture']['id'];
+			$this -> request -> data['Collectible']['collectibletype_id'] = $collectibleType['Collectibletype']['id'];
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-				$this -> data['Collectible']['variant'] = 1;
-				$this -> data['Collectible']['variant_collectible_id'] = $variantCollectible['Collectible']['id'];
+				$this -> request -> data['Collectible']['variant'] = 1;
+				$this -> request -> data['Collectible']['variant_collectible_id'] = $variantCollectible['Collectible']['id'];
 				$this -> set('collectible', $variantCollectible);
 			}
 			//Since this is a post, take the data that was submitted and set it to our variable
-			$newCollectible = $this -> data;
+			$newCollectible = $this -> request -> data;
 			//set default to true
 			$validCollectible = true;
 			//First try and validate the collectible.
@@ -424,7 +425,7 @@ class CollectiblesController extends AppController {
 	}
 
 	function _prepareAttributes() {
-		if (empty($this -> data)) {
+		if (empty($this -> request -> data)) {
 			if ($this -> Session -> check('add.collectible.variant')) {
 				//TODO store the collectible in the session for going back
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
@@ -435,7 +436,7 @@ class CollectiblesController extends AppController {
 
 					}
 				}
-				$this -> data['AttributesCollectible'] = $variantCollectible['AttributesCollectible'];
+				$this -> request -> data['AttributesCollectible'] = $variantCollectible['AttributesCollectible'];
 			}
 
 		}
@@ -449,15 +450,15 @@ class CollectiblesController extends AppController {
 
 	function _processAttributes() {
 		//TODO should validate
-		if (isset($this -> data['skip']) && $this -> data['skip'] === 'true') {
+		if (isset($this -> request -> data['skip']) && $this -> request -> data['skip'] === 'true') {
 			return true;
 		} else {
-			$this -> data = Sanitize::clean($this -> data);
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$this -> loadModel('AttributesCollectible');
 
 			//Uh this doesn't make sense, do I need to loop through each of these to validate?
-			if (isset($this -> data['AttributesCollectible'])) {
-				foreach ($this -> data['AttributesCollectible'] as $key => $attribue) {
+			if (isset($this -> request -> data['AttributesCollectible'])) {
+				foreach ($this->request->data['AttributesCollectible'] as $key => $attribue) {
 					$this -> AttributesCollectible -> set($attribue);
 					//debug($this -> AttributesCollectible);
 					if ($this -> AttributesCollectible -> validates()) {
@@ -478,11 +479,11 @@ class CollectiblesController extends AppController {
 		$wizardData = $this -> Wizard -> read();
 
 		if (isset($wizardData['tags']['CollectiblesTag'])) {
-			$this -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
+			$this -> request -> data['Tag'] = $wizardData['tags']['CollectiblesTag'];
 		} else {
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-				$this -> data['Tag'] = $variantCollectible['CollectiblesTag'];
+				$this -> request -> data['Tag'] = $variantCollectible['CollectiblesTag'];
 			}
 		}
 		if ($this -> Session -> check('add.collectible.variant')) {
@@ -494,16 +495,17 @@ class CollectiblesController extends AppController {
 	}
 
 	function _processTags() {
-		$this -> data = Sanitize::clean($this -> data);
+		$this -> request -> data = Sanitize::clean($this -> request -> data);
 		//TODO clean up the validation
-		if (count($this -> data['CollectiblesTag']) <= 5) {
+		if (count($this -> request -> data['CollectiblesTag']) <= 5) {
 			$this -> loadModel('Tag');
-			$processedTags = $this -> Tag -> processAddTags($this -> data['CollectiblesTag']);
-			$this -> data['CollectiblesTag'] = $processedTags;
+			$processedTags = $this -> Tag -> processAddTags($this -> request -> data['CollectiblesTag']);
+			$this -> request -> data['CollectiblesTag'] = $processedTags;
 			//If there are any errors returned from the processing, set them here and return false
 			//so the user knows they fucked something
 			if (!empty($this -> Tag -> validationErrors)) {
-				$this -> set('errors', $this -> Tag -> validationErrors);
+				debug($this -> Tag -> validationErrors);
+				$this -> set('errors', $this -> Tag -> validationErrors['tag']);
 				return false;
 			}
 		} else {
@@ -531,11 +533,11 @@ class CollectiblesController extends AppController {
 	}
 
 	function _processImage() {
-		if (!empty($this -> data)) {
+		if (!empty($this -> request -> data)) {
 
-			if (isset($this -> data['skip']) && $this -> data['skip'] === 'true') {
+			if (isset($this -> request -> data['skip']) && $this -> request -> data['skip'] === 'true') {
 				return true;
-			} else if (isset($this -> data['remove']) && $this -> data['remove'] === 'true') {
+			} else if (isset($this -> request -> data['remove']) && $this -> request -> data['remove'] === 'true') {
 
 				$wizardData = $this -> Wizard -> read();
 				$uploadId = $this -> Session -> read('uploadId');
@@ -554,8 +556,8 @@ class CollectiblesController extends AppController {
 				//If they submit and we already added a collectible, think back button, then just redisplay the
 				//page and show the image.  They can then choose to edit the image if they want
 				if (!isset($wizardData['image']['Upload']) && empty($uploadId)) {
-					if ($this -> Collectible -> Upload -> isValidUpload($this -> data)) {
-						if ($this -> Collectible -> Upload -> saveAll($this -> data['Upload'])) {
+					if ($this -> Collectible -> Upload -> isValidUpload($this -> request -> data)) {
+						if ($this -> Collectible -> Upload -> saveAll($this -> request -> data['Upload'])) {
 							//We have to save the upload right away because of how these work.  So lets save it
 							//Then lets grab the id of the upload and return the data of the uploaded one and store
 							//it in our saving object.  This will allow us to display the details to the user in the
@@ -760,6 +762,7 @@ class CollectiblesController extends AppController {
 			return false;
 		}
 	}
+
 	/**
 	 * This is called when cancelling during the contribute process
 	 */
@@ -916,12 +919,12 @@ class CollectiblesController extends AppController {
 	function admin_approve($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-		if ($id && is_numeric($id) && isset($this -> data['Approval']['approve'])) {
+		if ($id && is_numeric($id) && isset($this -> request -> data['Approval']['approve'])) {
 			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
-			$this -> data = Sanitize::clean($this -> data);
-			$notes = $this -> data['Approval']['notes'];
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			$notes = $this -> request -> data['Approval']['notes'];
 			//Approve
-			if ($this -> data['Approval']['approve'] === 'true') {
+			if ($this -> request -> data['Approval']['approve'] === 'true') {
 				if (!empty($collectible) && $collectible['Collectible']['state'] === '1') {
 					$data = array();
 					$data['Collectible'] = array();
@@ -929,7 +932,7 @@ class CollectiblesController extends AppController {
 					$data['Collectible']['state'] = 0;
 					$data['Revision']['action'] = 'P';
 					$data['Revision']['user_id'] = $this -> getUserId();
-					$data['Revision']['notes'] = $this -> data['Approval']['notes'];
+					$data['Revision']['notes'] = $this -> request -> data['Approval']['notes'];
 					if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
 						//Ugh need to get this again so I can get the Revision id
 						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
@@ -1004,26 +1007,19 @@ class CollectiblesController extends AppController {
 			$this -> set(compact('collectibleName'));
 			$this -> set(compact('username'));
 			$this -> set(compact('notes'));
-			$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
-			$this -> Email -> delivery = 'smtp';
-			$this -> Email -> to = $email;
 
-			$this -> Email -> from = Configure::read('Settings.Email.from');
+			$cakeEmail = new CakeEmail('smtp');
+			$cakeEmail -> emailFormat('both');
+			$cakeEmail -> to($email);
 			if ($approvedChange) {
-				$this -> Email -> template = 'add_approval';
-				$this -> Email -> subject = 'Your submission has been successfully approved!';
-				$this -> set('collectible_url', 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId);
+				$cakeEmail -> template('add_approval', 'simple');
+				$cakeEmail -> subject('Your submission has been successfully approved!');
 			} else {
-				$this -> Email -> template = 'add_deny';
-				$this -> Email -> subject = 'Oh no! Your submission has been denied.';
-			}
-			$this -> Email -> sendAs = 'both';
-			$return = $this -> Email -> send();
-			$this -> set('smtp_errors', $this -> Email -> smtpError);
-			if (!empty($this -> Email -> smtpError)) {
-				$return = false;
-				$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $email, 'error');
-			}
+				$cakeEmail -> template('add_deny', 'simple');
+				$cakeEmail -> subject('Oh no! Your submission has been denied.');
+			}			
+			$cakeEmail -> viewVars(array('collectible_url' => 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId, 'collectibleName'=> $collectibleName, 'notes'=>$notes,'username' => $username));
+			$cakeEmail -> send();
 		} else {
 			$return = false;
 		}

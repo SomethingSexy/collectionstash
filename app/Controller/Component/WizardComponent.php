@@ -156,7 +156,7 @@ class WizardComponent extends Component {
 	 * @access public
 	 */
 	function initialize(&$controller, $settings = array()) {
-		//$this -> controller = &$controller;
+		$this -> controller = $controller;
 		$this -> _set($settings);
 		$this -> _sessionKey = $this -> Session -> check('Wizard.complete') ? 'Wizard.complete' : 'Wizard.' . $controller -> name;
 		$this -> _configKey = 'Wizard.config';
@@ -303,8 +303,7 @@ class WizardComponent extends Component {
 				if ($this -> nestedViews) {
 					$this -> controller -> viewPath .= '/' . $this -> wizardAction;
 				}
-
-				return $this -> controller -> autoRender ? $this -> controller -> render($this -> _currentStep) : true;
+				return $this -> controller -> render($this -> _currentStep);
 			} else {
 				trigger_error(sprintf(__('Step validation: %s is not a valid step.', true), $step), E_USER_WARNING);
 			}

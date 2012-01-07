@@ -1,10 +1,9 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController {
 		
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
-
-	var $components = array('Email');
 
 	/**
 	 * This is the main index into this controller, it will display a list of users.

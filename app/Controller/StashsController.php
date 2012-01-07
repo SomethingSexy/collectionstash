@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class StashsController extends AppController {
 	public $name = 'Stashs';
-	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
 
 	function stats($id = null) {
 		//This is private stuff for sure make sure they are logged in

@@ -1,9 +1,9 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
 class ForgottenRequestsController extends AppController {
 
-	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
-	var $components = array('Email');
+	public $helpers = array('Html', 'Js', 'Minify');
 
 	public function forgotPassword() {
 		if (!empty($this -> data)) {
@@ -26,13 +26,14 @@ class ForgottenRequestsController extends AppController {
 				if ($this -> ForgottenRequest -> saveAll($forgottenModel)) {
 					//If it is successful, well then lets shoot off an email
 					$forgottenId = $this -> ForgottenRequest -> id;
-					if($this -> __sendForgottenEmail($forgottenUser, $forgottenId)){
-						// $this -> Session -> setFlash(__('An email as been sent with instructions on how to reset your password.', true), null, null, 'success');
-						$this -> render('forgotPasswordComplete');
-					} else {
-						
-					}
-					
+					$email = new CakeEmail('smtp');
+					$email -> emailFormat('text');
+					$email -> template('forgotten_password', 'simple');
+					$email -> to($forgottenUser['User']['email']);
+					$email -> subject('Forgotten Password Request');
+					$email -> viewVars(array('forgotten_url' => 'http://' . env('SERVER_NAME') . '/users/resetPassword/' . $forgottenId, 'username' => $forgottenUser['User']['username']));
+					$email -> send();
+					$this -> render('forgotPasswordComplete');
 				} else {
 
 				}
@@ -41,29 +42,5 @@ class ForgottenRequestsController extends AppController {
 			}
 		}
 	}
-
-	function __sendForgottenEmail($forgottenUser, $forgottenId) {
-		// Set data for the "view" of the Email
-		$this -> set('forgotten_url', 'http://' . env('SERVER_NAME') . '/users/resetPassword/' . $forgottenId);
-		$this -> set('username', $forgottenUser['User']['username']);
-
-		$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
-		$this -> Email -> delivery = 'smtp';
-		$this -> Email -> to = $forgottenUser['User']['email'];
-		$this -> Email -> subject = 'Forgotten Password Request';
-		$this -> Email -> from = Configure::read('Settings.Email.from');
-		$this -> Email -> template = 'forgotten_password';
-		$this -> Email -> sendAs = 'text';
-		// you probably want to use both :)
-		$return = $this -> Email -> send();
-		$this -> set('smtp_errors', $this -> Email -> smtpError);
-		if (!empty($this -> Email -> smtpError)) {
-			$return = false;
-			$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $user_id, 'error');
-		}
-
-		return $return;
-	}
-
 }
 ?>

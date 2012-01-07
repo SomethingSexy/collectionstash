@@ -3,7 +3,7 @@ App::uses('Sanitize', 'Utility');
 //TODO this could get renamed account
 class ProfilesController extends AppController {
 
-	public $helpers = array('Html', 'Ajax', 'FileUpload.FileUpload', 'Minify.Minify');
+	public $helpers = array('Html', 'Js', 'FileUpload.FileUpload', 'Minify');
 
 	public function index() {
 		$this -> checkLogIn();

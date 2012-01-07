@@ -2,13 +2,13 @@
 App::uses('Sanitize', 'Utility');
 class UploadEditsController extends AppController {
 		
-	public $helpers = array('Html', 'FileUpload.FileUpload', 'Minify.Minify');
+	public $helpers = array('Html', 'FileUpload.FileUpload', 'Minify');
 
 	//TODO this should get moved to an upload edit
 	function edit($collectibleId = null, $id = null) {
 		$this -> checkLogIn();
 		//First time in or a refresh
-		if (empty($this -> data)) {
+		if (empty($this->request->data)) {
 			//if collectible id is null and we didn't add it to the session already someone fucked up, redirect them
 			if (!is_null($collectibleId)) {
 				//If it is not null, then see if it was added to the session, if it was replace it, otherwise write it to the session
@@ -71,23 +71,23 @@ class UploadEditsController extends AppController {
 			$this -> set('collectible', $this -> Session -> read('Upload.Edit.upload'));
 
 			$this -> loadModel('Upload');
-			if ($this -> Upload -> isValidUpload($this -> data)) {
+			if ($this -> Upload -> isValidUpload($this->request->data)) {
 				$currentCollectibleId = $this -> Session -> read('Upload.Edit.collectibleId');
-				$this -> data['Upload'][0]['collectible_id'] = $currentCollectibleId;
-				$this -> data['Upload'][0]['edit_user_id'] = $this -> getUserId();
+				$this->request->data['Upload'][0]['collectible_id'] = $currentCollectibleId;
+				$this->request->data['Upload'][0]['edit_user_id'] = $this -> getUserId();
 				if ($this -> Session -> check('Upload.Edit.upload')) {
 					//If we have an image we are replacing, lets grab that uploadId, so we know which one is being replaced.
 					$originalUpload = $this -> Session -> read('Upload.Edit.upload');
-					$this -> data['Upload'][0]['upload_id'] = $originalUpload['Upload']['id'];
+					$this->request->data['Upload'][0]['upload_id'] = $originalUpload['Upload']['id'];
 					//Set the action to "R" to signify it is being replaces
-					$this -> data['Upload'][0]['action'] = 'E';
-					debug($this -> data);
+					$this->request->data['Upload'][0]['action'] = 'E';
+					debug($this->request->data);
 				} else {
 					//This means there was no image originally, add a "N" for new
-					$this -> data['Upload'][0]['action'] = 'A';
+					$this->request->data['Upload'][0]['action'] = 'A';
 				}
 				$this -> loadModel('UploadEdit');
-				if ($this -> UploadEdit -> saveAll($this -> data['Upload'])) {
+				if ($this -> UploadEdit -> saveAll($this->request->data['Upload'])) {
 					$uploadEditId = $this -> UploadEdit -> id;
 
 					$edit = array();
@@ -146,7 +146,7 @@ class UploadEditsController extends AppController {
 		if ($editId && is_numeric($editId) && $uploadEditId && is_numeric($uploadEditId)) {
 			$this -> set('uploadEditId', $uploadEditId);
 			$this -> set('editId', $editId);
-			if (empty($this -> data)) {
+			if (empty($this->request->data)) {
 				$uploadEditVersion = $this -> UploadEdit -> find("first", array('conditions' => array('UploadEdit.id' => $uploadEditId)));
 				if (!empty($uploadEditVersion)) {
 
