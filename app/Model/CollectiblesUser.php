@@ -1,12 +1,12 @@
 <?php
 class CollectiblesUser extends AppModel {
 
-	var $name = 'CollectiblesUser';
-	//As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user 
+	public $name = 'CollectiblesUser';
+	//As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
 	//then we have a complete total of collectibles
-	var $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User' => array('counterCache' => true), 'Condition', 'Merchant');
-	var $actsAs = array('Revision', 'Containable');
-	var $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'));
+	public $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User' => array('counterCache' => true), 'Condition', 'Merchant');
+	public $actsAs = array('Revision' => array('model' => 'CollectiblesUserRev'), 'Containable');
+	public $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'));
 
 	function beforeSave() {
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);

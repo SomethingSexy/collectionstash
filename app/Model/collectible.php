@@ -5,7 +5,7 @@ class Collectible extends AppModel {
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
-	var $actsAs = array('Revision', 'ExtendAssociations', 'Containable', 'Sluggable' => array(
+	var $actsAs = array('Revision' => array('model'=>'CollectibleRev'),'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -49,7 +49,8 @@ class Collectible extends AppModel {
 	//url
 		'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
 	//numbered
-		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'));
+		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.')
+		);
 
 	function beforeSave() {
 		debug($this -> data);
