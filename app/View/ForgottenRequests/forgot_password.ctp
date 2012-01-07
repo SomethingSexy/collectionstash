@@ -17,7 +17,7 @@
 				<ul class="form-fields">
 					<li>
 						<div class="label-wrapper">
-							<label for="UserEmail"><?php __('Email')
+							<label for="UserEmail"><?php echo __('Email')
 								?></label>
 						</div>
 						<?php echo $this -> Form -> input('email', array('div' => false, 'label' => false));?>

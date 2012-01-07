@@ -46,9 +46,9 @@
 				<?php 
 					if (isset($this->data['Upload'])) { ?>
 						<div class="collectible image">
-							<?php echo $fileUpload -> image($this->data['Upload']['name'], array('width' => '0'));?>
+							<?php echo $this -> FileUpload -> image($this->data['Upload']['name'], array('width' => '0'));?>
 							<div class="collectible image-fullsize hidden">
-								<?php echo $fileUpload -> image($this->data['Upload']['name'], array('width' => 0));?>
+								<?php echo $this -> FileUpload  -> image($this->data['Upload']['name'], array('width' => 0));?>
 							</div>								
 						</div>	
 						<div class="links">
@@ -63,7 +63,7 @@
 							<a class="link" id="remove-image-submit">Change Image</a> <a class="link" id="skip-image-button">Continue</a>
 						</div>
 				<?php } else { ?>
-					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' , 'id'=>'add-image-form', 'type' => 'file'));?>
+					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->request->params['controller']. '/'.$this->action.'/image' , 'id'=>'add-image-form', 'type' => 'file'));?>
 					<fieldset>
 						<legend><?php __('Image');?></legend>
 						<ul class="form-fields">	
@@ -89,7 +89,7 @@
 						<?php echo '<input type="hidden" name="data[remove]" value="false" />'; ?>		 
 					</fieldset>
 					</form>
-					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->params['controller']. '/'.$this->action.'/image' ,'id'=>'skip-image-form'));?>
+					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->request->params['controller']. '/'.$this->action.'/image' ,'id'=>'skip-image-form'));?>
 						<input type="hidden" name="data[skip]" value="true" />
 					</form>
 					<div class="links no-image">

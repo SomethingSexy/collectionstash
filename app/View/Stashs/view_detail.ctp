@@ -33,7 +33,7 @@
 						'collectibletype' => $myCollectible['Collectible']['Collectibletype']
 					));	
 					echo '<div class="collectible actions">';
-					echo $this -> Html -> link('Details', array('controller' => 'collectibles_user', 'action' => 'view', $myCollectible['CollectiblesUser']['id']));
+					echo $this -> Html -> link('Details', array('controller' => 'collectibles_users', 'action' => 'view', $myCollectible['CollectiblesUser']['id']));
 					echo '</div>';
 					echo '</div>'; 
 				}

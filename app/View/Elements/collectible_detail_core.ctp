@@ -31,7 +31,7 @@ if (!isset($adminMode)) {
 	<div class="collectible detail-wrapper">
 		<div class="collectible detail">
 			<div class="detail title">
-				<h3><?php __('Manufacture Details');?></h3>
+				<h3><?php echo __('Manufacture Details');?></h3>
 				<?php
 				if (isset($showEdit) && $showEdit) {
 					echo '<div class="title link">';
