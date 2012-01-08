@@ -153,6 +153,7 @@ class RevisionBehavior extends ModelBehavior {
 	 * @return boolean success
 	 */
 	public function createRevision(&$Model) {
+		
 		if (!$Model -> id) {
 			trigger_error('RevisionBehavior: Model::id must be set', E_USER_WARNING);
 			return null;

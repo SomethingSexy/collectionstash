@@ -1,6 +1,6 @@
 <?php
 class AttributesCollectiblesEditsController extends AppController {
-	public $helpers = array('Html', 'Ajax', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 
 	/*
 	 * In the future when doing this edits, we are going to have to make sure that these parts are not being

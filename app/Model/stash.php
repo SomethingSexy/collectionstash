@@ -4,7 +4,7 @@ class Stash extends AppModel {
 	var $useTable = 'stashes';
 	var $hasMany = array('CollectiblesUser' => array('dependent' => true));
 	var $belongsTo = array('User' => array('counterCache' => true));
-	var $actsAs = array('Revision', 'Containable');
+	var $actsAs = array('Containable');
 
 	function beforeValidate() {
 		$valid = true;

@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class ManufacturesController extends AppController {
 
-	public $helpers = array('Html', 'Ajax', 'Minify.Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 	
 	public function getManufactureData() {
 		if (!empty($this -> data)) {

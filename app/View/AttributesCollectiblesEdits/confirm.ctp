@@ -14,7 +14,7 @@
 		<div class="component-info">
 			<div>
 				<p><?php echo __('You have submitted for approval the following changes to the Accessories and Features for this collectible.'); ?></p>
-				<p><?php echo $html -> link('Return to Collectible', array('admin'=> false, 'controller' => '/collectibles','action'=>'view', $collectibleId));?></p>	
+				<p><?php echo $this -> Html -> link('Return to Collectible', array('admin'=> false, 'controller' => '/collectibles','action'=>'view', $collectibleId));?></p>	
 			</div>
 		</div>
 		<div class="component-view">
