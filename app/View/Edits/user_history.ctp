@@ -9,8 +9,8 @@
 			<li class="title">
 				<span class="collectible-name"><?php echo __('Name'); ?></span>
 				<span class="type"><?php echo __('Type'); ?></span>
-				<span class="timestamp"><?php echo $this->Paginator->sort('Date Added', 'created'); ?></span>
-				<span class="status"><?php echo $this->Paginator->sort('State', 'status'); ?></span>
+				<span class="timestamp"><?php echo $this->Paginator->sort('created', 'Date Added'); ?></span>
+				<span class="status"><?php echo $this->Paginator->sort( 'status', 'State'); ?></span>
 			</li>
 			<?php foreach($edits as $edit){
 				echo '<li>';

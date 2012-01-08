@@ -7,11 +7,11 @@
 	<div class="standard-list collectible-history-list">
 		<ul>
 			<li class="title">
-				<span class="collectible-name"><?php echo $this->Paginator->sort('Name', 'name'); ?></span>
-				<span class="collectible-manufacturer"><?php echo $this->Paginator->sort('Manufacturer', 'manufacture_id'); ?></span>
-				<span class="collectible-type"><?php echo $this->Paginator->sort('Type', 'collectibletype_id'); ?></span>
-				<span class="timestamp"><?php echo $this->Paginator->sort('Date Added', 'created'); ?></span>
-				<span class="status"><?php echo $this->Paginator->sort('State', 'state'); ?></span>
+				<span class="collectible-name"><?php echo $this->Paginator->sort('name', 'Name'); ?></span>
+				<span class="collectible-manufacturer"><?php echo $this->Paginator->sort( 'manufacture_id', 'Manufacturer'); ?></span>
+				<span class="collectible-type"><?php echo $this->Paginator->sort('collectibletype_id', 'Type'); ?></span>
+				<span class="timestamp"><?php echo $this->Paginator->sort('created', 'Date Added'); ?></span>
+				<span class="status"><?php echo $this->Paginator->sort('state', 'State'); ?></span>
 			</li>
 			<?php foreach($collectibles as $edit){
 				echo '<li>';
