@@ -1,3 +1,3 @@
 <?php
-echo $this -> Js -> object$aLicenseData);
+echo $this -> Js -> object($aLicenseData);
 ?>

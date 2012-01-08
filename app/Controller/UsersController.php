@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController {
-		
+
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
 
 	/**
@@ -294,33 +294,22 @@ class UsersController extends AppController {
 	 *  @return Boolean indicates success
 	 */
 	function __sendActivationEmail($user_id) {
-		$user = $this -> User -> find(array('User.id' => $user_id), array('User.id', 'User.email', 'User.username'), null, false);
+		$user = $this -> User -> find('first', array('conditions' => array('User.id' => $user_id), 'contain' => false));
 		debug($user);
 		if ($user === false) {
 			debug(__METHOD__ . " failed to retrieve User data for user.id: {$user_id}");
 			return false;
 		}
 
-		// Set data for the "view" of the Email
-		$this -> set('activate_url', 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash());
-		$this -> set('username', $this -> request -> data['User']['username']);
+		$email = new CakeEmail('smtp');
+		$email -> emailFormat('text');
+		$email -> template('user_confirm', 'simple');
+		$email -> to($user['User']['email']);
+		$email -> subject(env('SERVER_NAME') . '– Please confirm your email address');
+		$email -> viewVars(array('activate_url' => 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash(), 'username' => $this -> request -> data['User']['username']));
+		$email -> send();
 
-		$this -> Email -> smtpOptions = array('port' => Configure::read('Settings.Email.port'), 'timeout' => Configure::read('Settings.Email.timeout'), 'host' => Configure::read('Settings.Email.host'), 'username' => Configure::read('Settings.Email.username'), 'password' => Configure::read('Settings.Email.password'));
-		$this -> Email -> delivery = 'smtp';
-		$this -> Email -> to = $user['User']['email'];
-		$this -> Email -> subject = env('SERVER_NAME') . '– Please confirm your email address';
-		$this -> Email -> from = Configure::read('Settings.Email.from');
-		$this -> Email -> template = 'user_confirm';
-		$this -> Email -> sendAs = 'text';
-		// you probably want to use both :)
-		$return = $this -> Email -> send();
-		$this -> set('smtp_errors', $this -> Email -> smtpError);
-		if (!empty($this -> Email -> smtpError)) {
-			$return = false;
-			$this -> log('There was an issue sending the email ' . $this -> Email -> smtpError . ' for user ' . $user_id, 'error');
-		}
-
-		return $return;
+		return true;
 	}
 
 }

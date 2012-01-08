@@ -7,8 +7,8 @@
 	<div class="standard-list edit-history-list">
 		<ul>
 			<li class="title">
-				<span class="collectible-name"><?php __('Name'); ?></span>
-				<span class="type"><?php __('Type'); ?></span>
+				<span class="collectible-name"><?php echo __('Name'); ?></span>
+				<span class="type"><?php echo __('Type'); ?></span>
 				<span class="timestamp"><?php echo $this->Paginator->sort('Date Added', 'created'); ?></span>
 				<span class="status"><?php echo $this->Paginator->sort('State', 'status'); ?></span>
 			</li>

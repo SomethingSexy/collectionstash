@@ -27,7 +27,7 @@ var inviteAccount = function() {
 				$.each(data.responseData.Invites, function(key, value){
 					$li = $('<li></li>').append($('<span></spann').text(value.Invite.email));
 					var status = '';
-					if(value.Invite.registered === '0'){
+					if(value.Invite.registered === false){
 						status = 'Not registered';
 					} else {
 						status = 'Registered';
