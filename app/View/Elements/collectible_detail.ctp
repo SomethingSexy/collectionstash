@@ -13,7 +13,7 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 				<ul>
 					<?php
 					if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
-						echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectiblesUser/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link.png"/></a></li>';
+						echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link.png"/></a></li>';
 					}
 					?>
 				</ul>
