@@ -159,7 +159,7 @@
 							<li>
 								<?php 
 									$user = $this -> Session ->read('user');
-									echo $this -> Html -> link('My Stash', array('admin'=> false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username'], 'view'=>'glimpse'));
+									echo $this -> Html -> link('My Stash', array('admin'=> false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username']));
 								?>
 							</li>
 							<?php  }

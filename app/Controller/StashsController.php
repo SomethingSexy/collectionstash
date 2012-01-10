@@ -230,16 +230,12 @@ class StashsController extends AppController {
 		}
 	}
 
-	public function view($userId = null) {
-		if (!is_null($userId)) {
-			$view = 'glimpse';
-			if (isset($this -> request -> params['named']['view'])) {
-				$view = $this -> request -> params['named']['view'];
-			}
-
-			$userId = Sanitize::clean($userId, array('encode' => false));
+	public function pageView($userName = null) {
+		$this->autoLayout = false; 
+		if (!is_null($userName)) {
+			$userId = Sanitize::clean($userName, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later
-			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
+			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userName), 'contain' => array('Stash', 'UserUpload')));
 			debug($user);
 			//Ok we have a user, although this seems kind of inefficent but it works for now
 			if (!empty($user)) {
@@ -251,10 +247,10 @@ class StashsController extends AppController {
 						$viewingMyStash = true;
 					}
 					$this -> set('myStash', $viewingMyStash);
-					$this -> set('stashUsername', $userId);
+					$this -> set('stashUsername', $userName);
 					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24);
+						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
 						$collectibles = $this -> paginate('CollectiblesUser');
 
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
@@ -276,12 +272,50 @@ class StashsController extends AppController {
 
 		} else {
 			$this -> redirect('/', null, true);
-		}
+		}		
+	}
 
-		if ($view === 'glimpse') {
-			$this -> render('view_glimpse');
+	public function view($userId = null) {
+		if (!is_null($userId)) {
+			$userId = Sanitize::clean($userId, array('encode' => false));
+			//Also retrieve the UserUploads at this point, so we do not have to do it later
+			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
+			debug($user);
+			//Ok we have a user, although this seems kind of inefficent but it works for now
+			if (!empty($user)) {
+				$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
+				if (!empty($stash)) {
+					$loggedInUser = $this -> getUser();
+					$viewingMyStash = false;
+					if ($loggedInUser['User']['id'] === $user['User']['id']) {
+						$viewingMyStash = true;
+					}
+					$this -> set('myStash', $viewingMyStash);
+					$this -> set('stashUsername', $userId);
+					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
+						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
+						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+						$collectibles = $this -> paginate('CollectiblesUser');
+
+						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
+						debug($collectibles);
+						$this -> set('userUploads', $user['UserUpload']);
+						$this -> set(compact('collectibles'));
+					} else {
+						$this -> render('view_private');
+						return;
+					}
+				} else {
+					//This is a fucking error
+					$this -> redirect('/', null, true);
+				}
+			} else {
+				$this -> render('view_no_exist');
+				return;
+			}
+
 		} else {
-			$this -> render('view_detail');
+			$this -> redirect('/', null, true);
 		}
 
 		//TODO save for future use

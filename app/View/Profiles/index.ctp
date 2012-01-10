@@ -4,7 +4,7 @@
 </div>
 <ul class="account page list">
 	<li class="page list item" id="account-profile">
-		<div class="header"><span class="page"><?php echo __('Profile');?></span><span class="action"><a class="link"><?php echo __('View');?></a></span></div>
+		<div class="header"><span class="page"><?php echo __('Profile');?></span><span class="action"><?php echo __('Not Available');?></span></div>
 		<div class="body">
 			
 			
