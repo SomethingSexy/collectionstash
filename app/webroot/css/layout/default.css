@@ -20,8 +20,32 @@
 .clearfix {display: block;}
 /* End hide from IE-mac */
 
-
-
+.tn3e-prev {
+    background-image: url("/img/icon/tn3e.png");
+    background-position: -2px -3px;
+  	bottom: 50%;
+    cursor: pointer;
+    height: 17px;
+    left: 30px;
+    position: absolute;
+    width: 13px;
+}
+.tn3e-prev:hover {
+    background-position: -2px -23px;
+}
+.tn3e-next {
+    background-image: url("/img/icon/tn3e.png");
+    background-position: -20px -3px;
+	bottom: 50%;
+    cursor: pointer;
+    height: 17px;
+    position: absolute;
+    right: 33px;
+    width: 13px;
+}
+.tn3e-next:hover {
+    background-position: -20px -23px;
+}
 a {
    /* font-weight: bold;*/
     text-decoration: none;
@@ -687,7 +711,7 @@ a:active {
 }
 
 #my-stashes-component .inside .component-view .glimpse {
-   margin-top: 50px;
+   margin-top: 60px;
 }
 
 
@@ -698,15 +722,16 @@ a:active {
 	float: left;
 }
 
-#my-stashes-component .inside .component-title .actions .link.glimpse-link ,
-#my-stashes-component .inside .component-title .actions .link.add-stash-link, 
-#my-stashes-component .inside .component-title .actions .link.detail-link {
+#my-stashes-component .inside .component-view .tabs div .actions .link.glimpse-link ,
+#my-stashes-component .inside .component-view .tabs div .actions .link.add-stash-link, 
+#my-stashes-component .inside .component-view .tabs div .actions .link.detail-link {
 	background: none;
 }
-#my-stashes-component .inside .component-title .actions ul {
+#my-stashes-component .inside .component-view .ui-tabs div .actions ul {
 	overflow: hidden;
+	float: right;
 }
-#my-stashes-component .inside .component-title .actions ul li {
+#my-stashes-component .inside .component-view .ui-tabs div .actions ul li {
 	display: inline;
 	width: 16px;
 	position: relative;
@@ -715,11 +740,10 @@ a:active {
 	margin-top: 50px;
 }
 .glimpse {
-    margin-left: auto;
-    margin-right: auto;
-
-    position: relative;
+    margin-left: 50px;
     width: 850px;
+    height: 700px;
+    overflow:hidden;
 }
 .glimpse div.line {
 	width: 100%;
@@ -744,6 +768,8 @@ a:active {
 }
 .glimpse div.links {
 	text-align: right;
+	float: left;
+	width: 100%;
 }
 /*#collectible-detail .component-view*/ .collectible.tags {
 	float: left;
@@ -1406,7 +1432,9 @@ div.paging span a {
 	background: #FFF;
 }
 .ui-tabs-nav.ui-widget-header {
-	background-color: #464646;	
+	/*background-color: #464646;	*/
+	border-bottom: 1px solid #464646;
+	border-radius: 0;
 }
 .ui-tabs{
 	border: none;
