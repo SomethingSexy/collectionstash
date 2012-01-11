@@ -14,9 +14,7 @@
 					<li class="ui-state-default ui-corner-top">
 						<a href="#tabs-2"><?php echo __('Photos');?></a>
 					</li>
-					<li class="ui-state-default ui-corner-top">
-						<a href="#tabs-3"><?php echo __('Discussion');?></a>
-					</li>
+
 				</ul>
 				<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 					<div class="actions">
