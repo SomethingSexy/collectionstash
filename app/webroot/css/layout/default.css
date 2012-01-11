@@ -712,6 +712,7 @@ a:active {
 
 #my-stashes-component .inside .component-view .glimpse {
    margin-top: 60px;
+   height: 700px;
 }
 
 
@@ -742,7 +743,6 @@ a:active {
 .glimpse {
     margin-left: 50px;
     width: 850px;
-    height: 700px;
     overflow:hidden;
 }
 .glimpse div.line {
