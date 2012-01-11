@@ -14,7 +14,6 @@
 					<li class="ui-state-default ui-corner-top">
 						<a href="#tabs-2"><?php echo __('Photos');?></a>
 					</li>
-
 				</ul>
 				<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 					<div class="actions">
@@ -34,21 +33,20 @@
 					</div>
 					<?php
 					if (isset($collectibles) && !empty($collectibles)) {
-						echo '<div id="tiles" data-username="'. $stashUsername.'">';
-						
-						echo '<div class="glimpse" data-current="' . $this -> Paginator -> current(). '"';
-						if($this -> Paginator -> hasPrev()){
+						echo '<div id="tiles" data-username="' . $stashUsername . '">';
+
+						echo '<div class="glimpse" data-current="' . $this -> Paginator -> current() . '"';
+						if ($this -> Paginator -> hasPrev()) {
 							echo 'data-hasprev="true"';
 						} else {
 							echo 'data-hasprev="false"';
 						}
-						if($this -> Paginator -> hasNext()){
+						if ($this -> Paginator -> hasNext()) {
 							echo 'data-hasnext="true"';
 						} else {
 							echo 'data-hasnext="false"';
-						}						
-						
-						
+						}
+
 						echo '>';
 						$count = 0;
 						$collectiblesCount = count($collectibles) - 1;
@@ -93,16 +91,16 @@
 							}
 						}
 						echo '</div>';
-						
+
 						echo '<div class="links">';
-						if($this -> Paginator -> hasPrev()){
+						if ($this -> Paginator -> hasPrev()) {
 							echo '<div id="previous" class="tn3e-prev" title="Previous Collectibles"></div>';
-						} 
-						if($this -> Paginator -> hasNext()){
+						}
+						if ($this -> Paginator -> hasNext()) {
 							echo '<div id="next" class="tn3e-next" title="Next Collectibles"></div>';
 						}
 						echo '</div>';
-						
+
 						echo '</div>';
 					} else {
 						echo '<p class="">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
@@ -134,41 +132,6 @@
 
 <script>
 	$(function() {
-		$("#tabs").tabs();
-	});
-	
-	$(function(){
-		var isHandlerActive = true;
-		$(document).on('click','#tiles .links div', function(event){
-			if(!isHandlerActive){
-				return; 
-			}
-			isHandlerActive = false;
-			var current = $('#tiles').children('div.glimpse').attr('data-current');
-			var slide = 'right';
-			if($(this).attr('id') === 'next'){
-				current = parseInt(current) + 1;	
-			} else if($(this).attr('id') === 'previous'){
-				current = parseInt(current) - 1;	
-				slide = 'left';
-			} 
-			$.get('/stashs/pageView/' + $('#tiles').attr('data-username') +'/page:' + current, function(data) {
-			  	$('#tiles').children().remove();
-			  	$('#tiles').append(data);
-			  	var effect = function() {
-					return $('#tiles').children('.glimpse').show('slide', {direction: slide}, 1000);
-				};
-
-				$.when( effect() ).done(function() {
-					 isHandlerActive = true;
-				});
-			});
-			return false;
-		});
-		
-	});
-	
-	$(function() {
 
 var data = [<?php
 if (isset($userUploads) && !empty($userUploads)) {
@@ -187,16 +150,59 @@ if (isset($userUploads) && !empty($userUploads)) {
 }
 ?>
 	];
-	if(0 < data.length) {
-		$("#gallery").galleria({
-			width : 900,
-			height : 500,
-			lightbox : true,
-			data_source : data
-		});
-	} else {
-		$('#gallery').parent().prepend($('<p></p>').text('No photos have been added!'));
-	}
+var galleryLoaded = false;
+	$("#tabs").tabs({
+		select : function(event, ui) {
+			if(ui.index === 1 && !galleryLoaded) {
+				if(0 < data.length) {
+					$("#gallery").galleria({
+						width : 900,
+						height : 500,
+						lightbox : true,
+						data_source : data
+					});
+					galleryLoaded = true;
+				} else {
+					$('#gallery').parent().prepend($('<p></p>').text('No photos have been added!'));
+				}
+			}
+		}
 	});
-</script>
+	});
 
+	$(function() {
+		var isHandlerActive = true;
+		$(document).on('click', '#tiles .links div', function(event) {
+			if(!isHandlerActive) {
+				return;
+			}
+			isHandlerActive = false;
+			var current = $('#tiles').children('div.glimpse').attr('data-current');
+			var slide = 'right';
+			if($(this).attr('id') === 'next') {
+				current = parseInt(current) + 1;
+			} else if($(this).attr('id') === 'previous') {
+				current = parseInt(current) - 1;
+				slide = 'left';
+			}
+			$.get('/stashs/pageView/' + $('#tiles').attr('data-username') + '/page:' + current, function(data) {
+				$('#tiles').children().remove();
+				$('#tiles').append(data);
+				var effect = function() {
+					return $('#tiles').children('.glimpse').show('slide', {
+						direction : slide
+					}, 1000);
+				};
+
+				$.when(effect()).done(function() {
+					isHandlerActive = true;
+				});
+			});
+			return false;
+		});
+	});
+	$(function() {
+
+	});
+
+</script>
