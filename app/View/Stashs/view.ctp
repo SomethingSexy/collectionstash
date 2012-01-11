@@ -161,10 +161,10 @@ var galleryLoaded = false;
 						lightbox : true,
 						data_source : data
 					});
-					galleryLoaded = true;
 				} else {
 					$('#gallery').parent().prepend($('<p></p>').text('No photos have been added!'));
 				}
+				galleryLoaded = true;
 			}
 		}
 	});
