@@ -752,7 +752,7 @@ a:active {
 .glimpse div.image {
 	float: left;
 	padding: 10px;
-	border: 8px solid #333333;
+	border: 3px solid #333333;
     border-radius: 8px 8px 8px 8px;
     margin: 10px;
     height: 150px;

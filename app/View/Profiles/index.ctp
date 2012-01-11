@@ -57,10 +57,13 @@
 						<ul class="form-fields">
 							<li>
 								<div class="label-wrapper">
-									<label for="stash-privacy"><?php echo __('Private Stash?') ?></label>
+									<label for="stash-privacy"><?php echo __('Stash Privacy') ?></label>
 								</div>
-								<input id="stash-privacy" type="checkbox" value=""/>
-								<input id="stash-privacy-hidden" type="hidden" value="" name="data[Stash][privacy]" value=""/>
+								<select id="stash-privacy" name="data[Stash][privacy]">
+									<option value="0"><?php echo __('Everyone');?></option>
+									<option value="1"><?php echo __('Registered Members');?></option>
+									<option value="2"><?php echo __('Private');?></option>
+								</select>
 							</li>
 						</ul>
 					</fieldset>
