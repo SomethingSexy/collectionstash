@@ -192,11 +192,8 @@ class StashsController extends AppController {
 
 			$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
 			$profileSettings = array();
-			if ($stash['Stash']['privacy'] === '0') {
-				$profileSettings['privacy'] = false;
-			} else if ($stash['Stash']['privacy'] === '1') {
-				$profileSettings['privacy'] = true;
-			}
+			$profileSettings['privacy'] = $stash['Stash']['privacy'];
+
 
 			$this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));
 		} else {
@@ -292,7 +289,9 @@ class StashsController extends AppController {
 					}
 					$this -> set('myStash', $viewingMyStash);
 					$this -> set('stashUsername', $userId);
-					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
+					//If the privacy is 0 or you are viewing your own stash then always show
+					//or if it is set to 1 and this person is logged in also show.
+					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash || ($stash['Stash']['privacy'] === '1' && $this -> isLoggedIn())) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
 						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
 						$collectibles = $this -> paginate('CollectiblesUser');

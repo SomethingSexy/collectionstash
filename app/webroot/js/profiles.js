@@ -170,15 +170,8 @@ var stashAccount = function() {
 	function _viewSuccess(data) {
 		inviteAccount.close();
 		
-		if(data.responseData.privacy) {
-			$('#stash-privacy').attr('checked', true);	
-			$('#stash-privacy-hidden').val('1');
-		} else {
-			$('#stash-privacy').attr('checked', false);
-			$('#stash-privacy-hidden').val('0');
-		}
-		
-		
+		$('#stash-privacy').val(data.responseData.privacy);
+	
 		$('#account-stash').children('div.body').children('.account.detail.update').show();
 		$('#account-stash').children('div.body').show();
 		$('#account-stash').children('.header').children('span.action').children('a').text('Close');
