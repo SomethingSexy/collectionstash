@@ -703,7 +703,8 @@ $.fn.cycle.defaults = {
 
 	// default Region is en
 	$.formatCurrency.regions[''] = {
-		symbol: '$',
+		//setting the default to no symbol because of HTML5 number fields
+		symbol: '',
 		positiveFormat: '%s%n',
 		negativeFormat: '(%s%n)',
 		decimalSymbol: '.',
@@ -814,7 +815,12 @@ $.fn.cycle.defaults = {
 				$destination = $(destination);
 			}
 			// set destination
-			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
+			if($destination.is('input, select, textarea')){
+				$destination.val(money);
+			} else {
+				$destination.html(money);
+			}
+			//$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
 			if (
 				hasDecimals && 
