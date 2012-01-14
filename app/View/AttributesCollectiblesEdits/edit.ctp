@@ -33,9 +33,9 @@
 							echo '<span class="attribute-description">'.__('Description', true).'</span>';
 							echo '<span class="attribute-action">'.__('Action', true).'</span>';
 							echo '</li>';
-							if(isset($this -> data)) {
+							if(isset($this -> request -> data)) {
 
-								foreach($this -> data as $key => $attribue) {
+								foreach($this -> request-> data as $key => $attribue) {
 									echo '<li>';
 									echo '<span class="attribute-name">';
 									echo $attribue['Attribute']['name'];
