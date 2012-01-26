@@ -296,7 +296,12 @@ class StashsController extends AppController {
 					//or if it is set to 1 and this person is logged in also show.
 					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash || ($stash['Stash']['privacy'] === '1' && $this -> isLoggedIn())) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition','Merchant','Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+						if($display === 'gallery') {
+							$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition','Merchant','Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')));
+						} else {
+							$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition','Merchant','Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+						}
+						
 						$collectibles = $this -> paginate('CollectiblesUser');
 
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
