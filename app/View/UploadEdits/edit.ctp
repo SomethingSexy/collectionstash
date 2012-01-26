@@ -69,7 +69,7 @@
 							<li>
 								<div class="label-wrapper">
 									<label for="Upload0File">
-										<?php __('Upload image from URL') ?>
+										<?php echo __('Upload image from URL') ?>
 									</label>
 								</div>
 								<?php echo $this -> Form -> input('Upload.0.url', array('div' => false, 'label' => false));?>

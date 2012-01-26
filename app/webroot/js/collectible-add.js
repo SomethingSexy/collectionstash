@@ -2,38 +2,39 @@
 var collectibleAdd = function() {
 
 	var _currentSeriesLevel = 0;
-
-	function handleLicenseChange(element) {
-		var licenseid = $(element).val();
-		var manid = $('#CollectibleManufactureId').val();
-		$.ajax({
-			type : "POST",
-			dataType : 'json',
-			url : '/licenses/getLicenseData.json',
-			data : 'data[license_id]=' + licenseid + '&data[manufacture_id]=' + manid,
-			beforeSend : function(jqXHR, settings) {
-				//$.blockUI();
-			},
-			success : function(data, textStatus, XMLHttpRequest) {
-				var success = data.success.isSuccess;
-
-				if(success) {	
-					$('#CollectibleSeriesId').val('');			
-					if(data.data.hasSeries) {
-						$('#change-series-link').text('Add');
-						$('#CollectibleSeriesId').parent('.static-field').parent('li').show();
-					} else {
-						$('#CollectibleSeriesId').parent('.static-field').parent('li').hide();
-					}
-				} else {
-
-				}
-			},
-			complete : function(jqXHR, textStatus) {
-				//$.unblockUI();
-			}
-		});
-	}
+	var _baseSeriesLevel = 0;
+	//1-18-12 - we do not need to do this anymore
+	// function handleLicenseChange(element) {
+		// var licenseid = $(element).val();
+		// var manid = $('#CollectibleManufactureId').val();
+		// $.ajax({
+			// type : "POST",
+			// dataType : 'json',
+			// url : '/licenses/getLicenseData.json',
+			// data : 'data[license_id]=' + licenseid + '&data[manufacture_id]=' + manid,
+			// beforeSend : function(jqXHR, settings) {
+				// //$.blockUI();
+			// },
+			// success : function(data, textStatus, XMLHttpRequest) {
+				// var success = data.success.isSuccess;
+// 
+				// if(success) {	
+					// $('#CollectibleSeriesId').val('');			
+					// if(data.data.hasSeries) {
+						// $('#change-series-link').text('Add');
+						// $('#CollectibleSeriesId').parent('.static-field').parent('li').show();
+					// } else {
+						// $('#CollectibleSeriesId').parent('.static-field').parent('li').hide();
+					// }
+				// } else {
+// 
+				// }
+			// },
+			// complete : function(jqXHR, textStatus) {
+				// //$.unblockUI();
+			// }
+		// });
+	// }
 
 	function handleCollectibleTypeChange() {
 		var collectibleTypeid = $('#CollectibleCollectibletypeId').val();
@@ -266,17 +267,23 @@ var collectibleAdd = function() {
 		//This means that we don't have a level 1
 		var collectibleTypeId = '';
 		var collectibleText = '';
-		var success = true;
+		var success = false;
 		$('#edit-series-dialog').find('.error-message').remove();
 		/**
-		 * TODO: We might have to make this automatic, with what the level
-		 * is
+		 * First check to see if the most current one has been selected, if so use that and continue on
+		 * otherwise lets go up the change and grab the previous one as our category
 		 */
-		if($('#seriesLevel' + _currentSeriesLevel + ' option:selected').length != 0 && $('#seriesLevel' + _currentSeriesLevel + ' option:selected').val() !== '-1') {
-			collectibleTypeId = $('#seriesLevel' + _currentSeriesLevel + ' option:selected').val();
+		var i = _currentSeriesLevel;
+		for (i; i >= _baseSeriesLevel; i--) {
+			if($('#seriesLevel' + i + ' option:selected').length != 0 && $('#seriesLevel' + i + ' option:selected').val() !== '-1' && !success) {
+				collectibleTypeId = $('#seriesLevel' + i + ' option:selected').val();
+				_currentSeriesLevel = i;
+				success = true;
+			}
+		}
 		
-		} else {
-			$('#seriesLevel' + _currentSeriesLevel).after('<div class="error-message">Please select a series.</div>');
+		if(collectibleTypeId === ''){
+			$('#seriesLevel' + _currentSeriesLevel).after('<div class="error-message">Please select a category.</div>');
 			success = false;			
 		}
 
@@ -332,7 +339,7 @@ var collectibleAdd = function() {
 
 			var $li = $('<li></li>');
 			var $labelWrapper = $('<div></div>').addClass('label-wrapper');
-			var $label = $('<label></label>').attr('for', 'attributeLevel').text('Series');
+			var $label = $('<label></label>').attr('for', 'attributeLevel').text('Category');
 
 			$labelWrapper.prepend($label);
 			$li.prepend($select);
@@ -446,9 +453,10 @@ var collectibleAdd = function() {
 
 	return {
 		init : function() {
-			$('#CollectibleLicenseId').change(function() {
-				handleLicenseChange(this)
-			});
+			//1-18-12 - we do not need to do this anymore
+			// $('#CollectibleLicenseId').change(function() {
+				// handleLicenseChange(this)
+			// });
 
 			$('#change-collectibletype-link').click(function() {
 				initCollectibleChange();

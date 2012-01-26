@@ -47,7 +47,7 @@
 						?>
 					</p>
 					<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));?>
-					<?php echo $this -> Paginator -> numbers();?>
+					<?php echo $this -> Paginator -> numbers(array('separator'=> false));?>
 					<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 				</div>
 

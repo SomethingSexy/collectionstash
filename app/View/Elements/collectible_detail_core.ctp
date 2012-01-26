@@ -80,9 +80,9 @@ if (!isset($adminMode)) {
 				?>
 				<a href="<?php echo '/manufactures/view/'.$collectibleCore['Manufacture']['id'];?>"> <?php echo $collectibleCore['Manufacture']['title'];?></a>
 				</dd> <?php
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 				
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Series', 'Field' => 'name'), __('Series', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Type', true), array('compare' => $showCompareFields));
 				

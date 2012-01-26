@@ -18,8 +18,10 @@
 		
 		$this -> Minify -> js(array('js/jquery-1.7'));
 		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));
-		$this -> Minify -> js(array('js/jquery-plugins'));
+		//$this -> Minify -> js(array('js/jquery-plugins'));
+		
 	?>
+	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
 	<?php echo $scripts_for_layout; ?>
 	<script>
 		$( function() {
@@ -53,7 +55,7 @@
 			$( "#login-dialog" ).dialog({
 				'autoOpen' : false,
 				'width' : 500,
-				'height': 300,
+				'height': 'auto',
 				'resizable': false,
 				'modal': true,
 				'buttons': {

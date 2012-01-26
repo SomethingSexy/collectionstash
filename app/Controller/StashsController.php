@@ -227,6 +227,9 @@ class StashsController extends AppController {
 		}
 	}
 
+	/*
+	 * Not sure how necesssary this method will be but right now it turns a JSON view of the stash, paginated, this is only used for the tile view as of now
+	 */
 	public function pageView($userName = null) {
 		$this->autoLayout = false; 
 		if (!is_null($userName)) {
@@ -272,7 +275,7 @@ class StashsController extends AppController {
 		}		
 	}
 
-	public function view($userId = null) {
+	public function view($userId = null, $display = 'gallery') {
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later
@@ -293,7 +296,7 @@ class StashsController extends AppController {
 					//or if it is set to 1 and this person is logged in also show.
 					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash || ($stash['Stash']['privacy'] === '1' && $this -> isLoggedIn())) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+						$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition','Merchant','Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
 						$collectibles = $this -> paginate('CollectiblesUser');
 
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
@@ -317,6 +320,9 @@ class StashsController extends AppController {
 			$this -> redirect('/', null, true);
 		}
 
+		if($display === 'tiles') {
+			$this -> render('view_tiles');
+		} 
 		//TODO save for future use
 		// $this -> loadModel('CollectiblesUser');
 		// debug($this -> CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.user_id' => '14', 'Collectible.name' => 'test'))));
@@ -330,16 +336,5 @@ class StashsController extends AppController {
 		// UNION SELECT id, stash_id FROM posters_users'));
 
 	}
-
-	// private function setStashIdSession($id) {
-	// if($id) {
-	// $this -> Session -> write('stashId', $id);
-	// }
-	// }
-	//
-	// private function getStashIdSession() {
-	// return $this -> Session -> read('stashId');
-	// }
-
 }
 ?>

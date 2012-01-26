@@ -5,7 +5,7 @@ class Collectible extends AppModel {
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
-	var $actsAs = array('Revision' => array('model'=>'CollectibleRev'),'Containable', 'Sluggable' => array(
+	var $actsAs = array('Revision' => array('model' => 'CollectibleRev'), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -29,7 +29,7 @@ class Collectible extends AppModel {
 	//license filed
 		'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'),
 	//series field
-		'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Must be a valid category.'),
+		'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
 	//description field
 		'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
 	//msrp
@@ -49,8 +49,7 @@ class Collectible extends AppModel {
 	//url
 		'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
 	//numbered
-		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.')
-		);
+		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'));
 
 	function beforeSave() {
 		debug($this -> data);
@@ -94,7 +93,7 @@ class Collectible extends AppModel {
 		return true;
 	}
 
-	function doAfterFind($results) {
+	function doAfterFind($results, $primary = false) {
 		$showEditionSize = false;
 		//TODO not sure this is really needed anymore
 		if (isset($results['edition_size'])) {
@@ -109,7 +108,23 @@ class Collectible extends AppModel {
 			$results['release'] = '';
 		}
 
+		if(isset($results['series_id']) && !empty($results['series_id'])){
+			$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
+			$results['seriesPath'] = $fullSeriesPath;
+		}
 		return $results;
+	}
+	
+	/**
+	 * This is a helper method that will update a series path if a series has
+	 * been added for the passed in collectible.  Not pretty but this is used for the
+	 * cases that we cannot use the after fine helper method.
+	 */
+	public function addSeriesPath(&$collectible){
+		if(isset($collectible['Collectible']['series_id']) && !empty($collectible['Collectible']['series_id'])){
+			$fullSeriesPath = $this -> Series -> buildSeriesPathName($collectible['Collectible']['series_id']);
+			$collectible['Collectible']['seriesPath'] = $fullSeriesPath;
+		}		
 	}
 
 	function validateProductWidthDepthId($check) {
@@ -185,39 +200,50 @@ class Collectible extends AppModel {
 	}
 
 	/*
-	 * TODO This will have to get updated when we allow more than one series
+	 * This is going to validate the series based on the manufacturer.  If the manufacturer does not
+	 * have a series id set, then it will let it pass as null
+	 *
+	 * If the manufacturer does have a series id, then a series id MUST be set.
 	 */
 	function validateSeriesId($check) {
-		//Is not required but if it is entered make sure it is valid
-		if (isset($check['series_id']) && !empty($check['series_id'])) {
-			/*
-			 * To validate this we need to get the parent of this series and see if the parent matches in the database
-			 *
-			 * If the getparentnode call, returns nothing, that means we are at the top level already
-			 */
-			$paths = $this -> Series -> getPath($check['series_id']);
+		//grab the manufacturer first
+		$manufacturer = $this -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $this -> data['Collectible']['manufacture_id']), 'contain' => false));
+		
+		if (!empty($manufacturer['Manufacture']['series_id'])) {
 
-			if (!empty($paths)) {
-				reset($paths);
-				$parentNode = current($paths);
-				$parentSeriesId = $parentNode['Series']['id'];
-				//Now query to see if this is a valid hierarchy
-				$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $this -> data['Collectible']['license_id']), 'contain' => array('LicensesManufacturesSeries' => array('conditions' => array('series_id' => $parentSeriesId)))));
+			//Check to see if a series is set
+			if (isset($check['series_id']) && !empty($check['series_id'])) {
+				/*
+				 * To validate this we need to get the parent of this series and see if the parent matches in the database
+				 * If the getparentnode call, returns nothing, that means we are at the top level already
+				 */
+				$paths = $this -> Series -> getPath($check['series_id']);
 
-				if (!empty($result['LicensesManufacturesSeries'])) {
-					return true;
+				if (!empty($paths)) {
+					reset($paths);
+					$parentNode = current($paths);
+					$parentSeriesId = $parentNode['Series']['id'];
+					//Now query to see if this is a valid hierarchy
+					if ($manufacturer['Manufacture']['series_id'] === $parentSeriesId) {
+						return true;
+					} else {
+						return false;
+					}
 				} else {
 					return false;
 				}
 			} else {
+				/*
+				 * Returning false because there is a possible series but the series did
+				 * not select it is so it is invalid.
+				 */
 				return false;
 			}
-
 		} else {
+			//if there is no series id for this manufacturer then make sure we unset
+			unset($this -> data['Collectible']['series_id']);
 			return true;
-
 		}
-
 	}
 
 	public function getCollectibleNameById($collectibleId) {

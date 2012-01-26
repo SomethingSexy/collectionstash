@@ -35,11 +35,12 @@ class AppModel extends Model {
 	 * This loops through each individual return entry after the find so we can more eaily maniulate it.
 	 */
 	public function afterFind($results, $primary = false) {
+	
 		if (method_exists($this, 'doAfterFind')) {
 			if ($primary) {
 				foreach ($results as $key => $val) {
 					if (isset($val[$this -> alias])) {
-						$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias]);
+						$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias], $primary);
 					}
 				}
 			} else {
@@ -49,10 +50,10 @@ class AppModel extends Model {
 					foreach ($results as $key => $val) {
 						if (isset($val[$this -> alias])) {
 							if (isset($val[$this -> alias][$this -> primaryKey])) {
-								$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias]);
+								$results[$key][$this -> alias] = $this -> doAfterFind($results[$key][$this -> alias], $primary);
 							} else {
 								foreach ($results[$key][$this->alias] as $key2 => $val2) {
-									$results[$key][$this -> alias][$key2] = $this -> doAfterFind($results[$key][$this -> alias][$key2]);
+									$results[$key][$this -> alias][$key2] = $this -> doAfterFind($results[$key][$this -> alias][$key2], $primary);
 								}
 							}
 						}
@@ -60,13 +61,12 @@ class AppModel extends Model {
 				}
 			}
 		}
-
 		return $results;
 	}
 
 	/**
 	 * Overriding paginateCount method to add in some extra code when doing paginate with a gorup by
-	 * 
+	 *
 	 * This will correct the incorrect count by the core code
 	 */
 	public function paginateCount($conditions = null, $recursive = 0, $extra = array()) {

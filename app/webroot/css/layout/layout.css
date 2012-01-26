@@ -60,6 +60,11 @@ body {
 }
 #stage .main-navigation .inside .nav li a {
 	padding: 10px;
+	color: #4A4A4A;
+}
+#stage .main-navigation .inside .nav li a:hover {
+	color: #FFF;
+	text-decoration: none;
 }
 #stage .main-navigation .inside .site-search {
 	float: right;
