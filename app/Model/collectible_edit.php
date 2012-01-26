@@ -1,4 +1,7 @@
 <?php
+/**
+ * TODO: This really needs to be a behavior
+ */
 class CollectibleEdit extends AppModel {
 	var $name = 'CollectibleEdit';
 	var $actsAs = array('Containable');
@@ -46,6 +49,10 @@ class CollectibleEdit extends AppModel {
 		//Cleans up default no set years
 		if (isset($results['release']) && $results['release'] === '0000') {
 			$results['release'] = '';
+		}
+		if (isset($results['series_id']) && !empty($results['series_id'])) {
+			$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
+			$results['seriesPath'] = $fullSeriesPath;
 		}
 
 		return $results;

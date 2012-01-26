@@ -80,10 +80,9 @@ class SluggableBehavior extends ModelBehavior {
 
 				$d[$model -> alias]['slugField'] = $slug;
 			}
-			debug($d);
+			
 			$data[$i] = $d;
 		}
-
 		return $data;
 	}
 

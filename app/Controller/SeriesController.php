@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class SeriesController extends AppController {
 
-	public $helpers = array('Html','Js', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 	/**
 	 * TODO update this so that it returns the series data in levels
 	 */
@@ -17,9 +17,9 @@ class SeriesController extends AppController {
 			}
 
 			if (isset($seriesId) && !empty($seriesId)) {
-				$series = $this -> Series -> LicensesManufacturesSeries -> getSeriesLevels($manufactureId, $licenseId, $seriesId);
+				$series = $this -> Series -> Manufacture -> getSeriesLevels($manufactureId, $seriesId);
 			} else {
-				$series = $this -> Series -> LicensesManufacturesSeries -> getSeriesLevels($manufactureId, $licenseId, null);
+				$series = $this -> Series -> Manufacture -> getSeriesLevels($manufactureId, null);
 			}
 
 			/*
@@ -40,12 +40,13 @@ class SeriesController extends AppController {
 		}
 	}
 
- function add() {
-	
-	$data['Series']['parent_id'] = '30';
-	$data['Series']['name'] = 'Blackest Night';
-	$this -> Series -> save($data);
-	$this -> render(false);
-	}
+	// function add() {
+// 
+		// $data['Series']['parent_id'] = '114';
+		// $data['Series']['name'] = 'Series 7';
+		// $this -> Series -> save($data);
+		// $this -> render(false);
+	// }
+
 }
 ?>

@@ -4,7 +4,7 @@ App::uses('Sanitize', 'Utility');
  * This is not a join table, this is the edit controllor for collectibles.  This is why it is named liked this.
  */
 class CollectibleEditsController extends AppController {
-		
+
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify');
 
 	/*
@@ -46,7 +46,7 @@ class CollectibleEditsController extends AppController {
 				$this -> redirect(array('action' => 'review'));
 				//return so we do not call useless data
 				return;
-			} else {			
+			} else {
 				//Redundant but reget this collectible now for some display purposes (for stuff that does not change)
 				$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $this -> Session -> read('collectible.edit-id')), 'contain' => array('Manufacture')));
 				$licenseId = $this -> request -> data['Collectible']['license_id'];
@@ -105,14 +105,22 @@ class CollectibleEditsController extends AppController {
 			$this -> request -> data['Collectible']['series_name'] = $seriesPathName;
 			$this -> set('hasSeries', true);
 		} else {
-			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($collectible['Collectible']['manufacture_id'], $licenseId);
-			$hasSeries = false;
-			if (count($series) > 0) {
-				$hasSeries = true;
-			} else {
 
+			$hasSeries = false;
+			//First see if this manufacturer even has a series
+			if (!empty($collectible['Manufacture']['series_id'])) {
+				//If it does check to see if it has any children.
+				$seriesCount = $this -> Collectible -> Series -> childCount($seriesId);
+				//If it does have a series set to true so the user will be forced to add it
+				if (count($seriesCount) > 0) {
+					$hasSeries = true;
+				} else {
+					//set the default behind the scenes
+					$this -> request -> data('Collectible.series_id', $seriesId);
+				}
 			}
-			$this -> set('hasSeries', $series);
+
+			$this -> set('hasSeries', $hasSeries);
 		}
 
 		//}
@@ -157,8 +165,8 @@ class CollectibleEditsController extends AppController {
 				$specializedType = $this -> Collectible -> SpecializedType -> find('first', array('conditions' => array('SpecializedType.id' => $collectible['Collectible']['specialized_type_id']), 'fields' => array('SpecializedType.name'), 'contain' => false));
 				$collectible['SpecializedType'] = $specializedType['SpecializedType'];
 			}
-			$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
-			$collectible['Series'] = $series['Series'];
+			//This method will check and see if a series has been added and if so it will generate and add the path for us.
+			$this -> Collectible -> addSeriesPath($collectible);
 
 			$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 			$collectible['Scale'] = $scale['Scale'];

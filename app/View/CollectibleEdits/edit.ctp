@@ -74,11 +74,39 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						}
 						?>
 						<div class="label-wrapper">
-							<label for=""> <?php echo __('Manufacturer Type')
+							<label for=""> <?php echo __('Manufacturer Collectible Type');
 								?></label>
 						</div>
 						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
 						</li>
+						<?php
+						if (empty($hasSeries)) {
+							echo '<li class="hidden">';
+						} else {
+							echo '<li>';
+						}
+						?>
+						<div class="label-wrapper">
+							<label for=""> <?php echo __('Category')
+								?></label>
+						</div>
+						<?php
+						if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
+							echo '<div class="static-field">';
+							echo '<a class="link" id="change-series-link">' . $this -> data['Collectible']['series_name'] . '</a>';
+							echo $this -> Form -> hidden('series_id');
+							echo '</div>';
+							echo $this -> Form -> error('series_id');
+						} else {
+							echo '<div class="static-field">';
+							echo '<a class="link" id="change-series-link">Add</a>';
+							echo $this -> Form -> hidden('series_id');
+							echo '</div>';
+							echo $this -> Form -> error('series_id');
+						}
+						?>
+						</li>						
+						
 						<?php
 						if (empty($licenses)) {
 							echo '<li class="hidden">';
@@ -91,32 +119,6 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 								?></label>
 						</div>
 						<?php echo $this -> Form -> input('license_id', array('div' => false, 'label' => false));?>
-						</li>
-
-						<?php
-						if (empty($hasSeries)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<div class="label-wrapper">
-							<label for=""> <?php echo __('Series')
-								?></label>
-						</div>
-						<?php
-						if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
-							echo '<div class="static-field">';
-							echo '<a class="link" id="change-series-link">' . $this -> data['Collectible']['series_name'] . '</a>';
-							echo $this -> Form -> hidden('series_id');
-							echo '</div>';
-						} else {
-							echo '<div class="static-field">';
-							echo '<a class="link" id="change-series-link">Add</a>';
-							echo $this -> Form -> hidden('series_id');
-							echo '</div>';
-						}
-						?>
 						</li>
 						<li>
 							<div class="label-wrapper">
@@ -295,12 +297,12 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 	});
 
 </script>
-<div id="edit-series-dialog" class="dialog" title="Series">
+<div id="edit-series-dialog" class="dialog" title="Category">
 	<div class="component">
 		<div class="inside" >
 			<div class="component-info">
 				<div>
-					<?php echo __('Select from the series below to change.  Some series might have sub-series you can choose from.')
+					<?php echo __('Select from the categories below to change.  Some categories might have sub-categories you can choose from.');
 					?>
 				</div>
 			</div>

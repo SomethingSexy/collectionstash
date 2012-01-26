@@ -272,6 +272,8 @@ class CollectiblesController extends AppController {
 
 	function _prepareManufacture() {
 		$this -> Session -> delete('collectible');
+
+		//We need to make sure we have the two static pieces of data that cannot change right now.
 		if (!$this -> Session -> check('add.collectible.manufacture') && !$this -> Session -> check('add.collectible.collectibleType')) {
 			//If it has not, start them over
 			$this -> Session -> setFlash(__('Whoa! That was weird.', true), null, null, 'error');
@@ -282,41 +284,51 @@ class CollectiblesController extends AppController {
 		$this -> set(compact('manufacturer'));
 		$this -> set(compact('collectibleType'));
 
+		//Below is the stuff that needs to happen for every request
+
+		//Grab all licenses for this manufacturer.
 		$licenses = $this -> Collectible -> License -> LicensesManufacture -> getLicensesByManufactureId($manufacturer['Manufacture']['id']);
-		debug($licenses);
 		$this -> set('licenses', $licenses);
 
-		//If data is empty then this is the first time we are coming here or a refresh or something.
-		if (empty($this -> request -> data)) {
+		//Grab all specicialized types
+		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
+		$this -> set('specializedTypes', $specializedTypes);
 
+		//Grab all scales
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+		$this -> set(compact('scales'));
+
+		//Grab all retailers.
+		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+		$this -> set('retailers', $retailers);
+
+		//Check to see if this is a post, if it is not a post then do some initial stuff
+		if (!$this -> request -> is('post')) {
+			//Check to see if this is a variant we are adding
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-				debug($variantCollectible);
+				//If it is then lets set the request attribute for default data and then also
+				//prefill the input fields
 				$this -> set('collectible', $variantCollectible);
 				$this -> request -> data = $variantCollectible;
 			}
-			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale')));
-			$this -> set(compact('scales'));
-
-			//Now get any series for this license
-			/*
-			 * We will get the list, to determine if there is something for this license.  We will not display the list initially,
-			 * just the series name if they want to change it.  This way we know if a series exists for this collectible.
-			 *
-			 * TODO: At this point, we will also need to know how to draw this if we return
-			 */
-			reset($licenses);
-			$licensesId = key($licenses);
-			$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $licensesId);
-			debug($series);
 			$hasSeries = false;
-			if (count($series) > 0) {
-				$hasSeries = true;
-			} else {
-
+			//First see if this manufacturer even has a series
+			if (!empty($manufacturer['Manufacture']['series_id'])) {
+				//If it does check to see if it has any children.
+				$seriesCount = $this -> Collectible -> Series -> childCount($manufacturer['Manufacture']['series_id']);
+				//If it does have a series set to true so the user will be forced to add it
+				if (count($seriesCount) > 0) {
+					$hasSeries = true;
+				} else {
+					//set the default behind the scenes
+					$this -> request -> data('Collectible.series_id', $manufacturer['Manufacture']['series_id']);
+				}
 			}
-			$this -> set('hasSeries', $series);
+
+			$this -> set('hasSeries', $hasSeries);
 		} else {
+
 			//If data is not empty, then we submitted and it errored or we are coming back to edit
 			if ($this -> Session -> check('add.collectible.variant')) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
@@ -328,27 +340,23 @@ class CollectiblesController extends AppController {
 				$this -> request -> data['Collectible']['series_name'] = $seriesPathName;
 				$this -> set('hasSeries', true);
 			} else {
-				$series = $this -> Collectible -> Manufacture -> LicensesManufacture -> getSeries($manufacturer['Manufacture']['id'], $this -> request -> data['Collectible']['license_id']);
-				debug($series);
 				$hasSeries = false;
-				if (count($series) > 0) {
-					$hasSeries = true;
-				} else {
-
+				//First see if this manufacturer even has a series
+				if (!empty($manufacturer['Manufacture']['series_id'])) {
+					//If it does check to see if it has any children.
+					$seriesCount = $this -> Collectible -> Series -> childCount($manufacturer['Manufacture']['series_id']);
+					//If it does have a series set to true so the user will be forced to add it
+					if (count($seriesCount) > 0) {
+						$hasSeries = true;
+					} else {
+						//set the default behind the scenes
+						$this -> request -> data('Collectible.series_id', $manufacturer['Manufacture']['series_id']);
+					}
 				}
-				$this -> set('hasSeries', $series);
+
+				$this -> set('hasSeries', $hasSeries);
 			}
 		}
-
-		$specializedTypes = $this -> Collectible -> SpecializedType -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($manufacturer['Manufacture']['id'], $collectibleType['Collectibletype']['id']);
-		$this -> set('specializedTypes', $specializedTypes);
-
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-
-		$this -> set(compact('scales'));
-
-		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
-		$this -> set('retailers', $retailers);
 
 	}
 
@@ -638,8 +646,8 @@ class CollectiblesController extends AppController {
 		$license = $this -> Collectible -> License -> find('first', array('conditions' => array('License.id' => $collectible['Collectible']['license_id']), 'fields' => array('License.name'), 'contain' => false));
 		$collectible['License'] = $license['License'];
 
-		$series = $this -> Collectible -> Series -> find('first', array('conditions' => array('Series.id' => $collectible['Collectible']['series_id']), 'fields' => array('Series.name'), 'contain' => false));
-		$collectible['Series'] = $series['Series'];
+		//This method will check and see if a series has been added and if so it will generate and add the path for us.
+		$this -> Collectible -> addSeriesPath($collectible);	
 
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
@@ -1017,8 +1025,8 @@ class CollectiblesController extends AppController {
 			} else {
 				$cakeEmail -> template('add_deny', 'simple');
 				$cakeEmail -> subject('Oh no! Your submission has been denied.');
-			}			
-			$cakeEmail -> viewVars(array('collectible_url' => 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId, 'collectibleName'=> $collectibleName, 'notes'=>$notes,'username' => $username));
+			}
+			$cakeEmail -> viewVars(array('collectible_url' => 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId, 'collectibleName' => $collectibleName, 'notes' => $notes, 'username' => $username));
 			$cakeEmail -> send();
 		} else {
 			$return = false;

@@ -1,9 +1,8 @@
 <?php
 class LicensesManufacture extends AppModel {
-	var $name = 'LicensesManufacture';
-	var $belongsTo = array('Manufacture', 'License');
-	var $actsAs = array('Containable');
-	var $hasMany = array('LicensesManufacturesSeries');
+	public $name = 'LicensesManufacture';
+	public $belongsTo = array('Manufacture', 'License');
+	public $actsAs = array('Containable');
 
 	/**
 	 * This returns a "list" of licenses by manufacturer, so the key is the id
@@ -26,18 +25,6 @@ class LicensesManufacture extends AppModel {
 		$licenses = $this -> find('all', array('contain' => array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id'), 'order' => array('License.name' => 'ASC')));
 
 		return $licenses;
-	}
-
-	/**
-	 * Given a manufactureId and a license Id, this method returns all of the series
-	 * for that combination
-	 */
-	public function getSeries($manufactureId, $licenseId) {
-		$license = $this -> getLicenseManufacture($manufactureId, $licenseId);
-		//Grab all series for this license...should I just return all for all licenses and send that down the request?
-		$series = $this -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
-
-		return $series;
 	}
 
 	/**

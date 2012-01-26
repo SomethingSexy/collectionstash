@@ -2,7 +2,7 @@
 class AttributesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify');
-	
+
 	function index() {
 		//$this->data = $this->Attribute->generatetreelist(null, null, null, '&nbsp;&nbsp;&nbsp;');
 
@@ -27,11 +27,11 @@ class AttributesController extends AppController {
 	}
 
 	// function add() {
-	//
-	// $data['Attribute']['parent_id'] = '9';
-	// $data['Attribute']['name'] = 'Armour';
-	// $this -> Attribute -> save($data);
-	// $this -> render(false);
+// 
+		// $data['Attribute']['parent_id'] = '8';
+		// $data['Attribute']['name'] = 'Holster';
+		// $this -> Attribute -> save($data);
+		// $this -> render(false);
 	// }
 
 	public function getAttributeList($id = null) {

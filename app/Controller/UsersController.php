@@ -42,9 +42,9 @@ class UsersController extends AppController {
 					if ($results['User']['password'] == Security::hash($this -> request -> data['User']['password'])) {
 						$this -> User -> id = $results['User']['id'];
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
-						$this -> log($results, 'info');
+						CakeLog::write('info', $results);
 						$this -> Session -> write('user', $results);
-						$this -> log('User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()), 'info');
+						CakeLog::write('info', 'User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
 						if (!empty($this -> request -> data['User']['fromPage'])) {
 							$this -> redirect($this -> request -> data['User']['fromPage'], null, true);
 						} else {
@@ -68,7 +68,7 @@ class UsersController extends AppController {
 			$this -> request -> data['User']['password'] = '';
 			$this -> request -> data['User']['new_password'] = '';
 			$this -> request -> data['User']['confirm_password'] = '';
-			$this -> log('User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()), 'error');
+			CakeLog::write('error', 'User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
 		}
 
 	}
