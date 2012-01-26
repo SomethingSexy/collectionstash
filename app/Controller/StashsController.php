@@ -282,8 +282,9 @@ class StashsController extends AppController {
 			debug($user);
 			//Ok we have a user, although this seems kind of inefficent but it works for now
 			if (!empty($user)) {
-				$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
-				if (!empty($stash)) {
+				// $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']),'contain' =>false));
+				debug($user['Stash']);
+				if (!empty($user['Stash'])) {
 					$loggedInUser = $this -> getUser();
 					$viewingMyStash = false;
 					if ($loggedInUser['User']['id'] === $user['User']['id']) {
@@ -293,12 +294,12 @@ class StashsController extends AppController {
 					$this -> set('stashUsername', $userId);
 					//If the privacy is 0 or you are viewing your own stash then always show
 					//or if it is set to 1 and this person is logged in also show.
-					if ($stash['Stash']['privacy'] === '0' || $viewingMyStash || ($stash['Stash']['privacy'] === '1' && $this -> isLoggedIn())) {
+					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
 						if ($display === 'gallery') {
-							$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype'))));
+							$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
 						} else {
-							$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+							$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype')), 'limit' => 12);
 							$collectibles = $this -> paginate('CollectiblesUser');
 						}
 
