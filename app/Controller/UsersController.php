@@ -41,37 +41,51 @@ class UsersController extends AppController {
 		$this -> Session -> setFlash($message, null, null, $messageType);
 		$success = true;
 		if ($this -> request -> is('post')) {
-			if ($this -> Auth -> login()) {
-				$user = $this -> Auth -> user();
-				if ($user['status'] == 0) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
+			$this -> User -> recursive = 0;
+			$results = $this -> User -> getUser($this -> request -> data['User']['username']);
+			if ($results) {
+				if ($results['User']['status'] == 0) {
 					if (!$user['force_password_reset']) {
-						$this -> User -> id = $user['id'];
-						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
-						CakeLog::write('info', $results);
-						$this -> Session -> write('user', $user);
-						CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
-						return $this -> redirect($this -> Auth -> redirect());
-						// if (!empty($this -> request -> data['User']['fromPage'])) {
-						// $this -> redirect($this -> request -> data['User']['fromPage'], null, true);
-						// } else {
-						// $this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
-						// }
+						//This seems redundant might make more since to auto login them in because I already have the data
+						if ($this -> Auth -> login()) {
+							$user = $this -> Auth -> user();
+							$this -> User -> id = $user['id'];
+							$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
+							CakeLog::write('info', $results);
+							$this -> Session -> write('user', $user);
+							CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
+							return $this -> redirect($this -> Auth -> redirect());
+							// if (!empty($this -> request -> data['User']['fromPage'])) {
+							// $this -> redirect($this -> request -> data['User']['fromPage'], null, true);
+							// } else {
+							// $this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
+							// }
+						} else {
+							$this -> Session -> setFlash(__('Username or password is incorrect', true), null, null, 'error');
+							$this -> request -> data['User']['password'] = '';
+							$this -> request -> data['User']['new_password'] = '';
+							$this -> request -> data['User']['confirm_password'] = '';
+							CakeLog::write('error', 'User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
+						}
 					} else {
-						$this -> Auth -> logout();
+						// $this -> Auth -> logout();
 						return $this -> redirect(array('controller' => 'forgotten_requests', 'action' => 'forceResetPassword'));
 					}
-
 				} else {
-					$this -> Auth -> logout();
+					// $this -> Auth -> logout();
 					$this -> Session -> setFlash(__('Your account has not been activated yet.', true), null, null, 'error');
+					$this -> request -> data['User']['password'] = '';
+					$this -> request -> data['User']['new_password'] = '';
+					$this -> request -> data['User']['confirm_password'] = '';
 				}
 			} else {
-				$this -> Session -> setFlash(__('Username or password is incorrect', true), null, null, 'error');
+				$this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
 				$this -> request -> data['User']['password'] = '';
 				$this -> request -> data['User']['new_password'] = '';
 				$this -> request -> data['User']['confirm_password'] = '';
-				CakeLog::write('error', 'User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
 			}
+
 		}
 	}
 
@@ -233,12 +247,12 @@ class UsersController extends AppController {
 						if ($this -> User -> validates(array('fieldList' => array('new_password', 'confirm_password')))) {
 							$this -> request -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
 							if ($this -> User -> changePassword($this -> request -> data)) {
-								$userId = $this -> User -> id;	
-								if($type === 'reset'){
+								$userId = $this -> User -> id;
+								if ($type === 'reset') {
 									$this -> User -> id = $userId;
 									$this -> User -> saveField('force_password_reset', '0');
 								}
-								
+
 								$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
 								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');
 								$this -> redirect('login');
@@ -289,5 +303,6 @@ class UsersController extends AppController {
 
 		return true;
 	}
+
 }
 ?>
