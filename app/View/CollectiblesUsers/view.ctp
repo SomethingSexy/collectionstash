@@ -3,17 +3,20 @@
 		<div class="component-title">
 			<h2><?php echo $stashUsername . '\'s' .__(' collectible', true)
 			?></h2>
+						<div class="actions icon">
+				<ul>
+					<li><a class="link" href="/collectibles/view/<?php echo $collectible['Collectible']['id'];?>" title="<?php echo __('Details');?>"><img src="/img/icon/magnify.png"/></a></li>
+				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) { ?>
+					<li><a class="link" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id'];?>" title="<?php echo __('Edit');?>"><img src="/img/icon/pencil.png"/></a></li>
+					<li><a class="link" title="<?php echo __('Remove');?>" id="remove-link"><img src="/img/icon/trash.png"/></a>
+					<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form></li>
+			  	<?php } ?>
+			  	</ul>
+			</div>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-			<div class="collectible links">
-				<?php echo $this -> Html -> link('Detail', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id']));?>
-				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) { ?>
-					<?php echo $this -> Html -> link('Edit', array('admin' => false, 'controller' => 'collectibles_users', 'action' => 'edit', $collectible['CollectiblesUser']['id']));?>
-					<a class="link" id="remove-link"><?php echo __('Remove');?></a>
-					<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
-			  	<?php } ?>
-			</div>
+
 			<div class="collectible item">
 				<div class="collectible image">
 					<?php
@@ -52,6 +55,21 @@
 							<?php echo $collectible['CollectiblesUser']['edition_size'] . '/' . $collectible['Collectible']['edition_size'];?>
 						</dd>
 						<?php }?>
+						<?php
+						if(isset($collectible['CollectiblesUser']['artist_proof'])){
+							echo '<dt>';
+							echo __('Artist\'s Proof');
+							echo '</dt>';	
+							echo '<dd>';
+							if($collectible['CollectiblesUser']['artist_proof']){
+								echo __('Yes');
+							} else {
+								echo __('No');
+							}
+							echo '</dd>';
+						}
+						
+						?>
 						<dt>
 							<?php echo __('Purchase Price');?>
 						</dt>

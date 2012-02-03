@@ -31,16 +31,19 @@ if (!isset($adminMode)) {
 	<div class="collectible detail-wrapper">
 		<div class="collectible detail">
 			<div class="detail title">
-				<h3><?php echo __('Manufacture Details');?></h3>
+				<h3><?php echo __('Manufacturer Details');?></h3>
 				<?php
 				if (isset($showEdit) && $showEdit) {
-					echo '<div class="title link">';
+					echo '<div class="actions icon">';
+					echo '<ul>';
+					echo '<li>';
 					if ($adminMode) {
-						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '">Edit</a>';
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '"><img src="/img/icon/pencil.png"/></a>';
 					} else {
-						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '"><img src="/img/icon/pencil.png"/></a>';
 					}
-
+					echo '</li>';
+					echo '</ul>';
 					echo '</div>';
 				}
 				?>
@@ -69,7 +72,7 @@ if (!isset($adminMode)) {
 				}
 				?>
 				<dt>
-					<?php echo __('Manufacture');?>
+					<?php echo __('Manufacturer');?>
 				</dt>
 				<?php
 				if ($showCompareFields && isset($collectibleCore['Collectible']['manufacture_id_changed']) && $collectibleCore['Collectible']['manufacture_id_changed']) {

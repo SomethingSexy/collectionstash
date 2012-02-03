@@ -6,7 +6,6 @@ class ProfilesController extends AppController {
 	public $helpers = array('Html', 'Js', 'FileUpload.FileUpload', 'Minify');
 
 	public function index() {
-		$this -> checkLogIn();
 		if ($this -> isUserAdmin()) {
 			$this -> set('allowInvites', true);
 		} else {

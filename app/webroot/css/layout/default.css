@@ -206,7 +206,7 @@ a:active {
 	/*margin-bottom: 20px;*/
 }
 .collectible.detail .detail.title {
-
+	margin-bottom: 5px;
 	width: 100%;
 	overflow: hidden;
 }
@@ -217,6 +217,7 @@ a:active {
 	margin-bottom: 0;
 	float: left;
 	color: #656464;
+	margin-top: 15px;
 }
 .collectible.detail .detail.title .title.link {
 	font-size: 0.75em;
@@ -224,6 +225,9 @@ a:active {
 .collectible.detail .detail.title .title.link a {
 	padding: 2px;
 	float: right;
+}
+.collectible.detail .detail.title .actions.icon ul li {
+	padding: 0;
 }
 .collectible.detail dl {
 	padding: 5px;
@@ -520,6 +524,11 @@ a:active {
 #CollectibleMsrp {
 	width: 100px;
 }
+#dialogCost,
+#CollectiblesUserEditionSize {
+	width: 100px;
+}
+
 /*
  #collectibleWidth,
  #collectibleDepth {
@@ -625,8 +634,6 @@ a:active {
 }
 #my-stashes-component .inside .component-view .ui-tabs div .actions ul li {
 	display: inline;
-	width: 16px;
-	position: relative;
 }
 #collectibles-gallery, #photo-gallery {
 	margin-top: 50px;
@@ -1788,3 +1795,21 @@ div.paging span a:hover {
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
 
+.actions.icon {
+	overflow: hidden;
+	float: right;
+	background-color: #656464;
+	
+	border-radius: 3px;
+}
+
+.actions.icon ul {
+    float: right;
+    overflow: hidden;
+}
+
+.actions.icon ul li {
+    display: inline;
+    float: left;
+    padding: 5px;
+}

@@ -5,8 +5,20 @@ class CollectiblesUser extends AppModel {
 	//As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
 	//then we have a complete total of collectibles
 	public $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible', 'User' => array('counterCache' => true), 'Condition', 'Merchant');
-	public $actsAs = array('Revision' => array('model' => 'CollectiblesUserRev'), 'Containable');
-	public $validate = array('cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'), 'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.'), 'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'), 'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'));
+	public $actsAs = array('Autocache.Autocache', 'Revision' => array('model' => 'CollectiblesUserRev'), 'Containable');
+	public $validate = array(
+	//cost
+	'cost' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
+	//edition size
+	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true), 'edition_sizeRule-1' => array('rule' => array('validateEditionSizeAndAP'), 'message' => 'Cannot have an edition size and be an artist\'s proof.')),
+	//condition
+	'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
+	//merchant
+	'merchant_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
+	//purchase date
+	'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
+	//artist proof
+	'artist_proof' => array('rule' => array('boolean'), 'message' => 'Incorrect value for Artist Proof'));
 
 	function beforeSave() {
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
@@ -37,14 +49,20 @@ class CollectiblesUser extends AppModel {
 		return $results;
 	}
 
+	function validateEditionSizeAndAP($check) {
+		//We know we have a valid edition size before getting here
+		if (isset($check['edition_size']) && !empty($check['edition_size']) && isset($this -> data['CollectiblesUser']['artist_proof']) && $this -> data['CollectiblesUser']['artist_proof']) {
+			return false;
+		}
+
+		return true;
+	}
+
 	function validateEditionSize($check) {
-		debug($this -> data);
+		//TODO: At some point this should check if there is another edition size already added and warn the user
 		$collectible_id = $this -> data['CollectiblesUser']['collectible_id'];
-		debug($collectible_id);
-		//$this->loadModel('Collectible');
 		$this -> Collectible -> recursive = -1;
 		$collectible = $this -> Collectible -> findById($collectible_id);
-		debug($collectible);
 		$showUserEditionSize = $collectible['Collectible']['showUserEditionSize'];
 		$editionSize = trim($check['edition_size']);
 

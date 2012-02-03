@@ -4,6 +4,12 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
+	public $components = array('Auth' => array('authenticate' => array('Form')));
+
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this -> Auth -> allow('*');
+	}
 
 	/**
 	 * This is the main index into this controller, it will display a list of users.
@@ -19,6 +25,7 @@ class UsersController extends AppController {
 	function login() {
 		$message = null;
 		$messageType = null;
+
 		if ($this -> Session -> check('Message.error')) {
 			$message = $this -> Session -> read('Message.error');
 			$message = $message['message'];
@@ -33,44 +40,39 @@ class UsersController extends AppController {
 		debug($message);
 		$this -> Session -> setFlash($message, null, null, $messageType);
 		$success = true;
-		if ($this -> request -> data) {
-			$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
-			$this -> User -> recursive = 0;
-			$results = $this -> User -> getUser($this -> request -> data['User']['username']);
-			if ($results) {
-				if ($results['User']['status'] == 0) {
-					if ($results['User']['password'] == Security::hash($this -> request -> data['User']['password'])) {
-						$this -> User -> id = $results['User']['id'];
+		if ($this -> request -> is('post')) {
+			if ($this -> Auth -> login()) {
+				$user = $this -> Auth -> user();
+				if ($user['status'] == 0) {
+					if (!$user['force_password_reset']) {
+						$this -> User -> id = $user['id'];
 						$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
 						CakeLog::write('info', $results);
-						$this -> Session -> write('user', $results);
-						CakeLog::write('info', 'User ' . $results['User']['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
-						if (!empty($this -> request -> data['User']['fromPage'])) {
-							$this -> redirect($this -> request -> data['User']['fromPage'], null, true);
-						} else {
-							$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
-						}
+						$this -> Session -> write('user', $user);
+						CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
+						return $this -> redirect($this -> Auth -> redirect());
+						// if (!empty($this -> request -> data['User']['fromPage'])) {
+						// $this -> redirect($this -> request -> data['User']['fromPage'], null, true);
+						// } else {
+						// $this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
+						// }
 					} else {
-						$this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
-						$success = false;
+						$this -> Auth -> logout();
+						return $this -> redirect(array('controller' => 'forgotten_requests', 'action' => 'forceResetPassword'));
 					}
+
 				} else {
+					$this -> Auth -> logout();
 					$this -> Session -> setFlash(__('Your account has not been activated yet.', true), null, null, 'error');
-					$success = false;
 				}
 			} else {
-				$this -> Session -> setFlash(__('Invalid Login.', true), null, null, 'error');
-				$success = false;
+				$this -> Session -> setFlash(__('Username or password is incorrect', true), null, null, 'error');
+				$this -> request -> data['User']['password'] = '';
+				$this -> request -> data['User']['new_password'] = '';
+				$this -> request -> data['User']['confirm_password'] = '';
+				CakeLog::write('error', 'User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
 			}
 		}
-
-		if (!$success) {
-			$this -> request -> data['User']['password'] = '';
-			$this -> request -> data['User']['new_password'] = '';
-			$this -> request -> data['User']['confirm_password'] = '';
-			CakeLog::write('error', 'User ' . $this -> request -> data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
-		}
-
 	}
 
 	function logout() {
@@ -79,36 +81,6 @@ class UsersController extends AppController {
 
 		$this -> redirect('/', null, true);
 	}
-
-	// function account($view = null) {
-	// $username = $this -> getUsername();
-	// $user = $this -> getUser();
-	// if ($user) {
-	// //Grab the number of collectibles for this user
-	// $stashCount = $this -> User -> getNumberOfStashesByUser($username);
-	// $stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
-	// $this -> set('stashCount', $stashCount);
-	// $this -> set('stashDetails', $stashDetails);
-	// //Grab the number of pending submissions.
-	//
-	// $this -> loadModel('Collectible');
-	// $submissionCount = $this -> Collectible -> getPendingCollectiblesByUserId($user['User']['id']);
-	// $this -> set('submissionCount', $submissionCount);
-	//
-	// $this -> paginate = array('conditions' => array('id' => $stashDetails[0]['Stash']['id']), 'limit' => 20, 'contain' => array('CollectiblesUser' => array('Collectible' => array('Manufacture', 'License', 'Collectibletype', 'Upload'))));
-	//
-	// $collectibleCount = $this -> User -> Stash -> getNumberOfCollectiblesInStash($stashDetails[0]['Stash']['id']);
-	// $this -> set('collectibleCount', $collectibleCount);
-	// $data = $this -> paginate('Stash');
-	// $this -> set('myCollectibles', $data);
-	// debug($data);
-	//
-	// $this -> set('myCollection', true);
-	// //$this->set('collectibles',$data);
-	// } else {
-	// $this -> redirect(array('action' => 'login'), null, true);
-	// }
-	// }
 
 	/**
 	 * Need to update this so that if the config is invites-only, then we have to check the email address to make
@@ -132,7 +104,7 @@ class UsersController extends AppController {
 					}
 				}
 				if ($proceed) {
-					$this -> request -> data['User']['password'] = Security::hash($this -> request -> data['User']['new_password']);
+					$this -> request -> data['User']['password'] = AuthComponent::password($this -> data['User']['new_password']);
 					$this -> request -> data['User']['admin'] = 0;
 					$this -> request -> data['User']['status'] = 1;
 					//$this->request->data['User']['profile_id'] = '';
@@ -238,7 +210,7 @@ class UsersController extends AppController {
 	/**
 	 * This method is called when a user recieved a link to reset their password
 	 */
-	function resetPassword($id = null) {
+	function resetPassword($type = 'forgot', $id = null) {
 		if (!is_null($id)) {
 			$this -> loadModel('ForgottenRequest');
 			$forgottenRequest = $this -> ForgottenRequest -> find("first", array('conditions' => array('ForgottenRequest.id' => $id)));
@@ -261,6 +233,12 @@ class UsersController extends AppController {
 						if ($this -> User -> validates(array('fieldList' => array('new_password', 'confirm_password')))) {
 							$this -> request -> data['User']['id'] = $forgottenRequest['ForgottenRequest']['user_id'];
 							if ($this -> User -> changePassword($this -> request -> data)) {
+								$userId = $this -> User -> id;	
+								if($type === 'reset'){
+									$this -> User -> id = $userId;
+									$this -> User -> saveField('force_password_reset', '0');
+								}
+								
 								$this -> ForgottenRequest -> delete($forgottenRequest['ForgottenRequest']['id']);
 								$this -> Session -> setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');
 								$this -> redirect('login');
@@ -311,6 +289,5 @@ class UsersController extends AppController {
 
 		return true;
 	}
-
 }
 ?>

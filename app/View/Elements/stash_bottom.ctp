@@ -1,11 +1,11 @@
 				</div>
 				<div id="photos" class="ui-tabs-hide">
-					<div class="actions">
+					<div class="actions icon">
 						<ul>
 							<?php
 							if (isset($myStash) && $myStash) {
 								if (Configure::read('Settings.User.uploads.allowed')) {
-									echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/camera.png"/></a></li>';
+									echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_photo.png"/></a></li>';
 								}
 							}
 							?>

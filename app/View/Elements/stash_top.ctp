@@ -16,18 +16,19 @@
 					</li>
 				</ul>
 				<div id="collectibles" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-					<div class="actions">
+					<div class="actions icon">
 						<ul>
 							<?php
 							if (isset($myStash) && $myStash) {
 								echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
+								echo '<li>';
+								echo '<a title="Edit" class="link glimpse-link" href="/stashs/view/' . $stashUsername . '/tiles"><img src="/img/icon/pencil.png"/></a>';
+								echo '</li>';
 							}
 							?>
 							<li>
-								<?php echo '<a title="View as photo gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/gallery_link.png"/></a>';?>
+								<?php echo '<a title="Photo Gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/photos.png"/></a>';?>
 							</li>
-							<li>
-								<?php echo '<a title="View as tiles" class="link glimpse-link" href="/stashs/view/' . $stashUsername . '/tiles"><img src="/img/icon/glimpse_link.png"/></a>';?>
-							</li>
+
 						</ul>
 					</div>

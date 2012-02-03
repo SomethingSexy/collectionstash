@@ -6,19 +6,27 @@ class ForgottenRequestsController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify');
 
 	public function forgotPassword() {
-		if (!empty($this -> data)) {
-			$this -> data = Sanitize::clean($this -> data);
+		$this -> processRequest($this -> data, 'forgotPasswordComplete', 'forgotten_password', __('Forgotten Password Request'), 'forgot');
+	}
+
+	public function forceResetPassword() {
+		$this -> processRequest($this -> data, 'resetPasswordComplete', 'reset_password', __('Reset Password Request'), 'reset');
+	}
+
+	private function processRequest($user, $completeView, $template, $subject, $type) {
+		if (!empty($user)) {
+			$user = Sanitize::clean($user);
 			$this -> loadModel('User');
 
-			$this -> User -> set($this -> data);
+			$this -> User -> set($user);
 			/*
 			 * Don't really need to check if it is a valid email address, just
 			 * need to make sure that it exists already.  We MIGHT want to update
 			 * this in the future so that we always assume it sends so people
 			 * cannot phish for email address in our system.
 			 */
-			if ($this -> User -> isValidUserEmail($this -> data)) {
-				$forgottenUser = $this -> User -> getUserByEmail($this -> data);
+			if ($this -> User -> isValidUserEmail($user)) {
+				$forgottenUser = $this -> User -> getUserByEmail($user);
 				//Ok now that we have the user, lets create the forgotten entry
 				$forgottenModel = array();
 				$forgottenModel['ForgottenRequest']['user_id'] = $forgottenUser['User']['id'];
@@ -28,12 +36,12 @@ class ForgottenRequestsController extends AppController {
 					$forgottenId = $this -> ForgottenRequest -> id;
 					$email = new CakeEmail('smtp');
 					$email -> emailFormat('text');
-					$email -> template('forgotten_password', 'simple');
+					$email -> template($template, 'simple');
 					$email -> to($forgottenUser['User']['email']);
-					$email -> subject('Forgotten Password Request');
-					$email -> viewVars(array('forgotten_url' => 'http://' . env('SERVER_NAME') . '/users/resetPassword/' . $forgottenId, 'username' => $forgottenUser['User']['username']));
+					$email -> subject($subject);
+					$email -> viewVars(array('url' => 'http://' . env('SERVER_NAME') . '/users/resetPassword/' . $type . '/' . $forgottenId, 'username' => $forgottenUser['User']['username']));
 					$email -> send();
-					$this -> render('forgotPasswordComplete');
+					$this -> render($completeView);
 				} else {
 
 				}
@@ -42,5 +50,6 @@ class ForgottenRequestsController extends AppController {
 			}
 		}
 	}
+
 }
 ?>
