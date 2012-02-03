@@ -226,9 +226,6 @@ a:active {
 	padding: 2px;
 	float: right;
 }
-.collectible.detail .detail.title .actions.icon ul li {
-	padding: 0;
-}
 .collectible.detail dl {
 	padding: 5px;
 }
