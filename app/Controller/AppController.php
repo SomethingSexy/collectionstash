@@ -1,4 +1,6 @@
 <?php
+App::uses('AuthComponent', 'Controller/Component');
+
 class AppController extends Controller {
 
 	public function beforeFilter() {
@@ -8,7 +10,7 @@ class AppController extends Controller {
 		} else {
 			$this -> layout = 'default';
 		}
-		if ($this -> isLoggedIn()) {
+		if (AuthComponent::user('id')) {
 			$this -> set('isLoggedIn', true);
 			$this -> set('username', $this -> getUsername());
 			if ($this -> isUserAdmin()) {
@@ -37,7 +39,9 @@ class AppController extends Controller {
 	}
 
 	public function getUser() {
-		return $this -> Session -> read('user');
+		$authUser = AuthComponent::user();	
+		$user['User'] = $authUser;
+		return $user;
 	}
 
 	public function getUsername() {

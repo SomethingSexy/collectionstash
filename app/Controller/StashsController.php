@@ -299,12 +299,10 @@ class StashsController extends AppController {
 						if ($display === 'gallery') {
 							$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
 						} else {
-							$this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype')), 'limit' => 12);
+							$this -> paginate = array('autocache' => true,'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype')), 'limit' => 12);
 							$collectibles = $this -> paginate('CollectiblesUser');
 						}
 
-						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
-						debug($collectibles);
 						$this -> set('userUploads', $user['UserUpload']);
 						$this -> set(compact('collectibles'));
 					} else {

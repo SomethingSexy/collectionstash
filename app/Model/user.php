@@ -1,4 +1,5 @@
 <?php
+App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 	var $name = 'User';
 	var $actsAs = array('Containable');
@@ -23,16 +24,7 @@ class User extends AppModel {
 		return $valid;
 	}
 
-	var $validate = array(
-		'username' => array(
-			'validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 
-			'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 
-			'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 
-		'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 
-			'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 
-		'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 
-		'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 
-		'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
+	var $validate = array('username' => array('validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
 
 	/**
 	 * This validates to make sure the new and confirm password are the same
@@ -85,9 +77,9 @@ class User extends AppModel {
 	 */
 	public function changePassword($user) {
 		//Let's has the password first
-		$user['User']['password'] = Security::hash($user['User']['new_password']);
-		$this -> id = $user['User']['id'];
-		if ($this -> saveField('password', $user['User']['password'], false)) {
+		$user['User']['password'] = AuthComponent::password($this->data['User']['new_password']);
+		$data = array('id'=> $user['User']['id'], 'password' => $user['User']['password'], 'force_password_reset' => false);
+		if ($this -> save($data, false, array('password', 'force_password_reset'))) {
 			return true;
 		} else {
 			return false;

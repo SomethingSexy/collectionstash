@@ -88,6 +88,9 @@ class Collectible extends AppModel {
 		if (isset($this -> data['Collectible']['name'])) {
 			$this -> data['Collectible']['name'] = trim($this -> data['Collectible']['name']);
 		}
+		if (isset($this -> data['Collectible']['description'])) {
+			$this -> data['Collectible']['description'] = trim($this -> data['Collectible']['description']);
+		}
 
 		debug($this -> data);
 		return true;

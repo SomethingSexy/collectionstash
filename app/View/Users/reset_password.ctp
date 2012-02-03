@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="component-view">
-			<?php echo $this -> Form -> create('User', array('url' => '/users/resetPassword/'.$this->params['pass'][0],  ));?>
+			<?php echo $this -> Form -> create('User', array('url' => '/users/resetPassword/'.$this->request->params['pass'][0].'/'.$this->request->params['pass'][1],  ));?>
 			<fieldset>
 				<ul class="form-fields">
 					<li>

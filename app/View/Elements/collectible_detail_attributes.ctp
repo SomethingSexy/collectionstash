@@ -9,12 +9,16 @@ if(!isset($adminMode)){
 		<h3><?php echo __('Accessories/Features'); ?></h3>
 		<?php
 		if (isset($showEdit) && $showEdit) {
-			echo '<div class="title link">';
+			echo '<div class="actions icon">';
+			echo '<ul>';
+			echo '<li>';
 			if($adminMode){
-				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/true' . '">Edit</a>';
+				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/true' . '"><img src="/img/icon/pencil.png"/></a>';
 			} else {
-				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '">Edit</a>';
+				echo '<a href="/attributes_collectibles_edits/edit/' . $collectibleCore['Collectible']['id'] . '/' . '"><img src="/img/icon/pencil.png"/></a>';
 			}
+			echo '</li>';
+			echo '</ul>';
 			echo '</div>';
 		}
 		?>

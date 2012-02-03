@@ -33,7 +33,7 @@
 					<ul class="form-fields">
 						<li>
 							<div class="label-wrapper">
-								<label for=""> <?php echo __('Manufacture')
+								<label for=""> <?php echo __('Manufacturer')
 									?></label>
 							</div>
 							<div class="static-field">

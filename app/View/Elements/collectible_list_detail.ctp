@@ -26,7 +26,7 @@ if(!isset($showStatus)){
 		}
 		?>
 		<dt>
-			Manufacture:
+			Manufacturer:
 		</dt>
 		<dd>
 			<a href="<?php echo '/manufactures/view/'.$manufacture['id'];?>">
