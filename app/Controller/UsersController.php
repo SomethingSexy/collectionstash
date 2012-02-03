@@ -46,7 +46,7 @@ class UsersController extends AppController {
 			$results = $this -> User -> getUser($this -> request -> data['User']['username']);
 			if ($results) {
 				if ($results['User']['status'] == 0) {
-					if (!$user['force_password_reset']) {
+					if (!$results['User']['force_password_reset']) {
 						//This seems redundant might make more since to auto login them in because I already have the data
 						if ($this -> Auth -> login()) {
 							$user = $this -> Auth -> user();
