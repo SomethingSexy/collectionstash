@@ -1,10 +1,10 @@
-<?php echo $this->element('stash_top'); ?>
-	<div id="collectibles-gallery"></div>
-<?php echo $this->element('stash_bottom'); ?>
+<?php echo $this -> element('stash_top');?>
+<div id="collectibles-gallery"></div>
+<?php echo $this -> element('stash_bottom');?>
 
 <script>
 
-var collectibleData = [<?php
+	var collectibleData = [<?php
 if (isset($collectibles) && !empty($collectibles)) {
 	foreach ($collectibles as $key => $myCollectible) {
 
@@ -32,6 +32,20 @@ if (isset($collectibles) && !empty($collectibles)) {
 			$detail .= $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'];
 			$detail .= '</dd>';
 		}
+
+		if (isset($myCollectible['CollectiblesUser']['artist_proof'])) {
+			$detail .= '<dt>';
+			$detail .= __('Artist\'s Proof');
+			$detail .= '</dt>';
+			$detail .= '<dd>';
+			if ($collectible['CollectiblesUser']['artist_proof']) {
+				$detail .= __('Yes');
+			} else {
+				$detail .= __('No');
+			}
+			$detail .= '</dd>';
+		}
+
 		$detail .= '<dt>';
 		$detail .= __('Purchase Price');
 		$detail .= '</dt>';
@@ -65,9 +79,9 @@ if (isset($collectibles) && !empty($collectibles)) {
 			$detail .= $myCollectible['CollectiblesUser']['purchase_date'];
 			$detail .= '</dd>';
 		}
-		$detail .= '<dt><a href=\"/collectibles/view/'.$myCollectible['Collectible']['id'] .' \" class=\"link\">Collectible Details</a></dt>';
+		$detail .= '<dt><a href=\"/collectibles/view/' . $myCollectible['Collectible']['id'] . ' \" class=\"link\">Collectible Details</a></dt>';
 		$detail .= '</dl>';
-		
+
 		$detail .= '</div>';
 
 		echo '{';
