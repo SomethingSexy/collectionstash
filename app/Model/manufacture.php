@@ -3,7 +3,7 @@ class Manufacture extends AppModel {
 	public $name = 'Manufacture';
 	public $belongsTo = array('Series');
 	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id'), 'LicensesManufacture', 'CollectibletypesManufacture');
-	public $actsAs = array('Containable', 'Autocache.Autocache');
+	public $actsAs = array('Containable');
 
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
