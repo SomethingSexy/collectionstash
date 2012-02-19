@@ -39,7 +39,7 @@ class AppController extends Controller {
 	}
 
 	public function getUser() {
-		$authUser = AuthComponent::user();	
+		$authUser = AuthComponent::user();
 		$user['User'] = $authUser;
 		return $user;
 	}
@@ -89,7 +89,7 @@ class AppController extends Controller {
 			$this -> Session -> write('Manufacture_Search.filter', $manufactures);
 		}
 
-		debug($manufactures);
+		// debug($manufactures);
 
 		// $collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
 
@@ -108,7 +108,7 @@ class AppController extends Controller {
 			$this -> loadModel('LicensesManufacture');
 
 			$licenses = $this -> LicensesManufacture -> getFullLicensesByManufactureId($firstKey);
-			debug($licenses);
+			// debug($licenses);
 			$this -> Session -> write('License_Search.filter', $licenses);
 
 		} else {
@@ -133,7 +133,7 @@ class AppController extends Controller {
 			$this -> Session -> delete('Tag_Search.filter');
 		}
 
-		debug($collectibleTypes);
+		// debug($collectibleTypes);
 	}
 
 	public function handleNotLoggedIn() {
@@ -200,7 +200,16 @@ class AppController extends Controller {
 			$this -> request -> data['Search']['Tag']['Filter'][$this -> request -> query['t']] = 1;
 			$saveSearchFilters['tag'] = $this -> request -> query['t'];
 		}
-
+		if (isset($this -> request -> query['o'])) {
+			//find all of this license
+			$this -> request -> data['Search']['Order'] = array();
+			$this -> request -> data['Search']['Order']['Filter'] = array();
+			//Just setting a single filter for these now
+			$this -> request -> data['Search']['Order']['Filter'] = $this -> request -> query['o'];
+			$saveSearchFilters['order'] = $this -> request -> query['o'];
+		} else {
+			$saveSearchFilters['order'] = 'a';
+		}
 		if (isset($this -> request -> data['Search']['search']) && trim($this -> request -> data['Search']['search']) !== '') {
 			$search = $this -> request -> data['Search']['search'];
 			$search = ltrim($search);
@@ -227,7 +236,7 @@ class AppController extends Controller {
 		$filters = array();
 		$manFilters = array();
 		array_push($manFilters, array('AND' => array()));
-		debug($manFilters);
+	//	debug($manFilters);
 		array_push($manFilters[0]['AND'], array('OR' => array()));
 		$filtersSet = false;
 		$manufactureFilterSet = false;
@@ -244,7 +253,7 @@ class AppController extends Controller {
 		if ($manufactureFilterSet) {
 			array_push($filters, $manFilters);
 		}
-		debug($filters);
+		//debug($filters);
 
 		$typeFilters = array();
 		array_push($typeFilters, array('AND' => array()));
@@ -259,11 +268,11 @@ class AppController extends Controller {
 				}
 			}
 		}
-		debug($typeFilters);
+		//debug($typeFilters);
 		if ($collectibletypeFilterSet) {
 			array_push($filters, $typeFilters);
 		}
-		debug($filters);
+		//debug($filters);
 
 		$licenseFilters = array();
 		array_push($licenseFilters, array('AND' => array()));
@@ -281,7 +290,7 @@ class AppController extends Controller {
 		if ($licenseFilterSet) {
 			array_push($filters, $licenseFilters);
 		}
-		debug($filters);
+		//debug($filters);
 
 		$tagFilters = array();
 		$tagFilterSet = false;
@@ -295,6 +304,32 @@ class AppController extends Controller {
 				}
 			}
 		}
+
+		if (isset($this -> request -> data['Search']['Order'])) {
+			$orderType = $this -> request -> data['Search']['Order']['Filter'];
+			$order = array();
+			switch ($orderType) {
+				case "n" :
+					$order['Collectible.modified'] = 'desc';
+					break;
+				case "o" :
+					$order['Collectible.created'] = 'ASC';
+					break;
+				case "a" :
+					$order['Collectible.name'] = 'ASC';
+					break;
+				case "d" :
+					$order['Collectible.name'] = 'desc';
+					break;
+				default :
+					$order['Collectible.name'] = 'ASC';
+			}
+		} else {
+			//If nothing is set, use alphabetical order as the default
+			$order = array();
+			$order['Collectible.name'] = 'ASC';
+		}
+
 		/*
 		 * If this is set, write it to the session so that we know
 		 * we are using a tag filter to search on.  We need to make
@@ -327,7 +362,7 @@ class AppController extends Controller {
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
-				$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
 				$test = array();
@@ -337,11 +372,11 @@ class AppController extends Controller {
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
-				$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
 			//This a search based on filters, not a search string
-			$this -> paginate = array("joins" => $joins, 'order' => array('Collectible.name' => 'ASC'), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
+			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');

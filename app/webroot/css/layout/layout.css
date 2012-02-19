@@ -33,6 +33,11 @@ body {
 	color: #CCC;
 	text-indent: 0;
 }
+#header .header.title .sub-title {
+	color: #CCC;
+	line-height: 1.2;
+	float: right;
+}
 #header .header.navigation ul.nav {
 	float: right;
 }

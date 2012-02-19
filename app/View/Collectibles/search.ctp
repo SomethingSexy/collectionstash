@@ -24,7 +24,8 @@
 							'manufacture' => $collectible['Manufacture'],
 							'license' => $collectible['License'],
 							'collectibletype' => $collectible['Collectibletype'],
-							'speciazliedType' => $collectible['SpecializedType']
+							'speciazliedType' => $collectible['SpecializedType'],
+							'showStats' => true
 							));			
 						} else {
 							echo $this -> element('collectible_list_detail', array(
@@ -32,10 +33,9 @@
 							'manufacture' => $collectible['Manufacture'],
 							'license' => $collectible['License'],
 							'collectibletype' => $collectible['Collectibletype'],
+							'showStats' => true
 							));
 						}
-					
-
 					?>
 					<div class="links">
 						<?php if($isLoggedIn){

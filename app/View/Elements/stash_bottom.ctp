@@ -18,7 +18,7 @@
 		</div>
 	</div>
 </div>
-<?php echo $this -> Html -> script('galleria-1.2.5', array('inline' => false));?>
+<?php echo $this -> Html -> script('galleria-1.2.6', array('inline' => false));?>
 <?php echo $this -> Html -> script('galleria.classic.js', array('inline' => false));?>
 <?php echo $this -> Html -> css('galleria.classic');?>
 

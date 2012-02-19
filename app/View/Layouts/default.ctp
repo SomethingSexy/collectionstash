@@ -108,7 +108,8 @@
 	<div id="container">
 		<div id="header" class="clearfix">
 			<div class="header title">
-				<h1><?php __('Collection Stash'); ?></h1>
+				<h1><?php echo __('Collection Stash'); ?></h1>
+				<span class="sub-title"><?php echo __('Are you squirreling?'); ?></span>
 			</div>
 			<div class="header navigation">
 				<div class="box">

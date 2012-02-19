@@ -106,6 +106,14 @@ $(function(){
 			}
 		}
 		
+		if(selectedType === 'o') {
+				queryString += 'o=' + selectedFilter + '&';
+			} else {
+				if(orderFilter !== null){
+					queryString += 'o=' + orderFilter + '&';
+				}
+			}
+		
 		if(queryString !== ''){
 			queryString = queryString.substring(0, queryString.length-1);
 		}

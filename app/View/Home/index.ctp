@@ -11,61 +11,29 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="component random-collectibles">
-		<div class="inside" >
-			<div class="component-title">
-				<h2><?php echo __('Recently Added Collectibles');?></h2>
-			</div>
-			<div class="component-view">
-				<?php
-
-				echo '<div class="glimpse">';
-				$count = 0;			
-				$collectiblesCount = count($randomCollectibles) - 1;
-				foreach ($randomCollectibles as $key => $collectible) {
-					$newline = false;
-					$endline = false;
-					if ($count === 0) {
-						$newline = true;
-						$count += $count + 1;
-					} else {
-						if ($count % 5 != 0) {
-							$count += $count + 1;
-						} else {
-							$count = 0;
-							$endline = true;
-						}
-					}
-
-					if (!$endline) {
-						if (($collectiblesCount) === $key) {
-							$endline = true;
-						}
-					}
-
-					if ($newline) {
-						echo '<div class="line">';
-					}
-					if (!empty($collectible['Upload'])) {
-						echo '<div class="image"><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/'. $collectible['Collectible']['slugField']. '">';
-
-						if (!empty($collectible['Upload'])) {
-							echo $this -> FileUpload -> image($collectible['Upload'][0]['name'], array('width' => 150, 'height'=> 150));
-						} else {
-							echo '<img src="/img/silhouette_thumb.png"/>';
-						}
-						echo '</a></div>';
-					} else {
-						echo '<div class="image"><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/'. $collectible['Collectible']['slugField'].'"><img src="/img/silhouette_thumb.png"/></a></div>';
-					}
-					if ($endline) {
-						echo '</div>';
-					}
-				}
-				echo '</div>';
-				?>
-			</div>
-		</div>
+	<div class="site-information">
+		<ul class="information">
+			<li class="submit">
+				<span class="title"><?php echo __('Submit');?></span>
+				<p><?php echo __('Help build the largest collectible database and community by submitting new collectibles you own or enjoy.')?></p>
+			</li>
+			<li class="stash">
+				<span class="title"><?php echo __('Stash');?></span>
+				<p><?php echo __('Add collectibles from our growing database to your stash to build your collection.')?></p>
+			</li>	
+			<li class="share">
+				<span class="title"><?php echo __('Share');?></span>
+				<p><?php echo __('Share your stash with the community and friends.')?></p>
+			</li>			
+		</ul>			
+		<ul class="buttons">
+			<li>
+				<a href="/collectibles/catalog"><?php echo __('Discover'); ?></a>
+				
+			</li>
+			<li>
+				<a href="/users/register"><?php echo __('Register'); ?></a>
+			</li>
+		</ul>
 	</div>
 </div>

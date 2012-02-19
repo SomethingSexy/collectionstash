@@ -647,7 +647,7 @@ class CollectiblesController extends AppController {
 		$collectible['License'] = $license['License'];
 
 		//This method will check and see if a series has been added and if so it will generate and add the path for us.
-		$this -> Collectible -> addSeriesPath($collectible);	
+		$this -> Collectible -> addSeriesPath($collectible);
 
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
@@ -809,6 +809,22 @@ class CollectiblesController extends AppController {
 		 * Call the parent method now, that method handles pretty much everything now
 		 */
 		$this -> searchCollectible();
+	}
+
+	function catalog() {
+		//Updated to use modified desc, instead of created so I will get the latest ones added.
+		$recentlyAddedCollectibles = $this -> Collectible -> find('all', array('limit' => 20, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture', 'Collectibletype', 'License'), 'order' => array('Collectible.modified' => 'desc')));
+		$this -> set(compact('recentlyAddedCollectibles'));
+
+		$manufactures = $this -> Collectible -> Manufacture -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('Manufacture.collectible_count' => 'desc')));
+		$this -> set(compact('manufactures'));
+
+		$licenses = $this -> Collectible -> License -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('License.collectible_count' => 'desc')));
+		$this -> set(compact('licenses'));
+		
+		$collectibletypes = $this -> Collectible -> Collectibletype -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('Collectibletype.collectible_count' => 'desc')));
+		$this -> set(compact('collectibletypes'));
+
 	}
 
 	function history($id = null) {
