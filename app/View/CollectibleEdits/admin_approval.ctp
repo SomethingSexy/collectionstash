@@ -384,6 +384,26 @@
 								echo '</dd>';
 							}
 							
+							if (isset($collectible['Collectible']['pieces']) && !empty($collectible['Collectible']['pieces']) || (isset($collectible['Collectible']['pieces_changed']) && $collectible['Collectible']['pieces_changed'])) {
+								echo '<dt>';
+								echo __('Pieces');
+								echo '</dt>';
+
+								//Check if it is changed first
+								if (isset($collectible['Collectible']['pieces_changed']) && $collectible['Collectible']['pieces_changed']) {
+									echo '<dd class="changed">';
+								} else {
+									echo '<dd>';
+								}
+
+								if (!empty($collectible['Collectible']['pieces'])) {
+									echo $collectible['Collectible']['pieces'];
+								} else {
+									echo __('Removed');
+								}
+								echo '</dd>';
+							}							
+							
 							if (isset($collectible['Collectible']['product_weight']) && !empty($collectible['Collectible']['product_weight']) || (isset($collectible['Collectible']['product_weight_changed']) && $collectible['Collectible']['product_weight_changed'])) {
 								echo '<dt>';
 								echo __('Weight');

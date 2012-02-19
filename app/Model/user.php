@@ -26,6 +26,13 @@ class User extends AppModel {
 
 	var $validate = array('username' => array('validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
 
+	function beforeSave() {
+		//Make sure there is no space around the email, seems to be an issue with sending when there is
+		$this -> data['User']['email'] = trim($this -> data['User']['email']);
+		return true;
+	}
+
+
 	/**
 	 * This validates to make sure the new and confirm password are the same
 	 */

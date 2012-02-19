@@ -111,7 +111,8 @@ if (isset($collectibles) && !empty($collectibles)) {
 					height : 600,
 					lightbox : true,
 					data_source : collectibleData,
-					_showDetailInfo : true
+					_showDetailInfo : true,
+					debug: false
 				});
 			} else {
 				$("#collectibles-gallery").parent().prepend($('<p></p>').text('No collectibles have been added!'));
@@ -125,7 +126,8 @@ if (isset($collectibles) && !empty($collectibles)) {
 					height : 600,
 					lightbox : true,
 					data_source : photoData,
-					_showDetailInfo : false
+					_showDetailInfo : false,
+					debug: false
 				});
 			} else {
 				$("#photo-gallery").parent().prepend($('<p></p>').text('No photos have been added!'));
@@ -142,7 +144,8 @@ if (isset($collectibles) && !empty($collectibles)) {
 							height : 600,
 							lightbox : true,
 							data_source : collectibleData,
-							_showDetailInfo : true
+							_showDetailInfo : true,
+							debug: false
 						});
 					} else {
 						$("#collectibles-gallery").parent().prepend($('<p></p>').text('No collectibles have been added!'));
@@ -156,7 +159,8 @@ if (isset($collectibles) && !empty($collectibles)) {
 							height : 600,
 							lightbox : true,
 							data_source : photoData,
-							_showDetailInfo : false
+							_showDetailInfo : false,
+							debug: false
 						});
 					} else {
 						$("#photo-gallery").parent().prepend($('<p></p>').text('No photos have been added!'));

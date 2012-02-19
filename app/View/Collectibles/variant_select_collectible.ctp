@@ -21,7 +21,7 @@
 				?>
 				<div class="collectible item">
 					<?php echo $this -> element('collectible_list_image', array('collectible' => $collectible));?>
-					<?php echo $this -> element('collectible_list_detail', array('collectible' => $collectible['Collectible'], 'manufacture' => $collectible['Manufacture'], 'license' => $collectible['License'], 'collectibletype' => $collectible['Collectibletype']));?>
+					<?php echo $this -> element('collectible_list_detail', array('collectible' => $collectible['Collectible'], 'manufacture' => $collectible['Manufacture'], 'license' => $collectible['License'], 'collectibletype' => $collectible['Collectibletype'],'showStatus'=> true));?>
 					<div class="links">
 						<?php echo $this -> Html -> link('Select', array('action' => 'variantSelectCollectible', $collectible['Collectible']['id']));?>
 					</div>

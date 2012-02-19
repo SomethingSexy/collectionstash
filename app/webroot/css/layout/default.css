@@ -782,14 +782,37 @@ a:active {
 .dialog .component .inside .component-view {
 	padding-top: 0;
 }
-#home-components .random-collectibles {
-	width: 100%;
-}
-#home-components .random-collectibles .inside .component-view {
+#home-components {
 	overflow: hidden;
 }
+#home-components .component {
+	width: 100%;
+}
+#home-components .component .inside .component-title {
+	padding: 0;
+	font-size: 0.8em;
+	border-radius: 0;
+}
+#home-components .component .inside .component-view {
+	overflow: hidden;
+	/*padding: 0;*/
+}
+#home-components .component .inside .component-view .standard-list ul li span {
+	font-size: 0.75em;
+}
+#home-components .random-collectibles {
+	width: 880px;
+	margin-left: 50px;
+	margin-top: 20px
+}
 #home-components .random-collectibles .inside .component-view .glimpse {
-	width: 90%;
+	width: 880px;
+	 margin-left: 0;
+}
+#home-components .random-collectibles .inside .component-view .glimpse .line .image{
+	border-radius: 0;
+	margin: 2px;
+	border: 0;
 }
 #home-components .random-collectibles .inside .component-view .collectibles .collectible {
 	padding: 5px;
@@ -807,6 +830,24 @@ a:active {
 #home-components .random-collectibles .inside .component-view .collectibles .collectible .detail p {
 	font-size: 0.75em;
 }
+
+#home-components .component.manufacturers,
+#home-components .component.licenses,
+#home-components .component.collectibletypes {
+	width: 300px;
+}
+#home-components .random-collectibles .inside .component-title,
+#home-components .component.manufacturers .inside .component-title,
+#home-components .component.licenses .inside .component-title,
+#home-components .component.collectibletypes .inside .component-title{
+	padding: 0 2em 0 2em;
+	margin-bottom: 5px;
+}
+#home-components .component.manufacturers {
+	margin-left: 50px;
+}
+
+
 #home-components .find-by {
 	float: right;
 	width: 400px;
@@ -830,6 +871,82 @@ a:active {
 #home-components .welcome-component .inside .component-view p.body {
 	font-size: 0.9em;
 }
+#home-components .site-information {
+	float: left;
+	width: 100%;
+	margin-top: 50px;
+}
+#home-components .site-information ul {
+	width: 630px;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+}
+#home-components .site-information ul.information {
+	width: 630px;
+}
+#home-components .site-information ul.buttons {
+	width: 450px;
+	margin-top: 30px;
+}
+#home-components .site-information ul li {
+	float: left;
+	width: 200px;
+	text-align: center;
+	margin-right: 10px;
+}
+#home-components .site-information ul.buttons li {
+	margin-left: 10px;
+}
+#home-components .site-information ul li a {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #fdb629) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #fdb629 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#fdb629');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#000333;
+	font-family:arial;
+	font-size:24px;
+	font-weight:bold;
+	padding:20px 50px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+	cursor: pointer;
+}
+#home-components .site-information ul li a:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fdb629), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #fdb629 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdb629', endColorstr='#ededed');
+	background-color:#fdb629;
+}
+#home-components .site-information ul li a:active {
+	position:relative;
+	top:1px;
+}
+
+
+#home-components .site-information ul li .title {
+    color: #000000;
+    display: block;
+    font-family: 'MuseoSlab-500','sans-serif';
+    font-size: 25.78px;
+    margin: 0 auto;
+    text-transform: uppercase;
+}
+#home-components .site-information ul li p {
+   	color: #616161;
+    margin: 15px auto;
+    width: 198px;
+    word-wrap: break-word;
+}
+
 #registration-component {
 	width: 100%;
 }

@@ -69,7 +69,13 @@ class SluggableBehavior extends ModelBehavior {
 				$slug = '';
 				foreach ($fields as $key => $value) {
 					if(isset($d[$value['Model']]) && isset($d[$value['Model']][$value['Field']])) {
-						$slug .= $d[$value['Model']][$value['Field']] . ' ';
+						if(isset($value['Display']) && $d[$value['Model']][$value['Field']]) {
+							$slug .= $value['Display'] . ' ';
+						} else {
+							$slug .= $d[$value['Model']][$value['Field']] . ' ';
+						}
+						
+						
 					}
 				}
 				if ($this -> options[$model -> alias]['showPrimary']) {

@@ -237,6 +237,14 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 						</li>
 						<li>
 							<div class="label-wrapper">
+								<label for="CollectiblePieces"> <?php echo __('Number of Pieces')
+									?></label>
+								<a class="ui-icon ui-icon-info" title="<?php echo __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true) ?>" alt="info"></a>
+							</div>
+							<?php echo $this -> Form -> input('pieces', array('div' => false, 'label' => false, 'between' => ''));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
 								<label for="CollectibleProductWeight"> <?php echo __('Weight (lbs)')
 									?></label>
 							</div>

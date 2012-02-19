@@ -5,7 +5,7 @@ class Collectible extends AppModel {
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
-	var $actsAs = array('Revision' => array('model' => 'CollectibleRev'), 'Containable', 'Sluggable' => array(
+	var $actsAs = array('Revision' => array('model' => 'CollectibleRev','ignore'=> 'collectibles_user_count'), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -14,42 +14,44 @@ class Collectible extends AppModel {
 	 * so I am thinking I set those below like so to grab those associations.  If the first one
 	 * in the arry is not "Model", then do it on the model alias
 	 */
-		'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title'), 'field2' => array('Model' => 'License', 'Field' => 'name'), 'field3' => array('Model' => 'Collectible', 'Field' => 'name'), 'field4' => array('Model' => 'Collectibletype', 'Field' => 'name')), 'showPrimary' => false,
+	'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title'), 'field2' => array('Model' => 'License', 'Field' => 'name'), 'field3' => array('Model' => 'Collectible', 'Field' => 'name'), 'field4' => array('Model' => 'Collectibletype', 'Field' => 'name'), 'field5' => array('Model' => 'Collectible', 'Field' => 'exclusive', 'Display' => 'Exclusive'),'field6' => array('Model' => 'Collectible', 'Field' => 'variant', 'Display' => 'Variant')), 'showPrimary' => false,
 	// 'slugField' => 'theNameOfYourSlugVirtualField',
-		'replacement' => '-' //the char to implode the words in entry name...
+	'replacement' => '-' //the char to implode the words in entry name...
 	));
 
 	var $validate = array(
 	//name field
-		'name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
+	'name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
 	//manufacture field
-		'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
+	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
 	//collectible type field
-		'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
+	'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
 	//license filed
-		'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'),
+	'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'),
 	//series field
-		'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
+	'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
 	//description field
-		'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
+	'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
 	//msrp
-		'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
+	'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition_size
-		'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'),
+	'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'),
 	//upc
-		'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
+	'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
 	//product code
-		'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
+	'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
 	//This should be decmial or blank
-		'product_length' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid height.'),
+	'product_length' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid height.'),
 	//This should be decmial or blank
-		'product_width' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid width.'), ),
+	'product_width' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid width.'), ),
 	//This should be decmial or blank
-		'product_depth' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ),
+	'product_depth' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ),
 	//url
-		'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
+	'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
 	//numbered
-		'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'));
+	'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'),
+	//pieces
+	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), );
 
 	function beforeSave() {
 		debug($this -> data);
@@ -111,23 +113,23 @@ class Collectible extends AppModel {
 			$results['release'] = '';
 		}
 
-		if(isset($results['series_id']) && !empty($results['series_id'])){
+		if (isset($results['series_id']) && !empty($results['series_id'])) {
 			$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
 			$results['seriesPath'] = $fullSeriesPath;
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * This is a helper method that will update a series path if a series has
 	 * been added for the passed in collectible.  Not pretty but this is used for the
 	 * cases that we cannot use the after fine helper method.
 	 */
-	public function addSeriesPath(&$collectible){
-		if(isset($collectible['Collectible']['series_id']) && !empty($collectible['Collectible']['series_id'])){
+	public function addSeriesPath(&$collectible) {
+		if (isset($collectible['Collectible']['series_id']) && !empty($collectible['Collectible']['series_id'])) {
 			$fullSeriesPath = $this -> Series -> buildSeriesPathName($collectible['Collectible']['series_id']);
 			$collectible['Collectible']['seriesPath'] = $fullSeriesPath;
-		}		
+		}
 	}
 
 	function validateProductWidthDepthId($check) {
@@ -211,7 +213,7 @@ class Collectible extends AppModel {
 	function validateSeriesId($check) {
 		//grab the manufacturer first
 		$manufacturer = $this -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $this -> data['Collectible']['manufacture_id']), 'contain' => false));
-		
+
 		if (!empty($manufacturer['Manufacture']['series_id'])) {
 
 			//Check to see if a series is set
