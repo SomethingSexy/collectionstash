@@ -1,0 +1,24 @@
+Phase I = 1
+Phase II = 2
+Phase III = 3
+Phase IV= 4
+
+24 	Cover Girls of DC 		NULL 	47 	48    = 41
+25 	Women of the DC Universe 	NULL 	49 	58
+26 	Series 1 			25 	50 	51 = 94
+27 	Series 2 			25 	52 	53 = 95
+28 	Series 3 			25 	54 	55 = 96
+29 	Series 4 			25 	56 	57 = 97
+30 	Heroes of the DC Universe 	NULL 	59 	66
+31 	Series 1 			30 	60 	61 = 68
+32 	Series 2 			30 	62 	63 = 69
+33 	Blackest Night 			30 	64 	65 = 67
+
+
+
+
+
+
+
+
+I will need to manually update all Toynam, elektric tiki and hot toys
