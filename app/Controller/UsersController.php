@@ -15,7 +15,7 @@ class UsersController extends AppController {
 	 * This is the main index into this controller, it will display a list of users.
 	 */
 	function index() {
-		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'));
+		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'), 'limit' => 100);
 
 		$users = $this -> paginate('User');
 
@@ -296,7 +296,7 @@ class UsersController extends AppController {
 		$email = new CakeEmail('smtp');
 		$email -> emailFormat('text');
 		$email -> template('user_confirm', 'simple');
-		$email -> to($user['User']['email']);
+		$email -> to(trim($user['User']['email']));
 		$email -> subject(env('SERVER_NAME') . '– Please confirm your email address');
 		$email -> viewVars(array('activate_url' => 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this -> User -> getActivationHash(), 'username' => $this -> request -> data['User']['username']));
 		$email -> send();
