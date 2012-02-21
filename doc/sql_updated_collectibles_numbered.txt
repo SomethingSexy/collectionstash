@@ -1,3 +1,8 @@
 UPDATE `collectibles`
 SET numbered = '1'
 WHERE edition_size IS NOT NULL AND edition_size != '0'  
+
+
+UPDATE `collectibles`
+SET series_id = NULL
+WHERE 1
