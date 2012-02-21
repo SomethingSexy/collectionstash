@@ -37,7 +37,7 @@ class ForgottenRequestsController extends AppController {
 					$email = new CakeEmail('smtp');
 					$email -> emailFormat('text');
 					$email -> template($template, 'simple');
-					$email -> to($forgottenUser['User']['email']);
+					$email -> to(trim($forgottenUser['User']['email']));
 					$email -> subject($subject);
 					$email -> viewVars(array('url' => 'http://' . env('SERVER_NAME') . '/users/resetPassword/' . $type . '/' . $forgottenId, 'username' => $forgottenUser['User']['username']));
 					$email -> send();

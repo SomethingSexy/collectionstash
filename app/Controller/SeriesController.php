@@ -40,13 +40,13 @@ class SeriesController extends AppController {
 		}
 	}
 
-	function add() {
-
-		$data['Series']['parent_id'] = '128';
-		$data['Series']['name'] = 'Ghostbusters';
-		$this -> Series -> save($data);
-		$this -> render(false);
-	}
+	// function add() {
+// 
+		// $data['Series']['parent_id'] = '128';
+		// $data['Series']['name'] = 'Ghostbusters';
+		// $this -> Series -> save($data);
+		// $this -> render(false);
+	// }
 
 }
 ?>
