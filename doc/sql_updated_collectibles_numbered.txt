@@ -6,3 +6,19 @@ WHERE edition_size IS NOT NULL AND edition_size != '0'
 UPDATE `collectibles`
 SET series_id = NULL
 WHERE 1
+
+
+SELECT * 
+FROM `licenses` 
+WHERE id NOT IN (SELECT license_id FROM licenses_manufactures WHERE manufacture_id = 1)
+
+
+SELECT *
+FROM licenses
+WHERE NOT
+EXISTS (
+
+SELECT *
+FROM licenses_manufactures
+WHERE licenses_manufactures.license_id = licenses.id
+AND licenses_manufactures.manufacture_id =2)
