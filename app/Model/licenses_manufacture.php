@@ -22,7 +22,7 @@ class LicensesManufacture extends AppModel {
 	 * This returns the full license object
 	 */
 	public function getFullLicensesByManufactureId($manufactureId) {
-		$licenses = $this -> find('all', array('contain' => array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'fields' => array('License.name', 'License.id'), 'order' => array('License.name' => 'ASC')));
+		$licenses = $this -> find('all', array('contain' => array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $manufactureId), 'order' => array('License.name' => 'ASC')));
 
 		return $licenses;
 	}
@@ -41,6 +41,16 @@ class LicensesManufacture extends AppModel {
 	public function getLicenseCount($manufactureId) {
 		$licenseCount = $this -> find("count", array('conditions' => array('Manufacture.id' => $manufactureId)));
 		return $licenseCount;
+	}
+
+	/**
+	 * This method returns all licenses that are not currently associated with the given manufacture
+	 */
+	public function getLicensesNotAssMan($manufactureId) {
+		return $this -> Manufacture -> LicensesManufacture -> License -> find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('LicensesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
+			FROM licenses_manufactures
+			WHERE licenses_manufactures.license_id = license.id
+			AND licenses_manufactures.manufacture_id =' . $manufactureId . ')')));
 	}
 
 }

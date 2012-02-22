@@ -1,15 +1,35 @@
 <div class="two-column-page">
 	<div class="inside">
-	 	<div class="actions">
+		<div class="actions">
 			<ul>
 				<li>
 					<h3><?php echo __('Admin');?></h3>
 					<ul>
-						<li><?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class'=>'link')); ?></li>
-						<li><?php echo $this -> Html -> link('Edits','/admin/edits/index', array('class'=>'link')); ?></li>							
+						<li>
+							<?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class' => 'link'));?>
+						</li>
+						<li>
+							<?php echo $this -> Html -> link('Edits', '/admin/edits/index', array('class' => 'link'));?>
+						</li>
 					</ul>
 				</li>
-			</ul>	
+				<li>
+					<h3><?php echo __('Manufacturers');?></h3>
+					<ul>
+						<li>
+							<?php echo $this -> Html -> link('Detail', '/admin/manufactures/list', array('class' => 'link'));?>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<h3><?php echo __('Series');?></h3>
+					<ul>
+						<li>
+							<?php echo $this -> Html -> link('View', '/admin/series/view', array('class' => 'link'));?>
+						</li>
+					</ul>
+				</li>
+			</ul>
 		</div>
 		<div class="page">
 			<div class="title">
