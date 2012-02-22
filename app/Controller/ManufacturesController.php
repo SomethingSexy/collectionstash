@@ -3,47 +3,47 @@ App::uses('Sanitize', 'Utility');
 class ManufacturesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify');
-	
+
 	/**
 	 * I do not think this is being called anymore.
 	 */
 	// public function getManufactureData() {
-		// if (!empty($this -> data)) {
-			// $this -> data = Sanitize::clean($this -> data, array('encode' => false));
-			// //Grab all licenses for this manufacture
-			// $licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($this -> data['id']);
-			// reset($licenses);
-			// $this -> set(compact('licenses'));
-			// $firstLic = key($licenses);
-			// debug($firstLic);
-// 
-			// $license = $this -> Manufacture -> LicensesManufacture -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['id'], 'LicensesManufacture.license_id' => $firstLic)));
-			// //Grab all series for this license...should I just return all for all licenses and send that down the request?
-			// $series = $this -> Manufacture -> LicensesManufacture -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
-// 
-			// //grab all collectible types for this manufacture
-			// $collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($this -> data['id']);
-			// //As long as collectible types isn't empty, grab any manufacturer specific types
-			// $specializedTypes = array();
-			// if (!empty($collectibletypes)) {
-				// reset($collectibletypes);
-				// $firstColType = key($collectibletypes);
-// 
-				// $specializedTypes = $this -> Manufacture -> CollectibletypesManufacture -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($this -> data['id'], $firstColType);
-			// }
-// 
-			// $data = array();
-			// $data['success'] = array('isSuccess' => true);
-			// $data['isTimeOut'] = false;
-			// $data['data'] = array();
-			// $data['data']['licenses'] = $licenses;
-			// $data['data']['types'] = $collectibletypes;
-			// $data['data']['series'] = $series;
-			// $data['data']['specializedTypes'] = $specializedTypes;
-			// $this -> set('aManufactureData', $data);
-		// } else {
-			// $this -> set('aManufactureData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
-		// }
+	// if (!empty($this -> data)) {
+	// $this -> data = Sanitize::clean($this -> data, array('encode' => false));
+	// //Grab all licenses for this manufacture
+	// $licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($this -> data['id']);
+	// reset($licenses);
+	// $this -> set(compact('licenses'));
+	// $firstLic = key($licenses);
+	// debug($firstLic);
+	//
+	// $license = $this -> Manufacture -> LicensesManufacture -> find("first", array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['id'], 'LicensesManufacture.license_id' => $firstLic)));
+	// //Grab all series for this license...should I just return all for all licenses and send that down the request?
+	// $series = $this -> Manufacture -> LicensesManufacture -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($license['LicensesManufacture']['id']);
+	//
+	// //grab all collectible types for this manufacture
+	// $collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($this -> data['id']);
+	// //As long as collectible types isn't empty, grab any manufacturer specific types
+	// $specializedTypes = array();
+	// if (!empty($collectibletypes)) {
+	// reset($collectibletypes);
+	// $firstColType = key($collectibletypes);
+	//
+	// $specializedTypes = $this -> Manufacture -> CollectibletypesManufacture -> CollectibletypesManufactureSpecializedType -> getSpecializedTypes($this -> data['id'], $firstColType);
+	// }
+	//
+	// $data = array();
+	// $data['success'] = array('isSuccess' => true);
+	// $data['isTimeOut'] = false;
+	// $data['data'] = array();
+	// $data['data']['licenses'] = $licenses;
+	// $data['data']['types'] = $collectibletypes;
+	// $data['data']['series'] = $series;
+	// $data['data']['specializedTypes'] = $specializedTypes;
+	// $this -> set('aManufactureData', $data);
+	// } else {
+	// $this -> set('aManufactureData', array('success' => array('isSuccess' => false), 'isTimeOut' => false));
+	// }
 	// }
 
 	public function view($id = null) {
@@ -89,6 +89,67 @@ class ManufacturesController extends AppController {
 
 		} else {
 			$this -> redirect("/");
+		}
+	}
+
+	/*
+	 * This action will display a list of manufacturers
+	 */
+	public function admin_list() {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+
+		$manufacturers = $this -> Manufacture -> getManufactures();
+
+		$this -> set(compact('manufacturers'));
+	}
+
+	public function admin_view($manufacturer_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if (isset($manufacturer_id) && is_numeric($manufacturer_id)) {
+			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $manufacturer_id), 'contain' => false));
+			if (!empty($manufacture)) {
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getFullLicensesByManufactureId($manufacturer_id);
+				$this -> set(compact('licenses'));
+
+				$manufacturerCollectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $manufacturer_id)));
+
+				$this -> set(compact('manufacture'));
+			} else {
+				$this -> redirect("/");
+			}
+
+		} else {
+			$this -> redirect("/");
+		}
+	}
+
+	public function admin_add_license($manufacture_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		$this -> set(compact('manufacture_id'));
+		//at minimum we need a manufacturer id
+		if ($this -> request -> is('post')) {
+			debug($this -> request -> data);
+			if (!empty($this -> request -> data)) {
+				foreach ($this -> request -> data['LicensesManufacture'] as $key => &$value) {
+					$value['manufacture_id'] = $manufacture_id;
+				}
+			}
+			debug($this -> request -> data);
+
+			if ($this -> Manufacture -> LicensesManufacture -> saveMany($this -> request -> data['LicensesManufacture'])) {
+				$this -> Session -> setFlash(__('The licenses were successfully associated.', true), null, null, 'success');
+				$this -> redirect(array('action' => 'view', $manufacture_id));
+			} else {
+				$this -> Session -> setFlash(__('There was a problem associated the licenses to the manufacturer.', true), null, null, 'error');
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacture_id);
+				$this -> set(compact('licenses'));				
+			}
+		} else {
+			$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacture_id);
+			$this -> set(compact('licenses'));
 		}
 	}
 

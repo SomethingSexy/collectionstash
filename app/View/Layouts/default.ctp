@@ -15,6 +15,7 @@
 		$this -> Minify -> css(array('css/redmond'));
 		$this -> Minify -> css(array('css/layout/default'));	
 		$this -> Minify -> css(array('css/layout/non_msie'));
+		$this -> Minify -> css(array('css/jquery.treeview'));
 		
 		$this -> Minify -> js(array('js/jquery-1.7'));
 		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));

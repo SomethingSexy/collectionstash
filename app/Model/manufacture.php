@@ -8,7 +8,11 @@ class Manufacture extends AppModel {
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 	}
-
+	
+	/**
+	 * This method will return all manufacturers, in array form.  It will return all manufacturer specific data
+	 * but no associated data.
+	 */
 	public function getManufactures() {
 		return $this -> find('all', array('contain' => false, 'order' => array('Manufacture.title' => 'ASC')));
 	}

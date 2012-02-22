@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class SeriesController extends AppController {
 
-	public $helpers = array('Html', 'Js', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify', 'Tree');
 	/**
 	 * TODO update this so that it returns the series data in levels
 	 */
@@ -40,12 +40,18 @@ class SeriesController extends AppController {
 		}
 	}
 
+	public function admin_view() {
+		$stuff = $this -> Series -> find('all', array('contain'=> false, 'fields' => array('name', 'lft', 'rght'), 'order' => 'lft ASC'));
+		debug($stuff);
+		$this -> set('stuff', $stuff);
+	}
+
 	// function add() {
-// 
-		// $data['Series']['parent_id'] = '128';
-		// $data['Series']['name'] = 'Ghostbusters';
-		// $this -> Series -> save($data);
-		// $this -> render(false);
+	//
+	// $data['Series']['parent_id'] = '128';
+	// $data['Series']['name'] = 'Ghostbusters';
+	// $this -> Series -> save($data);
+	// $this -> render(false);
 	// }
 
 }
