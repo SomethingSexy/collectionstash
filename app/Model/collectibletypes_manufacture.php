@@ -117,5 +117,14 @@ class CollectibletypesManufacture extends AppModel {
 		return $collectibletypeCount;
 	}
 
+    /**
+     * This method returns all licenses that are not currently associated with the given manufacture
+     */
+    public function getCollectibleTypesNotAssMan($manufactureId) {
+        return $this ->  Collectibletype -> find('all', array('order' => array('Collectibletype.name' => 'ASC'), 'contain' => array('CollectibletypesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
+            FROM collectibletypes_manufactures
+            WHERE collectibletypes_manufactures.collectibletype_id = collectibletype.id
+            AND collectibletypes_manufactures.manufacture_id =' . $manufactureId . ')')));
+    }
 }
 ?>

@@ -1,9 +1,13 @@
 <?php
 class Series extends AppModel {
-	var $name = 'Series';
-	var $useTable = 'series';
-	var $hasMany = array('Collectible', 'Manufacture');
-	var $actsAs = array('Tree', 'Containable');
+	public $name = 'Series';
+	public $useTable = 'series';
+	public $hasMany = array('Collectible', 'Manufacture');
+	public $actsAs = array('Tree', 'Containable');
+
+    public $validate = array(
+    //name field
+    'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')));
 
 	/**
 	 * This method, given a series id will build the series name path.

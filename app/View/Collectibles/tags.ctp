@@ -45,9 +45,10 @@
 					$lastKey = 0;
 					if (isset($this -> data['Tag'])) {
 						foreach ($this->data['Tag'] as $key => $tag) {
-							echo '<li class="tag">';
+							echo '<li class="tag remove"><span class="tag-name">';
 							echo $tag['Tag']['tag'];
-							echo '<input type="hidden" name="data[CollectiblesTag][' . $key . '][tag]" value="' . $tag['Tag']['tag'] . '"/>';
+							echo '</span><input type="hidden" name="data[CollectiblesTag][' . $key . '][tag]" value="' . $tag['Tag']['tag'] . '"/>';
+							echo '<a class="ui-icon ui-icon-close remove-tag" data-type="l"></a>';
 							echo '</li>';
 							$lastKey = $key;
 						}

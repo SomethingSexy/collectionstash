@@ -13,7 +13,7 @@
 						<a href="#tabs-1"><?php echo __('Stats');?></a>
 					</li>
 					<li>
-						<a href="#tabs-2"><?php echo __('Licenses');?></a>
+						<a href="#tabs-2"><?php echo __('Brands');?></a>
 					</li>
 					<li>
 						<a href="#tabs-3"><?php echo __('Collectible Types');?></a>
@@ -32,7 +32,7 @@
 							<dt><?php echo __('Total Collectible Types');?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
 								?></dd>
 					
-							<dt><?php echo __('Total Licenses');?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
+							<dt><?php echo __('Total Brands');?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
 								?></dd>
 							<dt><?php echo __('Highest Price');?></dt><dd><?php echo $manufacture['Manufacture']['highest_price']
 								?></dd>
@@ -67,9 +67,9 @@
 						<ul class="tag-list">
 							<?php
 							foreach ($licenses as $key => $value) {
-								echo '<li class="tag">';
+								echo '<li class="tag"><span class="tag-name">';
 								echo '<a href="/collectibles/search?m='.$manufacture['Manufacture']['id'].'&l='.$key.'">'.$value.'</a>';
-								echo '</li>';
+								echo '</span></li>';
 							}
 							?>
 						</ul>

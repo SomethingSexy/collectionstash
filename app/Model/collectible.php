@@ -5,7 +5,7 @@ class Collectible extends AppModel {
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
-	var $actsAs = array('Revision' => array('model' => 'CollectibleRev','ignore'=> 'collectibles_user_count'), 'Containable', 'Sluggable' => array(
+	var $actsAs = array('Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count')), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -14,14 +14,16 @@ class Collectible extends AppModel {
 	 * so I am thinking I set those below like so to grab those associations.  If the first one
 	 * in the arry is not "Model", then do it on the model alias
 	 */
-	'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title'), 'field2' => array('Model' => 'License', 'Field' => 'name'), 'field3' => array('Model' => 'Collectible', 'Field' => 'name'), 'field4' => array('Model' => 'Collectibletype', 'Field' => 'name'), 'field5' => array('Model' => 'Collectible', 'Field' => 'exclusive', 'Display' => 'Exclusive'),'field6' => array('Model' => 'Collectible', 'Field' => 'variant', 'Display' => 'Variant')), 'showPrimary' => false,
+	'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title'), 'field2' => array('Model' => 'License', 'Field' => 'name'), 'field3' => array('Model' => 'Collectible', 'Field' => 'name'), 'field4' => array('Model' => 'Collectibletype', 'Field' => 'name'), 'field5' => array('Model' => 'Collectible', 'Field' => 'exclusive', 'Display' => 'Exclusive'), 'field6' => array('Model' => 'Collectible', 'Field' => 'variant', 'Display' => 'Variant')), 'showPrimary' => false,
 	// 'slugField' => 'theNameOfYourSlugVirtualField',
 	'replacement' => '-' //the char to implode the words in entry name...
 	));
 
 	var $validate = array(
 	//name field
-	'name' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
+	//'name' => array('rule' => "/^[A-Za-z0-9\s#:.-]+\z/", 'required' => true, 'message' => 'Invalid characters'),
+	//Opening this up because I don't see it being a big deal.
+	'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')),
 	//manufacture field
 	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
 	//collectible type field
@@ -35,24 +37,29 @@ class Collectible extends AppModel {
 	//msrp
 	'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition_size
-	'edition_size' => array('rule' => array('validateEditionSize'), 'message' => 'Must be numeric.'),
+	'edition_size' => array('rule' => array('validateEditionSize'), 'allowEmpty' => true, 'message' => 'Must be numeric.'),
 	//upc
 	'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
 	//product code
-	'code' => array('numeric' => array('rule' => 'alphanumeric', 'allowEmpty' => true, 'message' => 'Must be alphanumeric.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
+	'code' => array('numeric' => array('rule' => '/^[\\w\\s-\/]+$/', 'allowEmpty' => true, 'message' => 'Invalid characters.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
 	//This should be decmial or blank
 	'product_length' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid height.'),
 	//This should be decmial or blank
-	'product_width' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid width.'), ),
+	'product_width' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid width.'), ),
 	//This should be decmial or blank
-	'product_depth' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'message' => 'Must be a valid depth.'), ),
+	'product_depth' => array('validValues' => array('rule' => '/^(?:\d{1,3}(?:\.\d{0,6})?)?$/', 'allowEmpty' => true, 'message' => 'Must be a valid depth.'), ),
 	//url
 	'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'),
 	//numbered
-	'numbered' => array('rule' => array('validateNumbered'), 'message' => 'Must be limited and have valid edition sized to be numbered.'),
+	'numbered' => array('rule' => array('validateNumbered'), 'allowEmpty' => true, 'message' => 'Must be limited and have valid edition sized to be numbered.'),
 	//pieces
 	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), );
 
+
+    // function validateName($check) {
+        // debug($check['name']);
+        // return preg_match("/^[A-Za-z0-9\s#:.'-]+\z/", $check['name']) === 1;
+    // }
 	function beforeSave() {
 		debug($this -> data);
 		//Update Edition Size stuff

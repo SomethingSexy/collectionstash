@@ -51,10 +51,10 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 				echo '<div class="collectible tags">';
 				echo '<ul class="tag-list">';
 				foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
-					echo '<li class="tag">';
+					echo '<li class="tag"><span class="tag-name">';
 					echo '<a href="/collectibles/search/?t=' . $tag['Tag']['id'] . '"';
 					echo '>' . $tag['Tag']['tag'] . '</a>';
-					echo '</li>';
+					echo '</span></li>';
 				}
 				echo '</ul>';
 				echo '</div>';
@@ -120,7 +120,7 @@ if ($adminMode) {
 	</div>
 </div>
 <?php
-if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['variant']) {
+if (isset($showVariants) && $showVariants) {
 	echo $this -> element('collectible_variant_list', array());
 }
 ?>

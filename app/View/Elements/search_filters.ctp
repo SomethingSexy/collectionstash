@@ -50,7 +50,7 @@ if (!isset($lockManufacturer)) {
 		} else if (isset($saveSearchFilters['tag'])) {
 			//Check to see if we did a tag search, if so then grab it from the saved tag
 			$tag = $this -> Session -> read('Tag_Search.filter');
-			echo '<span class="tag">' . $tag['Tag']['tag'] . '</span>';
+			echo '<span class="tag"><span class="tag-name">' . $tag['Tag']['tag'] . '</span></span>';
 		}
 		?>
 	</div>
@@ -175,7 +175,7 @@ if (!isset($lockManufacturer)) {
 			echo '<a data-type="l" class="ui-icon ui-icon-close"></a>';
 		} else {
 			echo '<span class="name">';
-			echo __('License', true);
+			echo __('Brand', true);
 			echo '</span>';
 			echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
 		}

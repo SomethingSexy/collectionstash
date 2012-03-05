@@ -792,11 +792,12 @@ $.fn.cycle.defaults = {
 			}
 			num = String(num);
 
-			if (settings.groupDigits) {
-				for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
-					num = num.substring(0, num.length - (4 * i + 3)) + settings.digitGroupSymbol + num.substring(num.length - (4 * i + 3));
-				}
-			}
+			//This formats strings so 1999 turns into 1,999 chrome doesn't like it for number fields, fix later TODO
+			// if (settings.groupDigits) {
+				// for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
+					// num = num.substring(0, num.length - (4 * i + 3)) + settings.digitGroupSymbol + num.substring(num.length - (4 * i + 3));
+				// }
+			// }
 
 			if ((hasDecimals && settings.roundToDecimalPlace == -1) || settings.roundToDecimalPlace > 0) {
 				num += settings.decimalSymbol + decimals;

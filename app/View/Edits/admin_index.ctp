@@ -1,16 +1,6 @@
 <div id="admin-edit" class="two-column-page">
 	<div class="inside">
-	 	<div class="actions">
-			<ul>
-				<li>
-					<h3><?php echo __('Admin');?></h3>
-					<ul>
-						<li><?php echo $this -> Html -> link('New Collectibles', '/admin/collectibles/index', array('class'=>'link')); ?></li>
-						<li><?php echo $this -> Html -> link('Edits','/admin/edits/index', array('class'=>'link')); ?></li>							
-					</ul>
-				</li>
-			</ul>	
-		</div>
+		<?php echo $this -> element('admin_actions');?>
 		<div class="page">
 			<div class="title">
 				<h2>

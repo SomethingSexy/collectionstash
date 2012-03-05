@@ -85,7 +85,7 @@ if (!isset($adminMode)) {
 				</dd> <?php
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 				
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('License', true), array('compare' => $showCompareFields));
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('Brand', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Type', true), array('compare' => $showCompareFields));
 				

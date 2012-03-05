@@ -4,6 +4,14 @@ class Manufacture extends AppModel {
 	public $belongsTo = array('Series');
 	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id'), 'LicensesManufacture', 'CollectibletypesManufacture');
 	public $actsAs = array('Containable');
+	
+	public $validate = array(
+	//name field
+	'title' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
+	//series_id
+	'series_id' => array('rule' => array('numeric'), 'allowEmpty'=> true, 'message' => 'Please select a valid category.'),
+	//url
+	'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'), );
 
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
