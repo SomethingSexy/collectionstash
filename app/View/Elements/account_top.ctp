@@ -2,7 +2,7 @@
 <?php echo $this -> Html -> script('profiles', array('inline' => false));?>
 <div id="account" class="two-column-page">
 	<div class="inside">
-		<div class="actions">
+		<div class="page actions">
 			<ul>
 				<li>
 					<h3>Account</h3>		

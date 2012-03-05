@@ -47,7 +47,7 @@ class LicensesManufacture extends AppModel {
 	 * This method returns all licenses that are not currently associated with the given manufacture
 	 */
 	public function getLicensesNotAssMan($manufactureId) {
-		return $this -> Manufacture -> LicensesManufacture -> License -> find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('LicensesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
+		return $this -> License -> find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('LicensesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
 			FROM licenses_manufactures
 			WHERE licenses_manufactures.license_id = license.id
 			AND licenses_manufactures.manufacture_id =' . $manufactureId . ')')));

@@ -7,10 +7,10 @@
 		<ul class="tag-list">
 			<?php 
 				foreach($tags as $tag) {
-					echo '<li class="tag">';
+					echo '<li class="tag"><span class="tag-name">';
 					echo '<a href="/collectibles/search/?t='.$tag['Tag']['id'].'"';
 					echo '>'.$tag['Tag']['tag'].'</a>';
-					echo '</li>';
+					echo '</span></li>';
 				} ?>
 		</ul>
     </div>    

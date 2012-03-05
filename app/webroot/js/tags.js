@@ -37,9 +37,13 @@ var tags = function() {
 				if(tagNumber < totalTagsAllowed) {
 					var tagValue = $('#query').val();
 					if(tagValue !== '') {
-						var $li = $('<li></li>').addClass('tag').html($('#query').val());
+						var $li = $('<li></li>').addClass('tag').addClass('remove');
+						var $span = $('<span></span>').addClass('tag-name').text($('#query').val());
+						var $removeLink = $('<a></a>').addClass('ui-icon').addClass('ui-icon-close').addClass('remove-tag');
+						$li.append($span);
 						var $hiddenId = $('<input/>').attr('type', 'hidden').attr('name', 'data[CollectiblesTag][' + tagNumber + '][tag]').val($('#query').val());
 						$li.append($hiddenId);
+						$li.append($removeLink);
 						$('#add-tag-list').append($li);
 						$('#query').val('');
 						tagNumber++;
@@ -48,6 +52,10 @@ var tags = function() {
 					$('#add-query').after('<div class="error-message">Only '+ totalTagsAllowed +' tags allowed.</div>');
 				}
 
+			});
+
+			$(document).on('click','.tag-list > li.tag.remove > a.remove-tag', function(){
+				$(this).parent('li.tag.remove').remove();	
 			});
 		}
 	};

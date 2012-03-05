@@ -12,17 +12,17 @@
 		$this -> Minify -> css(array('css/jquery.ui.theme'));
 		$this -> Minify -> css(array('css/jquery.ui.dialog'));
 		$this -> Minify -> css(array('css/jquery.ui.tabs'));
+		$this -> Minify -> css(array('css/jquery.treeview'));
 		$this -> Minify -> css(array('css/redmond'));
 		$this -> Minify -> css(array('css/layout/default'));	
 		$this -> Minify -> css(array('css/layout/non_msie'));
-		$this -> Minify -> css(array('css/jquery.treeview'));
-		
+	
+		//$this -> Minify -> js(array('js/es5-shim'));
 		$this -> Minify -> js(array('js/jquery-1.7'));
 		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));
-		//$this -> Minify -> js(array('js/jquery-plugins'));
+		$this -> Minify -> js(array('js/jquery-plugins'));
 		
 	?>
-	<script type="text/javascript" src="/js/jquery-plugins.js"></script>
 	<?php echo $scripts_for_layout; ?>
 	<script>
 		$( function() {

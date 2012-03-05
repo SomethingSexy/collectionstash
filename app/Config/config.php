@@ -11,7 +11,7 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 	'Profile' => array (
 		'total-invites-allowed' => 5,
 		'total-admin-invites-allowed' => 9999,
-		'allow-invites' => false
+		'allow-invites' => true
 	),
   	'Approval' => array (
 		'auto-approve' => 'false'

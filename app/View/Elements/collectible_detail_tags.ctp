@@ -5,9 +5,9 @@
 	<ul class="tag-list no-link">
 		<?php
 		foreach ($collectibleCore['CollectiblesTag'] as $tag) {
-			echo '<li class="tag">';
+			echo '<li class="tag"><span class="tag-name">';
 			echo $tag['Tag']['tag'];
-			echo '</li>';
+			echo '</span></li>';
 		}
 		?>
 	</ul>

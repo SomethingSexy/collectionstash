@@ -35,7 +35,7 @@ if(!isset($showStats)) {
 			<a href="<?php echo '/manufactures/view/' . $manufacture['id'];?>"> <?php echo $manufacture['title'];?></a>
 		</dd>
 		<dt>
-			License:
+			<?php echo __('Brand'); ?>:
 		</dt>
 		<dd>
 			<?php echo $license['name'];?>
