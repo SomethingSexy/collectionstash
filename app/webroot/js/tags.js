@@ -4,6 +4,7 @@ $(function() {
 var tags = function() {
 	var totalTagsAllowed = 5;
 	var tagNumber = 0;
+	var tagCount = 0;
 
 	function initStashAdd() {
 
@@ -20,6 +21,7 @@ var tags = function() {
 			if( typeof lastTagKey !== "undefined") {
 				//If there is at least one added already then we will want to take that one and +1 for the next.
 				tagNumber = ++lastTagKey;
+				tagCount = ++ lastTagKey
 			}
 			var options, a;
 			jQuery(function() {
@@ -34,7 +36,7 @@ var tags = function() {
 			});
 			$('#add-query').click(function() {
 				$(this).parent('li').children('div.error-message').remove();
-				if(tagNumber < totalTagsAllowed) {
+				if(tagCount < totalTagsAllowed) {
 					var tagValue = $('#query').val();
 					if(tagValue !== '') {
 						var $li = $('<li></li>').addClass('tag').addClass('remove');
@@ -42,20 +44,37 @@ var tags = function() {
 						var $removeLink = $('<a></a>').addClass('ui-icon').addClass('ui-icon-close').addClass('remove-tag');
 						$li.append($span);
 						var $hiddenId = $('<input/>').attr('type', 'hidden').attr('name', 'data[CollectiblesTag][' + tagNumber + '][tag]').val($('#query').val());
+						var $hiddenAction = $('<input/>').attr('type', 'hidden').addClass('tag').addClass('action').attr('name', 'data[CollectiblesTag][' + tagNumber + '][action]').val('A');
 						$li.append($hiddenId);
+						$li.append($hiddenAction);
 						$li.append($removeLink);
 						$('#add-tag-list').append($li);
 						$('#query').val('');
 						tagNumber++;
+						tagCount++;
 					}
 				} else {
-					$('#add-query').after('<div class="error-message">Only '+ totalTagsAllowed +' tags allowed.</div>');
+					$('#add-query').after('<div class="error-message">Only ' + totalTagsAllowed + ' tags allowed.</div>');
 				}
 
 			});
 
-			$(document).on('click','.tag-list > li.tag.remove > a.remove-tag', function(){
-				$(this).parent('li.tag.remove').remove();	
+			$(document).on('click', '.tag-list > li.tag.remove > a.remove-tag', function() {
+				if($('#add-tag-list').attr('data-action') === 'edit') {
+					if($(this).parent('li.tag.remove').children('input.tag.action').val() === 'A') {
+						$(this).parent('li.tag.remove').remove();
+					} else {
+						$(this).parent('li.tag.remove').children('input.tag.action').val('D');
+						$(this).parent('li.tag.remove').css({
+							'border' : '1px solid red'
+						});
+					}
+					tagCount--;
+
+				} else {
+
+				}
+
 			});
 		}
 	};

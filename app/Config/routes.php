@@ -30,6 +30,11 @@
  * ...and connect the rest of 'Pages' controller's urls.
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+    
+    /**
+     * Renamed a url so keep it alive here.
+     */
+    Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
 
 /**
  * Load all plugin routes.  See the CakePlugin documentation on 

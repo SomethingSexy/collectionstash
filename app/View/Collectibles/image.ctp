@@ -44,7 +44,7 @@
 		<div class="component-view add-image">
 			<div class="collectible add">
 				<?php 
-					if (isset($this->data['Upload'])) { ?>
+					if (isset($this->request->data['Upload'])) { ?>
 						<div class="collectible image">
 							<?php echo $this -> FileUpload -> image($this->data['Upload']['name'], array('width' => '0'));?>
 							<div class="collectible image-fullsize hidden">

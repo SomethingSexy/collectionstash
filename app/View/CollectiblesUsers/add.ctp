@@ -30,7 +30,7 @@
 	          </li>
 	          <li>
 	            <div class="label-wrapper">
-	              <label for="dialogCost"><?php echo __('How much did you pay? (USD)') ?> (Retail: $<?php echo $collectible['Collectible']['msrp'] ?> )</label>
+	              <label for="dialogCost"><?php echo __('How much did you pay?') ?> (Retail: <?php echo $collectible['Currency']['sign']; echo $collectible['Collectible']['msrp'] ?> )</label>
 	            </div> 
 	            <?php echo $this->Form->input('cost', array('id'=>'dialogCost','div' =>  false, 'label' => false));?>
 	          </li> 

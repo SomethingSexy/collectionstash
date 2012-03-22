@@ -30,7 +30,7 @@
 				echo '</div>';
 			?>
 			</div>
-
+            <div class="notes">
 			<?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'approval-form'));?>
 				<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
 				<fieldset>
@@ -45,6 +45,7 @@
 					</ul>
 				</fieldset>			
 			</form>
+			</div>
 			<div class="links">
 				<input type="button" id="approval-button" class="button" value="Approve">
 				<input type="button" id="deny-button" class="button" value="Deny">

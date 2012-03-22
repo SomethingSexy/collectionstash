@@ -176,9 +176,9 @@
                             echo $this -> Form -> input('description', array('escape' => false, 'label' => __('Description'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'value' => $data));
 							?>
 						</li>
-						<li>
-							<?php echo $this -> Form -> input('msrp', array('label' => __('Original Retail Price (USD)'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
-						</li>
+                        <li class="msrp">
+                            <?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price (USD)'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+                        </li>
 						<li>
 							<div class="label-wrapper">
 								<label for="scale"> <?php echo __('Release Year')

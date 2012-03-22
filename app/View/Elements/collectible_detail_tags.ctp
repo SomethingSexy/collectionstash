@@ -4,11 +4,11 @@
 	</div>
 	<ul class="tag-list no-link">
 		<?php
-		foreach ($collectibleCore['CollectiblesTag'] as $tag) {
-			echo '<li class="tag"><span class="tag-name">';
-			echo $tag['Tag']['tag'];
-			echo '</span></li>';
-		}
+        foreach ($collectibleCore['CollectiblesTag'] as $tag) {
+            echo '<li class="tag"><span class="tag-name">';
+            echo $tag['Tag']['tag'];
+            echo '</span></li>';
+        }
 		?>
 	</ul>
 </div>

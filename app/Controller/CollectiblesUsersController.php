@@ -48,13 +48,15 @@ class CollectiblesUsersController extends AppController {
 		debug($id);
 		debug($this -> request -> data);
 		if (!is_null($id) && is_numeric($id)) {
-			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
+			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency')));
 			debug($collectible);
 			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
 					//$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
 					$user = $this -> getUser();
+                    //This returns all collectibles in this stash if I ever need them
 					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
+
 					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
 					$this -> request -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
 					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
@@ -92,7 +94,7 @@ class CollectiblesUsersController extends AppController {
 	function edit($id = null) {
 		$this -> checkLogIn();
 		debug($this -> request -> data);
-		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible')));
+		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible' => array('Currency'))));
 		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 			$loggedInUserId = $this -> getUserId();
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {

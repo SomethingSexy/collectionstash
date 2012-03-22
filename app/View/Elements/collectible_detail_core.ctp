@@ -100,20 +100,22 @@ if (!isset($adminMode)) {
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'scale'), __('Scale', true), array('compare' => $showCompareFields));
-
-				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), __('Release Year', true), array('compare' => $showCompareFields));
+                
+                if(isset($collectibleCore['Collectible']['release']) && $collectibleCore['Collectible']['release'] !== '0000'){
+                    echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), __('Release Year', true), array('compare' => $showCompareFields));    
+                }
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), __('Description', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('Product UPC', true), array('compare' => $showCompareFields));
-
-				if (strstr($collectibleCore['Collectible']['msrp'], '$') === false) {
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields, 'preValue' => '$'));
-				} else {
-					echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
-				}
+				
+				//if (strstr($collectibleCore['Collectible']['msrp'], '$') === false) {
+				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields, 'preValue' => $collectibleCore['Currency']['sign']));
+				//} else {
+					//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
+				//}
 
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'limited'), __('Limited Edition', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 

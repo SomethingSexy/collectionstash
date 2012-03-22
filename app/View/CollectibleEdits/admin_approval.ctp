@@ -52,7 +52,7 @@
 							//If the value is set and not empty OR if something changed
 							if (isset($collectible['Collectible']['license_id']) && !empty($collectible['Collectible']['license_id']) || (isset($collectible['Collectible']['license_id_changed']) && $collectible['Collectible']['license_id_changed'])) {
 								echo '<dt>';
-								echo __('License');
+								echo __('Brand');
 								echo '</dt>';
 
 								//Check if it is changed first
@@ -269,6 +269,27 @@
 								}
 								echo '</dd>';
 							}
+                            
+
+                            if (isset($collectible['Collectible']['currency_id']) && !empty($collectible['Collectible']['currency_id']) || (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed'])) {
+                                echo '<dt>';
+                                echo __('Currency');
+                                echo '</dt>';
+
+                                //Check if it is changed first
+                                if (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed']) {
+                                    echo '<dd class="changed">';
+                                } else {
+                                    echo '<dd>';
+                                }
+
+                                if (!empty($collectible['Collectible']['currency_id'])) {
+                                    echo $collectible['Currency']['iso_code'];
+                                } else {
+                                    echo __('Removed');
+                                }
+                                echo '</dd>';
+                            }                            
 
 							if (isset($collectible['Collectible']['limited']) && !empty($collectible['Collectible']['limited']) || (isset($collectible['Collectible']['limited_changed']) && $collectible['Collectible']['limited_changed'])) {
 								echo '<dt>';
