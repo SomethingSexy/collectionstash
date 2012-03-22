@@ -62,6 +62,7 @@ class FileUploadBehavior extends ModelBehavior {
 	 *
 	 */
 	function beforeSave(&$Model) {
+	  
 		//debug($Model);
 		$url = false;
 
@@ -89,7 +90,7 @@ class FileUploadBehavior extends ModelBehavior {
 
 			$url = true;
 		}
-
+     
 		//This checks to see if the file array is set in the data that is passed in.
 		if (isset($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']])) {
 			//Here we are setting the $file variable to the data was that was passed into this model
@@ -113,7 +114,7 @@ class FileUploadBehavior extends ModelBehavior {
 					$Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fields']['size']] = $file['size'];
 					$Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fields']['type']] = $file['type'];
 				} else {
-					$this -> log('Couldnt save', 'info');
+					CakeLog::write('error', 'Could not save.');
 					return false;
 					// we couldn't save the file, return false
 				}
