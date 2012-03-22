@@ -1,3 +1,7 @@
+/*
+ * TODO: At some point replace all class of "glimpse" with a more appropriate name
+ */
+
 .hidden {
 	display: none;
 }
@@ -381,7 +385,8 @@ a:active {
 }
 #collectible-add-component .inside .component-view .collectible.add {
 	margin-bottom: 1em;
-	width: 500px;
+	/*width: 500px;*/
+	width: 100%;
 }
 #collectible-add-component .component-view .form-fields li {
 	/*width: 600px; matches the width of the component */
@@ -614,6 +619,10 @@ a:active {
 .attributes-list ul li .attribute-description {
 	width: 200px;
 }
+.standard-list.tag-list ul li span.action,
+.standard-list.tag-list ul li span.name{
+	width: 50%;
+}
 #my-stashes-component {
 	width: 100%;
 }
@@ -643,6 +652,31 @@ a:active {
 #my-stashes-component .inside .component-view .ui-tabs div .actions ul li {
 	display: inline;
 }
+#my-stashes-component.edit-stash .inside .component-view .glimpse .image {
+	/* Need a border so the UI doesnt' get screwed up when adding border for hover */
+	/*border: 2px solid #FFF;*/
+	border: none;
+}
+#my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image:hover img{
+	border: 4px solid #656464;
+}
+#my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image {
+	cursor: pointer;
+}
+#my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image .actions {
+	display: none;
+}
+#my-stashes-component.edit-stash .inside .component-view .links ul li {
+	display: inline;
+	font-size: .8em;
+}
+#my-stashes-component.edit-stash .inside .component-view .links ul li.selected a {
+	font-weight: bold;
+}
+#my-stashes-component.edit-stash .inside .component-view .links ul li.mode-button button {
+	display: none;
+}
+
 #collectibles-gallery, #photo-gallery {
 	margin-top: 50px;
 }
@@ -766,6 +800,13 @@ a:active {
 #collectible-detail .component-view .collectible.tags .tag-list, #collectible-detail .component-view .collectible.tags {
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+#collectible-detail .component-view .collectible.tags .actions.icon {
+	float: left;
+}
+#collectible-detail .component-view .collectible.tags .tag-list {
+	float: left;
+	
 }
 .two-column-page .inside .page .view .detail dl,
 .stats dl, .collectible.statistics dl, .collectible.detail dl, .manufacturer.detail dl {
@@ -1599,6 +1640,7 @@ div.paging span a:hover {
 /**
  * 	Admin section
  */
+.tag-list ul li span,
 #admin-edit .inside .page .standard-list ul li span {
 	float: left;
 	font-size: 0.75em;
@@ -1639,6 +1681,11 @@ div.paging span a:hover {
 #admin-edit .inside .page.collectibles-approval fieldset {
 	width: 100%;
 	float: left;
+}
+
+#admin-edit div.notes {
+	float: left;
+	width: 100%
 }
 /*********************************
  * Collectible Add
@@ -1769,7 +1816,7 @@ div.paging span a:hover {
 #filters .filter .filter-list-container .filter-list {
 	margin: 10px;
 }
-#filters .filter.license .filter-list-container .filter-list {
+#filters .filter .filter-list-container .filter-list {
 	overflow-y: auto;
 	overflow-x: hidden;
 	max-height: 420px;
@@ -1955,3 +2002,17 @@ div.paging span a:hover {
 	width: 300px;
 }
 
+/* Collectible edit and add currency */
+.form-fields li.msrp div.currency,
+.form-fields li.msrp div.input {
+	float: left;
+}
+
+.form-fields li.msrp div.currency {
+	margin-left: 3px;
+}
+
+.form-fields li.msrp div.currency select {
+	padding-top:1px;
+	padding-bottom: 1px;
+}

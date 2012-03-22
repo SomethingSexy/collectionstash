@@ -4,7 +4,7 @@
 		<div class="page">
 			<div class="title">
 				<h2>
-					<?php echo __('Edits');?>
+					<?php echo __('Edits for this Collectible');?>
 				</h2>				
 			</div>
 			<?php echo $this -> element('flash');?>
@@ -13,7 +13,7 @@
 					<li class="title">
 						<span class="collectible-id"><?php echo __('Id'); ?></span>
 						<span class="user-id"><?php echo __('User Id'); ?></span>
-						<span class="type"><?php echo __('Type'); ?></span>
+						<!--<span class="type"><?php echo __('Type'); ?></span>-->
 						<span class="timestamp"><?php echo __('Timestamp'); ?></span>
 						<span class="action"><?php echo __('Action'); ?></span>
 					</li>
@@ -25,22 +25,23 @@
 						echo '<span class="user-id">';
 						echo $edit['User']['username'];
 						echo '</span>';
-						echo '<span class="type">';
-						echo $edit['type'];
-						echo '</span>';
+						// echo '<span class="type">';
+						// echo $edit['Edit']['type'];
+						// echo '</span>';
 						echo '<span class="timestamp">';
 						$datetime = strtotime($edit['Edit']['created']);
 						$mysqldate = date("m/d/y g:i A", $datetime);
 						echo $mysqldate;
 						echo '</span>';
 						echo '<span class="action">';
-						if($edit['type'] === 'Collectible') {
-							echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['collectible_edit_id']));
-						} else if ($edit['type'] === 'Upload'){
-							echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'upload_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['upload_edit_id']));	
-						} else if ($edit['type'] === 'Attribute'){
-							echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'attributes_collectibles_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['attributes_collectibles_edit_id']));	
-						}
+                        echo $this -> Html -> link('View', array('admin'=> true, 'controller' => 'edits', 'action'=> 'view',$edit['Edit']['id']));
+						// if($edit['Edit']['type'] === 'collectible') {
+							// echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'collectible_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['type_edit_id']));
+						// } else if ($edit['Edit']['type'] === 'upload'){
+							// echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'upload_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['type_edit_id']));	
+						// } else if ($edit['Edit']['type'] === 'attribute'){
+							// echo $this -> Html -> link('Approve', array('admin'=> true, 'controller' => 'attributes_collectibles_edits', 'action'=> 'approval',$edit['Edit']['id'], $edit['Edit']['type_edit_id']));	
+						// }
 						echo '</span>';	
 						echo '</li>';																	
 					} ?>

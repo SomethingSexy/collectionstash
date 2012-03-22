@@ -16,7 +16,7 @@
 		?>
 		<div class="component-info">
 			<div>
-				<?php echo __('Tags are a great way to organize and categorize collectibles outside of the main manufacturer collectible.  Tags can give you and the community an easier way to find this collectible and similar ones.  You can add up to 5 tags for each collectible.  The input box below will help you find existing tags to add to this collectible.  Please try to use existing tags when possible.')
+				<?php echo __('Tags are a great way to organize and categorize collectibles outside of the main manufacturer details.  Tags can give you and the community an easier way to find this collectible and similar ones.  You can add up to 5 tags for each collectible.  The input box below will help you find existing tags to add to this collectible.  Please try to use existing tags when possible.')
 				?>
 			</div>
 		</div>

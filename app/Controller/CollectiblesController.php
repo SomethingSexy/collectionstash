@@ -258,7 +258,7 @@ class CollectiblesController extends AppController {
     function confirm() {
         $id = $this -> Session -> read('addCollectibleId');
         if (isset($id) && $id != null) {
-            $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+            $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
             $this -> set('collectible', $collectible);
             $this -> Session -> delete('addCollectibleId');
         } else {
@@ -302,6 +302,10 @@ class CollectiblesController extends AppController {
         //Grab all retailers.
         $retailers = $this -> Collectible -> Retailer -> getRetailerList();
         $this -> set('retailers', $retailers);
+
+        //Grab all currencies
+        $currencies = $this -> Collectible -> Currency -> find("list", array('fields' => array('Currency.id', 'Currency.iso_code')));
+        $this -> set('currencies', $currencies);
 
         //Check to see if this is a post, if it is not a post then do some initial stuff
         if (!$this -> request -> is('post')) {
@@ -576,7 +580,8 @@ class CollectiblesController extends AppController {
                             $this -> Session -> write('uploadId', $uploadId);
                             return true;
                         } else {
-
+                            debug($this -> Collectible -> Upload -> validationErrors);
+                            unset($this -> request -> data['Upload']);
                             $this -> Session -> setFlash(__('Oops! There was an issue uploading your photo.', true), null, null, 'error');
                             return false;
                         }
@@ -658,6 +663,9 @@ class CollectiblesController extends AppController {
             $retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
             $collectible['Retailer'] = $retailer['Retailer'];
         }
+
+        $currency = $this -> Collectible -> Currency -> find('first', array('conditions' => array('Currency.id' => $collectible['Collectible']['currency_id']), 'contain' => false));
+        $collectible['Currency'] = $currency['Currency'];
 
         // debug($collectible);
         // debug($wizardData);
@@ -791,7 +799,7 @@ class CollectiblesController extends AppController {
             $this -> Session -> setFlash(__('Invalid collectible', true));
             $this -> redirect(array('action' => 'index'));
         }
-        $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+        $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
         if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
             $this -> set('collectible', $collectible);
             $count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
@@ -937,7 +945,7 @@ class CollectiblesController extends AppController {
             $this -> Session -> setFlash(__('Invalid collectible', true));
             $this -> redirect(array('action' => 'index'));
         }
-        $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+        $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency','SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
         $this -> set('collectible', $collectible);
     }
 

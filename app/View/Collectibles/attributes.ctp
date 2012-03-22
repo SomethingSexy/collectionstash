@@ -67,7 +67,7 @@
 							?>
 						</ul>
 					</div>
-					<div>
+					<div class="links">
 						<a class="add-attribute link">Add Attribute</a>
 					</div>
 				</fieldset>	

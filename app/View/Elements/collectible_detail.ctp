@@ -1,9 +1,28 @@
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
-	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
+    $this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
 }
 $this -> set('description_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name']);
 $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
+
+if (!isset($showEdit)) {
+    $showEdit = false;
+}
+if (!isset($editImageUrl)) {
+    $editImageUrl = false;
+}
+if (!isset($editManufactureUrl)) {
+    $editManufactureUrl = '';
+}
+if (!isset($showAddedBy)) {
+    $showAddedBy = false;
+}
+if (!isset($showAddedDate)) {
+    $showAddedDate = false;
+}
+if (!isset($adminMode)) {
+    $adminMode = false;
+}
 ?>
 <div class="component" id="collectible-detail">
 	<div class="inside">
@@ -12,74 +31,70 @@ $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] .
 			<div class="actions icon">
 				<ul>
 					<?php
-					if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
-						echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
-					}
+                    if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
+                        echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
+                    }
 					?>
 					<?php
-					if ($showWho) {
-						echo '<li>';
-						echo $this -> Html -> link($this -> Html -> image('/img/icon/group.png', array('alt' => "Registry", 'border' => "0")), '/collectibles_users/registry/'.$collectibleDetail['Collectible']['id'], array('title'=>'Registry','escape' => false));
-						echo '</li>';
-					}
-					if (isset($showHistory) && $showHistory) {
-						echo '<li>';
-						echo $this -> Html -> link($this -> Html -> image('/img/icon/cabinet.png', array('alt' => "History", 'border' => "0")), '/collectibles/history/'.$collectibleDetail['Collectible']['id'], array('title'=>'History','escape' => false));
-						echo '</li>';
-					}
-					if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
-						echo '<li>';
-						if ($collectibleDetail['Collectible']['variant']) {
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar variant collectible type with the same manufacturer.', true),'escape' => false));
-						} else {
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar collectible type with the same manufacturer.', true),'escape' => false));
-						}
-						echo '</li>';
-						if (!$collectibleDetail['Collectible']['variant']) {
-							echo '<li>';
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action_variant.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true),'escape' => false));
-							echo '</li>';
-						}
-					}
+                    if ($showWho) {
+                        echo '<li>';
+                        echo $this -> Html -> link($this -> Html -> image('/img/icon/group.png', array('alt' => "Registry", 'border' => "0")), '/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'], array('title' => 'Registry', 'escape' => false));
+                        echo '</li>';
+                    }
+                    if (isset($showHistory) && $showHistory) {
+                        echo '<li>';
+                        echo $this -> Html -> link($this -> Html -> image('/img/icon/cabinet.png', array('alt' => "History", 'border' => "0")), '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false));
+                        echo '</li>';
+                    }
+                    if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
+                        echo '<li>';
+                        if ($collectibleDetail['Collectible']['variant']) {
+                            echo $this -> Html -> link($this -> Html -> image('/img/icon/action.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar variant collectible type with the same manufacturer.', true), 'escape' => false));
+                        } else {
+                            echo $this -> Html -> link($this -> Html -> image('/img/icon/action.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar collectible type with the same manufacturer.', true), 'escape' => false));
+                        }
+                        echo '</li>';
+                        if (!$collectibleDetail['Collectible']['variant']) {
+                            echo '<li>';
+                            echo $this -> Html -> link($this -> Html -> image('/img/icon/action_variant.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true), 'escape' => false));
+                            echo '</li>';
+                        }
+                    }
 					?>
 				</ul>
 			</div>
 		</div>
 		<div class="component-view">
 			<?php
-			if (isset($collectibleDetail['CollectiblesTag']) && !empty($collectibleDetail['CollectiblesTag'])) {
-				echo '<div class="collectible tags">';
-				echo '<ul class="tag-list">';
-				foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
-					echo '<li class="tag"><span class="tag-name">';
-					echo '<a href="/collectibles/search/?t=' . $tag['Tag']['id'] . '"';
-					echo '>' . $tag['Tag']['tag'] . '</a>';
-					echo '</span></li>';
-				}
-				echo '</ul>';
-				echo '</div>';
-			}
+            if (isset($collectibleDetail['CollectiblesTag']) && !empty($collectibleDetail['CollectiblesTag'])) {
+                echo '<div class="collectible tags">';
+                echo '<ul class="tag-list">';
+                foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
+                    echo '<li class="tag"><span class="tag-name">';
+                    echo '<a href="/collectibles/search/?t=' . $tag['Tag']['id'] . '"';
+                    echo '>' . $tag['Tag']['tag'] . '</a>';
+                    echo '</span></li>';
+                }
+                echo '</ul>';
+                if (isset($showEdit) && $showEdit) {
+                    echo '<div class="actions icon">';
+                    echo '<ul>';
+                    echo '<li>';
+                    if ($adminMode) {
+                        echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id'], 'true'), array('escape' => false));
+                    } else {
+                        echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id']), array('escape' => false));
+                    }
+                    echo '</li>';
+                    echo '</ul>';
+                    echo '</div>';
+                }
+
+                echo '</div>';
+            }
 			?>
 			<?php
-			if (!isset($showEdit)) {
-				$showEdit = false;
-			}
-			if (!isset($editImageUrl)) {
-				$editImageUrl = false;
-			}
-			if (!isset($editManufactureUrl)) {
-				$editManufactureUrl = '';
-			}
-			if (!isset($showAddedBy)) {
-				$showAddedBy = false;
-			}
-			if (!isset($showAddedDate)) {
-				$showAddedDate = false;
-			}
-			if (!isset($adminMode)) {
-				$adminMode = false;
-			}
-			echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode));
+            echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode));
 			?>
 			<?php
 if ($adminMode) {
@@ -121,6 +136,6 @@ if ($adminMode) {
 </div>
 <?php
 if (isset($showVariants) && $showVariants) {
-	echo $this -> element('collectible_variant_list', array());
+    echo $this -> element('collectible_variant_list', array());
 }
 ?>

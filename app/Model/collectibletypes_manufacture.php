@@ -123,7 +123,7 @@ class CollectibletypesManufacture extends AppModel {
     public function getCollectibleTypesNotAssMan($manufactureId) {
         return $this ->  Collectibletype -> find('all', array('order' => array('Collectibletype.name' => 'ASC'), 'contain' => array('CollectibletypesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
             FROM collectibletypes_manufactures
-            WHERE collectibletypes_manufactures.collectibletype_id = collectibletype.id
+            WHERE collectibletypes_manufactures.collectibletype_id = Collectibletype.id
             AND collectibletypes_manufactures.manufacture_id =' . $manufactureId . ')')));
     }
 }

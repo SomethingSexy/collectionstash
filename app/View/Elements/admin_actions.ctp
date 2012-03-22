@@ -7,7 +7,7 @@
 					<?php echo $this -> Html -> link('Pending', array('admin' => true, 'controller' => 'collectibles'), array('class' => 'link'));?>
 				</li>
 				<li>
-					<?php echo $this -> Html -> link('Edits', array('admin' => true, 'controller' => 'edits'), array('class' => 'link'));?>
+					<?php echo $this -> Html -> link('Edits', array('admin' => true, 'controller' => 'edits', 'action'=> 'index'), array('class' => 'link'));?>
 				</li>
 			</ul>
 		</li>

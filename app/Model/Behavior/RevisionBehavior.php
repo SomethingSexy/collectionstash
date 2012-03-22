@@ -815,13 +815,13 @@ class RevisionBehavior extends ModelBehavior {
 			} else {
 				$old_value = '';
 			}
+            debug($key);
+            debug($this -> settings[$Model -> alias]['ignore']);
 			if ($value != $old_value && !in_array($key, $this -> settings[$Model -> alias]['ignore'])) {
 				$changeDetected = true;
 			}
 		}
-		debug($data);
 		$Model -> ShadowModel -> create($data);
-		debug($Model -> ShadowModel);
 		if (!empty($habtm)) {
 			foreach ($habtm as $assocAlias) {
 				if (in_array($assocAlias, $this -> settings[$Model -> alias]['ignore'])) {

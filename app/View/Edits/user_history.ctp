@@ -8,7 +8,7 @@
 		<ul>
 			<li class="title">
 				<span class="collectible-name"><?php echo __('Name'); ?></span>
-				<span class="type"><?php echo __('Type'); ?></span>
+				<span class="type"><?php echo __('Details'); ?></span>
 				<span class="timestamp"><?php echo $this->Paginator->sort('created', 'Date Added'); ?></span>
 				<span class="status"><?php echo $this->Paginator->sort( 'status', 'State'); ?></span>
 			</li>
@@ -18,7 +18,7 @@
 				echo $this -> Html -> link($edit['Collectible']['name'], array('admin'=> false, 'controller' => 'collectibles', 'action'=> 'view', $edit['Collectible']['id']));
 				echo '</span>';
 				echo '<span class="type">';
-				echo $edit['type'];
+				echo __('Future Use');
 				echo '</span>';
 				echo '<span class="timestamp">';
 				$datetime = strtotime($edit['Edit']['created']);

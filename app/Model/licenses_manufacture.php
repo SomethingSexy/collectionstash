@@ -49,7 +49,7 @@ class LicensesManufacture extends AppModel {
 	public function getLicensesNotAssMan($manufactureId) {
 		return $this -> License -> find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('LicensesManufacture'), 'conditions' => array('not exists ' . '(SELECT *
 			FROM licenses_manufactures
-			WHERE licenses_manufactures.license_id = license.id
+			WHERE licenses_manufactures.license_id = License.id
 			AND licenses_manufactures.manufacture_id =' . $manufactureId . ')')));
 	}
 
