@@ -142,7 +142,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 							?>
 						</li>
 						<li class="msrp">
-							<?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price (USD)'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+							<?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
 						</li>
 						<li>
 							<?php echo $this -> Form -> input('url', array('escape' => false, 'label'=>__('URL'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>

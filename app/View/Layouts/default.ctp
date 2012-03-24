@@ -19,7 +19,7 @@
 	
 		//$this -> Minify -> js(array('js/es5-shim'));
 		$this -> Minify -> js(array('js/jquery-1.7'));
-		$this -> Minify -> js(array('js/jquery-ui-1.8.5'));
+		$this -> Minify -> js(array('js/jquery-ui-1.8.18'));
 		$this -> Minify -> js(array('js/jquery-plugins'));
 		
 	?>
