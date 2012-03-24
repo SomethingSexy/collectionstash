@@ -177,7 +177,7 @@
 							?>
 						</li>
                         <li class="msrp">
-                            <?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price (USD)'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+                            <?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
                         </li>
 						<li>
 							<div class="label-wrapper">

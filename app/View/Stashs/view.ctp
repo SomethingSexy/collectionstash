@@ -38,7 +38,7 @@ if (isset($collectibles) && !empty($collectibles)) {
 			$detail .= __('Artist\'s Proof');
 			$detail .= '</dt>';
 			$detail .= '<dd>';
-			if ($collectible['CollectiblesUser']['artist_proof']) {
+			if ($myCollectible['CollectiblesUser']['artist_proof']) {
 				$detail .= __('Yes');
 			} else {
 				$detail .= __('No');

@@ -13,7 +13,7 @@ class HomeController extends AppController {
 	 */
 	public function index() {
 		if ($this -> isLoggedIn()) {
-			$this -> redirect(array('controller' => 'collectibles', 'action' => catalog));
+			$this -> redirect(array('controller' => 'collectibles', 'action' => 'catalog'));
 		}
 	}
 
