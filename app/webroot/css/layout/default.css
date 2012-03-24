@@ -731,6 +731,12 @@ a:active {
 	float: left;
 	/*background-color: #EAEAEA;*/
 }
+.collectible.tags .label {
+	float: left;
+	margin-right: 10px;
+	font-size: 0.8em;
+	margin-top: 10px;
+}
 #collectible-detail {
 	width: 100%;
 	margin-right: 0;
@@ -798,7 +804,7 @@ a:active {
 }
 #collectible-detail .component-view .collectible.tags .tag-list, #collectible-detail .component-view .collectible.tags {
 	margin-top: 0px;
-	margin-bottom: 0px;
+	margin-bottom: 5px;
 }
 #collectible-detail .component-view .collectible.tags .actions.icon {
 	float: left;

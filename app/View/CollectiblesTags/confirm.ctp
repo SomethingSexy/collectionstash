@@ -23,13 +23,14 @@
 		<div class="component-view">
 			<div class="collectible detail">
 				<?php
+				echo '<div class="standard-list tag-list">';
+                echo '<ul>';
+                echo '<li class="title">';
+                echo '<span class="name">' . __('Tag', true) . '</span>';
+                echo '<span class="action">' . __('Action', true) . '</span>';
+                echo '</li>';
                 foreach ($tags as $key => $value) {
-                    echo '<div class="standard-list tag-list">';
-                    echo '<ul>';
-                    echo '<li class="title">';
-                    echo '<span class="name">' . __('Tag', true) . '</span>';
-                    echo '<span class="action">' . __('Action', true) . '</span>';
-                    echo '</li>';
+
                     echo '<li>' . '<span class="name">' . $value['Tag']['tag'] . '</span>';
                     echo '<span class="action">';
                     if ($value['CollectiblesTag']['action'] === 'E') {
@@ -41,9 +42,9 @@
                     }
                     echo '</span>';
                     echo '</li>';
-                    echo '</ul>';
-                    echo '</div>';
                 }
+                echo '</ul>';
+                echo '</div>';
 				?>
 			</div>
 		</div>
