@@ -1,6 +1,6 @@
 $( function() {
     DED.init();
-    $(".ui-icon-info").tooltip({ position: 'center right', opacity: 0.7});
+    //$(".ui-icon-info").tooltip({ position: 'center right', opacity: 0.7});
     // $('.add-variant-attribute').hover( function() {
 	        // $(this).addClass("ui-state-hover");
 	    // }, function() {

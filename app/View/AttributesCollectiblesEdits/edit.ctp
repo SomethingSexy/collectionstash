@@ -92,12 +92,6 @@
 		</div>
 	</div>
 </div>
-<script>
-	$(".ui-icon-info").tooltip({
-		position: 'center right',
-		opacity: 0.7
-	});
-</script>
 <div id="add-attribute-dialog" class="dialog" title="Add Attribute">
 	<div class="component">
 		<div class="inside" >
