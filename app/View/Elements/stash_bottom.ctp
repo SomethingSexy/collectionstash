@@ -1,21 +1,9 @@
 				</div>
 				<div id="photos" class="ui-tabs-hide">
-					<div class="actions icon">
-						<ul>
-							<?php
-							if (isset($myStash) && $myStash) {
-								if (Configure::read('Settings.User.uploads.allowed')) {
-									echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_photo.png"/></a></li>';
-								}
-							}
-							?>
-						</ul>
-					</div>
+		
 					<div id="photo-gallery"></div>
 				</div>
-				<div id="tabs-3" class="ui-tabs-hide"></div>
 			</div>
-		</div>
 	</div>
 </div>
 <?php echo $this -> Html -> script('galleria-1.2.6', array('inline' => false));?>

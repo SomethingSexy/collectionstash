@@ -105,53 +105,63 @@
 	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
-	
-	<div id="container">
-		<div id="header" class="clearfix">
-			<div class="header title">
-				<h1><?php echo __('Collection Stash'); ?></h1>
-				<span class="sub-title"><?php echo __('Are you squirreling?'); ?></span>
-			</div>
-			<div class="header navigation">
-				<div class="box">
-					<ul class="nav">
-							<li>
-								<?php echo $this -> Html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
-							</li>
-							<?php
-							if(isset($isLoggedIn) && $isLoggedIn === true)
-							{  ?>
 
-							<li>
-								<?php echo $this -> Html -> link('Account', array('admin'=> false, 'controller' => 'profiles'));?>
-							</li>
-							<?php
-							if($isUserAdmin)
-							{ ?>
-								<li>
-									<?php echo $this -> Html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
-								</li>
-							<?php }?>
-							<li>
-								<?php echo $this -> Html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
-							</li>
-							<?php  }
-								else
-								{
-   							?>
-							<li>
-								<a id='login-link' href="/users/login"><?php echo __('Login');?></a>
-							</li>
-							<?php if(Configure::read('Settings.registration.open')){
-								echo '<li>';
-								echo $this -> Html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
-								echo '</li>';
-								} 
-							}?>					
-					</ul>
-				</div>	
-			</div>
-		</div>
+
+        <div id="header" class="clearfix">
+            <div class="header title">
+                <h1><?php echo __('Collection Stash'); ?></h1>
+                <span class="sub-title"><?php echo __('Are you squirreling?'); ?></span>
+            </div>
+            <div class="header navigation">
+                <div class="box">
+                    <ul class="nav">
+                            <?php
+                            if(isset($isLoggedIn) && $isLoggedIn === true)
+                            {  
+                                 echo '<li>';
+                                 echo __('Welcome, ');
+                                 echo $username . '!'; 
+                                 echo '</li>';
+                            }?>
+                            <li>
+                                <?php echo $this -> Html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
+                            </li>
+                            <?php
+                            if(isset($isLoggedIn) && $isLoggedIn === true)
+                            {  ?>
+
+                            <li>
+                                <?php echo $this -> Html -> link('Profile', array('admin'=> false, 'controller' => 'profiles'));?>
+                            </li>
+                            <?php
+                            if($isUserAdmin)
+                            { ?>
+                                <li>
+                                    <?php echo $this -> Html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
+                                </li>
+                            <?php }?>
+                            <li>
+                                <?php echo $this -> Html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
+                            </li>
+                            <?php  }
+                                else
+                                {
+                            ?>
+                            <li>
+                                <a id='login-link' href="/users/login"><?php echo __('Login');?></a>
+                            </li>
+                            <?php if(Configure::read('Settings.registration.open')){
+                                echo '<li>';
+                                echo $this -> Html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
+                                echo '</li>';
+                                } 
+                            }?>                 
+                    </ul>
+                </div>  
+            </div>
+        </div>	
+	<div id="container">
+
 		<div id="stage">
 			<div class="main-navigation">
 				<div class="inside">
@@ -227,7 +237,7 @@
       <div class="component-view">
       <?php echo $this -> Form -> create('User', array('action' => 'login')); ?>
         <fieldset>
-          <ul class="form-fields">
+          <ul class="form-fields dialog-fields">
             <li>
               <div class="label-wrapper">
                 <label for=""><?php echo __('Username') ?></label>

@@ -12,9 +12,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">
-			<div>
-				Text here
-			</div>
+			<div></div>
 		</div>
 		<div class="component-view">
 			<div class="collectible add">
@@ -24,177 +22,230 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				echo $this -> Form -> hidden('variant_collectible_id');
 				?>
 				<fieldset>
+				    <legend><?php echo __('Manufacture Details');?></legend>
+				    <ul class="form-fields">
+                        <li>
+                            <div class="label-wrapper">
+                                <label for=""> <?php echo __('Manufacture')
+                                    ?></label>
+                            </div>
+                            <?php
+                            echo '<div class="static-field">';
+                            echo $manufacturer['Manufacture']['title'];
+                            echo $this -> Form -> hidden('manufacture_id');
+                            echo '</div>';
+                            ?>
+                        </li>	
+                        <?php echo '<li>';?>
+                        <div class="label-wrapper">
+                            <label for=""> <?php echo __('Collectible Type');
+                                ?></label>
+                        </div>
+                        <?php
+                        //Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
+                        //$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
+                        //page that determine which one is selected to put in teh input field...
+                        //OR
+                        //We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
+                        //logic will be similar.
+                        //Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
+                        //return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
+
+                        //echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
+                        echo '<div class="static-field">';
+                        echo '<a class="link" id="change-collectibletype-link">' . $collectibleType['Collectibletype']['name'] . '</a>';
+                        echo $this -> Form -> hidden('collectibletype_id');
+                        echo '</div>';
+                        ?>
+                        </li>
+                        <?php
+                        if (!isset($specializedTypes)) {
+                            $specializedTypes = array();
+                        }
+
+                        if (empty($specializedTypes)) {
+                            echo '<li class="hidden">';
+                        } else {
+                            echo '<li>';
+                        }
+                        ?>
+                        <div class="label-wrapper">
+                            <label for=""> <?php echo __('Manufacturer Collectible Type');
+                                ?></label>
+                        </div>
+                        <?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
+                        </li>
+                        <?php
+                        if (empty($hasSeries)) {
+                            echo '<li class="hidden">';
+                        } else {
+                            echo '<li>';
+                        }
+                        ?>
+                        <?php
+                        if (empty($licenses)) {
+                            echo '<li class="hidden">';
+                        } else {
+                            echo '<li>';
+                        }
+                        ?>
+                        <?php echo $this -> Form -> input('license_id', array('label'=>__('Brand'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                        <div class="label-wrapper">
+                            <label for=""> <?php echo __('Category')
+                                ?></label>
+                        </div>
+                        <?php
+                        if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
+                            echo '<div class="static-field">';
+                            echo '<a class="link" id="change-series-link">' . $this -> data['Collectible']['series_name'] . '</a>';
+                            echo $this -> Form -> hidden('series_id');
+                            echo '</div>';
+                            echo $this -> Form -> error('series_id');
+                        } else {
+                            echo '<div class="static-field">';
+                            echo '<a class="link" id="change-series-link">Add</a>';
+                            echo $this -> Form -> hidden('series_id');
+                            echo '</div>';
+                            echo $this -> Form -> error('series_id');
+                        }
+                        ?>
+                        </li>   	
+                        <li>
+                            <?php echo $this -> Form -> input('name', array('escape' => false,'label'=>__('Name'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php
+                            $data = str_replace('\n', "\n", $this -> data['Collectible']['description']);
+                            $data = str_replace('\r', "\r", $data);
+
+                            echo $this -> Form -> input('description', array('escape' => false,'label'=>__('Description'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'value' => $data));
+                            ?>
+                        </li>	
+
+                        <li class="msrp">
+                            <?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+                        </li>
+                        <li>
+                            <div class="input select">
+                                <div class="label-wrapper">
+                                <label for="scale"> <?php echo __('Release Year')
+                                    ?></label>
+                                 </div>
+                            <?php
+                            $current_year = date('Y');
+                            $max_year = $current_year + 2;
+                            echo $this -> Form -> year('release', 1900, $max_year);
+                            ?>
+                            </div>
+                        </li>  
+                        <li>
+                            <?php echo $this -> Form -> input('code', array('label'=>__('Product Code'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the item code or product code given by the manufacture.', true).'" alt="info"></a>','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('upc', array('label'=>__('Product UPC'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                    </ul>  
+				</fieldset>
+				<fieldset>
+				    <legend><?php echo __('Collectible Details');?></legend>
+				    <ul class="form-fields">
+                        <li>
+                            <div class="input checkbox">
+                                <div class="label-wrapper">
+                                    <label for="CollectibleLimited">Limited Edition</label>
+                                </div>
+                                <?php echo $this -> Form -> input('limited', array('label'=> false,'div'=> false));?> 
+                            </div>
+                            
+                            
+                        </li>
+                        <?php
+                            if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
+                                echo '<li>';
+                            } else {
+                                echo '<li class="hidden">';
+                            }
+                        ?>
+                        <?php echo $this -> Form -> input('edition_size', array('label'=>__('Edition Size'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true).'" alt="info"></a>','between'=>'</div>'));?>
+                        </li>
+                        <?php
+                            if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
+                                echo '<li>';
+                            } else {
+                                echo '<li class="hidden">';
+                            }
+                        ?>
+                          <div class="input checkbox">
+                                <div class="label-wrapper">
+                                    <a class="ui-icon ui-icon-info" title="'. __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true).'" alt="info"></a>
+                                    <label for="CollectibleNumbered"><?php echo __('Numbered');?></label>
+                                </div>
+                                <?php echo $this -> Form -> input('numbered', array('label'=> false,'div'=> false));?>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="input checkbox">
+                                <div class="label-wrapper">
+                                    <label for="CollectibleExclusive"><?php echo __('Exclusive');?></label>
+                                </div>
+                                
+                                <?php echo $this -> Form -> input('exclusive', array('label'=> false,'div'=> false));?>
+                            </div>                          
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('retailer_id', array('label'=>__('Exclusive Retailer'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'empty' => true));?>
+                        </li>
+                    </ul>    				    
+				</fieldset>
+                <fieldset>
+                    <legend><?php echo __('Collectible Specs');?></legend>
+                    <ul class="form-fields">
+                        <li>
+                            <?php echo $this -> Form -> input('scale_id', array('empty' => true, 'label'=>__('Scale'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+
+
+
+
+
+    
+                        <li>
+                            <?php echo $this -> Form -> input('pieces', array('label'=>__('Number of Pieces'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true).'" alt="info"></a>','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('product_weight', array('label'=>__('Weight (lbs)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('product_length', array('label'=>__('Height (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('product_width', array('label'=>__('Width (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+                        <li>
+                            <?php echo $this -> Form -> input('product_depth', array('label'=>__('Depth (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>                    
+                    </ul>
+                </fieldset>				
+				
+				
+				
+				
+				
+				
+				<fieldset>
 					<legend>
-						<?php echo __('Details');?>
+						<?php echo __('Reference');?>
 					</legend>
 					<ul class="form-fields">
-						<li>
-							<div class="label-wrapper">
-								<label for=""> <?php echo __('Manufacture')
-									?></label>
-							</div>
-							<?php
-							echo '<div class="static-field">';
-							echo $manufacturer['Manufacture']['title'];
-							echo $this -> Form -> hidden('manufacture_id');
-							echo '</div>';
-							?>
-						</li>
-						<?php echo '<li>';?>
-						<div class="label-wrapper">
-							<label for=""> <?php echo __('Collectible Type');
-								?></label>
-						</div>
-						<?php
-						//Ok for now, lets draw out the first list, then check for the second list...will manually set which one is selected based on
-						//$selectedTypes, then we will see if a L2 is list is set and draw that one.  Then we will need to update the JavaScript for this
-						//page that determine which one is selected to put in teh input field...
-						//OR
-						//We use a modal dialog to change the type, and then the specialized type..., might be easier than trying to draw this on one page
-						//logic will be similar.
-						//Open up the modal, call a collectibletypes_getTypes ajax action, pass in manufacture id and selected collectible type, this will
-						//return each level of lists and which ones are selected, then once they select, change it on the page and submit...BAM
-
-						//echo $this -> Form -> select('Collectible.collectibletype_id', $collectibletypes, null, array('label' => false, 'empty' => false));
-						echo '<div class="static-field">';
-						echo '<a class="link" id="change-collectibletype-link">' . $collectibleType['Collectibletype']['name'] . '</a>';
-						echo $this -> Form -> hidden('collectibletype_id');
-						echo '</div>';
-						?>
-						</li>
-						<?php
-						if (!isset($specializedTypes)) {
-							$specializedTypes = array();
-						}
-
-						if (empty($specializedTypes)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<div class="label-wrapper">
-							<label for=""> <?php echo __('Manufacturer Collectible Type');
-								?></label>
-						</div>
-						<?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
-						</li>
-						<?php
-						if (empty($hasSeries)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<div class="label-wrapper">
-							<label for=""> <?php echo __('Category')
-								?></label>
-						</div>
-						<?php
-						if (isset($this -> data['Collectible']['series_id']) && !empty($this -> data['Collectible']['series_id'])) {
-							echo '<div class="static-field">';
-							echo '<a class="link" id="change-series-link">' . $this -> data['Collectible']['series_name'] . '</a>';
-							echo $this -> Form -> hidden('series_id');
-							echo '</div>';
-							echo $this -> Form -> error('series_id');
-						} else {
-							echo '<div class="static-field">';
-							echo '<a class="link" id="change-series-link">Add</a>';
-							echo $this -> Form -> hidden('series_id');
-							echo '</div>';
-							echo $this -> Form -> error('series_id');
-						}
-						?>
-						</li>						
-						
-						<?php
-						if (empty($licenses)) {
-							echo '<li class="hidden">';
-						} else {
-							echo '<li>';
-						}
-						?>
-						<?php echo $this -> Form -> input('license_id', array('label'=>__('Brand'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('scale_id', array('empty' => true, 'label'=>__('Scale'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<div class="label-wrapper">
-								<label for="scale"> <?php echo __('Release Year')
-									?></label>
-							</div>
-							<?php
-							$current_year = date('Y');
-							$max_year = $current_year + 2;
-							echo $this -> Form -> year('release', 1900, $max_year);
-							?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('name', array('escape' => false,'label'=>__('Name'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php
-							$data = str_replace('\n', "\n", $this -> data['Collectible']['description']);
-							$data = str_replace('\r', "\r", $data);
-
-							echo $this -> Form -> input('description', array('escape' => false,'label'=>__('Description'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'value' => $data));
-							?>
-						</li>
-						<li class="msrp">
-							<?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('url', array('escape' => false, 'label'=>__('URL'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
                         <li>
-							<?php echo $this -> Form -> input('limited', array('label'=>__('Limited Edition'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<?php
-							if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
-								echo '<li>';
-							} else {
-								echo '<li class="hidden">';
-							}
-						?>
-						<?php echo $this -> Form -> input('edition_size', array('label'=>__('Edition Size'),'before' => '<div class="label-wrapper">','between'=>'</div><a class="ui-icon ui-icon-info" title="'. __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true).'" alt="info"></a>'));?>
-						</li>
-						<?php
-							if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
-								echo '<li>';
-							} else {
-								echo '<li class="hidden">';
-							}
-						?>
-						<?php echo $this -> Form -> input('numbered', array('label'=>__('Numbered'),'before' => '<div class="label-wrapper">','between'=>'</div>','after'=>'<a class="ui-icon ui-icon-info" title="'. __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true).'" alt="info"></a>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('exclusive', array('label'=>__('Exclusive'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('retailer_id', array('label'=>__('Exclusive Retailer'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'empty' => true));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('code', array('label'=>__('Product Code'),'before' => '<div class="label-wrapper">','between'=>'</div><a class="ui-icon ui-icon-info" title="'. __('This is the item code or product code given by the manufacture.', true).'" alt="info"></a>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('upc', array('label'=>__('Product UPC'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('pieces', array('label'=>__('Number of Pieces'),'before' => '<div class="label-wrapper">','between'=>'</div><a class="ui-icon ui-icon-info" title="'. __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true).'" alt="info"></a>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('product_weight', array('label'=>__('Weight (lbs)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('product_length', array('label'=>__('Height (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('product_width', array('label'=>__('Width (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('product_depth', array('label'=>__('Depth (inches)'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
-						</li>
+                            <?php echo $this -> Form -> input('url', array('escape' => false, 'label'=>__('URL'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
+                        </li>
+
+						
+
+
 					</ul>
 				</fieldset>
 				<?php echo $this -> Form -> end();?>
@@ -239,7 +290,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-series-dialog-fields" class="form-fields"></ul>
+					<ul id="edit-series-dialog-fields" class="form-fields dialog-fields"></ul>
 				</fieldset>
 			</div>
 		</div>
@@ -256,7 +307,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-collectibletype-dialog-fields" class="form-fields"></ul>
+					<ul id="edit-collectibletype-dialog-fields" class="form-fields dialog-fields"></ul>
 				</fieldset>
 			</div>
 		</div>

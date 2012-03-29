@@ -103,14 +103,16 @@
 			<div class="component-view">
 				<?php echo $this -> Form -> create('AttributesCollectible', array('url' => '')); ?>
 				<fieldset>
-					<ul id="add-attribute-dialog-fields" class="form-fields">
+					<ul id="add-attribute-dialog-fields" class="form-fields dialog-fields">
 						<li id="description-field">
-							<div class="label-wrapper">
-								<label for="CollectibleName">
-									<?php echo __('Description') ?>
-								</label>
-							</div>
-							<?php echo $this -> Form -> input('description', array('maxlength' => 200, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>
+						    <div class="input text required">
+    							<div class="label-wrapper">
+    								<label for="CollectibleName">
+    									<?php echo __('Description') ?>
+    								</label>
+    							</div>
+    							<?php echo $this -> Form -> input('description', array('maxlength' => 200, 'id' => 'attributeDescription', 'div' => false, 'label' => false, 'error' => false));?>
+						    </div>
 						</li>
 					</ul>
 				</fieldset>

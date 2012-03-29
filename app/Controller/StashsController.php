@@ -176,7 +176,7 @@ class StashsController extends AppController {
     public function view($userId = null, $display = 'gallery') {
         if (!is_null($userId)) {
             $userId = Sanitize::clean($userId, array('encode' => false));
-            //Also retrieve the UserUploads at this point, so we do not have to do it later
+            //Also retrieve the UserUploads at this point, so we do not have to do it later and comments
             $user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
             debug($user);
             //Ok we have a user, although this seems kind of inefficent but it works for now
@@ -198,6 +198,8 @@ class StashsController extends AppController {
                         $collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
                         $this -> set('userUploads', $user['UserUpload']);
                         $this -> set(compact('collectibles'));
+                        $this -> set('stash', $user['Stash'][0]);
+                        // $this -> set('comments', $user['Stash'][0]['Comment']);
                     } else {
                         $this -> render('view_private');
                         return;

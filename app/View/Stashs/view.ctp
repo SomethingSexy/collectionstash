@@ -1,6 +1,98 @@
-<?php echo $this -> element('stash_top');?>
-<div id="collectibles-gallery"></div>
-<?php echo $this -> element('stash_bottom');?>
+<div id="my-stashes-component" class="component">
+    <div class="inside">
+        <div class="component-title"></div>
+        <?php echo $this -> element('flash');?>
+        <div class="component-view">
+            <div class="actions icon">
+                <ul>
+                    <?php
+                    if (isset($myStash) && $myStash) {
+                        echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
+                        echo '<li>';
+                        echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil.png"/></a>';
+                        echo '</li>';
+                    }
+                    ?>
+                    <li>
+                        <?php echo '<a title="Photo Gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/photos.png"/></a>';?>
+                    </li>
+                    <?php
+                    if (isset($myStash) && $myStash) {
+                        if (Configure::read('Settings.User.uploads.allowed')) {
+                            echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_photo.png"/></a></li>';
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
+            <div class="stash-details">
+                <h2><?php echo $stashUsername . '\'s' .__(' stash', true)
+                ?></h2>
+                <dl>
+                    <dt>Total Collectibles: </dt>
+                    <dd>45</dd>
+                </dl>
+            </div>
+            <div id="collectibles" class="collectibles">
+                <div id="collectibles-gallery"></div>
+            </div>
+            <div id="photos" class="photos">
+                <div id="photo-gallery"></div>
+            </div>
+            <div id="comments" class="comments-container" data-type="stash" data-typeID="<?php echo $stash['id']; ?>">
+                <!-- This is where all the comments will go-
+                <ol class="comments">
+                    <li class="comment">
+                        <div class="info">
+                            <span class="user"></span>
+                            <span class="datetime"></span>
+                        </div>
+                        <!-- This is the actual comment 
+                        <div class="text"></div>
+                        <div class="actions">
+                            reply
+                            delete
+                            edit
+                        </div>
+                    </li>
+                </ol>
+                <div class="actions">
+                    
+                </div>-->
+                <?php
+                   echo $this -> Form -> create('Comment', array('url' => '/comments/add'));
+                   echo $this -> Form -> input('comment', array('escape' => false, 'label' => __('Comment'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));   
+                   echo $this -> Form -> end();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php echo $this -> Html -> script('galleria-1.2.6', array('inline' => false));?>
+<?php echo $this -> Html -> script('galleria.classic.js', array('inline' => false));?>
+<?php echo $this -> Html -> script('jquery.comments', array('inline' => false));?>
+<?php echo $this -> Html -> css('galleria.classic');?>
+
+<script>
+    var photoData = [<?php
+if (isset($userUploads) && !empty($userUploads)) {
+
+    foreach ($userUploads as $key => $userUpload) {
+        echo '{';
+        echo 'image : "' . $this -> FileUpload -> image($userUpload['name'], array('width' => 0, 'imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+        echo 'thumb : "' . $this -> FileUpload -> image($userUpload['name'], array('imagePathOnly' => true, 'height' => 100, 'width' => 100, 'title' => $userUpload['title'], 'alt' => $userUpload['description'], 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $userUpload['user_id'])) . '",';
+        echo 'title : "' . $userUpload['title'] . '",';
+        echo 'description : "' . $userUpload['description'] . '"';
+        echo '}';
+        if ($key != (count($userUploads) - 1)) {
+            echo ',';
+        }
+    }
+}
+?>
+    ];  
+    
+</script>
 
 <script>
 
@@ -102,13 +194,16 @@ if (isset($collectibles) && !empty($collectibles)) {
 	];
 
 	$(function() {
+	    
+	    $('#comments').comments();
+	    
 		var photosLoaded = false;
 		var collectiblesLoaded = false;
-		if(window.location.hash === '#collectibles' || window.location.hash === "") {
+		// if(window.location.hash === '#collectibles' || window.location.hash === "") {
 			if(0 < collectibleData.length) {
 				$("#collectibles-gallery").galleria({
-					width : 900,
-					height : 600,
+					width : 600,
+					height : 400,
 					lightbox : true,
 					data_source : collectibleData,
 					_showDetailInfo : true,
@@ -119,7 +214,7 @@ if (isset($collectibles) && !empty($collectibles)) {
 			}
 			collectiblesLoaded = true;
 
-		} else if(window.location.hash === '#photos') {
+		// } else if(window.location.hash === '#photos') {
 			if(0 < photoData.length) {
 				$("#photo-gallery").galleria({
 					width : 900,
@@ -133,7 +228,7 @@ if (isset($collectibles) && !empty($collectibles)) {
 				$("#photo-gallery").parent().prepend($('<p></p>').text('No photos have been added!'));
 			}
 			photosLoaded = true;
-		}
+		// }
 
 		$("#tabs").tabs({
 			select : function(event, ui) {

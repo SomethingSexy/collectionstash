@@ -2,28 +2,40 @@ body {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 100.1%;
 	letter-spacing: 0.01em;
-	text-rendering: optimizelegibility;
-	background: #656464;
-	/*height: 100%;*/
+	/*background: #656464;*/
+	background: none repeat scroll 0 0 #F2F2F2;
 }
 #container {
 	position: relative;
 	text-align: left;
 	font-size: 100%;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	min-height: 100%;
 	margin: 0 auto;
 	width: 900px;
-	background: #656464;
+	/*background: #656464;*/
 	padding: 0;
+}
+#container:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 #container, #bottom {
 	width: 1024px;
 }
 #header {
 	position: relative;
-	margin: 20px 0;
+	/*margin: 20px 0;*/
 	overflow: hidden;
+	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
+	background-color: #FDB924;
+    border-bottom: 1px solid #CCCCCC;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    height: 100px;
 }
 #header .header.title {
 	float: left;
@@ -47,10 +59,14 @@ body {
 	width: 100%;
 	padding-bottom: 1em;
 	min-height: 600px;
+	border: 1px solid #BBBBBB;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
 #stage .main-navigation {
 	width: 100%;
-	background-color: #FDB924;
+	/*background-color: #FDB924;*/
 	margin-top: 5px;
 	/*float: left;*/
 }
@@ -98,14 +114,16 @@ ul.nav li {
 	margin: 0;
 	/* padding: 0 15px 0 0; */
 	position: relative; /*--Declare X and Y axis base for sub navigation--*/
-}
-ul.nav li a {
 	padding: 10px 5px;
 	/* color: #fff;*/
 	display: block;
-	text-decoration: none;
 	float: left;
 	color: #fff;
+	font-size: .9em;
+}
+ul.nav li a {
+	color: #fff;
+	text-decoration: none;
 	/* border-right: solid 1px #990000;  */
 }
 ul.nav li a:hover {
@@ -187,3 +205,4 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
 .inside {
 	padding: 5px;
 }
+
