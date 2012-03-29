@@ -13,7 +13,7 @@ $(function() {
 
 	$("#add-attribute-dialog").dialog({
 		'autoOpen' : false,
-		'width' : 500,
+		'width' : 700,
 		'height' : 'auto',
 		'modal' : true,
 		'resizable' : false,
@@ -96,13 +96,15 @@ var DED = function() {
 			});
 			$select.html(output.join(''))
 
-			var $li = $('<li></li>');
-			var $labelWrapper = $('<div></div>').addClass('label-wrapper');
-			var $label = $('<label></label>').attr('for', 'attributeLevel' + attributeLevel).text('Attribute Category');
-
-			$labelWrapper.prepend($label);
-			$li.prepend($select);
-			$li.prepend($labelWrapper);
+            var $li = $('<li></li>');
+            var $inputWrapper = $('<div>').addClass('input').addClass('select');
+            var $labelWrapper = $('<div></div>').addClass('label-wrapper');
+            var $label = $('<label></label>').attr('for', 'attributeLevel' + attributeLevel).text('Attribute Category');
+			
+            $labelWrapper.prepend($label);
+            $inputWrapper.prepend($select);
+            $inputWrapper.prepend($labelWrapper);
+            $li.prepend($inputWrapper);
 			//If it is the first level, prepend to the dialog fields
 			if(isFirstLevel()) {
 				$('#add-attribute-dialog-fields').prepend($li);
