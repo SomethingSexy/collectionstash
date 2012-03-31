@@ -58,12 +58,20 @@
                 </ol>
                 <div class="actions">
                     
+                </div>
+                <div class="post-comment-container">
+                    <form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">
+                        <div style="display:none;">
+                            <input type="hidden" value="POST" name="_method">
+                        </div>
+                        <div class="input textarea required">
+                            <div class="label-wrapper">
+                                <label for="CommentComment">Comment</label>
+                            </div>
+                            <textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea>
+                        </div>
+                    </form>                    
                 </div>-->
-                <?php
-                   echo $this -> Form -> create('Comment', array('url' => '/comments/add'));
-                   echo $this -> Form -> input('comment', array('escape' => false, 'label' => __('Comment'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));   
-                   echo $this -> Form -> end();
-                ?>
             </div>
         </div>
     </div>
