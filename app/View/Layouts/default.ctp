@@ -108,56 +108,63 @@
 
 
         <div id="header" class="clearfix">
-            <div class="header title">
-                <h1><?php echo __('Collection Stash'); ?></h1>
-                <span class="sub-title"><?php echo __('Are you squirreling?'); ?></span>
-            </div>
-            <div class="header navigation">
-                <div class="box">
-                    <ul class="nav">
-                            <?php
-                            if(isset($isLoggedIn) && $isLoggedIn === true)
-                            {  
-                                 echo '<li>';
-                                 echo __('Welcome, ');
-                                 echo $username . '!'; 
-                                 echo '</li>';
-                            }?>
-                            <li>
-                                <?php echo $this -> Html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
-                            </li>
-                            <?php
-                            if(isset($isLoggedIn) && $isLoggedIn === true)
-                            {  ?>
-
-                            <li>
-                                <?php echo $this -> Html -> link('Profile', array('admin'=> false, 'controller' => 'profiles'));?>
-                            </li>
-                            <?php
-                            if($isUserAdmin)
-                            { ?>
+            <div class="header-container">
+                <div class="header title">
+                    <h1><?php echo __('Collection Stash'); ?></h1>
+                    <span class="sub-title"><?php echo __('Are you squirreling?'); ?></span>
+                </div>
+                <div class="header navigation">
+                    <div class="box">
+                        <ul class="nav">
+                                <?php
+                                if(isset($isLoggedIn) && $isLoggedIn === true)
+                                {  
+                                     echo '<li>';
+                                     echo __('Welcome, ');
+                                     echo $username . '!'; 
+                                     echo '</li>';
+                                }?>
                                 <li>
-                                    <?php echo $this -> Html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
+                                    <?php echo $this -> Html -> link('Home', array('admin'=> false, 'controller' => '/'));?>
                                 </li>
-                            <?php }?>
-                            <li>
-                                <?php echo $this -> Html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
-                            </li>
-                            <?php  }
-                                else
-                                {
-                            ?>
-                            <li>
-                                <a id='login-link' href="/users/login"><?php echo __('Login');?></a>
-                            </li>
-                            <?php if(Configure::read('Settings.registration.open')){
-                                echo '<li>';
-                                echo $this -> Html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
-                                echo '</li>';
-                                } 
-                            }?>                 
-                    </ul>
-                </div>  
+                                <?php
+                                if(isset($isLoggedIn) && $isLoggedIn === true)
+                                {  ?>
+    
+                                <li>
+                                    <?php echo $this -> Html -> link('Profile', array('admin'=> false, 'controller' => 'profiles'));?>
+                                </li>
+                                <?php
+                                if($isUserAdmin)
+                                { ?>
+                                    <li>
+                                        <?php echo $this -> Html -> link('Admin', array('admin'=> true, 'action' => 'index', 'controller' => 'collectibles'));?>
+                                    </li>
+                                <?php }?>
+                                <li>
+                                    <?php echo $this -> Html -> link('Logout', array('admin'=> false, 'action' => 'logout', 'controller' => 'users'));?>
+                                </li>
+                                <?php  }
+                                    else
+                                    {
+                                ?>
+                                <li>
+                                    <a id='login-link' href="/users/login"><?php echo __('Login');?></a>
+                                </li>
+                                <?php if(Configure::read('Settings.registration.open')){
+                                    echo '<li>';
+                                    echo $this -> Html -> link('Register', array('controller'=> 'users', 'action' => 'register'));
+                                    echo '</li>';
+                                    } 
+                                }?>                 
+                        </ul>
+                    </div>  
+                </div>
+                                        <div class="site-search">
+                            <form method="get" action="/collectibles/search">
+                                <input id="q" type="text" name="q" value="Find a Collectible">
+                            </form>                             
+                        </div>
             </div>
         </div>	
 	<div id="container">
@@ -192,11 +199,6 @@
 								<?php echo $this -> Html -> link('Catalog', array('admin'=> false, 'controller' => 'collectibles','action'=>'search'));?>
 							</li>
 						</ul>
-						<div class="site-search">
-							<form method="get" action="/collectibles/search">
-								<input id="q" type="text" name="q" value="Find a Collectible">
-							</form>								
-						</div>
 					</div>
 				</div>
 			</div>

@@ -845,12 +845,12 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #my-stashes-component .inside .component-view .collectibles {
 	float: right;
-	width: 600px;
+	/*width: 600px;*/
 	clear: right;
 }
 #my-stashes-component .inside .component-view .photos {
 	float: left;
-	width: 100%;
+	/*width: 100%;*/
 	clear: both;
 }
 #collectibles-gallery, #photo-gallery {
@@ -858,6 +858,20 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectibles-gallery .galleria-container {
 	margin-right: 0;
+}
+
+#collectibles-gallery {
+	width: 600px;
+	padding: 12px;
+	background: none repeat scroll 0 0 #CCC;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#photo-gallery {
+	background: none repeat scroll 0 0 #CCCCCC;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    width: 900px;
 }
 .galleria-detail-text .collectible.detail {
 	background-color: #000000;
