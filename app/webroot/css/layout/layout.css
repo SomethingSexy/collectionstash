@@ -15,6 +15,7 @@ body {
 	width: 900px;
 	/*background: #656464;*/
 	padding: 0;
+	margin-top: 5px;
 }
 #container:after {
 	visibility: hidden;
@@ -39,18 +40,27 @@ body {
 }
 #header .header.title {
 	float: left;
+	margin-top: 10px;
 }
 #header .header.title h1 {
-	background-color: #656464;
-	color: #CCC;
+	background-color: inherit;
+	color: #FFFFFF;
 	text-indent: 0;
 }
 #header .header.title .sub-title {
-	color: #CCC;
+	color: #FFFFFF;
 	line-height: 1.2;
 	float: right;
 }
 #header .header.navigation ul.nav {
+	float: right;
+}
+
+#header .header-container {
+	width: 1024px;
+	margin: 0 auto;
+}
+#header .header-container .header.navigation {
 	float: right;
 }
 #stage {
@@ -77,21 +87,26 @@ body {
 	float: left;
 }
 #stage .main-navigation .inside .nav li {
-	border-right: solid 1px #FFF;
+	
 }
 #stage .main-navigation .inside .nav li a {
 	padding: 10px;
-	color: #4A4A4A;
+	color: #FFF;
+	border-radius: 4px 4px 4px 4px;
+	background: none repeat scroll 0 0 #CCCCCC;
 }
 #stage .main-navigation .inside .nav li a:hover {
-	color: #FFF;
+	background: none repeat scroll 0 0 #AAA;
 	text-decoration: none;
 }
-#stage .main-navigation .inside .site-search {
-	float: right;
+#header .header-container .site-search {
+    left: 490px;
+    line-height: 2;
+    position: relative;
+    top: 60px;
 	line-height: 2;
 }
-#stage .main-navigation .inside .site-search form input#q {
+#header .header-container .site-search form input#q {
 	background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
 	border: 0 none;
 	color: #9E9FA4;
