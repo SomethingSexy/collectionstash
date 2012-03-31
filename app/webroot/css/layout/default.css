@@ -215,13 +215,12 @@ a:active {
 	overflow: hidden;
 }
 .collectible.detail .detail.title h3 {
-	font-size: 1em;
-	padding: 2px;
-	font-weight: bold;
-	margin-bottom: 0;
-	float: left;
-	color: #74A4BE;
-	margin-top: 15px;
+	border-bottom: 1px solid #CCCCCC;
+    color: #74A4BE;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-weight: normal;
+    float: left;
 }
 .collectible.detail .detail.title .title.link {
 	font-size: 0.75em;
@@ -849,7 +848,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	clear: right;
 }
 #my-stashes-component .inside .component-view .photos {
-	float: left;
+	float: right;
 	/*width: 100%;*/
 	clear: both;
 }
@@ -2052,7 +2051,21 @@ div.paging span a:hover {
 /* Comments */
 .comments-container {
 	float: left;
-	width: 100%;
+	width: 500px;
 }
+.comments-container ol.comments {
+	overflow: hidden;
+}
+.comments-container ol.comments li {
+	float: left;
+	margin-bottom: 25px;
+	padding: 20px;
 
-.comments-container
+}
+.comments-container ol.comments li .comment-info {
+	
+}
+/* Login Dialog */
+#login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {
+	width: 100px;
+}

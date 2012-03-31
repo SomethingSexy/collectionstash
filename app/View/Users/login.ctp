@@ -16,17 +16,11 @@
         <fieldset>
           <ul class="form-fields">
             <li>
-              <div class="label-wrapper">
-                <label for=""><?php echo __('Username') ?></label>
-              </div>
-            <?php echo $this -> Form -> input('username', array('div' => false,'label'=> false));?>
-           </li>
-           <li>
-              <div class="label-wrapper">
-                <label for=""><?php echo __('Password') ?></label>
-              </div>           
-            <?php echo $this -> Form -> input('password', array('div' => false, 'label'=> false));?>
-           </li>
+                <?php echo $this -> Form -> input('username', array('label' => __('Username'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
+            </li>
+            <li>
+                <?php echo $this -> Form -> input('password', array('label' => __('Password'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
+            </li>
           </ul>
         </fieldset>
       <?php echo $this -> Form -> end('Login');?>

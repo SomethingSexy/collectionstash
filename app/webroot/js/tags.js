@@ -20,8 +20,8 @@ var tags = function() {
 			//This var is located on the add_variant.ctp
 			if( typeof lastTagKey !== "undefined") {
 				//If there is at least one added already then we will want to take that one and +1 for the next.
-				tagNumber = ++lastTagKey;
-				tagCount = ++ lastTagKey
+				tagNumber = lastTagKey + 1;
+				tagCount = lastTagKey + 1;
 			}
 			var options, a;
 			jQuery(function() {
