@@ -852,8 +852,17 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*width: 100%;*/
 	clear: both;
 }
-#collectibles-gallery, #photo-gallery {
+#collectibles.collectibles, #photos.photos{
 	margin-top: 50px;
+}
+
+#collectibles.collectibles .title h3,
+#photos.photos .title h3 {
+	border-bottom: 1px solid #CCCCCC;
+    color: #74A4BE;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-weight: normal;	
 }
 #collectibles-gallery .galleria-container {
 	margin-right: 0;
@@ -2051,7 +2060,15 @@ div.paging span a:hover {
 /* Comments */
 .comments-container {
 	float: left;
-	width: 500px;
+	width: 100%;
+	margin-top: 25px;
+}
+.comments-container .title h3 {
+	border-bottom: 1px solid #CCCCCC;
+    color: #74A4BE;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-weight: normal;	
 }
 .comments-container ol.comments {
 	overflow: hidden;
@@ -2060,10 +2077,26 @@ div.paging span a:hover {
 	float: left;
 	margin-bottom: 25px;
 	padding: 20px;
+	background-color: #B5CAD0;
+	font: 300 14px/1.4em Open Sans,Georgia,Verdana,"Lucida Grande",Lucida,sans-serif;
+	width: 800px;
 
 }
-.comments-container ol.comments li .comment-info {
-	
+.comments-container ol.comments li .comment-info .user {
+	display: block;
+}
+.comments-container ol.comments li .comment-text {
+	margin-top: 10px;
+}
+.comments-container .post-comment-container form fieldset ul li div.input div.label-wrapper {
+	width: auto;	
+}
+.comments-container .post-comment-container form fieldset ul li div.input textarea {
+	width: 750px;
+}
+.comments-container .post-comment-container form fieldset ul li .error-message {
+	width: auto;	
+	margin-left: 80px;
 }
 /* Login Dialog */
 #login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {

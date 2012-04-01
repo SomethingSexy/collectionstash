@@ -34,9 +34,11 @@
                 </dl>
             </div>
             <div id="collectibles" class="collectibles">
+                <div class="title"><h3><?php echo __('Collectibles');?></h3></div>
                 <div id="collectibles-gallery"></div>
             </div>
             <div id="photos" class="photos">
+                <div class="title"><h3><?php echo __('Photos');?></h3></div>
                 <div id="photo-gallery"></div>
             </div>
             <div id="comments" class="comments-container" data-type="stash" data-typeID="<?php echo $stash['id']; ?>">
