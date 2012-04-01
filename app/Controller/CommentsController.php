@@ -59,8 +59,39 @@ class CommentsController extends AppController {
     }
 
     function view($type = null, $typeID = null) {
-        $comments = $this -> Comment -> find("all", array('contain' => 'User', 'conditions' => array('Comment.type' => $type, 'Comment.type_id' => $typeID)));
-        $this -> set('comments', array('comments' => $comments));
+        /*
+         * At this point, I think we need to get the security settings for each comment.
+         * 
+         * Rules:
+         *  - If you are viewing comments owned by someone the person who owns it is a "mod", (stash)
+         *  - If you are an admin then you can all actions for all comments
+         *  - If you are viewing general comments, you get actions for your own comments
+         */
+        $userId = null;
+        $ownerId = null;
+        
+        if ($this -> isLoggedIn()) {
+            $userId = $this -> getUserId();    
+        }
+        
+        /*
+         * At this point, I could either hardcore checking for stash here or
+         * 
+         * I could make a comment component and then we would have to tell the
+         * JS which URL to go after and then there wouldn't have to be any
+         * real hardcoding
+         */
+        
+        //For now
+        if($type === 'stash'){
+            $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions'=> array('Stash.id'=> $typeID)));
+            if(!empty($stash)){
+                $ownerId = $stash['Stash']['user_id'];
+            }
+        }
+        
+        $comments = $this -> Comment -> getComments($type, $typeID, $userId, $ownerId);
+        $this -> set('comments', array('commentsData' => $comments));
     }
 
 }
