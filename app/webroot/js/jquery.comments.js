@@ -23,9 +23,9 @@
 			this.commentsList = $('<ol></ol>').addClass('comments');
 			//Add our comment list to our main element
 			this.element.append(this.commentsList);
-			
+
 			var commentPost = self._buildComnentPost();
-			
+
 			this.element.append(commentPost);
 			//Post button, although not sure I want this
 			this.changer = $("<button>", {
@@ -35,6 +35,10 @@
 				//Using apply here because we want to pass in the widget context
 				$.cs.comments.prototype._postComment.apply(self, event);
 			});
+			//bind events
+			$(document).on('click', '#comments ol.comments li.comment div.actions span a' , function() {
+				alert('action!');
+			});
 			//get the initial list of comments
 			$.ajax({
 				type : "GET",
@@ -43,17 +47,15 @@
 				success : function(data, textStatus, XMLHttpRequest) {
 					//Need to get top level permissions first
 					if(data.commentsData.comments.length > 0) {
-						var permissions = null;
-						if(data.commentsData.hasOwnProperty('permissions')){
-							permissions = data.commentsData.permissions;
-						}
 						var cont = [];
 						//Initialize an array to build the content
 						$.each(data.commentsData.comments, function(index, element) {
-							var commentMarkup = $.cs.comments.prototype._buildComment(element, permissions);
+							var commentMarkup = $.cs.comments.prototype._buildComment(element);
 							cont.push(commentMarkup)
 						});
 						self.commentsList.append(cont.join(''));
+						//save the last comment to be used later when posting
+						self.lastComment = data.commentsData.comments[data.commentsData.comments.length - 1];
 					} else {
 						//TODO: There are no comments
 					}
@@ -61,7 +63,7 @@
 			});
 		},
 		_addError : function(errorMessage) {
-			
+
 			$('#CommentComment').after('<div class="error-message">' + errorMessage + '</div>');
 		},
 		_postComment : function(event) {
@@ -72,15 +74,28 @@
 				data : {
 					'data[Comment][type]' : this.commentType,
 					'data[Comment][type_id]' : this.commentTypeID,
-					'data[Comment][comment]' : comment
+					'data[Comment][comment]' : comment,
+					'data[Comment][last_comment_created]' : self.lastComment.Comment.created
 				},
 				dataType : 'json',
 				url : '/comments/add.json',
 				success : function(data, textStatus, XMLHttpRequest) {
-					if(data.success.isSuccess){
-						$('#CommentComment').val('');	
-						var commentMarkup = $.cs.comments.prototype._buildComment(data.comment);
-						self.commentsList.append(commentMarkup);
+					if(data.success.isSuccess) {
+						$('#CommentComment').val('');
+						if(data.comments.length > 0) {
+							var cont = [];
+							//Initialize an array to build the content
+							$.each(data.comments, function(index, element) {
+								var commentMarkup = $.cs.comments.prototype._buildComment(element);
+								cont.push(commentMarkup)
+							});
+							self.commentsList.append(cont.join(''));
+							//save the last comment to be used later when posting
+							self.lastComment = data.comments[data.comments.length - 1];
+						} else {
+							//TODO: There are no comments
+						}
+
 					} else {
 						$.cs.comments.prototype._addError(data.error.message);
 					}
@@ -89,19 +104,19 @@
 			});
 		},
 		_buildComnentPost : function() {
-                // <div class="post-comment-container">
-                    // <form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">
-                        // <div style="display:none;">
-                            // <input type="hidden" value="POST" name="_method">
-                        // </div>
-                        // <div class="input textarea required">
-                            // <div class="label-wrapper">
-                                // <label for="CommentComment">Comment</label>
-                            // </div>
-                            // <textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea>
-                        // </div>
-                    // </form>                    
-                // </div>	
+			// <div class="post-comment-container">
+			// <form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">
+			// <div style="display:none;">
+			// <input type="hidden" value="POST" name="_method">
+			// </div>
+			// <div class="input textarea required">
+			// <div class="label-wrapper">
+			// <label for="CommentComment">Comment</label>
+			// </div>
+			// <textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea>
+			// </div>
+			// </form>
+			// </div>
 			var commentPost = '<div class="post-comment-container">';
 			commentPost += '<form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
 			commentPost += '<div style="display:none;"><input type="hidden" value="POST" name="_method"></div>';
@@ -109,7 +124,7 @@
 			commentPost += '<li><div class="input textarea"><div class="label-wrapper"><label for="CommentComment">Discuss</label></div><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></li>';
 			commentPost += '</ul></fieldset>'
 			commentPost += '</form></div>';
-			
+
 			return commentPost;
 		},
 		_buildComment : function(comment, permissions) {
@@ -124,21 +139,28 @@
 			 */
 			//IF permissions are there then these are the top level and override
 			//anything at the comment level
-			if(typeof permissions !== 'undefined' && permissions !== null){
-				
-			}
 			var commentMarkup = '<li class="comment">';
 			commentMarkup += '<div class="comment-info"><span class="user">';
 			commentMarkup += comment.User.username;
 			commentMarkup += '</span>';
 			commentMarkup += '<span class="datetime">';
-			commentMarkup += comment.Comment.created;
+			commentMarkup += comment.Comment.formatted_created;
 			commentMarkup += '</span>';
 			commentMarkup += '</div>';
 			commentMarkup += '<div class="comment-text">';
 			var test = comment.Comment.comment
 			test = test.replace(/\\n/g, "<br />");
 			commentMarkup += test;
+			commentMarkup += '</div>';
+			commentMarkup += '<div class="actions">'
+			if(comment.hasOwnProperty('permissions')) {
+				if(comment.permissions.edit) {
+					commentMarkup += '<span><a class="link">Edit</a></span>';
+				}
+				if(comment.permissions.remove) {
+					commentMarkup += '<span><a class="link">Delete</a></span>';
+				}
+			}
 			commentMarkup += '</div>';
 			commentMarkup += '</li>';
 

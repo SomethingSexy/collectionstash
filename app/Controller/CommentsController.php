@@ -4,6 +4,14 @@ class CommentsController extends AppController {
 
     public $helpers = array('Html', 'Js', 'Minify');
 
+    function test() {
+        // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
+        $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
+
+        debug($lastestComments);
+
+    }
+
     /*
      * Adds a comment
      * Post
@@ -27,12 +35,21 @@ class CommentsController extends AppController {
             $this -> request -> data['Comment']['user_id'] = $this -> getUserId();
             //TODO: After save we need to also return all comments inbetween this update the last one they viewed.
             if ($this -> Comment -> saveAll($this -> request -> data)) {
+                $data['comments'] = array();
                 $data['success'] = array('isSuccess' => true);
                 $commentId = $this -> Comment -> id;
                 $comment = $this -> Comment -> findById($commentId);
-                $data['comment'] = $comment;
+
+                if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
+                    //TODO: Need to call $this -> Comment -> getComments(), passing in the following conditions so that we can accurately get the comments with their permissions to pass back to the client
+                    $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.type' => $this -> request -> data['Comment']['type'], 'Comment.type_id' => $this -> request -> data['Comment']['type_id'], 'Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <' => $comment['Comment']['created']))));
+                    $data['comments'] = $lastestComments;
+                }
+
+                array_push($data['comments'], $comment);
+
                 $this -> set('comments', $data);
-                
+
             } else {
                 $data['success'] = array('isSuccess' => false);
                 $errors = $this -> Comment -> invalidFields();
@@ -61,7 +78,7 @@ class CommentsController extends AppController {
     function view($type = null, $typeID = null) {
         /*
          * At this point, I think we need to get the security settings for each comment.
-         * 
+         *
          * Rules:
          *  - If you are viewing comments owned by someone the person who owns it is a "mod", (stash)
          *  - If you are an admin then you can all actions for all comments
@@ -69,27 +86,27 @@ class CommentsController extends AppController {
          */
         $userId = null;
         $ownerId = null;
-        
+
         if ($this -> isLoggedIn()) {
-            $userId = $this -> getUserId();    
+            $userId = $this -> getUserId();
         }
-        
+
         /*
          * At this point, I could either hardcore checking for stash here or
-         * 
+         *
          * I could make a comment component and then we would have to tell the
          * JS which URL to go after and then there wouldn't have to be any
          * real hardcoding
          */
-        
+
         //For now
-        if($type === 'stash'){
-            $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions'=> array('Stash.id'=> $typeID)));
-            if(!empty($stash)){
+        if ($type === 'stash') {
+            $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeID)));
+            if (!empty($stash)) {
                 $ownerId = $stash['Stash']['user_id'];
             }
         }
-        
+
         $comments = $this -> Comment -> getComments($type, $typeID, $userId, $ownerId);
         $this -> set('comments', array('commentsData' => $comments));
     }
