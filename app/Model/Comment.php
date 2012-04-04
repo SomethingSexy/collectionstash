@@ -33,7 +33,7 @@ class Comment extends AppModel {
         foreach ($results as $key => &$val) {
             $datetime = strtotime($val['Comment']['created']);
             $mysqldate = date("m/d/y g:i A", $datetime);
-            $val['Comment']['created'] = $mysqldate;
+            $val['Comment']['formatted_created'] = $mysqldate;
         }
         return $results;
     }
@@ -49,13 +49,29 @@ class Comment extends AppModel {
      * The owner id will be the userId of the person who might "own" these comments.  That will
      * allow me to not necessarly have to hardcode anything in here.
      */
-    public function getComments($type = null, $typeID = null, $userId = null, $ownerId = null) {
+    public function getComments($type = null, $typeID = null, $userId = null, $ownerId = null, $conditions = array()) {
         $commentMetaData = array();
         //These are main level permissions that would override all individual comment permissions
         //$commentMetaData['permissions']['edit'] = false;
         //$commentMetaData['permissions']['remove'] = false;
         //Get all comments
-        $comments = $this -> find("all", array('contain' => 'User', 'conditions' => array('Comment.type' => $type, 'Comment.type_id' => $typeID)));
+        $conditions = array_merge(array('Comment.type' => $type, 'Comment.type_id' => $typeID), $conditions);
+
+        $comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
+
+        $commentMetaData = $this -> addPermissions($comments, $userId, $ownerId);
+
+        return $commentMetaData;
+    }
+
+    /**
+     * This method will add the permissions to each comment
+     */
+    private function addPermissions($comments, $userId = null, $ownerId = null) {
+        $commentMetaData = array();
+        //These are main level permissions that would override all individual comment permissions
+        //$commentMetaData['permissions']['edit'] = false;
+        //$commentMetaData['permissions']['remove'] = false;
         //If the user Id is null then continue because no one is logged in who is viewing
         //so no permissions are given
         if ($userId !== null && is_numeric($userId)) {
@@ -66,18 +82,28 @@ class Comment extends AppModel {
                 //If they are an admin then they have all rights regardless
                 if ($loggedInUser['User']['admin']) {
                     //An admin can remove and edit
-                    $commentMetaData['permissions']['edit'] = true;
-                    $commentMetaData['permissions']['remove'] = true;
+                    $commentPermissions['permissions']['edit'] = true;
+                    $commentPermissions['permissions']['remove'] = true;
+
+                    foreach ($comments as $key => &$comment) {
+                        $comment['permissions'] = $commentPermissions['permissions'];
+                    }
+
                 } else {
                     //see if they have an owner
-                    if ($ownerId != null && is_numeric($ownerId)) {
+                    if ($ownerId != null && is_numeric($ownerId) && $userId === $ownerId) {
                         $ownerUser = $this -> User -> find("first", array('conditions' => array('User.id' => $ownerId)));
                         //If the logged in user and the owner are the same, give them mod rights
-                        if (!empty($ownerUser) && $userId === $ownerId) {
+                        if (!empty($ownerUser)) {
                             //If there is an owner and it is the same as the logged in user then give them "mod" rights over all comments
                             //An owner can just remove other's comments but not edit
-                            $commentMetaData['permissions']['remove'] = true;
-                            $commentMetaData['permissions']['edit'] = false;
+                            $commentPermissions['permissions']['remove'] = true;
+                            $commentPermissions['permissions']['edit'] = false;
+
+                            foreach ($comments as $key => &$comment) {
+                                $comment['permissions'] = $commentPermissions['permissions'];
+                            }
+
                         }
                     } else {
                         //there is no owner and they are not an admin so now we need to do individual comment permissions to
@@ -85,7 +111,7 @@ class Comment extends AppModel {
 
                         foreach ($comments as $key => &$comment) {
                             $commentPermissions = array();
-                            if ($comment['User']['user_id'] === $userId) {
+                            if ($comment['User']['id'] === $userId) {
                                 $commentPermissions['permissions']['edit'] = true;
                                 $commentPermissions['permissions']['remove'] = true;
                             } else {

@@ -2082,6 +2082,13 @@ div.paging span a:hover {
 	width: 800px;
 
 }
+.comments-container ol.comments li.comment .actions {
+	text-align: right;
+}
+
+.comments-container ol.comments li.comment .actions span{
+	margin-right: 5px;
+}
 .comments-container ol.comments li .comment-info .user {
 	display: block;
 }
