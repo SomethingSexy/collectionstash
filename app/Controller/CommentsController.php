@@ -12,6 +12,27 @@ class CommentsController extends AppController {
 
     }
 
+    function update() {
+        if (!$this -> isLoggedIn()) {
+            $data['success'] = array('isSuccess' => false);
+            $data['error']['message'] = __('Clearly I broke something because you are not logged in yet but somehow you are able to submit an update.');
+            $this -> set('comments', $data);
+            return;
+        }
+        if ($this -> request -> is('post') || $this -> request -> is('put')) {
+            $this -> request -> data = Sanitize::clean($this -> request -> data);
+            $this -> request -> data['Comment']['user_id'] = $this -> getUserId();
+            if($this -> Comment -> updateComment($comment)){
+                
+            }
+        } else {
+            $data['success'] = array('isSuccess' => false);
+            $data['error'] = array('message', __('Invalid request.'));
+            $this -> set('comments', $data);
+            return;
+        }
+    }
+
     /*
      * Adds a comment
      * Post
@@ -41,12 +62,17 @@ class CommentsController extends AppController {
                 $comment = $this -> Comment -> findById($commentId);
 
                 if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
-                    //TODO: Need to call $this -> Comment -> getComments(), passing in the following conditions so that we can accurately get the comments with their permissions to pass back to the client
-                    $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.type' => $this -> request -> data['Comment']['type'], 'Comment.type_id' => $this -> request -> data['Comment']['type_id'], 'Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <' => $comment['Comment']['created']))));
-                    $data['comments'] = $lastestComments;
+                    if ($this -> request -> data['Comment']['type'] === 'stash') {
+                        $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $this -> request -> data['Comment']['type_id'])));
+                        if (!empty($stash)) {
+                            $ownerId = $stash['Stash']['user_id'];
+                        }
+                    }
+                    $lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId, array('Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
+                    if (!empty($lastestComments)) {
+                        $data['comments'] = $lastestComments['comments'];
+                    }
                 }
-
-                array_push($data['comments'], $comment);
 
                 $this -> set('comments', $data);
 
