@@ -37,6 +37,18 @@ class Comment extends AppModel {
         }
         return $results;
     }
+    
+    public function updateComment($comment){
+        // This is the userid the person updating the comment
+        $userId = $comment['Comment']['user_id'];
+        
+        //Check to make sure this logged in user has permission to update this comment. 
+        //They need to either be an admin OR the one who added the comment original
+    }
+    
+    public function removeComment($comment, $ownerId = null) {
+        //To remove the comment, they need to either be an admin, the one who added the comment or the owner of the domain of the comment
+    }
 
     /*
      * Might have to do custom pagination on this at some point

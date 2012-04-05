@@ -36,8 +36,30 @@
 				$.cs.comments.prototype._postComment.apply(self, event);
 			});
 			//bind events
-			$(document).on('click', '#comments ol.comments li.comment div.actions span a' , function() {
-				alert('action!');
+			$(document).on('click', '#comments ol.comments li.comment div.actions span a.edit', function() {
+				var $comment = $(this).closest('li.comment').children('div.comment-text');
+				var commentText = $comment.text();
+				$comment.text('');
+				var $textarea = $('<textarea/>').css('width', '100%').attr('rows', '6').val(commentText);
+				
+				var $updateActions = $('<div></div>').addClass('actions');
+				
+				var $saveAction = $('<button>Save</button>').click(function(){
+					$.cs.comments.prototype._updateComment(this);		
+				});
+				
+				var $cancelAction = $('<button>Cancel</button>').click(function(){
+					$comment.children().remove();
+					$comment.text(commentText);
+					$comment.next('div.actions').show();
+				});
+				
+				$updateActions.append($saveAction).append($cancelAction);
+				
+				var $updateWrapper = $('<div></div>').addClass('update-comment').append($textarea).append($updateActions);
+				
+				$comment.append($updateWrapper);
+				$(this).closest('div.actions').hide();
 			});
 			//get the initial list of comments
 			$.ajax({
@@ -103,6 +125,42 @@
 				}
 			});
 		},
+		_updateComment : function(element){
+			var self = this;
+			var comment = $(element).closest('div.update-comment').children('textarea').val();
+			$.ajax({
+				type : "post",
+				data : {
+					'data[Comment][type]' : this.commentType,
+					'data[Comment][type_id]' : this.commentTypeID,
+					'data[Comment][comment]' : comment,
+				},
+				dataType : 'json',
+				url : '/comments/update.json',
+				success : function(data, textStatus, XMLHttpRequest) {
+					if(data.success.isSuccess) {
+						$('#CommentComment').val('');
+						if(data.comments.length > 0) {
+							var cont = [];
+							//Initialize an array to build the content
+							$.each(data.comments, function(index, element) {
+								var commentMarkup = $.cs.comments.prototype._buildComment(element);
+								cont.push(commentMarkup)
+							});
+							self.commentsList.append(cont.join(''));
+							//save the last comment to be used later when posting
+							self.lastComment = data.comments[data.comments.length - 1];
+						} else {
+							//TODO: There are no comments
+						}
+
+					} else {
+						$.cs.comments.prototype._addError(data.error.message);
+					}
+
+				}
+			});			
+		},
 		_buildComnentPost : function() {
 			// <div class="post-comment-container">
 			// <form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">
@@ -139,7 +197,7 @@
 			 */
 			//IF permissions are there then these are the top level and override
 			//anything at the comment level
-			var commentMarkup = '<li class="comment">';
+			var commentMarkup = '<li class="comment" data-id="' + comment.Comment.id + '">';
 			commentMarkup += '<div class="comment-info"><span class="user">';
 			commentMarkup += comment.User.username;
 			commentMarkup += '</span>';
@@ -155,7 +213,7 @@
 			commentMarkup += '<div class="actions">'
 			if(comment.hasOwnProperty('permissions')) {
 				if(comment.permissions.edit) {
-					commentMarkup += '<span><a class="link">Edit</a></span>';
+					commentMarkup += '<span><a class="link edit">Edit</a></span>';
 				}
 				if(comment.permissions.remove) {
 					commentMarkup += '<span><a class="link">Delete</a></span>';
