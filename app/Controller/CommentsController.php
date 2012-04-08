@@ -4,15 +4,15 @@ class CommentsController extends AppController {
 
     public $helpers = array('Html', 'Js', 'Minify');
 
-    function test() {
-        // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
-        $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
+    // function test() {
+    // // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
+    // $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
+    //
+    // debug($lastestComments);
+    //
+    // }
 
-        debug($lastestComments);
-
-    }
-
-    function update() {
+    public function update() {
         if (!$this -> isLoggedIn()) {
             $data['success'] = array('isSuccess' => false);
             $data['error']['message'] = __('Clearly I broke something because you are not logged in yet but somehow you are able to submit an update.');
@@ -22,8 +22,17 @@ class CommentsController extends AppController {
         if ($this -> request -> is('post') || $this -> request -> is('put')) {
             $this -> request -> data = Sanitize::clean($this -> request -> data);
             $this -> request -> data['Comment']['user_id'] = $this -> getUserId();
-            if($this -> Comment -> updateComment($comment)){
+
+            $response = $this -> Comment -> updateComment($this -> request -> data);
+            if ($response) {
                 
+                
+                $this -> set('comments', $response);
+            } else {
+                //Something really fucked up
+                $data['success'] = array('isSuccess' => false);
+                $data['error'] = array('message', __('Invalid request.'));
+                $this -> set('comments', $data);
             }
         } else {
             $data['success'] = array('isSuccess' => false);
@@ -31,6 +40,10 @@ class CommentsController extends AppController {
             $this -> set('comments', $data);
             return;
         }
+    }
+
+    public function remove() {
+
     }
 
     /*
@@ -41,7 +54,7 @@ class CommentsController extends AppController {
      *  - type
      *  - type_id
      */
-    function add() {
+    public function add() {
         $data = array();
         //must be logged in to post comment
         if (!$this -> isLoggedIn()) {
@@ -101,7 +114,7 @@ class CommentsController extends AppController {
 
     }
 
-    function view($type = null, $typeID = null) {
+    public function view($type = null, $typeID = null) {
         /*
          * At this point, I think we need to get the security settings for each comment.
          *

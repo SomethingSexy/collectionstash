@@ -35,22 +35,28 @@
 					</li>
 				</ul>
 			</div>
-
+            <div id="edit-error-message" class="component-message error hidden">
+                <span><div class="message"></div></span>
+            </div>
 			<?php
             if (isset($collectibles) && !empty($collectibles)) {
                 echo '<div id="tiles" data-username="' . $stashUsername . '">';
 
                 echo '<div class="glimpse edit-mode">';
                 foreach ($collectibles as $key => $myCollectible) {
-                    echo '<div class="image" id="' . $myCollectible['CollectiblesUser']['id'] . '">';
+                    echo '<div class="image" data-id="' . $myCollectible['CollectiblesUser']['id'] . '">';
+                    echo '<div class="image-container">';
                     if (!empty($myCollectible['Collectible']['Upload'])) {
                         echo $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('uploadDir' => 'files', 'width' => 150, 'height' => 150));
                     } else {
                         echo '<img src="/img/silhouette_thumb.png"/>';
                     }
+                    echo '</div>';
                     echo '<div class="actions">';
                     echo '<a class="link" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">View</a> | ';
-                    echo '<a class="link" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '">Edit</a>';
+                    echo '<a class="link" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '">Edit</a> | ';
+                    echo '<a class="link delete">Delete</a>';
+                    echo '<form class="remove-form" action="/collectibles_users/remove/' .$myCollectible['CollectiblesUser']['id'] . '" method="post"></form>';
                     echo '</div>';
                     echo '</div>';
                 }
@@ -95,7 +101,7 @@ echo $this -> Form -> end();
 
 
 			//$('.glimpse').children('div.image').each(function(index, element) {
-				var $inputId = $('<input type="hidden"/>').attr('name', 'data[CollectiblesUser][' + index + '][id]').val($(element).attr('id'));
+				var $inputId = $('<input type="hidden"/>').attr('name', 'data[CollectiblesUser][' + index + '][id]').val($(element).attr('data-id'));
 				var $inputSort = $('<input type="hidden"/>').attr('name', 'data[CollectiblesUser][' + index + '][sort_number]').val(index);
 
 				$('#StashEditForm').append($inputId);
@@ -105,6 +111,52 @@ echo $this -> Form -> end();
 
 			$('#StashEditForm').submit();
 		});
+		
+        $(document).on('click', '#tiles .glimpse.edit-mode .image .actions a.delete', function(event) {
+            var $image = $(this).parent('div.actions').parent('div.image');
+            var $img = $image.children('div.image-container');
+            var $actions = $image.children('div.actions');
+            var imageName = $(this).parent('div.actions').parent('div.image').attr('data-id');
+            var requestData = 'data[CollectiblesUsers][id]=' + imageName;
+            $.ajax({
+                url : '/collectibles_users/remove.json',
+                data : requestData,
+                dataType : 'json',
+                type : 'POST',
+                beforeSend : function(xhr) {
+                    var $loaderImg = $('<img class="loader-image"></img').attr('src', '/img/ajax-loader-circle.gif');
+                    $img.hide();
+                    $actions.hide();
+                    $image.append($loaderImg);
+                    $('#edit-error-message').hide();
+                },
+                success : function(data) {
+                    if(data.success.isSuccess) {
+                        //This saves me a DB call
+                        $('#user-count').text(parseInt($('#user-count').text()) - 1);
+                        $image.remove();
+                    } else {
+                        if(data.isTimeout) {
+                            window.location = '/users/login';
+                        } else {
+                            if(data.error.message){
+                                $('#edit-error-message').children('span').children('div').text(data.error.message);
+                                $('#edit-error-message').show();
+                            }
+                            
+                            $image.children('.loader-image').remove();
+                            $image.children().show();
+                        }
+                    }
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+
+                },
+                complete : function(jqXHR, textStatus) {
+
+                }
+            });
+        });
 	});
 
 </script>
