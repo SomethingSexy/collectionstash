@@ -215,12 +215,12 @@
 					<li><a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a></li>
 					<li><div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-colorscheme="dark"></div></li>
 					<li>&copy; Collection Stash</li>
-					<li>About Us</li>
+					<!--<li>About Us</li>
 					<li>Contact Us</li>
 					<li>Donate</li>
 					<li>Report a Bug</li>
 					<li>Milestones</li>
-					<li>Request a Feature</li>
+					<li>Request a Feature</li>-->
 				</ul>
 			</span>
 			

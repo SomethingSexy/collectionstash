@@ -37,15 +37,61 @@ class Comment extends AppModel {
         }
         return $results;
     }
-    
-    public function updateComment($comment){
+
+    /**
+     * This is the start of a standard of how to return stuff for updates and committs so that we can do them
+     * via the model and also return proper data.
+     *
+     * For now I am not saving history of the comment
+     */
+    public function updateComment($comment) {
+        $retVal = array();
+        $retVal['response'] = array();
+        $retVal['response']['isSuccess'] = false;
+        $retVal['response']['message'] = '';
+        $retVal['response']['code'] = 0;
+        //Maybe this should be an error code
+        $retVal['response']['errors'] = array();
+
         // This is the userid the person updating the comment
         $userId = $comment['Comment']['user_id'];
-        
-        //Check to make sure this logged in user has permission to update this comment. 
-        //They need to either be an admin OR the one who added the comment original
+        $commentId = $comment['Comment']['id'];
+
+        //Check to make sure this logged in user has permission to update this comment.
+        //They need to be the one who added the comment original
+        $currentComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => 'User'));
+        if ($currentComment['User']['id'] === $userId) {
+            $this -> id = $commentId;
+            if ($this -> save($comment)) {
+                $retVal['response']['isSuccess'] = true;
+            } else {
+                $retVal['response']['isSuccess'] = false;
+                $errors = $this -> validationErrors;
+                $retVal['response']['errors'] = $errors;
+                
+            }
+
+            // $errors = $this -> Comment -> invalidFields();
+            // debug($errors);
+            // /*
+            // * If there is an error, check to see if any of the fields were invalid. if they
+            // * were the only user inputted one is the comment field, otherwise use a generic error mesage
+            // */
+            // if (!empty($errors)) {
+            // $data['error']['message'] = $errors['comment'][0];
+            // } else {
+            // $data['error']['message'] = __('Sorry, your request was invalid.');
+            // }
+
+        } else {
+            $error['code'] = 0;
+            $error['message'] = 'Invalid access';
+            array_push($retVal['response']['errors'], $error);
+        }
+
+        return $retVal;
     }
-    
+
     public function removeComment($comment, $ownerId = null) {
         //To remove the comment, they need to either be an admin, the one who added the comment or the owner of the domain of the comment
     }
@@ -92,17 +138,14 @@ class Comment extends AppModel {
             //Make sure it is a valid user first
             if (!empty($loggedInUser)) {
                 //If they are an admin then they have all rights regardless
-                if ($loggedInUser['User']['admin']) {
-                    //An admin can remove and edit
-                    $commentPermissions['permissions']['edit'] = true;
-                    $commentPermissions['permissions']['remove'] = true;
-
-                    foreach ($comments as $key => &$comment) {
-                        $comment['permissions'] = $commentPermissions['permissions'];
+                foreach ($comments as $key => &$comment) {
+                    $commentPermissions['permissions']['edit'] = false;
+                    $commentPermissions['permissions']['remove'] = false;
+                    //If they are admin, they get to remove anything
+                    if ($loggedInUser['User']['admin']) {
+                        $commentPermissions['permissions']['remove'] = true;
                     }
-
-                } else {
-                    //see if they have an owner
+                    //If they are the owner, they also get to remove
                     if ($ownerId != null && is_numeric($ownerId) && $userId === $ownerId) {
                         $ownerUser = $this -> User -> find("first", array('conditions' => array('User.id' => $ownerId)));
                         //If the logged in user and the owner are the same, give them mod rights
@@ -110,30 +153,15 @@ class Comment extends AppModel {
                             //If there is an owner and it is the same as the logged in user then give them "mod" rights over all comments
                             //An owner can just remove other's comments but not edit
                             $commentPermissions['permissions']['remove'] = true;
-                            $commentPermissions['permissions']['edit'] = false;
-
-                            foreach ($comments as $key => &$comment) {
-                                $comment['permissions'] = $commentPermissions['permissions'];
-                            }
-
-                        }
-                    } else {
-                        //there is no owner and they are not an admin so now we need to do individual comment permissions to
-                        //see if any of the comments that were posted were posted by the user who is logged in
-
-                        foreach ($comments as $key => &$comment) {
-                            $commentPermissions = array();
-                            if ($comment['User']['id'] === $userId) {
-                                $commentPermissions['permissions']['edit'] = true;
-                                $commentPermissions['permissions']['remove'] = true;
-                            } else {
-                                $commentPermissions['permissions']['edit'] = false;
-                                $commentPermissions['permissions']['remove'] = false;
-                            }
-
-                            $comment['permissions'] = $commentPermissions['permissions'];
                         }
                     }
+                    //If they are the one who wrote the comment, they get to edit and remove
+                    if ($comment['User']['id'] === $userId) {
+                        $commentPermissions['permissions']['edit'] = true;
+                        $commentPermissions['permissions']['remove'] = true;
+                    }
+
+                    $comment['permissions'] = $commentPermissions['permissions'];
                 }
             }
         }

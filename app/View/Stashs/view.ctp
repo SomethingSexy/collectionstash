@@ -1,8 +1,7 @@
 <div id="my-stashes-component" class="component">
     <div class="inside">
-        <div class="component-title"></div>
-        <?php echo $this -> element('flash');?>
-        <div class="component-view">
+        <div class="component-title">
+            <h2><?php echo $stashUsername . '\'s' .__(' stash', true)?></h2>
             <div class="actions icon">
                 <ul>
                     <?php
@@ -25,14 +24,9 @@
                     ?>
                 </ul>
             </div>
-            <div class="stash-details">
-                <h2><?php echo $stashUsername . '\'s' .__(' stash', true)
-                ?></h2>
-                <dl>
-                    <dt>Total Collectibles: </dt>
-                    <dd>45</dd>
-                </dl>
-            </div>
+        </div>
+        <?php echo $this -> element('flash');?>
+        <div class="component-view">
             <div id="collectibles" class="collectibles">
                 <div class="title"><h3><?php echo __('Collectibles');?></h3></div>
                 <div id="collectibles-gallery"></div>
@@ -212,15 +206,17 @@ if (isset($collectibles) && !empty($collectibles)) {
 		// if(window.location.hash === '#collectibles' || window.location.hash === "") {
 			if(0 < collectibleData.length) {
 				$("#collectibles-gallery").galleria({
-					width : 600,
-					height : 400,
+					//width : 600,
+					width : 900,
+					//height : 400,
+					height : 600,
 					lightbox : true,
 					data_source : collectibleData,
 					_showDetailInfo : true,
 					debug: false
 				});
 			} else {
-				$("#collectibles-gallery").parent().prepend($('<p></p>').text('No collectibles have been added!'));
+				$("#collectibles-gallery").append($('<p></p>').text('No collectibles have been added!'));
 			}
 			collectiblesLoaded = true;
 
@@ -235,48 +231,10 @@ if (isset($collectibles) && !empty($collectibles)) {
 					debug: false
 				});
 			} else {
-				$("#photo-gallery").parent().prepend($('<p></p>').text('No photos have been added!'));
+				$("#photo-gallery").append($('<p></p>').text('No photos have been added!'));
 			}
 			photosLoaded = true;
 		// }
-
-		$("#tabs").tabs({
-			select : function(event, ui) {
-				if(ui.tab.hash === '#collectibles' && !collectiblesLoaded) {
-					if(0 < collectibleData.length) {
-						$("#collectibles-gallery").galleria({
-							width : 900,
-							height : 600,
-							lightbox : true,
-							data_source : collectibleData,
-							_showDetailInfo : true,
-							debug: false
-						});
-					} else {
-						$("#collectibles-gallery").parent().prepend($('<p></p>').text('No collectibles have been added!'));
-					}
-					collectiblesLoaded = true;
-
-				} else if(ui.tab.hash === '#photos' && !photosLoaded) {
-					if(0 < photoData.length) {
-						$("#photo-gallery").galleria({
-							width : 900,
-							height : 600,
-							lightbox : true,
-							data_source : photoData,
-							_showDetailInfo : false,
-							debug: false
-						});
-					} else {
-						$("#photo-gallery").parent().prepend($('<p></p>').text('No photos have been added!'));
-					}
-					photosLoaded = true;
-				}
-			},
-			show : function(event, ui) {
-				window.location.hash = ui.tab.hash;
-			}
-		});
 	});
 	$(function() {
 		var isHandlerActive = true;

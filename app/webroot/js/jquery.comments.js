@@ -37,29 +37,7 @@
 			});
 			//bind events
 			$(document).on('click', '#comments ol.comments li.comment div.actions span a.edit', function() {
-				var $comment = $(this).closest('li.comment').children('div.comment-text');
-				var commentText = $comment.text();
-				$comment.text('');
-				var $textarea = $('<textarea/>').css('width', '100%').attr('rows', '6').val(commentText);
-				
-				var $updateActions = $('<div></div>').addClass('actions');
-				
-				var $saveAction = $('<button>Save</button>').click(function(){
-					$.cs.comments.prototype._updateComment(this);		
-				});
-				
-				var $cancelAction = $('<button>Cancel</button>').click(function(){
-					$comment.children().remove();
-					$comment.text(commentText);
-					$comment.next('div.actions').show();
-				});
-				
-				$updateActions.append($saveAction).append($cancelAction);
-				
-				var $updateWrapper = $('<div></div>').addClass('update-comment').append($textarea).append($updateActions);
-				
-				$comment.append($updateWrapper);
-				$(this).closest('div.actions').hide();
+				$.cs.comments.prototype._initUpdate.call(self, this);
 			});
 			//get the initial list of comments
 			$.ajax({
@@ -84,9 +62,42 @@
 				}
 			});
 		},
-		_addError : function(errorMessage) {
+		_initUpdate : function(element) {
+			var self = this;
+			var $comment = $(element).closest('li.comment').children('div.comment-text');
+			//Grab the html, to keep the line breaks, save this one incase they cancel
+			var commentText = $comment.html();
+			//Convert the <br> to new lines for tehe update
+			var updateText = $.cs.comments.prototype._br2nl(commentText);
 
-			$('#CommentComment').after('<div class="error-message">' + errorMessage + '</div>');
+			$comment.text('');
+			var $textarea = $('<textarea/>').css('width', '100%').attr('rows', '6').val(updateText);
+
+			var $updateActions = $('<div></div>').addClass('actions');
+
+			var $saveAction = $('<button>Save</button>').click(function() {
+				$.cs.comments.prototype._updateComment.call(self, this);
+			});
+			var $cancelAction = $('<button>Cancel</button>').click(function() {
+				$comment.children().remove();
+				$comment.html(commentText);
+				$comment.next('div.actions').show();
+			});
+
+			$updateActions.append($saveAction).append($cancelAction);
+
+			var $updateWrapper = $('<div></div>').addClass('update-comment').append($textarea).append($updateActions);
+
+			$comment.append($updateWrapper);
+			$(element).closest('div.actions').hide();
+		},
+		_addError : function($element, errorMessage) {
+			$element.after('<div class="error-message">' + errorMessage + '</div>');
+		},
+		_removeError : function($element){
+			if($element.next().hasClass('error-message')){
+				$element.next().remove();	
+			}	
 		},
 		_postComment : function(event) {
 			var self = this;
@@ -119,47 +130,50 @@
 						}
 
 					} else {
-						$.cs.comments.prototype._addError(data.error.message);
+						$.cs.comments.prototype._addError($('#CommentComment'), data.error.message);
 					}
 
 				}
 			});
 		},
-		_updateComment : function(element){
+		_updateComment : function(element) {
 			var self = this;
+			var $comment = $(element).closest('li.comment').children('div.comment-text');
+			var $textarea = $(element).closest('div.update-comment').children('textarea');
 			var comment = $(element).closest('div.update-comment').children('textarea').val();
+			var commentId = $(element).closest('li.comment').attr('data-id');
 			$.ajax({
 				type : "post",
 				data : {
 					'data[Comment][type]' : this.commentType,
 					'data[Comment][type_id]' : this.commentTypeID,
 					'data[Comment][comment]' : comment,
+					'data[Comment][id]' : commentId
 				},
 				dataType : 'json',
 				url : '/comments/update.json',
+				beforeSend : function(jqXHR, settings) {
+					$.cs.comments.prototype._removeError($textarea);		
+				},
 				success : function(data, textStatus, XMLHttpRequest) {
-					if(data.success.isSuccess) {
-						$('#CommentComment').val('');
-						if(data.comments.length > 0) {
-							var cont = [];
-							//Initialize an array to build the content
-							$.each(data.comments, function(index, element) {
-								var commentMarkup = $.cs.comments.prototype._buildComment(element);
-								cont.push(commentMarkup)
-							});
-							self.commentsList.append(cont.join(''));
-							//save the last comment to be used later when posting
-							self.lastComment = data.comments[data.comments.length - 1];
-						} else {
-							//TODO: There are no comments
-						}
+					if(data.response.isSuccess) {
+						$comment.children().remove();
+						var updateText = $.cs.comments.prototype._nl2br(comment);
+						$comment.html(updateText);
+						$comment.next('div.actions').show();
 
 					} else {
-						$.cs.comments.prototype._addError(data.error.message);
+						$.each(data.response.errors, function(){
+							if(this[0]){
+								$.cs.comments.prototype._addError($textarea, this[0]);	
+							}
+							
+						});
+						//$.cs.comments.prototype._addError($textarea, data.error.message);
 					}
 
 				}
-			});			
+			});
 		},
 		_buildComnentPost : function() {
 			// <div class="post-comment-container">
@@ -206,9 +220,8 @@
 			commentMarkup += '</span>';
 			commentMarkup += '</div>';
 			commentMarkup += '<div class="comment-text">';
-			var test = comment.Comment.comment
-			test = test.replace(/\\n/g, "<br />");
-			commentMarkup += test;
+			var text = $.cs.comments.prototype._nl2br(comment.Comment.comment);
+			commentMarkup += text;
 			commentMarkup += '</div>';
 			commentMarkup += '<div class="actions">'
 			if(comment.hasOwnProperty('permissions')) {
@@ -223,6 +236,14 @@
 			commentMarkup += '</li>';
 
 			return commentMarkup;
+		},
+		_nl2br : function(text) {
+			var retVal = text.replace(/\\n/g, "<br />");
+			return retVal;
+		},
+		_br2nl : function(text) {
+			var retVal = text.replace(/\<br(\s*\/|)\>/g, '\r\n');
+			return retVal;
 		},
 		// Use the _setOption method to respond to changes to options
 

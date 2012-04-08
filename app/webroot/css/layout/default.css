@@ -797,7 +797,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	padding-bottom: 1em;
 }
 #my-stashes-component .inside .component-view .glimpse {
-	margin-top: 60px;
+	margin-top: 25px;
 }
 #my-stashes-component .inside .component-title h2 {
 	width: 50%;
@@ -838,6 +838,11 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #my-stashes-component.edit-stash .inside .component-view .links ul li.mode-button button {
 	display: none;
 }
+
+#my-stashes-component.edit-stash .inside .component-view .component-message.error {
+	margin-top: 10px;
+	padding-bottom: 0;
+}
 #my-stashes-component .inside .component-view .stash-details {
 	float: left;
 	width: 200px;
@@ -869,7 +874,8 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 
 #collectibles-gallery {
-	width: 600px;
+	/*width: 600px;*/
+	width: 900px;
 	padding: 12px;
 	background: none repeat scroll 0 0 #CCC;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -909,7 +915,6 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 .glimpse div.image a {
 	overflow: hidden;
-	text-decoration: none;
 }
 .glimpse div.image a img {
 
