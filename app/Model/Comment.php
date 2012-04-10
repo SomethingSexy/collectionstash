@@ -2,7 +2,7 @@
 class Comment extends AppModel {
     public $name = 'Comment';
     //TODO: We need a counter cache for user
-    public $belongsTo = array('User' => array('fields' => array('id', 'username')), 'Stash' => array('conditions' => array('Comment.type' => 'stash'), 'foreignKey' => 'type_id'));
+    public $belongsTo = array('CommentType', 'User' => array('fields' => array('id', 'username')));
     public $actsAs = array('Containable');
 
     public $validate = array(
@@ -11,7 +11,6 @@ class Comment extends AppModel {
 
     function beforeValidate() {
         //right now we only have comments on stashes
-        debug($this -> data);
         if ($this -> data['Comment']['type'] !== 'stash') {
             return false;
         }
@@ -19,7 +18,8 @@ class Comment extends AppModel {
         $model = null;
         //Do I want to valid that the id I am posting too is valid?
         if ($this -> data['Comment']['type'] === 'stash') {
-            $model = $this -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeId)));
+
+            $model = $this -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeId)));
         }
 
         if ($model === null || empty($model)) {
@@ -36,6 +36,35 @@ class Comment extends AppModel {
             $val['Comment']['formatted_created'] = $mysqldate;
         }
         return $results;
+    }
+
+    public function beforeSave() {
+        //Update the id is set, so we don't have to worry about this
+        $retVal = true;
+        if (empty($this -> id)) {
+            $type = $this -> data['Comment']['type'];
+            $type_id = $this -> data['Comment']['type_id'];
+
+            $commentType = $this -> CommentType -> find('first', array('conditions' => array('CommentType.type' => $type, 'CommentType.type_id' => $type_id)));
+            if (empty($commentType)) {
+                $commentTypeForSave = array();
+                $commentTypeForSave['CommentType']['type'] = $type;
+                $commentTypeForSave['CommentType']['type_id'] = $type_id;
+                if ($this -> CommentType -> save($commentTypeForSave)) {
+                    $commentType['CommentType']['id'] = $this -> CommentType -> id;
+                } else {
+                    $retVal = false;
+                }
+            }
+            $this -> data['Comment']['comment_type_id'] = $commentType['CommentType']['id'];
+        }
+
+        if ($retVal) {
+            unset($this -> data['Comment']['type']);
+            unset($this -> data['Comment']['type_id']);
+        }
+
+        return $retVal;
     }
 
     /**
@@ -68,21 +97,7 @@ class Comment extends AppModel {
                 $retVal['response']['isSuccess'] = false;
                 $errors = $this -> validationErrors;
                 $retVal['response']['errors'] = $errors;
-                
             }
-
-            // $errors = $this -> Comment -> invalidFields();
-            // debug($errors);
-            // /*
-            // * If there is an error, check to see if any of the fields were invalid. if they
-            // * were the only user inputted one is the comment field, otherwise use a generic error mesage
-            // */
-            // if (!empty($errors)) {
-            // $data['error']['message'] = $errors['comment'][0];
-            // } else {
-            // $data['error']['message'] = __('Sorry, your request was invalid.');
-            // }
-
         } else {
             $error['code'] = 0;
             $error['message'] = 'Invalid access';
@@ -109,11 +124,10 @@ class Comment extends AppModel {
      */
     public function getComments($type = null, $typeID = null, $userId = null, $ownerId = null, $conditions = array()) {
         $commentMetaData = array();
-        //These are main level permissions that would override all individual comment permissions
-        //$commentMetaData['permissions']['edit'] = false;
-        //$commentMetaData['permissions']['remove'] = false;
         //Get all comments
-        $conditions = array_merge(array('Comment.type' => $type, 'Comment.type_id' => $typeID), $conditions);
+        //Grab the comment type first, I have a feeling this will be the fastest way to do this, instead of a join
+        $commentType = $this -> CommentType -> find("first", array('conditions' => array('CommentType.type' => $type, 'CommentType.type_id' => $typeID), 'contain' => false));
+        $conditions = array_merge(array('Comment.comment_type_id' => $commentType['CommentType']['id']), $conditions);
 
         $comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
 
