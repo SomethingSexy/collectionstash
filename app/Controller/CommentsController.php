@@ -4,13 +4,15 @@ class CommentsController extends AppController {
 
     public $helpers = array('Html', 'Js', 'Minify');
 
-    // function test() {
-    // // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
-    // $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
-    //
-    // debug($lastestComments);
-    //
-    // }
+    function test() {
+        // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
+        // $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
+
+        $lastestComments = $this -> Comment -> find('all', array('contain' => array('CommentType' => array('conditions' => array('CommentType.type =' => "stash", 'CommentType.type_id' => 1)))));
+
+        debug($lastestComments);
+
+    }
 
     public function update() {
         if (!$this -> isLoggedIn()) {
@@ -25,8 +27,7 @@ class CommentsController extends AppController {
 
             $response = $this -> Comment -> updateComment($this -> request -> data);
             if ($response) {
-                
-                
+
                 $this -> set('comments', $response);
             } else {
                 //Something really fucked up
@@ -73,7 +74,7 @@ class CommentsController extends AppController {
                 $data['success'] = array('isSuccess' => true);
                 $commentId = $this -> Comment -> id;
                 $comment = $this -> Comment -> findById($commentId);
-
+                $lastestComments = array();
                 if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
                     if ($this -> request -> data['Comment']['type'] === 'stash') {
                         $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $this -> request -> data['Comment']['type_id'])));
@@ -82,9 +83,12 @@ class CommentsController extends AppController {
                         }
                     }
                     $lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId, array('Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
-                    if (!empty($lastestComments)) {
-                        $data['comments'] = $lastestComments['comments'];
-                    }
+                } else {
+                    $lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId);
+                }
+
+                if (!empty($lastestComments)) {
+                    $data['comments'] = $lastestComments['comments'];
                 }
 
                 $this -> set('comments', $data);

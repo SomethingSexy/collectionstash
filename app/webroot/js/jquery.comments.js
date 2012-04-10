@@ -102,16 +102,23 @@
 		_postComment : function(event) {
 			var self = this;
 			var comment = $('#CommentComment').val();
+			var lastCommentCreated = '';
+			if(typeof self.lastComment !== 'undefined'){
+				lastCommentCreated = self.lastComment.Comment.created;
+			}
 			$.ajax({
 				type : "post",
 				data : {
 					'data[Comment][type]' : this.commentType,
 					'data[Comment][type_id]' : this.commentTypeID,
 					'data[Comment][comment]' : comment,
-					'data[Comment][last_comment_created]' : self.lastComment.Comment.created
+					'data[Comment][last_comment_created]' : lastCommentCreated
 				},
 				dataType : 'json',
 				url : '/comments/add.json',
+				beforeSend : function(jqXHR, settings) {
+					$.cs.comments.prototype._removeError($('#CommentComment'));		
+				},
 				success : function(data, textStatus, XMLHttpRequest) {
 					if(data.success.isSuccess) {
 						$('#CommentComment').val('');
