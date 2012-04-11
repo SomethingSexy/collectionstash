@@ -3,6 +3,7 @@ class Comment extends AppModel {
     public $name = 'Comment';
     //TODO: We need a counter cache for user
     public $belongsTo = array('CommentType', 'User' => array('fields' => array('id', 'username')));
+    public $hasMany = array('LatestComment');
     public $actsAs = array('Containable');
 
     public $validate = array(
@@ -30,6 +31,8 @@ class Comment extends AppModel {
     }
 
     public function afterFind($results, $primary = false) {
+        debug($results);
+        debug($primary);
         foreach ($results as $key => &$val) {
             $datetime = strtotime($val['Comment']['created']);
             $mysqldate = date("m/d/y g:i A", $datetime);
@@ -65,6 +68,14 @@ class Comment extends AppModel {
         }
 
         return $retVal;
+    }
+
+    public function afterSave($created) {
+        if ($created) {
+            if (!$this -> LatestComment -> saveLatest($this -> data)) {
+                CakeLog::write('error', 'There was a problem saving the last comment for ' . $this -> data['Comment']['comment_type_id']);
+            }
+        }
     }
 
     /**

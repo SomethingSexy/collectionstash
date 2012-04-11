@@ -151,6 +151,12 @@ ul.nav li span { /*--Drop down trigger styles--*/
 	float: left;
 	background: url(subnav_btn.gif) no-repeat center top;
 }
+ul.nav li span.inner-text {
+	background: none;
+	float: none;
+	width: auto;
+	height: auto;
+}
 ul.nav li span.subhover {
 	background-position: center bottom;
 	cursor: pointer;
