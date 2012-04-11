@@ -14,6 +14,16 @@ class CommentsController extends AppController {
 
     }
 
+    /**
+     * This is the main entry way into "Discussion" page.
+     */
+    public function index() {
+        $this -> paginate = array('limit' => 25);
+        $data = $this -> paginate('LatestComment');
+
+        debug($data);
+    }
+
     public function update() {
         if (!$this -> isLoggedIn()) {
             $data['success'] = array('isSuccess' => false);
@@ -75,13 +85,16 @@ class CommentsController extends AppController {
                 $commentId = $this -> Comment -> id;
                 $comment = $this -> Comment -> findById($commentId);
                 $lastestComments = array();
-                if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
-                    if ($this -> request -> data['Comment']['type'] === 'stash') {
-                        $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $this -> request -> data['Comment']['type_id'])));
-                        if (!empty($stash)) {
-                            $ownerId = $stash['Stash']['user_id'];
-                        }
+
+                if ($this -> request -> data['Comment']['type'] === 'stash') {
+                    $stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $this -> request -> data['Comment']['type_id'])));
+                    if (!empty($stash)) {
+                        $ownerId = $stash['Stash']['user_id'];
                     }
+                }
+
+                if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
+
                     $lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId, array('Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
                 } else {
                     $lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId);

@@ -5,7 +5,7 @@ class AppController extends Controller {
 
 	public function beforeFilter() {
 		if ($this -> request -> isAjax()) {
-			// Configure::write('debug', 0);
+			Configure::write('debug', 0);
 			$this -> layout = 'ajax';
 		} else {
 			$this -> layout = 'default';

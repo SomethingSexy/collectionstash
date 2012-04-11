@@ -198,6 +198,9 @@
    							<li>
 								<?php echo $this -> Html -> link('Catalog', array('admin'=> false, 'controller' => 'collectibles','action'=>'search'));?>
 							</li>
+							<li>
+                                <a href="/comments/"><?php echo __('Discussion') . '<span class="beta inner-text">Beta</span>';?></a>
+                            </li>
 						</ul>
 					</div>
 				</div>
