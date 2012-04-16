@@ -37,6 +37,15 @@ class Comment extends AppModel {
             $datetime = strtotime($val['Comment']['created']);
             $mysqldate = date("m/d/y g:i A", $datetime);
             $val['Comment']['formatted_created'] = $mysqldate;
+
+            //Create a shorthand for this comment
+            $comment = $val['Comment']['comment'];
+            $commentLength = strlen($comment);
+
+            if ($commentLength > 200) {
+                $comment = substr($comment, 0, 200);
+            }
+            $val['Comment']['shorthand_comment'] = $comment;
         }
         return $results;
     }

@@ -69,7 +69,6 @@ a:hover {
 a:active {
 
 }
-
 .beta {
 	color: red;
 	font-size: 0.6em;
@@ -119,6 +118,7 @@ a:active {
 	 display: inline;*/
 	position: absolute;
 	right: 20px;
+	top: 10px;
 }
 .component .inside .component-title .actions ul li a {
 	background: none repeat scroll 0 0 transparent;
@@ -223,11 +223,12 @@ a:active {
 }
 .collectible.detail .detail.title h3 {
 	border-bottom: 1px solid #CCCCCC;
-    color: #74A4BE;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    font-weight: normal;
-    float: left;
+	color: #74A4BE;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	font-weight: normal;
+	float: left;
+	margin-right: 10px;
 }
 .collectible.detail .detail.title .title.link {
 	font-size: 0.75em;
@@ -239,8 +240,7 @@ a:active {
 .collectible.detail dl {
 	padding: 5px;
 }
-.two-column-page .inside .page .view .detail dl,
-.collectible.detail .attributes-list ul li span, .stats dl, .collectible.statistics dl, .collectible.detail dl {
+.two-column-page .inside .page .view .detail dl, .collectible.detail .attributes-list ul li span, .stats dl, .collectible.statistics dl, .collectible.detail dl {
 	font-size: 0.75em;
 }
 .collectibles.view {
@@ -315,7 +315,6 @@ a:active {
 	height: 27px;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
-
 /* Form Fields */
 form .required label:after {
 	color: #e32;
@@ -323,10 +322,10 @@ form .required label:after {
 	display: inline;
 }
 /*
-label {
-	display: block;
-	margin-bottom: 3px;
-}*/
+ label {
+ display: block;
+ margin-bottom: 3px;
+ }*/
 fieldset legend {
 	color: #74A4BE;
 	border-bottom: 1px solid #CCCCCC;
@@ -352,7 +351,7 @@ fieldset legend {
 	width: 200px;
 	text-align: right;
 }
-.form-fields.dialog-fields li .label-wrapper{
+.form-fields.dialog-fields li .label-wrapper {
 	/*width: auto;*/
 }
 .form-fields li div.checkbox label, .form-fields li .label-wrapper label {
@@ -384,7 +383,6 @@ fieldset legend {
 .form-fields li select {
 	letter-spacing: 0;
 }
-
 .form-fields input, .form-fields textarea {
 	padding: 5px;
 }
@@ -395,14 +393,9 @@ fieldset legend {
 
 	width: 272px;
 }
-
 .form-fields .static-field {
 	float: left;
 }
-
-
-
-
 select {
 	/*clear: both;*/
 	/*font-size: 120%;*/
@@ -474,10 +467,6 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#575757', endColorstr='#888888');*/
 }
 /* End Form Fields */
-
-
-
-
 
 /* collectibles view component */
 #collectibles-list-component {
@@ -576,14 +565,14 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin-bottom: 1em;
 }
 /*
-#collectible-add-component .component-view .collectible.add fieldset legend {
-	font-size: 1em;
-	font-weight: bold;
-	color: #656464;
-	width: 100%;
-	margin-bottom: 0.5em;
-	float: right;
-}*/
+ #collectible-add-component .component-view .collectible.add fieldset legend {
+ font-size: 1em;
+ font-weight: bold;
+ color: #656464;
+ width: 100%;
+ margin-bottom: 0.5em;
+ float: right;
+ }*/
 #collectible-add-component .component-view .collectible.add .add-attribute, #collectible-add-component .component-view .collectible.add .add-variant-attribute, #collectible-add-component .component-view .collectible.add .attributes-list {
 	font-size: 0.75em;
 	width: 500px;
@@ -626,8 +615,15 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 /*#collectible-add-component .inside .component-view .collectible.add.tag*/
 .tag-list {
-	overflow: hidden;
 	margin-bottom: 20px;
+}
+.tag-list:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 /*#collectible-add-component .inside .component-view .collectible.add.tag*/
 .tag {
@@ -638,18 +634,17 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	padding: 5px;
 	float: left;
 	background-color: #E0EAF1;
-	border-bottom: 1px solid #666666;
-	border-right: 1px solid #666666;
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 .tag.remove .tag-name {
 	position: relative;
-    top: -2px;
+	top: -2px;
 }
 .tag.remove a.ui-icon.ui-icon-close {
 	display: inline-block;
 	position: relative;
-    top: 1px;
-    cursor: pointer;
+	top: 1px;
+	cursor: pointer;
 }
 .tag-list .tag:hover {
 	background-color: #FDB924;
@@ -664,6 +659,10 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 .tag-list .tag:hover a {
 	color: #000;
+}
+.tag-list .empty {
+	font-size: 0.75em;
+	color: #606060;
 }
 #collectibletypes-list-component, #manufactures-list-component {
 	width: 100%;
@@ -707,11 +706,9 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #CollectibleMsrp {
 	width: 100px;
 }
-#dialogCost,
-#CollectiblesUserEditionSize {
+#dialogCost, #CollectiblesUserEditionSize {
 	width: 100px;
 }
-
 /*
  #collectibleWidth,
  #collectibleDepth {
@@ -777,9 +774,6 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 .attributes-list ul li {
 	padding: 0;
 }
-.attributes-list.empty ul li {
-	padding: 10px;
-}
 .attributes-list ul li span.attribute-label, .attributes-list ul li span.attribute-action, .attributes-list ul li span.attribute-name, .attributes-list ul li span.attribute-description, .attributes-list ul li span.attribute-status {
 	padding: 10px;
 }
@@ -789,8 +783,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 .attributes-list ul li .attribute-description {
 	width: 200px;
 }
-.standard-list.tag-list ul li span.action,
-.standard-list.tag-list ul li span.name{
+.standard-list.tag-list ul li span.action, .standard-list.tag-list ul li span.name {
 	width: 50%;
 }
 #my-stashes-component {
@@ -826,7 +819,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*border: 2px solid #FFF;*/
 	border: none;
 }
-#my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image:hover img{
+#my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image:hover img {
 	border: 4px solid #656464;
 }
 #my-stashes-component.edit-stash .inside .component-view .glimpse.sort-mode .image {
@@ -845,7 +838,6 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #my-stashes-component.edit-stash .inside .component-view .links ul li.mode-button button {
 	display: none;
 }
-
 #my-stashes-component.edit-stash .inside .component-view .component-message.error {
 	margin-top: 10px;
 	padding-bottom: 0;
@@ -864,42 +856,36 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*width: 100%;*/
 	clear: both;
 }
-#collectibles.collectibles, #photos.photos{
+#collectibles.collectibles, #photos.photos {
 	margin-top: 50px;
 }
-
-#collectibles.collectibles .title h3,
-#photos.photos .title h3 {
+#collectibles.collectibles .title h3, #photos.photos .title h3 {
 	border-bottom: 1px solid #CCCCCC;
-    color: #74A4BE;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    font-weight: normal;	
+	color: #74A4BE;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	font-weight: normal;
 }
 #collectibles-gallery .galleria-container {
 	margin-right: 0;
 }
-
 #collectibles-gallery {
 	/*width: 600px;*/
 	width: 900px;
 	padding: 12px;
 	background: none repeat scroll 0 0 #CCC;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-
 #photo-gallery {
 	background: none repeat scroll 0 0 #CCCCCC;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    padding: 12px;
-    width: 900px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	padding: 12px;
+	width: 900px;
 }
 .galleria-detail-text .collectible.detail {
 	background-color: #000000;
 	float: none;
 }
-
-
 .glimpse {
 	margin-left: 50px;
 	width: 850px;
@@ -984,6 +970,13 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-detail .component-view .collectible.item  .collectible.detail {
 	width: 500px;
+	margin-bottom: 10px;
+}
+#collectible-detail .component-view .collectible.item  .collectible.detail .title .actions.icon {
+	background-color: #FFF;
+}
+#collectible-detail .component-view .collectible.item  .collectible.detail .title .actions.icon ul li {
+	padding: 0;
 }
 #collectible-detail .component-view .approval-fields {
 	float: left;
@@ -1025,21 +1018,17 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-detail .component-view .collectible.tags .tag-list {
 	float: left;
-	
 }
-.two-column-page .inside .page .view .detail dl,
-.stats dl, .collectible.statistics dl, .collectible.detail dl, .manufacturer.detail dl {
+.two-column-page .inside .page .view .detail dl, .stats dl, .collectible.statistics dl, .collectible.detail dl, .manufacturer.detail dl {
 	line-height: 2em;
 	margin: 0em 0em;
 }
-.two-column-page .inside .page .view .detail dl dt,
-.stats dl dt, .collectible.statistics dt, .collectible.detail dl dt {
+.two-column-page .inside .page .view .detail dl dt, .stats dl dt, .collectible.statistics dt, .collectible.detail dl dt {
 	color: #606060;
 	/*padding-left: 4px;*/
 	vertical-align: top;
 }
-.two-column-page .inside .page .view .detail dl dd,
-.stats dl dd, .collectible.statistics dd, .collectible.detail dl dd {
+.two-column-page .inside .page .view .detail dl dd, .stats dl dd, .collectible.statistics dd, .collectible.detail dl dd {
 	margin-left: 14em;
 	margin-top: -2em;
 	vertical-align: top;
@@ -1081,9 +1070,9 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #home-components .random-collectibles .inside .component-view .glimpse {
 	width: 880px;
-	 margin-left: 0;
+	margin-left: 0;
 }
-#home-components .random-collectibles .inside .component-view .glimpse .line .image{
+#home-components .random-collectibles .inside .component-view .glimpse .line .image {
 	border-radius: 0;
 	margin: 2px;
 	border: 0;
@@ -1104,24 +1093,16 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #home-components .random-collectibles .inside .component-view .collectibles .collectible .detail p {
 	font-size: 0.75em;
 }
-
-#home-components .component.manufacturers,
-#home-components .component.licenses,
-#home-components .component.collectibletypes {
+#home-components .component.manufacturers, #home-components .component.licenses, #home-components .component.collectibletypes {
 	width: 300px;
 }
-#home-components .random-collectibles .inside .component-title,
-#home-components .component.manufacturers .inside .component-title,
-#home-components .component.licenses .inside .component-title,
-#home-components .component.collectibletypes .inside .component-title{
+#home-components .random-collectibles .inside .component-title, #home-components .component.manufacturers .inside .component-title, #home-components .component.licenses .inside .component-title, #home-components .component.collectibletypes .inside .component-title {
 	padding: 0 2em 0 2em;
 	margin-bottom: 5px;
 }
 #home-components .component.manufacturers {
 	margin-left: 50px;
 }
-
-
 #home-components .find-by {
 	float: right;
 	width: 400px;
@@ -1173,54 +1154,51 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin-left: 10px;
 }
 #home-components .site-information ul li a {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #fdb629) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #fdb629 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#fdb629');
-	background-color:#ededed;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	color:#000333;
-	font-family:arial;
-	font-size:24px;
-	font-weight:bold;
-	padding:20px 50px;
-	text-decoration:none;
-	text-shadow:1px 1px 0px #ffffff;
+	-moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #fdb629) );
+	background: -moz-linear-gradient( center top, #ededed 5%, #fdb629 100% );
+	filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#fdb629');
+	background-color: #ededed;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #dcdcdc;
+	display: inline-block;
+	color: #000333;
+	font-family: arial;
+	font-size: 24px;
+	font-weight: bold;
+	padding: 20px 50px;
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #ffffff;
 	cursor: pointer;
 }
 #home-components .site-information ul li a:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fdb629), color-stop(1, #ededed) );
-	background:-moz-linear-gradient( center top, #fdb629 5%, #ededed 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdb629', endColorstr='#ededed');
-	background-color:#fdb629;
+	background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fdb629), color-stop(1, #ededed) );
+	background: -moz-linear-gradient( center top, #fdb629 5%, #ededed 100% );
+	filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#fdb629', endColorstr='#ededed');
+	background-color: #fdb629;
 }
 #home-components .site-information ul li a:active {
-	position:relative;
-	top:1px;
+	position: relative;
+	top: 1px;
 }
-
-
 #home-components .site-information ul li .title {
-    color: #000000;
-    display: block;
-    font-family: 'MuseoSlab-500',sans-serif;
-    font-size: 25.78px;
-    margin: 0 auto;
-    text-transform: uppercase;
+	color: #000000;
+	display: block;
+	font-family: 'MuseoSlab-500', sans-serif;
+	font-size: 25.78px;
+	margin: 0 auto;
+	text-transform: uppercase;
 }
 #home-components .site-information ul li p {
-   	color: #616161;
-    margin: 15px auto;
-    width: 198px;
-    word-wrap: break-word;
+	color: #616161;
+	margin: 15px auto;
+	width: 198px;
+	word-wrap: break-word;
 }
-
 #registration-component {
 	width: 100%;
 }
@@ -1461,7 +1439,6 @@ div.paging span a:hover {
 	text-align: left;
 	width: 200px;
 }
-
 #stash-list-container .stash-list-details {
 	color: #444444;
 	font-size: 0.8em;
@@ -1602,13 +1579,11 @@ div.paging span a:hover {
 	float: left;
 	width: 75%;
 }
-.ui-tabs-panel div.title,
-.two-column-page .inside .page div.title {
+.ui-tabs-panel div.title, .two-column-page .inside .page div.title {
 	overflow: hidden;
 	margin-bottom: 1em;
 }
-.ui-tabs-panel div.title h3,
-.two-column-page .inside .page .title h2 {
+.ui-tabs-panel div.title h3, .two-column-page .inside .page .title h2 {
 	float: left;
 	font-weight: bold;
 	color: #656464;
@@ -1692,8 +1667,7 @@ div.paging span a:hover {
 /**
  * 	Admin section
  */
-.tag-list ul li span,
-#admin-edit .inside .page .standard-list ul li span {
+.tag-list ul li span, #admin-edit .inside .page .standard-list ul li span {
 	float: left;
 	font-size: 0.75em;
 }
@@ -1734,7 +1708,6 @@ div.paging span a:hover {
 	width: 100%;
 	float: left;
 }
-
 #admin-edit div.notes {
 	float: left;
 	width: 100%
@@ -2022,24 +1995,20 @@ div.paging span a:hover {
 	height: 27px;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
-
 .actions.icon {
 	overflow: hidden;
-	float: right;
+	float: left;
 	background-color: #656464;
-	
 	border-radius: 3px;
 }
-
 .actions.icon ul {
-    float: right;
-    overflow: hidden;
+	float: right;
+	overflow: hidden;
 }
-
 .actions.icon ul li {
-    display: inline;
-    float: left;
-    padding: 5px;
+	display: inline;
+	float: left;
+	padding: 5px;
 }
 /*Tree View */
 .treeview li span.name {
@@ -2048,27 +2017,21 @@ div.paging span a:hover {
 .treeview li span.action {
 	font-size: 0.7em;
 }
-
 /*Series specific treeview */
 .treeview li div.series.input input {
 	width: 300px;
 }
-
 /* Collectible edit and add currency */
-.form-fields li.msrp div.currency,
-.form-fields li.msrp div.input {
+.form-fields li.msrp div.currency, .form-fields li.msrp div.input {
 	float: left;
 }
-
 .form-fields li.msrp div.currency {
 	margin-left: 3px;
 }
-
 .form-fields li.msrp div.currency select {
-	padding-top:1px;
+	padding-top: 1px;
 	padding-bottom: 1px;
 }
-
 /* Comments */
 .comments-container {
 	float: left;
@@ -2077,10 +2040,10 @@ div.paging span a:hover {
 }
 .comments-container .title h3 {
 	border-bottom: 1px solid #CCCCCC;
-    color: #74A4BE;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    font-weight: normal;	
+	color: #74A4BE;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	font-weight: normal;
 }
 .comments-container ol.comments {
 	overflow: hidden;
@@ -2090,15 +2053,13 @@ div.paging span a:hover {
 	margin-bottom: 25px;
 	padding: 20px;
 	background-color: #B5CAD0;
-	font: 300 14px/1.4em Open Sans,Georgia,Verdana,"Lucida Grande",Lucida,sans-serif;
+	font: 300 14px/1.4em Open Sans, Georgia, Verdana, "Lucida Grande", Lucida, sans-serif;
 	width: 800px;
-
 }
 .comments-container ol.comments li.comment .actions {
 	text-align: right;
 }
-
-.comments-container ol.comments li.comment .actions span{
+.comments-container ol.comments li.comment .actions span {
 	margin-right: 5px;
 }
 .comments-container ol.comments li .comment-info .user {
@@ -2108,15 +2069,54 @@ div.paging span a:hover {
 	margin-top: 10px;
 }
 .comments-container .post-comment-container form fieldset ul li div.input div.label-wrapper {
-	width: auto;	
+	width: auto;
 }
 .comments-container .post-comment-container form fieldset ul li div.input textarea {
 	width: 750px;
 }
 .comments-container .post-comment-container form fieldset ul li .error-message {
-	width: auto;	
+	width: auto;
 	margin-left: 80px;
 }
+.latest-comments .comment {
+	
+	width: 200px;
+	float: left;
+	margin-left: 10px;
+}
+.latest-comments .comment .comment-type {
+	font-size: 0.8em;
+	margin-bottom: 2px;
+	background-color: #FDB924;
+	color: #FFF;
+	width: auto;
+	float: left;
+	clear: both;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.latest-comments .comment .comment-text {
+	border-radius: 5px;
+	background-color: #CCCCCC;
+	padding: 10px;
+	font-size: 0.8em;
+	float: left;
+	clear: both;
+	width: 180px;
+}
+
+.latest-comments .comment .comment-info {
+	font-size: 0.7em;
+	float: left;
+	margin-top: 3px;
+	clear: both;
+}
+.latest-comments .comment .comment-info span {
+	float: left;
+	clear: both;
+}
+
 /* Login Dialog */
 #login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {
 	width: 100px;

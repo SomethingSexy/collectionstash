@@ -82,7 +82,28 @@
                             }
                         }
 						?>
-
+						<?php
+                        if (empty($licenses)) {
+                            echo '<li class="hidden">';
+                        } else {
+                            echo '<li>';
+                        }
+						?>
+						<?php
+                        if (!$this -> Session -> check('add.collectible.variant')) {
+                            echo $this -> Form -> input('license_id', array('label' => __('Brand'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));
+                        } else {
+                            echo '<div class="label-wrapper">';
+                            echo '<label for="">';
+                            echo __('Brand');
+                            echo '</label></div>';
+                            echo '<div class="static-field">';
+                            echo $collectible['License']['name'];
+                            echo $this -> Form -> hidden('license_id');
+                            echo '</div>';
+                        }
+						?>
+						</li>
 						<?php
                         if (empty($hasSeries)) {
                             echo '<li class="hidden">';
@@ -120,29 +141,94 @@
 						<li>
 							<?php echo $this -> Form -> input('name', array('escape' => false, 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
 						</li>
-						<?php
-                        if (empty($licenses)) {
-                            echo '<li class="hidden">';
-                        } else {
-                            echo '<li>';
-                        }
-						?>
-						<?php
-                        if (!$this -> Session -> check('add.collectible.variant')) {
-                            echo $this -> Form -> input('license_id', array('label' => __('Brand'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));
-                        } else {
-                            echo '<div class="label-wrapper">';
-                            echo '<label for="">';
-                            echo __('Brand');
-                            echo '</label></div>';
-                            echo '<div class="static-field">';
-                            echo $collectible['License']['name'];
-                            echo $this -> Form -> hidden('license_id');
-                            echo '</div>';
-                        }
-						?>
-						</li>
+						<li>
+							<?php
+                            $data = '';
+                            if (isset($this -> request -> data['Collectible']['description'])) {
+                                $data = str_replace('\n', "\n", $this -> request -> data['Collectible']['description']);
+                                $data = str_replace('\r', "\r", $data);
+                            }
 
+                            echo $this -> Form -> input('description', array('escape' => false, 'label' => __('Description'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'value' => $data));
+							?>
+						</li>
+						<li class="msrp">
+							<?php echo $this -> Form -> input('msrp', array('maxLength' => 10000, 'label' => __('Original Retail Price'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'after' => $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+						</li>
+						<li>
+							<div class="label-wrapper">
+								<label for="scale"> <?php echo __('Release Year')
+									?></label>
+							</div>
+							<?php
+                            $current_year = date('Y');
+                            $max_year = $current_year + 2;
+                            echo $this -> Form -> year('release', 1900, $max_year);
+							?>
+						</li>
+						<li>
+							<?php echo $this -> Form -> input('code', array('label' => __('Product Code'), 'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="' . __('This is the item code or product code given by the manufacture.', true) . '" alt="info"></a>', 'between' => '</div>'));?>
+						</li>
+						<li>
+							<?php echo $this -> Form -> input('upc', array('label' => __('Product UPC'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
+						</li>
+					</ul>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<?php echo __('Collectible Details');?>
+					</legend>
+					<ul class="form-fields">
+						<li>
+							<div class="input checkbox">
+								<div class="label-wrapper">
+									<label for="CollectibleLimited"><?php echo __('Limited Edition');?></label>
+								</div>
+								<?php echo $this -> Form -> input('limited', array('label' => false, 'div' => false));?>
+							</div>
+						</li>
+						<?php
+                        if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
+                            echo '<li>';
+                        } else {
+                            echo '<li class="hidden">';
+                        }
+						?>
+						  <?php echo $this -> Form -> input('edition_size', array('label'=>__('Edition Size'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true).'" alt="info"></a>','between'=>'</div>'));?>
+						</li>
+						<?php
+                        if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
+                            echo '<li>';
+                        } else {
+                            echo '<li class="hidden">';
+                        }
+						?>
+						<div class="input checkbox">
+							<div class="label-wrapper">
+								<a class="ui-icon ui-icon-info" title="'. __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true).'" alt="info"></a>
+								<label for="CollectibleNumbered"><?php echo __('Numbered');?></label>
+							</div>
+							<?php echo $this -> Form -> input('numbered', array('label' => false, 'div' => false));?>
+						</div>
+						</li>
+						<li>
+							<div class="input checkbox">
+								<div class="label-wrapper">
+									<label for="CollectibleExclusive"><?php echo __('Exclusive');?></label>
+								</div>
+								<?php echo $this -> Form -> input('exclusive', array('label' => false, 'div' => false));?>
+							</div>
+						</li>
+						<li>
+							<?php echo $this -> Form -> input('retailer_id', array('label' => __('Exclusive Retailer'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'empty' => true));?>
+						</li>
+					</ul>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<?php echo __('Collectible Specs');?>
+					</legend>
+					<ul class="form-fields">
 						<?php
                         if (!$this -> Session -> check('add.collectible.variant')) {
                             echo '<li>';
@@ -150,7 +236,7 @@
                             echo '</li>';
                         } else {
                             if (isset($collectible['Collectible']['scale_id']) && !empty($collectible['Collectible']['scale_id'])) {
-                                echo '<li>';    
+                                echo '<li>';
                                 echo '<div class="label-wrapper">';
                                 echo '<label for="">';
                                 echo __('Scale');
@@ -165,70 +251,9 @@
                         }
 						?>
 						</li>
-						<li>
-							<?php
-                            $data = '';
-                            if (isset($this -> request -> data['Collectible']['description'])) {
-                                $data = str_replace('\n', "\n", $this -> request -> data['Collectible']['description']);
-                                $data = str_replace('\r', "\r", $data);
-                            }
-
-                            echo $this -> Form -> input('description', array('escape' => false, 'label' => __('Description'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'value' => $data));
-							?>
-						</li>
-                        <li class="msrp">
-                            <?php echo $this -> Form -> input('msrp', array('maxLength'=> 10000, 'label'=>__('Original Retail Price'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'after'=> $this -> Form -> input('currency_id', array('label' => false, 'div' => 'currency'))));?>
+                        <li>
+                            <?php echo $this -> Form -> input('pieces', array('label'=>__('Number of Pieces'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true).'" alt="info"></a>','between'=>'</div>'));?>
                         </li>
-						<li>
-							<div class="label-wrapper">
-								<label for="scale"> <?php echo __('Release Year')
-									?></label>
-							</div>
-							<?php
-                            $current_year = date('Y');
-                            $max_year = $current_year + 2;
-                            echo $this -> Form -> year('release', 1900, $max_year);
-							?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('url', array('escape' => false, 'label' => __('URL'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('limited', array('label' => __('Limited Edition'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
-						</li>
-						<?php
-                        if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
-                            echo '<li>';
-                        } else {
-                            echo '<li class="hidden">';
-                        }
-						?>
-						<?php echo $this -> Form -> input('edition_size', array('label' => __('Edition Size'), 'before' => '<div class="label-wrapper">', 'between' => '</div><a class="ui-icon ui-icon-info" title="' . __('This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.', true) . '" alt="info"></a>'));?>
-						</li>
-						<?php
-                        if (isset($this -> request -> data['Collectible']['limited']) && $this -> request -> data['Collectible']['limited']) {
-                            echo '<li>';
-                        } else {
-                            echo '<li class="hidden">';
-                        }
-						?>
-						<?php echo $this -> Form -> input('numbered', array('label' => __('Numbered'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'after' => '<a class="ui-icon ui-icon-info" title="' . __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) . '" alt="info"></a>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('exclusive', array('label' => __('Exclusive'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('retailer_id', array('label' => __('Exclusive Retailer'), 'before' => '<div class="label-wrapper">', 'between' => '</div>', 'empty' => true));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('code', array('label' => __('Product Code'), 'before' => '<div class="label-wrapper">', 'between' => '</div><a class="ui-icon ui-icon-info" title="' . __('This is the item code or product code given by the manufacture.', true) . '" alt="info"></a>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('upc', array('label' => __('Product UPC'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
-						</li>
-						<li>
-							<?php echo $this -> Form -> input('pieces', array('label' => __('Number of Pieces'), 'before' => '<div class="label-wrapper">', 'between' => '</div><a class="ui-icon ui-icon-info" title="' . __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true) . '" alt="info"></a>'));?>
-						</li>
 						<li>
 							<?php echo $this -> Form -> input('product_weight', array('label' => __('Weight (lbs)'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
 						</li>
@@ -240,6 +265,16 @@
 						</li>
 						<li>
 							<?php echo $this -> Form -> input('product_depth', array('label' => __('Depth (inches)'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
+						</li>
+					</ul>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<?php echo __('Reference');?>
+					</legend>
+					<ul class="form-fields">
+						<li>
+							<?php echo $this -> Form -> input('url', array('escape' => false, 'label' => __('URL'), 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
 						</li>
 					</ul>
 				</fieldset>

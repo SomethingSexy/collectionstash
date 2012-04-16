@@ -66,53 +66,9 @@ if (!isset($adminMode)) {
 		</div>
 		<div class="component-view">
 			<?php
-            if (isset($collectibleDetail['CollectiblesTag']) && !empty($collectibleDetail['CollectiblesTag'])) {
-                echo '<div class="collectible tags">';
-                echo '<ul class="tag-list">';
-                foreach ($collectibleDetail['CollectiblesTag'] as $tag) {
-                    echo '<li class="tag"><span class="tag-name">';
-                    echo '<a href="/collectibles/search/?t=' . $tag['Tag']['id'] . '"';
-                    echo '>' . $tag['Tag']['tag'] . '</a>';
-                    echo '</span></li>';
-                }
-                echo '</ul>';
-                if (isset($showEdit) && $showEdit) {
-                    echo '<div class="actions icon">';
-                    echo '<ul>';
-                    echo '<li>';
-                    if ($adminMode) {
-                        echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id'], 'true'), array('title' => 'Edit Tags', 'escape' => false));
-                    } else {
-                        echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id']), array('title' => 'Edit Tags','escape' => false));
-                    }
-                    echo '</li>';
-                    echo '</ul>';
-                    echo '</div>';
-                }
-
-                echo '</div>';
-            } else {
-                echo '<div class="collectible tags">';
-                if (isset($showEdit) && $showEdit) {
-                    echo '<div class="label">Tags:</div>';
-                    echo '<div class="actions icon">';
-                    echo '<ul>';
-                    echo '<li>';
-                    if ($adminMode) {
-                        echo $this -> Html -> link($this -> Html -> image('/img/icon/add.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id'], 'true'), array('title' => 'Add Tags', 'escape' => false));
-                    } else {
-                        echo $this -> Html -> link($this -> Html -> image('/img/icon/add.png'), array('admin'=> false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleDetail['Collectible']['id']), array('title' => 'Add Tags','escape' => false));
-                    }
-                    echo '</li>';
-                    echo '</ul>';
-                    echo '</div>';
-                }                
-                echo '</div>';
-            }
-			?>
-			<?php
             echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode));
 			?>
+			
 			<?php
 if ($adminMode) {
 			?>

@@ -1,7 +1,8 @@
 <?php
 class CommentType extends AppModel {
-    var $name = 'CommentType';
-    var $hasMany = array('Comment');
-    var $actsAs = array('Containable');
+    public $name = 'CommentType';
+    public $hasMany = array('Comment');
+    public $belongsTo = array('Stash' => array('conditions' => array('CommentType.type' => 'stash'), 'foreignKey' => 'type_id'));
+    public $actsAs = array('Containable');
 }
 ?>
