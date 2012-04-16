@@ -205,12 +205,6 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         <li>
                             <?php echo $this -> Form -> input('scale_id', array('empty' => true, 'label'=>__('Scale'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>
-
-
-
-
-
-    
                         <li>
                             <?php echo $this -> Form -> input('pieces', array('label'=>__('Number of Pieces'),'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="'. __('This is the number of pieces that come with this collectible.  If unknown, please leave blank.', true).'" alt="info"></a>','between'=>'</div>'));?>
                         </li>
@@ -228,12 +222,6 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         </li>                    
                     </ul>
                 </fieldset>				
-				
-				
-				
-				
-				
-				
 				<fieldset>
 					<legend>
 						<?php echo __('Reference');?>
@@ -242,10 +230,6 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         <li>
                             <?php echo $this -> Form -> input('url', array('escape' => false, 'label'=>__('URL'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>
-
-						
-
-
 					</ul>
 				</fieldset>
 				<?php echo $this -> Form -> end();?>

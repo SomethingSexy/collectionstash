@@ -8,9 +8,11 @@ class CommentsController extends AppController {
         // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
         // $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
 
-        $lastestComments = $this -> Comment -> find('all', array('contain' => array('CommentType' => array('conditions' => array('CommentType.type =' => "stash", 'CommentType.type_id' => 1)))));
+        // $lastestComments = $this -> Comment -> find('all', array('contain' => array('CommentType' => array('conditions' => array('CommentType.type =' => "stash", 'CommentType.type_id' => 1)))));
 
-        debug($lastestComments);
+        $balls = $this -> Comment -> CommentType -> find("first", array('conditions' => array('CommentType.id' => 1)));
+
+        debug($balls);
 
     }
 
@@ -19,9 +21,11 @@ class CommentsController extends AppController {
      */
     public function index() {
         $this -> paginate = array('limit' => 25);
-        $data = $this -> paginate('LatestComment');
+        $comments = $this -> paginate('LatestComment');
 
-        debug($data);
+        $this -> set(compact('comments'));
+
+        debug($comments);
     }
 
     public function update() {

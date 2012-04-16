@@ -49,7 +49,7 @@
 			<div class="account detail update">
 				<div class='component-message'><span></span></div>				
 				<div class="account directional">
-					<p><?php echo __('To make your stash private, please check the box below and submit.') ?></p>
+					<p><?php echo __('Select your privacy settings below.') ?></p>
 				</div>
 				<form id="stash-form" method="post">
 					<fieldset>

@@ -486,7 +486,7 @@ var collectibleAdd = function() {
 
 			$("#edit-series-dialog").dialog({
 				'autoOpen' : false,
-				'width' : 500,
+				'width' : 700,
 				'height' : 'auto',
 				'modal' : true,
 				'resizable' : false,
