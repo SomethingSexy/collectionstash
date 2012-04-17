@@ -138,7 +138,9 @@ if (!isset($adminMode)) {
 			</dl>
 		</div>
 		<?php
-		echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+        if (isset($showTags) && $showTags === true) {
+            echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+        }
         if ($showAttributes) {
             echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
         }

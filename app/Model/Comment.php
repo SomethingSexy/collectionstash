@@ -31,8 +31,6 @@ class Comment extends AppModel {
     }
 
     public function afterFind($results, $primary = false) {
-        debug($results);
-        debug($primary);
         foreach ($results as $key => &$val) {
             $datetime = strtotime($val['Comment']['created']);
             $mysqldate = date("m/d/y g:i A", $datetime);
