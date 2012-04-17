@@ -23,6 +23,10 @@ if (!isset($showAddedDate)) {
 if (!isset($adminMode)) {
     $adminMode = false;
 }
+
+if (!isset($showTags)) {
+    $showTags = false;
+}
 ?>
 <div class="component" id="collectible-detail">
 	<div class="inside">
@@ -66,9 +70,20 @@ if (!isset($adminMode)) {
 		</div>
 		<div class="component-view">
 			<?php
-            echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode));
+if(isset($isLoggedIn) && $isLoggedIn === true)
+{
+//Show something if logged in?
 			?>
-			
+
+			<?php } else {?>
+			<div class="helpful-hint-message">
+				<?php echo __('See something that is inaccurate? Login or register to help us maintain the most accurate collectible database.');?>
+			</div>
+			<?php }?>
+			<?php
+            echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
+			?>
+
 			<?php
 if ($adminMode) {
 			?>

@@ -75,6 +75,20 @@ a:active {
 	font-weight: bold;
 	margin-left: 2px;
 }
+.helpful-hint-message {
+	padding: 15px 10px 20px 55px;
+	font-size: 12px;
+	border: 1px solid #E9C95F;
+	color: #666;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+	clear: both;
+	display: block;
+	max-width: 715px;
+	min-height: 15px;
+	line-height: 18px;
+	margin-bottom: 20px;
+	background: #FFF2C6;
+}
 /* base component view */
 .component {
 	margin: 10px 0px 0 0;
@@ -950,6 +964,12 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #collectible-detail .component-view {
 	overflow: hidden; /* contain floats */
 	padding-top: 0;
+}
+#collectible-detail .component-view .helpful-hint-message {
+	width: 300px;
+	position: absolute;
+	right: 40px;
+	top: 80px;
 }
 #collectible-detail .component-view .collectible.item {
 	border: none;
@@ -2079,7 +2099,7 @@ div.paging span a:hover {
 	margin-left: 80px;
 }
 .latest-comments .comment {
-	
+
 	width: 200px;
 	float: left;
 	margin-left: 10px;
@@ -2095,7 +2115,6 @@ div.paging span a:hover {
 	border-radius: 5px;
 	padding: 5px;
 }
-
 .latest-comments .comment .comment-text {
 	border-radius: 5px;
 	background-color: #CCCCCC;
@@ -2105,7 +2124,10 @@ div.paging span a:hover {
 	clear: both;
 	width: 180px;
 }
-
+.latest-comments .comment .comment-text a {
+	text-decoration: none;
+	color: #000;	
+}
 .latest-comments .comment .comment-info {
 	font-size: 0.7em;
 	float: left;
@@ -2116,7 +2138,6 @@ div.paging span a:hover {
 	float: left;
 	clear: both;
 }
-
 /* Login Dialog */
 #login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {
 	width: 100px;
