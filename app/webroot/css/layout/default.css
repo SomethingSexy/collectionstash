@@ -76,7 +76,7 @@ a:active {
 	margin-left: 2px;
 }
 .helpful-hint-message {
-	padding: 15px 10px 20px 55px;
+	padding: 15px 10px 20px 20px;
 	font-size: 12px;
 	border: 1px solid #E9C95F;
 	color: #666;
@@ -2088,6 +2088,10 @@ div.paging span a:hover {
 .comments-container ol.comments li .comment-text {
 	margin-top: 10px;
 }
+.comments-container ol.comments li.comment .error-message {
+	float: right;
+	color: #c73e14;
+}
 .comments-container .post-comment-container form fieldset ul li div.input div.label-wrapper {
 	width: auto;
 }
@@ -2126,7 +2130,7 @@ div.paging span a:hover {
 }
 .latest-comments .comment .comment-text a {
 	text-decoration: none;
-	color: #000;	
+	color: #000;
 }
 .latest-comments .comment .comment-info {
 	font-size: 0.7em;
