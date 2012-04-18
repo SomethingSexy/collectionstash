@@ -213,11 +213,15 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
 	padding-left: 20px;
 	float: left;
 }
-#footer .links ul li {
+#footer .links div {
 	font-size: 0.8em;
 	padding: 5px;
-	display: inline-block;
+	float: left;
 	vertical-align: top;
+}
+
+#footer .links div .fb_iframe_widget iframe {
+	position: static;
 }
 #footer .copyright {
 	float: right;
@@ -227,3 +231,6 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
 	padding: 5px;
 }
 
+.fb_iframe_widget iframe {
+	
+}
