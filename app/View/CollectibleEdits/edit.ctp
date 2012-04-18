@@ -75,13 +75,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         </div>
                         <?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
                         </li>
-                        <?php
-                        if (empty($hasSeries)) {
-                            echo '<li class="hidden">';
-                        } else {
-                            echo '<li>';
-                        }
-                        ?>
+
                         <?php
                         if (empty($licenses)) {
                             echo '<li class="hidden">';
@@ -91,7 +85,13 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         ?>
                         <?php echo $this -> Form -> input('license_id', array('label'=>__('Brand'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>
-                        <li>
+                        <?php
+                        if (empty($hasSeries)) {
+                            echo '<li class="hidden">';
+                        } else {
+                            echo '<li>';
+                        }
+                        ?>
                         <div class="label-wrapper">
                             <label for=""> <?php echo __('Category')
                                 ?></label>
