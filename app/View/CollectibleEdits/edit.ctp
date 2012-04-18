@@ -73,7 +73,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                             <label for=""> <?php echo __('Manufacturer Collectible Type');
                                 ?></label>
                         </div>
-                        <?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true));?>
+                        <?php  echo $this -> Form -> select('Collectible.specialized_type_id', $specializedTypes, array('label' => false, 'empty' => true, 'before' => '<div class="label-wrapper">', 'between' => '</div>'));?>
                         </li>
 
                         <?php
