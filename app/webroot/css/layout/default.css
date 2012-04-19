@@ -2103,7 +2103,7 @@ div.paging span a:hover {
 	margin-left: 80px;
 }
 .latest-comments .comment {
-
+	height: 200px;
 	width: 200px;
 	float: left;
 	margin-left: 10px;
