@@ -55,8 +55,8 @@ class UsersController extends AppController {
                             CakeLog::write('info', $results);
                             $this -> Session -> write('user', $user);
                             CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
-                            $this -> redirect(array('controller' => 'collectibles', 'action' => 'catalog'));
-                            // $this -> redirect($this -> Auth -> redirect());
+                            // $this -> redirect(array('controller' => 'collectibles', 'action' => 'catalog'));
+                            $this -> redirect($this -> Auth -> redirect());
                             // if (!empty($this -> request -> data['User']['fromPage'])) {
                             // $this -> redirect($this -> request -> data['User']['fromPage'], null, true);
                             // } else {

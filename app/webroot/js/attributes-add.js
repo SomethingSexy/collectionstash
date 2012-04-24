@@ -130,7 +130,7 @@ var DED = function() {
 		},
 		reset : function() {
 			//TODO remove all except for the description field.
-			$('#add-attribute-dialog-fields').find('.attributeLevels').parent('li').remove();
+			 $('#add-attribute-dialog-fields').find('.attributeLevels').parent().parent('li').remove();
 			$('#attributeDescription', '#add-attribute-dialog').val('');
 			attributeLevel = 0;
 

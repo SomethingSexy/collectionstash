@@ -236,7 +236,7 @@ class AppController extends Controller {
 		$filters = array();
 		$manFilters = array();
 		array_push($manFilters, array('AND' => array()));
-	//	debug($manFilters);
+		//	debug($manFilters);
 		array_push($manFilters[0]['AND'], array('OR' => array()));
 		$filtersSet = false;
 		$manufactureFilterSet = false;
