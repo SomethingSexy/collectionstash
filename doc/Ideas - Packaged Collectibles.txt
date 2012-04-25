@@ -1,0 +1,6 @@
+A collectible can also be a package of other collectibles.
+
+This would require another table for hold references to other collectibles
+
+It would also require another column on the collectible table to indicate that this is a package
+

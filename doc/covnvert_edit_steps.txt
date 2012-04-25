@@ -1,0 +1,24 @@
+1) Import Production tables
+	- done
+
+2) Add New columns
+- attributes_collectibles_edits
+	- added edit_id
+	- renamed attributes_collectible_id -> base_id
+- collectibles_edits
+	- renamed collectible_id -> base_id
+	- added edit_id
+- uploads_edits
+	- renamed upload_id -> base_id
+	- added edit_id
+	
+3) Rename edit tables
+- done
+
+4) Loop through each Edit, updating edit table columns
+- done
+
+5) Drop upload_id, collectible_edit_id, attributes_collectible_id, attributes_collectibles_edit_id from edits table
+- done
+
+6) Done
