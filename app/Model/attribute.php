@@ -3,7 +3,7 @@ App::import('Vendor', 'attribute_item');
 class Attribute extends AppModel {
     var $name = 'Attribute';
     var $actsAs = array('Tree','Containable');
-
+	public $hasMany = array('AttributesCollectible');
     //public function get
 
     public function getAttributeList($id=null) {
