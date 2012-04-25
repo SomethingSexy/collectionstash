@@ -30,6 +30,7 @@
  * @package       cake
  * @subpackage    cake.app
  */
+App::uses('Model', 'Model');
 class AppModel extends Model {
 	/**
 	 * This loops through each individual return entry after the find so we can more eaily maniulate it.

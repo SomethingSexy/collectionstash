@@ -1,8 +1,8 @@
 <?php
 class Tag extends AppModel {
-    var $name = 'Tag';
-    var $hasMany = array('CollectiblesTag');
-    var $actsAs = array('Containable');
+    public $name = 'Tag';
+    public $hasMany = array('CollectiblesTag');
+    public $actsAs = array('Containable');
 
     var $validate = array('tag' => array('rule' => '/^[\\w\\s-.]+$/', 'required' => true, 'message' => 'Invalid characters'));
     /**
