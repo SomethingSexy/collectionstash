@@ -236,6 +236,7 @@
 				<div>
 					&copy; Collection Stash
 				</div>
+				
 				<!--<li>About Us</li>
 				<li>Contact Us</li>
 				<li>Donate</li>
