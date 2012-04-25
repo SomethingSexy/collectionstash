@@ -227,7 +227,6 @@
 				<?php //echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash')) ?>
 			</div>
 			<div class="links">
-
 				<div>
 					<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
 				</div>
@@ -243,9 +242,6 @@
 				<li>Report a Bug</li>
 				<li>Milestones</li>
 				<li>Request a Feature</li>-->
-
-				</span>
-
 			</div>
 		</div>
 
