@@ -800,6 +800,7 @@ class CollectiblesController extends AppController {
             $this -> redirect(array('action' => 'index'));
         }
         $collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+        debug($collectible);
         if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
             $this -> set('collectible', $collectible);
             $count = $this -> Collectible -> getNumberofCollectiblesInStash($id);

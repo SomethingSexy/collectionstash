@@ -45,7 +45,7 @@
                 <div class="label-wrapper">
                   <label for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?') ?></label>
                 </div> 
-                <?php echo $this->Form->input('merchant_id', array('div' =>  false, 'label' => false));?>
+                <?php echo $this -> Form -> input('merchant', array('type'=> 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
               </li> 
 	          <li>
 	            <div class="label-wrapper">
@@ -60,8 +60,31 @@
           </div>    
   </div>
 </div>
-<script>
+<script><?php
+echo 'var merchants=[';
+
+foreach ($merchants as $key => $value) {
+	echo '\''.addslashes($value['Merchant']['name']).'\'';
+	if ($key != (count($merchants) - 1)) {
+		echo ',';
+	}
+}
+echo '];';
+?>
 	$(function() {
-		$( "#CollectiblesUserPurchaseDate" ).datepicker();
+		$("#CollectiblesUserPurchaseDate").datepicker();
+		var options, a;
+		jQuery(function() {
+			options = {
+				lookup : merchants,
+				width : 282,
+				onSelect : function(value, data) {
+					// Not sure I need to do anything here
+				}
+			};
+			a = $('#CollectiblesUserMerchant').autocomplete(options);
+		});
+
 	});
+
 </script>

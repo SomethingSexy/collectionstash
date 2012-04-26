@@ -28,6 +28,7 @@
 	$this -> Minify -> js(array('js/jquery-1.7'));
 	$this -> Minify -> js(array('js/jquery-ui-1.8.18'));
 	$this -> Minify -> js(array('js/jquery-plugins'));
+	$this -> Minify -> js(array('js/jquery.autocomplete'));
 	?>
 	<?php echo $scripts_for_layout; ?>
 	<script>
