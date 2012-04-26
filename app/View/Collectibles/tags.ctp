@@ -1,4 +1,3 @@
-<?php echo $this -> Html -> script('jquery.autocomplete.js', array('inline' => false));?>
 <?php echo $this -> Html -> script('tags', array('inline' => false));?>
 <div id="bread-crumbs">
 	<?php echo $this -> Wizard -> progressMenu(array('manufacture' => 'Manufacturer Details', 'attributes' => 'Accessories/Features', 'tags'=> 'Tags', 'image' => 'Image', 'review' => 'Review'));?>
