@@ -39,7 +39,6 @@ class CollectiblesUser extends AppModel {
 	}
 
 	function beforeSave() {
-		debug($this -> data);
 		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
 		$this -> data['CollectiblesUser']['cost'] = str_replace(',', '', $this -> data['CollectiblesUser']['cost']);
 
@@ -61,7 +60,7 @@ class CollectiblesUser extends AppModel {
 			} else {
 				$newMerchant = array();
 				$newMerchant['Merchant']['name'] = $this -> data['CollectiblesUser']['merchant'];
-				$this ->  Merchant -> create();
+				$this -> Merchant -> create();
 				if ($this -> Merchant -> saveAll($newMerchant)) {
 					$this -> data['CollectiblesUser']['merchant_id'] = $this -> Merchant -> id;
 				} else {
@@ -71,8 +70,6 @@ class CollectiblesUser extends AppModel {
 		} else {
 			$this -> data['CollectiblesUser']['merchant_id'] = '';
 		}
-
-		debug($this -> data);
 
 		return true;
 	}
@@ -92,7 +89,6 @@ class CollectiblesUser extends AppModel {
 				if (isset($val['Merchant'])) {
 					$results[$key]['CollectiblesUser']['merchant'] = $val['Merchant']['name'];
 				}
-
 			} else {
 				unset($results[$key]['Merchant']);
 			}
