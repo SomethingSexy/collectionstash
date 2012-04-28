@@ -52,7 +52,6 @@ class CollectiblesUsersController extends AppController {
 			debug($collectible);
 			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
-					//$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id');
 					$user = $this -> getUser();
 					//This returns all collectibles in this stash if I ever need them
 					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => false, 'conditions' => array('Stash.user_id' => $user['User']['id'])));
