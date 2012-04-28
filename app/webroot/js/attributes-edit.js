@@ -102,7 +102,7 @@ var DED = function() {
             if(currentLevel < attributeLevel) {
                 var i = currentLevel + 1;
                 for (i; i <= attributeLevel; i++) {
-                    $('#attributeLevel' + i).parent('li').remove();
+                    $('#attributeLevel' + i).parent('div').parent('li').remove();
                 }
                 attributeLevel = currentLevel;
             } else {
