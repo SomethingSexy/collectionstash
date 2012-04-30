@@ -1,7 +1,7 @@
 <?php
 class LatestComment extends AppModel {
 	public $name = 'LatestComment';
-	public $belongsTo = array('CommentType', 'Comment', 'User' => array('fields' => array('id', 'username')));
+	public $belongsTo = array('EntityType', 'Comment', 'User' => array('fields' => array('id', 'username')));
 	public $actsAs = array('Containable');
 
 	/**
@@ -18,10 +18,10 @@ class LatestComment extends AppModel {
 		$dataSource -> begin();
 		$latestComment = array();
 		$latestComment['LatestComment']['comment_id'] = $comment['Comment']['id'];
-		$latestComment['LatestComment']['comment_type_id'] = $comment['Comment']['comment_type_id'];
+		$latestComment['LatestComment']['entity_type_id'] = $comment['Comment']['entity_type_id'];
 		$latestComment['LatestComment']['user_id'] = $comment['Comment']['user_id'];
 
-		$existingLatestComment = $this -> find("first", array('contain' => false, 'conditions' => array('LatestComment.comment_type_id' => $comment['Comment']['comment_type_id'])));
+		$existingLatestComment = $this -> find("first", array('contain' => false, 'conditions' => array('LatestComment.entity_type_id' => $comment['Comment']['entity_type_id'])));
 		if (!empty($existingLatestComment)) {
 			$latestComment['LatestComment']['id'] = $existingLatestComment['LatestComment']['id'];
 			$this -> id = $existingLatestComment['LatestComment']['id'];
