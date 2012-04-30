@@ -2,7 +2,7 @@
 class Comment extends AppModel {
 	public $name = 'Comment';
 	//TODO: We need a counter cache for user
-	public $belongsTo = array('CommentType', 'User' => array('fields' => array('id', 'username')));
+	public $belongsTo = array('EntityType', 'User' => array('fields' => array('id', 'username')));
 	public $hasMany = array('LatestComment' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
@@ -55,18 +55,18 @@ class Comment extends AppModel {
 			$type = $this -> data['Comment']['type'];
 			$type_id = $this -> data['Comment']['type_id'];
 
-			$commentType = $this -> CommentType -> find('first', array('conditions' => array('CommentType.type' => $type, 'CommentType.type_id' => $type_id)));
+			$commentType = $this -> EntityType -> find('first', array('conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $type_id)));
 			if (empty($commentType)) {
 				$commentTypeForSave = array();
-				$commentTypeForSave['CommentType']['type'] = $type;
-				$commentTypeForSave['CommentType']['type_id'] = $type_id;
+				$commentTypeForSave['EntityType']['type'] = $type;
+				$commentTypeForSave['EntityType']['type_id'] = $type_id;
 				if ($this -> CommentType -> save($commentTypeForSave)) {
-					$commentType['CommentType']['id'] = $this -> CommentType -> id;
+					$commentType['EntityType']['id'] = $this -> EntityType -> id;
 				} else {
 					$retVal = false;
 				}
 			}
-			$this -> data['Comment']['comment_type_id'] = $commentType['CommentType']['id'];
+			$this -> data['Comment']['entity_type_id'] = $commentType['EntityType']['id'];
 		}
 
 		if ($retVal) {
@@ -80,7 +80,7 @@ class Comment extends AppModel {
 	public function afterSave($created) {
 		if ($created) {
 			if (!$this -> LatestComment -> saveLatest($this -> data)) {
-				CakeLog::write('error', 'There was a problem saving the last comment for ' . $this -> data['Comment']['comment_type_id']);
+				CakeLog::write('error', 'There was a problem saving the last comment for ' . $this -> data['Comment']['entity_type_id']);
 			}
 		}
 	}
@@ -178,8 +178,8 @@ class Comment extends AppModel {
 		$commentMetaData = array();
 		//Get all comments
 		//Grab the comment type first, I have a feeling this will be the fastest way to do this, instead of a join
-		$commentType = $this -> CommentType -> find("first", array('conditions' => array('CommentType.type' => $type, 'CommentType.type_id' => $typeID), 'contain' => false));
-		$conditions = array_merge(array('Comment.comment_type_id' => $commentType['CommentType']['id']), $conditions);
+		$commentType = $this -> EntityType -> find("first", array('conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $typeID), 'contain' => false));
+		$conditions = array_merge(array('Comment.entity_type_id' => $commentType['EntityType']['id']), $conditions);
 
 		$comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
 
@@ -248,7 +248,7 @@ class Comment extends AppModel {
 
 		$commentId = $comment['Comment']['id'];
 
-		$actionComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User', 'CommentType')));
+		$actionComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User', 'EntityType')));
 
 		$ownerId = $this -> getOwnerId($actionComment);
 
@@ -276,8 +276,8 @@ class Comment extends AppModel {
 	private function getOwnerId($commentType) {
 		$ownerId = null;
 
-		if ($commentType['CommentType']['type'] === 'stash') {
-			$stash = $this -> CommentType -> Stash -> find("first", array('conditions' => array('Stash.id' => $commentType['CommentType']['type_id'])));
+		if ($commentType['EntityType']['type'] === 'stash') {
+			$stash = $this -> EntityType -> Stash -> find("first", array('conditions' => array('Stash.id' => $commentType['EntityType']['type_id'])));
 			if (!empty($stash)) {
 				$ownerId = $stash['Stash']['user_id'];
 			}

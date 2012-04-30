@@ -7,18 +7,18 @@
  * 
  * I will be renaming this model and table so I don't have to make existing changes to the database
  */
-class CommentType extends AppModel {
-    public $name = 'CommentType';
+class EntityType extends AppModel {
+    public $name = 'EntityType';
     public $hasMany = array('Comment');
-    public $belongsTo = array('Stash' => array('conditions' => array('CommentType.type' => 'stash'), 'foreignKey' => 'type_id'));
+    public $belongsTo = array('Stash' => array('conditions' => array('EntityType.type' => 'stash'), 'foreignKey' => 'type_id'));
     public $actsAs = array('Containable');
 
     public function afterFind($results, $primary = false) {
         foreach ($results as $key => &$val) {
-            if ($val['CommentType']['type'] === 'stash') {
-                $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.id' => $val['CommentType']['type_id']), 'contain' => array('User'=>array('fields'=>'username'))));
-                $val['CommentType']['Stash'] = $stash['Stash'];
-                $val['CommentType']['User'] = $stash['User'];
+            if ($val['EntityType']['type'] === 'stash') {
+                $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.id' => $val['EntityType']['type_id']), 'contain' => array('User'=>array('fields'=>'username'))));
+                $val['EntityType']['Stash'] = $stash['Stash'];
+                $val['EntityType']['User'] = $stash['User'];
             }
         }
         return $results;

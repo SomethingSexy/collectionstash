@@ -10,8 +10,8 @@
 				foreach ($comments as $key => $comment) {
 					echo '<div class="comment">';
 					echo '<div class="comment-type">';
-					if ($comment['CommentType']['type'] === 'stash') {
-						echo $comment['CommentType']['User']['username'] . '\'s ';
+					if ($comment['EntityType']['type'] === 'stash') {
+						echo $comment['EntityType']['User']['username'] . '\'s ';
 						echo 'Stash';
 					}
 					echo '</div>';
@@ -20,8 +20,8 @@
 					$commentText = str_replace('\r', "\r", $commentText);
 					$commentText = htmlspecialchars_decode($commentText, ENT_QUOTES);
 
-					if ($comment['CommentType']['type'] === 'stash') {
-						echo $this -> Html -> link( $commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['CommentType']['User']['username']));
+					if ($comment['EntityType']['type'] === 'stash') {
+						echo $this -> Html -> link( $commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['User']['username']));
 					}
 					echo '</div>';
 					echo '<div class="comment-info">';
