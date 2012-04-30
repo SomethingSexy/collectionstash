@@ -1,4 +1,12 @@
 <?php
+/**
+ * This should be turned into a generic model type object.  Not sure I 100% agree with this type of design but it will
+ * prevent me from having a whole crap ton of extra tables.  
+ * 
+ * This will be used to store references to different models to link up comments and subscriptions, or anything else that needs to dynamically links to models
+ * 
+ * I will be renaming this model and table so I don't have to make existing changes to the database
+ */
 class CommentType extends AppModel {
     public $name = 'CommentType';
     public $hasMany = array('Comment');
