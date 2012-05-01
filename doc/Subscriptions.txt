@@ -1,0 +1,18 @@
+Subscriptions Table
+
+This will contain a user_id and what they are subscribing too
+
+We will want to use the cake 2.1 event system
+
+Everytime we do an update or a comment add, we will trigger a subscription check event
+
+That will then take what they subscribed to, look up what to do in the notifications table and then send off that notification
+
+
+Will we need some sort of subscriptions type table? Similar to the comment_type table?
+
+
+SELECT *
+FROM subscriptions
+JOIN entity_types ON ( subscriptions.entity_type_id = entity_types.id )
+WHERE entity_types.type = 'stash'
