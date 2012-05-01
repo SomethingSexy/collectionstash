@@ -6,29 +6,29 @@ class Comment extends AppModel {
 	public $hasMany = array('LatestComment' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
-	public $validate = array(
-	//description field
-	'comment' => array('minLength' => array('rule' => array('minLength', 10), 'message' => 'Comment must be at least 10 characters.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Comment cannot be more than 1000 characters.')), );
+	public $validate = array('comment' => array('rule' => array('between', 10, 1000), 'allowEmpty' => false, 'message' => 'Comment must be at least 10 characters and less than 1000.'));
 
-	function beforeValidate() {
-		//right now we only have comments on stashes
-		if ($this -> data['Comment']['type'] !== 'stash') {
-			return false;
-		}
-		$typeId = $this -> data['Comment']['type_id'];
-		$model = null;
-		//Do I want to valid that the id I am posting too is valid?
-		if ($this -> data['Comment']['type'] === 'stash') {
-
-			$model = $this -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeId)));
-		}
-
-		if ($model === null || empty($model)) {
-			return false;
-		}
-
-		return true;
-	}
+	//WTF why is this breaking my validation, fucking piece of shit
+	// public function beforeValidate() {
+	// //right now we only have comments on stashes
+	//
+	// if ($this -> data['Comment']['type'] !== 'stash') {
+	// return false;
+	// }
+	// $typeId = $this -> data['Comment']['type_id'];
+	// $model = null;
+	// //Do I want to valid that the id I am posting too is valid?
+	// if ($this -> data['Comment']['type'] === 'stash') {
+	//
+	// $model = $this -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeId)));
+	// }
+	//
+	// if ($model === null || empty($model)) {
+	// return false;
+	// }
+	// CakeLog::write('info', $this -> data['Comment']['comment']);
+	// return true;
+	// }
 
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => &$val) {
@@ -55,17 +55,7 @@ class Comment extends AppModel {
 			$type = $this -> data['Comment']['type'];
 			$type_id = $this -> data['Comment']['type_id'];
 
-			$commentType = $this -> EntityType -> find('first', array('conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $type_id)));
-			if (empty($commentType)) {
-				$commentTypeForSave = array();
-				$commentTypeForSave['EntityType']['type'] = $type;
-				$commentTypeForSave['EntityType']['type_id'] = $type_id;
-				if ($this -> CommentType -> save($commentTypeForSave)) {
-					$commentType['EntityType']['id'] = $this -> EntityType -> id;
-				} else {
-					$retVal = false;
-				}
-			}
+			$commentType = $this -> EntityType -> getEntity($type_id, $type);
 			$this -> data['Comment']['entity_type_id'] = $commentType['EntityType']['id'];
 		}
 
