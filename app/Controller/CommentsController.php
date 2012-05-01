@@ -108,6 +108,7 @@ class CommentsController extends AppController {
 			debug($this -> request -> data);
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$this -> request -> data['Comment']['user_id'] = $this -> getUserId();
+			CakeLog::write('info', $this -> request -> data['Comment']['comment']);
 			//TODO: After save we need to also return all comments inbetween this update the last one they viewed.
 			if ($this -> Comment -> saveAll($this -> request -> data)) {
 				$data['comments'] = array();

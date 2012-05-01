@@ -1,5 +1,7 @@
 <?php
 App::import('Core', 'Validation');
+App::uses('CakeEvent', 'Event');
+App::uses('BlogEventListener', 'Event');
 class CollectiblesUser extends AppModel {
 
 	public $name = 'CollectiblesUser';

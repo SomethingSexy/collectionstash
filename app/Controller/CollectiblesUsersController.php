@@ -1,5 +1,6 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEvent', 'Event');
 class CollectiblesUsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
@@ -62,7 +63,11 @@ class CollectiblesUsersController extends AppController {
 					if ($this -> CollectiblesUser -> saveAll($this -> request -> data)) {
 						$collectibleUser = $this -> CollectiblesUser -> getUserCollectible($this -> CollectiblesUser -> id);
 						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
+						//This should be in the model I think
+						$this -> getEventManager() -> dispatch(new CakeEvent('Model.Stash.Collectible.afterAdd', $this, array('stashId' => $stash['Stash']['id'])));
+
 						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
+
 						return;
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -226,7 +231,7 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	public function beforeRender() {
-		debug($this -> validationErrors);
+
 	}
 
 }
