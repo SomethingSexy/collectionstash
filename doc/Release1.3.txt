@@ -1,0 +1,7 @@
+Change Database table: comment_types to entity_types
+
+Rename comment_type_id to entity_type_id in comments and latest_comments
+
+User Table add comment_count
+
+EntityType add comment_count
