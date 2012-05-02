@@ -20,12 +20,20 @@ class CommentsController extends AppController {
 	 * This is the main entry way into "Discussion" page.
 	 */
 	public function index() {
-		$this -> paginate = array('limit' => 25);
+		$this -> paginate = array('limit' => 25, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
 
 		$this -> set(compact('comments'));
 
-		debug($comments);
+		debug($this -> params['paging']['LatestComment']['pageCount']);
+
+	}
+
+	public function latestComments() {
+		$this -> paginate = array('limit' => 25, 'order' => array('LatestComment.created' => 'desc'));
+		$comments = $this -> paginate('LatestComment');
+
+		$this -> set(compact('comments'));
 	}
 
 	public function update() {
