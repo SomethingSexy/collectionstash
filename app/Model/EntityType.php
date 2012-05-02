@@ -6,6 +6,9 @@
  * This will be used to store references to different models to link up comments and subscriptions, or anything else that needs to dynamically links to models
  *
  * I will be renaming this model and table so I don't have to make existing changes to the database
+ * 
+ * This model will contain additional properties about that relationship, for example it contains a comment_count, to indicate how many comments
+ * this entity has.
  */
 class EntityType extends AppModel {
 	public $name = 'EntityType';
@@ -35,7 +38,7 @@ class EntityType extends AppModel {
 			$entityTypeForSave['EntityType']['type'] = $type;
 			$entityTypeForSave['EntityType']['type_id'] = $type_id;
 			if ($this -> save($entityTypeForSave)) {
-				$retVal['EntityType']['id'] = $this -> EntityType -> id;
+				$retVal['EntityType']['id'] = $this -> id;
 			} else {
 				$retVal = false;
 			}

@@ -2,7 +2,7 @@
 class Comment extends AppModel {
 	public $name = 'Comment';
 	//TODO: We need a counter cache for user
-	public $belongsTo = array('EntityType', 'User' => array('fields' => array('id', 'username')));
+	public $belongsTo = array('EntityType' => array('counterCache' => true), 'User' => array('counterCache' => true, 'fields' => array('id', 'username')));
 	public $hasMany = array('LatestComment' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
@@ -32,19 +32,22 @@ class Comment extends AppModel {
 
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => &$val) {
-			$datetime = strtotime($val['Comment']['created']);
-			$mysqldate = date("m/d/y g:i A", $datetime);
-			$val['Comment']['formatted_created'] = $mysqldate;
+			if (isset($val['Comment'])) {
+				$datetime = strtotime($val['Comment']['created']);
+				$mysqldate = date("m/d/y g:i A", $datetime);
+				$val['Comment']['formatted_created'] = $mysqldate;
 
-			//Create a shorthand for this comment
-			$comment = $val['Comment']['comment'];
-			$commentLength = strlen($comment);
+				//Create a shorthand for this comment
+				$comment = $val['Comment']['comment'];
+				$commentLength = strlen($comment);
 
-			if ($commentLength > 200) {
-				$comment = substr($comment, 0, 200);
+				if ($commentLength > 200) {
+					$comment = substr($comment, 0, 200);
+				}
+				$val['Comment']['shorthand_comment'] = $comment;
 			}
-			$val['Comment']['shorthand_comment'] = $comment;
 		}
+
 		return $results;
 	}
 

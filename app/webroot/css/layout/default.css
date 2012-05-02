@@ -2070,11 +2070,13 @@ div.paging span a:hover {
 }
 .comments-container ol.comments li {
 	float: left;
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 	padding: 20px;
-	background-color: #B5CAD0;
-	font: 300 14px/1.4em Open Sans, Georgia, Verdana, "Lucida Grande", Lucida, sans-serif;
+	/*background-color: #F9F8EA;*/
+	font: 300 14px/1.4em helvetica,arial,sans-serif;
 	width: 800px;
+	color: #606060;
+	border-bottom: 1px solid #FDB924;
 }
 .comments-container ol.comments li.comment .actions {
 	text-align: right;
@@ -2082,11 +2084,22 @@ div.paging span a:hover {
 .comments-container ol.comments li.comment .actions span {
 	margin-right: 5px;
 }
+.comments-container ol.comments li .comment-info {
+	float: left;
+	width: 200px;
+}
 .comments-container ol.comments li .comment-info .user {
 	display: block;
+	font-weight: bold;
+}
+.comments-container ol.comments li .comment-info .datetime {
+	display: block;
+	font-style: italic;
+	font-size: 10px;
 }
 .comments-container ol.comments li .comment-text {
-	margin-top: 10px;
+	float: left;
+	width: 600px;
 }
 .comments-container ol.comments li.comment .error-message {
 	float: right;
@@ -2102,14 +2115,30 @@ div.paging span a:hover {
 	width: auto;
 	margin-left: 80px;
 }
-.latest-comments .comment {
-	height: 200px;
-	width: 200px;
+.comments-container  .comments-loader {
+	overflow: hidden;
+	background: none repeat scroll 0 0 #FFF2C6;
+    border: 1px solid #E9C95F;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+    clear: both;
+    color: #666666;
+    display: block;
+    font-size: 12px;
+    padding: 15px;
+    float: left;
+    margin-left: 30px;
+    visibility: hidden;
+}
+.comments-container  .comments-loader span {
+	float: left;
+}
+.latest-comments ol.comments li.comment {
 	float: left;
 	margin-left: 10px;
+	border-bottom: none;
 }
 .latest-comments .comment .comment-type {
-	font-size: 0.8em;
+	
 	margin-bottom: 2px;
 	background-color: #FDB924;
 	color: #FFF;
@@ -2118,6 +2147,12 @@ div.paging span a:hover {
 	clear: both;
 	border-radius: 5px;
 	padding: 5px;
+}
+.latest-comments .comment .comment-count {
+	float: left;
+	margin-bottom: 2px;
+    padding: 5px;
+    font-size: 0.8em;
 }
 .latest-comments .comment .comment-text {
 	border-radius: 5px;
@@ -2140,7 +2175,8 @@ div.paging span a:hover {
 }
 .latest-comments .comment .comment-info span {
 	float: left;
-	clear: both;
+	clear: none;
+	margin-right: 10px;
 }
 /* Login Dialog */
 #login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {
