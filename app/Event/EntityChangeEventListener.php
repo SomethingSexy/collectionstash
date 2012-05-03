@@ -1,10 +1,13 @@
 <?php
 App::uses('CakeEventListener', 'Event');
 
+/**
+ * I might be able to put this into one Event called notify :)
+ */
 class EntityChangeEventListener implements CakeEventListener {
 
 	public function implementedEvents() {
-		return array('Model.Stash.Collectible.afterAdd' => 'collectibleAddedToStash',                // assign event to function
+		return array('Model.Stash.Collectible.afterAdd' => 'collectibleAddedToStash',                   // assign event to function
 		);
 	}
 
@@ -41,13 +44,15 @@ class EntityChangeEventListener implements CakeEventListener {
 			// It will also be used to kick off emails
 			// I think part of this event will
 			CakeLog::write('info', 'Event callback fuck' . $subscriptions[0]['Subscription']['id']);
+			// This will do a bulk notify
+			CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions, 'message' => __('User Updated Stash!'))));
+
 		} else {
 			CakeLog::write('info', 'No subscriptions');
 		}
-	
+
 		// Eh is this the way to do it?
 		// We will pass the user and the message
-		CakeEventManager::instance() -> dispatch(new CakeEvent('Event.Subscription.trigger', $this, array()));
 
 	}
 
