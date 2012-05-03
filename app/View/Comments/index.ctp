@@ -6,7 +6,7 @@
 		</div>
 		<div class="component-view">
 			<div class="comments-container latest-comments">
-				<ol id="comments" class="comments" data-page="1">
+				<ol id="comments" class="comments" data-page="2" data-page-count="<?php echo $pageCount; ?>">
 					<?php
 					foreach ($comments as $key => $comment) {
 						echo '<li class="comment">';
@@ -51,8 +51,11 @@
 </div>
 <script>
 	$(function() {
-		$(window).data('ajaxready', true).scroll(function(e) {
+		if($('#comments').attr('data-page') <= $('#comments').attr('data-page-count')) {
+			$(window).data('ajaxready', true);
+		}
 
+		$(window).scroll(function(e) {
 			if($(window).data('ajaxready') === false)
 				return;
 			// alert($(window).scrollTop() + ' ' + ($(document).height() - $(window).height()));
@@ -66,17 +69,15 @@
 					url : '/comments/latestComments/page:' + $('#comments').attr('data-page'),
 					success : function(html) {
 						if(html) {
-							$('#postswrapper').append(html);
+							$('#comments').append(html);
 							$('div#loadmoreajaxloader').css('visibility', 'hidden');
-						} else {
-							// $('div#loadmoreajaxloader').html();
 						}
 
 						$('#comments').attr('data-page', parseInt($('#comments').attr('data-page')) + 1);
 
-						$(window).data('ajaxready', true);
-
-						alert($('#comments').attr('data-page'));
+						if($('#comments').attr('data-page') <= $('#comments').attr('data-page-count')) {
+							$(window).data('ajaxready', true);
+						}
 					}
 				});
 			}

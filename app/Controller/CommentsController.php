@@ -4,33 +4,23 @@ class CommentsController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify');
 
-	// function test() {
-	// // $lastestComments = $this -> Comment -> find("all", array('conditions' => array('Comment.created BETWEEN ? AND ?' => array("2012-04-04 01:14:38", "2012-04-04 01:16:01"))));
-	// // $lastestComments = $this -> Comment -> find("all", array('conditions' => array("Comment.created >" => "2012-04-04 01:10:29", 'and' => array("Comment.created <" => "2012-04-04 01:16:01"))));
-	//
-	// // $lastestComments = $this -> Comment -> find('all', array('contain' => array('CommentType' => array('conditions' => array('CommentType.type =' => "stash", 'CommentType.type_id' => 1)))));
-	//
-	// $balls = $this -> Comment -> CommentType -> find("first", array('conditions' => array('CommentType.id' => 1)));
-	//
-	// debug($balls);
-	//
-	// }
-
 	/**
 	 * This is the main entry way into "Discussion" page.
 	 */
 	public function index() {
-		$this -> paginate = array('limit' => 25, 'order' => array('LatestComment.created' => 'desc'));
+		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
 
 		$this -> set(compact('comments'));
-
-		debug($this -> params['paging']['LatestComment']['pageCount']);
-
+		$this -> set('pageCount', $this -> params['paging']['LatestComment']['pageCount']);
 	}
 
+	/**
+	 * This will return the pagination of the latest comments via ajax.  The limits need to match up
+	 * for this one and the index.
+	 */
 	public function latestComments() {
-		$this -> paginate = array('limit' => 25, 'order' => array('LatestComment.created' => 'desc'));
+		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
 
 		$this -> set(compact('comments'));
