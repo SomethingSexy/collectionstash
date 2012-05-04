@@ -12,6 +12,9 @@
 						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil.png"/></a>';
 						echo '</li>';
 					}
+					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash){
+						echo '<li><a title="Subscribe to this Stash" id="subscribe" data-subscribed="false" data-entity-type="stash" data-entity-id="' .$stash['id'] . '" class="link add-stash-link"><img src="/img/icon/subscription.png"/></a></li>';
+					}
 					?>
 					<li>
 						<?php echo '<a title="Photo Gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/photos.png"/></a>'; ?>

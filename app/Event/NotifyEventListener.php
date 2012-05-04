@@ -21,7 +21,7 @@ class NotifyEventListener implements CakeEventListener {
 		// I think the subject will be the controller/model whatever the subscription was
 		// $event -> subject ->
 
-		$event -> subject -> loadModel('Message');
+		$event -> subject -> loadModel('Notification');
 
 		// This could kick off a shit ton of events, depending on how many people.
 		// We might want to do a bulk notify
@@ -30,7 +30,7 @@ class NotifyEventListener implements CakeEventListener {
 			array_push($data, array('user_id'=> $subscription['Subscription']['user_id'], 'message'=> $message));
 		}
 
-		$event -> subject -> Message -> saveAll($data);
+		$event -> subject -> Notification -> saveAll($data);
 
 		CakeLog::write('info', 'Notify Bitches');
 	}
