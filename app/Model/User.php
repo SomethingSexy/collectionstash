@@ -3,27 +3,31 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 	var $name = 'User';
 	var $actsAs = array('Containable');
-	var $hasMany = array('Stash', 'CollectiblesUser', 'Invite', 'UserUpload');
+	var $hasMany = array('Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Subscription' => array('dependent' => true));
 	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
 	var $hasOne = array('Profile' => array('dependent' => true));
 
-	function beforeValidate() {
-		$valid = true;
-		if (!$this -> id) {
-			if (isset($this -> data['User']['username']) && !empty($this -> data['User']['username']) && $this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username']))) > 0) {
-				$this -> invalidate('username_unique');
-				$valid = false;
-			}
-			if (isset($this -> data['User']['email']) && !empty($this -> data['User']['email']) && $this -> find('count', array('conditions' => array('User.email' => $this -> data['User']['email']))) > 0) {
-				$this -> invalidate('email', 'A user with that email already exists.');
-				$valid = false;
-			}
-		}
-
-		return $valid;
-	}
-
-	var $validate = array('username' => array('validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'message' => 'Alphanumeric only.'), 'validLength' => array('rule' => array('maxLength', '40'), 'message' => 'Maximum 40 characters long'), 'validLengthMin' => array('rule' => array('minLength', '3'), 'message' => 'Minimum 3 characters long')), 'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'required' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')), 'email' => array('rule' => array('email', true), 'message' => 'Enter a valid email'), 'first_name' => array('rule' => 'alphaNumeric', 'required' => true), 'last_name' => array('rule' => 'alphaNumeric', 'required' => true));
+	public $validate = array(
+	//username
+	'username' => array(
+	//valid values
+	'validValues' => array('rule' => 'alphaNumeric', 'allowEmpty' => false, 'message' => 'Alphanumeric only.'),
+	//valid length
+	'validLength' => array('rule' => array('maxLength', 40), 'message' => 'Maximum 40 characters long'),
+	//valid min length
+	'validLengthMin' => array('rule' => array('minLength', 3), 'message' => 'Minimum 3 characters long'),
+	//unique
+	'uniqueUserName' => array('rule' => array('isUnqiueUserName'), 'message' => 'That username exists already. Try again.')),
+	//password
+	'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'allowEmpty' => false, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')),
+	//email
+	'email' => array('validValues' => array('rule' => array('email', true), 'allowEmpty' => false, 'message' => 'Enter a valid email'),
+	//Unique email
+	'uniqueEmail' => array('rule' => array('isUnqiueEmail'), 'message' => 'A user with that email already exists.')),
+	//first
+	'first_name' => array('rule' => 'alphaNumeric', 'allowEmpty' => false),
+	//last
+	'last_name' => array('rule' => 'alphaNumeric', 'allowEmpty' => false));
 
 	function beforeSave() {
 		//Make sure there is no space around the email, seems to be an issue with sending when there is
@@ -38,7 +42,29 @@ class User extends AppModel {
 		$valid = true;
 		if (strcmp($this -> data['User']['new_password'], $this -> data['User']['confirm_password'])) {
 			$valid = false;
-			debug($valid);
+		}
+		return $valid;
+	}
+
+	function isUnqiueUserName() {
+		$valid = true;
+		if (isset($this -> data['User']['username']) && !empty($this -> data['User']['username'])) {
+			$userCount = $this -> find('count', array('conditions' => array('User.username' => $this -> data['User']['username'])));
+			if ($userCount > 0) {
+				$valid = false;
+			}
+		}
+		return $valid;
+	}
+
+	function isUnqiueEmail() {
+		$valid = true;
+		if (isset($this -> data['User']['email']) && !empty($this -> data['User']['email'])) {
+			$emailCount = $this -> find('count', array('conditions' => array('User.email' => $this -> data['User']['email'])));
+			if ($emailCount > 0) {
+				$valid = false;
+			}
+
 		}
 		return $valid;
 	}
@@ -48,7 +74,7 @@ class User extends AppModel {
 	 */
 	function validatePasswordChars() {
 		$valid = true;
-		if (!preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
+		if (!empty($this -> data['User']['new_password']) && !preg_match('/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/', $this -> data['User']['new_password'])) {
 			//doesnt mneet our 1 upper, one lower, 1 digit or special character require,ent
 			$valid = false;
 
@@ -148,6 +174,31 @@ class User extends AppModel {
 			return false;
 		}
 		return substr(Security::hash(Configure::read('Security.salt') . $this -> field('created') . date('Ymd')), 0, 8);
+	}
+
+	/**
+	 * The data for this will be given to us as $user['User]
+	 */
+	public function createUser($userData) {
+		$userData['User']['admin'] = 0;
+		$userData['User']['status'] = 1;
+		$userData['Profile'] = array();
+		//Set the invites to 0, as they invite people we will increase this number
+		$userData['Profile']['invites'] = 0;
+		$userData['Stash'] = array();
+		$userData['Stash']['0'] = array();
+		$userData['Stash']['0']['name'] = 'Default';
+		$userData['Stash']['0']['total_count'] = 0;
+		if ($this -> saveAll($userData)) {
+			//Find the user
+			$user = $this -> find("first", array('conditions' => array('User.id' => $this -> id)));
+			//Subscribe them to their own stash
+			
+			$this -> Subscription -> addSubscription('stash', $user['Stash'][0]['id'], $user['User']['id']);
+			return true;
+		}
+
+		return false;
 	}
 
 }

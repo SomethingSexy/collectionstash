@@ -13,7 +13,7 @@
 						echo '</li>';
 					}
 					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash){
-						echo '<li><a title="Subscribe to this Stash" id="subscribe" data-subscribed="false" data-entity-type="stash" data-entity-id="' .$stash['id'] . '" class="link add-stash-link"><img src="/img/icon/subscription.png"/></a></li>';
+						echo '<li><a title="Subscribe to this Stash" id="subscribe" data-subscribed="false" data-entity-type="stash" data-entity-id="' .$stash['id'] . '" class="link add-stash-link"><img src="/img/icon/subscribed.png"/></a></li>';
 					}
 					?>
 					<li>
