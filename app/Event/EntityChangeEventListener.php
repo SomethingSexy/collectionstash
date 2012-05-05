@@ -26,7 +26,7 @@ class EntityChangeEventListener implements CakeEventListener {
 		//Grab the Entity Type for this stash
 		$entityType = $event -> subject -> Subscription -> EntityType -> find("first", array('contain' => false, 'conditions' => array('EntityType.type' => 'stash', 'EntityType.type_id' => $stashId)));
 		//now grab all of the Subscriptions
-		$subscriptions = $event -> subject -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.entity_type_id' => $entityType['EntityType']['id'])));
+		$subscriptions = $event -> subject -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed'=> 1, 'Subscription.entity_type_id' => $entityType['EntityType']['id'])));
 
 		//Now take the stashId, and find all users that are subscribed to it
 

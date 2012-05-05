@@ -815,8 +815,6 @@ class RevisionBehavior extends ModelBehavior {
 			} else {
 				$old_value = '';
 			}
-            debug($key);
-            debug($this -> settings[$Model -> alias]['ignore']);
 			if ($value != $old_value && !in_array($key, $this -> settings[$Model -> alias]['ignore'])) {
 				$changeDetected = true;
 			}

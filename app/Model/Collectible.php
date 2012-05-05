@@ -1,7 +1,7 @@
 <?php
 class Collectible extends AppModel {
 	var $name = 'Collectible';
-	var $belongsTo = array('SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer', 'User' => array('counterCache' => true), 'Currency');
+	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer', 'User' => array('counterCache' => true), 'Currency');
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
@@ -60,9 +60,7 @@ class Collectible extends AppModel {
 	// return preg_match("/^[A-Za-z0-9\s#:.'-]+\z/", $check['name']) === 1;
 	// }
 	function beforeSave() {
-		debug($this -> data);
 		$this -> data = $this -> processBeforeSave($this -> data);
-		debug($this -> data);
 		return true;
 	}
 
@@ -117,7 +115,6 @@ class Collectible extends AppModel {
 		if (isset($returnData['Collectible']['description'])) {
 			$returnData['Collectible']['description'] = trim($returnData['Collectible']['description']);
 		}
-		debug($returnData);
 		return $returnData;
 	}
 
