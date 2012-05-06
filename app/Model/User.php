@@ -189,12 +189,14 @@ class User extends AppModel {
 		$userData['Stash']['0'] = array();
 		$userData['Stash']['0']['name'] = 'Default';
 		$userData['Stash']['0']['total_count'] = 0;
-		if ($this -> saveAll($userData)) {
+		//Need to put this here to create the entity
+		$userData['Stash']['0']['EntityType']['type'] = 'stash';
+		if ($this -> saveAssociated($userData, array('deep' => true))) {
 			//Find the user
 			$user = $this -> find("first", array('conditions' => array('User.id' => $this -> id)));
 			//Subscribe them to their own stash
-			
-			$this -> Subscription -> addSubscription('stash', $user['Stash'][0]['id'], $user['User']['id']);
+
+			//$this -> Subscription -> addSubscription('stash', $user['Stash'][0]['id'], $user['User']['id']);
 			return true;
 		}
 

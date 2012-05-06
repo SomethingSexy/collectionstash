@@ -43,7 +43,7 @@
 				</div>
 				<div id="photo-gallery"></div>
 			</div>
-			<div id="comments" class="comments-container" data-type="stash" data-typeID="<?php echo $stash['id']; ?>">
+			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $stash['entity_type_id']; ?>" data-type="stash" data-typeID="<?php echo $stash['id']; ?>">
 				<!-- This is where all the comments will go-
 				<ol class="comments">
 				<li class="comment">
