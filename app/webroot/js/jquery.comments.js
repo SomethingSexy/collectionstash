@@ -16,6 +16,8 @@
 				this.commentType = this.element.attr('data-type');
 				//This is the id of the type we are attached to
 				this.commentTypeID = this.element.attr('data-typeID');
+				//This is the entity Type
+				this.entityTypeId = this.element.attr('data-entity-type-id');
 				//Add a class for themeing
 				this.element.addClass('comments-container');
 				this.element.prepend($('<div class="title"><h3>Discussion</h3></div>'));
@@ -46,7 +48,7 @@
 				$.ajax({
 					type : "GET",
 					dataType : 'json',
-					url : '/comments/view/' + this.commentType + '/' + this.commentTypeID + '.json',
+					url : '/comments/view/' + this.entityTypeId + '.json',
 					success : function(data, textStatus, XMLHttpRequest) {
 						//Need to get top level permissions first
 						if(data.commentsData.comments.length > 0) {
@@ -112,8 +114,7 @@
 				$.ajax({
 					type : "post",
 					data : {
-						'data[Comment][type]' : this.commentType,
-						'data[Comment][type_id]' : this.commentTypeID,
+						'data[Comment][entity_type_id]' : this.entityTypeId,
 						'data[Comment][comment]' : comment,
 						'data[Comment][last_comment_created]' : lastCommentCreated
 					},

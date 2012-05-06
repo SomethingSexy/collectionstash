@@ -6,12 +6,11 @@ class Stash extends AppModel {
 	public $belongsTo = array('User' => array('counterCache' => true), 'EntityType');
 	public $actsAs = array('Containable');
 
-	public function afterSave($created) {
-		if ($created) {
-			// $stashId = $this -> id;
-			// $entityType = $this -> EntityType -> getEntity($stashId, 'stash');
-// 			
-		}
+	public function beforeSave() {
+		
+
+		debug($this -> data);
+		return true;
 	}
 
 	public function getStashDetails($userId) {

@@ -10,6 +10,8 @@ class CommentsController extends AppController {
 	public function index() {
 		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
+		
+		debug($comments);
 
 		$this -> set(compact('comments'));
 		$this -> set('pageCount', $this -> params['paging']['LatestComment']['pageCount']);
@@ -115,17 +117,10 @@ class CommentsController extends AppController {
 				$comment = $this -> Comment -> findById($commentId);
 				$lastestComments = array();
 
-				if ($this -> request -> data['Comment']['type'] === 'stash') {
-					$stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $this -> request -> data['Comment']['type_id'])));
-					if (!empty($stash)) {
-						$ownerId = $stash['Stash']['user_id'];
-					}
-				}
-
 				if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
-					$lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId, array('Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
+					$lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['entity_type_id'], $this -> request -> data['Comment']['user_id'], array('Comment.created >' => $this -> request -> data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
 				} else {
-					$lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['type'], $this -> request -> data['Comment']['type_id'], $this -> request -> data['Comment']['user_id'], $ownerId);
+					$lastestComments = $this -> Comment -> getComments($this -> request -> data['Comment']['entity_type_id'], $this -> request -> data['Comment']['user_id']);
 				}
 
 				if (!empty($lastestComments)) {
@@ -159,7 +154,7 @@ class CommentsController extends AppController {
 
 	}
 
-	public function view($type = null, $typeID = null) {
+	public function view($entityTypeId = null) {
 		/*
 		 * At this point, I think we need to get the security settings for each comment.
 		 *
@@ -169,30 +164,12 @@ class CommentsController extends AppController {
 		 *  - If you are viewing general comments, you get actions for your own comments
 		 */
 		$userId = null;
-		$ownerId = null;
 
 		if ($this -> isLoggedIn()) {
 			$userId = $this -> getUserId();
 		}
 
-		/*
-		 * At this point, I could either hardcore checking for stash here or
-		 *
-		 * I could make a comment component and then we would have to tell the
-		 * JS which URL to go after and then there wouldn't have to be any
-		 * real hardcoding
-		 */
-
-		//For now
-		if ($type === 'stash') {
-			$stash = $this -> Comment -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeID)));
-			if (!empty($stash)) {
-				$ownerId = $stash['Stash']['user_id'];
-			}
-		}
-		debug($userId);
-		debug($ownerId);
-		$comments = $this -> Comment -> getComments($type, $typeID, $userId, $ownerId);
+		$comments = $this -> Comment -> getComments($entityTypeId, $userId);
 		$this -> set('comments', array('commentsData' => $comments));
 	}
 

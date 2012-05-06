@@ -55,17 +55,17 @@ class Comment extends AppModel {
 		//Update the id is set, so we don't have to worry about this
 		$retVal = true;
 		if (empty($this -> id)) {
-			$type = $this -> data['Comment']['type'];
-			$type_id = $this -> data['Comment']['type_id'];
-
-			$commentType = $this -> EntityType -> getEntity($type_id, $type);
-			$this -> data['Comment']['entity_type_id'] = $commentType['EntityType']['id'];
+			// $type = $this -> data['Comment']['type'];
+			// $type_id = $this -> data['Comment']['type_id'];
+			//
+			// $commentType = $this -> EntityType -> getEntity($type_id, $type);
+			// $this -> data['Comment']['entity_type_id'] = $commentType['EntityType']['id'];
 		}
 
-		if ($retVal) {
-			unset($this -> data['Comment']['type']);
-			unset($this -> data['Comment']['type_id']);
-		}
+		// if ($retVal) {
+		// unset($this -> data['Comment']['type']);
+		// unset($this -> data['Comment']['type_id']);
+		// }
 
 		return $retVal;
 	}
@@ -167,12 +167,16 @@ class Comment extends AppModel {
 	 * The owner id will be the userId of the person who might "own" these comments.  That will
 	 * allow me to not necessarly have to hardcode anything in here.
 	 */
-	public function getComments($type = null, $typeID = null, $userId = null, $ownerId = null, $conditions = array()) {
+	public function getComments($entityTypeId = null, $userId = null, $conditions = array()) {
 		$commentMetaData = array();
 		//Get all comments
 		//Grab the comment type first, I have a feeling this will be the fastest way to do this, instead of a join
-		$commentType = $this -> EntityType -> find("first", array('conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $typeID), 'contain' => false));
-		$conditions = array_merge(array('Comment.entity_type_id' => $commentType['EntityType']['id']), $conditions);
+		$entityType = $this -> EntityType -> find("first", array('conditions' => array('EntityType.id' => $entityTypeId), 'contain' => false));
+
+		//Get the entity owner
+		$ownerId = $this -> EntityType -> getEntityOwner($entityType);
+
+		$conditions = array_merge(array('Comment.entity_type_id' => $entityType['EntityType']['id']), $conditions);
 
 		$comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
 
