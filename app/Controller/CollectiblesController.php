@@ -1018,8 +1018,11 @@ class CollectiblesController extends AppController {
 				if ($this -> Collectible -> delete($collectible['Collectible']['id'], true)) {
 
 					//If this fails oh well
+					//TODO: This should be in some callback
 					//Have to do this because we have a belongsTo relationship on Collectible, probably should be a hasOne, fix at some point
 					$this -> Collectible -> Revision -> delete($collectible['Collectible']['revision_id']);
+					//Have to do the same thing with Entity
+					$this -> Collectible -> EntityType -> delete($collectible['Collectible']['entity_type_id']);
 					$this -> __sendApprovalEmail(false, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], null, $notes);
 					$this -> Session -> setFlash(__('The collectible was successfully denied.', true), null, null, 'success');
 					$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);

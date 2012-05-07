@@ -26,31 +26,24 @@ class Subscription extends AppModel {
 	public $belongsTo = array('EntityType', 'User' => array('fields' => array('id', 'username', 'email')));
 	public $actsAs = array('Containable');
 
-	public function beforeSave() {
-		//Update the id is set, so we don't have to worry about this
-		$retVal = true;
-
-		$type = $this -> data['Entity']['type'];
-		$type_id = $this -> data['Entity']['type_id'];
-
-		$entityType = $this -> EntityType -> getEntity($type_id, $type);
-		$this -> data['Subscription']['entity_type_id'] = $entityType['EntityType']['id'];
-
-		if ($retVal) {
-			unset($this -> data['Entity']['type']);
-			unset($this -> data['Entity']['type_id']);
-		}
-
-		return $retVal;
-	}
-
 	/**
 	 * This will add a subscription to the given model, model id and the user who is adding ths subscription
 	 */
-	public function addSubscription($type, $type_id, $user_id) {
+	public function addSubscription($entityTypeId, $user_id, $subscribed = null) {
 		$subscription = array();
-		$subscription['Entity']['type'] = $type;
-		$subscription['Entity']['type_id'] = $type_id;
+		// Doing this here, it really shouln't be a big deal since this will be done by user for their own stuff
+		$alreadyExist = $this -> find("first", array('conditions' => array('Subscription.entity_type_id' => $entityTypeId, 'Subscription.user_id' => $user_id)));
+
+		if (!empty($alreadyExist)) {
+			$subscription['Subscription']['id'] = $alreadyExist['Subscription']['id'];
+		}
+
+		if ($subscribed === null || $subscribed === 'true') {
+			$subscription['Subscription']['subscribed'] = 1;
+		} else {
+			$subscription['Subscription']['subscribed'] = 0;
+		}
+		$subscription['Subscription']['entity_type_id'] = $entityTypeId;
 		$subscription['Subscription']['user_id'] = $user_id;
 
 		if ($this -> save($subscription)) {
@@ -58,6 +51,13 @@ class Subscription extends AppModel {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * This will return all subscriptions for a given user
+	 */
+	public function getSubscriptions($user_id) {
+		return $this -> find("list", array('conditions' => array('Subscription.user_id' => $user_id, 'Subscription.subscribed' => 1), 'fields' => array('Subscription.entity_type_id', 'Subscription.id')));
 	}
 
 }
