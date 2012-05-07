@@ -1,226 +1,226 @@
 <?php
 App::uses('Sanitize', 'Utility');
 class StashsController extends AppController {
-    public $name = 'Stashs';
-    public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
+	public $name = 'Stashs';
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
 
-    function stats($id = null) {
-        //This is private stuff for sure make sure they are logged in
-        $this -> checkLogIn();
+	function stats($id = null) {
+		//This is private stuff for sure make sure they are logged in
+		$this -> checkLogIn();
 
-        if ($id) {
-            $id = Sanitize::clean($id, array('encode' => false));
-            $stash = $this -> Stash -> findById($id);
-            //Check to make sure that the user id tied to this stash is the one logged in
-            if ($stash['Stash']['user_id'] == $this -> getUserId()) {
-                $stashStats = $this -> Stash -> getStashStats($id);
-                //CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.stash_id'=>$id), 'contain'=> false));
-                $this -> set(compact('stashStats'));
-            } else {
-                $this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
-            }
+		if ($id) {
+			$id = Sanitize::clean($id, array('encode' => false));
+			$stash = $this -> Stash -> findById($id);
+			//Check to make sure that the user id tied to this stash is the one logged in
+			if ($stash['Stash']['user_id'] == $this -> getUserId()) {
+				$stashStats = $this -> Stash -> getStashStats($id);
+				//CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.stash_id'=>$id), 'contain'=> false));
+				$this -> set(compact('stashStats'));
+			} else {
+				$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
+			}
 
-        } else {
-            $this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
-        }
+		} else {
+			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
+		}
 
-    }
+	}
 
-    /*
-     * This action will be used to allow the user to view/edit their stash.  Individual collectible edits will happen in
-     * the ColletiblesUsers controller.  This will be the main launching point.  Although one could argue that this
-     * should go in the CollectiblesUsers controller.
-     *
-     * Right now, I am not keying this by Stash, if I ever get back into multiple stashes this will have to be updated.
-     */
-    public function edit() {
-        //Since we are making sure they are logged in, there should always be a user
-        $this -> checkLogIn();
-        $user = $this -> getUser();
+	/*
+	 * This action will be used to allow the user to view/edit their stash.  Individual collectible edits will happen in
+	 * the ColletiblesUsers controller.  This will be the main launching point.  Although one could argue that this
+	 * should go in the CollectiblesUsers controller.
+	 *
+	 * Right now, I am not keying this by Stash, if I ever get back into multiple stashes this will have to be updated.
+	 */
+	public function edit() {
+		//Since we are making sure they are logged in, there should always be a user
+		$this -> checkLogIn();
+		$user = $this -> getUser();
 
-        if ($this -> request -> is('post') || $this -> request -> is('put')) {
-            debug($this -> request -> data);
-            $this -> request -> data = Sanitize::clean($this -> request -> data);
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			debug($this -> request -> data);
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
 
-            // foreach ($this -> request -> data['CollectiblesUser'] as $key => $value) {
-            // // $this -> Stash -> CollectiblesUser -> id = $value['id'];
-            // // $this -> Stash -> CollectiblesUser -> saveField('sort_number', $value['sort_number']);
-            //
-            // if ($this -> Stash -> CollectiblesUser -> save($value, array('fieldList' => array('sort_number'), 'callbacks' => false))) {
-            //
-            // } else {
-            // debug($this -> Stash -> CollectiblesUser -> validationErrors);
-            // }
-            // }
+			// foreach ($this -> request -> data['CollectiblesUser'] as $key => $value) {
+			// // $this -> Stash -> CollectiblesUser -> id = $value['id'];
+			// // $this -> Stash -> CollectiblesUser -> saveField('sort_number', $value['sort_number']);
+			//
+			// if ($this -> Stash -> CollectiblesUser -> save($value, array('fieldList' => array('sort_number'), 'callbacks' => false))) {
+			//
+			// } else {
+			// debug($this -> Stash -> CollectiblesUser -> validationErrors);
+			// }
+			// }
 
-            if ($this -> Stash -> CollectiblesUser -> saveMany($this -> request -> data['CollectiblesUser'], array('fieldList' => array('sort_number'), 'callbacks' => false))) {
-                $this -> Session -> setFlash(__('Your sort was successfully saved.', true), null, null, 'success');
-            } else {
-                debug($this -> Stash -> CollectiblesUser -> validationErrors);
-                $this -> Session -> setFlash(__('There was a problem saving your sort.', true), null, null, 'error');
-            }
+			if ($this -> Stash -> CollectiblesUser -> saveMany($this -> request -> data['CollectiblesUser'], array('fieldList' => array('sort_number'), 'callbacks' => false))) {
+				$this -> Session -> setFlash(__('Your sort was successfully saved.', true), null, null, 'success');
+			} else {
+				debug($this -> Stash -> CollectiblesUser -> validationErrors);
+				$this -> Session -> setFlash(__('There was a problem saving your sort.', true), null, null, 'error');
+			}
 
-        }
-        //Ok we have a user, although this seems kind of inefficent but it works for now
-        $this -> set('myStash', true);
-        $this -> set('stashUsername', $user['User']['username']);
+		}
+		//Ok we have a user, although this seems kind of inefficent but it works for now
+		$this -> set('myStash', true);
+		$this -> set('stashUsername', $user['User']['username']);
 
-        $collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype'))));
+		$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype'))));
 
-        $this -> set(compact('collectibles'));
+		$this -> set(compact('collectibles'));
 
-    }
+	}
 
-    public function stashList() {
-        $username = $this -> getUsername();
-        if ($username) {
-            $user = $this -> getUser();
-            $this -> loadModel('User');
-            $stashCount = $this -> User -> getNumberOfStashesByUser($username);
-            $stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
-            $this -> set('aStash', $stashDetails);
-        } else {
-            $this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-        }
+	public function stashList() {
+		$username = $this -> getUsername();
+		if ($username) {
+			$user = $this -> getUser();
+			$this -> loadModel('User');
+			$stashCount = $this -> User -> getNumberOfStashesByUser($username);
+			$stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
+			$this -> set('aStash', $stashDetails);
+		} else {
+			$this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
+		}
 
-    }
+	}
 
-    public function profileSettings() {
-        if ($this -> isLoggedIn()) {
-            $user = $this -> getUser();
+	public function profileSettings() {
+		if ($this -> isLoggedIn()) {
+			$user = $this -> getUser();
 
-            $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
-            $profileSettings = array();
-            $profileSettings['privacy'] = $stash['Stash']['privacy'];
+			$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
+			$profileSettings = array();
+			$profileSettings['privacy'] = $stash['Stash']['privacy'];
 
-            $this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));
-        } else {
-            $this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-        }
-    }
+			$this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));
+		} else {
+			$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
+		}
+	}
 
-    public function updateProfileSettings() {
-        $this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
-        if ($this -> isLoggedIn()) {
-            if (!empty($this -> request -> data)) {
-                $user = $this -> getUser();
+	public function updateProfileSettings() {
+		$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
+		if ($this -> isLoggedIn()) {
+			if (!empty($this -> request -> data)) {
+				$user = $this -> getUser();
 
-                $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
+				$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
 
-                $this -> Stash -> id = $stash['Stash']['id'];
-                if (!isset($this -> request -> data['Stash']['privacy'])) {
-                    $this -> request -> data['Stash']['privacy'] = 0;
-                }
-                if ($this -> Stash -> saveField('privacy', $this -> request -> data['Stash']['privacy'])) {
-                    $this -> set('aProfileSettings', array('success' => array('isSuccess' => true, 'message' => __('You have successfully updated your settings.', true))));
-                } else {
-                    $this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> Stash -> validationErrors)));
-                }
-            } else {
-                $this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'message' => array('There was an issue trying to save your settings.')));
-            }
+				$this -> Stash -> id = $stash['Stash']['id'];
+				if (!isset($this -> request -> data['Stash']['privacy'])) {
+					$this -> request -> data['Stash']['privacy'] = 0;
+				}
+				if ($this -> Stash -> saveField('privacy', $this -> request -> data['Stash']['privacy'])) {
+					$this -> set('aProfileSettings', array('success' => array('isSuccess' => true, 'message' => __('You have successfully updated your settings.', true))));
+				} else {
+					$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> Stash -> validationErrors)));
+				}
+			} else {
+				$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'message' => array('There was an issue trying to save your settings.')));
+			}
 
-        } else {
-            $this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-        }
-    }
+		} else {
+			$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
+		}
+	}
 
-    /*
-     * Not sure how necesssary this method will be but right now it turns a JSON view of the stash, paginated, this is only used for the tile view as of now
-     */
-    // public function pageView($userName = null) {
-    // $this -> autoLayout = false;
-    // if (!is_null($userName)) {
-    // $userId = Sanitize::clean($userName, array('encode' => false));
-    // //Also retrieve the UserUploads at this point, so we do not have to do it later
-    // $user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userName), 'contain' => array('Stash', 'UserUpload')));
-    // debug($user);
-    // //Ok we have a user, although this seems kind of inefficent but it works for now
-    // if (!empty($user)) {
-    // $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
-    // if (!empty($stash)) {
-    // $loggedInUser = $this -> getUser();
-    // $viewingMyStash = false;
-    // if ($loggedInUser['User']['id'] === $user['User']['id']) {
-    // $viewingMyStash = true;
-    // }
-    // $this -> set('myStash', $viewingMyStash);
-    // $this -> set('stashUsername', $userName);
-    // if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
-    // //$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-    // $this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
-    // $collectibles = $this -> paginate('CollectiblesUser');
-    //
-    // //$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
-    // debug($collectibles);
-    // $this -> set('userUploads', $user['UserUpload']);
-    // $this -> set(compact('collectibles'));
-    // } else {
-    // $this -> render('view_private');
-    // return;
-    // }
-    // } else {
-    // //This is a fucking error
-    // $this -> redirect('/', null, true);
-    // }
-    // } else {
-    // $this -> render('view_no_exist');
-    // return;
-    // }
-    //
-    // } else {
-    // $this -> redirect('/', null, true);
-    // }
-    // }
+	/*
+	 * Not sure how necesssary this method will be but right now it turns a JSON view of the stash, paginated, this is only used for the tile view as of now
+	 */
+	// public function pageView($userName = null) {
+	// $this -> autoLayout = false;
+	// if (!is_null($userName)) {
+	// $userId = Sanitize::clean($userName, array('encode' => false));
+	// //Also retrieve the UserUploads at this point, so we do not have to do it later
+	// $user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userName), 'contain' => array('Stash', 'UserUpload')));
+	// debug($user);
+	// //Ok we have a user, although this seems kind of inefficent but it works for now
+	// if (!empty($user)) {
+	// $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id'])));
+	// if (!empty($stash)) {
+	// $loggedInUser = $this -> getUser();
+	// $viewingMyStash = false;
+	// if ($loggedInUser['User']['id'] === $user['User']['id']) {
+	// $viewingMyStash = true;
+	// }
+	// $this -> set('myStash', $viewingMyStash);
+	// $this -> set('stashUsername', $userName);
+	// if ($stash['Stash']['privacy'] === '0' || $viewingMyStash) {
+	// //$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
+	// $this -> paginate = array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 12);
+	// $collectibles = $this -> paginate('CollectiblesUser');
+	//
+	// //$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array());
+	// debug($collectibles);
+	// $this -> set('userUploads', $user['UserUpload']);
+	// $this -> set(compact('collectibles'));
+	// } else {
+	// $this -> render('view_private');
+	// return;
+	// }
+	// } else {
+	// //This is a fucking error
+	// $this -> redirect('/', null, true);
+	// }
+	// } else {
+	// $this -> render('view_no_exist');
+	// return;
+	// }
+	//
+	// } else {
+	// $this -> redirect('/', null, true);
+	// }
+	// }
 
-    public function view($userId = null, $display = 'gallery') {
-        if (!is_null($userId)) {
-            $userId = Sanitize::clean($userId, array('encode' => false));
-            //Also retrieve the UserUploads at this point, so we do not have to do it later and comments
-            $user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
-            debug($user);
-            //Ok we have a user, although this seems kind of inefficent but it works for now
-            if (!empty($user)) {
-                // $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']),'contain' =>false));
-                debug($user['Stash']);
-                if (!empty($user['Stash'])) {
-                    $loggedInUser = $this -> getUser();
-                    $viewingMyStash = false;
-                    if ($loggedInUser['User']['id'] === $user['User']['id']) {
-                        $viewingMyStash = true;
-                    }
-                    $this -> set('myStash', $viewingMyStash);
-                    $this -> set('stashUsername', $userId);
-                    //If the privacy is 0 or you are viewing your own stash then always show
-                    //or if it is set to 1 and this person is logged in also show.
-                    if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
-                        //$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-                        $collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
-                        $this -> set('userUploads', $user['UserUpload']);
-                        $this -> set(compact('collectibles'));
-                        $this -> set('stash', $user['Stash'][0]);
-                        // $this -> set('comments', $user['Stash'][0]['Comment']);
-                    } else {
-                        $this -> render('view_private');
-                        return;
-                    }
-                } else {
-                    //This is a fucking error
-                    $this -> redirect('/', null, true);
-                }
-            } else {
-                $this -> render('view_no_exist');
-                return;
-            }
+	public function view($userId = null, $display = 'gallery') {
+		if (!is_null($userId)) {
+			$userId = Sanitize::clean($userId, array('encode' => false));
+			//Also retrieve the UserUploads at this point, so we do not have to do it later and comments
+			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
+			debug($user);
+			//Ok we have a user, although this seems kind of inefficent but it works for now
+			if (!empty($user)) {
+				// $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']),'contain' =>false));
+				debug($user['Stash']);
+				if (!empty($user['Stash'])) {
+					$loggedInUser = $this -> getUser();
+					$viewingMyStash = false;
+					if ($loggedInUser['User']['id'] === $user['User']['id']) {
+						$viewingMyStash = true;
+					}
+					$this -> set('myStash', $viewingMyStash);
+					$this -> set('stashUsername', $userId);
+					//If the privacy is 0 or you are viewing your own stash then always show
+					//or if it is set to 1 and this person is logged in also show.
+					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
+						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
+						$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
+						$this -> set('userUploads', $user['UserUpload']);
+						$this -> set(compact('collectibles'));
+						$this -> set('stash', $user['Stash'][0]);
+						// $this -> set('comments', $user['Stash'][0]['Comment']);
+					} else {
+						$this -> render('view_private');
+						return;
+					}
+				} else {
+					//This is a fucking error
+					$this -> redirect('/', null, true);
+				}
+			} else {
+				$this -> render('view_no_exist');
+				return;
+			}
 
-        } else {
-            $this -> redirect('/', null, true);
-        }
+		} else {
+			$this -> redirect('/', null, true);
+		}
 
-        if ($display === 'tiles') {
-            $this -> render('view_tiles');
-        }
-    }
+		if ($display === 'tiles') {
+			$this -> render('view_tiles');
+		}
+	}
 
 }
 ?>

@@ -12,8 +12,12 @@
 						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil.png"/></a>';
 						echo '</li>';
 					}
-					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash){
-						echo '<li><a title="Subscribe to this Stash" id="subscribe" data-subscribed="false" data-entity-type="stash" data-entity-id="' .$stash['id'] . '" class="link add-stash-link"><img src="/img/icon/subscribed.png"/></a></li>';
+					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
+						$userSubscribed = 'false';
+						if (array_key_exists($stash['entity_type_id'], $subscriptions)) {
+							$userSubscribed = 'true';
+						}
+						echo '<li><a id="subscribe" data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="link add-stash-link"></a></li>';
 					}
 					?>
 					<li>
@@ -83,6 +87,7 @@
 <?php echo $this -> Html -> script('galleria-1.2.6', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('galleria.classic.js', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Html -> css('galleria.classic'); ?>
 
 <script>
@@ -275,9 +280,5 @@ if (isset($collectibles) && !empty($collectibles)) {
 			});
 			return false;
 		});
-	});
-	$(function() {
-
-	});
-
+	});
 </script>

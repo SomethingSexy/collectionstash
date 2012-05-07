@@ -34,7 +34,7 @@ class EntityType extends AppModel {
 	public $name = 'EntityType';
 	public $hasMany = array('Comment');
 	//EntityType only has one and the id belongs in the stash/collectible
-	public $hasOne = array('Stash' => array('dependent' => true), 'Collectible' => array('dependent' => true));
+	public $hasOne = array('Stash', 'Collectible');
 	public $actsAs = array('Containable');
 
 	public function afterFind($results, $primary = false) {

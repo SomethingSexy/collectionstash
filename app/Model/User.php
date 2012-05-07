@@ -196,7 +196,7 @@ class User extends AppModel {
 			$user = $this -> find("first", array('conditions' => array('User.id' => $this -> id)));
 			//Subscribe them to their own stash
 
-			//$this -> Subscription -> addSubscription('stash', $user['Stash'][0]['id'], $user['User']['id']);
+			$this -> Subscription -> addSubscription($user['Stash'][0]['entity_type_id'], $user['User']['id']);
 			return true;
 		}
 

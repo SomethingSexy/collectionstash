@@ -5,7 +5,7 @@ class AppController extends Controller {
 
 	public function beforeFilter() {
 		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
+			// Configure::write('debug', 0);
 			$this -> layout = 'ajax';
 		} else {
 			$this -> layout = 'default';
@@ -22,6 +22,9 @@ class AppController extends Controller {
 			$this -> set('isLoggedIn', false);
 			$this -> set('isUserAdmin', false);
 		}
+		
+		$this -> set('subscriptions', $this -> getSubscriptions());
+		
 		//Since this gets set for every request, setting this here for the default
 		$this -> set('title_for_layout', 'Collection Stash');
 		$this -> set('description_for_layout', 'Your collectible database and storage system.');
@@ -71,6 +74,16 @@ class AppController extends Controller {
 	public function getUserId() {
 		$user = $this -> getUser();
 		return $user['User']['id'];
+	}
+
+	public function getSubscriptions() {
+		$subscriptions = $this -> Session -> read('subscriptions');
+		
+		if($subscriptions === null){
+			return array();
+		} else {
+			return $subscriptions;
+		}
 	}
 
 	public function setSearchData() {
