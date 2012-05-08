@@ -64,10 +64,8 @@ class CollectiblesUsersController extends AppController {
 						$collectibleUser = $this -> CollectiblesUser -> getUserCollectible($this -> CollectiblesUser -> id);
 						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
 						//This should be in the model I think
-						$this -> getEventManager() -> dispatch(new CakeEvent('Model.Stash.Collectible.afterAdd', $this, array('stashId' => $stash['Stash']['id'])));
-
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
 						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
-
 						return;
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
@@ -213,7 +211,6 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	public function registry($id = null) {
-		$this -> checkLogIn();
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			if (!empty($collectible)) {
@@ -224,7 +221,6 @@ class CollectiblesUsersController extends AppController {
 			} else {
 				$this -> redirect("/", null, true);
 			}
-
 		} else {
 			$this -> redirect("/", null, true);
 		}

@@ -10,7 +10,7 @@ class CommentsController extends AppController {
 	public function index() {
 		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
-		
+
 		debug($comments);
 
 		$this -> set(compact('comments'));
@@ -126,7 +126,7 @@ class CommentsController extends AppController {
 				if (!empty($lastestComments)) {
 					$data['comments'] = $lastestComments['comments'];
 				}
-
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Comment.add', $this, array('userId' => $this -> request -> data['Comment']['user_id'], 'entityTypeId' => $this -> request -> data['Comment']['entity_type_id'])));
 				$this -> set('comments', $data);
 
 			} else {

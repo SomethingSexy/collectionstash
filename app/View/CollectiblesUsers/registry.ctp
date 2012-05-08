@@ -33,7 +33,12 @@
 						echo '</span>';
 						if ($showEditionSize) {
 							echo '<span class="edition-size">';
-							echo $value['CollectiblesUser']['edition_size'];
+							if(!empty($value['CollectiblesUser']['edition_size'])) {
+								echo $value['CollectiblesUser']['edition_size'];	
+							} else {
+								echo __('Not recorded');
+							}
+							
 						}
 						echo '</span>';
 						echo '</li>';

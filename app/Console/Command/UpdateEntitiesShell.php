@@ -1,4 +1,7 @@
 <?php
+/**
+ * This will do updates to entited for existing rows
+ */
 class UpdateEntitiesShell extends AppShell {
 	public $uses = array('Collectible', 'Stash');
 
