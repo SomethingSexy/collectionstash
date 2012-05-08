@@ -11,3 +11,21 @@ Collectible add entity_type_id column, needs to be index
 Stash add entity_type_id column, needs to be index
 
 Remove type_id from entity_type, after I turn comment_Types into entity_types and AFTER I run the command to update stashes
+
+Upgrade to 2.1.2
+
+
+TODO:
+- Link to the registry on the search view of a collectible
+- If it is a variant, make the "Yes" a link to the parent collectible.
+
+
+Notes:
+
+cake -app D:\Development\wamp\www\app update_entities
+
+cake -app D:\Development\wamp\www\app process_notifications
+
+linux: ./cake 
+
+./cake -app /var/www/collectionstash/app hello
