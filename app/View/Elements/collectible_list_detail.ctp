@@ -2,7 +2,7 @@
 if (!isset($showStatus)) {
 	$showStatus = false;
 }
-if(!isset($showStats)) {
+if (!isset($showStats)) {
 	$showStats = false;
 }
 ?>
@@ -13,7 +13,7 @@ if(!isset($showStats)) {
 			Name:
 		</dt>
 		<dd>
-			<?php echo $collectible['name'];?><?php
+			<?php echo $collectible['name']; ?><?php
 			if ($collectible['exclusive']) { echo __(' - Exclusive');
 			}
 			?>
@@ -32,19 +32,19 @@ if(!isset($showStats)) {
 			Manufacturer:
 		</dt>
 		<dd>
-			<a href="<?php echo '/manufactures/view/' . $manufacture['id'];?>"> <?php echo $manufacture['title'];?></a>
+			<a href="<?php echo '/manufactures/view/' . $manufacture['id']; ?>"> <?php echo $manufacture['title']; ?></a>
 		</dd>
 		<dt>
 			<?php echo __('Brand'); ?>:
 		</dt>
 		<dd>
-			<?php echo $license['name'];?>
+			<?php echo $license['name']; ?>
 		</dd>
 		<dt>
 			Type:
 		</dt>
 		<dd>
-			<?php echo $collectibletype['name'];?>
+			<?php echo $collectibletype['name']; ?>
 		</dd>
 		<?php
 if(isset($speciazliedType)) {
@@ -53,9 +53,9 @@ if(isset($speciazliedType)) {
 			Manufacturer Type:
 		</dt>
 		<dd>
-			<?php echo $speciazliedType['name'];?>
+			<?php echo $speciazliedType['name']; ?>
 		</dd>
-		<?php }?>
+		<?php } ?>
 		<?php
 		if ($showStatus) {
 			echo '<dt>';
@@ -76,7 +76,12 @@ if(isset($speciazliedType)) {
 			echo __('Owned By:');
 			echo '</dt>';
 			echo '<dd>';
-			echo $collectible['collectibles_user_count'];
+			if($collectible['collectibles_user_count'] === '0') {
+				echo $collectible['collectibles_user_count'];	
+			} else {
+				echo $this -> Html -> link($collectible['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['id']));	
+			}
+			
 			echo '</dd>';
 		}
 		?>

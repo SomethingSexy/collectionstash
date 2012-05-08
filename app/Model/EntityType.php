@@ -40,9 +40,7 @@ class EntityType extends AppModel {
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => &$val) {
 			if ($val['EntityType']['type'] === 'stash') {
-				$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.entity_type_id' => $val['EntityType']['id']), 'contain' => array('User' => array('fields' => 'username'))));
-				$val['EntityType']['Stash'] = $stash['Stash'];
-				$val['EntityType']['User'] = $stash['User'];
+				unset($results[$key]['Collectible']);
 			}
 		}
 		return $results;
@@ -66,6 +64,11 @@ class EntityType extends AppModel {
 		}
 
 		return $retVal;
+	}
+
+	//Lame ass name, this will get get the entity core and related type object
+	public function getEntityCore($entityTypeId) {
+		return $this -> find("first", array('contain' => array('Stash', 'Collectible'), 'conditions' => array('EntityType.id' => $entityTypeId)));
 	}
 
 	/**
