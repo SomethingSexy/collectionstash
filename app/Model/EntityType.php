@@ -68,7 +68,7 @@ class EntityType extends AppModel {
 
 	//Lame ass name, this will get get the entity core and related type object
 	public function getEntityCore($entityTypeId) {
-		return $this -> find("first", array('contain' => array('Stash', 'Collectible'), 'conditions' => array('EntityType.id' => $entityTypeId)));
+		return $this -> find("first", array('contain' => array('Stash' => array('User'), 'Collectible'), 'conditions' => array('EntityType.id' => $entityTypeId)));
 	}
 
 	/**

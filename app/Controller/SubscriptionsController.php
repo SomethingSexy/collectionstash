@@ -9,9 +9,38 @@ class SubscriptionsController extends AppController {
 		// debug($entityType);
 		// $subscriptions = $this -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.entity_type_id' => $entityType['EntityType']['id'])));
 		// debug($subscriptions);
-		
-		$entityType = $this -> Subscription -> EntityType -> getEntityCore(712);
-		debug($entityType);
+		// $subscriptions = $this -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => 1, 'Subscription.entity_type_id' => 712)));
+		// $entityType = $this -> Subscription -> EntityType -> getEntityCore(712);
+		// debug($subscriptions);
+		//
+		// $stash = $this -> Subscription -> EntityType -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => 58)));
+		// debug($stash);
+		// //now grab all of the Subscriptions
+		// $subscriptions = $this -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => 1, 'Subscription.entity_type_id' => 712)));
+		//
+		// if (!empty($subscriptions)) {
+		// //Build the message
+		// $message = $stash['User']['username'];
+		// $message .= __(' has added a new collectible to their stash!');
+		//
+		// foreach ($subscriptions as $key => $subscription) {
+		// //If the subscription is the same as the owner of the stash, unset it
+		// CakeLog::write('info', $subscription['Subscription']['user_id']);
+		// CakeLog::write('info', $stash['Stash']['user_id']);
+		// if ($subscription['Subscription']['user_id'] === $stash['Stash']['user_id']) {
+		// unset($subscriptions[$key]);
+		// } else {
+		// $subscriptions[$key]['Subscription']['message'] = $message;
+		// }
+		//
+		// }
+		//
+		// debug($subscriptions);
+		//
+		// } else {
+		//
+		// }
+
 	}
 
 	public function subscribe() {
