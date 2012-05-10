@@ -15,7 +15,7 @@ class NotifyEventListener implements CakeEventListener {
 	 */
 	public function notifyUser($event) {
 		$subscriptions = $event -> data['subscriptions'];
-		$message = $event -> data['message'];
+		// $message = $event -> data['message'];
 
 		// We will be loading the Notify model and then updating it
 		// I think the subject will be the controller/model whatever the subscription was
@@ -27,7 +27,7 @@ class NotifyEventListener implements CakeEventListener {
 		// We might want to do a bulk notify
 		$data = array();
 		foreach ($subscriptions as $key => $subscription) {
-			array_push($data, array('user_id'=> $subscription['Subscription']['user_id'], 'message'=> $message));
+			array_push($data, array('user_id'=> $subscription['Subscription']['user_id'], 'message'=> $subscription['Subscription']['message']));
 		}
 
 		$event -> subject -> Notification -> saveAll($data);
