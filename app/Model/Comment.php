@@ -31,20 +31,20 @@ class Comment extends AppModel {
 	// }
 
 	public function afterFind($results, $primary = false) {
-		foreach ($results as $key => &$val) {
-			if (isset($val['Comment'])) {
-				$datetime = strtotime($val['Comment']['created']);
+		foreach ($results as $key => $val) {
+			if (isset($results[$key]['Comment'])) {
+				$datetime = strtotime($results[$key]['Comment']['created']);
 				$mysqldate = date("m/d/y g:i A", $datetime);
-				$val['Comment']['formatted_created'] = $mysqldate;
+				$results[$key]['Comment']['formatted_created'] = $mysqldate;
 
 				//Create a shorthand for this comment
-				$comment = $val['Comment']['comment'];
+				$comment = $results[$key]['Comment']['comment'];
 				$commentLength = strlen($comment);
 
 				if ($commentLength > 200) {
 					$comment = substr($comment, 0, 200);
 				}
-				$val['Comment']['shorthand_comment'] = $comment;
+				$results[$key]['Comment']['shorthand_comment'] = $comment;
 			}
 		}
 

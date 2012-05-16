@@ -38,9 +38,11 @@ class EntityType extends AppModel {
 	public $actsAs = array('Containable');
 
 	public function afterFind($results, $primary = false) {
-		foreach ($results as $key => &$val) {
-			if ($val['EntityType']['type'] === 'stash') {
-				unset($results[$key]['Collectible']);
+		foreach ($results as $key => $val) {
+			if ($primary && isset($val['EntityType'])) {
+				if ($results[$key]['EntityType']['type'] === 'stash') {
+					unset($results[$key]['Collectible']);
+				}
 			}
 		}
 		return $results;

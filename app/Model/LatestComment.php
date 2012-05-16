@@ -1,7 +1,7 @@
 <?php
 class LatestComment extends AppModel {
 	public $name = 'LatestComment';
-	public $belongsTo = array('EntityType', 'Comment', 'User' => array('fields' => array('id', 'username')));
+	public $belongsTo = array('EntityType' => array('contain' => array('Stash')), 'Comment', 'User' => array('fields' => array('id', 'username')));
 	public $actsAs = array('Containable');
 
 	/**
@@ -34,6 +34,24 @@ class LatestComment extends AppModel {
 		//Commit regardless
 		$dataSource -> commit();
 		return $retVal;
+	}
+
+	public function afterFind($results, $primary = false) {
+		foreach ($results as $key => $val) {
+			if (isset($results[$key]['LatestComment'])) {
+				/*
+				 * Grab the entity Core, this will properly retrieve the data for this entity
+				 * 
+				 * There might be a better way to do this more automagically but this will work for now.
+				 */
+				$entity = $this -> EntityType -> getEntityCore($results[$key]['EntityType']['id']);
+				if ($results[$key]['EntityType']['type'] === 'stash') {
+					$results[$key]['EntityType'] = $entity['EntityType'];
+					$results[$key]['EntityType']['Stash'] = $entity['Stash'];
+				}
+			}
+		}
+		return $results;
 	}
 
 }
