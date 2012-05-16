@@ -12,7 +12,7 @@
 						echo '<li class="comment">';
 						echo '<div class="comment-type">';
 						if ($comment['EntityType']['type'] === 'stash') {
-							echo $comment['EntityType']['User']['username'] . '\'s ';
+							echo $comment['EntityType']['Stash']['User']['username'] . '\'s ';
 							echo 'Stash';
 						}
 						echo '</div>';
@@ -34,7 +34,7 @@
 						$commentText = htmlspecialchars_decode($commentText, ENT_QUOTES);
 
 						if ($comment['EntityType']['type'] === 'stash') {
-							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['User']['username']));
+							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['Stash']['User']['username']));
 						}
 						echo '</div>';
 
