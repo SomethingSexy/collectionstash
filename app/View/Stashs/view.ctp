@@ -47,40 +47,7 @@
 				</div>
 				<div id="photo-gallery"></div>
 			</div>
-			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $stash['entity_type_id']; ?>" data-type="stash" data-typeID="<?php echo $stash['id']; ?>">
-				<!-- This is where all the comments will go-
-				<ol class="comments">
-				<li class="comment">
-				<div class="info">
-				<span class="user"></span>
-				<span class="datetime"></span>
-				</div>
-				<!-- This is the actual comment
-				<div class="text"></div>
-				<div class="actions">
-				reply
-				delete
-				edit
-				</div>
-				</li>
-				</ol>
-				<div class="actions">
-
-				</div>
-				<div class="post-comment-container">
-				<form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">
-				<div style="display:none;">
-				<input type="hidden" value="POST" name="_method">
-				</div>
-				<div class="input textarea required">
-				<div class="label-wrapper">
-				<label for="CommentComment">Comment</label>
-				</div>
-				<textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea>
-				</div>
-				</form>
-				</div>-->
-			</div>
+			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $stash['entity_type_id']; ?>" data-type="stash" data-typeID="<?php echo $stash['id']; ?>"></div>
 		</div>
 	</div>
 </div>

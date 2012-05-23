@@ -30,7 +30,7 @@ class EntityChangeEventListener implements CakeEventListener {
 		if ($entityType['EntityType']['type'] === 'stash') {
 			$message .= $entityType['Stash']['User']['username'] . '\'s stash.';
 		} else if ($entityType['EntityType']['type'] === 'collectible') {
-			$message .= 'the collectible ' . $entityType['Collectible']['name'];
+			$message .= 'the collectible ' . $entityType['Collectible']['name'] . '.';
 		}
 
 		foreach ($subscriptions as $key => $subscription) {

@@ -14,11 +14,14 @@
 						if ($comment['EntityType']['type'] === 'stash') {
 							echo $comment['EntityType']['Stash']['User']['username'] . '\'s ';
 							echo 'Stash';
+						} else if($comment['EntityType']['type'] === 'collectible') {
+							echo 'Collectible: ';	
+							echo $comment['EntityType']['Collectible']['name'];
 						}
 						echo '</div>';
 						echo '<div class="comment-count">';
 						echo $comment['EntityType']['comment_count'];
-						if ($comment['EntityType']['comment_count'] === 1) {
+						if ($comment['EntityType']['comment_count'] === '1') {
 							echo ' comment';
 						} else {
 							echo ' comments';
@@ -35,6 +38,8 @@
 
 						if ($comment['EntityType']['type'] === 'stash') {
 							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['Stash']['User']['username']));
+						} else if($comment['EntityType']['type'] === 'collectible') {
+							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $comment['EntityType']['Collectible']['id']));
 						}
 						echo '</div>';
 
@@ -58,7 +63,6 @@
 		$(window).scroll(function(e) {
 			if($(window).data('ajaxready') === false)
 				return;
-			// alert($(window).scrollTop() + ' ' + ($(document).height() - $(window).height()));
 			// The second part is done to fix a FF issue where it reports it as one pixel more than it should
 			if($(window).scrollTop() >= ($(document).height() - $(window).height()) || $(window).scrollTop() == ($(document).height() - $(window).height() - 1)) {
 				$('div#loadmoreajaxloader').css('visibility', 'visible');

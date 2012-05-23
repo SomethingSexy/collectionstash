@@ -5,11 +5,14 @@ foreach ($comments as $key => $comment) {
 	if ($comment['EntityType']['type'] === 'stash') {
 		echo $comment['EntityType']['Stash']['User']['username'] . '\'s ';
 		echo 'Stash';
+	} else if($comment['EntityType']['type'] === 'collectible') {
+		echo 'Collectible: ';	
+		echo $comment['EntityType']['Collectible']['name'];
 	}
 	echo '</div>';
 	echo '<div class="comment-count">';
 	echo $comment['EntityType']['comment_count'];
-	if ($comment['EntityType']['comment_count'] === 1) {
+	if ($comment['EntityType']['comment_count'] === '1') {
 		echo ' comment';
 	} else {
 		echo ' comments';

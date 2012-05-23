@@ -15,7 +15,8 @@
 			'collectibleDetail' => $collectible,
 			'showAddStash' => true,
 			'showQuickAdd' => true,
-			'showTags' => true
+			'showTags' => true,
+			'showComments' => true
 		));		
 		
 	} else {
@@ -30,7 +31,8 @@
 			'showAddedDate' => true,
 			'collectibleDetail' => $collectible,
 			'showQuickAdd' => false,
-			'showTags' => true
+			'showTags' => true,
+			'showComments' => true
 		));			
 	}
 ?>

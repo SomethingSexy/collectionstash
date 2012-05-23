@@ -41,13 +41,16 @@ class LatestComment extends AppModel {
 			if (isset($results[$key]['LatestComment'])) {
 				/*
 				 * Grab the entity Core, this will properly retrieve the data for this entity
-				 * 
+				 *
 				 * There might be a better way to do this more automagically but this will work for now.
 				 */
-				$entity = $this -> EntityType -> getEntityCore($results[$key]['EntityType']['id']);
-				if ($results[$key]['EntityType']['type'] === 'stash') {
+				$entity = $this -> EntityType -> getEntityCore($results[$key]['LatestComment']['entity_type_id']);
+				if ($entity['EntityType']['type'] === 'stash') {
 					$results[$key]['EntityType'] = $entity['EntityType'];
 					$results[$key]['EntityType']['Stash'] = $entity['Stash'];
+				} else if ($entity['EntityType']['type'] === 'collectible') {
+					$results[$key]['EntityType'] = $entity['EntityType'];
+					$results[$key]['EntityType']['Collectible'] = $entity['Collectible'];
 				}
 			}
 		}
