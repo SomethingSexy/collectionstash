@@ -10,9 +10,6 @@ class CommentsController extends AppController {
 	public function index() {
 		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.modified' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
-
-		debug($comments);
-
 		$this -> set(compact('comments'));
 		$this -> set('pageCount', $this -> params['paging']['LatestComment']['pageCount']);
 	}
@@ -24,7 +21,6 @@ class CommentsController extends AppController {
 	public function latestComments() {
 		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
-
 		$this -> set(compact('comments'));
 	}
 
@@ -105,10 +101,8 @@ class CommentsController extends AppController {
 			return;
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			debug($this -> request -> data);
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$this -> request -> data['Comment']['user_id'] = $this -> getUserId();
-			CakeLog::write('info', $this -> request -> data['Comment']['comment']);
 			//TODO: After save we need to also return all comments inbetween this update the last one they viewed.
 			if ($this -> Comment -> saveAll($this -> request -> data)) {
 				$data['comments'] = array();
@@ -132,7 +126,6 @@ class CommentsController extends AppController {
 			} else {
 				$data['success'] = array('isSuccess' => false);
 				$errors = $this -> Comment -> invalidFields();
-				debug($errors);
 				/*
 				 * If there is an error, check to see if any of the fields were invalid. if they
 				 * were the only user inputted one is the comment field, otherwise use a generic error mesage

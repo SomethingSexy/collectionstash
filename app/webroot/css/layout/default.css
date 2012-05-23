@@ -969,7 +969,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	width: 300px;
 	position: absolute;
 	right: 40px;
-	top: 80px;
+	top: 10px;
 }
 #collectible-detail .component-view .collectible.item {
 	border: none;
@@ -986,7 +986,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #collectible-detail .component-view .collectible.item {
 	width: 100%;
 	padding: 0;
-	margin-top: 5px;
+	margin-top: 10px;
 }
 #collectible-detail .component-view .collectible.item  .collectible.detail {
 	width: 500px;
@@ -2181,4 +2181,12 @@ div.paging span a:hover {
 /* Login Dialog */
 #login-dialog .component.component-dialog .inside .component-view .form-fields.dialog-fields li .input .label-wrapper {
 	width: 100px;
+}
+
+#collectible-detail .component.variant-list {
+	width: 200px;	
+	float: none;
+	position: absolute;
+	right: 50px;
+    top: 100px;
 }
