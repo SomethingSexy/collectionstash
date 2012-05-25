@@ -2,7 +2,7 @@
 	<div class="component variant-list">
 	  <div class="inside" >
 	     <div class="component-title">
-	      <h2><?php echo __('Variants');?></h2>
+	      <h2><?php echo __('Variants'); ?></h2>
 	    </div>
 	    <div class="component-view">
 	      <div class="collectibles view">
@@ -10,16 +10,17 @@
 	        foreach ($variants as $variant):
 	        ?>
 	        	<div class="collectible item">
-	            	<?php echo $this -> element('collectible_list_image', array(
-						'collectible' => $variant
-					));?>
-					<?php /*echo $this -> element('collectible_list_detail', array(
-						'collectible' => $variant['Collectible'],
-						'manufacture' => $variant['Manufacture'],
-						'license' => $variant['License'],
-						'collectibletype' => $variant['Collectibletype']
-					));*/ ?>
-	        	 <div class="collectible actions"><?php echo $this -> Html ->link('Details', array('controller' => 'collectibles', 'action' => 'view', $variant['Collectible']['id'])); ?></div>
+	        		<div class="collectible image">
+						<?php
+						if (!empty($variant['Upload'])) {
+							echo '<a href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
+							echo $this -> FileUpload -> image($variant['Upload'][0]['name'], array('escape' => false, 'width' => 150, 'height' => 150));
+							echo '</a>';
+						} else {
+							echo '<img src="/img/silhouette_thumb.png"/>';
+						}
+					?>
+					</div>
 	          </div>
 	        <?php endforeach; ?>      
 	      </div>
@@ -30,7 +31,7 @@
 	<div class="component variant-list" id="collectibles-list-component">
 	  <div class="inside" >
 	     <div class="component-title">
-	      <h2><?php echo __('Variants');?></h2>
+	      <h2><?php echo __('Variants'); ?></h2>
 	    </div>
 	    <div class="component-view">
 	      <div class="collectibles view empty">
