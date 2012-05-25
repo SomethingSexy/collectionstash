@@ -1,10 +1,10 @@
 <?php
 /**
  * This will send out emails, 100 at a time.
- * 
+ *
  * This will have to run once a day to start.
- * 
- * 
+ *
+ *
  */
 App::uses('CakeEmail', 'Network/Email');
 class SendEmailShell extends AppShell {
@@ -28,18 +28,6 @@ class SendEmailShell extends AppShell {
 			$this -> Email -> saveField('sent', 1, false);
 
 		}
-
-		//This will go in email shell
-		// $email = new CakeEmail('smtp');
-		// $email -> emailFormat('text');
-		// $email -> template('user_confirm', 'simple');
-		// $email -> to('tyler.cvetan@gmail.com');
-		// $email -> subject(env('SERVER_NAME') . '– Please confirm your email address');
-		// $email -> viewVars(array('activate_url' => 'balls', 'username' => 'fuck'));
-		// $email -> send();
-
-		//For now we are going to send emails until I get the settings up
-
 	}
 
 }

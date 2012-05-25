@@ -8,28 +8,6 @@ class Comment extends AppModel {
 
 	public $validate = array('comment' => array('rule' => array('between', 10, 1000), 'allowEmpty' => false, 'message' => 'Comment must be at least 10 characters and less than 1000.'));
 
-	//WTF why is this breaking my validation, fucking piece of shit
-	// public function beforeValidate() {
-	// //right now we only have comments on stashes
-	//
-	// if ($this -> data['Comment']['type'] !== 'stash') {
-	// return false;
-	// }
-	// $typeId = $this -> data['Comment']['type_id'];
-	// $model = null;
-	// //Do I want to valid that the id I am posting too is valid?
-	// if ($this -> data['Comment']['type'] === 'stash') {
-	//
-	// $model = $this -> User -> Stash -> find("first", array('conditions' => array('Stash.id' => $typeId)));
-	// }
-	//
-	// if ($model === null || empty($model)) {
-	// return false;
-	// }
-	// CakeLog::write('info', $this -> data['Comment']['comment']);
-	// return true;
-	// }
-
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => $val) {
 			if (isset($results[$key]['Comment'])) {
@@ -49,25 +27,6 @@ class Comment extends AppModel {
 		}
 
 		return $results;
-	}
-
-	public function beforeSave() {
-		//Update the id is set, so we don't have to worry about this
-		$retVal = true;
-		if (empty($this -> id)) {
-			// $type = $this -> data['Comment']['type'];
-			// $type_id = $this -> data['Comment']['type_id'];
-			//
-			// $commentType = $this -> EntityType -> getEntity($type_id, $type);
-			// $this -> data['Comment']['entity_type_id'] = $commentType['EntityType']['id'];
-		}
-
-		// if ($retVal) {
-		// unset($this -> data['Comment']['type']);
-		// unset($this -> data['Comment']['type_id']);
-		// }
-
-		return $retVal;
 	}
 
 	public function afterSave($created) {

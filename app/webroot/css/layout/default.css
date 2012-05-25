@@ -2073,7 +2073,7 @@ div.paging span a:hover {
 	margin-bottom: 15px;
 	padding: 20px;
 	/*background-color: #F9F8EA;*/
-	font: 300 14px/1.4em helvetica,arial,sans-serif;
+	font: 300 14px/1.4em helvetica, arial, sans-serif;
 	width: 800px;
 	color: #606060;
 	border-bottom: 1px solid #FDB924;
@@ -2118,16 +2118,16 @@ div.paging span a:hover {
 .comments-container  .comments-loader {
 	overflow: hidden;
 	background: none repeat scroll 0 0 #FFF2C6;
-    border: 1px solid #E9C95F;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-    clear: both;
-    color: #666666;
-    display: block;
-    font-size: 12px;
-    padding: 15px;
-    float: left;
-    margin-left: 30px;
-    visibility: hidden;
+	border: 1px solid #E9C95F;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+	clear: both;
+	color: #666666;
+	display: block;
+	font-size: 12px;
+	padding: 15px;
+	float: left;
+	margin-left: 30px;
+	visibility: hidden;
 }
 .comments-container  .comments-loader span {
 	float: left;
@@ -2138,7 +2138,7 @@ div.paging span a:hover {
 	border-bottom: none;
 }
 .latest-comments .comment .comment-type {
-	
+
 	margin-bottom: 2px;
 	background-color: #FDB924;
 	color: #FFF;
@@ -2151,8 +2151,8 @@ div.paging span a:hover {
 .latest-comments .comment .comment-count {
 	float: left;
 	margin-bottom: 2px;
-    padding: 5px;
-    font-size: 0.8em;
+	padding: 5px;
+	font-size: 0.8em;
 }
 .latest-comments .comment .comment-text {
 	border-radius: 5px;
@@ -2184,9 +2184,27 @@ div.paging span a:hover {
 }
 
 #collectible-detail .component.variant-list {
-	width: 200px;	
+	width: 200px;
 	float: none;
 	position: absolute;
 	right: 50px;
-    top: 100px;
+	top: 110px;
+	border-radius: 0;
 }
+
+#collectible-detail .component.variant-list .inside .component-title {
+	padding: 0;
+	border-radius: 0;
+}
+#collectible-detail .component.variant-list .inside .component-title h2 {
+	border-bottom: 1px solid #CCCCCC;	
+	font-weight: normal;
+}
+
+#collectible-detail .component.variant-list .inside .component-view {
+	padding: 0;
+}
+#collectible-detail .component.variant-list .inside .component-view .collectibles.view.empty {
+	margin-top: 5px;
+}
+
