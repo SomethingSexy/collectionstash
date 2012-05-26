@@ -1,0 +1,8 @@
+TODO:
+- If it is a variant, make the "Yes" a link to the parent collectible.
+- Enlarge Image button
+- Remember me checkbox
+- Notifiy a user if they already have a collectible when addnig to stash
+- drag and drop stash adding
+- tile view for stash with filtering
+- tile view for catalog

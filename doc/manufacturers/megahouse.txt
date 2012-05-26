@@ -1,0 +1,42 @@
+MegaHouse
+
+http://www.megahouse.co.jp
+
+
+Brands:
+- One Piece
+- Queens Blade
+
+Categories:
+-High Qaulity Figure
+- Excellent Model
+	- One Piece
+		- Original Series
+			- Series 1
+			- Series 2
+			- series 3
+			- Series 4
+		- Neo
+			- Neo 1
+			- Neo 2
+			- Neo 3
+			- Neo EX
+			- Neo 4
+			- Neo 5
+			- Neo 6
+			- Neo Ex2
+			- Neo 7
+		- Neo DX
+			- 1-18
+		- Strong Edition
+			- 1-10
+		- Sailing Again
+		- MILD
+		- Limited
+- Excellent Model Core
+	- Queens Blade
+
+
+
+
+http://onepiece.wikia.com/wiki/Portrait_of_Pirates
