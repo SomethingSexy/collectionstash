@@ -1,17 +1,17 @@
 
-Upgrade to 2.1.2
+Upgrade to 2.1.2 - Done
 
-Change Database table: comment_types to entity_types
+Change Database table: comment_types to entity_types - done
 
-Rename comment_type_id to entity_type_id in comments and latest_comments
+Rename comment_type_id to entity_type_id in comments and latest_comments - done
 
-User Table add comment_count
+User Table add comment_count - done
 
-EntityType add comment_count
+EntityType add comment_count - done
 
-Collectible add entity_type_id column, needs to be index
+Collectible add entity_type_id column, needs to be index - done
 
-Stash add entity_type_id column, needs to be index
+Stash add entity_type_id column, needs to be index - done
 
 Run the Update Entities Shell
 
@@ -21,8 +21,7 @@ Remove type_id from entity_type, after I turn comment_Types into entity_types an
 Run the UpdateUserSubscriptionsShell once I have everything updated
 
 
-TODO:
-- If it is a variant, make the "Yes" a link to the parent collectible.
+
 
 
 Notes:
@@ -37,4 +36,18 @@ cake -app D:\Development\wamp\www\app update_user_subscriptions
 
 linux: ./cake 
 
-./cake -app /var/www/collectionstash/app hello
+./cake -app /var/www/collectionstash/app send_email
+
+
+ ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
+
+//test
+ bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+
+cron
+
+/var/www/collectionstash/vendors/cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+/var/www/collectionstash/vendors/cakeshell.sh send_email -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+

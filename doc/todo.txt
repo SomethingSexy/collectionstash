@@ -46,7 +46,7 @@ Think about making attribute description not required
 Image upload error message size not coming through
 
 
-git://github.com/cakephp/cakephp.git
+sudo git clone git://github.com/cakephp/cakephp.git
 
 
 /var/www/collectionstash/cake
