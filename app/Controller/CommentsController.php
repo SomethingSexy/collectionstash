@@ -19,7 +19,7 @@ class CommentsController extends AppController {
 	 * for this one and the index.
 	 */
 	public function latestComments() {
-		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.created' => 'desc'));
+		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.modified' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
 		$this -> set(compact('comments'));
 	}
