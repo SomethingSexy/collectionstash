@@ -220,7 +220,7 @@ class CollectiblesController extends AppController {
 			//reset anything so we are fresh
 			$this -> resetCollectibleAdd();
 			//Grab my collectible
-			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 			//make sure this is a valid collectible
 
 			if (!empty($collectible)) {
@@ -242,7 +242,7 @@ class CollectiblesController extends AppController {
 						//If the collectible we are copying is a variant itself, then grab its parent
 						//and set that as a parent and then this will be a variant of that collectible
 						$variantId = $collectible['Collectible']['variant_collectible_id'];
-						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 						$this -> Session -> write('add.collectible.variant', $collectible);
 					}
 				}
