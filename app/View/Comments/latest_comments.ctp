@@ -29,8 +29,10 @@ foreach ($comments as $key => $comment) {
 
 	if ($comment['EntityType']['type'] === 'stash') {
 		echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['Stash']['User']['username']));
+	} else if($comment['EntityType']['type'] === 'collectible') {
+		echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $comment['EntityType']['Collectible']['id']));
 	}
-	echo '</div>';
+echo '</div>';
 
 	echo '</li>';
 }
