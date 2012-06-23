@@ -15,7 +15,7 @@ class UsersController extends AppController {
 	 * This is the main index into this controller, it will display a list of users.
 	 */
 	function index() {
-		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'), 'limit' => 100);
+		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'), 'limit' => 500);
 
 		$users = $this -> paginate('User');
 
@@ -54,10 +54,10 @@ class UsersController extends AppController {
 							$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
 							CakeLog::write('info', $results);
 							$this -> Session -> write('user', $user);
-							
+
 							$subscriptions = $this -> User -> Subscription -> getSubscriptions($user['id']);
 							$this -> Session -> write('subscriptions', $subscriptions);
-							
+
 							CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
 							// $this -> redirect(array('controller' => 'collectibles', 'action' => 'catalog'));
 							$this -> redirect($this -> Auth -> redirect());
