@@ -149,7 +149,7 @@
 					}
 				}
 			},
-			complete : function() {
+			complete : function(xhr) {
 				$('#upload-add-button').removeAttr('disabled');
 			}
 		});
