@@ -3,7 +3,7 @@ App::uses('Sanitize', 'Utility');
 class UserUploadsController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify');
-	
+
 	public $components = array('Image');
 	/**
 	 * This will display all uploads for the user logged in, since this is not a publically visible page
@@ -102,6 +102,11 @@ class UserUploadsController extends AppController {
 	 */
 	public function add() {
 		$data = array();
+		$fake = true;
+		if ($this -> request -> isAjax()) {
+			$fake = false;
+		}
+		$this -> set(compact('fake'));
 		if ($this -> isLoggedIn()) {
 			debug($this -> request -> data);
 			$this -> request -> data['UserUpload']['user_id'] = $this -> getUserId();
@@ -125,10 +130,6 @@ class UserUploadsController extends AppController {
 						$data['success'] = array('isSuccess' => true);
 						$data['isTimeOut'] = false;
 						$data['data'] = array();
-						/*
-						 * At this point we are changing license data, so we need to reset the series. We will determine if there are
-						 * any series for this license and return a flag so the UI knows it can add a series
-						 */
 						$data['data']['imageLocation'] = $img['path'];
 						$data['data']['imageHeight'] = $img['height'];
 						$data['data']['imageName'] = $userUpload['UserUpload']['name'];
