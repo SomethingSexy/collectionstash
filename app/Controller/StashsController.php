@@ -4,28 +4,6 @@ class StashsController extends AppController {
 	public $name = 'Stashs';
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
 
-	function stats($id = null) {
-		//This is private stuff for sure make sure they are logged in
-		$this -> checkLogIn();
-
-		if ($id) {
-			$id = Sanitize::clean($id, array('encode' => false));
-			$stash = $this -> Stash -> findById($id);
-			//Check to make sure that the user id tied to this stash is the one logged in
-			if ($stash['Stash']['user_id'] == $this -> getUserId()) {
-				$stashStats = $this -> Stash -> getStashStats($id);
-				//CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.stash_id'=>$id), 'contain'=> false));
-				$this -> set(compact('stashStats'));
-			} else {
-				$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
-			}
-
-		} else {
-			$this -> redirect(array('controller' => 'users', 'action' => 'login'), null, true);
-		}
-
-	}
-
 	/*
 	 * This action will be used to allow the user to view/edit their stash.  Individual collectible edits will happen in
 	 * the ColletiblesUsers controller.  This will be the main launching point.  Although one could argue that this
@@ -65,23 +43,9 @@ class StashsController extends AppController {
 		$this -> set('myStash', true);
 		$this -> set('stashUsername', $user['User']['username']);
 
-		$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype'))));
+		$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'Upload', 'Manufacture', 'Collectibletype'))));
 
 		$this -> set(compact('collectibles'));
-
-	}
-
-	public function stashList() {
-		$username = $this -> getUsername();
-		if ($username) {
-			$user = $this -> getUser();
-			$this -> loadModel('User');
-			$stashCount = $this -> User -> getNumberOfStashesByUser($username);
-			$stashDetails = $this -> User -> Stash -> getStashDetails($user['User']['id']);
-			$this -> set('aStash', $stashDetails);
-		} else {
-			$this -> set('aStash', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-		}
 
 	}
 
@@ -178,11 +142,8 @@ class StashsController extends AppController {
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later and comments
 			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash', 'UserUpload')));
-			debug($user);
 			//Ok we have a user, although this seems kind of inefficent but it works for now
 			if (!empty($user)) {
-				// $stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']),'contain' =>false));
-				debug($user['Stash']);
 				if (!empty($user['Stash'])) {
 					$loggedInUser = $this -> getUser();
 					$viewingMyStash = false;
@@ -195,11 +156,14 @@ class StashsController extends AppController {
 					//or if it is set to 1 and this person is logged in also show.
 					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
 						//$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.stash_id' => $stash['Stash']['id']), 'contain' => array('Collectible' => array('Upload', 'Manufacture', 'License', 'Collectibletype')), 'limit' => 24));
-						$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype'))));
-						$this -> set('userUploads', $user['UserUpload']);
+						$this -> paginate = array('limit' => 12, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.stash_id' => $user['Stash'][0]['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'Upload', 'Manufacture', 'Collectibletype')));
+						$collectibles = $this -> paginate('CollectiblesUser');
+
+						//$this -> set('userUploads', $user['UserUpload']);
 						$this -> set(compact('collectibles'));
 						$this -> set('stash', $user['Stash'][0]);
-						// $this -> set('comments', $user['Stash'][0]['Comment']);
+						// This will us the standard view
+						$this -> render('view_v2');
 					} else {
 						$this -> render('view_private');
 						return;
@@ -212,13 +176,8 @@ class StashsController extends AppController {
 				$this -> render('view_no_exist');
 				return;
 			}
-
 		} else {
 			$this -> redirect('/', null, true);
-		}
-
-		if ($display === 'tiles') {
-			$this -> render('view_tiles');
 		}
 	}
 

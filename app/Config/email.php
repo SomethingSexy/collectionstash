@@ -52,10 +52,10 @@ class EmailConfig {
 	public $smtp = array(
 		'transport' => 'Smtp',
 		'from' => array('admin@collectionstash.com' => 'Collection Stash'),
-		'host' => 'smtpout.secureserver.net',
-		'port' => 25,
+		'host' => 'smtp.sendgrid.net',
+		'port' => 587,
 		'timeout' => 30,
-		'username' => 'admin@collectionstash.com',
+		'username' => 'collectionstash',
 		'password' => 'oblivion1968',
 		'client' => null,
 		'log' => false

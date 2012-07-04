@@ -25,6 +25,21 @@
 }
 /* End hide from IE-mac */
 
+
+#infscr-loading {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+    border-radius: 10px 10px 10px 10px;
+    bottom: 30px;
+    color: #222222;
+    font-size: 15px;
+    font-weight: bold;
+    left: 42%;
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    z-index: 100;
+}
+
 .tn3e-prev {
 	background-image: url("/img/icon/tn3e.png");
 	background-position: -2px -3px;
@@ -828,6 +843,18 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #my-stashes-component .inside .component-view .ui-tabs div .actions ul li {
 	display: inline;
 }
+
+#my-stashes-component .inside .component-view .actions.stash .nav li a {
+	background: none repeat scroll 0 0 #CCCCCC;
+	border-radius: 4px 4px 4px 4px;
+	color: #FFFFFF;
+	padding: 5px;
+}
+#my-stashes-component .inside .component-view .actions.stash .nav li a:hover {
+	background: none repeat scroll 0 0 #AAAAAA;
+	text-decoration: none;
+	cursor: pointer;
+}
 #my-stashes-component.edit-stash .inside .component-view .glimpse .image {
 	/* Need a border so the UI doesnt' get screwed up when adding border for hover */
 	/*border: 2px solid #FFF;*/
@@ -869,6 +896,49 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	float: right;
 	/*width: 100%;*/
 	clear: both;
+}
+#my-stashes-component .inside .component-view .tiles {
+	float: left;
+	width: 100%;
+}
+#my-stashes-component .inside .component-view .tiles .tile {
+	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+	float: left;
+	margin: 10px;
+	padding: 10px;
+	height: 250px;
+	width: 200px;
+	background-color: #EEEEEE;
+}
+
+#my-stashes-component .inside .component-view .tiles .tile div.image {
+	height: 150px;
+	text-align: center;
+	width: 150px;
+	display: block;
+	margin: auto;
+}
+
+#my-stashes-component .inside .component-view .tiles .tile .description {
+	font-size: 0.7em;
+	margin-top: 5px;
+	color: #606060;
+	overflow: hidden;
+}
+#my-stashes-component .inside .component-view .tiles .tile .description span {
+	float: left;
+	width: 100%;
+	text-align: right;
+}
+#my-stashes-component .inside .component-view .tiles .tile .user-detail {
+	color: #606060;
+	font-size: 0.7em;
+	text-align: right;
+}
+#my-stashes-component .inside .component-view .tiles .tile .user-detail .date {
+	position: relative;
+	top: 45px;
+	text-align: right;
 }
 #collectibles.collectibles, #photos.photos {
 	margin-top: 50px;
@@ -2197,7 +2267,7 @@ div.paging span a:hover {
 	border-radius: 0;
 }
 #collectible-detail .component.variant-list .inside .component-title h2 {
-	border-bottom: 1px solid #CCCCCC;	
+	border-bottom: 1px solid #CCCCCC;
 	font-weight: normal;
 }
 
