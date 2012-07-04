@@ -7,3 +7,25 @@ Location of backups: /var/backups/project_collectionstash
 Location of database scripts: /usr/local/bin/database_backup.sh
 
 Location of database backups: /var/backups/database
+
+
+
+/var/backups/database/mysql/collectionstash.collectionstash.com.25-05-2012.gz
+
+
+
+
+How to get a backup from the server
+
+collectionstash.collectionstash.com.25-05-2012.gz root@www.collectionstash.com:/var/backups/database/mysql
+
+
+
+collectionstash.collectionstash.com.25-05-2012.gz
+
+
+pscp root@collectionstash.com:/var/backups/database/mysql/collectionstash.collectionstash.com.25-05-2012.gz C:\text\.
+
+
+
+pscp root@collectionstash.com:/var/backups/database/mysql/text.txt C:
