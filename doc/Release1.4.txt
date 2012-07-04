@@ -1,8 +1,15 @@
-TODO:
-- If it is a variant, make the "Yes" a link to the parent collectible.
-- Enlarge Image button
+Nice to haves:
 - Remember me checkbox
-- Notifiy a user if they already have a collectible when addnig to stash
 - drag and drop stash adding
-- tile view for stash with filtering
-- tile view for catalog
+- added filtering to the stash view, like the catalog
+- tile view for catalog - same one I am using for stash - make auto scroll as well
+
+TODO:
+- download fancy box plugin and use that on stash tile view to enlarge images
+- auto scroll, infinite-scroll.com, stash tile view
+- Update Stash Photos page
+- update Stash Comments
+- Enlarge the image on both the user collectible page and the collectible page as the default
+- add fancy box to both pages above
+- Notifiy a user if they already have a collectible when addnig to stash, display this when they are on the add page a list at the top that shows the current collectibles of this type they have
+- If it is a variant, make the "Yes" a link to the parent collectible.
