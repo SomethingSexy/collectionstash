@@ -1,9 +1,9 @@
 body {
 	font-family: helvetica,arial,sans-serif;
 	font-size: 100.1%;
-	letter-spacing: 0.01em;
+	/*letter-spacing: 0.01em;*/
 	/*background: #656464;*/
-	background: none repeat scroll 0 0 #F2F2F2;
+	background: none repeat scroll 0 0 #F1F1F1;
 }
 #container {
 	position: relative;

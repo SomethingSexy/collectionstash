@@ -103,6 +103,10 @@ class UserUploadsController extends AppController {
 	public function add() {
 		$data = array();
 		$fake = true;
+		// This is necessary because for uploading photos, certain browsers that are not
+		// compliant with the newest standards will use an iframe instead of XHR, so we need
+		// to properly handle those browsers by returning the data in a slightly different
+		// format
 		if ($this -> request -> isAjax()) {
 			$fake = false;
 		}

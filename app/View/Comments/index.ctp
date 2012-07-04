@@ -1,3 +1,4 @@
+<?php echo $this -> Html -> script('jquery.infinitescroll', array('inline' => false)); ?>
 <div id="latest-comments-component" class="component">
 	<div class="inside">
 		<div class="component-title">
@@ -6,6 +7,11 @@
 		</div>
 		<div class="component-view">
 			<div class="comments-container latest-comments">
+						<?php echo '<div id="titles-nav">';
+				echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
+				echo '</div>';
+		?>
+				
 				<ol id="comments" class="comments" data-page="2" data-page-count="<?php echo $pageCount; ?>">
 					<?php
 					foreach ($comments as $key => $comment) {
@@ -14,8 +20,8 @@
 						if ($comment['EntityType']['type'] === 'stash') {
 							echo $comment['EntityType']['Stash']['User']['username'] . '\'s ';
 							echo 'Stash';
-						} else if($comment['EntityType']['type'] === 'collectible') {
-							echo 'Collectible: ';	
+						} else if ($comment['EntityType']['type'] === 'collectible') {
+							echo 'Collectible: ';
 							echo $comment['EntityType']['Collectible']['name'];
 						}
 						echo '</div>';
@@ -38,7 +44,7 @@
 
 						if ($comment['EntityType']['type'] === 'stash') {
 							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['Stash']['User']['username']));
-						} else if($comment['EntityType']['type'] === 'collectible') {
+						} else if ($comment['EntityType']['type'] === 'collectible') {
 							echo $this -> Html -> link($commentText . '...', array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $comment['EntityType']['Collectible']['id']));
 						}
 						echo '</div>';
@@ -47,43 +53,20 @@
 					}
 					?>
 				</ol>
-				<div id="loadmoreajaxloader" class="comments-loader">
-					<span>Loading Comments</span>
-				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <script>
 	$(function() {
-		if($('#comments').attr('data-page') <= $('#comments').attr('data-page-count')) {
-			$(window).data('ajaxready', true);
-		}
-
-		$(window).scroll(function(e) {
-			if($(window).data('ajaxready') === false)
-				return;
-			// The second part is done to fix a FF issue where it reports it as one pixel more than it should
-			if($(window).scrollTop() >= ($(document).height() - $(window).height()) || $(window).scrollTop() == ($(document).height() - $(window).height() - 1)) {
-				$('div#loadmoreajaxloader').css('visibility', 'visible');
-				$(window).data('ajaxready', false);
-
-				$.ajax({
-					cache : false,
-					url : '/comments/latestComments/page:' + $('#comments').attr('data-page'),
-					success : function(html) {
-						if(html) {
-							$('#comments').append(html);
-							$('div#loadmoreajaxloader').css('visibility', 'hidden');
-						}
-
-						$('#comments').attr('data-page', parseInt($('#comments').attr('data-page')) + 1);
-
-						if($('#comments').attr('data-page') <= $('#comments').attr('data-page-count')) {
-							$(window).data('ajaxready', true);
-						}
-					}
-				});
+		$('#comments').infinitescroll({
+			nextSelector : "#titles-nav a",
+			navSelector : "#titles-nav",
+			itemSelector : ".comment",
+			loading : {
+				finishedMsg : "<em>All comments have been loaded!</em>",
+				msgText : "<em>Loading the next set of comments.</em>",
 			}
 		});
 	});

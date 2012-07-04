@@ -11,7 +11,7 @@ class Manufacture extends AppModel {
 	//series_id
 	'series_id' => array('rule' => array('numeric'), 'allowEmpty'=> true, 'message' => 'Please select a valid category.'),
 	//url
-	'url' => array('rule' => 'url', 'required' => true, 'message' => 'Must be a valid url.'), );
+	'url' => array('rule' => 'url', 'allowEmpty'=> true, 'message' => 'Must be a valid url.'), );
 
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));

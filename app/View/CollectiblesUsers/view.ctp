@@ -55,7 +55,7 @@ if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['Col
 						?>
 
 						<dt>
-							<?php echo __('Edition Size'); ?>
+							<?php echo __('Edition Number'); ?>
 						</dt>
 						<dd>
 							<?php echo $collectible['CollectiblesUser']['edition_size'] . '/' . $collectible['Collectible']['edition_size']; ?>
