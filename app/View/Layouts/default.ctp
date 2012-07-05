@@ -5,12 +5,12 @@
 		?></title>
 	<?php echo $this -> Html -> meta('icon'); ?>
 	<?php
-		if (isset($description_for_layout)) { echo "<meta name='description' content='" . $description_for_layout . "' />";
-		}
+	if (isset($description_for_layout)) { echo "<meta name='description' content='" . $description_for_layout . "' />";
+	}
 	?>
 	<?php
-		if (isset($keywords_for_layout)) { echo "<meta name='keywords' content='" . $keywords_for_layout . "' />";
-		}
+	if (isset($keywords_for_layout)) { echo "<meta name='keywords' content='" . $keywords_for_layout . "' />";
+	}
 	?>
 	<?php
 	$this -> Minify -> css(array('css/layout/index'));
@@ -20,6 +20,7 @@
 	$this -> Minify -> css(array('css/jquery.ui.dialog'));
 	$this -> Minify -> css(array('css/jquery.ui.tabs'));
 	$this -> Minify -> css(array('css/jquery.treeview'));
+	$this -> Minify -> css(array('css/jquery.fancybox'));
 	$this -> Minify -> css(array('css/redmond'));
 	$this -> Minify -> css(array('css/layout/default'));
 	$this -> Minify -> css(array('css/layout/non_msie'));
@@ -84,7 +85,7 @@
 			});
 			$('#q').focus(function() {
 				var firstTime = $('#q').data('firstTime');
-				if( typeof firstTime === "undefined") {
+				if ( typeof firstTime === "undefined") {
 					$('#q').val('');
 					$('#q').data('firstTime', false);
 				}
@@ -112,7 +113,7 @@
 	<script>
 		( function(d, s, id) {
 				var js, fjs = d.getElementsByTagName(s)[0];
-				if(d.getElementById(id))
+				if (d.getElementById(id))
 					return;
 				js = d.createElement(s);
 				js.id = id;
@@ -166,12 +167,12 @@
 							<a id='login-link' href="/users/login"><?php echo __('Login'); ?></a>
 						</li>
 						<?php
-							if (Configure::read('Settings.registration.open')) {
-								echo '<li>';
-								echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
-								echo '</li>';
-							}
-							}
+						if (Configure::read('Settings.registration.open')) {
+							echo '<li>';
+							echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
+							echo '</li>';
+						}
+						}
 						?>
 					</ul>
 				</div>
@@ -262,7 +263,7 @@
 								<li>
 									<div class="input text">
 										<div class="label-wrapper">
-											<label for="UserUsername"><?php echo __('Username');?></label>
+											<label for="UserUsername"><?php echo __('Username'); ?></label>
 										</div>
 										<input id="UserUsername" type="text" maxlength="50" name="data[User][username]">
 									</div>

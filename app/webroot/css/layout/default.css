@@ -25,19 +25,18 @@
 }
 /* End hide from IE-mac */
 
-
 #infscr-loading {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
-    border-radius: 10px 10px 10px 10px;
-    bottom: 30px;
-    color: #222222;
-    font-size: 15px;
-    font-weight: bold;
-    left: 42%;
-    padding: 20px;
-    position: fixed;
-    text-align: center;
-    z-index: 100;
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+	border-radius: 10px 10px 10px 10px;
+	bottom: 30px;
+	color: #222222;
+	font-size: 15px;
+	font-weight: bold;
+	left: 42%;
+	padding: 20px;
+	position: fixed;
+	text-align: center;
+	z-index: 100;
 }
 
 .tn3e-prev {
@@ -850,8 +849,12 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	color: #FFFFFF;
 	padding: 5px;
 }
+#my-stashes-component .inside .component-view .actions.stash .nav li.selected a {
+	background-color: #FDB924;
+}
 #my-stashes-component .inside .component-view .actions.stash .nav li a:hover {
 	background: none repeat scroll 0 0 #AAAAAA;
+	color: #FFFFFF;
 	text-decoration: none;
 	cursor: pointer;
 }
