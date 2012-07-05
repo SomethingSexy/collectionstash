@@ -37,55 +37,45 @@
 		<div class="component-view">
 			<div class="actions stash">
 				<ul class="nav">
-					<li class="selected">
+					<li>
 					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' .__('Collectibles') . '</a>'; ?>
 					</li>
-					<li>
+					<li class="selected">
 					<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' .__('Photos') . '</a>'; ?>	
 					</li>
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' .__('Comments') . '</a>'; ?></li>
 				</ul>	
 			</div>
 	<?php
-	if (isset($collectibles) && !empty($collectibles)) {
+	if (isset($userUploads) && !empty($userUploads)) {
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
 		echo '<div class="tiles" data-username="' . $stashUsername . '">';
 
-		foreach ($collectibles as $key => $myCollectible) {
-			echo '<div class="tile">';
-			if (!empty($myCollectible['Collectible']['Upload'])) {
+		foreach ($userUploads as $key => $upload) {
+
+			if (!empty($upload['UserUpload'])) {
+				echo '<div class="tile">';
 				echo '<div class="image">';
-				echo '<a rel="gallery" href="'. $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => true,'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => false,'uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
+				echo '<a rel="gallery" href="'. $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true , 'width' => 1280, 'height' => 1024, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => false, 'width' => 150, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 				echo '</div>';
-				//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
-			} else {
-				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
+
+				echo '<div class="description">';
+
+				echo '</div>';
+				$detail = '';
+
+				$datetime = strtotime($upload['UserUpload']['created']);
+				$mysqldate = date("m/d/y g:i A", $datetime);
+				$detail .= '<div class="date">' . $mysqldate . '</div>';
+
+				echo '<div class="user-detail">';
+				echo $detail;
+				echo '</div>';
+				echo '</div>';
 			}
-			echo '<div class="description">';
-			echo '<span>' . $myCollectible['Collectible']['Collectibletype']['name'] . ' </span> <span>' . $myCollectible['Collectible']['Manufacture']['title'] . '</span>';
-			echo '</div>';
 
-			$detail = '';
-
-			$editionSize = $myCollectible['Collectible']['edition_size'];
-			if ($myCollectible['Collectible']['showUserEditionSize'] && isset($myCollectible['CollectiblesUser']['edition_size']) && !empty($myCollectible['CollectiblesUser']['edition_size'])) {
-				$detail .= $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'];
-
-			} else if (isset($myCollectible['CollectiblesUser']['artist_proof'])) {
-				if ($myCollectible['CollectiblesUser']['artist_proof']) {
-					$detail .= __('Artist\'s Proof');
-				}
-			}
-			$datetime = strtotime($myCollectible['CollectiblesUser']['created']);
-			$mysqldate = date("m/d/y g:i A", $datetime);
-			$detail .= '<div class="date">' . $mysqldate . '</div>';
-
-			echo '<div class="user-detail">';
-			echo $detail;
-			echo '</div>';
-			echo '</div>';
 		}
 		echo '</div>';
 	} else {
@@ -109,12 +99,12 @@
 			navSelector : "#titles-nav",
 			itemSelector : ".tile",
 			loading : {
-				finishedMsg : "All collectibles have been loaded!",
-				msgText : "<em>Loading the next set of collectibles.</em>",
+				finishedMsg : "All photos have been loaded!",
+				msgText : "<em>Loading the next set of photos.</em>",
 			}
 		});
 
 		$('#comments').comments();
 
-	}); 
+	});
 </script>

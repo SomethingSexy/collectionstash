@@ -7,7 +7,7 @@
 		</div>
 		<div class="component-view">
 			<div class="comments-container latest-comments">
-						<?php echo '<div id="titles-nav">';
+						<?php echo '<div id="titles-nav" class="hidden">';
 				echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 				echo '</div>';
 		?>
