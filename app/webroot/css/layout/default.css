@@ -5,6 +5,9 @@
 .hidden {
 	display: none;
 }
+.orange {
+	color: #FDB924;	
+}
 .clearfix:after {
 	visibility: hidden;
 	display: block;
@@ -111,6 +114,8 @@ a:active {
 	border-radius: 10px;
 	float: left;
 	width: 100%;
+	
+	
 }
 .component .inside {
 	padding: 0;
@@ -402,7 +407,7 @@ fieldset legend {
 	width: 262px;
 	padding: 5px;
 	clear: both;
-	color: #c73e14;;
+	color: #c73e14;
 	font-size: 100%;
 	font-weight: bold;
 	margin-left: 220px;
@@ -816,6 +821,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #my-stashes-component {
 	width: 100%;
+	background-color: #F1F1F1;
 }
 #my-stashes-component .inside .component-view {
 	overflow: hidden;
@@ -900,6 +906,11 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*width: 100%;*/
 	clear: both;
 }
+#my-stashes-component .inside .component-view .empty {
+	float: left;
+	width: 100%;
+	margin-top: 25px;
+}
 #my-stashes-component .inside .component-view .tiles {
 	float: left;
 	width: 100%;
@@ -909,9 +920,13 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	float: left;
 	margin: 10px;
 	padding: 10px;
-	height: 250px;
+	height: 225px;
 	width: 200px;
-	background-color: #EEEEEE;
+	background-color: #FFF;
+}
+
+#my-stashes-component .inside .component-view .tiles .tile.photo {
+	height: 275px;
 }
 
 #my-stashes-component .inside .component-view .tiles .tile div.image {
@@ -922,11 +937,16 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin: auto;
 }
 
+#my-stashes-component .inside .component-view .tiles .tile.photo div.image {
+	height: 200px;
+}
+
 #my-stashes-component .inside .component-view .tiles .tile .description {
 	font-size: 0.7em;
 	margin-top: 5px;
 	color: #606060;
-	overflow: hidden;
+	float: left;
+	width: 100%;
 }
 #my-stashes-component .inside .component-view .tiles .tile .description span {
 	float: left;
@@ -937,12 +957,9 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	color: #606060;
 	font-size: 0.7em;
 	text-align: right;
+	margin-top: 5px;
 }
-#my-stashes-component .inside .component-view .tiles .tile .user-detail .date {
-	position: relative;
-	top: 45px;
-	text-align: right;
-}
+
 #collectibles.collectibles, #photos.photos {
 	margin-top: 50px;
 }
@@ -1139,7 +1156,8 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	padding-top: 0;
 }
 #home-components {
-	overflow: hidden;
+	float: left;
+	width: 100%;
 }
 #home-components .component {
 	width: 100%;
@@ -2062,6 +2080,8 @@ div.paging span a:hover {
 }
 #user-upload-component .inside .component-view .image div.metadata div.metadata-update .error-message {
 	display: block;
+	color: #c73e14;
+	font-weight: bold;
 }
 #user-upload-component .inside .component-view .image div.metadata div.metadata-update input.cancel-button {
 	margin-left: 5px;
