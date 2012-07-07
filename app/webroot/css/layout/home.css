@@ -1,0 +1,90 @@
+#stage {
+	background-color: #F1F1F1;
+	border: none;
+	box-shadow: none;
+	font-family: "League Gothic", sans-serif;
+}
+
+#home-components .component {
+	background-color: #F1F1F1;
+}
+
+#home-components h3 {
+	font-size: 3.5em;
+	padding-left: 200px;
+	color: #373535;
+	background: url("/img/logo/collection_stash_logo_white.png") no-repeat scroll 0 0 transparent;
+	height: 3em;
+	margin-bottom: 0;
+}
+
+#home-components .site-information ul.information {
+	width: 700px;
+}
+
+#home-components .site-information ul.information li {
+	width: 300px;
+	text-align: left;
+	padding: 20px;
+}
+
+#home-components .site-information ul.information li h4 {
+	color: #373535;
+	font-size: 2em;
+	line-height: 27px;
+	float: left;
+	width: 100%;
+}
+
+#home-components .site-information ul.information li.third {
+	clear: left;
+}
+
+#home-components .site-information ul.information li .icon {
+	float: left;
+	margin-bottom: 20px;
+	width: 100%;
+	text-align: center;
+	height: 60px;
+}
+
+#home-components .site-information ul.information li .text {
+	font-size: 0.9em;
+}
+
+
+
+#home-components .site-information .how-it-works {
+	list-style: decimal outside none;
+	margin: 0 0 9px 25px;
+	
+}
+
+#home-components .site-information .how-it-works li {
+	padding: 10px;
+}
+
+.login-registration .inside .component-view .login,
+.login-registration .inside .component-view .registration {
+	width: 300px;
+	float: left;
+	padding: 40px;
+}
+
+.login-registration .inside .component-view .registration {
+	border-left: 1px solid #C6C6C6; 
+	padding-left: 140px;
+	padding-right: 70px;
+	float: right;
+}
+
+.login-registration .inside .component-view div .form-fields li .label-wrapper {
+	float: none;
+	text-align: left;
+}
+
+.login-registration .inside .component-view div fieldset legend {
+	border: none;
+	font-weight: bold;
+	font-size: 1.6em;
+}

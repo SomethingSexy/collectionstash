@@ -96,7 +96,7 @@
 							window.location = '/users/login';
 						} else {
 							var errorMessage = data.errors[0][type];
-							$eventInput.after($('<span></span>').addClass('error-message').text(errorMessage));
+							$eventInput.after($('<span>' + errorMessage + '</span>').addClass('error-message'));
 						}
 					}
 				},

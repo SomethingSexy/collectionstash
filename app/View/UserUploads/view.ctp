@@ -38,12 +38,12 @@
 			<div class="actions stash">
 				<ul class="nav">
 					<li>
-					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' .__('Collectibles') . '</a>'; ?>
+					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
 					</li>
 					<li class="selected">
-					<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' .__('Photos') . '</a>'; ?>	
+					<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
 					</li>
-					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' .__('Comments') . '</a>'; ?></li>
+					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
 				</ul>	
 			</div>
 	<?php
@@ -56,13 +56,13 @@
 		foreach ($userUploads as $key => $upload) {
 
 			if (!empty($upload['UserUpload'])) {
-				echo '<div class="tile">';
+				echo '<div class="tile photo">';
 				echo '<div class="image">';
-				echo '<a rel="gallery" href="'. $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true , 'width' => 1280, 'height' => 1024, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => false, 'width' => 150, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
+				echo '<a rel="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => false, 'width' => 150, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 				echo '</div>';
 
 				echo '<div class="description">';
-
+				echo '<span>' . $upload['UserUpload']['title'] . '</span><span>' . $upload['UserUpload']['description'] . '</span>';
 				echo '</div>';
 				$detail = '';
 
@@ -79,7 +79,7 @@
 		}
 		echo '</div>';
 	} else {
-		echo '<p class="">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+		echo '<div class="empty">' . $stashUsername . __(' has no photos in their stash!', true) . '</div>';
 	}
 	?>
 		</div>
@@ -106,5 +106,5 @@
 
 		$('#comments').comments();
 
-	});
+	}); 
 </script>

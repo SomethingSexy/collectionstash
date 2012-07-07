@@ -89,7 +89,7 @@
 		}
 		echo '</div>';
 	} else {
-		echo '<p class="">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+		echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
 	}
 	?>
 		</div>

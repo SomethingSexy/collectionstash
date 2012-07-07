@@ -1,5 +1,5 @@
 body {
-	font-family: helvetica,arial,sans-serif;
+	font-family: "League Gothic", sans-serif;
 	font-size: 100.1%;
 	/*letter-spacing: 0.01em;*/
 	/*background: #656464;*/
@@ -34,9 +34,9 @@ body {
 	overflow: hidden;
 	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
 	background-color: #FDB924;
-    border-bottom: 1px solid #CCCCCC;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-    height: 100px;
+	border-bottom: 1px solid #CCCCCC;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+	height: 100px;
 }
 #header .header.title {
 	float: left;
@@ -73,6 +73,9 @@ body {
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	background-color: #F1F1F1;
+	border: none;
+	box-shadow: none;
 }
 #stage .main-navigation {
 	width: 100%;
@@ -87,7 +90,7 @@ body {
 	float: left;
 }
 #stage .main-navigation .inside .nav li {
-	
+
 }
 #stage .main-navigation .inside .nav li a {
 	padding: 10px;
@@ -100,10 +103,10 @@ body {
 	text-decoration: none;
 }
 #header .header-container .site-search {
-    left: 490px;
-    line-height: 2;
-    position: relative;
-    top: 60px;
+	left: 490px;
+	line-height: 2;
+	position: relative;
+	top: 60px;
 	line-height: 2;
 }
 #header .header-container .site-search form input#q {
@@ -145,7 +148,7 @@ ul.nav li a:hover {
 	/*  background: url(topnav_hover.gif) no-repeat center top; */
 	text-decoration: underline;
 }
-ul.nav li span { /*--Drop down trigger styles--*/
+ul.nav li span {/*--Drop down trigger styles--*/
 	width: 17px;
 	height: 35px;
 	float: left;
@@ -191,7 +194,7 @@ html ul.nav li ul.subnav li a {
 	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
 	padding-left: 20px;
 }
-html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
+html ul.nav li ul.subnav li a:hover {/*--Hover effect for subnav links--*/
 	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
 }
 #footer {
@@ -232,5 +235,5 @@ html ul.nav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
 }
 
 .fb_iframe_widget iframe {
-	
+
 }
