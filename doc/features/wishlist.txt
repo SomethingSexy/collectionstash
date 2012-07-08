@@ -1,0 +1,9 @@
+- Open up to allow multiple stashes, although the UI won't support it yet
+
+- Create a stash type, defaults would be main, wishlist, preorder
+
+- Different types might decide how that stash acts
+
+- Users can add any collectible to a wish list stash
+
+- Allow users to move a wish list item to their main stash 

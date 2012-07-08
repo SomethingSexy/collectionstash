@@ -1,0 +1,8 @@
+- News feed to support recent activity
+
+- This would display new members, comments, users adding items to their stash, etc etc, reviews...basically anything that happens on the site would go to the news feed
+
+- News feeds should agragate data that might be similar...like if user X added 15 collectibles to their stash at the sametime, have one entry
+  This could be based on if the latest news feed is something they did, just update it
+
+- filters for the news feed
