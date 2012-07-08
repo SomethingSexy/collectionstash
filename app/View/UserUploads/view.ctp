@@ -20,9 +20,6 @@
 						echo '<li><a id="subscribe" data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="link add-stash-link"></a></li>';
 					}
 					?>
-					<li>
-						<?php echo '<a title="Photo Gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/photos.png"/></a>'; ?>
-					</li>
 					<?php
 					if (isset($myStash) && $myStash) {
 						if (Configure::read('Settings.User.uploads.allowed')) {

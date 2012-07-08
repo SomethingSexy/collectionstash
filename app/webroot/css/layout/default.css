@@ -109,9 +109,9 @@ a:active {
 /* base component view */
 .component {
 	margin: 10px 0px 0 0;
-	background-color: #FFF;
+	/*background-color: #FFF;
 	-moz-border-radius: 10px;
-	border-radius: 10px;
+	border-radius: 10px;*/
 	float: left;
 	width: 100%;
 	
@@ -241,12 +241,13 @@ a:active {
 .collectible.detail-wrapper {
 	float: left;
 	width: 550px;
+	margin-left: 10px;
 }
 .collectible.detail {
 	float: left;
 	margin-left: 10px;
 	width: 350px;
-	background-color: #FFF;
+	/*background-color: #FFF;*/
 	/*margin-bottom: 20px;*/
 }
 .collectible.detail .detail.title {
@@ -765,10 +766,17 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	padding: 10px;
 	color: #606060;
 }
+.standard-list ul li:nth-child(odd), .attributes-list ul li:nth-child(odd) {
+	background-color: #EEE;
+}
 .standard-list ul li.title, .attributes-list ul li.title {
 	background-color: #EAEAEA;
 	border-bottom: 1px solid #D8D8D8;
 	color: #999999;
+}
+.standard-list ul li.title a {
+	color: #74A4BE;
+	font-weight: bold;
 }
 .standard-list ul li.title span a.asc {
 	background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
@@ -1044,6 +1052,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #collectible-detail {
 	width: 100%;
 	margin-right: 0;
+	background: none;
 }
 #collectible-detail .inside .component-title h2 {
 	clear: none;
@@ -1081,12 +1090,13 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #collectible-detail .component-view .collectible.item  .collectible.detail {
 	width: 500px;
 	margin-bottom: 10px;
-}
-#collectible-detail .component-view .collectible.item  .collectible.detail .title .actions.icon {
-	background-color: #FFF;
+	background: none;
 }
 #collectible-detail .component-view .collectible.item  .collectible.detail .title .actions.icon ul li {
 	padding: 0;
+}
+#collectible-detail .component-view .collectible.item .collectible.image {
+	width: auto;
 }
 #collectible-detail .component-view .approval-fields {
 	float: left;
@@ -2111,7 +2121,6 @@ div.paging span a:hover {
 .actions.icon {
 	overflow: hidden;
 	float: left;
-	background-color: #656464;
 	border-radius: 3px;
 }
 .actions.icon ul {
@@ -2283,6 +2292,7 @@ div.paging span a:hover {
 	right: 50px;
 	top: 110px;
 	border-radius: 0;
+	background: none;
 }
 
 #collectible-detail .component.variant-list .inside .component-title {

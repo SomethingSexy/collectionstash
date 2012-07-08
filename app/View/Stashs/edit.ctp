@@ -9,9 +9,6 @@
 
                     echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
 					?>
-					<li>
-						<?php echo '<a title="Photo Gallery" class="link detail-link" href="/stashs/view/' . $stashUsername . '"><img src="/img/icon/photos.png"/></a>';?>
-					</li>
 				</ul>
 			</div>
 		</div>

@@ -2,7 +2,7 @@
 	<?php
 	if (!empty($collectibleCore['Upload'])) {
 		?>
-		<?php echo $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 150, 'height' => 150));?>
+		<?php echo $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 400, 'height' => 400));?>
 		<div class="collectible image-fullsize hidden">
 			<?php echo $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 0));?>
 		</div>

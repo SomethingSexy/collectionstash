@@ -254,7 +254,7 @@
 				//anything at the comment level
 				var commentMarkup = '<li class="comment" data-id="' + comment.Comment.id + '">';
 				commentMarkup += '<div class="comment-info"><span class="user">';
-				commentMarkup += '<a href="/stashs/view' + comment.User.username + '">';
+				commentMarkup += '<a href="/stashs/view/' + comment.User.username + '">';
 				commentMarkup += comment.User.username;
 				commentMarkup += '</a></span>';
 				commentMarkup += '<span class="datetime">';
