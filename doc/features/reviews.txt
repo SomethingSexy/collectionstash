@@ -1,0 +1,17 @@
+- Allow for ratings and reviews.
+
+- Ratings are simple ratings from 1 to 5
+
+- Ratings are quick click things to do
+
+- Reviews are more indepth
+
+- Allow site system of record reviews and link to other reviews
+
+- If it is a link to other review it should have a summary and then a link to the main review, plus an overall rating
+
+- Should support link to video reviews, as in display the video from CS, of course linking back to the site
+
+- Each stash will have a review tab to showcase members reviews
+
+- All a main review dashboard
