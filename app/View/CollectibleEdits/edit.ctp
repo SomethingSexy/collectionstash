@@ -179,7 +179,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         ?>
                           <div class="input checkbox">
                                 <div class="label-wrapper">
-                                    <a class="ui-icon ui-icon-info" title="'. __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true).'" alt="info"></a>
+                                    <?php echo '<a class="ui-icon ui-icon-info" title="' . __('A collectible is considered numbered if it has an edition size and is indivudually numbered.', true) . '" alt="info"></a>'; ?>
                                     <label for="CollectibleNumbered"><?php echo __('Numbered');?></label>
                                 </div>
                                 <?php echo $this -> Form -> input('numbered', array('label'=> false,'div'=> false));?>
@@ -188,6 +188,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                         <li>
                             <div class="input checkbox">
                                 <div class="label-wrapper">
+                                	<?php echo '<a class="ui-icon ui-icon-info" title="' . __('Indicates if this collectible is exclusive to any one place.', true) . '" alt="info"></a>'; ?>
                                     <label for="CollectibleExclusive"><?php echo __('Exclusive');?></label>
                                 </div>
                                 
@@ -195,7 +196,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
                             </div>                          
                         </li>
                         <li>
-                            <?php echo $this -> Form -> input('retailer_id', array('label'=>__('Exclusive Retailer'),'before' => '<div class="label-wrapper">','between'=>'</div>', 'empty' => true));?>
+                            <?php echo $this -> Form -> input('retailer_id', array('label'=>__('Venue / Exclusive Retailer'),'empty' => true, 'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="' . __('If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.', true) . '" alt="info"></a>', 'between' => '</div>')); ?>
                         </li>
                     </ul>    				    
 				</fieldset>
