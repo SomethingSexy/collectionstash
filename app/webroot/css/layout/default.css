@@ -6,7 +6,7 @@
 	display: none;
 }
 .orange {
-	color: #FDB924;	
+	color: #FDB924;
 }
 .clearfix:after {
 	visibility: hidden;
@@ -110,12 +110,10 @@ a:active {
 .component {
 	margin: 10px 0px 0 0;
 	/*background-color: #FFF;
-	-moz-border-radius: 10px;
-	border-radius: 10px;*/
+	 -moz-border-radius: 10px;
+	 border-radius: 10px;*/
 	float: left;
 	width: 100%;
-	
-	
 }
 .component .inside {
 	padding: 0;
@@ -772,7 +770,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 .standard-list ul li.title, .attributes-list ul li.title {
 	background-color: #EAEAEA;
 	border-bottom: 1px solid #D8D8D8;
-	color: #999999;
+	color: #74A4BE;
 }
 .standard-list ul li.title a {
 	color: #74A4BE;
@@ -1920,7 +1918,7 @@ div.paging span a:hover {
 }
 #filters .filter {
 	background-color: #E9F0F4;
-	border: 1px solid #B3CCE2;
+	border: 1px solid #FDB924;
 	color: #111111;
 	cursor: pointer;
 	height: 12px;
@@ -2216,6 +2214,9 @@ div.paging span a:hover {
 .comments-container .post-comment-container form fieldset ul li .error-message {
 	width: auto;
 	margin-left: 80px;
+}
+.comments-container .post-comment-container form fieldset ul li div.input .ajax-loader {
+	margin-left: 60px;
 }
 .comments-container  .comments-loader {
 	overflow: hidden;

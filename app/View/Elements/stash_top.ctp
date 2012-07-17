@@ -11,7 +11,7 @@
                     if (isset($myStash) && $myStash) {
                         echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
                         echo '<li>';
-                        echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil.png"/></a>';
+                        echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil-gray.png"/></a>';
                         echo '</li>';
                     }
                     ?>

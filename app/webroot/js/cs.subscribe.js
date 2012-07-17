@@ -3,7 +3,7 @@ $(function() {
 	if(subscribed === 'true') {
 		$('#subscribe').html('<img src="/img/icon/subscribed.png"/>').attr('title','Unsubscribe to this.');
 	} else {
-		$('#subscribe').html('<img src="/img/icon/subscription.png"/>').attr('title','Subscribe to this.');
+		$('#subscribe').html('<img src="/img/icon/subscription-gray.png"/>').attr('title','Subscribe to this.');
 	}
 
 	/**
@@ -16,7 +16,7 @@ $(function() {
 		var subscribed = $(this).attr('data-subscribed');
 		if(subscribed === 'true') {
 			subscribed = false;
-			$(this).html('<img src="/img/icon/subscription.png"/>').attr('title','Subscribe to this.');
+			$(this).html('<img src="/img/icon/subscription-gray.png"/>').attr('title','Subscribe to this.');
 		} else {
 			subscribed = true;
 			$(this).html('<img src="/img/icon/subscribed.png"/>').attr('title','Unsubscribe to this.');
