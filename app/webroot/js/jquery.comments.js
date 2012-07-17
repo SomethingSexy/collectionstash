@@ -51,7 +51,7 @@
 					url : '/comments/view/' + this.entityTypeId + '.json',
 					success : function(data, textStatus, XMLHttpRequest) {
 						//Need to get top level permissions first
-						if(data.commentsData.comments.length > 0) {
+						if (data.commentsData.comments.length > 0) {
 							var cont = [];
 							//Initialize an array to build the content
 							$.each(data.commentsData.comments, function(index, element) {
@@ -100,7 +100,7 @@
 				$element.after('<div class="error-message">' + errorMessage + '</div>');
 			},
 			_removeError : function($element) {
-				if($element.next().hasClass('error-message')) {
+				if ($element.next().hasClass('error-message')) {
 					$element.next().remove();
 				}
 			},
@@ -108,7 +108,7 @@
 				var self = this;
 				var comment = $('#CommentComment').val();
 				var lastCommentCreated = '';
-				if( typeof self.lastComment !== 'undefined') {
+				if ( typeof self.lastComment !== 'undefined') {
 					lastCommentCreated = self.lastComment.Comment.created;
 				}
 				$.ajax({
@@ -121,12 +121,14 @@
 					dataType : 'json',
 					url : '/comments/add.json',
 					beforeSend : function(jqXHR, settings) {
+						$.cs.comments.prototype._removeProcessingBar();
 						$.cs.comments.prototype._removeError($('#CommentComment'));
+						$.cs.comments.prototype._addProcessingBar($('#CommentComment'));
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
-						if(data.success.isSuccess) {
+						if (data.success.isSuccess) {
 							$('#CommentComment').val('');
-							if(data.comments.length > 0) {
+							if (data.comments.length > 0) {
 								var cont = [];
 								//Initialize an array to build the content
 								$.each(data.comments, function(index, element) {
@@ -144,6 +146,9 @@
 							$.cs.comments.prototype._addError($('#CommentComment'), data.error.message);
 						}
 
+					},
+					complete : function() {
+						$.cs.comments.prototype._removeProcessingBar();
 					}
 				});
 			},
@@ -164,10 +169,12 @@
 					dataType : 'json',
 					url : '/comments/update.json',
 					beforeSend : function(jqXHR, settings) {
+						$.cs.comments.prototype._removeProcessingBar();
 						$.cs.comments.prototype._removeError($textarea);
+						$.cs.comments.prototype._addProcessingBar($(element).closest('div.update-comment').children('textarea'));
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
-						if(data.response.isSuccess) {
+						if (data.response.isSuccess) {
 							$comment.children().remove();
 							var updateText = $.cs.comments.prototype._nl2br(comment);
 							$comment.html(updateText);
@@ -175,7 +182,7 @@
 
 						} else {
 							$.each(data.response.errors, function() {
-								if(this[0]) {
+								if (this[0]) {
 									$.cs.comments.prototype._addError($textarea, this[0]);
 								}
 
@@ -183,6 +190,9 @@
 							//$.cs.comments.prototype._addError($textarea, data.error.message);
 						}
 
+					},
+					complete : function() {
+						$.cs.comments.prototype._removeProcessingBar();
 					}
 				});
 			},
@@ -198,23 +208,33 @@
 					dataType : 'json',
 					url : '/comments/remove.json',
 					beforeSend : function(jqXHR, settings) {
+						$.cs.comments.prototype._removeProcessingBar();
 						$.cs.comments.prototype._removeError($comment.children('.actions'));
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
-						if(data.response.isSuccess) {
+						if (data.response.isSuccess) {
 							$comment.fadeOut(200, function() {
 								$comment.remove();
 							});
 						} else {
 							$.each(data.response.errors, function() {
-								if(this['message']) {
+								if (this['message']) {
 									$.cs.comments.prototype._addError($comment.children('.actions'), this['message']);
 								}
 
 							});
 						}
+					},
+					complete : function() {
+						$.cs.comments.prototype._removeProcessingBar();
 					}
 				});
+			},
+			_addProcessingBar : function(element) {
+				element.after("<img class='ajax-loader' src='/img/ajax-loader.gif'/>");
+			},
+			_removeProcessingBar : function() {
+				$('img.ajax-loader').remove();
 			},
 			_buildComnentPost : function() {
 				// <div class="post-comment-container">
@@ -266,11 +286,11 @@
 				commentMarkup += text;
 				commentMarkup += '</div>';
 				commentMarkup += '<div class="actions">'
-				if(comment.hasOwnProperty('permissions')) {
-					if(comment.permissions.edit) {
+				if (comment.hasOwnProperty('permissions')) {
+					if (comment.permissions.edit) {
 						commentMarkup += '<span><a class="link edit">Edit</a></span>';
 					}
-					if(comment.permissions.remove) {
+					if (comment.permissions.remove) {
 						commentMarkup += '<span><a class="link remove">Delete</a></span>';
 					}
 				}

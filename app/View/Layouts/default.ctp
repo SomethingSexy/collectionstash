@@ -228,7 +228,7 @@
 			<div class="logo">
 				<?php //echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash')) ?>
 			</div>
-			<div class="links">
+			<div class="social">
 				<div>
 					<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
 				</div>
@@ -236,7 +236,7 @@
 					<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
 				</div>
 				<div>
-					&copy; Collection Stash
+					
 				</div>
 				<!--<li>About Us</li>
 				<li>Contact Us</li>
@@ -245,6 +245,9 @@
 				<li>Milestones</li>
 				<li>Request a Feature</li>-->
 			</div>
+			<ul class="links">
+				<li>&copy; Collection Stash</li>
+			</ul>
 		</div>
 
 		<?php /**echo $this->element('sql_dump');

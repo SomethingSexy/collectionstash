@@ -46,11 +46,8 @@ class CollectiblesUsersController extends AppController {
 	 */
 	public function add($id = null) {
 		$this -> checkLogIn();
-		debug($id);
-		debug($this -> request -> data);
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency')));
-			debug($collectible);
 			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
 					$user = $this -> getUser();
@@ -85,7 +82,6 @@ class CollectiblesUsersController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect($this -> referer());
 		}
-		debug($this -> CollectiblesUser -> validationErrors);
 	}
 
 	/**

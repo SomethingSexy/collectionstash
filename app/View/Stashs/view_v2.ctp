@@ -9,7 +9,7 @@
 					if (isset($myStash) && $myStash) {
 						echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
 						echo '<li>';
-						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil.png"/></a>';
+						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil-gray.png"/></a>';
 						echo '</li>';
 					}
 					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
@@ -23,7 +23,7 @@
 					<?php
 					if (isset($myStash) && $myStash) {
 						if (Configure::read('Settings.User.uploads.allowed')) {
-							echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_photo.png"/></a></li>';
+							echo '<li><a title="Upload Photos" class="link upload-link" href="/user_uploads/uploads"><img src="/img/icon/upload_photo-gray.png"/></a></li>';
 						}
 					}
 					?>
