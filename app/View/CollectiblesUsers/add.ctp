@@ -23,7 +23,7 @@ if($collectible['Collectible']['numbered'])
 					<li>
 						<div class="label-wrapper">
 							<label for="collectibleType"><?php echo __('Edition Number')
-								?>(Total: <?php echo $collectible['Collectible']['edition_size']
+								?> (Total: <?php echo $collectible['Collectible']['edition_size']
 								?>)</label>
 						</div>
 						<?php  echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false)); ?>
@@ -39,7 +39,7 @@ if($collectible['Collectible']['numbered'])
 					<li>
 						<div class="label-wrapper">
 							<label for="dialogCost"><?php echo __('How much did you pay?')
-								?>(Retail: <?php echo $collectible['Currency']['sign']; echo $collectible['Collectible']['msrp']
+								?> (Retail: <?php echo $collectible['Currency']['sign']; echo $collectible['Collectible']['msrp']
 								?>)</label>
 						</div>
 						<?php echo $this -> Form -> input('cost', array('id' => 'dialogCost', 'div' => false, 'label' => false)); ?>
@@ -72,6 +72,58 @@ if($collectible['Collectible']['numbered'])
 		</div>
 	</div>
 </div>
+<div id="my-stashes-component" class="component">
+	<div class="inside">
+		<div class="component-title">
+			<h2><?php echo __('Just an FYI, you already have this collectible in your stash...');?></h2>
+		</div>
+		<?php echo $this -> element('flash'); ?>
+		<div class="component-view">
+	<?php
+	if (isset($collectibles) && !empty($collectibles)) {
+		echo '<div class="tiles">';
+
+		foreach ($collectibles as $key => $myCollectible) {
+			echo '<div class="tile">';
+			if (!empty($myCollectible['Collectible']['Upload'])) {
+				echo '<div class="image">';
+				echo '<a rel="gallery" href="'. $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => true,'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => false,'uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
+				echo '</div>';
+				//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
+			} else {
+				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
+			}
+			echo '<div class="description">';
+			echo '<span>' . $myCollectible['Collectible']['Collectibletype']['name'] . ' </span> <span>' . $myCollectible['Collectible']['Manufacture']['title'] . '</span>';
+			echo '</div>';
+
+			$detail = '';
+
+			$editionSize = $myCollectible['Collectible']['edition_size'];
+			if ($myCollectible['Collectible']['showUserEditionSize'] && isset($myCollectible['CollectiblesUser']['edition_size']) && !empty($myCollectible['CollectiblesUser']['edition_size'])) {
+				$detail .= $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'];
+
+			} else if (isset($myCollectible['CollectiblesUser']['artist_proof'])) {
+				if ($myCollectible['CollectiblesUser']['artist_proof']) {
+					$detail .= __('Artist\'s Proof');
+				}
+			}
+			$datetime = strtotime($myCollectible['CollectiblesUser']['created']);
+			$mysqldate = date("m/d/y g:i A", $datetime);
+			$detail .= '<div class="date">' . $mysqldate . '</div>';
+
+			echo '<div class="user-detail">';
+			echo $detail;
+			echo '</div>';
+			echo '</div>';
+		}
+		echo '</div>';
+	}?>
+		</div>
+	</div>
+</div>
+
+
 <script><?php
 echo 'var merchants=[';
 

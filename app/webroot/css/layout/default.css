@@ -1582,7 +1582,7 @@ div.paging span a:hover {
 }
 .ui-tabs {
 	border: none;
-	background-color: #FFF;
+	background-color: #F1F1F1;
 }
 .ui-tabs .ui-state-default {
 	background: url("/img/icon/555555_40x100_textures_03_highlight_soft_75.png") repeat-x scroll 50% 50% #555555;
@@ -1596,7 +1596,7 @@ div.paging span a:hover {
 	font-weight: normal;
 }
 .ui-tabs .ui-state-active {
-	background: #FFF;
+	background: #F1F1F1;
 	border: 1px solid #666666;
 	outline: medium none;
 }
@@ -2217,6 +2217,8 @@ div.paging span a:hover {
 }
 .comments-container .post-comment-container form fieldset ul li div.input .ajax-loader {
 	margin-left: 60px;
+	clear: both;
+	float: left;
 }
 .comments-container  .comments-loader {
 	overflow: hidden;

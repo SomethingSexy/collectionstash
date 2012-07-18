@@ -206,7 +206,7 @@ class Comment extends AppModel {
 
 		$actionComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User', 'EntityType')));
 
-		$ownerId = $this -> getOwnerId($actionComment);
+		$ownerId =  $stash = $this -> EntityType -> getEntityOwner($actionComment);
 
 		$userId = $actionComment['Comment']['user_id'];
 		//To remove the comment, they need to either be an admin, the one who added the comment or the owner of the domain of the comment
@@ -228,19 +228,5 @@ class Comment extends AppModel {
 
 		return $retVal;
 	}
-
-	private function getOwnerId($commentType) {
-		$ownerId = null;
-
-		if ($commentType['EntityType']['type'] === 'stash') {
-			$stash = $this -> EntityType -> Stash -> find("first", array('conditions' => array('Stash.id' => $commentType['EntityType']['type_id'])));
-			if (!empty($stash)) {
-				$ownerId = $stash['Stash']['user_id'];
-			}
-		}
-
-		return $ownerId;
-	}
-
 }
 ?>
