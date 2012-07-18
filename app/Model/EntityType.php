@@ -48,25 +48,26 @@ class EntityType extends AppModel {
 		return $results;
 	}
 
-	/**
-	 * This will find an entity, if it doesn't exist, it will create one and return the one that was created
-	 */
-	public function getEntity($type_id, $type) {
-		$retVal = $this -> find('first', array('contain' => false, 'conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $type_id)));
-
-		if (empty($retVal)) {
-			$entityTypeForSave = array();
-			$entityTypeForSave['EntityType']['type'] = $type;
-			$entityTypeForSave['EntityType']['type_id'] = $type_id;
-			if ($this -> save($entityTypeForSave)) {
-				$retVal['EntityType']['id'] = $this -> id;
-			} else {
-				$retVal = false;
-			}
-		}
-
-		return $retVal;
-	}
+	//
+	// /**
+	// * This will find an entity, if it doesn't exist, it will create one and return the one that was created
+	// */
+	// public function getEntity($type_id, $type) {
+	// $retVal = $this -> find('first', array('contain' => false, 'conditions' => array('EntityType.type' => $type, 'EntityType.type_id' => $type_id)));
+	//
+	// if (empty($retVal)) {
+	// $entityTypeForSave = array();
+	// $entityTypeForSave['EntityType']['type'] = $type;
+	// // $entityTypeForSave['EntityType']['type_id'] = $type_id;
+	// if ($this -> save($entityTypeForSave)) {
+	// $retVal['EntityType']['id'] = $this -> id;
+	// } else {
+	// $retVal = false;
+	// }
+	// }
+	//
+	// return $retVal;
+	// }
 
 	//Lame ass name, this will get get the entity core and related type object
 	public function getEntityCore($entityTypeId) {

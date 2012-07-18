@@ -26,7 +26,7 @@ body {
 	height: 0;
 }
 #container, #bottom {
-	width: 1024px;
+	width: 1280px;
 }
 #header {
 	position: relative;
@@ -57,7 +57,7 @@ body {
 }
 
 #header .header-container {
-	width: 1024px;
+	width: 1280px;
 	margin: 0 auto;
 }
 #header .header-container .header.navigation {
@@ -103,7 +103,7 @@ body {
 	text-decoration: none;
 }
 #header .header-container .site-search {
-	left: 490px;
+	left: 800px;
 	line-height: 2;
 	position: relative;
 	top: 60px;

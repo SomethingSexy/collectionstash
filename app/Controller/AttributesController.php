@@ -28,8 +28,8 @@ class AttributesController extends AppController {
 
 	// function add() {
 // 
-		// $data['Attribute']['parent_id'] = '8';
-		// $data['Attribute']['name'] = 'Holster';
+		// $data['Attribute']['parent_id'] = '1';
+		// $data['Attribute']['name'] = 'Body';
 		// $this -> Attribute -> save($data);
 		// $this -> render(false);
 	// }

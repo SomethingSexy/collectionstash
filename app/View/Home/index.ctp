@@ -8,7 +8,7 @@
 		
 		<ul class="information">
 			<li>
-				<span class="icon"><img src="/img/icon/chat-gray.png"/></span>
+				<span class="icon"><img src="/img/icon/hammer-gray-big.png"/></span>
 				<h4>Build</h4>
 				<span class="text">Help build the largest collectible database and community by submitting new collectibles you own or enjoy.</span>
 			</li>

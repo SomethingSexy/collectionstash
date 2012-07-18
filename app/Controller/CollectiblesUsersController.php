@@ -47,13 +47,13 @@ class CollectiblesUsersController extends AppController {
 	public function add($id = null) {
 		$this -> checkLogIn();
 		if (!is_null($id) && is_numeric($id)) {
+			$user = $this -> getUser();
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency')));
 			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
-					$user = $this -> getUser();
+					
 					//This returns all collectibles in this stash if I ever need them
 					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => false, 'conditions' => array('Stash.user_id' => $user['User']['id'])));
-
 					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
 					$this -> request -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
 					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
@@ -74,6 +74,8 @@ class CollectiblesUsersController extends AppController {
 					return;
 				}
 			}
+			$collectibles = $this -> CollectiblesUser -> find("all", array('contain' => array('Collectible' => array('Upload', 'Collectibletype', 'Manufacture')), 'conditions' => array('CollectiblesUser.collectible_id' => $id, 'CollectiblesUser.user_id' => $user['User']['id'])));
+			$this -> set(compact('collectibles'));
 			$this -> set('collectible', $collectible);
 			$this -> set('conditions', $this -> CollectiblesUser -> Condition -> find('list', array('order' => 'name')));
 			$this -> set('merchants', $this -> CollectiblesUser -> Merchant -> find('all', array('contain' => false)));
