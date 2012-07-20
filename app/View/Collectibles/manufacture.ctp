@@ -221,7 +221,7 @@
 							</div>
 						</li>
 						<li>
-							<?php echo $this -> Form -> input('retailer_id', array('label' => __('Venue / Exclusive Retailer'), 'empty' => true, 'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="' . __('If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.', true) . '" alt="info"></a>', 'between' => '</div>')); ?>
+							<?php echo $this -> Form -> input('retailer', array('label' => __('Venue / Exclusive Retailer'), 'type'=> 'text', 'maxLength' => 150 , 'before' => '<div class="label-wrapper"><a class="ui-icon ui-icon-info" title="' . __('If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.', true) . '" alt="info"></a>', 'between' => '</div>')); ?>
 						</li>
 					</ul>
 				</fieldset>
@@ -308,6 +308,20 @@
 	?>
 </div>
 <?php } ?>
+<script><?php
+echo 'var retailers=[';
+
+foreach ($retailers as $key => $value) {
+	echo '\''.addslashes($value['Retailer']['name']).'\'';
+	if ($key != (count($retailers) - 1)) {
+		echo ',';
+	}
+}
+echo '];';
+?>
+</script>
+
+
 <script>
 	$(function() {
 		$(".ui-icon-info").tooltip({

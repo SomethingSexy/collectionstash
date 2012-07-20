@@ -43,6 +43,9 @@
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' .__('Comments') . '</a>'; ?></li>
 				</ul>	
 			</div>
+			<div class="title">
+			<h3><?php echo __('Collectibles');?></h3>
+			</div>
 	<?php
 	if (isset($collectibles) && !empty($collectibles)) {
 		echo '<div id="titles-nav" class="hidden">';
@@ -96,7 +99,6 @@
 <?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('jquery.fancybox', array('inline' => false)); ?>
-<?php echo $this -> Html -> css('layout/stash'); ?>
 
 <script>
 	$(function() {
