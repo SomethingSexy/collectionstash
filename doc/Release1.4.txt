@@ -2,13 +2,14 @@ Nice to haves:
 - Remember me checkbox
 - drag and drop stash adding
 - added filtering to the stash view, like the catalog
+- If it is a variant, make the "Yes" a link to the parent collectible.
 
 TODO:
-- Update Stash Photos page
+
 - Enlarge the image on the user collectible page
 - add fancy box to both pages above
-- Notifiy a user if they already have a collectible when addnig to stash, display this when they are on the add page a list at the top that shows the current collectibles of this type they have
-- If it is a variant, make the "Yes" a link to the parent collectible.
+
+
 - autocomplete the exclusive retailer/venue field
 
 
@@ -17,7 +18,9 @@ Completed
 - auto scroll, infinite-scroll.com, stash tile view
 - Enlarge the image on the collectible page as the default
 - download fancy box plugin and use that on stash tile view to enlarge images
-
+- Update Stash Photos page
+- Notifiy a user if they already have a collectible when addnig to stash, display this when they are on the add page a list at the top that shows the current collectibles of this type they have
 
 Release Day
 - After Deploy remove "type_id" from entitytype table
+- Before deploy add columsn to retailers: collectible_count, modified, created
