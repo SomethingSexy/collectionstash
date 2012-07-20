@@ -300,7 +300,7 @@ class CollectiblesController extends AppController {
 		$this -> set(compact('scales'));
 
 		//Grab all retailers.
-		$retailers = $this -> Collectible -> Retailer -> getRetailerList();
+		$retailers = $this -> Collectible -> Retailer -> find('all', array('contain' => false));
 		$this -> set('retailers', $retailers);
 
 		//Grab all currencies
@@ -659,10 +659,11 @@ class CollectiblesController extends AppController {
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
 
-		if (isset($collectible['Collectible']['retailer_id'])) {
-			$retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
-			$collectible['Retailer'] = $retailer['Retailer'];
-		}
+		// We don't need this here anymore, because we will be storing the strnig up until we committ
+		// if (isset($collectible['Collectible']['retailer_id'])) {
+			// $retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
+			// $collectible['Retailer'] = $retailer['Retailer'];
+		// }
 
 		$currency = $this -> Collectible -> Currency -> find('first', array('conditions' => array('Currency.id' => $collectible['Collectible']['currency_id']), 'contain' => false));
 		$collectible['Currency'] = $currency['Currency'];

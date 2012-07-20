@@ -72,6 +72,9 @@ if($collectible['Collectible']['numbered'])
 		</div>
 	</div>
 </div>
+	<?php
+	if (isset($collectibles) && !empty($collectibles)) {?>
+
 <div id="my-stashes-component" class="component">
 	<div class="inside">
 		<div class="component-title">
@@ -122,7 +125,7 @@ if($collectible['Collectible']['numbered'])
 		</div>
 	</div>
 </div>
-
+<?php } ?>
 
 <script><?php
 echo 'var merchants=[';

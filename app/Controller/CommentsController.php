@@ -8,18 +8,7 @@ class CommentsController extends AppController {
 	 * This is the main entry way into "Discussion" page.
 	 */
 	public function index() {
-		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.modified' => 'desc'));
-		$comments = $this -> paginate('LatestComment');
-		$this -> set(compact('comments'));
-		$this -> set('pageCount', $this -> params['paging']['LatestComment']['pageCount']);
-	}
-
-	/**
-	 * This will return the pagination of the latest comments via ajax.  The limits need to match up
-	 * for this one and the index.
-	 */
-	public function latestComments() {
-		$this -> paginate = array('limit' => 5, 'order' => array('LatestComment.modified' => 'desc'));
+		$this -> paginate = array('limit' => 10, 'order' => array('LatestComment.modified' => 'desc'));
 		$comments = $this -> paginate('LatestComment');
 		$this -> set(compact('comments'));
 	}

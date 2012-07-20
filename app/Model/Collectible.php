@@ -1,7 +1,7 @@
 <?php
 class Collectible extends AppModel {
 	var $name = 'Collectible';
-	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer', 'User' => array('counterCache' => true), 'Currency');
+	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Currency');
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
@@ -38,6 +38,8 @@ class Collectible extends AppModel {
 	'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition_size
 	'edition_size' => array('rule' => array('validateEditionSize'), 'allowEmpty' => true, 'message' => 'Must be numeric.'),
+	//retailer
+	'retailer' => array('minLength' => array('rule' => array('minLength', 4), 'allowEmpty' => true, 'message' => 'Must be at least 4 characters.'), 'maxLength' => array('rule' => array('maxLength', 150), 'message' => 'Cannot be more than 150 characters.')),
 	//upc
 	'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
 	//product code
@@ -53,7 +55,7 @@ class Collectible extends AppModel {
 	//numbered
 	'numbered' => array('rule' => array('validateNumbered'), 'allowEmpty' => true, 'message' => 'Must be limited and have valid edition sized to be numbered.'),
 	//pieces
-	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')), );
+	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')));
 
 	// function validateName($check) {
 	// debug($check['name']);
@@ -115,6 +117,31 @@ class Collectible extends AppModel {
 		if (isset($returnData['Collectible']['description'])) {
 			$returnData['Collectible']['description'] = trim($returnData['Collectible']['description']);
 		}
+
+		// If it is set already well then don't do anything
+		if (!isset($returnData['Collectible']['retailer_id']) || empty($returnData['Collectible']['retailer_id'])) {
+			if (isset($returnData['Collectible']['retailer']) && !empty($returnData['Collectible']['retailer'])) {
+				$existingRetailer = $this -> Retailer -> find('first', array('conditions' => array('Retailer.name' => $returnData['Collectible']['retailer'])));
+				/*
+				 * If it does exist, link that one, otherwise add it and then use that id
+				 */
+				if (!empty($existingRetailer)) {
+					$returnData['Collectible']['retailer_id'] = $existingRetailer['Retailer']['id'];
+				} else {
+					$newRetailer = array();
+					$newRetailer['Retailer']['name'] = $returnData['Collectible']['retailer'];
+					$this -> Retailer -> create();
+					if ($this -> Retailer -> saveAll($newRetailer)) {
+						$returnData['Collectible']['retailer_id'] = $this -> Retailer -> id;
+					} else {
+						return false;
+					}
+				}
+			} else {
+				$returnData['Collectible']['retailer_id'] = '';
+			}
+		}
+
 		return $returnData;
 	}
 

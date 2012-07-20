@@ -5,35 +5,35 @@ var collectibleAdd = function() {
 	var _baseSeriesLevel = 0;
 	//1-18-12 - we do not need to do this anymore
 	// function handleLicenseChange(element) {
-		// var licenseid = $(element).val();
-		// var manid = $('#CollectibleManufactureId').val();
-		// $.ajax({
-			// type : "POST",
-			// dataType : 'json',
-			// url : '/licenses/getLicenseData.json',
-			// data : 'data[license_id]=' + licenseid + '&data[manufacture_id]=' + manid,
-			// beforeSend : function(jqXHR, settings) {
-				// //$.blockUI();
-			// },
-			// success : function(data, textStatus, XMLHttpRequest) {
-				// var success = data.success.isSuccess;
-// 
-				// if(success) {	
-					// $('#CollectibleSeriesId').val('');			
-					// if(data.data.hasSeries) {
-						// $('#change-series-link').text('Add');
-						// $('#CollectibleSeriesId').parent('.static-field').parent('li').show();
-					// } else {
-						// $('#CollectibleSeriesId').parent('.static-field').parent('li').hide();
-					// }
-				// } else {
-// 
-				// }
-			// },
-			// complete : function(jqXHR, textStatus) {
-				// //$.unblockUI();
-			// }
-		// });
+	// var licenseid = $(element).val();
+	// var manid = $('#CollectibleManufactureId').val();
+	// $.ajax({
+	// type : "POST",
+	// dataType : 'json',
+	// url : '/licenses/getLicenseData.json',
+	// data : 'data[license_id]=' + licenseid + '&data[manufacture_id]=' + manid,
+	// beforeSend : function(jqXHR, settings) {
+	// //$.blockUI();
+	// },
+	// success : function(data, textStatus, XMLHttpRequest) {
+	// var success = data.success.isSuccess;
+	//
+	// if(success) {
+	// $('#CollectibleSeriesId').val('');
+	// if(data.data.hasSeries) {
+	// $('#change-series-link').text('Add');
+	// $('#CollectibleSeriesId').parent('.static-field').parent('li').show();
+	// } else {
+	// $('#CollectibleSeriesId').parent('.static-field').parent('li').hide();
+	// }
+	// } else {
+	//
+	// }
+	// },
+	// complete : function(jqXHR, textStatus) {
+	// //$.unblockUI();
+	// }
+	// });
 	// }
 
 	function handleCollectibleTypeChange() {
@@ -50,8 +50,8 @@ var collectibleAdd = function() {
 			success : function(data, textStatus, XMLHttpRequest) {
 				var success = data.success.isSuccess;
 
-				if(success) {
-					if(data.data.specializedTypes.length !== 0) {
+				if (success) {
+					if (data.data.specializedTypes.length !== 0) {
 						var output = [];
 						output.push("<option value=''></option>");
 						$.each(data.data.specializedTypes, function(key, value) {
@@ -84,7 +84,7 @@ var collectibleAdd = function() {
 		var collectibleTypeid = $(element).val();
 		$('#edit-collectibletype-dialog').find('.error-message').remove();
 		$('#typeLevel1').parent('li').remove();
-		if(collectibleTypeid !== '-1') {
+		if (collectibleTypeid !== '-1') {
 			$.ajax({
 				type : "POST",
 				dataType : 'json',
@@ -96,8 +96,8 @@ var collectibleAdd = function() {
 				success : function(data, textStatus, XMLHttpRequest) {
 					var success = data.success.isSuccess;
 
-					if(success) {
-						if(data.data.collectibleTypes && data.data.collectibleTypes.length > 0) {
+					if (success) {
+						if (data.data.collectibleTypes && data.data.collectibleTypes.length > 0) {
 							var output = [];
 							output.push('<option value="-1">Select</option>');
 							//TODO need to wrap this in the LI and setup the label tags appropriately for each level
@@ -146,11 +146,11 @@ var collectibleAdd = function() {
 			success : function(data, textStatus, XMLHttpRequest) {
 				var success = data.success.isSuccess;
 
-				if(success) {
-					if(data.data.collectibleTypes) {
+				if (success) {
+					if (data.data.collectibleTypes) {
 						//Hard coding for now, fix this so we know the number of levels returned and loop through them
 						//TODO: make this code reusable
-						if(data.data.collectibleTypes.collectibletypes_L0) {
+						if (data.data.collectibleTypes.collectibletypes_L0) {
 							var output = [];
 							output.push('<option value="-1">Select</option>');
 							//TODO need to wrap this in the LI and setup the label tags appropriately for each level
@@ -160,7 +160,7 @@ var collectibleAdd = function() {
 							});
 							var selected = data.data.collectibleTypes.selectedTypes.L0;
 							$.each(data.data.collectibleTypes.collectibletypes_L0, function(key, value) {
-								if(selected == key) {
+								if (selected == key) {
 									output.push('<option value="' + key + '" selected="selected">' + value + '</option>');
 								} else {
 									output.push('<option value="' + key + '">' + value + '</option>');
@@ -178,7 +178,7 @@ var collectibleAdd = function() {
 							$li.prepend($labelWrapper);
 							$('#edit-collectibletype-dialog-fields').prepend($li);
 
-							if(data.data.collectibleTypes.collectibletypes_L1 && data.data.collectibleTypes.collectibletypes_L1.length > 0) {
+							if (data.data.collectibleTypes.collectibletypes_L1 && data.data.collectibleTypes.collectibletypes_L1.length > 0) {
 								var output = [];
 								output.push('<option value="-1">Select</option>');
 								//TODO need to wrap this in the LI and setup the label tags appropriately for each level
@@ -187,7 +187,7 @@ var collectibleAdd = function() {
 								});
 								var selected = data.data.collectibleTypes.selectedTypes.L1;
 								$.each(data.data.collectibleTypes.collectibletypes_L1, function(key, value) {
-									if(selected == value.Collectibletype.id) {
+									if (selected == value.Collectibletype.id) {
 										output.push('<option value="' + value.Collectibletype.id + '" selected="selected">' + value.Collectibletype.name + '</option>');
 									} else {
 										output.push('<option value="' + value.Collectibletype.id + '">' + value.Collectibletype.name + '</option>');
@@ -232,11 +232,11 @@ var collectibleAdd = function() {
 		var collectibleText = '';
 		var success = true;
 		$('#edit-collectibletype-dialog').find('.error-message').remove();
-		if($('#typeLevel1').length != 0 && $('#typeLevel1').val() !== '-1') {
+		if ($('#typeLevel1').length != 0 && $('#typeLevel1').val() !== '-1') {
 			collectibleTypeId = $('#typeLevel1 option:selected').val();
 			collectibleText = $('#typeLevel1 option:selected').text();
 		} else {
-			if($('#typeLevel0').val() !== '-1') {
+			if ($('#typeLevel0').val() !== '-1') {
 				collectibleTypeId = $('#typeLevel0 option:selected').val();
 				collectibleText = $('#typeLevel0 option:selected').text();
 			} else {
@@ -245,7 +245,7 @@ var collectibleAdd = function() {
 			}
 		}
 
-		if(success) {
+		if (success) {
 			$('#CollectibleCollectibletypeId').val(collectibleTypeId);
 			$('#change-collectibletype-link').text(collectibleText);
 		}
@@ -275,39 +275,39 @@ var collectibleAdd = function() {
 		 */
 		var i = _currentSeriesLevel;
 		for (i; i >= _baseSeriesLevel; i--) {
-			if($('#seriesLevel' + i + ' option:selected').length != 0 && $('#seriesLevel' + i + ' option:selected').val() !== '-1' && !success) {
+			if ($('#seriesLevel' + i + ' option:selected').length != 0 && $('#seriesLevel' + i + ' option:selected').val() !== '-1' && !success) {
 				collectibleTypeId = $('#seriesLevel' + i + ' option:selected').val();
 				_currentSeriesLevel = i;
 				success = true;
 			}
 		}
-		
-		if(collectibleTypeId === ''){
+
+		if (collectibleTypeId === '') {
 			$('#seriesLevel' + _currentSeriesLevel).after('<div class="error-message">Please select a category.</div>');
-			success = false;			
+			success = false;
 		}
 
-		if(success) {
+		if (success) {
 			$('#CollectibleSeriesId').val(collectibleTypeId);
 			//Lets build the text so it lists out the entire series
 			var text = '';
-			var i = 0; 
-			for(i;i <= _currentSeriesLevel; i++){
-				text +=  $('#seriesLevel' + i + ' option:selected').text();
-				if(i != _currentSeriesLevel){
+			var i = 0;
+			for (i; i <= _currentSeriesLevel; i++) {
+				text += $('#seriesLevel' + i + ' option:selected').text();
+				if (i != _currentSeriesLevel) {
 					text += '/';
 				}
 			}
-				
+
 			$('#change-series-link').text(text);
-		}		
-		
+		}
+
 		return success;
 	}
-	
-	function removeSeries(){
-		$('#CollectibleSeriesId').val('');					
-		$('#change-series-link').text('Add');		
+
+	function removeSeries() {
+		$('#CollectibleSeriesId').val('');
+		$('#change-series-link').text('Add');
 	}
 
 	function buildSelect(data) {
@@ -318,17 +318,17 @@ var collectibleAdd = function() {
 		//This is a cheap cheap hack, need ot figure out a better way. Creating a dummy
 		//object to store the jQuery DOM objects so we make sure events properly carry over
 		var $html = $('<li></li>');
-		for(i; i < levelCount; i++) {
+		for (i; i < levelCount; i++) {
 			var currentLevelList = data.data['L' + i];
 			var output = [];
 			output.push('<option value="-1">Select</option>');
-			var $select = $('<select></select>').attr('id', 'seriesLevel' + i).data('level', i).on('change',function() {
+			var $select = $('<select></select>').attr('id', 'seriesLevel' + i).data('level', i).on('change', function() {
 				//handleChange(this)
 				handleSeriesSelect(this);
 			});
 			var selected = data.data.selected['L' + i];
 			$.each(currentLevelList, function(key, value) {
-				if(selected == key) {
+				if (selected == key) {
 					output.push('<option value="' + key + '" selected="selected">' + value + '</option>');
 				} else {
 					output.push('<option value="' + key + '">' + value + '</option>');
@@ -347,7 +347,7 @@ var collectibleAdd = function() {
 			$html.append($li)
 			//html += '<li>' + $li.html() + '</li>';
 		}
-		
+
 		return $html.children();
 	}
 
@@ -361,16 +361,16 @@ var collectibleAdd = function() {
 		var seriesid = $(element).val();
 		$('#edit-series-dialog').find('.error-message').remove();
 		var currentLevel = $(element).data('level')
-		
-		if(currentLevel < _currentSeriesLevel) {
+
+		if (currentLevel < _currentSeriesLevel) {
 			var i = currentLevel + 1;
-			for(i; i <= _currentSeriesLevel; i++) {
+			for (i; i <= _currentSeriesLevel; i++) {
 				$('#seriesLevel' + i).parent('li').remove();
 			}
 			_currentSeriesLevel = currentLevel;
-		} 	
-		
-		if(seriesid !== '-1') {
+		}
+
+		if (seriesid !== '-1') {
 			$.ajax({
 				type : "POST",
 				dataType : 'json',
@@ -384,11 +384,11 @@ var collectibleAdd = function() {
 					/*
 					 * This is going to return all series so we will need to redraw everything
 					 */
-					if(success) {
-						if(data.data.levelCount) {
+					if (success) {
+						if (data.data.levelCount) {
 							var html = buildSelect(data);
 							$('#edit-series-dialog-fields').children().remove();
-							$('#edit-series-dialog-fields').prepend(html);								
+							$('#edit-series-dialog-fields').prepend(html);
 						} else {
 							//error, no level count
 						}
@@ -429,13 +429,13 @@ var collectibleAdd = function() {
 			success : function(data, textStatus, XMLHttpRequest) {
 				var success = data.success.isSuccess;
 
-				if(success) {
+				if (success) {
 					/*
 					 * We should only be return the levels that exist
 					 */
-					if(data.data.levelCount) {
+					if (data.data.levelCount) {
 						var html = buildSelect(data);
-						$('#edit-series-dialog-fields').prepend(html);								
+						$('#edit-series-dialog-fields').prepend(html);
 					} else {
 						//error, no level count
 					}
@@ -455,8 +455,20 @@ var collectibleAdd = function() {
 		init : function() {
 			//1-18-12 - we do not need to do this anymore
 			// $('#CollectibleLicenseId').change(function() {
-				// handleLicenseChange(this)
+			// handleLicenseChange(this)
 			// });
+			var options, a;
+			jQuery(function() {
+				options = {
+					lookup : retailers,
+					width : 282,
+					onSelect : function(value, data) {
+						// Not sure I need to do anything here
+					}
+				};
+				a = $('#CollectibleRetailer').autocomplete(options);
+			});
+
 
 			$('#change-collectibletype-link').click(function() {
 				initCollectibleChange();
@@ -467,7 +479,7 @@ var collectibleAdd = function() {
 			});
 
 			$('#CollectibleLimited').change(function() {
-				if($(this).is(':checked')) {
+				if ($(this).is(':checked')) {
 					$('#CollectibleEditionSize').parent('div').parent('li').show();
 					$('#CollectibleNumbered').parent('div').parent('li').show();
 				} else {
@@ -492,7 +504,7 @@ var collectibleAdd = function() {
 				'resizable' : false,
 				'buttons' : {
 					Change : function() {
-						if(isChangeSeries()) {
+						if (isChangeSeries()) {
 							$('#edit-series-dialog').dialog("close");
 						}
 					},
@@ -518,7 +530,7 @@ var collectibleAdd = function() {
 				'resizable' : false,
 				'buttons' : {
 					Change : function() {
-						if(changeCollectibleType()) {
+						if (changeCollectibleType()) {
 							handleCollectibleTypeChange();
 						}
 					},

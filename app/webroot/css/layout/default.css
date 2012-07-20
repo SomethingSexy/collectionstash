@@ -218,7 +218,7 @@ a:active {
 	padding: 20px;
 	float: left;
 	clear: both;
-	/*width: 550px;*/
+	width: 700px;
 	border-bottom: 1px solid #FDB924;
 }
 .collectible.item .test {
@@ -801,6 +801,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 .standard-list.empty ul li, .attributes-list.empty ul li {
 	font-size: 0.75em;
+	background: none;
 }
 /**
  * 	This is the new list code where we put the padding
@@ -844,6 +845,18 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	clear: none;
 	float: left;
 }
+#my-stashes-component .inside .component-view .title {
+	width: 100%;
+	clear: both;
+}
+
+#my-stashes-component .inside .component-view .title h3 {
+	border-bottom: 1px solid #CCCCCC;
+	color: #74A4BE;
+	font-weight: normal;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+}
 #my-stashes-component .inside .component-view .tabs div .actions .link.glimpse-link, #my-stashes-component .inside .component-view .tabs div .actions .link.add-stash-link, #my-stashes-component .inside .component-view .tabs div .actions .link.detail-link {
 	background: none;
 }
@@ -853,6 +866,11 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #my-stashes-component .inside .component-view .ui-tabs div .actions ul li {
 	display: inline;
+}
+
+#my-stashes-component .inside .component-view .actions.stash {
+	margin-bottom: 25px;
+	overflow: hidden;
 }
 
 #my-stashes-component .inside .component-view .actions.stash .nav li a {
@@ -964,6 +982,10 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	font-size: 0.7em;
 	text-align: right;
 	margin-top: 5px;
+}
+
+#my-stashes-component .inside .component-view .comments-container {
+	margin-top: 0;
 }
 
 #collectibles.collectibles, #photos.photos {
