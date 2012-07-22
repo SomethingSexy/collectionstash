@@ -1,7 +1,7 @@
 <?php
 class Collectible extends AppModel {
 	var $name = 'Collectible';
-	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Currency');
+	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'User' => array('counterCache' => true), 'Currency');
 
 	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
 
@@ -119,7 +119,7 @@ class Collectible extends AppModel {
 		}
 
 		// If it is set already well then don't do anything
-		if (!isset($returnData['Collectible']['retailer_id']) || empty($returnData['Collectible']['retailer_id'])) {
+		if (!isset($returnData['Collectible']['retailer_id'])) {
 			if (isset($returnData['Collectible']['retailer']) && !empty($returnData['Collectible']['retailer'])) {
 				$existingRetailer = $this -> Retailer -> find('first', array('conditions' => array('Retailer.name' => $returnData['Collectible']['retailer'])));
 				/*
@@ -137,8 +137,6 @@ class Collectible extends AppModel {
 						return false;
 					}
 				}
-			} else {
-				$returnData['Collectible']['retailer_id'] = '';
 			}
 		}
 
