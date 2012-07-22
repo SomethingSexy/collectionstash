@@ -1,0 +1,7 @@
+Nice to haves:
+- Remember me checkbox
+- drag and drop stash adding
+- added filtering to the stash view, like the catalog
+- If it is a variant, make the "Yes" a link to the parent collectible.
+- Admin page to clean up any venue/exclusive retailers and then if I am going to combine them have a way for the page to combine retailers into one
+- Add a widget on every page, if you are logged in that shows you the number of collectibles in your stash and maybe total cost
