@@ -6,12 +6,6 @@ Nice to haves:
 
 TODO:
 
-- Enlarge the image on the user collectible page
-- add fancy box to both pages above
-
-
-- autocomplete the exclusive retailer/venue field
-
 
 Completed
 - update Stash Comments
@@ -20,6 +14,11 @@ Completed
 - download fancy box plugin and use that on stash tile view to enlarge images
 - Update Stash Photos page
 - Notifiy a user if they already have a collectible when addnig to stash, display this when they are on the add page a list at the top that shows the current collectibles of this type they have
+- finish updating the logged in home page
+- need links to the collectibles and user_collectibles off the stash pages
+- Enlarge the image on the user collectible page
+- add fancy box to both pages above
+- autocomplete the exclusive retailer/venue field - need to test
 
 Release Day
 - After Deploy remove "type_id" from entitytype table
