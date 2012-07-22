@@ -5,3 +5,9 @@ Nice to haves:
 - If it is a variant, make the "Yes" a link to the parent collectible.
 - Admin page to clean up any venue/exclusive retailers and then if I am going to combine them have a way for the page to combine retailers into one
 - Add a widget on every page, if you are logged in that shows you the number of collectibles in your stash and maybe total cost
+- Indicate number for attributes
+- More categories for attributes
+- Dynamic categories based on collectible type and/or manufacturer
+- Link attributes?
+- *Subscript emails should include link to what it is for
+- Allow attributes to belong to other attributes
