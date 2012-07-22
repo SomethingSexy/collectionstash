@@ -30,6 +30,7 @@
 	$this -> Minify -> js(array('js/jquery-ui-1.8.18'));
 	$this -> Minify -> js(array('js/jquery-plugins'));
 	$this -> Minify -> js(array('js/jquery.autocomplete'));
+	$this -> Minify -> js(array('js/jquery.fancybox'));
 	?>
 	<?php echo $scripts_for_layout; ?>
 	<script>

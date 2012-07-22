@@ -2,10 +2,7 @@
 	<?php
 	if (!empty($collectibleCore['Upload'])) {
 		?>
-		<?php echo $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 400, 'height' => 400));?>
-		<div class="collectible image-fullsize hidden">
-			<?php echo $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('width' => 0));?>
-		</div>
+		<?php echo '<a href="' . $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('imagePathOnly' => true,'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($collectibleCore['Upload'][0]['name'], array('imagePathOnly' => false,'width' => 400, 'height' => 400)) . '</a>';?>
 		<?php } else {?><img src="/img/silhouette_thumb.png"/>
 		<?php }?>
 		<?php
@@ -20,3 +17,9 @@
 		}
 		?>
 </div>
+
+<script>
+	$(function() {
+		$('.collectible.image a').fancybox();
+	}); 
+</script>

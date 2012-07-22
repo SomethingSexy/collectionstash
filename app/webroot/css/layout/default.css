@@ -1205,7 +1205,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	font-size: 0.75em;
 }
 #home-components .random-collectibles {
-	width: 880px;
+	width: 100%;
 	margin-left: 50px;
 	margin-top: 20px
 }
