@@ -282,6 +282,7 @@ class CollectiblesController extends AppController {
 		}
 		$manufacturer = $this -> Session -> read('add.collectible.manufacture');
 		$collectibleType = $this -> Session -> read('add.collectible.collectibleType');
+
 		$this -> set(compact('manufacturer'));
 		$this -> set(compact('collectibleType'));
 
@@ -308,61 +309,45 @@ class CollectiblesController extends AppController {
 		$this -> set('currencies', $currencies);
 
 		//Check to see if this is a post, if it is not a post then do some initial stuff
-		if (!$this -> request -> is('post')) {
-			//Check to see if this is a variant we are adding
-			if ($this -> Session -> check('add.collectible.variant')) {
+
+		//Check to see if this is a variant we are adding
+		if ($this -> Session -> check('add.collectible.variant')) {
+			$wizardData = $this -> Wizard -> read();
+
+			// Do some initial stuff if what we are adding is a variant and the wizard
+			// data has not been set yet.  
+			// TODO: As of 7/22/12 There is still a defect if you come in for
+			// the first time, submit a change that has an error, it will overrwrite
+			// what you entered because the wizard data has not been set yet
+			if (is_null($wizardData) || !isset($wizardData['manufacture'])) {
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
+
+				if (isset($variantCollectible['Collectible']['retailer_id']) && !is_null($variantCollectible['Collectible']['retailer_id'])) {
+					$variantCollectible['Collectible']['retailer'] = $variantCollectible['Retailer']['name'];
+					unset($variantCollectible['Collectible']['retailer_id']);
+				}
 				//If it is then lets set the request attribute for default data and then also
 				//prefill the input fields
 				$this -> set('collectible', $variantCollectible);
 				$this -> request -> data = $variantCollectible;
 			}
-			$hasSeries = false;
-			//First see if this manufacturer even has a series
-			if (!empty($manufacturer['Manufacture']['series_id'])) {
-				//If it does check to see if it has any children.
-				$seriesCount = $this -> Collectible -> Series -> childCount($manufacturer['Manufacture']['series_id']);
-				//If it does have a series set to true so the user will be forced to add it
-				if (count($seriesCount) > 0) {
-					$hasSeries = true;
-				} else {
-					//set the default behind the scenes
-					$this -> request -> data('Collectible.series_id', $manufacturer['Manufacture']['series_id']);
-				}
-			}
 
-			$this -> set('hasSeries', $hasSeries);
-		} else {
-
-			//If data is not empty, then we submitted and it errored or we are coming back to edit
-			if ($this -> Session -> check('add.collectible.variant')) {
-				$variantCollectible = $this -> Session -> read('add.collectible.variant');
-				debug($variantCollectible);
-				$this -> set('collectible', $variantCollectible);
-			}
-
-			if (isset($this -> request -> data['Collectible']['series_id']) && !empty($this -> request -> data['Collectible']['series_id'])) {
-				$seriesPathName = $this -> Collectible -> Series -> buildSeriesPathName($this -> request -> data['Collectible']['series_id']);
-				$this -> request -> data['Collectible']['series_name'] = $seriesPathName;
-				$this -> set('hasSeries', true);
+		}
+		$hasSeries = false;
+		//First see if this manufacturer even has a series
+		if (!empty($manufacturer['Manufacture']['series_id'])) {
+			//If it does check to see if it has any children.
+			$seriesCount = $this -> Collectible -> Series -> childCount($manufacturer['Manufacture']['series_id']);
+			//If it does have a series set to true so the user will be forced to add it
+			if (count($seriesCount) > 0) {
+				$hasSeries = true;
 			} else {
-				$hasSeries = false;
-				//First see if this manufacturer even has a series
-				if (!empty($manufacturer['Manufacture']['series_id'])) {
-					//If it does check to see if it has any children.
-					$seriesCount = $this -> Collectible -> Series -> childCount($manufacturer['Manufacture']['series_id']);
-					//If it does have a series set to true so the user will be forced to add it
-					if (count($seriesCount) > 0) {
-						$hasSeries = true;
-					} else {
-						//set the default behind the scenes
-						$this -> request -> data('Collectible.series_id', $manufacturer['Manufacture']['series_id']);
-					}
-				}
-
-				$this -> set('hasSeries', $hasSeries);
+				//set the default behind the scenes
+				$this -> request -> data('Collectible.series_id', $manufacturer['Manufacture']['series_id']);
 			}
 		}
+
+		$this -> set('hasSeries', $hasSeries);
 
 	}
 
@@ -661,8 +646,8 @@ class CollectiblesController extends AppController {
 
 		// We don't need this here anymore, because we will be storing the strnig up until we committ
 		// if (isset($collectible['Collectible']['retailer_id'])) {
-			// $retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
-			// $collectible['Retailer'] = $retailer['Retailer'];
+		// $retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
+		// $collectible['Retailer'] = $retailer['Retailer'];
 		// }
 
 		$currency = $this -> Collectible -> Currency -> find('first', array('conditions' => array('Currency.id' => $collectible['Collectible']['currency_id']), 'contain' => false));
