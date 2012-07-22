@@ -69,3 +69,9 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(function() {
+		$('#collectibles-list-component .inside .component-view .collectibles .collectible .collectible.image a').fancybox();
+	}); 
+</script>

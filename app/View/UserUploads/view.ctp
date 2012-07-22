@@ -88,7 +88,6 @@
 <?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('jquery.infinitescroll', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('jquery.fancybox', array('inline' => false)); ?>
 <script>
 	$(function() {
 		$('.tiles .image a').fancybox();

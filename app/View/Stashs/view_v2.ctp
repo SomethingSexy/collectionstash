@@ -81,6 +81,7 @@
 			$datetime = strtotime($myCollectible['CollectiblesUser']['created']);
 			$mysqldate = date("m/d/y g:i A", $datetime);
 			$detail .= '<div class="date">' . $mysqldate . '</div>';
+			$detail .= '<div class="link"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">Details</a></div>';
 
 			echo '<div class="user-detail">';
 			echo $detail;
@@ -98,7 +99,7 @@
 <?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('jquery.infinitescroll', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('jquery.fancybox', array('inline' => false)); ?>
+
 
 <script>
 	$(function() {

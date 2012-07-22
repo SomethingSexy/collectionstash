@@ -6,15 +6,15 @@
 			<div class="actions icon">
 				<ul>
 					<li>
-						<a class="link" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><img src="/img/icon/magnify.png"/></a>
+						<a class="link" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><img src="/img/icon/magnify-gray.png"/></a>
 					</li>
 					<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
 					?>
 					<li>
-						<a class="link" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><img src="/img/icon/pencil.png"/></a>
+						<a class="link" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><img src="/img/icon/pencil-gray.png"/></a>
 					</li>
 					<li>
-						<a class="link" title="<?php echo __('Remove'); ?>" id="remove-link"><img src="/img/icon/trash.png"/></a>
+						<a class="link" title="<?php echo __('Remove'); ?>" id="remove-link"><img src="/img/icon/trash-gray.png"/></a>
 						<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
 					</li>
 					<?php } ?>
@@ -29,7 +29,7 @@
 					<?php
 if (!empty($collectible['Collectible']['Upload'])) {
 					?>
-					<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '150', 'height' => '150')); ?>
+					<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '400', 'height' => '400')); ?>
 					<div class="collectible image-fullsize hidden">
 						<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0)); ?>
 					</div>
