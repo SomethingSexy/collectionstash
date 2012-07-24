@@ -29,14 +29,16 @@ body {
 	width: 1280px;
 }
 #header {
-	position: relative;
+	/*position: relative;*/
 	/*margin: 20px 0;*/
-	overflow: hidden;
+	/*overflow: hidden;*/
 	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
 	background-color: #FDB924;
 	border-bottom: 1px solid #CCCCCC;
 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 	height: 100px;
+	width: 100%;
+	float: left;
 }
 #header .header.title {
 	float: left;
@@ -59,6 +61,8 @@ body {
 #header .header-container {
 	width: 1280px;
 	margin: 0 auto;
+	position: relative;
+	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 #FDB924;
 }
 #header .header-container .header.navigation {
 	float: right;
@@ -76,6 +80,7 @@ body {
 	background-color: #F1F1F1;
 	border: none;
 	box-shadow: none;
+	margin-top: 5px;
 }
 #stage .main-navigation {
 	width: 100%;
@@ -108,6 +113,7 @@ body {
 	position: relative;
 	top: 60px;
 	line-height: 2;
+	float: left;
 }
 #header .header-container .site-search form input#q {
 	background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
