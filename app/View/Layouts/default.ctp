@@ -123,7 +123,7 @@
 			}(document, 'script', 'facebook-jssdk'));
 	</script>
 
-	<div id="header" class="clearfix">
+	<div id="header">
 		<div class="header-container">
 			<div class="header title">
 				<h1><?php echo __('Collection Stash'); ?></h1>
