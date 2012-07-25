@@ -32,16 +32,17 @@ body {
 	/*position: relative;*/
 	/*margin: 20px 0;*/
 	/*overflow: hidden;*/
-	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
-	background-color: #FDB924;
-	border-bottom: 1px solid #CCCCCC;
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+	/*background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
+	 background-color: #FDB924;
+	 border-bottom: 1px solid #CCCCCC;
+	 box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);*/
 	height: 100px;
 	width: 100%;
 }
 #header .header.title {
 	float: left;
 	margin-top: 10px;
+	margin-left: 30px;
 }
 #header .header.title h1 {
 	background-color: inherit;
@@ -58,13 +59,18 @@ body {
 }
 
 #header .header-container {
-	width: 1280px;
+	min-width: 1280px;
+	width: 100%;
 	margin: 0 auto;
-	position: relative;
-	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 #FDB924;
+	height: 100px;
+	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
+	background-color: #FDB924;
+	border-bottom: 1px solid #CCCCCC;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
 #header .header-container .header.navigation {
 	float: right;
+	margin-right: 30px;
 }
 #stage {
 	background-color: #FFF;
@@ -107,12 +113,9 @@ body {
 	text-decoration: none;
 }
 #header .header-container .site-search {
-	left: 800px;
 	line-height: 2;
-	position: relative;
-	top: 60px;
-	line-height: 2;
-	float: left;
+	margin-top: 5px;
+	float: right;
 }
 #header .header-container .site-search form input#q {
 	background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
@@ -238,9 +241,6 @@ html ul.nav li ul.subnav li a:hover {/*--Hover effect for subnav links--*/
 #footer .links li {
 	font-size: 0.8em;
 }
-
-
-
 
 #footer .copyright {
 	float: right;
