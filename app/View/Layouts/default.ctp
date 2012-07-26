@@ -71,7 +71,7 @@
 				'modal' : true,
 				'buttons' : {
 					"Login" : function() {
-						$('#UserLoginForm').submit();
+						$('#UserLoginFormDialog').submit();
 					}
 				}
 
@@ -261,7 +261,7 @@
 			<div class="component component-dialog">
 				<div class="inside" >
 					<div class="component-view">
-						<?php echo $this -> Form -> create('User', array('action' => 'login')); ?>
+						<?php echo $this -> Form -> create('User', array('action' => 'login', 'id'=>'UserLoginFormDialog')); ?>
 						<fieldset>
 							<ul class="form-fields dialog-fields">
 								<li>
