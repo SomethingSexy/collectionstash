@@ -38,12 +38,12 @@ class UsersController extends AppController {
 		}
 
 		$this -> Session -> destroy();
-		debug($message);
 		$this -> Session -> setFlash($message, null, null, $messageType);
 		$success = true;
 		if ($this -> request -> is('post')) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 			$this -> User -> recursive = 0;
+
 			$results = $this -> User -> getUser($this -> request -> data['User']['username']);
 			if ($results) {
 				if ($results['User']['status'] == 0) {
