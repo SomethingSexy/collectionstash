@@ -253,6 +253,7 @@ class Uploader {
 	 */
 	function _ext($file = null) {
 		$this -> setFile($file);
+		debug($this -> file['name']);
 		return strrchr($this -> file['name'], ".");
 	}
 
@@ -287,6 +288,7 @@ class Uploader {
 
 			$ext = strtolower('.' . str_replace('.', '', $ext));
 			$file_ext = strtolower($this -> _ext());
+			debug($file_ext);
 			if ($file_ext == $ext) {
 				if (is_array($types) && !in_array($this -> file['type'], $types)) {
 					$this -> _error("{$this->file['type']} is not an allowed type.");
@@ -297,8 +299,7 @@ class Uploader {
 				}
 			}
 		}
-
-		$this -> _error("extension is not allowed.");
+		CakeLog::write('error', 'The file ' . $this -> file['name'] . ' extension is not allowed.' . $this -> file['error']);
 		return false;
 	}
 
