@@ -3,7 +3,7 @@
 <div id="account" class="two-column-page">
 	<div class="inside">
 		<div class="page actions">
-			<ul>
+			<ul class="unstyled">
 				<li>
 					<h3>Account</h3>		
 					<ul>

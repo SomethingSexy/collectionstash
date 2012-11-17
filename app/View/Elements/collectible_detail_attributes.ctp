@@ -42,7 +42,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 	// I am going to put the JSON object as a data attribute on each row
 	if ($attributeEmpty) {
 		echo '<div class="standard-list attributes collectible empty" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
-		echo '<ul>';
+		echo '<ul class="unstyled">';
 		echo '<li>No Parts or Accessories have been added</li>';
 		echo '</ul>';
 		echo '</div>';
