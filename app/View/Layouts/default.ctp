@@ -241,7 +241,7 @@
 				<li>Milestones</li>
 				<li>Request a Feature</li>-->
 			</div>
-			<ul class="links">
+			<ul class="links unstyled">
 				<li>&copy; Collection Stash</li>
 			</ul>
 		

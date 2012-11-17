@@ -67,7 +67,7 @@
 			</div>
 			<div class="component-view">
 				<div class="standard-list">
-					<ul>
+					<ol>
 					<?php
 					foreach ($manufactures as $key => $manufacture) {
 						echo '<li>';
@@ -77,7 +77,7 @@
 						echo '</li>';
 					}
 					?>
-					</ul>
+					</ol>
 				</div>
 			</div>
 		</div>		
@@ -89,7 +89,7 @@
 			</div>
 			<div class="component-view">
 				<div class="standard-list">
-					<ul>
+					<ol>
 					<?php
 					foreach ($licenses as $key => $license) {
 						echo '<li>';
@@ -99,7 +99,7 @@
 						echo '</li>';
 					}
 					?>
-					</ul>
+					</ol>
 				</div>				
 			</div>
 		</div>		
@@ -111,7 +111,7 @@
 			</div>
 			<div class="component-view">
 				<div class="standard-list">
-					<ul>
+					<ol>
 					<?php
 					foreach ($collectibletypes as $key => $type) {
 						echo '<li>';
@@ -121,7 +121,7 @@
 						echo '</li>';
 					}
 					?>
-					</ul>	
+					</ol>	
 				</div>			
 			</div>
 		</div>		

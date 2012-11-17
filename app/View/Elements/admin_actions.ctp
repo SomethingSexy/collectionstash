@@ -1,5 +1,5 @@
 <div class="page actions">
-	<ul>
+	<ul class="unstyled">
 		<li>
 			<h3><?php echo __('Collectibles');?></h3>
 			<ul>
