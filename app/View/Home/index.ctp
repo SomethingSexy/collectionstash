@@ -6,7 +6,7 @@
 			<span>Are you squirreling?</span>
 		</h3>
 		
-		<ul class="information">
+		<ul class="information unstyled">
 			<li>
 				<span class="icon"><img src="/img/icon/hammer-gray-big.png"/></span>
 				<h4>Build</h4>

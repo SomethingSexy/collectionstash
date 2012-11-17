@@ -271,6 +271,14 @@
 								<li>
 									<?php echo $this -> Form -> input('password', array('label' => __('Password'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
 								</li>
+								<li>
+									<div class="input checkbox">
+										<div class="label-wrapper">
+											<label for="CollectibleExclusive"><?php echo __('Remember Me'); ?></label>
+										</div>
+										<?php echo $this -> Form -> input('auto_login', array('type' => 'checkbox', 'label' => false, 'div' => false)); ?>
+									</div>
+								</li>
 							</ul>
 							<?php
 							if (isset($request_params)) {

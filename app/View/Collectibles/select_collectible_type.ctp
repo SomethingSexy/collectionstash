@@ -20,7 +20,7 @@
 				<div class="collectibletype detail">
 					<span class="collectibletype name"><?php echo $this -> Html -> link($collectibleType['Collectibletype']['name'], array('action' => 'selectCollectibleType',$collectibleType['Collectibletype']['id'])); ?></span>
 					<?php if(!empty($collectibleType['children'])){
-					echo '<ul class="collectibletype specialized-types">';
+					echo '<ul class="collectibletype specialized-types unstyled">';
 					foreach ($collectibleType['children'] as $specializedType) {
 						if(in_array($specializedType['Collectibletype']['id'], $manufacturerCollectibletypes)) { 
 							echo '<li>';

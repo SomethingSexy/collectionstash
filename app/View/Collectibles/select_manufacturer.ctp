@@ -17,7 +17,7 @@
         	<div class="manufacture item">
 				<div class="manufacture detail">
 					<span class="manufacture name"><?php echo $this -> Html -> link($manufacture['Manufacture']['title'], array('class'=> 'link','action' => 'selectManufacturer',$manufacture['Manufacture']['id'])); ?></span>
-					<ul class="manufacture collectibletypes">
+					<ul class="manufacture collectibletypes unstyled">
 					<?php foreach ($manufacture['CollectibletypesManufacture'] as $collectibleTypes): 
 						echo '<li>';
 						echo $collectibleTypes['Collectibletype']['name'];		

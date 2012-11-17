@@ -4,11 +4,9 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
-	public $components = array('Auth' => array('authenticate' => array('Form')));
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this -> Auth -> allow('*');
 	}
 
 	/**
@@ -50,6 +48,12 @@ class UsersController extends AppController {
 					if (!$results['User']['force_password_reset']) {
 						//This seems redundant might make more since to auto login them in because I already have the data
 						if ($this -> Auth -> login()) {
+							$autoLogin = isset($this -> request -> data['User']['auto_login']) ? $this -> request -> data['User']['auto_login'] : false;
+							if ($autoLogin) {
+								$this -> AutoLogin -> write($this -> request -> data['User']['username'], $this -> request -> data['User']['password']);
+							} else {
+								$this -> AutoLogin -> delete();
+							}
 							$user = $this -> Auth -> user();
 							$this -> User -> id = $user['id'];
 							$this -> User -> saveField('last_login', date("Y-m-d H:i:s", time()));
@@ -60,13 +64,9 @@ class UsersController extends AppController {
 							$this -> Session -> write('subscriptions', $subscriptions);
 
 							CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
-							// $this -> redirect(array('controller' => 'collectibles', 'action' => 'catalog'));
+
 							$this -> redirect($this -> Auth -> redirect());
-							// if (!empty($this -> request -> data['User']['fromPage'])) {
-							// $this -> redirect($this -> request -> data['User']['fromPage'], null, true);
-							// } else {
-							// $this -> redirect(array('controller' => 'stashs', 'action' => 'view', $results['User']['username']), null, true);
-							// }
+
 						} else {
 							$this -> Session -> setFlash(__('Username or password is incorrect', true), null, null, 'error');
 							$this -> request -> data['User']['password'] = '';
@@ -98,6 +98,7 @@ class UsersController extends AppController {
 	function logout() {
 		$this -> Session -> delete('user');
 		$this -> Session -> destroy();
+		$this -> AutoLogin -> delete();
 
 		$this -> redirect('/', null, true);
 	}
