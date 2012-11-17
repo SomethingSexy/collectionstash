@@ -58,3 +58,6 @@ Lot's of these!
 
 <h4>Artist Proof and Edition Number</h4>
 <p>It was pointed out to me that some collectibles can be an artist proof and a part of the collectible edition.  I have updated the process so that this is now allowed.</p>
+
+<h4>Remember Me!</h4>
+<p>When logging in, you can know check whether or not you want us to remember who you are for the next time you visit. </p>
