@@ -44,6 +44,7 @@ linux: ./cake
 
 ./cake -app /var/www/collectionstash/app send_email
 ./cake -app /var/www/collectionstash/app attributes_converter
+./cake -app /var/www/collectionstash/app uploads_converter
 
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
