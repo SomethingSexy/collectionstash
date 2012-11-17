@@ -1,8 +1,29 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
 class AppController extends Controller {
+	// Since we are specifying the auto login and auth here, we need to pull in session as well
+	public $components = array('Session', 'AutoLogin', 'Auth' => array('authenticate' => array('Form')));
 
 	public function beforeFilter() {
+		// Configure our auto login stuff
+		$this -> AutoLogin -> settings = array(
+		// Model settings
+		'model' => 'User', 'username' => 'username', 'password' => 'password',
+
+		// Controller settings
+		'plugin' => '', 'controller' => 'Users', 'loginAction' => 'login', 'logoutAction' => 'logout',
+
+		// Cookie settings
+		'cookieName' => 'rememberMe', 'expires' => '+1 month',
+
+		// Process logic
+		'active' => true, 'redirect' => true, 'requirePrompt' => true);
+		
+		// Since I am not using auth to it's fullest right now
+		// we need to allow all, the individual methods will 
+		// figure out if they need a user to be logged in
+		$this -> Auth -> allow('*');
+
 		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);			$this -> layout = 'ajax';
 		} else {
@@ -21,8 +42,7 @@ class AppController extends Controller {
 			$this -> set('isUserAdmin', false);
 		}
 
-		$this -> set('subscriptions', $this -> getSubscriptions());
-
+		$this -> set('subscriptions', $this -> getSubscriptions());
 		//Since this gets set for every request, setting this here for the default
 		$this -> set('title_for_layout', 'Collection Stash');
 		$this -> set('description_for_layout', 'Your collectible database and storage system.');
