@@ -25,6 +25,8 @@ Release TODO:
 - create a features table = this will be a table for features that not really physical pieces or items ** Not this release
 - Do a recover on the current attribute categories - fix things being out of order
 - Approve all edits, going to start over so I don't have to convert, will lose user edit history but not a huge deal..that means I need to empty all "_edits" tables
+
+
 - Once the attributes have been converted over need to run the UpdateEntitiesShell.php to add the entity id ** Not 100% necessary
 - Update the Upload table to add user_id before running converter
 - Run the UploadsConverterShell to convert all uploads to the new model
