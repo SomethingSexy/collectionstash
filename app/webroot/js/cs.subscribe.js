@@ -1,25 +1,26 @@
 $(function() {
 	var subscribed = $('#subscribe').attr('data-subscribed');
 	if(subscribed === 'true') {
-		$('#subscribe').html('<img src="/img/icon/subscribed.png"/>').attr('title','Unsubscribe to this.');
+		$('#subscribe').addClass('btn-success').attr('title','You are already following this.  Click to unfollow.');
 	} else {
-		$('#subscribe').html('<img src="/img/icon/subscription-gray.png"/>').attr('title','Subscribe to this.');
+		$('#subscribe').attr('title','You are not following this.  Click to follow.');
 	}
 
 	/**
 	 *This is coded in such away that it is not waiting for a response from the
 	 * server to set.  Right now it is assuming the server will work
 	 */
-	$('#subscribe').click(function() {
+	$('#subscribe').click(function(event) {
+		event.preventDefault();
 		//First check if I am subscribing or unsubcribing.. not sure it matters yet
 		//data-subscribed="false" data-entity-type="stash" data-entity-id
 		var subscribed = $(this).attr('data-subscribed');
 		if(subscribed === 'true') {
 			subscribed = false;
-			$(this).html('<img src="/img/icon/subscription-gray.png"/>').attr('title','Subscribe to this.');
+			$(this).removeClass('btn-success').attr('title','You are not following this.  Click to follow.');
 		} else {
 			subscribed = true;
-			$(this).html('<img src="/img/icon/subscribed.png"/>').attr('title','Unsubscribe to this.');
+			$(this).addClass('btn-success').attr('title','You are already following this.  Click to unfollow.');
 		}
 		$(this).attr('data-subscribed', subscribed);
 		//This is the id of the entity we are subscribing to

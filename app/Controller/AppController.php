@@ -1,12 +1,10 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
-
 class AppController extends Controller {
 
 	public function beforeFilter() {
 		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);
-			$this -> layout = 'ajax';
+			Configure::write('debug', 0);			$this -> layout = 'ajax';
 		} else {
 			$this -> layout = 'default';
 		}
@@ -22,9 +20,9 @@ class AppController extends Controller {
 			$this -> set('isLoggedIn', false);
 			$this -> set('isUserAdmin', false);
 		}
-		
+
 		$this -> set('subscriptions', $this -> getSubscriptions());
-		
+
 		//Since this gets set for every request, setting this here for the default
 		$this -> set('title_for_layout', 'Collection Stash');
 		$this -> set('description_for_layout', 'Your collectible database and storage system.');
@@ -78,8 +76,8 @@ class AppController extends Controller {
 
 	public function getSubscriptions() {
 		$subscriptions = $this -> Session -> read('subscriptions');
-		
-		if($subscriptions === null){
+
+		if ($subscriptions === null) {
 			return array();
 		} else {
 			return $subscriptions;
@@ -101,10 +99,6 @@ class AppController extends Controller {
 			$manufactures = $this -> Manufacture -> getManufactureSearchData();
 			$this -> Session -> write('Manufacture_Search.filter', $manufactures);
 		}
-
-		// debug($manufactures);
-
-		// $collectibleTypes = $this -> Session -> read('CollectibleType_Search.filter');
 
 		//For now, we allow one manufacture filter, if that is set regardless lets also
 		//reget the types
@@ -174,6 +168,8 @@ class AppController extends Controller {
 	 * This is the insane search method to search on a collectible.
 	 *
 	 * Enhancements: Determine what filters might be set so we only do the contains on necessary ones, not all
+	 *
+	 * This should really be a component
 	 */
 	public function searchCollectible($conditions = null) {
 		//TODO clean up this code
@@ -375,7 +371,7 @@ class AppController extends Controller {
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
 				$test = array();
@@ -385,14 +381,15 @@ class AppController extends Controller {
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
 			//This a search based on filters, not a search string
-			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
+			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');
+
 		$this -> set('collectibles', $data);
 	}
 

@@ -41,7 +41,7 @@ if (!isset($lockManufacturer)) {
 
 	echo 'var searchUrl = "' . $searchUrl . '";';
 ?></script>
-<?php echo $this -> Html -> script('search-filters', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/search-filters', array('inline' => false));?>
 <div id="filters">
 	<div class="search-query">
 		<?php

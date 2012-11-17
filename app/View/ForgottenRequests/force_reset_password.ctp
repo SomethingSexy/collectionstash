@@ -14,7 +14,7 @@
 		<div class="component-view">
 			<?php echo $this -> Form -> create('User', array('url' => array('controller' => 'forgotten_requests', 'action' => 'forceResetPassword')));?>
 			<fieldset>
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<li>
 						<div class="label-wrapper">
 							<label for="UserEmail"><?php echo __('Email')

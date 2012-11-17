@@ -1,4 +1,4 @@
-<?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/collectible-add', array('inline' => false));?>
 <?php if($this -> Session -> check('edit.collectible.mode.variant')) {
 ?>
 <?php
@@ -23,7 +23,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				?>
 				<fieldset>
 				    <legend><?php echo __('Manufacture Details');?></legend>
-				    <ul class="form-fields">
+				    <ul class="form-fields unstyled">
                         <li>
                             <div class="label-wrapper">
                                 <label for=""> <?php echo __('Manufacture')
@@ -150,7 +150,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				</fieldset>
 				<fieldset>
 				    <legend><?php echo __('Collectible Details');?></legend>
-				    <ul class="form-fields">
+				    <ul class="form-fields unstyled">
                         <li>
                             <div class="input checkbox">
                                 <div class="label-wrapper">
@@ -202,7 +202,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				</fieldset>
                 <fieldset>
                     <legend><?php echo __('Collectible Specs');?></legend>
-                    <ul class="form-fields">
+                    <ul class="form-fields unstyled">
                         <li>
                             <?php echo $this -> Form -> input('scale_id', array('empty' => true, 'label'=>__('Scale'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>
@@ -227,7 +227,7 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 					<legend>
 						<?php echo __('Reference');?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
                         <li>
                             <?php echo $this -> Form -> input('url', array('escape' => false, 'label'=>__('URL'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>
@@ -238,8 +238,8 @@ echo $this -> element('collectible_detail', array('title' => __('Base Collectibl
 				<input type="hidden" name="data[skip]" value="true" />
 				</form>
 				<div class="links">
-					<input type="button" id="edit-manufacture-button" class="button" value="Submit">
-					<input type="button" id="skip-manufacture-button" class="button" value="Cancel">
+					<button id="edit-manufacture-button" class="btn btn-primary" value="Submit"><?php echo __('Submit'); ?></button>
+					<button id="skip-manufacture-button" class="btn" value="Cancel"><?php echo __('Cancel'); ?></button>
 				</div>
 				<script>
 					$(function() {
@@ -288,7 +288,7 @@ echo '];';
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-series-dialog-fields" class="form-fields dialog-fields"></ul>
+					<ul id="edit-series-dialog-fields" class="form-fields dialog-fields unstyled"></ul>
 				</fieldset>
 			</div>
 		</div>
@@ -305,7 +305,7 @@ echo '];';
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-collectibletype-dialog-fields" class="form-fields dialog-fields"></ul>
+					<ul id="edit-collectibletype-dialog-fields" class="form-fields dialog-fields unstyled"></ul>
 				</fieldset>
 			</div>
 		</div>

@@ -1,0 +1,23 @@
+Update to Collectible Edit
+    One page collectible add
+    
+    
+    Have all of the fields blank and they edit everything on a single page
+    
+    This will make it easier for me to maintain in the future
+    
+    The only thing they need to select first would be the type of collectible it is,then when I do this I can add in new collectible types.
+    
+    This will create a new collectible that will be in draft status, new attributes and uploads will be done the same way.
+    
+    They can then come back to edit their drafts until they are ready to submit. Other users should be able to view the drafts and can post comments on them
+    
+    Allow multiple collaborations on a collectible so other people can work on them....nice to have
+    
+    Real time checking to see if one exists? Or maybe it does it before you submit for approval?
+    
+Update to Collectible User Edit
+    Be able to update the fields in the list view when logged in
+    
+Adding Collectibles
+    Be able to do a quick add, where it automatically gets added to your stash when you click the acorn

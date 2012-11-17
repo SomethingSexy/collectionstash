@@ -1,7 +1,6 @@
 /*
  * TODO: At some point replace all class of "glimpse" with a more appropriate name
  */
-
 .hidden {
 	display: none;
 }
@@ -19,10 +18,6 @@
 .clearfix {
 	display: inline-block;
 }
-/* Hides from IE-mac \*/
-* html .clearfix {
-	height: 1%;
-}
 .clearfix {
 	display: block;
 }
@@ -33,7 +28,6 @@
 	border-radius: 10px 10px 10px 10px;
 	bottom: 30px;
 	color: #222222;
-	font-size: 15px;
 	font-weight: bold;
 	left: 42%;
 	padding: 20px;
@@ -75,7 +69,7 @@ a {
 a:link, a.link {
 	cursor: pointer;
 	color: #606060;
-	text-decoration: underline;
+	/*text-decoration: underline;*/
 }
 a:visited {
 	color: #606060;
@@ -88,23 +82,8 @@ a:active {
 }
 .beta {
 	color: red;
-	font-size: 0.6em;
 	font-weight: bold;
 	margin-left: 2px;
-}
-.helpful-hint-message {
-	padding: 15px 10px 20px 20px;
-	font-size: 12px;
-	border: 1px solid #E9C95F;
-	color: #666;
-	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-	clear: both;
-	display: block;
-	max-width: 715px;
-	min-height: 15px;
-	line-height: 18px;
-	margin-bottom: 20px;
-	background: #FFF2C6;
 }
 /* base component view */
 .component {
@@ -125,7 +104,6 @@ a:active {
 	padding-bottom: 1em;
 	padding-top: 0.5em;
 	color: #444444;
-	font-size: 0.8em;
 }
 .component .component-info ul {
 	list-style-type: disc;
@@ -141,15 +119,17 @@ a:active {
 	padding: 1em;
 }
 .component .inside .component-title {
-	overflow: hidden;
+	/*overflow: hidden;*/
+	float: left;
+	width: 100%;
 }
 .component .inside .component-title .actions {
 	/*float: right;
 	 margin-right: 20px;
-	 display: inline;*/
-	position: absolute;
-	right: 20px;
-	top: 10px;
+	 display: inline;
+	 position: absolute;
+	 right: 20px;
+	 top: 10px;*/
 }
 .component .inside .component-title .actions ul li a {
 	background: none repeat scroll 0 0 transparent;
@@ -159,7 +139,7 @@ a:active {
 	margin: 0;
 }
 .component .inside .component-title .actions ul li a.link {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 .component .component-title h2 {
 	clear: both;
@@ -190,7 +170,7 @@ a:active {
 	/*background: green;*/
 }
 .component-message ul li, .component-message span {
-	font-size: .90em;
+	/*font-size: .90em;*/
 	/*margin-left: 0.5em;*/
 }
 .component-message ul {
@@ -198,17 +178,17 @@ a:active {
 	margin-left: 10px;
 }
 .component .component-view {
-	/* float: left;
-	 width: 100%;*/
+	float: left;
+	width: 100%;
 	padding: 0 2em 2em 2em;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 .component.component-dialog {
 	/*background-color: #FFFFFF;*/
 }
 .component.component-dialog .component-info {
 	margin: 0;
-	padding: 0;
+	width: 400px;
 }
 .ui-tabs-panel .component {
 	float: none;
@@ -234,36 +214,35 @@ a:active {
 }
 .collectible.image .image.link {
 	padding-top: 5px;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
-.collectible.detail-wrapper {
+.detail-wrapper {
 	float: left;
 	width: 550px;
 	margin-left: 10px;
 }
-.collectible.detail {
+.attribute.detail, .collectible.detail {
 	float: left;
 	margin-left: 10px;
-	width: 350px;
+	width: 400px;
 	/*background-color: #FFF;*/
 	/*margin-bottom: 20px;*/
 }
-.collectible.detail .detail.title {
+.attribute.detail .detail.title, .collectible.detail .detail.title {
 	margin-bottom: 5px;
 	width: 100%;
-	overflow: hidden;
+	float: left;
 }
-.collectible.detail .detail.title h3 {
+.attribute.detail .detail.title h3, .collectible.detail .detail.title h3 {
 	border-bottom: 1px solid #CCCCCC;
 	color: #74A4BE;
 	margin-bottom: 5px;
-	padding-bottom: 5px;
 	font-weight: normal;
 	float: left;
 	margin-right: 10px;
 }
 .collectible.detail .detail.title .title.link {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 .collectible.detail .detail.title .title.link a {
 	padding: 2px;
@@ -272,8 +251,8 @@ a:active {
 .collectible.detail dl {
 	padding: 5px;
 }
-.two-column-page .inside .page .view .detail dl, .collectible.detail .attributes-list ul li span, .stats dl, .collectible.statistics dl, .collectible.detail dl {
-	font-size: 0.75em;
+.two-column-page .inside .page .view .detail dl, .stats dl, .collectible.statistics dl, .collectible.detail dl, .attribute.detail dl {
+	/*font-size: 0.75em;*/
 }
 .collectibles.view {
 	float: left;
@@ -285,7 +264,7 @@ a:active {
 .collectibles.view table caption {
 	text-align: left;
 	color: #993;
-	font-size: 140%;
+	/*font-size: 140%;*/
 }
 .collectibles.view table th {
 	text-align: right;
@@ -298,7 +277,7 @@ a:active {
 	float: right;
 }
 .collectibles .collectible .links a {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	color: #000;
 }
 .collectibles .collectible .links ul li {
@@ -310,7 +289,7 @@ a:active {
 	margin-top: 5px;
 }
 .collectibles.view .collectible.actions a {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	padding: 0;
 }
 /* search component */
@@ -343,7 +322,7 @@ a:active {
 	border: 1px solid #494949;
 	/*border-radius: 2em 2em 2em 2em;*/
 	color: #FFFFFF;
-	font-size: 11px;
+	/*font-size: 11px;*/
 	height: 27px;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
@@ -366,7 +345,7 @@ fieldset legend {
 	margin-bottom: 5px;
 }
 .form-fields {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 .form-fields li {
 	/* width:64%;*/
@@ -375,6 +354,9 @@ fieldset legend {
 	padding: 6px 1% 9px;
 	width: 100%;
 	float: left;
+}
+.form-fields li.directional-text {
+	width: 400px;
 }
 .form-fields li .label-wrapper {
 	margin-right: 20px;
@@ -407,7 +389,7 @@ fieldset legend {
 	padding: 5px;
 	clear: both;
 	color: #c73e14;
-	font-size: 100%;
+	/*font-size: 100%;*/
 	font-weight: bold;
 	margin-left: 220px;
 	/*background: #c73e14;*/
@@ -416,7 +398,7 @@ fieldset legend {
 	letter-spacing: 0;
 }
 .form-fields input, .form-fields textarea {
-	padding: 5px;
+	/*padding: 5px;*/
 }
 .form-fields .static-field, .form-fields input, .form-fields textarea {
 	/*clear: both;*/
@@ -454,51 +436,6 @@ input[type=radio] {
 div.radio label {
 	margin: 0 0 6px 20px;
 }
-input[type=button].button, .ui-dialog .ui-dialog-buttonpane button, input[type=submit], div.actions ul li a.button {
-	display: inline-block;
-	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
-	*
-	display: inline;
-	vertical-align: baseline;
-	margin: 0 2px;
-	outline: none;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	font: 14px /100% Arial, Helvetica, sans-serif;
-	padding: .5em 2em .55em;
-	text-shadow: 0 1px 1px rgba(0,0,0,.3);
-	-webkit-border-radius: .5em;
-	-moz-border-radius: .5em;
-	border-radius: .5em;
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	color: #e9e9e9;
-	border: solid 1px #555;
-	background: #6e6e6e;
-	background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
-	background: -moz-linear-gradient(top,  #888,  #575757);
-	/*filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#888888', endColorstr='#575757');*/
-}
-input[type=button].button:hover, .ui-dialog .ui-dialog-buttonpane button:hover, input[type=submit]:hover {
-	text-decoration: none;
-	background: -moz-linear-gradient(center top , #757575, #4B4B4B) repeat scroll 0 0 transparent;
-	background: #616161;
-	background: -webkit-gradient(linear, left top, left bottom, from(#757575), to(#4b4b4b));
-	background: -moz-linear-gradient(top,  #757575,  #4b4b4b);
-	/*filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#757575', endColorstr='#4b4b4b');*/
-}
-input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active, input[type=submit]:active {
-	position: relative;
-	top: 1px;
-	background: -moz-linear-gradient(center top , #575757, #888888) repeat scroll 0 0 transparent;
-	color: #afafaf;
-	background: -webkit-gradient(linear, left top, left bottom, from(#575757), to(#888));
-	background: -moz-linear-gradient(top,  #575757,  #888);
-	/*filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#575757', endColorstr='#888888');*/
-}
-/* End Form Fields */
 
 /* collectibles view component */
 #collectibles-list-component {
@@ -525,7 +462,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	border: none;
 }
 #collectibles-list-component .component-view .collectibles.view.empty p {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	color: #606060;
 }
 #collectibles-list-component.variant-list .component-view {
@@ -566,7 +503,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-add-component .inside .component-view .links a {
 	color: #000;
-	font-size: 1em;
+	/*font-size: 1em;*/
 	cursor: pointer;
 }
 #collectible-add-component .inside .component-view .links.review {
@@ -605,8 +542,8 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
  margin-bottom: 0.5em;
  float: right;
  }*/
-#collectible-add-component .component-view .collectible.add .add-attribute, #collectible-add-component .component-view .collectible.add .add-variant-attribute, #collectible-add-component .component-view .collectible.add .attributes-list {
-	font-size: 0.75em;
+#collectible-add-component .component-view .collectible.add .add-attribute, #collectible-add-component .component-view .collectible.add .add-variant-attribute {
+	/*font-size: 0.75em;*/
 	width: 500px;
 }
 #collectible-add-component .inside .component-view .collectible.image.uploader .file-uploader {
@@ -629,7 +566,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-add-component .inside .component-view .question dl {
 	margin-left: 20px;
-	font-size: 0.80em;
+	/*font-size: 0.80em;*/
 }
 #collectible-add-component .inside .component-view .question dl dt {
 	font-weight: bold;
@@ -659,7 +596,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 /*#collectible-add-component .inside .component-view .collectible.add.tag*/
 .tag {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	display: inline;
 	margin-right: 1em;
 	margin-bottom: 1em;
@@ -693,7 +630,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	color: #000;
 }
 .tag-list .empty {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	color: #606060;
 }
 #collectibletypes-list-component, #manufactures-list-component {
@@ -711,7 +648,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 
 }
 #collectibletypes-list-component .inside .component-view .view .item .detail .name a, #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.name a {
-	font-size: 1em;
+	/*font-size: 1em;*/
 	font-weight: bold;
 	color: #656464;
 	text-decoration: none;
@@ -720,7 +657,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	text-decoration: underline;
 }
 #collectibletypes-list-component .inside .component-view .manufactures.view .collectibletype.item .collectibletype.detail .collectibletype.specialized-types li, #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.detail .manufacture.collectibletypes li {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	color: #999999;
 }
 #collectibletypes-list-component .inside .component-view .manufactures.view .collectibletype.item .collectibletype.detail .collectibletype.specialized-types li, #manufactures-list-component .inside .component-view .manufactures.view .manufacture.item .manufacture.collectibletypes li {
@@ -741,88 +678,66 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #dialogCost, #CollectiblesUserEditionSize {
 	width: 100px;
 }
-/*
- #collectibleWidth,
- #collectibleDepth {
- clear: none;
- }
- */
-.standard-list, .attributes-list {
+.standard-list {
 	float: left;
 	width: 100%;
 	margin-bottom: 10px;
 }
-.standard-list ul, .attributes-list ul {
+/*
+.standard-list ul {
 
 	border-left: 1px solid #D8D8D8;
 	border-right: 1px solid #D8D8D8;
 	border-top: 1px solid #D8D8D8;
 }
-.standard-list ul li, .attributes-list ul li {
+.standard-list ul li {
 	overflow: hidden;
-	border-bottom: 1px solid #E1E1E1;
-	padding: 10px;
+	/*border-bottom: 1px solid #E1E1E1;
 	color: #606060;
 }
-.standard-list ul li:nth-child(odd), .attributes-list ul li:nth-child(odd) {
-	background-color: #EEE;
+.standard-list ul li:nth-child(odd) {
+	/*background-color: #EEE;
 }
-.standard-list ul li.title, .attributes-list ul li.title {
-	background-color: #EAEAEA;
-	border-bottom: 1px solid #D8D8D8;
+.standard-list ul li span {
+	padding: 1em;
+}
+.standard-list ul li.title {
+	background: #D2E3F1;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
 	color: #74A4BE;
 }
-.standard-list ul li.title a {
-	color: #74A4BE;
+.standard-list ul li.title span {
+	vertical-align: middle;
+	color: #369;
+	padding: 1em;
+	background: #D2E3F1;
 	font-weight: bold;
-}
-.standard-list ul li.title span a.asc {
+} */
+.table tr th a.asc {
 	background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
 	padding-right: 20px;
 }
-.standard-list ul li.title span a.desc {
+.table tr th a.desc {
 	background: url("/img/icon/triangle_down.png") no-repeat scroll right center transparent;
 	padding-right: 20px;
 }
-/* TODO it would make sense to have a common class for these repeats */
-.attributes-list ul li .attribute-action, .attributes-list ul li .attribute-label, .attributes-list ul li .attribute-name, .attributes-list ul li .attribute-description, .attributes-list ul li .attribute-status {
-	float: left;
-	white-space: normal;
-}
-.attributes-list ul li .attribute-description .edit.attribute.description {
-	display: none;
-}
-.attributes-list ul li .attribute-action a {
-	margin-right: 5px;
-	cursor: pointer;
-}
-.standard-list.empty ul, .standard-list.empty ul li, .attributes-list.empty ul, .attributes-list.empty ul li {
+.standard-list.empty ul, .standard-list.empty ul li {
 	border: none;
 }
-.standard-list.empty ul li, .attributes-list.empty ul li {
-	font-size: 0.75em;
+.standard-list.empty ul li {
+	/*font-size: 0.75em;*/
 	background: none;
 }
+/*
+.standard-list ul li span {
+	float: left;
+}*/
 /**
  * 	This is the new list code where we put the padding
  * on the spans instead of the li so the text doesn't run
  * together
  */
-.attributes-list {
-	width: 500px;
-}
-.attributes-list ul li {
-	padding: 0;
-}
-.attributes-list ul li span.attribute-label, .attributes-list ul li span.attribute-action, .attributes-list ul li span.attribute-name, .attributes-list ul li span.attribute-description, .attributes-list ul li span.attribute-status {
-	padding: 10px;
-}
-.attributes-list ul li .attribute-label, .attributes-list ul li .attribute-action, .attributes-list ul li .attribute-name {
-	width: 100px;
-}
-.attributes-list ul li .attribute-description {
-	width: 200px;
-}
 .standard-list.tag-list ul li span.action, .standard-list.tag-list ul li span.name {
 	width: 50%;
 }
@@ -831,11 +746,12 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	background-color: #F1F1F1;
 }
 #my-stashes-component .inside .component-view {
-	overflow: hidden;
 	padding-top: 0;
 	padding-left: 1em;
 	padding-right: 1em;
 	padding-bottom: 1em;
+	float: left;
+	width: 100%;
 }
 #my-stashes-component .inside .component-view .glimpse {
 	margin-top: 25px;
@@ -848,6 +764,10 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #my-stashes-component .inside .component-view .title {
 	width: 100%;
 	clear: both;
+}
+
+#my-stashes-component .inside .component-view .title .views {
+	float: right;
 }
 
 #my-stashes-component .inside .component-view .title h3 {
@@ -878,6 +798,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	border-radius: 4px 4px 4px 4px;
 	color: #FFFFFF;
 	padding: 5px;
+	text-decoration: none;
 }
 #my-stashes-component .inside .component-view .actions.stash .nav li.selected a {
 	background-color: #FDB924;
@@ -904,7 +825,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #my-stashes-component.edit-stash .inside .component-view .links ul li {
 	display: inline;
-	font-size: .8em;
+	/*font-size: .8em;*/
 }
 #my-stashes-component.edit-stash .inside .component-view .links ul li.selected a {
 	font-weight: bold;
@@ -944,7 +865,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	float: left;
 	margin: 10px;
 	padding: 10px;
-	height: 225px;
+	/*height: 225px;*/
 	width: 200px;
 	background-color: #FFF;
 }
@@ -954,9 +875,9 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 
 #my-stashes-component .inside .component-view .tiles .tile div.image {
-	height: 150px;
+	/*height: 150px;*/
 	text-align: center;
-	width: 150px;
+	width: 200px;
 	display: block;
 	margin: auto;
 }
@@ -966,22 +887,39 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 
 #my-stashes-component .inside .component-view .tiles .tile .description {
-	font-size: 0.7em;
+	/*font-size: 0.7em;*/
 	margin-top: 5px;
 	color: #606060;
 	float: left;
 	width: 100%;
 }
-#my-stashes-component .inside .component-view .tiles .tile .description span {
-	float: left;
-	width: 100%;
-	text-align: right;
+#my-stashes-component .inside .component-view .tiles .tile .header {
+	margin-bottom: 0.313em;
+	text-align: center;
+}
+#my-stashes-component .inside .component-view .tiles .tile .header a {
+	/*font-size: 1em;*/
+	font-weight: 400;
+	line-height: 1.231em;
+	color: #222222;
+	text-decoration: none;
+	-webkit-transition: color 0.3s ease 0s;
+	-moz-transition: color 0.3s ease 0s;
+	-o-transition: color 0.3s ease 0s;
+	transition: color 0.3s ease 0s;
+}
+#my-stashes-component .inside .component-view .tiles .tile .header a:hover {
+	color: #606060;
 }
 #my-stashes-component .inside .component-view .tiles .tile .user-detail {
 	color: #606060;
-	font-size: 0.7em;
-	text-align: right;
+	/*font-size: 0.7em;*/
+	text-align: center;
 	margin-top: 5px;
+	margin-left: 0;
+}
+#my-stashes-component .inside .component-view .tiles .tile .user-detail li {
+	display: inline-block;
 }
 
 #my-stashes-component .inside .component-view .comments-container {
@@ -1058,7 +996,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 /*#collectible-detail .component-view*/
 .collectible.tags .tag {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	margin-left: 1em;
 	float: left;
 	/*background-color: #EAEAEA;*/
@@ -1066,7 +1004,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 .collectible.tags .label {
 	float: left;
 	margin-right: 10px;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 	margin-top: 10px;
 }
 #collectible-detail {
@@ -1078,17 +1016,20 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	clear: none;
 	width: 50%;
 	float: left;
-	font-size: 1.2em;
+	/*font-size: 1.2em;*/
+}
+#collectible-detail .inside .component-title .actions {
+	float: right;
 }
 #collectible-detail .component-view {
-	overflow: hidden; /* contain floats */
+	/* overflow: hidden; contain floats */
 	padding-top: 0;
 }
 #collectible-detail .component-view .helpful-hint-message {
 	width: 300px;
 	position: absolute;
 	right: 40px;
-	top: 10px;
+	top: 70px;
 }
 #collectible-detail .component-view .collectible.item {
 	border: none;
@@ -1099,7 +1040,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin-bottom: 0.5em;
 }
 #collectible-detail .component-view .links a {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	margin-left: 1em;
 }
 #collectible-detail .component-view .collectible.item {
@@ -1107,21 +1048,29 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	padding: 0;
 	margin-top: 10px;
 }
-#collectible-detail .component-view .collectible.item  .collectible.detail {
-	width: 500px;
+#collectible-detail .component-view .collectible.item .collectible.detail {
+	width: 600px; /* This might overlap the variant list */
 	margin-bottom: 10px;
 	background: none;
 }
-#collectible-detail .component-view .collectible.item  .collectible.detail .title .actions.icon ul li {
-	padding: 0;
+#collectible-detail .component-view .collectible.item .collectible.detail.attributes {
+	width: 100%;
+	clear: both;
+}
+#collectible-detail .component-view .collectible.item  .collectible.detail .title .btn-group {
+	top: 20px;
 }
 #collectible-detail .component-view .collectible.item .collectible.image {
 	width: auto;
 }
-#collectible-detail .component-view .approval-fields {
+.approval-fields {
 	float: left;
 	width: 100%;
 }
+.approval-fields .form-fields li .label-wrapper {
+	width: auto;
+}
+
 #collectible-history-list-component {
 	width: 100%;
 }
@@ -1131,7 +1080,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li span {
 	float: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #collectible-history-list-component .inside .component-view .collectible.detail.collectible-history .standard-list ul li .user {
 	width: 25%;
@@ -1144,7 +1093,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #collectible-history-list-component .inside .component-view .history {
 	text-align: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #collectible-history-list-component .inside .component-view .history th, #collectible-history-list-component .inside .component-view .history td {
 	padding: 5px;
@@ -1159,22 +1108,23 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #collectible-detail .component-view .collectible.tags .tag-list {
 	float: left;
 }
-.two-column-page .inside .page .view .detail dl, .stats dl, .collectible.statistics dl, .collectible.detail dl, .manufacturer.detail dl {
-	line-height: 2em;
+.two-column-page .inside .page .view .detail dl, .stats dl, .collectible.statistics dl, .collectible.detail dl, .manufacturer.detail dl, .attribute.detail dl {
+
 	margin: 0em 0em;
 }
-.two-column-page .inside .page .view .detail dl dt, .stats dl dt, .collectible.statistics dt, .collectible.detail dl dt {
+.two-column-page .inside .page .view .detail dl dt, .stats dl dt, .collectible.statistics dt, .collectible.detail dl dt, .attribute.detail dl dt {
 	color: #606060;
 	/*padding-left: 4px;*/
 	vertical-align: top;
+	line-height: 2em;
 }
-.two-column-page .inside .page .view .detail dl dd, .stats dl dd, .collectible.statistics dd, .collectible.detail dl dd {
+.two-column-page .inside .page .view .detail dl dd, .stats dl dd, .collectible.statistics dd, .collectible.detail dl dd, .attribute.detail dl dd {
 	margin-left: 14em;
 	margin-top: -2em;
 	vertical-align: top;
 	color: #999999;
 }
-.collectible.detail dl dd.changed {
+.attribute.detail dl dd.changed, .collectible.detail dl dd.changed {
 	font-weight: bold;
 	color: red;
 }
@@ -1184,6 +1134,8 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 .dialog .component .inside .component-view {
 	padding-top: 0;
+	overflow: hidden;
+	width: auto;
 }
 #home-components {
 	float: left;
@@ -1194,7 +1146,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 #home-components .component .inside .component-title {
 	padding: 0;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 	border-radius: 0;
 }
 #home-components .component .inside .component-view {
@@ -1202,7 +1154,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	/*padding: 0;*/
 }
 #home-components .component .inside .component-view .standard-list ul li span {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #home-components .random-collectibles {
 	width: 100%;
@@ -1232,7 +1184,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin-left: 1em;
 }
 #home-components .random-collectibles .inside .component-view .collectibles .collectible .detail p {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #home-components .component.manufacturers, #home-components .component.licenses, #home-components .component.collectibletypes {
 	width: 300px;
@@ -1249,7 +1201,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	width: 400px;
 }
 #home-components .find-by .inside .component-view .search-types div ul li a {
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #home-components .welcome-component .inside .component-view img {
 	width: 150px;
@@ -1265,7 +1217,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	margin-top: 20px;
 }
 #home-components .welcome-component .inside .component-view p.body {
-	font-size: 0.9em;
+	/*font-size: 0.9em;*/
 }
 #home-components .site-information {
 	float: left;
@@ -1300,7 +1252,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 	box-shadow: inset 0px 1px 0px 0px #ffffff;
 	background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #fdb629) );
 	background: -moz-linear-gradient( center top, #ededed 5%, #fdb629 100% );
-	filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#fdb629');
+	/*filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#fdb629');*/
 	background-color: #ededed;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -1319,7 +1271,7 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 #home-components .site-information ul li a:hover {
 	background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fdb629), color-stop(1, #ededed) );
 	background: -moz-linear-gradient( center top, #fdb629 5%, #ededed 100% );
-	filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#fdb629', endColorstr='#ededed');
+	/*filter: progid :DXImageTransform.Microsoft.gradient(startColorstr='#fdb629', endColorstr='#ededed');*/
 	background-color: #fdb629;
 }
 #home-components .site-information ul li a:active {
@@ -1367,52 +1319,17 @@ input[type=button].button:active, .ui-dialog .ui-dialog-buttonpane button:active
 }
 .info h2 {
 	clear: left;
-	font-size: 160%;
 	font-weight: normal;
 	margin: 0 0 5px;
 	color: #000000;
-	font-size: 160%;
+	/*font-size: 160%;*/
 }
 .info div {
 	color: #555555;
-	font-size: 95%;
 	line-height: 135%;
 	color: #444444;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 }
-/** Forms **/
-form {
-	/*  clear: both;
-	 margin-right: 20px;
-	 padding: 0;
-	 width: 95%;*/
-}
-/*
- fieldset {
- border: 1px solid #ccc;
- margin-bottom: 1em;
- padding: 16px 20px;
- }
- fieldset legend {
- color: #FDC82F;
- font-size: 160%;
- font-weight: bold;
- }
- fieldset fieldset {
- margin-top: 0px;
- margin-bottom: 20px;
- padding: 16px 10px;
- }
- fieldset fieldset legend {
- font-size: 120%;
- font-weight: normal;
- }
- fieldset fieldset div {
- clear: left;
- margin: 0 20px;
- }
- */
-
 /* collectible-add */
 
 .standard-add, .non-standard-add {
@@ -1438,29 +1355,20 @@ h1 a {
 	background: url(../images/wflogo.png) no-repeat left top;
 	overflow: hidden;
 }
-* html h1 a {
-	_background-image: none;
-	_filter: progid :DXImageTransform.Microsoft.AlphaImageLoader(src="../images/wflogo.png", sizingMethod="crop");
-}
 img, a img {
 	border: none;
 	-ms-interpolation-mode: bicubic;
 }
-* html #bottom {
-	_behavior: url(../images/iepngfix.htc);
-}
-.hide, .cloak div {
-	display: none !important;
-}
+/* interferring with bootstrap image gallery
+ .hide, .cloak div {
+ display: none !important;
+ }*/
 /** Paging **/
 div.paging {
 	color: #ccc;
 	margin-top: 1em;
 	clear: both;
 	float: left;
-}
-div.paging p {
-	font-size: 13px;
 }
 div.paging span.disabled {
 	display: none;
@@ -1469,7 +1377,6 @@ div.paging span a {
 	background-color: #686868;
 	border-radius: 4px 4px 4px 4px;
 	color: #FFFFFF;
-	font-size: 13px;
 	margin-left: 5px;
 	padding: 3px 8px;
 	text-decoration: none;
@@ -1479,7 +1386,6 @@ div.paging span.current {
 	color: #EEEEEE !important;
 	cursor: default;
 	border-radius: 4px 4px 4px 4px;
-	font-size: 13px;
 	padding: 3px 8px;
 	margin-left: 5px;
 }
@@ -1555,6 +1461,7 @@ div.paging span a:hover {
 }
 .ui-dialog .ui-dialog-buttonpane {
 	border: none;
+	/*background-color: #F1F1F1;*/
 }
 .ui-dialog .ui-dialog-title {
 	color: #74A4BE;
@@ -1575,19 +1482,22 @@ div.paging span a:hover {
 	border: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	display: none;
-	font-size: 12px;
+	/*font-size: 12px;*/
 	padding: 10px 15px;
 	text-align: left;
 	width: 200px;
 }
 #stash-list-container .stash-list-details {
 	color: #444444;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 }
 .ui-dialog {
-	border: 8px solid #333333;
-	border-radius: 8px 8px 8px 8px;
-	background: #FFF;
+	/* css3 drop shadow */
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	/* css3 border radius */
+	border-radius: 5px;
+	/*background: #F1F1F1;*/
+	/*z-index: 99999 !important;*/
 }
 .ui-widget-header {
 	background: none;
@@ -1610,7 +1520,6 @@ div.paging span a:hover {
 	background: url("/img/icon/555555_40x100_textures_03_highlight_soft_75.png") repeat-x scroll 50% 50% #555555;
 	border: 1px solid #666666;
 	color: #FFFFFF;
-	font-size: 14px;
 	padding: 4px 1.2em 3px;
 }
 .ui-tabs .ui-state-default a {
@@ -1705,7 +1614,6 @@ div.paging span a:hover {
 .two-column-page .inside .page.actions ul li h3 {
 	margin-bottom: 5px;
 	color: #656464;
-	font-size: 1em;
 }
 .two-column-page .inside .page.actions ul li ul {
 	margin-left: 10px;
@@ -1714,7 +1622,7 @@ div.paging span a:hover {
 	margin-bottom: 2px;
 }
 .two-column-page .inside .page.actions ul li a {
-	font-size: 0.9em;
+	/*font-size: 0.9em;*/
 }
 .two-column-page .inside .page {
 	float: left;
@@ -1722,16 +1630,26 @@ div.paging span a:hover {
 }
 .ui-tabs-panel div.title, .two-column-page .inside .page div.title {
 	overflow: hidden;
-	margin-bottom: 1em;
+	margin-bottom: 0.25em;
+	margin-top: 0.25em;
 }
 .ui-tabs-panel div.title h3, .two-column-page .inside .page .title h2 {
 	float: left;
 	font-weight: bold;
 	color: #656464;
 }
+.two-column-page .inside .page .detail-wrapper .detail, .two-column-page .inside .page .detail-wrapper {
+	width: 100%;
+}
+
+.two-column-page .inside .page .directional-text {
+	margin-bottom: 0.25em;
+	/*font-size: 0.8em;*/
+	color: #606060;
+}
 .two-column-page .inside .page .title.link {
 	float: right;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 /**
  * 	Account/Profile Settings
@@ -1743,7 +1661,7 @@ div.paging span a:hover {
 #account .inside .account.page .account.detail .account.directional {
 	color: #606060;
 	margin-top: 10px;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #account .inside .account.page .account.page.list {
 	width: 100%;
@@ -1758,7 +1676,7 @@ div.paging span a:hover {
 #account .inside .account.page .account.page.list li .header {
 	padding: 1em;
 	overflow: hidden;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 }
 #account .inside .account.page .account.page.list li .header span.page {
 	float: left;
@@ -1786,14 +1704,14 @@ div.paging span a:hover {
 #account-invites .body .account.detail.view .standard-list ul li span {
 	float: left;
 	width: 50%;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #account .inside .page .standard-list.edit-history-list ul li, #account .inside .page .standard-list.collectible-history-list ul li {
 	padding: 0;
 }
 #account .inside .page .standard-list.edit-history-list ul li span, #account .inside .page .standard-list.collectible-history-list ul li span {
 	float: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 	padding: 10px;
 }
 #account .inside .page .standard-list.edit-history-list, #account .inside .page .standard-list.collectible-history-list {
@@ -1810,28 +1728,25 @@ div.paging span a:hover {
  */
 .tag-list ul li span, #admin-edit .inside .page .standard-list ul li span {
 	float: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
-#admin-edit .inside .page .standard-list.edit-list ul li span.collectible-id {
+#admin-edit .inside .page .standard-list.edit-list ul li span.date, #admin-edit .inside .page .standard-list.edit-list ul li span.user, #admin-edit .inside .page .standard-list.edit-list ul li span.type, #admin-edit .inside .page .standard-list.edit-list ul li span.action {
 	width: 20%;
-}
-#admin-edit .inside .page .standard-list.edit-list ul li span.name, #admin-edit .inside .page .standard-list.edit-list ul li span.action {
-	width: 40%;
 }
 #admin-edit .inside .page .standard-list.collectible-edit-list ul li span.collectible-id {
-	width: 10%;
+	width: 15%;
 }
 #admin-edit .inside .page .standard-list.collectible-edit-list ul li span.user-id {
-	width: 25%;
+	width: 15%;
 }
 #admin-edit .inside .page .standard-list.collectible-edit-list ul li span.type {
-	width: 20%;
+	width: 15%;
 }
 #admin-edit .inside .page .standard-list.collectible-edit-list ul li span.timestamp {
-	width: 25%;
+	width: 15%;
 }
 #admin-edit .inside .page .standard-list.collectible-edit-list ul li span.action {
-	width: 20%;
+	width: 15%;
 }
 #admin-edit .inside .page .collectible.item {
 	padding: 0;
@@ -1841,7 +1756,7 @@ div.paging span a:hover {
 #admin-edit .inside .page .collectible.item .collectible.detail {
 	width: 100%;
 }
-#admin-edit .inside .page.attributes-approval .links {
+#admin-edit .inside .page .links {
 	width: 100%;
 	float: left;
 }
@@ -1897,7 +1812,7 @@ div.paging span a:hover {
 }
 #registry-component .inside .component-view .standard-list ul li span {
 	float: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #registry-component .inside .component-view .standard-list ul li span.username {
 	width: 100%;
@@ -1916,10 +1831,10 @@ div.paging span a:hover {
 }
 #user-list-component .inside .component-view .standard-list ul li span {
 	float: left;
-	font-size: 0.75em;
+	/*font-size: 0.75em;*/
 }
 #user-list-component .inside .component-view .standard-list ul li span {
-	width: 25%;
+	width: 23%;
 	text-align: center;
 }
 #user-list-component .inside .component-view .standard-list ul li span.username {
@@ -1931,10 +1846,10 @@ div.paging span a:hover {
 #filters {
 	float: left;
 	width: 100%;
+	margin-bottom: 10px;
 }
 #filters .search-query {
 	color: #656464;
-	font-size: 1em;
 	padding-bottom: 0.5em;
 	overflow: hidden;
 }
@@ -1943,7 +1858,7 @@ div.paging span a:hover {
 	border: 1px solid #FDB924;
 	color: #111111;
 	cursor: pointer;
-	height: 12px;
+	/*height: 12px;*/
 	margin-right: 8px;
 	padding: 9px;
 	position: relative;
@@ -1957,7 +1872,6 @@ div.paging span a:hover {
 #filters .filter .filter-name {
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font-size: 12px;
 	float: left;
 }
 #filters .filter .filter-name span {
@@ -1965,8 +1879,8 @@ div.paging span a:hover {
 }
 #filters .filter .filter-name a {
 	float: left;
-	position: relative;
-	top: -2px;
+	/*position: relative;
+	 top: -2px;*/
 }
 #filters .filter .filter-list-container {
 	border-radius: 4px 4px 4px 4px;
@@ -1991,11 +1905,13 @@ div.paging span a:hover {
 	background-color: white;
 	list-style: none outside none;
 	padding: 0;
+	margin: 0;
 }
-#filters .filter .filter-list ol li:first-child {
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-}
+/*
+ #filters .filter .filter-list ol li:first-child {
+ border-top-left-radius: 4px;
+ border-top-right-radius: 4px;
+ }*/
 #filters .filter .filter-list ol li {
 	border-bottom: 1px solid #D9D9DB;
 	line-height: 20px;
@@ -2005,6 +1921,11 @@ div.paging span a:hover {
 	white-space: nowrap;
 	width: 250px;
 }
+
+#filters .filter .filter-list ol li.selected {
+	background-color: #FDB924;
+}
+
 #filters .filter .filter-list ol li:last-child {
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
@@ -2017,7 +1938,7 @@ div.paging span a:hover {
  * User Uploads Component
  */
 .image div.metadata {
-	font-size: 0.6em;
+	/*font-size: 0.6em;*/
 	margin-bottom: 5px;
 }
 .image div.metadata a {
@@ -2028,7 +1949,7 @@ div.paging span a:hover {
 	text-align: left;
 }
 .image div.metadata {
-	font-size: 0.6em;
+	/*font-size: 0.6em;*/
 	margin-bottom: 5px;
 }
 .image div.metadata a {
@@ -2042,7 +1963,7 @@ div.paging span a:hover {
 	color: #AAA;
 }
 .image div.actions {
-	font-size: 0.6em;
+	/*font-size: 0.6em;*/
 	visibility: hidden;
 }
 .image:hover div.actions {
@@ -2053,7 +1974,7 @@ div.paging span a:hover {
 }
 #user-upload-component .inside .component-view .image div.metadata, #user-upload-component .inside .component-view .image div.metadata {
 	margin-top: 1em;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 	text-decoration: none;
 }
 #user-upload-component .inside .component-view .image div.metadata a, #user-upload-component .inside .component-view .image div.metadata a {
@@ -2080,7 +2001,7 @@ div.paging span a:hover {
 }
 .upload-component .stats {
 	float: left;
-	font-size: 0.6em;
+	/*font-size: 0.6em;*/
 }
 .upload-component form {
 	background: -moz-linear-gradient(center top , #FFFFFF, #EDEDED) repeat scroll 0 0 transparent;
@@ -2134,7 +2055,7 @@ div.paging span a:hover {
 	border: 1px solid #494949;
 	/*border-radius: 2em 2em 2em 2em;*/
 	color: #FFFFFF;
-	font-size: 11px;
+	/*font-size: 11px;*/
 	height: 27px;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
@@ -2142,10 +2063,13 @@ div.paging span a:hover {
 	overflow: hidden;
 	float: left;
 	border-radius: 3px;
+	position: relative;
+	top: 20px;
 }
 .actions.icon ul {
 	float: right;
 	overflow: hidden;
+	margin: 0;
 }
 .actions.icon ul li {
 	display: inline;
@@ -2154,10 +2078,10 @@ div.paging span a:hover {
 }
 /*Tree View */
 .treeview li span.name {
-	font-size: 1em;
+	/*font-size: 1em;*/
 }
 .treeview li span.action {
-	font-size: 0.7em;
+	/*font-size: 0.7em;*/
 }
 /*Series specific treeview */
 .treeview li div.series.input input {
@@ -2170,15 +2094,15 @@ div.paging span a:hover {
 .form-fields li.msrp div.currency {
 	margin-left: 3px;
 }
-.form-fields li.msrp div.currency select {
-	padding-top: 1px;
-	padding-bottom: 1px;
-}
 /* Comments */
 .comments-container {
 	float: left;
 	width: 100%;
 	margin-top: 25px;
+}
+.comments-container button.btn-primary {
+	position: relative;
+	left: 825px;
 }
 .comments-container .title h3 {
 	border-bottom: 1px solid #CCCCCC;
@@ -2208,7 +2132,7 @@ div.paging span a:hover {
 }
 .comments-container ol.comments li .comment-info {
 	float: left;
-	width: 200px;
+	width: 250px;
 }
 .comments-container ol.comments li .comment-info .user {
 	display: block;
@@ -2217,7 +2141,7 @@ div.paging span a:hover {
 .comments-container ol.comments li .comment-info .datetime {
 	display: block;
 	font-style: italic;
-	font-size: 10px;
+	/*font-size: 10px;*/
 }
 .comments-container ol.comments li .comment-text {
 	float: left;
@@ -2250,7 +2174,7 @@ div.paging span a:hover {
 	clear: both;
 	color: #666666;
 	display: block;
-	font-size: 12px;
+	/*font-size: 12px;*/
 	padding: 15px;
 	float: left;
 	margin-left: 30px;
@@ -2279,13 +2203,13 @@ div.paging span a:hover {
 	float: left;
 	margin-bottom: 2px;
 	padding: 5px;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 }
 .latest-comments .comment .comment-text {
 	border-radius: 5px;
 	background-color: #CCCCCC;
 	padding: 10px;
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 	float: left;
 	clear: both;
 	width: 180px;
@@ -2295,7 +2219,7 @@ div.paging span a:hover {
 	color: #000;
 }
 .latest-comments .comment .comment-info {
-	font-size: 0.7em;
+	/*font-size: 0.7em;*/
 	float: left;
 	margin-top: 3px;
 	clear: both;
@@ -2315,7 +2239,7 @@ div.paging span a:hover {
 	float: none;
 	position: absolute;
 	right: 50px;
-	top: 110px;
+	top: 160px;
 	border-radius: 0;
 	background: none;
 }
@@ -2336,3 +2260,218 @@ div.paging span a:hover {
 	margin-top: 5px;
 }
 
+/*
+ * This is for the attributes index list
+ *
+ */
+
+.standard-list.attributes.index {
+	/*font-size: 0.75em;*/
+}
+.standard-list.attributes.index ul li .category {
+	width: 120px;
+}
+.standard-list.attributes.index ul li .name {
+	width: 120px;
+}
+.standard-list.attributes.index ul li .description {
+	width: 300px;
+}
+.standard-list.attributes.index ul li .manufacturer {
+	width: 200px;
+}
+.standard-list.attributes.index ul li .scale {
+	width: 50px;
+}
+.standard-list.attributes.index ul li .created {
+	width: 120px;
+	text-align: center;
+}
+.standard-list.attributes.index ul li .actions {
+	width: 120px;
+	text-align: right;
+}
+.standard-list.attributes.index ul li .attribute-collectibles {
+	clear: both;
+	width: 100%;
+	float: left;
+}
+.standard-list.attributes.index ul li .attribute-collectibles a {
+	padding: 0px 0px 10px 10px;
+	float: left;
+}
+.standard-list.attributes.index ul li .collectibles {
+	display: none;
+	clear: both;
+	width: 100%;
+	float: left;
+}
+
+.standard-list.attributes.index ul li .collectibles .inside {
+	padding: 10px;
+}
+.standard-list.attributes.collectible {
+	/*font-size: 0.75em;*/
+}
+
+.standard-list.attributes.collectible ul li span {
+	line-height: 25px;
+}
+.standard-list.attributes.collectible ul li span.category {
+	width: 125px;
+}
+
+.standard-list.attributes.collectible ul li span.name {
+	width: 125px;
+}
+
+.standard-list.attributes.collectible ul li span.count {
+	width: 125px;
+}
+
+.standard-list.attributes.collectible ul li span.user {
+	width: 125px;
+}
+
+.standard-list.attributes.collectible ul li span.created {
+	width: 125px;
+}
+.standard-list.attributes.collectible ul li span.actions {
+	width: 125px;
+	text-align: right;
+}
+/*
+ * Add attribute dialog
+ */
+
+.component-dialog .form-fields li .label-wrapper {
+	width: 100px;
+}
+
+.component-dialog .form-fields li .error-message {
+	margin-left: 120px;
+}
+.dialog.attribute .component-dialog .inside .component-view .attribute-form, .dialog.attribute .component-dialog .inside .component-view .item-search, .dialog .component-dialog .inside .component-view .attribute-category, #attribute-add-dialog .component-dialog .inside .component-view .attribute-form {
+	float: left;
+	width: 450px;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search, .dialog .component-dialog .inside .component-view .attribute-category {
+	width: 350px;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search {
+	width: 450px;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search, .dialog .component-dialog .inside .component-view .attribute-category {
+	display: none;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 300px;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .directional-text {
+	margin-bottom: 10px;
+	/*font-size: 0.75em;*/
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li {
+	font-weight: normal;
+	border-bottom: 1px solid #E1E1E1;
+}
+
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li .title {
+	/*font-size: 0.6em;*/
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li.no-attributes {
+	opacity: 0.6; /* Real browsers */
+	filter: alpha(opacity = 60); /* MSIE */
+}
+
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li span.name {
+	font-weight: bold;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li span.category, .dialog.attribute .component-dialog .inside .component-view .item-search .items ul li span.exclusive, .dialog.attribute .component-dialog .inside .component-view .item-search .items ul li span.variant {
+	font-style: italic;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li .attribute-list {
+	list-style: circle inside;
+}
+
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li .attribute-list li {
+	/*font-size: 0.6em;*/
+	border-bottom: none;
+	cursor: pointer;
+}
+
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li .attribute-list li:hover {
+	/*font-size: 0.8em;*/
+	font-weight: bold;
+}
+
+.dialog.attribute .component-dialog .inside .component-view .item-search .component-search-input {
+	clear: both;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items {
+	float: left;
+}
+.dialog.attribute .component-dialog .inside .component-view .item-search .items ul li {
+	padding: 10px;
+}
+
+.dialog .component-dialog .inside .component-view .attribute-category ul li {
+	cursor: pointer;
+}
+/*
+ * For Upload drop zone effects
+ */
+#upload-dialog .component.component-dialog {
+	width: 1240px;
+	overflow: hidden;
+}
+#upload-dialog .component.component-dialog .inside .component-info {
+	width: 100%;
+}
+
+#dropzone {
+	background: palegreen;
+	width: 150px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-weight: bold;
+}
+#dropzone.in {
+	width: 600px;
+	height: 200px;
+	line-height: 200px;
+	font-size: larger;
+}
+#dropzone.hover {
+	background: lawngreen;
+}
+#dropzone.fade {
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	opacity: 1;
+}
+
+/**
+ * 	Bootstrap overrides
+ */
+.tab-content {
+	overflow: hidden;
+}
+
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+	margin-left: 0;
+}
+
+.radio, .checkbox {
+	padding-left: 0;
+}
+/*
+ * Cake BS
+ */
+.cake-sql-log {
+	float: left;
+}

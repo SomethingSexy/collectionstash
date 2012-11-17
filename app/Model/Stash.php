@@ -3,11 +3,10 @@ class Stash extends AppModel {
 	public $name = 'Stash';
 	public $useTable = 'stashes';
 	public $hasMany = array('CollectiblesUser' => array('dependent' => true));
-	public $belongsTo = array('User' => array('counterCache' => true), 'EntityType');
+	public $belongsTo = array('User' => array('counterCache' => true), 'EntityType' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
 	public function beforeSave() {
-		
 
 		debug($this -> data);
 		return true;

@@ -24,15 +24,15 @@
 			<div class="collectible detail">
 				<?php
 				echo '<div class="standard-list tag-list">';
-                echo '<ul>';
-                echo '<li class="title">';
-                echo '<span class="name">' . __('Tag', true) . '</span>';
-                echo '<span class="action">' . __('Action', true) . '</span>';
-                echo '</li>';
+                echo '<table class="table">';
+                echo '<thead><tr>';
+                echo '<th class="name">' . __('Tag', true) . '</th>';
+                echo '<th class="action">' . __('Action', true) . '</th>';
+                echo '</tr></thead><tbody>';
                 foreach ($tags as $key => $value) {
 
-                    echo '<li>' . '<span class="name">' . $value['Tag']['tag'] . '</span>';
-                    echo '<span class="action">';
+                    echo '<tr>' . '<td class="name">' . $value['Tag']['tag'] . '</td>';
+                    echo '<td class="action">';
                     if ($value['CollectiblesTag']['action'] === 'E') {
                         echo __('Edit', true);
                     } else if ($value['CollectiblesTag']['action'] === 'D') {
@@ -40,10 +40,10 @@
                     } else if ($value['CollectiblesTag']['action'] === 'A') {
                         echo __('Add', true);
                     }
-                    echo '</span>';
-                    echo '</li>';
+                    echo '</td>';
+                    echo '</tr>';
                 }
-                echo '</ul>';
+                echo '</tbody></table>';
                 echo '</div>';
 				?>
 			</div>

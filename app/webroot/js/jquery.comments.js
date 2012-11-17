@@ -32,7 +32,8 @@
 				//Post button, although not sure I want this
 				this.changer = $("<button>", {
 					text : "Post",
-					"id" : "post-comment"
+					"id" : "post-comment",
+					'class' : 'btn btn-primary'
 				}).appendTo(this.element).button().click(function(event) {
 					//Using apply here because we want to pass in the widget context
 					$.cs.comments.prototype._postComment.apply(self, event);
@@ -80,10 +81,10 @@
 
 				var $updateActions = $('<div></div>').addClass('actions');
 
-				var $saveAction = $('<button>Save</button>').click(function() {
+				var $saveAction = $('<button class="btn btn-primary">Save</button>').click(function() {
 					$.cs.comments.prototype._updateComment.call(self, this);
 				});
-				var $cancelAction = $('<button>Cancel</button>').click(function() {
+				var $cancelAction = $('<button class="btn">Cancel</button>').click(function() {
 					$comment.children().remove();
 					$comment.html(commentText);
 					$comment.next('div.actions').show();
@@ -253,7 +254,7 @@
 				var commentPost = '<div class="post-comment-container">';
 				commentPost += '<form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
 				commentPost += '<div style="display:none;"><input type="hidden" value="POST" name="_method"></div>';
-				commentPost += '<fieldset><ul class="form-fields">';
+				commentPost += '<fieldset><ul class="form-fields unstyled">';
 				commentPost += '<li><div class="input textarea"><div class="label-wrapper"><label for="CommentComment">Discuss</label></div><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></li>';
 				commentPost += '</ul></fieldset>'
 				commentPost += '</form></div>';

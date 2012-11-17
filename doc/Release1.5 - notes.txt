@@ -1,0 +1,56 @@
+Test Cases
+
+I link an attribute to a collectible
+
+I would add a new edit in the edit table, I would add a new row in the collectible_edits table with the collectible id being changed, this would also contain the edit_id, and then I would add a row in the attributes_collectibles_edits indicating what changed, this would had the collectible_edits_id
+
+
+If I added a new attribute and linked at the same time:
+
+I would add a new edit in the edit table, I would add a row in the collectible_edits table with the collectible_id and edit_id, I would add a new row to the attributes_collectibles_edits table with the collectible_edit_id.  I would then add a new attribute to the attributes table that would not be approved.
+
+I could then either approve the attribute through the attribute admin approval, or if I approval the edit, I would then also approve the attribute at the same time
+
+
+If I changed the collectible and I linked an attribute at the same time:
+
+I would add a new edit in the edit table, I would adda  row in the collectible_edits table with the collectible_id and the edit_id, I would add a new row to the attributes_collectibles_edits table with the collectible_edit_id, I would add a new row in the collectibles_Edits table 
+
+
+If I edit an attribute
+
+I would add a new edit in the edit table, I would add a row in the attributes_edits table which would contain the attribute being changed and the edit_id
+
+
+It is only when I am editing associated data of a main table that I would link directly to the edit_table
+
+Everytime I create an edit for a collectible I need to:
+
+- Insert a row into Edit
+- Insert row in CollectibleEdits - join table between Edit and Collectible
+- Inser row into CollectiblesEdits (contains collectible_edits id)
+
+Everytime I create an edit for a attribute link I need to:
+- Insert a row into Edit
+- Insert a row into AttributesCollectiblesEdits (contains collectible_edits id)
+- Insert a row into CollectibleEdits - join table between Edit and Collectible
+
+
+Everytime I edit an attribute I need to:
+
+- Insert a row into Edit
+- Insert a row into AttributeEdits - join table between edit and AttributesEdits
+- Insert a row into AttributesEdits
+
+
+Or
+
+What if I keep the edits table and drop the collectible_id
+
+To then link multiple edits to one, I would have to take that id and scan all tables for that id to find the linked changes
+- Ruling this one out because I think it will be slower and lame to have to scan a lot of tables and then if I want to group them by collectible_id
+
+
+Or I make the edits a collectible_edits table and make that completely indepdent of an attribute_edits
+
+The disdavantage here is not shared columns and no way to easily link changes across the board

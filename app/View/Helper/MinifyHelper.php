@@ -11,23 +11,18 @@ class MinifyHelper extends AppHelper {
 	var $helpers = array('Js', 'Html');
 	//used for seamless degradation when MinifyAsset is set to false;
 
-	function js($assets) {
-		if (Configure::read('MinifyAsset')) {
-			echo(sprintf("<script type='text/javascript' src='%s'></script>", $this -> _path($assets, 'js')));
-		} else {
-			echo($this -> Javascript -> link($assets));
-		}
+	function script($url, $options = array()) {
+		return $this -> Html -> script(Configure::read('MinifyAsset') ? $this -> path($url, 'js') : $url, $options);
 	}
 
-	function css($assets) {
-		if (Configure::read('MinifyAsset')) {
-			echo(sprintf("<link type='text/css' rel='stylesheet' href='%s' />", $this -> _path($assets, 'css')));
-		} else {
-			echo($this -> Html -> css($assets));
-		}
+	public function css($path, $rel = null, $options = array()) {
+		return $this -> Html -> css(Configure::read('MinifyAsset') ? $this -> path($path, 'css') : $path, $rel, $options);
 	}
 
-	function _path($assets, $ext) {
+	function path($assets, $ext) {
+		if (!is_array($assets)) {
+			$assets = array($assets);
+		}
 		$path = $this -> webroot . "min/?f=";
 		foreach ($assets as $asset) {
 			$path .= ($asset . ".$ext,");
@@ -36,4 +31,4 @@ class MinifyHelper extends AppHelper {
 	}
 
 }
-?> 
+?>

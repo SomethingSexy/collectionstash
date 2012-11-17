@@ -12,10 +12,15 @@
 	        	<div class="collectible item">
 	        		<div class="collectible image">
 						<?php
-						if (!empty($variant['Upload'])) {
-							echo '<a href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
-							echo $this -> FileUpload -> image($variant['Upload'][0]['name'], array('escape' => false, 'width' => 150, 'height' => 150));
-							echo '</a>';
+						if (!empty($variant['CollectiblesUpload'])) {
+							foreach ($variant['CollectiblesUpload'] as $key => $upload) {
+								if ($upload['primary']) {
+									echo '<a href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
+									echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false, 'width' => 150, 'height' => 150));
+									echo '</a>';
+									break;
+								}
+							}
 						} else {
 							echo '<img src="/img/silhouette_thumb.png"/>';
 						}

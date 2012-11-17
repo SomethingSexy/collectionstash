@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class CommentsController extends AppController {
 
-	public $helpers = array('Html', 'Js', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify', 'Time');
 
 	/**
 	 * This is the main entry way into "Discussion" page.

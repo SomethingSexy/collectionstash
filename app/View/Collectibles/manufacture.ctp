@@ -1,11 +1,11 @@
-<?php echo $this -> Html -> script('collectible-add', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/collectible-add', array('inline' => false)); ?>
 <div id="bread-crumbs">
 	<?php echo $this -> Wizard -> progressMenu(array('manufacture' => 'Manufacturer Details', 'attributes' => 'Accessories/Features', 'tags' => 'Tags', 'image' => 'Image', 'review' => 'Review')); ?>
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo __('Add New Collectible'); ?></h2>
+			<h2><?php echo __('Submit New Collectible'); ?></h2>
 			<?php if($this -> Session -> check('add.collectible.variant')) {
 			?>
 			<div class="actions">
@@ -30,7 +30,7 @@
 					<legend>
 						<?php echo __('Manufacturer Details'); ?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<li>
 							<div class="label-wrapper">
 								<label for=""> <?php echo __('Manufacturer')
@@ -178,7 +178,7 @@
 					<legend>
 						<?php echo __('Collectible Details'); ?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<li>
 							<div class="input checkbox">
 								<div class="label-wrapper">
@@ -229,7 +229,7 @@
 					<legend>
 						<?php echo __('Collectible Specs'); ?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<?php
 						if (!$this -> Session -> check('add.collectible.variant')) {
 							echo '<li>';
@@ -273,13 +273,14 @@
 					<legend>
 						<?php echo __('Reference'); ?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<li>
 							<?php echo $this -> Form -> input('url', array('escape' => false, 'label' => __('URL'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
 						</li>
 					</ul>
 				</fieldset>
-				<?php echo $this -> Form -> end(__('Submit', true)); ?>
+				<input type="submit" value="Submit" class="btn btn-primary" />
+				<?php echo $this -> Form -> end(); ?>
 			</div>
 		</div>
 	</div>
@@ -294,7 +295,7 @@
 			</div>
 			<div class="component-view">
 				<fieldset>
-					<ul id="edit-series-dialog-fields" class="form-fields"></ul>
+					<ul id="edit-series-dialog-fields" class="form-fields unstyled"></ul>
 				</fieldset>
 			</div>
 		</div>

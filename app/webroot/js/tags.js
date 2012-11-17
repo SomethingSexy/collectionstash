@@ -34,7 +34,7 @@ var tags = function() {
 				};
 				a = $('#query').autocomplete(options);
 			});
-			$('#add-query').click(function() {
+			$('#add-query').click(function(event) {
 				$(this).parent('li').children('div.error-message').remove();
 				if(tagCount < totalTagsAllowed) {
 					var tagValue = $('#query').val();
@@ -56,7 +56,7 @@ var tags = function() {
 				} else {
 					$('#add-query').after('<div class="error-message">Only ' + totalTagsAllowed + ' tags allowed.</div>');
 				}
-
+				event.preventDefault();
 			});
 
 			$(document).on('click', '.tag-list > li.tag.remove > a.remove-tag', function() {

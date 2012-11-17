@@ -1,248 +1,35 @@
 body {
-	font-family: "League Gothic", sans-serif;
-	font-size: 100.1%;
-	/*letter-spacing: 0.01em;*/
-	/*background: #656464;*/
 	background: none repeat scroll 0 0 #F1F1F1;
+	padding: 80px;
 }
-#container {
-	position: relative;
-	text-align: left;
-	font-size: 100%;
-	/*overflow: hidden;*/
-	min-height: 100%;
-	margin: 0 auto;
-	width: 900px;
-	/*background: #656464;*/
-	padding: 0;
-	margin-top: 5px;
-}
-#container:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
-}
-#container, #bottom {
-	width: 1280px;
-}
-#header {
-	/*position: relative;*/
-	/*margin: 20px 0;*/
-	/*overflow: hidden;*/
-	/*background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
-	 background-color: #FDB924;
-	 border-bottom: 1px solid #CCCCCC;
-	 box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);*/
-	height: 100px;
-	width: 100%;
-}
-#header .header.title {
-	float: left;
-	margin-top: 10px;
-	margin-left: 30px;
-}
-#header .header.title h1 {
-	background-color: inherit;
-	color: #FFFFFF;
-	text-indent: 0;
-}
-#header .header.title .sub-title {
-	color: #FFFFFF;
-	line-height: 1.2;
+.footer .logo {
 	float: right;
 }
-#header .header.navigation ul.nav {
-	float: right;
-}
-
-#header .header-container {
-	min-width: 1280px;
-	width: 100%;
-	margin: 0 auto;
-	height: 100px;
-	background: -moz-linear-gradient(center top , #E08C18, #FDB924) repeat scroll 0 0 transparent;
-	background-color: #FDB924;
-	border-bottom: 1px solid #CCCCCC;
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-}
-#header .header-container .header.navigation {
-	float: right;
-	margin-right: 30px;
-}
-#stage {
-	background-color: #FFF;
-	float: left;
-	width: 100%;
-	padding-bottom: 1em;
-	min-height: 600px;
-	border: 1px solid #BBBBBB;
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-	background-color: #F1F1F1;
-	border: none;
-	box-shadow: none;
-	margin-top: 5px;
-}
-#stage .main-navigation {
-	width: 100%;
-	/*background-color: #FDB924;*/
-	margin-top: 5px;
-	/*float: left;*/
-}
-#stage .main-navigation .inside {
-	overflow: hidden;
-}
-#stage .main-navigation .inside .nav {
-	float: left;
-}
-#stage .main-navigation .inside .nav li {
-
-}
-#stage .main-navigation .inside .nav li a {
-	padding: 10px;
-	color: #FFF;
-	border-radius: 4px 4px 4px 4px;
-	background: none repeat scroll 0 0 #CCCCCC;
-}
-#stage .main-navigation .inside .nav li a:hover {
-	background: none repeat scroll 0 0 #AAA;
-	text-decoration: none;
-}
-#header .header-container .site-search {
-	line-height: 2;
-	margin-top: 5px;
-	float: right;
-}
-#header .header-container .site-search form input#q {
-	background: url("/img/search-bg.png") no-repeat scroll 0 0 transparent;
-	border: 0 none;
-	color: #9E9FA4;
-	height: 31px;
-	padding: 0 0 0 30px;
-	width: 229px;
-}
-ul.nav {
-	list-style: none;
-	/*  padding: 0 20px;*/
-	margin: 0;
-	/*  width: 920px; */
-	/*  background: #222; */
-	/*  font-size: 1.2em;
-	 background: url(topnav_bg.gif) repeat-x;*/
-	/* background: #b60002; */
-}
-ul.nav li {
-	float: left;
-	margin: 0;
-	/* padding: 0 15px 0 0; */
-	position: relative; /*--Declare X and Y axis base for sub navigation--*/
-	padding: 10px 5px;
-	/* color: #fff;*/
-	display: block;
-	float: left;
-	color: #fff;
-	font-size: .9em;
-}
-ul.nav li a {
-	color: #fff;
-	text-decoration: none;
-	/* border-right: solid 1px #990000;  */
-}
-ul.nav li a:hover {
-	/*  background: url(topnav_hover.gif) no-repeat center top; */
-	text-decoration: underline;
-}
-ul.nav li span {/*--Drop down trigger styles--*/
-	width: 17px;
-	height: 35px;
-	float: left;
-	background: url(subnav_btn.gif) no-repeat center top;
-}
-ul.nav li span.inner-text {
-	background: none;
-	float: none;
-	width: auto;
-	height: auto;
-}
-ul.nav li span.subhover {
-	background-position: center bottom;
-	cursor: pointer;
-}/*--Hover effect for trigger--*/
-ul.nav li ul.subnav {
-	list-style: none;
-	position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
-	left: 0;
-	top: 35px;
-	background: #333;
-	margin: 0;
-	padding: 0;
-	display: none;
-	float: left;
-	/* width: 170px; it is on the li, do I need it here?*/
-	border-left: 1px solid #111;
-	border-right: 1px solid #111;
-	border-bottom: 1px solid #111;
-	z-index: 10000;
-}
-ul.nav li ul.subnav li {
-	margin: 0;
-	padding: 0;
-	border-top: 1px solid #252525; /*--Create bevel effect--*/
-	border-bottom: 1px solid #444; /*--Create bevel effect--*/
-	clear: both;
-	width: 170px;
-}
-html ul.nav li ul.subnav li a {
-	float: left;
-	width: 145px;
-	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
-	padding-left: 20px;
-}
-html ul.nav li ul.subnav li a:hover {/*--Hover effect for subnav links--*/
-	background: #FDB924 url(dropdown_linkbg.gif) no-repeat 10px center;
-}
-#footer {
-	clear: both;
-	padding: 10px 0px 10px 0px;
-	text-align: right;
-	color: #CCCCCC;
-	float: left;
-	width: 100%;
-}
-#footer .logo {
-	float: right;
-}
-#footer .version {
+.footer .version {
 	padding-left: 20px;
 	float: left;
 }
-#footer .social {
+.footer .social {
 	padding-left: 20px;
 	float: left;
 }
-#footer .social div {
-	font-size: 0.8em;
+.footer .social div {
 	padding: 5px;
 	float: left;
 	vertical-align: top;
 }
 
-#footer .social div .fb_iframe_widget iframe {
+.footer .social div .fb_iframe_widget iframe {
 	position: static;
 }
-#footer .links {
+.footer .links {
 	margin-right: 30px;
 	float: right;
 }
-#footer .links li {
-	font-size: 0.8em;
+.footer .links li {
 }
 
-#footer .copyright {
+.footer .copyright {
 	float: right;
 	padding-right: 20px;
 }

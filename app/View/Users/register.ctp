@@ -1,55 +1,37 @@
 <div class="component">
   <div class="inside">
     <div class="component-title">
-      <h2><?php echo __('Registration');?></h2>
+      <h2><?php echo __('Registration'); ?></h2>
     </div>
-    <?php echo $this->element('flash'); ?>
+    <?php echo $this -> element('flash'); ?>
     <div class="component-info">
-      <div><?php echo __('Please fill out the form below to register an account.');?></div> 
+      <div><?php echo __('Please fill out the form below to register an account.'); ?></div> 
     </div>
     <div class="component-view">
-      <?php echo $this->Form->create('User' , array('action' => 'register'));?>
+      <?php echo $this -> Form -> create('User', array('action' => 'register')); ?>
         <fieldset>
-          <ul class="form-fields">
+          <ul class="form-fields unstyled">
             <li>
-              <div class="label-wrapper">
-                <label for="UserUsername"><?php echo __('User Name') ?></label>
-              </div>
-              <?php echo $this->Form->input('username', array('div' => false, 'label' => false, 'after' => $this->Form->error('username_unique', 'The username is taken. Please try again.')));  ?>
-            </li>
+				<?php echo $this -> Form -> input('username', array('label' => __('User Name'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>  
             <li>
-              <div class="label-wrapper">
-                <label for="UserNewPassword"><?php echo __('Password') ?></label>
-              </div>              
-              <?php echo $this->Form->input('new_password', array('div' => false, 'label' => false, 'type' => 'password'));?>
-            </li> 
+				<?php echo $this -> Form -> input('new_password', array('label' => __('Password'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>            
             <li>
-              <div class="label-wrapper">
-                <label for="UserConfirmPassword"><?php echo __('Confirm Password') ?></label>
-              </div>
-              <?php echo $this->Form->input('confirm_password', array('div' => false, 'label' => false, 'type' => 'password'));?>
-            </li>
+				<?php echo $this -> Form -> input('confirm_password', array('label' => __('Confirm Password'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>
             <li>
-              <div class="label-wrapper">
-                <label for="UserFirstName"><?php echo __('First Name') ?></label>
-              </div>      
-              <?php echo $this->Form->input('first_name', array('div' => false, 'label' => false));?>
-            </li>
+				<?php echo $this -> Form -> input('first_name', array('label' => __('First Name'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>
             <li>
-              <div class="label-wrapper">
-                <label for="UserLastName"><?php echo __('Last Name') ?></label>
-              </div>      
-              <?php echo $this->Form->input('last_name', array('div' => false, 'label' => false));?>
-            </li> 
-            <li>
-              <div class="label-wrapper">
-                <label for="UserEmail"><?php echo __('Email') ?></label>
-              </div> 
-              <?php echo $this->Form->input('email', array('div' => false, 'label' => false));?>
-            </li>
+				<?php echo $this -> Form -> input('last_name', array('label' => __('Last Name'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>
+			<li>
+				<?php echo $this -> Form -> input('email', array('label' => __('Email'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+			</li>	
           </ul>
         </fieldset>
-      <?php echo $this->Form->end(__('Submit', true));?>
+      <?php echo $this -> Form -> end(__('Submit', true)); ?>
           </div>    
   </div>
 </div>

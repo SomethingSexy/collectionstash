@@ -1,11 +1,9 @@
 <?php
 class Collectible extends AppModel {
-	var $name = 'Collectible';
-	var $belongsTo = array('EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'User' => array('counterCache' => true), 'Currency');
-
-	var $hasMany = array('CollectiblesUser', 'Upload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
-
-	var $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id')), 'Containable', 'Sluggable' => array(
+	public $name = 'Collectible';
+	public $belongsTo = array('EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'User' => array('counterCache' => true), 'Currency');
+	public $hasMany = array('CollectiblesUser', 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
+	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id')), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -19,7 +17,7 @@ class Collectible extends AppModel {
 	'replacement' => '-' //the char to implode the words in entry name...
 	));
 
-	var $validate = array(
+	public $validate = array(
 	//name field
 	//'name' => array('rule' => "/^[A-Za-z0-9\s#:.-]+\z/", 'required' => true, 'message' => 'Invalid characters'),
 	//Opening this up because I don't see it being a big deal.
@@ -340,7 +338,6 @@ class Collectible extends AppModel {
 		$this -> CollectiblesUser -> Behaviors -> attach('Containable');
 		//TODO finish this, we want to return all userids to output other users hwo have this
 		$count2 = $this -> CollectiblesUser -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('Stash' => array('fields' => 'user_id')), 'group' => array('stash_id')));
-		debug($count2);
 
 		return $count;
 	}
@@ -350,7 +347,7 @@ class Collectible extends AppModel {
 	 * the given id.
 	 */
 	public function getCollectibleVariants($collectibleId) {
-		$collectibles = $this -> find('all', array('conditions' => array('Collectible.variant_collectible_id' => $collectibleId, 'Collectible.state' => 0)));
+		$collectibles = $this -> find('all', array('contain' => array('CollectiblesUpload' => array('Upload')), 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId, 'Collectible.state' => 0)));
 
 		return $collectibles;
 	}
@@ -405,33 +402,23 @@ class Collectible extends AppModel {
 			}
 			debug($conditions);
 
-			$returnList = $this -> find("all", array("conditions" => array($conditions), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'Upload')));
+			$returnList = $this -> find("all", array("conditions" => array($conditions), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'))));
 		}
 
 		return $returnList;
 
 	}
 
-	/**
-	 * This will get the collectible reading for saving from an edit
-	 *
-	 * If $includeChanges is true, then we will get the current version of the collectible
-	 * and check to see what is different.  This is going to show the differences between this edit
-	 * and the latest version of the collectible we are editing.  This should be fine for now but this behavior might need to
-	 * be updated in the future.  Not sure this is a good long term solution.  But at the time of someone editing this collectible
-	 * they will see what they are saving against...unless someone swoops in and does a save inbetween a user getting this object and doing
-	 * a save.
-	 */
-	function getUpdateFields($collectibleEditId, $includeChanges = false, $notes = null) {
+	public function publishEdit($editId) {
+		$retVal = false;
 		//Grab out edit collectible
-		$collectibleEditVersion = $this -> findEdit($collectibleEditId);
+		$collectibleEditVersion = $this -> findEdit($editId);
 		debug($collectibleEditVersion);
 		$collectible = array();
-		if ($includeChanges) {
-			$currentVersionCollectible = $this -> find("first", array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleEditVersion['CollectibleEdit']['base_id'])));
-			debug($currentVersionCollectible);
-			$collectible = $this -> compareEdit($collectibleEditVersion, $currentVersionCollectible);
-		}
+
+		$currentVersionCollectible = $this -> find("first", array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleEditVersion['CollectibleEdit']['base_id'])));
+		debug($currentVersionCollectible);
+		$collectible = $this -> compareEdit($collectibleEditVersion, $currentVersionCollectible);
 
 		/*
 		 * Lets build our update array based on what has changed from the latest version of the collectible(as of now:)) and the one we are editing.  We only
@@ -462,9 +449,129 @@ class Collectible extends AppModel {
 			//Make sure I grab the user id that did this edit
 			$updateFields['Revision']['user_id'] = $collectibleEditVersion['CollectibleEdit']['edit_user_id'];
 			$updateFields['Collectible']['id'] = $collectibleEditVersion['CollectibleEdit']['base_id'];
+
+			if ($this -> saveAll($updateFields, array('validate' => false))) {
+				$retVal = true;
+			}
+			if ($retVal) {
+				$message = 'We have approved your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
+				$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message);
+			}
+
+		} else {
+			$retVal = $this -> denyEdit($editId);
 		}
 
-		return $updateFields;
+		return $retVal;
+	}
+
+	public function denyEdit($editId) {
+		$retVal = false;
+		debug($editId);
+		// Grab the fields that will need to updated
+		$collectibleEditVersion = $this -> findEdit($editId);
+		debug($collectibleEditVersion);
+		// Right now we can really only add or edit
+		if ($collectibleEditVersion['Action']['action_type_id'] === '1') {//Add
+			//TODO: Add does not go through here yet so it should not happen
+
+		} else if ($collectibleEditVersion['Action']['action_type_id'] === '2') {// Edit
+			if ($this -> deleteEdit($collectibleEditVersion)) {
+				$retVal = true;
+			}
+
+		} else if ($collectibleEditVersion['Action']['action_type_id'] === '4') {// Delete
+			// If we are deny a delete, then we are keeping it out there
+			// so just delete the edit
+			if ($this -> deleteEdit($collectibleEditVersion)) {
+				$retVal = true;
+			}
+
+		}
+
+		if ($retVal) {
+			$message = 'We have denied your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
+			$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message);
+		}
+
+		return $retVal;
+	}
+
+	public function add($collectible, $userId) {
+
+		/* Since they confirmed, now set to pending = 1.  I really don't like how
+		 this is setup right now but it works because of the image thing.
+		 A 1 means that this collectible needs to be approved by an admin first
+		 *
+		 * TODO: If we are not auto approving, then do we need to make sure that attributes_collectible is set to not active?
+		 * */
+		$pendingState = '1';
+		if (Configure::read('Settings.Approval.auto-approve') == 'true') {
+			$pendingState = '0';
+		}
+
+		$collectible['Collectible']['state'] = $pendingState;
+
+		//user id of the person who added this collectible
+		$collectible['Collectible']['user_id'] = $userId;
+
+		//Adding this here, we need to clean this up later and put it all in the model
+		$collectible['EntityType']['type'] = 'collectible';
+
+		$dataSource = $this -> getDataSource();
+		$dataSource -> begin();
+
+		$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
+		if ($this -> Revision -> save($revision)) {
+			$revisionId = $this -> Revision -> id;
+			$collectible['Collectible']['revision_id'] = $revisionId;
+
+			if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
+				foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
+					$collectible['AttributesCollectible'][$key]['revision_id'] = $revisionId;
+					// If the attribute id is set, that means this is an existing attribute we are adding,
+					// otherwise if I don't have an attribute id, then this is a new one
+					if (!isset($attributesCollectible['attribute_id']) && isset($attributesCollectible['Attribute'])) {
+						$collectible['AttributesCollectible'][$key]['Attribute']['revision_id'] = $revisionId;
+						$collectible['AttributesCollectible'][$key]['Attribute']['user_id'] = $userId;
+						$collectible['AttributesCollectible'][$key]['Attribute']['EntityType']['type'] = 'attribute';
+						$collectible['AttributesCollectible'][$key]['Attribute']['status_id'] = 2;
+					}
+				}
+			}
+
+			if (isset($collectible['CollectiblesUpload'])) {
+				$collectible['CollectiblesUpload'][0]['revision_id'] = $revisionId;
+				$collectible['CollectiblesUpload'][0]['status_id'] = 2;
+			}
+
+			$this -> create();
+			debug($collectible);
+			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {
+				$id = $this -> Collectible -> id;
+				$addCollectible = $this -> findById($id);
+				//TODO: This stuff needs to be updated to do the same for the tags, although this is kind of caca
+				if (!empty($addCollectible['CollectiblesUpload'])) {
+					//Update the current one
+					//Doing this so that we will trigger the revision
+					$this -> CollectiblesUpload -> Upload -> id = $addCollectible['CollectiblesUpload'][0]['Upload']['id'];
+					if (!$this -> CollectiblesUpload -> Upload -> saveField('revision_id', $revisionId)) {
+						//If it fails, let it pass but log the problem.
+						$this -> log('Failed to update the upload with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'] . ' and upload id ' . $addCollectible['Upload']['id'], 'error');
+						$dataSource -> rollback();
+						return false;
+					}
+				}
+				$dataSource -> commit();
+				return true;
+			} else {
+				$dataSource -> rollback();
+				return false;
+			}
+		} else {
+			$dataSource -> rollback();
+			return false;
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
-<?php echo $this -> Html -> script('jquery.form', array('inline' => false));?>
-<?php echo $this -> Html -> script('profiles', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/profiles', array('inline' => false));?>
 <div id="account" class="two-column-page">
 	<div class="inside">
 		<div class="page actions">
@@ -14,7 +14,7 @@
 					<h3>History</h3>
 					<ul>
 						<li><?php echo $this -> Html ->link('Submission', '/collectibles/userHistory', array('class' => 'link'));?></li>
-						<li><?php echo $this -> Html ->link('Edit', '/edits/userHistory', array('class' => 'link'));?></li>
+						<li><?php //echo $this -> Html ->link('Edit', '/edits/userHistory', array('class' => 'link'));?></li>
 					</ul>
 					
 					

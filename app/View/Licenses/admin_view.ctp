@@ -11,7 +11,7 @@
 							<form id="remove-form" action="/admin/licenses/remove/<?php echo $license['License']['id'];?>" method="post"></form>
 						</li>
 						<li>
-							<a href="/admin/licenses/edit/<?php echo $license['License']['id'];?>"> <img src="/img/icon/pencil.png"> </a>
+							<a href="/admin/licenses/edit/<?php echo $license['License']['id'];?>"> <i class="icon-pencil icon-large"></i> </a>
 						</li>
 					</ul>
 				</div>

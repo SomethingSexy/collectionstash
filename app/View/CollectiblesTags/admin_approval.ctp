@@ -9,31 +9,31 @@
         
             <?php
                 echo '<div class="standard-list tag-list">';
-                echo '<ul>';
-                echo '<li class="title">';
-                echo '<span class="name">' . __('Tag', true) . '</span>';
-                echo '<span class="action">' . __('Action', true) . '</span>';
-                echo '</li>';
-                echo '<li>' . '<span class="name">' . $tag['Tag']['tag'] . '</span>'; 
-                echo '<span class="action">';
-                if($tag['CollectiblesTag']['action'] === 'E'){
+                echo '<table class="table"><thead>';
+                echo '<tr class="title">';
+                echo '<th class="name">' . __('Tag', true) . '</th>';
+                echo '<th class="action">' . __('Action', true) . '</th>';
+                echo '</tr></thead><tbody>';
+                echo '<tr>' . '<td class="name">' . $tag['Tag']['tag'] . '</td>'; 
+                echo '<td class="action">';
+                if($tag['Action']['action_type_id'] === '2'){
                     echo __('Edit', true);
-                } else if($tag['CollectiblesTag']['action'] === 'D'){
+                } else if($tag['Action']['action_type_id'] === '4'){
                     echo __('Delete', true);
-                }else if($tag['CollectiblesTag']['action'] === 'A'){
+                }else if($tag['Action']['action_type_id'] === '1'){
                     echo __('Add', true);
                 }   
-                echo '</span>';
-                echo '</li>';           
-                echo '</ul>';
+                echo '</td>';
+                echo '</tr>';           
+                echo '</tbody></table>';
                 echo '</div>';
             ?>
          
             <div class="notes">
-            <?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval/'.$editId, 'id'=>'approval-form'));?>
+            <?php echo $this -> Form -> create('Approval', array('url'=>'/admin/edits/approval_2/'.$editId, 'id'=>'approval-form'));?>
                 <input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
                 <fieldset>
-                    <ul class="form-fields">
+                    <ul class="form-fields unstyled">
                         <li>
                             <div class="label-wrapper">
                                 <label for=""> <?php echo __('Notes')
@@ -46,8 +46,8 @@
             </form>
             </div>
             <div class="links">
-                <input type="button" id="approval-button" class="button" value="Approve">
-                <input type="button" id="deny-button" class="button" value="Deny">
+				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve');?></button>
+				<button id="deny-button" class="btn"><?php echo __('Deny');?></button>
             </div>
         <script>
             //Eh move this out of here

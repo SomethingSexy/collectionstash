@@ -1,10 +1,10 @@
-<?php echo $this -> Html -> script('collectible-list', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/collectible-list', array('inline' => false));?>
 
 <div class="component" id="collectible-add-component">
 	<div class="inside" >
 		<div class="component-title">
 			<h2>
-			<?php echo __('Add New Collectible', true); ?>
+			<?php echo __('Submit New Collectible', true); ?>
 			</h2>
 		</div>
 		<div class="component-info">
@@ -48,11 +48,14 @@
 			<div class="links">
 				<?php echo $this->Form->create(null, array('url'=> $this->here));?>
 					<input type="hidden" name="data[addAnyway]"	value="true" />
-				<?php echo $this->Form->end(array('label'=>__('Submit Anyway!', true), 'value'=> __('Submit Anyway!', true), 'name'=>'submit'));?>
+					<input type="submit" name="submit" value="Submit Anyway!" class="btn btn-primary"/>
+				<?php echo $this->Form->end();?>
 				<?php echo $this->Form->create(null, array('url'=>'/collectibles/wizard/manufacture', 'type'=>'get'));?>
-				<?php echo $this->Form->end(array('label'=>__('Edit', true), 'value'=> __('Cancel', true), 'name'=>'submit'));?>
+				<input type="submit" name="submit" value="Edit" class="btn"/>
+				<?php echo $this->Form->end();?>
 				<?php echo $this->Form->create(null, array('url'=>'/collectibles/cancel'));?>
-				<?php echo $this->Form->end(array('label'=>__('Cancel', true), 'value'=> __('Cancel', true), 'name'=>'submit'));?>
+				<input type="submit" name="submit" value="Cancel" class="btn"/>
+				<?php echo $this->Form->end();?>
 				
 			</div>			
 		</div>

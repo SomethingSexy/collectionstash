@@ -20,7 +20,7 @@
 					<div class="standard-list">
 						<ul></ul>
 					</div>
-					<input type="button" class="button" value="Invite" id="invite-user" /> 
+					<button class="btn btn-primary" id="invite-user"><?php echo __('Invite');?></button> 
 				</div>
 				<div class="account detail update">
 					<div class="account directional">
@@ -29,7 +29,7 @@
 					<form id="invite-form" method="post">
 						<fieldset>
 							<legend></legend>
-							<ul class="form-fields">
+							<ul class="form-fields unstyled">
 								<li>
 									<div class="label-wrapper">
 										<label for="invite-email"><?php echo __('Email') ?></label>
@@ -39,7 +39,7 @@
 							</ul>
 						</fieldset>
 					</form>
-					<input type="button" class="button" value="Invite" id="invite-submit" /> <input type="button" class="button" value="Cancel" id="invite-cancel" />
+					<button class="btn btn-primary" id="invite-submit"><?php echo __('Invite');?></button> <button class="btn" id="invite-cancel"><?php echo __('Cancel');?></button>
 				</div>			
 		</div>
 	</li>
@@ -54,7 +54,7 @@
 				<form id="stash-form" method="post">
 					<fieldset>
 						<legend></legend>
-						<ul class="form-fields">
+						<ul class="form-fields unstyled">
 							<li>
 								<div class="label-wrapper">
 									<label for="stash-privacy"><?php echo __('Stash Privacy') ?></label>
@@ -68,7 +68,7 @@
 						</ul>
 					</fieldset>
 				</form>
-				<input type="button" class="button" value="Submit" id="stash-submit" /> <input type="button" class="button" value="Cancel" id="stash-cancel" />
+				<button class="btn btn-primary" id="stash-submit"><?php echo __('Submit');?></button> <button class="btn" id="stash-cancel"><?php echo __('Cancel');?></button>
 			</div>				
 			
 		</div>

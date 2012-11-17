@@ -3,7 +3,7 @@ App::uses('CakeEventListener', 'Event');
 class NotifyEventListener implements CakeEventListener {
 
 	public function implementedEvents() {
-		return array('Model.Subscription.notify' => 'notifyUser', );
+		return array('Controller.Subscription.notify' => 'notifyUserController', 'Model.Subscription.notify' => 'notifyUserModel');
 	}
 
 	/**
@@ -13,7 +13,7 @@ class NotifyEventListener implements CakeEventListener {
 	 * This will get passed the user id and the message that we are going to
 	 * notify
 	 */
-	public function notifyUser($event) {
+	public function notifyUserController($event) {
 		$subscriptions = $event -> data['subscriptions'];
 		// $message = $event -> data['message'];
 
@@ -30,6 +30,26 @@ class NotifyEventListener implements CakeEventListener {
 		}
 
 		$event -> subject -> Notification -> saveAll($data);
+	}
+
+	public function notifyUserModel($event) {
+		$subscriptions = $event -> data['subscriptions'];
+		// $message = $event -> data['message'];
+
+		// We will be loading the Notify model and then updating it
+		// I think the subject will be the controller/model whatever the subscription was
+		// $event -> subject ->
+
+		// This could kick off a shit ton of events, depending on how many people.
+		// We might want to do a bulk notify
+		$data = array();
+		foreach ($subscriptions as $key => $subscription) {
+			array_push($data, array('user_id' => $subscription['Subscription']['user_id'], 'message' => $subscription['Subscription']['message']));
+		}
+		debug($event -> subject);
+		$event -> subject -> bindModel(array('belongsTo' => array('Notification')));
+		$event -> subject -> Notification -> saveAll($data);
+		$event -> subject -> unbindModel(array('belongsTo' => array('Notification')));
 	}
 
 }

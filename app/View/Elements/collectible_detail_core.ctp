@@ -38,9 +38,9 @@ if (!isset($adminMode)) {
 					echo '<ul>';
 					echo '<li>';
 					if ($adminMode) {
-						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '"><img src="/img/icon/pencil-gray.png"/></a>';
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/true' . '"> <i class="icon-pencil icon-large"></i></a>';
 					} else {
-						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '"><img src="/img/icon/pencil-gray.png"/></a>';
+						echo '<a href="' . $editManufactureUrl . $collectibleCore['Collectible']['id'] . '/' . '"> <i class="icon-pencil icon-large"></i></a>';
 					}
 					echo '</li>';
 					echo '</ul>';
@@ -141,13 +141,79 @@ if (!isset($adminMode)) {
 				?>
 			</dl>
 		</div>
+		<?php ?>
+	</div>
+	
 		<?php
-		if (isset($showTags) && $showTags === true) {
+				if (isset($showTags) && $showTags === true) {
 			echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
 		}
+		
 		if ($showAttributes) {
-			echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
-		}
-		?>
-	</div>
+			echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleCore, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
+			<script>
+				$(function() {
+					// If we are in admin mode, we need to pass that in to these methods so that they can 
+					// do specific things based on that
+					
+					// We also need to update the attributes element so that if we are in admin mode and they are new attributes they
+					// can be edited and removed..if they are not new then they cannot be edited automatically from here
+					$('.standard-list.attributes.index').children('ul').children('li').children('div.attribute-collectibles').children('a').on('click', function() {
+						$(this).parent().parent().children('.collectibles').toggle();
+					});
+
+					//$('.standard-list.attributes').attributes();
+					var removeAttributes = new RemoveAttributes({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					removeAttributes.init();
+
+					var removeAttributeLinks = new RemoveAttributeLinks({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					removeAttributeLinks.init();
+
+					var addExistingCollectiblesAttributes = new AddExistingCollectibleAttributes({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					addExistingCollectiblesAttributes.init();
+
+					var updateAttributes = new UpdateAttributes({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					updateAttributes.init();
+
+					var updateCollectiblesAttributes = new UpdateCollectibleAttributes({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					updateCollectiblesAttributes.init();
+
+					var addCollectiblesAttributes = new AddCollectibleAttributes({
+						<?php if($adminMode) {echo 'adminPage : true,';}?>
+						$element : $('.standard-list.attributes')
+					});
+
+					addCollectiblesAttributes.init();
+
+				}); 
+</script>
+
+<?php echo $this -> element('attribute_remove_dialog'); ?>
+<?php echo $this -> element('attribute_update_dialog'); ?>
+<?php echo $this -> element('attribute_remove_link_dialog'); ?>
+<?php echo $this -> element('attribute_collectible_add_dialog'); ?>
+<?php echo $this -> element('attribute_collectible_update_dialog'); ?>
+<?php echo $this -> element('attribute_collectible_add_existing_dialog'); ?>
+			
+		<?php } ?>
 </div>

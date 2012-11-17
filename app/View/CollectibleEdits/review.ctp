@@ -27,7 +27,7 @@
 			));	?>		
 			<div class="links review">
 				<?php echo $this->Form->create('Collectible', array('url'=>'/collectible_edits/confirm'));?>
-					<input type="submit" value="Submit">
+					<input type="submit" value="Submit" class="btn btn-primary">
 				</form>
 			</div>
 		</div>

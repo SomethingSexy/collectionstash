@@ -10,7 +10,7 @@ App::uses('CakeEventListener', 'Event');
 class EntityChangeEventListener implements CakeEventListener {
 
 	public function implementedEvents() {
-		return array('Controller.Stash.Collectible.add' => 'collectibleAddedToStash', 'Controller.Comment.add' => 'commentAdded');
+		return array('Controller.Stash.Collectible.add' => 'collectibleAddedToStash', 'Controller.Comment.add' => 'commentAdded', 'Controller.Attribute.approve' => 'attributeApprove');
 	}
 
 	/**
@@ -47,7 +47,7 @@ class EntityChangeEventListener implements CakeEventListener {
 		}
 
 		if (!empty($subscriptions)) {
-			CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
+			CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
 		} else {
 			CakeLog::write('info', 'No subscriptions');
 		}
@@ -86,10 +86,14 @@ class EntityChangeEventListener implements CakeEventListener {
 		}
 
 		if (!empty($subscriptions)) {
-			CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
+			CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
 		} else {
 			CakeLog::write('info', 'No subscriptions');
 		}
+	}
+
+	public function attributeApprove($event) {
+
 	}
 
 }

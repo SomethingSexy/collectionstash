@@ -23,7 +23,7 @@
 			<div class="links review">
 				<?php echo $this->Form->create('Collectible' , array('url' => '/'.$this->params['controller']. '/'.$this->action.'/review', ));?>
 					<input type="hidden" name="data[balls]" value="Submit">
-					<input type="submit" value="Submit">
+					<input type="submit" value="Submit" class="btn btn-primary"/>
 				</form>
 			</div>
 		</div>

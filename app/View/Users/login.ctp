@@ -1,4 +1,3 @@
-<?php echo $this -> Html -> css('login/login', null, array('inline' => false)); ?>
 <div class="component">
 	<div class="inside">
 		<div class="component-title">
@@ -18,7 +17,7 @@
 		<div class="component-view">
 			<?php echo $this -> Form -> create('User', array('action' => 'login')); ?>
 			<fieldset>
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<li>
 						<div class="input text">
 							<div class="label-wrapper">
@@ -32,7 +31,8 @@
 					</li>
 				</ul>
 			</fieldset>
-			<?php echo $this -> Form -> end('Login'); ?>
+			<input type="submit" value="Login" class="btn btn-primary"/>
+			<?php echo $this -> Form -> end(); ?>
 		</div>
 	</div>
 </div>

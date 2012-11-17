@@ -1,7 +1,7 @@
 <div class="component" id="manufactures-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php echo __('Contribute - Select Manufacturer');?></h2>
+      <h2><?php echo __('Submit New Collectible - Select Manufacturer');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
