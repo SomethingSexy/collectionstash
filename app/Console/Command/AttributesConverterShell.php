@@ -5,7 +5,7 @@
  *
  * TODO: The converter needs to get updated, when the "Features" table is done
  * to add the attributes that are not items to the features table
- * 
+ *
  * TODO: The converter needs to delete all of the inactive ones
  */
 class AttributesConverterShell extends AppShell {
@@ -14,8 +14,10 @@ class AttributesConverterShell extends AppShell {
 	public function main() {
 		//Grabbing them all for now that active
 		$attributes = $this -> AttributesCollectible -> find("all", array('conditions' => array('active' => 1)));
+
 		$featureAttributeIds = array(2, 4, 20, 3);
 		foreach ($attributes as $key => $value) {
+
 			// If it not a feature
 			if (!in_array($value['AttributesCollectible']['attribute_id'], $featureAttributeIds) && !empty($value['Collectible']['id']) && !is_null($value['Collectible']['id'])) {
 				$attribute = array();
@@ -33,10 +35,12 @@ class AttributesConverterShell extends AppShell {
 				$attribute['Attribute']['user_id'] = $value['Collectible']['user_id'];
 				$attribute['Attribute']['active'] = 1;
 				$this -> Attribute -> create();
-				if ($this -> Attribute -> saveAll($attribute)) {
+				if ($this -> Attribute -> saveAll($attribute, array('validate' => false))) {
 					$id = $this -> Attribute -> id;
 					$value['AttributesCollectible']['attribute_id'] = $id;
 					$this -> AttributesCollectible -> save($value);
+				} else {
+					debug($this -> Attribute -> validationErrors);
 				}
 			} else {
 				if (empty($value['Collectible']['id']) || is_null($value['Collectible']['id'])) {
