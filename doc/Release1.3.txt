@@ -43,9 +43,12 @@ cake -app D:\Development\wamp\www\app uploads_converter
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
+./cake -app /var/www/collectionstash/app attributes_converter
 
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
+ 
+  ./vendors/cakeshell attributes_converter -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
