@@ -480,8 +480,8 @@ var collectibleAdd = function() {
 
 			$('#CollectibleLimited').change(function() {
 				if ($(this).is(':checked')) {
-					$('#CollectibleEditionSize').parent('div').parent('li').show();
-					$('#CollectibleNumbered').parent('div').parent('li').show();
+					$('#CollectibleEditionSize').parent('div').parent('li').removeClass('hidden').show();
+					$('#CollectibleNumbered').parent('div').parent('li').removeClass('hidden').show();
 				} else {
 					$('#CollectibleEditionSize').val('').parent('div').parent('li').hide();
 					$('#CollectibleNumbered').removeAttr('checked').parent('div').parent('li').hide();

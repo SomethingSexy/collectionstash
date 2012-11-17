@@ -34,13 +34,20 @@ class EntityType extends AppModel {
 	public $name = 'EntityType';
 	public $hasMany = array('Comment');
 	//EntityType only has one and the id belongs in the stash/collectible
-	public $hasOne = array('Stash', 'Collectible');
+	public $hasOne = array('Stash', 'Collectible', 'Attribute');
 	public $actsAs = array('Containable');
 
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => $val) {
 			if ($primary && isset($val['EntityType'])) {
 				if ($results[$key]['EntityType']['type'] === 'stash') {
+					unset($results[$key]['Collectible']);
+					unset($results[$key]['Attribute']);
+				} else if ($results[$key]['EntityType']['type'] === 'collectible') {
+					unset($results[$key]['Stash']);
+					unset($results[$key]['Attribute']);
+				} else if ($results[$key]['EntityType']['type'] === 'attribute') {
+					unset($results[$key]['Stash']);
 					unset($results[$key]['Collectible']);
 				}
 			}
@@ -71,7 +78,7 @@ class EntityType extends AppModel {
 
 	//Lame ass name, this will get get the entity core and related type object
 	public function getEntityCore($entityTypeId) {
-		return $this -> find("first", array('contain' => array('Stash' => array('User'), 'Collectible'), 'conditions' => array('EntityType.id' => $entityTypeId)));
+		return $this -> find("first", array('contain' => array('Stash' => array('User'), 'Collectible', 'Attribute'), 'conditions' => array('EntityType.id' => $entityTypeId)));
 	}
 
 	/**

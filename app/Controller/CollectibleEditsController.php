@@ -76,7 +76,7 @@ class CollectibleEditsController extends AppController {
 				$collectible['Collectible']['retailer'] = $collectible['Retailer']['name'];
 				unset($collectible['Collectible']['retailer_id']);
 			}
-			
+
 			$this -> request -> data = $collectible;
 			$this -> Session -> write('collectible.edit-id', $id);
 			if ($collectible['Collectible']['variant']) {
@@ -84,7 +84,6 @@ class CollectibleEditsController extends AppController {
 			} else {
 				$this -> Session -> delete('edit.collectible.variant');
 			}
-
 
 		}
 
@@ -235,8 +234,10 @@ class CollectibleEditsController extends AppController {
 			} else {
 
 				$this -> loadModel('Collectible');
-				$newCollectible['Collectible']['action'] = 'E';
-				$returnData = $this -> Collectible -> saveEdit($newCollectible, $newCollectible['Collectible']['base_id'], $this -> getUserId(), $newCollectible['Collectible']['base_id']);
+				//$newCollectible['Collectible']['action'] = 'E';
+				$action = array();
+				$action['Action']['action_type_id'] = 2;
+				$returnData = $this -> Collectible -> saveEdit($newCollectible, $newCollectible['Collectible']['base_id'], $this -> getUserId(), $action);
 
 				if ($returnData) {
 					//TODO hack for now
@@ -253,48 +254,6 @@ class CollectibleEditsController extends AppController {
 					$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					$this -> redirect(array('action' => 'review'));
 				}
-
-				// $saveCollectible['CollectibleEdit'] = $newCollectible['Collectible'];
-				// $saveCollectible['CollectibleEdit']['edit_user_id'] = $this -> getUserId();
-				// $saveCollectible['CollectibleEdit']['action'] = 'E';
-				//
-				// $this -> CollectibleEdit -> create();
-				// if ($this -> CollectibleEdit -> saveAll($saveCollectible, array('validate' => false))) {
-				// $id = $this -> CollectibleEdit -> id;
-				// /*
-				// * Not sure how useful this will be in the end but I figured this would be a clean
-				// * way to store all edits in one table no matter what we are editing of the collectible.
-				// *
-				// * This would also be a way in the future to link all edits to one edit at a time.
-				// */
-				// $edit = array();
-				// $edit['user_id'] = $this -> getUserId();
-				// $edit['type_edit_id'] = $id;
-				// $edit['type'] = 'collectible';
-				// $edit['collectible_id'] = $newCollectible['Collectible']['collectible_id'];
-				// $edit['type_id'] = $newCollectible['Collectible']['collectible_id'];
-				// $this -> loadModel('Edit');
-				// if (!$this -> Edit -> save($edit)) {
-				// $this -> log('Failed to save the collectible edit into the edits table ' . $id . ' ' . date("Y-m-d H:i:s", time()), 'error');
-				// }
-				//
-				// $editCollectible = $this -> CollectibleEdit -> findById($id);
-				// $pendingState = '1';
-				//
-				// $collectible = $editCollectible;
-				// $collectible['Collectible'] = $editCollectible['CollectibleEdit'];
-				// unset($collectible['CollectibleEdit']);
-				// debug($editCollectible);
-				// $this -> set('collectible', $collectible);
-				// $this -> Session -> delete('preSaveCollectible');
-				// $this -> Session -> delete('collectible.edit-id');
-				// $this -> Session -> delete('collectible.edit.admin-mode');
-				// } else {
-				// debug($this -> CollectibleEdit -> validationErrors);
-				// $this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-				// $this -> redirect(array('action' => 'review'));
-				// }
-
 			}
 
 		} else {

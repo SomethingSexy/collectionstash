@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class UserUploadsController extends AppController {
 
-	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify');
+	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify', 'Time');
 
 	public $components = array('Image');
 

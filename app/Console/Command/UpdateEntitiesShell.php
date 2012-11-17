@@ -1,6 +1,8 @@
 <?php
 /**
  * This will do updates to entited for existing rows
+ * 
+ * TODO: Need to update this to handle updating attributes after they have been converted over
  */
 class UpdateEntitiesShell extends AppShell {
 	public $uses = array('Collectible', 'Stash');

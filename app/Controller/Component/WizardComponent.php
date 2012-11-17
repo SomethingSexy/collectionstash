@@ -176,7 +176,7 @@ class WizardComponent extends Component {
 		$this -> config('steps', $this -> steps);
 
 		// if (!in_array('Wizard.Wizard', $this -> controller -> helpers) && !array_key_exists('Wizard.Wizard', $this -> controller -> helpers)) {
-			// $this -> controller -> helpers[] = 'Wizard.Wizard';
+		// $this -> controller -> helpers[] = 'Wizard.Wizard';
 		// }
 	}
 
@@ -237,7 +237,6 @@ class WizardComponent extends Component {
 					// debug($this->Session->check('Wizard.complete'));
 					$this -> redirect(current($this -> steps));
 				}
-
 			}
 
 			$this -> autoReset = false;
@@ -313,7 +312,7 @@ class WizardComponent extends Component {
 			$this -> reset();
 		}
 
-		$this -> redirect();
+		$this -> redirect();
 	}
 
 	/**

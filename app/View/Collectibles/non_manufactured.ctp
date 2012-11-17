@@ -1,7 +1,7 @@
 <div class="component" id="collectible-add-component">
   <div class="inside">
     <div class="component-title">
-      <h2><?php echo __('Contribute - Non-manufactured');?></h2>
+      <h2><?php echo __('Submit New Collectible - Non-manufactured');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">

@@ -1,4 +1,4 @@
-<?php echo $this -> Html -> script('jquery.form', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false));?>
 <div id="user-uploads-component" class="component">
 	<div class="inside">
 		<div class="component-title">

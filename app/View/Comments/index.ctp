@@ -1,4 +1,4 @@
-<?php echo $this -> Html -> script('jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <div id="latest-comments-component" class="component">
 	<div class="inside">
 		<div class="component-title">
@@ -12,7 +12,7 @@
 				echo '</div>';
 		?>
 				
-				<ol id="comments" class="comments" data-page="2" data-page-count="<?php echo $pageCount; ?>">
+				<ol id="comments" class="comments">
 					<?php
 					foreach ($comments as $key => $comment) {
 						echo '<li class="comment">';
@@ -35,7 +35,7 @@
 						echo '</div>';
 						echo '<div class="comment-info">';
 						echo '<span class="user"><a href="/stashs/view/' . $comment['User']['username'] . ' ">' . $comment['User']['username'] . '</a></span>';
-						echo '<span class="datetime">' . $comment['Comment']['formatted_created'] . '</span>';
+						echo '<span class="datetime">' . $this -> Time -> format('F jS, Y h:i A', $comment['Comment']['formatted_created'], null) . '</span>';
 						echo '</div>';
 						echo '<div class="comment-text">';
 						$commentText = str_replace('\n', "\n", $comment['Comment']['shorthand_comment']);

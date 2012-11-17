@@ -496,10 +496,10 @@
 					</div>
 				</div>
 			</div>
-			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/edits/approval/' . $editId, 'id' => 'approval-form'));?>
+			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/edits/approval_2/' . $editId, 'id' => 'approval-form'));?>
 			<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
 			<fieldset>
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<li>
 						<div class="label-wrapper">
 							<label for=""> <?php echo __('Notes')
@@ -511,8 +511,8 @@
 			</fieldset>
 			</form>
 			<div class="links">
-				<input type="button" id="approval-button" class="button" value="Approve">
-				<input type="button" id="deny-button" class="button" value="Deny">
+				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve');?></button>
+				<button id="deny-button" class="btn"><?php echo __('Deny');?></button>
 			</div>
 			<script>
 				//Eh move this out of here

@@ -1,0 +1,10 @@
+- Attributes list, make the collectibles linked an actual link
+- Attributes list, indicate if a collectible that is linked to that part is pending or active
+- Allow the deletion of the primary photo or to indicate which one is primary
+- Update User Uploads to use the new upload process
+- User Edit History - put back and make not suck
+- Attribute's Uploads
+- When adding an attribute to a collectible, be able to search the list of attributes
+- Get Features back in
+- Admin section to change and update attribute categories
+- Procssing gif for editing attributes and shit 

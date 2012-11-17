@@ -1,7 +1,7 @@
 <div class="component" id="collectibletypes-list-component">
   <div class="inside" >
      <div class="component-title">
-      <h2><?php echo __('Contribute - Select Collectible Type');?></h2>
+      <h2><?php echo __('Submit New Collectible - Select Collectible Type');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">

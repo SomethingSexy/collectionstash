@@ -1,7 +1,7 @@
 <div class="component" id="collectible-add-component">
   <div class="inside">
     <div class="component-title">
-      <h2><?php echo __('Contribute - Mass Produced');?></h2>
+      <h2><?php echo __('Submit New Collectible - Mass Produced');?></h2>
     </div>
     <?php echo $this->element('flash'); ?>
     <div class="component-info">
@@ -22,10 +22,12 @@
 		<div class="links">
 	      	<?php echo $this->Form->create('Collectible');?>
 				<input type="hidden" name="data[Collectible][manufactured]" value="true" ?>
-	     	<?php echo $this->Form->end('Yes');?> 	 
+				<input type="submit" value="Yes" class="btn btn-primary"/>
+	     	<?php echo $this->Form->end();?> 	 
 	     	<?php echo $this->Form->create('Collectible');?>
 				<input type="hidden" name="data[Collectible][manufactured]" value="false" ?>
-	     	<?php echo $this->Form->end('No');?>
+				<input type="submit" value="No" class="btn" />
+	     	<?php echo $this->Form->end();?>
 		</div>
 
     </div>    

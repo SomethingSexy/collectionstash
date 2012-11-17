@@ -14,7 +14,7 @@
 		<div class="component-view">
 			<?php echo $this -> Form -> create('CollectiblesUser'); ?>
 			<fieldset>
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<?php
 $editionSize = $collectible['Collectible']['edition_size'];
 if($collectible['Collectible']['numbered'])
@@ -56,7 +56,7 @@ if($collectible['Collectible']['numbered'])
 							<label for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?')
 								?></label>
 						</div>
-						<?php echo $this -> Form -> input('merchant', array('type'=> 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
+						<?php echo $this -> Form -> input('merchant', array('type' => 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
 					</li>
 					<li>
 						<div class="label-wrapper">
@@ -68,7 +68,8 @@ if($collectible['Collectible']['numbered'])
 					<?php echo $this -> Form -> hidden('CollectiblesUser.collectible_id'); ?>
 				</ul>
 			</fieldset>
-			<?php echo $this -> Form -> end('Add'); ?>
+			<input type="submit" value="Add" class="btn btn-primary">
+			<?php echo $this -> Form -> end(); ?>
 		</div>
 	</div>
 </div>
@@ -78,7 +79,7 @@ if($collectible['Collectible']['numbered'])
 <div id="my-stashes-component" class="component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo __('Just an FYI, you already have this collectible in your stash...');?></h2>
+			<h2><?php echo __('Just an FYI, you already have this collectible in your stash...'); ?></h2>
 		</div>
 		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
@@ -88,14 +89,20 @@ if($collectible['Collectible']['numbered'])
 
 		foreach ($collectibles as $key => $myCollectible) {
 			echo '<div class="tile">';
-			if (!empty($myCollectible['Collectible']['Upload'])) {
-				echo '<div class="image">';
-				echo '<a rel="gallery" href="'. $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => true,'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array('imagePathOnly' => false,'uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
-				echo '</div>';
-				//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
+
+			if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
+				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
+					if ($upload['primary']) {
+						echo '<div class="image">';
+						echo '<a rel="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
+						echo '</div>';
+						break;
+					}
+				}
 			} else {
 				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
 			}
+
 			echo '<div class="description">';
 			echo '<span>' . $myCollectible['Collectible']['Collectibletype']['name'] . ' </span> <span>' . $myCollectible['Collectible']['Manufacture']['title'] . '</span>';
 			echo '</div>';
@@ -121,7 +128,8 @@ if($collectible['Collectible']['numbered'])
 			echo '</div>';
 		}
 		echo '</div>';
-	}?>
+	}
+?>
 		</div>
 	</div>
 </div>
@@ -131,7 +139,7 @@ if($collectible['Collectible']['numbered'])
 echo 'var merchants=[';
 
 foreach ($merchants as $key => $value) {
-	echo '\''.addslashes($value['Merchant']['name']).'\'';
+	echo '\'' . addslashes($value['Merchant']['name']) . '\'';
 	if ($key != (count($merchants) - 1)) {
 		echo ',';
 	}

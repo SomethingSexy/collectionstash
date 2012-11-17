@@ -7,7 +7,7 @@
 				<div class="actions icon">
 					<ul>
 						<li>
-							<a href="/admin/manufactures/edit/<?php echo $manufacture['Manufacture']['id'];?>"> <img src="/img/icon/pencil.png"> </a>
+							<a href="/admin/manufactures/edit/<?php echo $manufacture['Manufacture']['id'];?>"> <i class="icon-pencil icon-large"></i> </a>
 						</li>
 					</ul>
 				</div>

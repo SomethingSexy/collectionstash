@@ -31,12 +31,13 @@
  * @subpackage    cake.app
  */
 App::uses('Model', 'Model');
+App::uses('CakeEventListener', 'Event');
 class AppModel extends Model {
 	/**
 	 * This loops through each individual return entry after the find so we can more eaily maniulate it.
 	 */
 	public function afterFind($results, $primary = false) {
-	
+
 		if (method_exists($this, 'doAfterFind')) {
 			if ($primary) {
 				foreach ($results as $key => $val) {
@@ -95,4 +96,32 @@ class AppModel extends Model {
 		return $count;
 	}
 
+	public function convertErrorsJSON($errors = null, $model = null) {
+		$retVal = array();
+
+		if (!is_null($errors)) {
+			foreach ($errors as $key => $value) {
+				$error = array();
+				if (!is_null($model)) {
+					$error['model'] = $model;
+				}
+				$error['name'] = $key;
+				$error['message'] = $value;
+				$error['inline'] = true;
+				array_push($retVal, $error);
+			}
+		}
+
+		return $retVal;
+	}
+
+	public function notifyUser($userEmail = null, $message) {
+		$subscriptions = array();
+		$subscription = array();
+		$subscription['Subscription']['user_id'] = $userEmail;
+		$subscription['Subscription']['message'] = $message;
+		array_push($subscriptions, $subscription);
+
+		CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
+	}
 }

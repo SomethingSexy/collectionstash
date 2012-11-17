@@ -9,7 +9,7 @@
 					if (isset($myStash) && $myStash) {
 						echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
 						echo '<li>';
-						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><img src="/img/icon/pencil-gray.png"/></a>';
+						echo '<a title="Edit" class="link glimpse-link" href="/stashs/edit/' . $stashUsername . '"><i class="icon-pencil icon-large"></i></a>';
 						echo '</li>';
 					}
 					if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
@@ -33,7 +33,7 @@
 		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
 			<div class="actions stash">
-				<ul class="nav">
+				<ul class="nav nav-pills">
 					<li>
 					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' .__('Collectibles') . '</a>'; ?>
 					</li>
@@ -48,8 +48,8 @@
 	</div>
 </div>
 
-<?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <script>
 
 

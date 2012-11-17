@@ -3,38 +3,32 @@
 		<div class="component-title">
 			<h2><?php echo $stashUsername . '\'s' .__(' collectible', true)
 			?></h2>
-			<div class="actions icon">
-				<ul>
-					<li>
-						<a class="link" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><img src="/img/icon/magnify-gray.png"/></a>
-					</li>
-					<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
-					?>
-					<li>
-						<a class="link" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><img src="/img/icon/pencil-gray.png"/></a>
-					</li>
-					<li>
-						<a class="link" title="<?php echo __('Remove'); ?>" id="remove-link"><img src="/img/icon/trash-gray.png"/></a>
-						<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
-					</li>
-					<?php } ?>
-				</ul>
+			<div class="actions btn-group">
+				<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="icon-search"></i></a>
+				<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
+				?>
+				<a class="btn" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><i class="icon-pencil icon-large"></i></a>
+				<a class="btn" title="<?php echo __('Remove'); ?>" id="remove-link"><i class="icon-trash"></i></a>
+				<form id="remove-form" action="/collectibles_users/remove/<?php echo $collectible['CollectiblesUser']['id']; ?>" method="post"></form>
+				<?php } ?>
 			</div>
 		</div>
 		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
 
 			<div class="collectible item">
-				<div class="collectible image">
+				<div class="collectible image" data-toggle="modal-gallery" data-target="#modal-gallery">
 					<?php
-if (!empty($collectible['Collectible']['Upload'])) {
+					if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
+						foreach ($collectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
+							if ($upload['primary']) {
+								echo '<a href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'width' => 400, 'height' => 400)) . '</a>';
+							}
+						}
+					} else {
+						echo '<img src="/img/silhouette_thumb.png"/>';
+					}
 					?>
-					<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => '400', 'height' => '400')); ?>
-					<div class="collectible image-fullsize hidden">
-						<?php echo $this -> FileUpload -> image($collectible['Collectible']['Upload'][0]['name'], array('width' => 0)); ?>
-					</div>
-					<?php } else { ?><img src="/img/silhouette_thumb.png"/>
-					<?php } ?>
 				</div>
 				<div class="collectible detail">
 					<dl>
@@ -129,11 +123,14 @@ if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['Col
 			'height' : 'auto',
 			'resizable' : false,
 			'modal' : true,
-			'buttons' : {
-				"Remove" : function() {
+			'buttons' : [{
+				'text' : 'Remove',
+				'class' : 'btn btn-primary',
+				"click" : function() {
 					$('#remove-form').submit();
 				}
-			}
+			}]
+
 		});
 		$('#remove-link').click(function() {
 			$('#remove-dialog').dialog('open');

@@ -12,7 +12,7 @@
 		<div class="component-view">
 			<?php echo $this -> Form -> create('User', array('url' => '/users/resetPassword/'.$this->request->params['pass'][0].'/'.$this->request->params['pass'][1],  ));?>
 			<fieldset>
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<li>
 						<div class="label-wrapper">
 							<label for="UserNewPassword"><?php echo __('Password')

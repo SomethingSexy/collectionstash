@@ -4,19 +4,19 @@ class Manufacture extends AppModel {
 	public $belongsTo = array('Series');
 	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id'), 'LicensesManufacture', 'CollectibletypesManufacture');
 	public $actsAs = array('Containable');
-	
+
 	public $validate = array(
 	//name field
 	'title' => array('rule' => '/^[\\w\\s-.:&#]+$/', 'required' => true, 'message' => 'Invalid characters'),
 	//series_id
-	'series_id' => array('rule' => array('numeric'), 'allowEmpty'=> true, 'message' => 'Please select a valid category.'),
+	'series_id' => array('rule' => array('numeric'), 'allowEmpty' => true, 'message' => 'Please select a valid category.'),
 	//url
-	'url' => array('rule' => 'url', 'allowEmpty'=> true, 'message' => 'Must be a valid url.'), );
+	'url' => array('rule' => 'url', 'allowEmpty' => true, 'message' => 'Must be a valid url.'), );
 
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 	}
-	
+
 	/**
 	 * This method will return all manufacturers, in array form.  It will return all manufacturer specific data
 	 * but no associated data.
@@ -27,36 +27,13 @@ class Manufacture extends AppModel {
 
 	public function getManufactureNameById($manufactureId) {
 		$manufacture = $this -> find('first', array('conditions' => array('Manufacture.id' => $manufactureId), 'fields' => array('Manufacture.title'), 'contain' => false));
-		debug($manufacture);
 		return $manufacture['Manufacture']['title'];
 	}
 
 	public function getManufactureSearchData() {
 		$manufactures = $this -> find("all", array('order' => array('Manufacture.title' => 'ASC'), 'contain' => false));
-		debug($manufactures);
 		return $manufactures;
 	}
-	//Commented out 1/18/12 - not sure it is being used anymore
-	// public function getManufactureListData() {
-		// $returnData = array();
-		// $manufactures = $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
-		// reset($manufactures);
-		// //Safety - sets pointer to top of array
-		// $firstMan = key($manufactures);
-		// // Returns the first key of it
-		// $licenses = $this -> LicensesManufacture -> getLicensesByManufactureId($firstMan);
-		// reset($licenses);
-		// $firstLic = key($licenses);
-		// $series = $this -> LicensesManufacture -> LicensesManufacturesSeries -> getSeriesByLicenseManufactureId($firstLic);
-		// $collectibletypes = $this -> CollectibletypesManufacture -> getCollectibleTypeByManufactureId($firstMan);
-// 
-		// $returnData['manufactures'] = $manufactures;
-		// $returnData['licenses'] = $licenses;
-		// $returnData['series'] = $series;
-		// $returnData['collectibletypes'] = $collectibletypes;
-// 
-		// return $returnData;
-	// }
 
 	/**
 	 * Given a manufactureId and a license Id, this method returns all of the series
@@ -64,7 +41,7 @@ class Manufacture extends AppModel {
 	 */
 	public function getSeries($manufactureId) {
 		$series = $this -> find('all', array('conditions' => array('Manufacture.id' => $manufactureId), 'contain' => array('Series'), 'fields' => array('Series.name', 'Series.id')));
-		
+
 		$seriesList = array();
 
 		foreach ($series as $serie) {

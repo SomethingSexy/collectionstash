@@ -11,7 +11,7 @@
     <div class="component-view">
       <?php echo $this->Form->create('CollectiblesUser',array('action'=>'edit'));?>
         <fieldset>
-          <ul class="form-fields">
+          <ul class="form-fields unstyled">
           	<?php 
           		$editionSize = $collectible['Collectible']['edition_size'];
 				if($collectible['Collectible']['numbered'])
@@ -56,7 +56,8 @@
           </ul>
           <input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
         </fieldset>
-      <?php echo $this->Form->end(__('Submit', true));?>
+        <input type="submit" value="Submit" class="btn btn-primary">
+      <?php echo $this->Form->end();?>
           </div>    
   </div>
 </div>

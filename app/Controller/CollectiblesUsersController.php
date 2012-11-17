@@ -74,7 +74,8 @@ class CollectiblesUsersController extends AppController {
 					return;
 				}
 			}
-			$collectibles = $this -> CollectiblesUser -> find("all", array('contain' => array('Collectible' => array('Upload', 'Collectibletype', 'Manufacture')), 'conditions' => array('CollectiblesUser.collectible_id' => $id, 'CollectiblesUser.user_id' => $user['User']['id'])));
+			$collectibles = $this -> CollectiblesUser -> find("all", array('contain' => array('Collectible' => array('CollectiblesUpload' => array('Upload'), 'Collectibletype', 'Manufacture')), 'conditions' => array('CollectiblesUser.collectible_id' => $id, 'CollectiblesUser.user_id' => $user['User']['id'])));
+			debug($collectibles);
 			$this -> set(compact('collectibles'));
 			$this -> set('collectible', $collectible);
 			$this -> set('conditions', $this -> CollectiblesUser -> Condition -> find('list', array('order' => 'name')));

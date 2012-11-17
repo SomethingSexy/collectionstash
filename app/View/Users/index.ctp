@@ -5,34 +5,38 @@
 		</div>
 		<div class="component-view">
 		<div class="standard-list user-list">
-			<ul>
-				<li class="title">
-					<span class="username"><?php echo $this -> Paginator -> sort('username', 'User Name'); ?></span>
-					<span class="join-date"><?php echo $this -> Paginator -> sort('created', 'Join Date'); ?></span>
-					<span class="count"><?php echo $this -> Paginator -> sort('collectibles_user_count', 'Collectible Count'); ?></span>
-					<span class="upload-count"><?php echo $this -> Paginator -> sort('user_upload_count', 'Photo Count'); ?></span>
-				</li>
+			<table class="table">
+				<thead>
+					<tr>
+						<th><?php echo $this -> Paginator -> sort('username', 'User Name'); ?></th>
+						<th><?php echo $this -> Paginator -> sort('created', 'Join Date'); ?></th>
+						<th><?php echo $this -> Paginator -> sort('collectibles_user_count', 'Collectible Count'); ?></th>
+						<th><?php echo $this -> Paginator -> sort('user_upload_count', 'Photo Count'); ?></th>
+					</tr>					
+				</thead>
+				<tbody>
 				<?php
 				foreach ($users as $user) {
-					echo '<li>';
-					echo '<span class="username">';
+					echo '<tr>';
+					echo '<td>';
 					echo $this -> Html -> link($user['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username']));
-					echo '</span>';
-					echo '<span class="join-date">';
+					echo '</td>';
+					echo '<td>';
 					$datetime = strtotime($user['User']['created']);
 					$mysqldate = date("m/d/y g:i A", $datetime);
 					echo $mysqldate;
-					echo '</span>';
-					echo '<span class="count">';
+					echo '</td>';
+					echo '<td>';
 					echo $user['User']['collectibles_user_count'];
-					echo '</span>';
-					echo '<span class="upload-count">';
+					echo '</td>';
+					echo '<td>';
 					echo $user['User']['user_upload_count'];
-					echo '</span>';
-					echo '</li>';
+					echo '</td>';
+					echo '</tr>';
 				}
  ?>
-			</ul>
+ 				</tbody>
+			</table>
 		</div>	
 				<div class="paging">
 			<p>

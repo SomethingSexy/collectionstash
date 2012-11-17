@@ -7,9 +7,8 @@
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
-
 			<?php echo $this -> element('search_filters', array('searchUrl'=>'/collectibles/search'));?>
-			<div class="collectibles view">				
+			<div class="collectibles view" data-toggle="modal-gallery" data-target="#modal-gallery">				
 				<?php
 				foreach ($collectibles as $collectible):
 				?>
@@ -69,9 +68,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-	$(function() {
-		$('#collectibles-list-component .inside .component-view .collectibles .collectible .collectible.image a').fancybox();
-	}); 
-</script>

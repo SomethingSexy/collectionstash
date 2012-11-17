@@ -11,7 +11,7 @@ class User extends AppModel {
 	//username
 	'username' => array(
 	//valid values
-	'validValues' => array('rule' => 'alphaNumeric', 'allowEmpty' => false, 'message' => 'Alphanumeric only.'),
+	'validValues' => array('rule' => 'alphaNumeric', 'required' => true, 'allowEmpty' => false, 'message' => 'Alphanumeric only.'),
 	//valid length
 	'validLength' => array('rule' => array('maxLength', 40), 'message' => 'Maximum 40 characters long'),
 	//valid min length
@@ -19,15 +19,15 @@ class User extends AppModel {
 	//unique
 	'uniqueUserName' => array('rule' => array('isUnqiueUserName'), 'message' => 'That username exists already. Try again.')),
 	//password
-	'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'allowEmpty' => false, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')),
+	'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'allowEmpty' => false, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')),
 	//email
-	'email' => array('validValues' => array('rule' => array('email', true), 'allowEmpty' => false, 'message' => 'Enter a valid email'),
+	'email' => array('validValues' => array('rule' => array('email', true), 'required' => true, 'allowEmpty' => false,  'message' => 'Enter a valid email'),
 	//Unique email
 	'uniqueEmail' => array('rule' => array('isUnqiueEmail'), 'message' => 'A user with that email already exists.')),
 	//first
-	'first_name' => array('rule' => 'alphaNumeric', 'allowEmpty' => false),
-	//last
-	'last_name' => array('rule' => 'alphaNumeric', 'allowEmpty' => false));
+	'first_name' => array('rule' => 'alphaNumeric', 'required' => true, 'allowEmpty' => false, 'message' => 'Alphanumeric only.'),
+	//last, allow space now
+	'last_name' => array('rule' => '/^[a-z0-9 ]*$/i', 'required' => true, 'allowEmpty' => false, 'message' => 'Alphanumeric only.'));
 
 	function beforeSave() {
 		//Make sure there is no space around the email, seems to be an issue with sending when there is
@@ -190,6 +190,7 @@ class User extends AppModel {
 		$userData['Stash']['0']['name'] = 'Default';
 		$userData['Stash']['0']['total_count'] = 0;
 		//Need to put this here to create the entity
+		// TODO: Update Stash to use the EntityTypeBehavior to automate this shit
 		$userData['Stash']['0']['EntityType']['type'] = 'stash';
 		if ($this -> saveAssociated($userData, array('deep' => true))) {
 			//Find the user

@@ -17,7 +17,7 @@ class SendEmailShell extends AppShell {
 
 		foreach ($emails as $key => $email) {
 			$cakeEmail = new CakeEmail('smtp');
-			$cakeEmail -> emailFormat('text');
+			$cakeEmail -> emailFormat('html');
 			$cakeEmail -> template('notification', 'simple');
 			$cakeEmail -> to($email['Email']['receiver']);
 			$cakeEmail -> subject($email['Email']['subject']);

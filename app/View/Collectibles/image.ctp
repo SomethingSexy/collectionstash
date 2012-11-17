@@ -1,4 +1,4 @@
-<?php echo $this -> Html -> script('collectible-add', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/collectible-add', array('inline' => false));?>
 <?php if($this -> Session -> check('add.collectible.mode.variant')) { ?>
 <?php      
 	echo $this->element('collectible_detail', array(
@@ -60,13 +60,13 @@
 								echo '<input type="hidden" name="data[remove]" value="true" />';
 								echo $this -> Form -> end(); 
 							?>
-							<a class="link" id="remove-image-submit">Change Image</a> <a class="link" id="skip-image-button">Continue</a>
+							<button class="btn" id="remove-image-submit">Change Image</button> <button class="btn" id="skip-image-button">Continue</button>
 						</div>
 				<?php } else { ?>
 					<?php echo $this -> Form -> create('Collectible', array('url' => '/'.$this->request->params['controller']. '/'.$this->action.'/image' , 'id'=>'add-image-form', 'type' => 'file'));?>
 					<fieldset>
 						<legend><?php __('Image');?></legend>
-						<ul class="form-fields">	
+						<ul class="form-fields unstyled">	
 						
 							<li>
 								<div class="label-wrapper">
@@ -74,7 +74,7 @@
 										<?php echo __('Upload image from your computer') ?>
 									</label>
 								</div>
-								<?php echo $this -> Form -> input('Upload.0.file', array('div' => false, 'type' => 'file', 'label' => false));?>
+								<?php echo $this -> Form -> input('Upload.file', array('div' => false, 'type' => 'file', 'label' => false));?>
 							</li>
 							<li>
 								<div class="label-wrapper">
@@ -82,7 +82,7 @@
 										<?php echo __('Upload image from URL') ?>
 									</label>
 								</div>
-								<?php echo $this -> Form -> input('Upload.0.url', array('div' => false, 'label' => false));?>
+								<?php echo $this -> Form -> input('Upload.url', array('div' => false, 'label' => false));?>
 							</li>
 						
 						</ul>
@@ -93,8 +93,8 @@
 						<input type="hidden" name="data[skip]" value="true" />
 					</form>
 					<div class="links no-image">
-						<input type="button" id="add-image-button" class="button" value="Add Image">
-						<input type="button" id="skip-image-button" class="button" value="Skip">
+						<button id="add-image-button" class="btn btn-primary"><?php echo __('Add Image');?></button>
+						<button id="skip-image-button" class="btn"><?php echo __('Skip');?></button>
 					</div>
 					
 				<?php } ?>

@@ -1,5 +1,5 @@
-<?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('cs.subscribe', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
 	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
@@ -34,48 +34,38 @@ if (!isset($showTags)) {
 	<div class="inside">
 		<div class="component-title">
 			<h2><?php echo $title; ?></h2>
-			<div class="actions icon">
-				<ul>
-					<?php
-					if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
-						echo '<li><a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
+			<div class="btn-group actions">
+				<?php
+				if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
+					echo '<a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
+				}
+				if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
+					$userSubscribed = 'false';
+					if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
+						$userSubscribed = 'true';
 					}
-					if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
-						$userSubscribed = 'false';
-						if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
-							$userSubscribed = 'true';
-						}
-						echo '<li><a id="subscribe" data-subscribed="' . $userSubscribed . '" data-entity-type="collectible" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="link add-stash-link"></a></li>';
+					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+				}
+				
+				?>
+				<?php
+				if ($showWho) {
+					echo $this -> Html -> link('<i class="icon-group"></i>', '/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'], array('title' => 'Registry', 'escape' => false, 'class' => 'btn'));
+				}
+				if (isset($showHistory) && $showHistory) {
+					echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
+				}
+				if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
+					if ($collectibleDetail['Collectible']['variant']) {
+						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar variant collectible type with the same manufacturer.', true), 'escape' => false, 'class'=>'btn'));
+					} else {
+						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar collectible type with the same manufacturer.', true), 'escape' => false, 'class'=>'btn'));
 					}
-					
-					?>
-					<?php
-					if ($showWho) {
-						echo '<li>';
-						echo $this -> Html -> link($this -> Html -> image('/img/icon/group-gray.png', array('alt' => "Registry", 'border' => "0")), '/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'], array('title' => 'Registry', 'escape' => false));
-						echo '</li>';
+					if (!$collectibleDetail['Collectible']['variant']) {
+						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true), 'escape' => false, 'class'=> 'btn btn-warning'));
 					}
-					if (isset($showHistory) && $showHistory) {
-						echo '<li>';
-						echo $this -> Html -> link($this -> Html -> image('/img/icon/cabinet-gray.png', array('alt' => "History", 'border' => "0")), '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false));
-						echo '</li>';
-					}
-					if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
-						echo '<li>';
-						if ($collectibleDetail['Collectible']['variant']) {
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action-gray.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar variant collectible type with the same manufacturer.', true), 'escape' => false));
-						} else {
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action-gray.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar collectible type with the same manufacturer.', true), 'escape' => false));
-						}
-						echo '</li>';
-						if (!$collectibleDetail['Collectible']['variant']) {
-							echo '<li>';
-							echo $this -> Html -> link($this -> Html -> image('/img/icon/action_variant.png', array('alt' => "Add", 'border' => "0")), '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true), 'escape' => false));
-							echo '</li>';
-						}
-					}
-					?>
-				</ul>
+				}
+				?>
 			</div>
 		</div>
 		<div class="component-view">
@@ -86,7 +76,7 @@ if (!isset($showTags)) {
 			?>
 
 			<?php } else { ?>
-			<div class="helpful-hint-message">
+			<div class="helpful-hint-message alert alert-info">
 				<?php echo __('See something that is inaccurate? Login or register to help us maintain the most accurate collectible database.'); ?>
 			</div>
 			<?php } ?>
@@ -116,7 +106,7 @@ if ($adminMode) {
 			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form')); ?>
 			<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
 			<fieldset class="approval-fields">
-				<ul class="form-fields">
+				<ul class="form-fields unstyled">
 					<li>
 						<div class="label-wrapper">
 							<label for=""> <?php echo __('Notes')
@@ -128,8 +118,8 @@ if ($adminMode) {
 			</fieldset>
 			</form>
 			<div class="links">
-				<input type="button" id="approval-button" class="button" value="Approve">
-				<input type="button" id="deny-button" class="button" value="Deny">
+				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve');?></button>
+				<button id="deny-button" class="btn"><?php echo __('Deny');?></button>
 			</div>
 			<script>
 				//Eh move this out of here

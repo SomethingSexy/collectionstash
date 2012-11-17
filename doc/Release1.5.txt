@@ -11,3 +11,72 @@ Nice to haves:
 - Link attributes?
 - *Subscript emails should include link to what it is for
 - Allow attributes to belong to other attributes
+- Make scales dynamic,auto complete box...add validation so that it will always be a 1:xxx
+- Might be nice to have a collectible activity table that will record all activity for a collectible as it occurs...mainly updates...collectible was updated, tag added, tag removed, attribute added...yadda yadda...mgith work better than the individual history thing
+
+Issues that need to be fixed:
+- Edit will not allow me to remove a exclusive retailer
+
+
+Release TODO:
+- rename attributes = attributes_category
+- create table = attributes, add manufuacture_id, scale_id, name, description
+- modified attributes_collectibles to be join table with collectible and contain a quantity
+- create a features table = this will be a table for features that not really physical pieces or items ** Not this release
+- Do a recover on the current attribute categories - fix things being out of order
+- Approve all edits, going to start over so I don't have to convert, will lose user edit history but not a huge deal..that means I need to empty all "_edits" tables
+- Once the attributes have been converted over need to run the UpdateEntitiesShell.php to add the entity id ** Not 100% necessary
+- Update the Upload table to add user_id before running converter
+- Run the UploadsConverterShell to convert all uploads to the new model
+- Empty the uploads_revs table to start fresh
+
+
+
+
+
+Should I add dimensions to an attribute?
+
+
+I will then need to create a job that will convert the attributes_collectibles to the attributes table, each current attributes_collectibles will be its own attribute
+
+We will need edit tables for the attributes_collectibles and the attributes tables
+
+The "features" of an attribute might need to be broken out to another table
+
+Figure out how to start history over again...if I go through the job I think it will be fine.''
+
+When adding a new attribute category or when moving an attribute category, we will need to update the path name
+
+
+
+
+
+Features
+- Users will be able to add attributes indepdent of collectibles
+- Users will be able to edit attributes indepdent of collectibles
+- When add a new attribute to a collectible, it will automatically create the indepdent attribute and then link it to the collectible
+- Users should be able to remove attributes from collectibles which will unlink it
+- Users should be able to indicate, when removing an attribute if it should be permantely deleted (dups)
+- Users should link an existing collectible attribute to an attribute.  For example if there is a duplicate out there you can then "link"
+the two, which will basically combine the two...if the one we are linking to is linked to others, then it will link ALL to the new one...those existing attributes will be deleted on all references will be udpated
+
+- Need admin tools for monitoring additions and edits
+- Need admin tools to do a mass merger
+- Need admin tools to do a delete...if you are deleting a linked attribute need to specify an attribute to replace with
+- Need to make sure that adding variants with attributes auto links the existing attributes
+- Need to update the addinf of a collectible to account for adding new attributes
+- Need to update when approval a new collectible that it's attributes get autoapproved - Attributes will be showing up in the pending attribute if they are tied to a new collectible...which is fine just need to indicate that, if it is tied to a collectible or not
+- Need to update the attribute collectible list to have a link to hide or show pending attributes...this will show all and who added them and when
+
+Clean Up
+- Manually check all "display base" ones for ones that are not really display bases
+- Manually check all of the "environment" attributes and see if I can rename and/or add another category
+
+
+Notes:
+- When adding a new attribute during editing a collectible or adding a collectible, we will need to indicate if this attribute is brand new on the UI
+	Then when we approve it, it will also approve the new attribute
+	If we delete it, it will also delete the new attribute since it won't be linked to anything
+	If we delete it and the attribute is linked to something else, it will just unlink it and delete the entry in attributes_collectibles but keep the attribute intact
+	We should be able to edit the new attribute as well, but it might be through the new items link
+	

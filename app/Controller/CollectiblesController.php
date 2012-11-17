@@ -3,7 +3,7 @@ App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
 class CollectiblesController extends AppController {
 
-	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Wizard');
+	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Wizard', 'Tree');
 
 	public $components = array('Wizard');
 
@@ -169,7 +169,7 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('action' => 'addSelectType'));
 		}
 		if ($id && is_numeric($id)) {
-			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$variantCollectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
 			if (!empty($variantCollectible)) {
 				$manufacturer = $this -> Session -> read('add.collectible.manufacture');
@@ -220,7 +220,7 @@ class CollectiblesController extends AppController {
 			//reset anything so we are fresh
 			$this -> resetCollectibleAdd();
 			//Grab my collectible
-			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
 			//make sure this is a valid collectible
 
 			if (!empty($collectible)) {
@@ -242,7 +242,7 @@ class CollectiblesController extends AppController {
 						//If the collectible we are copying is a variant itself, then grab its parent
 						//and set that as a parent and then this will be a variant of that collectible
 						$variantId = $collectible['Collectible']['variant_collectible_id'];
-						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+						$collectible = $this -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $variantId), 'contain' => array('Currency', 'Manufacture', 'SpecializedType', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute' => array('Manufacture', 'Scale', 'AttributeCategory', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 						$this -> Session -> write('add.collectible.variant', $collectible);
 					}
 				}
@@ -258,7 +258,7 @@ class CollectiblesController extends AppController {
 	function confirm() {
 		$id = $this -> Session -> read('addCollectibleId');
 		if (isset($id) && $id != null) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'Collectibletype', 'CollectiblesTag' => array('Tag'), 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute' => array('Manufacture', 'Scale', 'AttributeCategory', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 			$this -> set('collectible', $collectible);
 			$this -> Session -> delete('addCollectibleId');
 		} else {
@@ -315,7 +315,7 @@ class CollectiblesController extends AppController {
 			$wizardData = $this -> Wizard -> read();
 
 			// Do some initial stuff if what we are adding is a variant and the wizard
-			// data has not been set yet.  
+			// data has not been set yet.
 			// TODO: As of 7/22/12 There is still a defect if you come in for
 			// the first time, submit a change that has an error, it will overrwrite
 			// what you entered because the wizard data has not been set yet
@@ -390,6 +390,7 @@ class CollectiblesController extends AppController {
 				 *
 				 */
 				$similarCollectibles = $this -> Collectible -> doesCollectibleExist($newCollectible);
+				debug($similarCollectibles);
 				if (!empty($similarCollectibles)) {
 					$this -> Session -> write('add.collectible.similar', $similarCollectibles);
 					$this -> Wizard -> branch('similar');
@@ -424,21 +425,82 @@ class CollectiblesController extends AppController {
 	}
 
 	function _prepareAttributes() {
+
+		$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
+		$this -> set(compact('attributeCategories'));
+
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+		$this -> set(compact('scales'));
+
+		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
+		$this -> set(compact('manufactures'));
+
 		if (empty($this -> request -> data)) {
+
+			// If this is a variant then we need to take the existing
+			// attributes and link the attribute id itsefl to them, not just
+			// the name anymore
 			if ($this -> Session -> check('add.collectible.variant')) {
 				//TODO store the collectible in the session for going back
 				$variantCollectible = $this -> Session -> read('add.collectible.variant');
 				$this -> set('collectible', $variantCollectible);
 				if (isset($variantCollectible['AttributesCollectible'])) {
-					foreach ($variantCollectible['AttributesCollectible'] as $key => &$value) {
-						$value['name'] = $value['Attribute']['name'];
-
+					foreach ($variantCollectible['AttributesCollectible'] as $attributeKey => $attributesCollectible) {
+						if (isset($attributesCollectible['attribute_id']) && !empty($attributesCollectible['attribute_id'])) {
+							$attribute = $this -> Collectible -> AttributesCollectible -> Attribute -> find("first", array('contain' => array('Manufacture', 'Scale', 'AttributeCategory'), 'conditions' => array('Attribute.id' => $attributesCollectible['attribute_id'])));
+							$variantCollectible['AttributesCollectible'][$attributeKey]['Attribute'] = $attribute['Attribute'];
+							$variantCollectible['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture'] = $attribute['Manufacture'];
+							$variantCollectible['AttributesCollectible'][$attributeKey]['Attribute']['Scale'] = $attribute['Scale'];
+							$variantCollectible['AttributesCollectible'][$attributeKey]['Attribute']['AttributeCategory'] = $attribute['AttributeCategory'];
+						}
 					}
 				}
 				$this -> request -> data['AttributesCollectible'] = $variantCollectible['AttributesCollectible'];
 			}
+		} else {
+			// If it is set, that means we already went through this
+			// we need to do some work to make sure that our stuff is set
+			if ($this -> request -> data['AttributesCollectible']) {
+				foreach ($this -> request -> data['AttributesCollectible'] as $attributeKey => $attributesCollectible) {
+					if (isset($attributesCollectible['attribute_id']) && !empty($attributesCollectible['attribute_id'])) {
+						$attribute = $this -> Collectible -> AttributesCollectible -> Attribute -> find("first", array('contain' => array('Manufacture', 'Scale', 'AttributeCategory'), 'conditions' => array('Attribute.id' => $attributesCollectible['attribute_id'])));
+						$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute'] = $attribute['Attribute'];
+						$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture'] = $attribute['Manufacture'];
+						$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Scale'] = $attribute['Scale'];
+						$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['AttributeCategory'] = $attribute['AttributeCategory'];
+					} else {
+						if (isset($attributesCollectible['Attribute']['manufacture_id'])) {
+							foreach ($manufactures as $key => $value) {
+								if ($key == $attributesCollectible['Attribute']['manufacture_id']) {
+									$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture'] = array();
+									$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture']['title'] = $value;
+								}
+							}
+						}
+						//scale_id
+						if (isset($attributesCollectible['Attribute']['scale_id'])) {
+							foreach ($scales as $key => $value) {
+								if ($key == $attributesCollectible['Attribute']['scale_id']) {
+									$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Scale'] = array();
+									$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['Scale']['scale'] = $value;
+								}
+							}
+						}
 
+						//attribute_category_id
+						if (isset($attributesCollectible['Attribute']['attribute_category_id'])) {
+							foreach ($attributeCategories as $key => $value) {
+								if ($value['AttributeCategory']['id'] === $attributesCollectible['Attribute']['attribute_category_id']) {
+									$this -> request -> data['AttributesCollectible'][$attributeKey]['Attribute']['AttributeCategory'] = $value['AttributeCategory'];
+								}
+							}
+						}
+					}
+				}
+			}
 		}
+		debug($this -> request -> data);
+
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
 
@@ -453,20 +515,18 @@ class CollectiblesController extends AppController {
 			return true;
 		} else {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
-			$this -> loadModel('AttributesCollectible');
-
+			debug($this -> request -> data);
 			//Uh this doesn't make sense, do I need to loop through each of these to validate?
 			if (isset($this -> request -> data['AttributesCollectible'])) {
-				foreach ($this->request->data['AttributesCollectible'] as $key => $attribue) {
-					$this -> AttributesCollectible -> set($attribue);
-					//debug($this -> AttributesCollectible);
-					if ($this -> AttributesCollectible -> validates()) {
-						return true;
-					} else {
-
-						$this -> set('errors', $this -> AttributesCollectible -> validationErrors);
-						return false;
-					}
+				foreach ($this -> request -> data['AttributesCollectible'] as $key => $attribue) {
+					$this -> Collectible -> AttributesCollectible -> Attribute -> set($attribue['Attribute']);
+					//if ($this -> Collectible -> AttributesCollectible -> Attribute -> validates()) {
+					return true;
+					//} else {
+					//	debug($this -> Collectible -> AttributesCollectible -> Attribute -> validationErrors);
+					//	$this -> set('errors', $this -> Collectible -> AttributesCollectible -> Attribute -> validationErrors);
+					//	return false;
+					//}
 				}
 			}
 
@@ -522,13 +582,8 @@ class CollectiblesController extends AppController {
 
 			$this -> set('collectible', $variantCollectible);
 		}
-		//debug($this -> Session -> read('Wizard.Collectibles.image'));
 
-		$collectible = array();
-		// if(isset($wizardData['image']['Upload'])) {
-		// $collectible['Upload'] = $wizardData['image']['Upload'];
-		// $this -> set('collectible', $collectible);
-		// }
+		debug($this -> request -> data);
 	}
 
 	function _processImage() {
@@ -542,7 +597,7 @@ class CollectiblesController extends AppController {
 				$uploadId = $this -> Session -> read('uploadId');
 				if (isset($wizardData['image']['Upload']) && !empty($uploadId)) {
 					$imageId = $uploadId;
-					if ($this -> Collectible -> Upload -> delete($imageId)) {
+					if ($this -> Collectible -> CollectiblesUpload -> Upload -> delete($imageId)) {
 						$this -> Session -> delete('Wizard.Collectibles.image');
 						return false;
 					} else {
@@ -555,14 +610,16 @@ class CollectiblesController extends AppController {
 				//If they submit and we already added a collectible, think back button, then just redisplay the
 				//page and show the image.  They can then choose to edit the image if they want
 				if (!isset($wizardData['image']['Upload']) && empty($uploadId)) {
-					if ($this -> Collectible -> Upload -> isValidUpload($this -> request -> data)) {
-						if ($this -> Collectible -> Upload -> saveAll($this -> request -> data['Upload'])) {
+					if ($this -> Collectible -> CollectiblesUpload -> Upload -> isValidUpload($this -> request -> data)) {
+						// We are adding this to the upload table first and then when we actually submit this will get added
+						// to the collectibles upload table
+						$response = $this -> Collectible -> CollectiblesUpload -> Upload -> add($this -> request -> data, $this -> getUserId(), true);
+						if ($response['response']['isSuccess']) {
 							//We have to save the upload right away because of how these work.  So lets save it
 							//Then lets grab the id of the upload and return the data of the uploaded one and store
 							//it in our saving object.  This will allow us to display the details to the user in the
 							//review and confirm process.
-							$uploadId = $this -> Collectible -> Upload -> id;
-							$this -> Session -> write('uploadId', $uploadId);
+							$this -> Session -> write('uploadId', $response['response']['data']['Upload']['id']);
 							return true;
 						} else {
 							debug($this -> Collectible -> Upload -> validationErrors);
@@ -571,7 +628,8 @@ class CollectiblesController extends AppController {
 							return false;
 						}
 					} else {
-						$this -> Collectible -> Upload -> validationErrors['0']['file'] = 'Image is required.';
+						//TODO:
+						$this -> Collectible -> CollectiblesUpload -> Upload -> validationErrors['0']['file'] = 'Image is required.';
 
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 						return false;
@@ -590,7 +648,7 @@ class CollectiblesController extends AppController {
 
 	function _saveImage() {
 		$uploadId = $this -> Session -> read('uploadId');
-		$upload = $this -> Collectible -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
+		$upload = $this -> Collectible -> CollectiblesUpload -> Upload -> find('first', array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
 		$this -> Wizard -> save('image', $upload);
 	}
 
@@ -600,23 +658,15 @@ class CollectiblesController extends AppController {
 
 		$collectible = array();
 		$collectible['Collectible'] = $wizardData['manufacture']['Collectible'];
-		if (isset($wizardData['attributes']['AttributesCollectible'])) {
-			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
-		}
-
-		if (isset($collectible['AttributesCollectible'])) {
-			foreach ($collectible['AttributesCollectible'] as $key => &$value) {
-				$value['Attribute']['name'] = $value['name'];
-
-			}
-		}
 
 		if (isset($wizardData['tags']['CollectiblesTag'])) {
 			$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 		}
 
+		// Need to do a little magic because the review page is reusing stuff
 		if (isset($wizardData['image']['Upload'])) {
-			$collectible['Upload'][0] = $wizardData['image']['Upload'];
+			$collectible['CollectiblesUpload'][0]['Upload'] = $wizardData['image']['Upload'];
+			$collectible['CollectiblesUpload'][0]['primary'] = true;
 		}
 		//fuck you cake
 		if (isset($collectible['Collectible']['release']['year'])) {
@@ -644,17 +694,60 @@ class CollectiblesController extends AppController {
 		$scale = $this -> Collectible -> Scale -> find('first', array('conditions' => array('Scale.id' => $collectible['Collectible']['scale_id']), 'fields' => array('Scale.scale'), 'contain' => false));
 		$collectible['Scale'] = $scale['Scale'];
 
-		// We don't need this here anymore, because we will be storing the strnig up until we committ
-		// if (isset($collectible['Collectible']['retailer_id'])) {
-		// $retailer = $this -> Collectible -> Retailer -> find('first', array('conditions' => array('Retailer.id' => $collectible['Collectible']['retailer_id']), 'fields' => array('Retailer.name'), 'contain' => false));
-		// $collectible['Retailer'] = $retailer['Retailer'];
-		// }
-
 		$currency = $this -> Collectible -> Currency -> find('first', array('conditions' => array('Currency.id' => $collectible['Collectible']['currency_id']), 'contain' => false));
 		$collectible['Currency'] = $currency['Currency'];
 
-		// debug($collectible);
-		// debug($wizardData);
+		if (isset($wizardData['attributes']['AttributesCollectible'])) {
+			$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
+			$this -> set(compact('attributeCategories'));
+
+			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+			$this -> set(compact('scales'));
+
+			$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
+			$this -> set(compact('manufactures'));
+
+			$collectible['AttributesCollectible'] = $wizardData['attributes']['AttributesCollectible'];
+
+			foreach ($collectible['AttributesCollectible'] as $attributeKey => $attributesCollectible) {
+				if (isset($attributesCollectible['attribute_id']) && !empty($attributesCollectible['attribute_id'])) {
+					$attribute = $this -> Collectible -> AttributesCollectible -> Attribute -> find("first", array('contain' => array('Manufacture', 'Scale', 'AttributeCategory'), 'conditions' => array('Attribute.id' => $attributesCollectible['attribute_id'])));
+					$collectible['AttributesCollectible'][$attributeKey]['Attribute'] = $attribute['Attribute'];
+					$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture'] = $attribute['Manufacture'];
+					$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Scale'] = $attribute['Scale'];
+					$collectible['AttributesCollectible'][$attributeKey]['Attribute']['AttributeCategory'] = $attribute['AttributeCategory'];
+				} else {
+					if (isset($attributesCollectible['Attribute']['manufacture_id'])) {
+						foreach ($manufactures as $key => $value) {
+							if ($key == $attributesCollectible['Attribute']['manufacture_id']) {
+								$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture'] = array();
+								$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Manufacture']['title'] = $value;
+							}
+						}
+					}
+					//scale_id
+					if (isset($attributesCollectible['Attribute']['scale_id'])) {
+						foreach ($scales as $key => $value) {
+							if ($key == $attributesCollectible['Attribute']['scale_id']) {
+								$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Scale'] = array();
+								$collectible['AttributesCollectible'][$attributeKey]['Attribute']['Scale']['scale'] = $value;
+							}
+						}
+					}
+
+					//attribute_category_id
+					if (isset($attributesCollectible['Attribute']['attribute_category_id'])) {
+						foreach ($attributeCategories as $key => $value) {
+							if ($value['AttributeCategory']['id'] === $attributesCollectible['Attribute']['attribute_category_id']) {
+								$collectible['AttributesCollectible'][$attributeKey]['Attribute']['AttributeCategory'] = $value['AttributeCategory'];
+							}
+						}
+					}
+				}
+			}
+
+		}
+
 		if ($this -> Session -> check('add.collectible.variant')) {
 			$variantCollectible = $this -> Session -> read('add.collectible.variant');
 			// debug($variantCollectible);
@@ -679,39 +772,16 @@ class CollectiblesController extends AppController {
 		}
 		$collectible['CollectiblesTag'] = $wizardData['tags']['CollectiblesTag'];
 
-		if ($this -> Session -> check('add.collectible.variant')) {
-			// if (!isset($collectible['AttributesCollectible'])) {
-			// $collectible['AttributesCollectible'] = array();
-			// }
+		if (isset($wizardData['image']['Upload'])) {
+			$collectible['CollectiblesUpload'][0]['upload_id'] = $wizardData['image']['Upload']['id'];
+			$collectible['CollectiblesUpload'][0]['primary'] = true;
+		}
 
-			// if (isset($wizardData['variantFeatures']['AttributesCollectible']) && !empty($wizardData['variantFeatures']['AttributesCollectible'])) {
-			// $result = array_merge($collectible['AttributesCollectible'], $wizardData['variantFeatures']['AttributesCollectible']);
-			// debug($result);
-			// $collectible['AttributesCollectible'] = $result;
-			// }
+		if ($this -> Session -> check('add.collectible.variant')) {
 			$collectible['Collectible']['variant'] = 1;
 		}
-		/* Since they confirmed, now set to pending = 1.  I really don't like how
-		 this is setup right now but it works because of the image thing.
-		 A 1 means that this collectible needs to be approved by an admin first
-		 *
-		 * TODO: If we are not auto approving, then do we need to make sure that attributes_collectible is set to not active?
-		 * */
-		$pendingState = '1';
-		if (Configure::read('Settings.Approval.auto-approve') == 'true') {
-			$pendingState = '0';
-		}
-
-		$collectible['Collectible']['state'] = $pendingState;
 
 		$userId = $this -> getUserId();
-
-		//user id of the person who added this collectible
-		$collectible['Collectible']['user_id'] = $this -> getUserId();
-		$collectible['Revision']['action'] = 'A';
-		$collectible['Revision']['user_id'] = $this -> getUserId();
-		//Adding this here, we need to clean this up later and put it all in the model
-		$collectible['EntityType']['type'] = 'collectible';
 
 		//If there are any newly created Tags, we need to remove them from the array or else cake won't add
 		//In the future we might want to update this to that we active tags
@@ -722,41 +792,8 @@ class CollectiblesController extends AppController {
 		}
 		//}
 
-		$this -> Collectible -> create();
-		if ($this -> Collectible -> saveAll($collectible)) {
+		if ($this -> Collectible -> add($collectible, $userId)) {
 			$id = $this -> Collectible -> id;
-			$addCollectible = $this -> Collectible -> findById($id);
-			//TODO: This stuff needs to be updated to do the same for the tags, although this is kind of caca
-			if (isset($wizardData['image']['Upload'])) {
-				//Update the current one
-				//Doing this so that we will trigger the revision
-				$updateUpload = array();
-				$updateUpload['Upload']['id'] = $wizardData['image']['Upload']['id'];
-				$updateUpload['Upload']['collectible_id'] = $id;
-				$updateUpload['Upload']['revision_id'] = $addCollectible['Collectible']['revision_id'];
-				if (!$this -> Collectible -> Upload -> saveAll($updateUpload, array('validate' => false))) {
-					//If it fails, let it pass but log the problem.
-					$this -> log('Failed to update the upload with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'] . ' and upload id ' . $addCollectible['Upload']['id'], 'error');
-				}
-			}
-			//If I did set some attributes, lets update the revision ids for them as well.
-			if (isset($addCollectible['AttributesCollectible']) && !empty($addCollectible['AttributesCollectible'])) {
-				foreach ($addCollectible['AttributesCollectible'] as $key => &$value) {
-					$value['revision_id'] = $addCollectible['Collectible']['revision_id'];
-					unset($value['attribute_id']);
-					unset($value['collectible_id']);
-					unset($value['description']);
-					unset($value['active']);
-					unset($value['created']);
-					unset($value['modified']);
-				}
-				//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
-				if (!$this -> Collectible -> AttributesCollectible -> saveAll($addCollectible['AttributesCollectible'], array('validate' => false))) {
-					//If it fails, let it pass but log the problem.
-					$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'], 'error');
-				}
-			}
-
 			$this -> Session -> write('addCollectibleId', $id);
 			$this -> Session -> delete('uploadId');
 			$this -> Session -> delete('add.collectible.manufacture');
@@ -788,7 +825,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
 			$this -> set('collectible', $collectible);
@@ -797,6 +834,16 @@ class CollectiblesController extends AppController {
 
 			$variants = $this -> Collectible -> getCollectibleVariants($id);
 			$this -> set('variants', $variants);
+
+			//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
+			$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
+			$this -> set(compact('attributeCategories'));
+
+			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+			$this -> set(compact('scales'));
+
+			$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
+			$this -> set(compact('manufactures'));
 
 		} else {
 			$this -> render('viewMissing');
@@ -808,11 +855,21 @@ class CollectiblesController extends AppController {
 		 * Call the parent method now, that method handles pretty much everything now
 		 */
 		$this -> searchCollectible();
+		// I can use this to pull the pagination data off the request and pass it to the view
+		// although in the JSON view, I should be able to pull all of the data off the request
+		// and build out the JSON object and send that down, with access to the pagination
+		// information.  I can pass it as meta data that the client side script can then use
+		// to know how to make the next set of requests
+		debug($this -> request -> params['paging']['Collectible']);
+		if ($this -> request -> isAjax()) {
+			$this -> render('searchJson');
+		}
+
 	}
 
 	function catalog() {
 		//Updated to use modified desc, instead of created so I will get the latest ones added.
-		$recentlyAddedCollectibles = $this -> Collectible -> find('all', array('limit' => 20, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('Upload', 'Manufacture', 'Collectibletype', 'License'), 'order' => array('Collectible.modified' => 'desc')));
+		$recentlyAddedCollectibles = $this -> Collectible -> find('all', array('limit' => 20, 'conditions' => array('Collectible.state' => '0'), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'License'), 'order' => array('Collectible.modified' => 'desc')));
 		$this -> set(compact('recentlyAddedCollectibles'));
 
 		$manufactures = $this -> Collectible -> Manufacture -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('Manufacture.collectible_count' => 'desc')));
@@ -919,7 +976,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 
-		$this -> paginate = array("conditions" => array('state' => 1), "contain" => array('Manufacture', 'License', 'Collectibletype', 'Upload', 'CollectiblesTag' => array('Tag')));
+		$this -> paginate = array("conditions" => array('state' => 1), "contain" => array('Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')));
 
 		$collectilbes = $this -> paginate('Collectible');
 
@@ -935,8 +992,20 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'Upload', 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Attribute', 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 		$this -> set('collectible', $collectible);
+		debug($collectible);
+
+		//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
+		$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
+		$this -> set(compact('attributeCategories'));
+
+		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+		$this -> set(compact('scales'));
+
+		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
+		$this -> set(compact('manufactures'));
+
 	}
 
 	function admin_approve($id = null) {
@@ -958,33 +1027,48 @@ class CollectiblesController extends AppController {
 					$data['Revision']['notes'] = $this -> request -> data['Approval']['notes'];
 					if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
 						//Ugh need to get this again so I can get the Revision id
-						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
+						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
 						//update with the new revision id
-						if (isset($collectible['Upload']) && !empty($collectible['Upload'])) {
+						if (isset($collectible['CollectiblesUpload']) && !empty($collectible['CollectiblesUpload'])) {
 
-							$this -> Collectible -> Upload -> id = $collectible['Upload'][0]['id'];
-							if (!$this -> Collectible -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+							$this -> Collectible -> CollectiblesUpload -> id = $collectible['CollectiblesUpload'][0]['id'];
+							if (!$this -> Collectible -> CollectiblesUpload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+								//If it fails, let it pass but log the problem.
+								$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
+							}
+
+							$this -> Collectible -> CollectiblesUpload -> Upload -> id = $collectible['CollectiblesUpload'][0]['Upload']['id'];
+							if (!$this -> Collectible -> CollectiblesUpload -> Upload -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+								//If it fails, let it pass but log the problem.
+								$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
+							}
+							$this -> Collectible -> CollectiblesUpload -> Upload -> id = $collectible['CollectiblesUpload'][0]['Upload']['id'];
+							if (!$this -> Collectible -> CollectiblesUpload -> Upload -> saveField('status_id', 4)) {
 								//If it fails, let it pass but log the problem.
 								$this -> log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
 							}
 						}
-						//If I did set some attributes, lets update the revision ids for them as well.
+
 						if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
-							foreach ($collectible['AttributesCollectible'] as $key => &$value) {
-								$value['revision_id'] = $collectible['Collectible']['revision_id'];
-								unset($value['attribute_id']);
-								unset($value['collectible_id']);
-								unset($value['description']);
-								unset($value['active']);
-								unset($value['created']);
-								unset($value['modified']);
+							foreach ($collectible['AttributesCollectible'] as $key => $value) {
+								$this -> Collectible -> AttributesCollectible -> id = $value['id'];
+								if (!$this -> Collectible -> AttributesCollectible -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+									//If it fails, let it pass but log the problem.
+									$this -> log('Failed to update the AttributesCollectible with the revision id (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
+								}
+								$this -> Collectible -> AttributesCollectible -> Attribute -> id = $value['Attribute']['id'];
+								if (!$this -> Collectible -> AttributesCollectible -> Attribute -> saveField('status_id', 4)) {
+									//If it fails, let it pass but log the problem.
+									$this -> log('Failed to update the attribute with the status id of 4 (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
+								}
+								$this -> Collectible -> AttributesCollectible -> Attribute -> id = $value['Attribute']['id'];
+								if (!$this -> Collectible -> AttributesCollectible -> Attribute -> saveField('revision_id', $collectible['Collectible']['revision_id'])) {
+									//If it fails, let it pass but log the problem.
+									$this -> log('Failed to update the attribute with the revision id (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
+								}
+
 							}
 
-							//SINCE this is a new collectible and I am approving, this should be the newest of the collectible data out there so I should be fine with doing it on all attributes collectibles whose collectible io is the one I just approved.
-							if (!$this -> Collectible -> AttributesCollectible -> saveAll($collectible['AttributesCollectible'], array('validate' => false))) {
-								//If it fails, let it pass but log the problem.
-								$this -> log('Failed to update the AttributesCollectible with the collectible id and revision id for collectible ' . $collectible['Collectible']['id'], 'error');
-							}
 						}
 
 						$this -> __sendApprovalEmail(true, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);

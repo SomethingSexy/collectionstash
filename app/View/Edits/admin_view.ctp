@@ -1,54 +1,73 @@
 <div id="admin-edit" class="two-column-page">
 	<div class="inside">
-		<?php echo $this -> element('admin_actions');?>
+		<?php echo $this -> element('admin_actions'); ?>
 		<div class="page">
 			<div class="title">
-				<h2><?php echo __('Edit View');?></h2>
+				<h2><?php echo __('Edit View'); ?></h2>
 			</div>
-			<?php echo $this -> element('flash');?>
+			<?php echo $this -> element('flash'); ?>
 			<div class="standard-list collectible-edit-list">
-				<ul>
-					<li class="title">
-						<span class="collectible-id"><?php echo __('Id');?></span>
-						<span class="user-id"><?php echo __('User Id');?></span>
-						<span class="type"><?php echo __('Type');?></span>
-						<span class="timestamp"><?php echo __('Timestamp');?></span>
-						<span class="action"><?php echo __('Action');?></span>
-					</li>
+				<table class="table">
+					<thead>	
+						<tr>
+							<td><?php echo __('Id'); ?></td>
+							<td><?php echo __('User Id'); ?></td>
+							<td><?php echo __('Type'); ?></td>
+							<td><?php echo __('Timestamp'); ?></td>
+							<td><?php echo __('Action'); ?></td>
+						</tr>
+					</thead>
 					<?php
-                    foreach ($editDetail['Edits'] as $edit) {
-                        echo '<li>';
-                        echo '<span class="collectible-id">';
-                        echo $this -> Html -> link($editDetail['Edit']['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $editDetail['Edit']['collectible_id']));
-                        echo '</span>';
-                        echo '<span class="user-id">';
-                        echo $editDetail['User']['username'];
-                        echo '</span>';
-                        echo '<span class="type">';
-                        echo $edit['edit_type'];
-                        echo '</span>';
-                        echo '<span class="timestamp">';
-                        $datetime = strtotime($editDetail['Edit']['created']);
-                        $mysqldate = date("m/d/y g:i A", $datetime);
-                        echo $mysqldate;
-                        echo '</span>';
-                        echo '<span class="action">';
-                        if ($edit['edit_type'] === 'Collectible') {
-                            echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectible_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
-                        } else if ($edit['edit_type'] === 'Upload') {
-                            echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'upload_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
-                        } else if ($edit['edit_type'] === 'Attribute') {
-                            echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'attributes_collectibles_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
-                        } else if ($edit['edit_type'] === 'Tag') {
-                            echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles_tags', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
-                        }
+					foreach ($editDetail['Edits'] as $edit) {
+						echo '<tr>';
+						echo '<td class="collectible-id">';
 
-                        echo '</span>';
-                        echo '</li>';
-                    }
+						if ($edit['edit_type'] === 'Collectible') {
+							echo $this -> Html -> link($edit['base_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['base_id']));
+						} else if ($edit['edit_type'] === 'Attribute') {
+							echo $this -> Html -> link($edit['base_id'], array('admin' => false, 'controller' => 'attributes', 'action' => 'view', $edit['base_id']));
+						} else if ($edit['edit_type'] === 'Upload') {
+							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
+						} else if ($edit['edit_type'] === 'AttributesCollectible') {
+							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
+						} else if ($edit['edit_type'] === 'Tag') {
+							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
+						} else if ($edit['edit_type'] === 'CollectiblesUpload') {
+							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
+						}
+						echo '</td>';
+						echo '<td class="user-id">';
+						echo $editDetail['User']['username'];
+						echo '</td>';
+						echo '<td class="type">';
+						echo $edit['edit_type'];
+						echo '</td>';
+						echo '<td class="timestamp">';
+						$datetime = strtotime($editDetail['Edit']['created']);
+						$mysqldate = date("m/d/y g:i A", $datetime);
+						echo $mysqldate;
+						echo '</td>';
+						echo '<td class="action">';
+						if ($edit['edit_type'] === 'Collectible') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectible_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'Attribute') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'attributes', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'Upload') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'upload_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'AttributesCollectible') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'attributes_collectibles', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'Tag') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles_tags', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'CollectiblesUpload') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles_uploads', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						}
+
+						echo '</td>';
+						echo '</tr>';
+					}
 					?>
 
-				</ul>
+				</table>
 			</div>
 		</div>
 	</div>

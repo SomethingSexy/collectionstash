@@ -10,7 +10,7 @@
             <div class="series view">
                 <?php echo $this -> Form -> create('Collectibletype');?>
                 <fieldset>
-                    <ul class="form-fields">
+                    <ul class="form-fields unstyled">
                         <li>
                             <?php echo $this -> Form -> input('name', array('label'=>__('Name'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
                         </li>

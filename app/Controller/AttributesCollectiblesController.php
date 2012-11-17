@@ -1,6 +1,28 @@
 <?php
+/**
+ * We will now use this controller for all adding, editing and removing.
+ *
+ * We will now only be able to edit, add, remove one at a time from the UI
+ *
+ * This should make the controller code a lot less compliated
+ *
+ * however, this will have to handle...adding brand new attributes which will have to
+ * add a new Attribute (for approval) and add a new attribute collectible which will be an edit
+ * - If the attribute collectible is approved then we will automatically approve the attributr
+ * 	- If the attribute collectible is denied then we will automatically delete the attribute as well
+ *
+ * - Update will be standard, just updating the count for now
+ *
+ * - Removing
+ * 		- Will indicate if we are just remove the link or removing the link and deleting the attribute
+ *
+ *  To handle duplicates through this UI,  you would delete the link and the attribute and then add the new one
+ *
+ *
+ */
+App::uses('Sanitize', 'Utility');
 class AttributesCollectiblesController extends AppController {
-	public $helpers = array('Html', 'Ajax', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify', 'Tree', 'CollectibleDetail');
 
 	/**
 	 * This method will return the history for a given attributes collectible
@@ -23,6 +45,300 @@ class AttributesCollectiblesController extends AppController {
 
 		} else {
 			$this -> redirect($this -> referer());
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function add() {
+		$data = array();
+		//must be logged in to post comment
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to add an item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUserId());
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	public function admin_add() {
+		$data = array();
+		//must be logged and be an admin
+		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to add an item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUserId(), true);
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	/**
+	 * This will submit a removal.
+	 */
+	public function remove() {
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to remove this item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			debug($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUserId(), false);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	public function admin_remove() {
+		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to remove this item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			debug($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUserId(), true);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function update() {
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to update this item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			debug($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUserId(), false);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	public function admin_update() {
+		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to update this item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			debug($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUserId(), true);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function admin_approval($editId = null, $attributeEditId = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if ($editId && is_numeric($editId) && $attributeEditId && is_numeric($attributeEditId)) {
+			$this -> set('attributeEditId', $attributeEditId);
+			$this -> set('editId', $editId);
+			if (empty($this -> request -> data)) {
+				$attribute = $this -> AttributesCollectible -> getEditForApproval($attributeEditId);
+				debug($attribute);
+				if ($attribute) {
+					// method does not return deeper associaions, need to fix that at some point
+					$attributeCategory = $this -> AttributesCollectible -> Attribute -> AttributeCategory -> find("first", array('contain' => false, 'conditions' => array('AttributeCategory.id' => $attribute['Attribute']['attribute_category_id'])));
+
+					$attribute['Attribute']['AttributeCategory'] = $attributeCategory['AttributeCategory'];
+					$manufacturer = $this -> AttributesCollectible -> Attribute -> Manufacture -> find("first", array('contain' => false, 'conditions' => array('Manufacture.id' => $attribute['Attribute']['manufacture_id'])));
+					$attribute['Attribute']['Manufacture'] = $manufacturer['Manufacture'];
+					$scale = $this -> AttributesCollectible -> Attribute -> Scale -> find("first", array('contain' => false, 'conditions' => array('Scale.id' => $attribute['Attribute']['scale_id'])));
+					$attribute['Attribute']['Scale'] = $scale['Scale'];
+					$status = $this -> AttributesCollectible -> Attribute -> Status -> find("first", array('contain' => false, 'conditions' => array('Status.id' => $attribute['Attribute']['status_id'])));
+					$attribute['Attribute']['Status'] = $status['Status'];
+
+					// we also want to see any collectibles currently linked to this item
+					debug($attribute['Attribute']['id']);
+					$attributesCollectible = $this -> AttributesCollectible -> find("all", array('conditions' => array('Attribute.id' => $attribute['Attribute']['id'])));
+					debug($attributesCollectible);
+					$this -> set(compact('attributesCollectible'));
+
+					$this -> set(compact('attribute'));
+
+					//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
+					$attributeCategories = $this -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
+					$this -> set(compact('attributeCategories'));
+
+					$scales = $this -> AttributesCollectible -> Attribute -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
+					$this -> set(compact('scales'));
+
+					$manufactures = $this -> AttributesCollectible -> Attribute -> Manufacture -> getManufactureList();
+					$this -> set(compact('manufactures'));
+				} else {
+					//uh fuck you
+					$this -> redirect('/');
+				}
+			}
+
+		} else {
+			$this -> redirect('/');
+		}
+	}
+
+	public function isValid() {
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to update this item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+
+			$response = $this -> AttributesCollectible -> validateAttrbitue($this -> request -> data);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['isSuccess'] = false;
+				$data['errors'] = array('message', __('Invalid request.'));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['isSuccess'] = false;
+			$data['errors'] = array('message', __('Invalid request.'));
+			$this -> set('returnData', $data);
+			return;
 		}
 	}
 

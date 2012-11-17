@@ -9,7 +9,7 @@
 			<div class="licenses view">
 				<?php echo $this -> Form -> create('Manufacture');?>
 				<fieldset>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<li>
 							<?php echo $this -> Form -> input('title', array('label'=>__('Name'),'before' => '<div class="label-wrapper">','between'=>'</div>'));?>
 						</li>

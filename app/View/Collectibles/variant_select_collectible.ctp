@@ -2,7 +2,7 @@
 <div class="component" id="collectibles-list-component">
 	<div class="inside" >
 		<div class="component-title">
-			<h2><?php echo __('Contribute Variant - Select Collectible');?></h2>
+			<h2><?php echo __('Submit New Collectible Variant - Select Collectible');?></h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-info">

@@ -1,5 +1,5 @@
-<?php echo $this -> Html -> script('home', array('inline' => false)); ?>
-<?php echo $this -> Html -> css('layout/home'); ?>
+<?php echo $this -> Minify -> script('js/home', array('inline' => false)); ?>
+<?php echo $this -> Minify -> css('css/layout/home'); ?>
 <div id="home-components">
 	<div class="site-information">
 		<h3>
@@ -42,7 +42,7 @@
 				<?php echo __('Click the acorn icon on any collectible to add it to your stash.'); ?>
 			</li>
 			<li>
-				<?php echo __('If you don\'t see a collectible in our database click the "Contribute" link to submit it to our catalog.'); ?>
+				<?php echo __('If you don\'t see a collectible in our database click the "Submit New Collectible" link to submit it to our catalog.'); ?>
 			</li>
 			<li>
 				<?php echo __('Share and discuss your stash with the community!'); ?>
@@ -73,7 +73,7 @@
     	<?php echo $this -> Form -> create('User', array('action' => 'login')); ?>
 		<fieldset>
 			<legend><?php echo __('Sign In');?></legend>
-			<ul class="form-fields">
+			<ul class="form-fields unstyled">
 				<li>
 					<div class="input text">
 						<div class="label-wrapper">
@@ -87,13 +87,14 @@
 				</li>
 			</ul>
 		</fieldset>
-		<?php echo $this -> Form -> end('Login'); ?>
+		<input type="submit" value="Login" class="btn btn-primary">
+		<?php echo $this -> Form -> end(); ?>
     	</div>
     	<div class="registration">
 	      <?php echo $this -> Form -> create('User', array('action' => 'register')); ?>
 	        <fieldset>
 	        	<legend><?php echo __('Sign Up');?></legend>
-	          <ul class="form-fields">
+	          <ul class="form-fields unstyled">
 	            <li>
 	              <div class="label-wrapper">
 	                <label for="UserUsername"><?php echo __('User Name') ?></label>
@@ -132,7 +133,8 @@
 	            </li>
 	          </ul>
 	        </fieldset>
-	      <?php echo $this -> Form -> end(__('Sign Up!', true)); ?>
+	        <input type="submit" value="Sign Up!" class="btn btn-primary">
+	      <?php echo $this -> Form -> end(); ?>
       </div>
 	</div>    
   </div>

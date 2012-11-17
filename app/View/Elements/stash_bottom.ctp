@@ -6,9 +6,9 @@
 			</div>
 	</div>
 </div>
-<?php echo $this -> Html -> script('galleria-1.2.6', array('inline' => false));?>
-<?php echo $this -> Html -> script('galleria.classic.js', array('inline' => false));?>
-<?php echo $this -> Html -> css('galleria.classic');?>
+<?php echo $this -> Minify -> script('js/galleria-1.2.6', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/galleria.classic.js', array('inline' => false));?>
+<?php echo $this -> Minify -> css('css/galleria.classic');?>
 
 <script>
 	var photoData = [<?php

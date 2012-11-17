@@ -4,12 +4,28 @@
 			<h3><?php echo __('Collectibles');?></h3>
 			<ul>
 				<li>
-					<?php echo $this -> Html -> link('Pending', array('admin' => true, 'controller' => 'collectibles'), array('class' => 'link'));?>
-				</li>
-				<li>
-					<?php echo $this -> Html -> link('Edits', array('admin' => true, 'controller' => 'edits', 'action'=> 'index'), array('class' => 'link'));?>
+					<?php echo $this -> Html -> link('View Pending', array('admin' => true, 'controller' => 'collectibles'), array('class' => 'link'));?>
 				</li>
 			</ul>
+		</li>
+		<li>
+			<h3><?php echo __('Items');?></h3>
+			<ul>
+				<li>
+					<?php echo $this -> Html -> link('View Standalone Pending', array('admin' => true, 'controller' => 'attributes', true), array('class' => 'link'));?>
+				</li>
+				<li>
+					<?php echo $this -> Html -> link('View Collectible Pending', array('admin' => true, 'controller' => 'attributes', false), array('class' => 'link'));?>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<h3><?php echo __('Edits');?></h3>
+			<ul>
+				<li>
+					<?php echo $this -> Html -> link('View', array('admin' => true, 'controller' => 'edits', 'action'=> 'index'), array('class' => 'link'));?>
+				</li>
+			</ul>			
 		</li>
 		<li>
 			<h3><?php echo __('Manufacturers');?></h3>

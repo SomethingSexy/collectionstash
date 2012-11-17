@@ -8,9 +8,9 @@
             echo '<li>';
             if (isset($collectibleCore['CollectiblesTag']) && !empty($collectibleCore['CollectiblesTag'])) {
                 if ($adminMode) {
-                    echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil-gray.png'), array('admin' => false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleCore['Collectible']['id'], 'true'), array('title' => 'Edit Tags', 'escape' => false));
+                    echo $this -> Html -> link('<i class="icon-pencil icon-large"></i>', array('admin' => false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleCore['Collectible']['id'], 'true'), array('title' => 'Edit Tags', 'escape' => false));
                 } else {
-                    echo $this -> Html -> link($this -> Html -> image('/img/icon/pencil-gray.png'), array('admin' => false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleCore['Collectible']['id']), array('title' => 'Edit Tags', 'escape' => false));
+                    echo $this -> Html -> link('<i class="icon-pencil icon-large"></i>', array('admin' => false, 'controller' => 'collectibles_tags', 'action' => 'edit', $collectibleCore['Collectible']['id']), array('title' => 'Edit Tags', 'escape' => false));
                 }
             } else {
                 if ($adminMode) {

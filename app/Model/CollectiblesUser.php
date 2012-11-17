@@ -13,7 +13,8 @@ class CollectiblesUser extends AppModel {
 	//cost
 	'cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition size
-	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true), 'edition_sizeRule-1' => array('rule' => array('validateEditionSizeAndAP'), 'message' => 'Cannot have an edition size and be an artist\'s proof.')),
+	//'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true), 'edition_sizeRule-1' => array('rule' => array('validateEditionSizeAndAP'), 'message' => 'Cannot have an edition size and be an artist\'s proof.')),
+	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true)),
 	//condition
 	'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
 	//merchant
@@ -147,7 +148,7 @@ class CollectiblesUser extends AppModel {
 	 * Use this to get the CollectiblesUser, this will guarunetee that the correct data gets returned.
 	 */
 	public function getUserCollectible($id) {
-		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'Upload', 'License', 'Scale'))));
+		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
 	}
 
 	/**

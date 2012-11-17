@@ -1,11 +1,11 @@
-<?php echo $this -> Html -> script('tags', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/tags', array('inline' => false));?>
 <div id="bread-crumbs">
 	<?php echo $this -> Wizard -> progressMenu(array('manufacture' => 'Manufacturer Details', 'attributes' => 'Accessories/Features', 'tags'=> 'Tags', 'image' => 'Image', 'review' => 'Review'));?>
 </div>
 <div class="component" id="collectible-add-component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo __('Add New Collectible', true);?></h2>
+			<h2><?php echo __('Submit New Collectible', true);?></h2>
 		</div>
 		<?php echo $this -> element('flash');?>
 		<?php 
@@ -27,14 +27,10 @@
 						<?php echo __('Tags')
 						?>
 					</legend>
-					<ul class="form-fields">
+					<ul class="form-fields unstyled">
 						<li>
-							<div class="label-wrapper">
-								<label for=""> <?php __('Tags')
-									?></label>
-							</div>
 							<input type="text" maxlength="25" class="text-box" name="q" id="query" />
-							<input type="button" class="button" id="add-query" value="Add"/>
+							<button class="btn" id="add-query"><?php echo __('Add');?></button>
 							<?php //echo $this -> Form -> input('tag_id', array('div' => false, 'label' => false));?>
 						</li>
 					</ul>
@@ -55,7 +51,8 @@
 					}
 					?>
 				</ul>
-				<?php echo $this -> Form -> end(__('Submit', true));?>
+				<input type="submit" class="btn btn-primary" value="Submit"/>
+				<?php echo $this -> Form -> end();?>
 			</div>
 		</div>
 	</div>
