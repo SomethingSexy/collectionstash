@@ -17,12 +17,11 @@ class AttributesController extends AppController {
 	public $filters = array('m' => array('model' => 'Attribute', 'id' => 'manufacture_id'), 'c' => array('model' => 'Attribute', 'id' => 'attribute_category_id'), 's' => array('model' => 'Attribute', 'id' => 'scale_id'));
 
 	// public function balls() {
-		// $data['AttributeCategory']['parent_id'] = '1';
-		// $data['AttributeCategory']['name'] = 'Document';
-		// $this -> Attribute -> AttributeCategory -> recover();
-		// $this -> render(false);
+	// $data['AttributeCategory']['parent_id'] = '1';
+	// $data['AttributeCategory']['name'] = 'Document';
+	// $this -> Attribute -> AttributeCategory -> recover();
+	// $this -> render(false);
 	// }
-
 	/**
 	 * This method is used by the main catelog page to view all of the attributes
 	 */
@@ -341,7 +340,12 @@ class AttributesController extends AppController {
 				if ($attribute) {
 					// We also want to find all collectibles that this attribute is currently tied too
 					// Because this is an edit we want the base id
-					$attributesCollectible = $this -> Attribute -> AttributesCollectible -> find("all", array('conditions' => array('attribute_id' => $attribute['AttributeEdit']['base_id'])));
+					if (isset($attribute['AttributeEdit'])) {
+						$attributesCollectible = $this -> Attribute -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['AttributeEdit']['base_id'])));
+					} else {
+						$attributesCollectible = $this -> Attribute -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['Attribute']['base_id'])));
+					}
+
 					debug($attributesCollectible);
 					$this -> set(compact('attributesCollectible'));
 					$this -> set(compact('attribute'));
