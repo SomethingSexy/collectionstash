@@ -2100,7 +2100,7 @@ div.paging span a:hover {
 	width: 100%;
 	margin-top: 25px;
 }
-.comments-container button.btn-primary {
+.comments-container button#post-comment.btn-primary {
 	position: relative;
 	left: 825px;
 }

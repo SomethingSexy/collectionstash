@@ -22,7 +22,7 @@
 				this.element.addClass('comments-container');
 				this.element.prepend($('<div class="title"><h3>Discussion</h3></div>'));
 				//This is the comment list which will hold all comments
-				this.commentsList = $('<ol></ol>').addClass('comments');
+				this.commentsList = $('<ol></ol>').addClass('comments').addClass('unstyled');
 				//Add our comment list to our main element
 				this.element.append(this.commentsList);
 
