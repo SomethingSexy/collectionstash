@@ -341,7 +341,7 @@ class AttributesController extends AppController {
 				if ($attribute) {
 					// We also want to find all collectibles that this attribute is currently tied too
 					// Because this is an edit we want the base id
-					$attributesCollectible = $this -> Attribute -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['AttributeEdit']['base_id'])));
+					$attributesCollectible = $this -> Attribute -> AttributesCollectible -> find("all", array('conditions' => array('attribute_id' => $attribute['AttributeEdit']['base_id'])));
 					debug($attributesCollectible);
 					$this -> set(compact('attributesCollectible'));
 					$this -> set(compact('attribute'));
