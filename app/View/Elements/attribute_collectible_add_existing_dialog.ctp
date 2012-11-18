@@ -40,7 +40,7 @@
 						<?php echo $this -> element('search_collectible', array()); ?>
 					</div>
 					<div class="items">
-						<ul></ul>
+						<ul class="unstyled"></ul>
 					</div>
 					<div class="paging"></div>
 				</div>

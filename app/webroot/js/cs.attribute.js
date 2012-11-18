@@ -272,7 +272,7 @@ AttributesBase.prototype = {
 						var $listItem = $('<li></li>').html(title);
 
 						if ($.isArray(collectible.AttributesCollectible) && collectible.AttributesCollectible.length > 0) {
-							var $attributeList = $('<ul></ul>').addClass('attribute-list');
+							var $attributeList = $('<ul></ul>').addClass('attribute-list').addClass('unstyled');
 
 							$.each(collectible.AttributesCollectible, function(index, attribute) {
 								// If there is no category then don't show it, I think this is a problem
