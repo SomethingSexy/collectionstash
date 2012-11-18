@@ -7,4 +7,8 @@
 - When adding an attribute to a collectible, be able to search the list of attributes
 - Get Features back in
 - Admin section to change and update attribute categories
-- Procssing gif for editing attributes and shit 
+- Procssing gif for editing attributes and shit*************needed
+- When adding an existing attribute from a collectible indicate how many that collectible has
+- When adding an existing attribute we need to enhance it so that you can select a collectible and then select all of the attributes you want to add from that collectible - go WAY faster
+- In the collectible attribute list when adding existing, only show name or description...not both
+ 
