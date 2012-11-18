@@ -275,13 +275,18 @@ AttributesBase.prototype = {
 							var $attributeList = $('<ul></ul>').addClass('attribute-list');
 
 							$.each(collectible.AttributesCollectible, function(index, attribute) {
-								var pathName = attribute.Attribute.AttributeCategory.path_name;
-								var name = attribute.Attribute.name;
-								var description = attribute.Attribute.description;
+								// If there is no category then don't show it, I think this is a problem
+								// right now because we have some attributes that are still in the features list
+								if ( typeof attribute.Attribute.AttributeCategory !== 'undefined') {
+									var pathName = attribute.Attribute.AttributeCategory.path_name;
+									var name = attribute.Attribute.name;
+									var description = attribute.Attribute.description;
 
-								var $attributeItem = $('<li></li>').addClass('attribute').attr('data-id', attribute.Attribute.id).attr('data-attribute', JSON.stringify(attribute.Attribute));
-								$attributeItem.html('<span class="category">' + pathName + ' - </span> ' + name + ' ' + description);
-								$attributeList.append($attributeItem);
+									var $attributeItem = $('<li></li>').addClass('attribute').attr('data-id', attribute.Attribute.id).attr('data-attribute', JSON.stringify(attribute.Attribute));
+									$attributeItem.html('<span class="category">' + pathName + ' - </span> ' + name + ' ' + description);
+									$attributeList.append($attributeItem);
+								}
+
 							});
 							$listItem.append($attributeList);
 						} else {
