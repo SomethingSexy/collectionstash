@@ -27,7 +27,7 @@
 	</div>
 	<?php
     echo '<div class="collectible tags">';
-    echo '<ul class="tag-list">';
+    echo '<ul class="tag-list unstyled">';
     if (isset($collectibleCore['CollectiblesTag']) && !empty($collectibleCore['CollectiblesTag'])) {
         foreach ($collectibleCore['CollectiblesTag'] as $tag) {
             echo '<li class="tag"><span class="tag-name">';
