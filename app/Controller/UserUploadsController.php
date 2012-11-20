@@ -54,9 +54,26 @@ class UserUploadsController extends AppController {
 		$this -> checkLogIn();
 		if (Configure::read('Settings.User.uploads.allowed')) {
 			$uploads = $this -> UserUpload -> find('all', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
+			$returnData = array();
+			foreach ($uploads as $key => $value) {
+				$resizedImg = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+				$img = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
+				$uploadResponse = array();
+				$uploadResponse['url'] = $img['path'];
+				$uploadResponse['thumbnail_url'] = $resizedImg['path'];
+				$uploadResponse['type'] = $value['UserUpload']['type'];
+				$uploadResponse['size'] = intval($value['UserUpload']['size']);
+				$uploadResponse['name'] = $value['UserUpload']['name'];
+				$uploadResponse['delete_url'] = '/user_uploads/remove/' . $value['UserUpload']['id'];
+				$uploadResponse['edit_url'] = '/user_uploads/upload/' . $value['UserUpload']['id'];
+				$uploadResponse['delete_type'] = 'POST';
+
+				array_push($returnData, $uploadResponse);
+			}
+
 			//This is fucking bullshit but counter cache is not working right now
 			$uploadCount = $this -> UserUpload -> find('count', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
-			$this -> set(compact('uploads'));
+			$this -> set('uploads', $returnData);
 			$this -> set(compact('uploadCount'));
 			$this -> set('username', $this -> getUsername());
 		} else {
@@ -66,10 +83,10 @@ class UserUploadsController extends AppController {
 
 	}
 
-	public function upload($name = null) {
+	public function upload($id) {
 		$this -> checkLogIn();
-		if (!is_null($name)) {
-			$userUpload = $this -> UserUpload -> findByName($name);
+		if (!is_null($id)) {
+			$userUpload = $this -> UserUpload -> findById($id);
 			debug($userUpload);
 			if (!empty($userUpload)) {
 				$this -> set(compact('userUpload'));
@@ -142,115 +159,129 @@ class UserUploadsController extends AppController {
 	 */
 	public function add() {
 		$data = array();
-		$fake = true;
-		// This is necessary because for uploading photos, certain browsers that are not
-		// compliant with the newest standards will use an iframe instead of XHR, so we need
-		// to properly handle those browsers by returning the data in a slightly different
-		// format
-		if ($this -> request -> isAjax()) {
-			$fake = false;
-		}
-		$this -> set(compact('fake'));
-		if ($this -> isLoggedIn()) {
-			debug($this -> request -> data);
-			$this -> request -> data['UserUpload']['user_id'] = $this -> getUserId();
 
-			//Seriously, need counter cache to work
-			//Grab the count, if the current count is less than the total allowed, allow this one
+		//must be logged in to post comment
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to add an item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$uploadCount = $this -> UserUpload -> find('count', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
 			if ($uploadCount < Configure::read('Settings.User.uploads.total-allowed')) {
 				if ($this -> UserUpload -> isValidUpload($this -> request -> data)) {
-
+					$this -> request -> data['UserUpload']['user_id'] = $this -> getUserId();
 					if ($this -> UserUpload -> saveAll($this -> request -> data['UserUpload'])) {
 						//Grab the user id of the upload that was just added
 						$id = $this -> UserUpload -> id;
-						$userUpload = $this -> UserUpload -> findById($id);
-						/*
-						 * We do not want our images to be wider than 100 and higher than 200
-						 * This will handle resizing for us and then return the name and location
-						 * of the image that we resized
-						 */
-						$img = $this -> Image -> image($userUpload['UserUpload']['name'], array('width' => 100, 'height' => 200, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $this -> getUserId()));
-						$data['success'] = array('isSuccess' => true);
-						$data['isTimeOut'] = false;
-						$data['data'] = array();
-						$data['data']['imageLocation'] = $img['path'];
-						$data['data']['imageHeight'] = $img['height'];
-						$data['data']['imageName'] = $userUpload['UserUpload']['name'];
-						$data['data']['count'] = ++$uploadCount;
+						$upload = $this -> UserUpload -> findById($id);
+						$resizedImg = $this -> Image -> image($upload['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+						$img = $this -> Image -> image($upload['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
+						$retunData = array();
+						$uploadResponse = array();
+						$uploadResponse['url'] = $img['path'];
+						$uploadResponse['thumbnail_url'] = $resizedImg['path'];
+						$uploadResponse['type'] = $upload['UserUpload']['type'];
+						$uploadResponse['size'] = intval($upload['UserUpload']['size']);
+						$uploadResponse['name'] = $upload['UserUpload']['name'];
+						$uploadResponse['delete_url'] = '/user_uploads/remove/' . $upload['UserUpload']['id'];
+						$uploadResponse['delete_type'] = 'POST';
+						$uploadResponse['edit_url'] = '/user_uploads/upload/' . $value['UserUpload']['id'];
+						array_push($retunData, $uploadResponse);
+						$this -> set('returnData', $retunData);
 
 					} else {
-						$data['success'] = array('isSuccess' => false);
-						$data['isTimeOut'] = false;
-						$data['errors'] = array($this -> UserUpload -> validationErrors);
+						$retunData = array();
+						$uploadResponse = array();
+						$uploadResponse['error'] = $this -> UserUpload -> validationErrors;
+						array_push($retunData, $uploadResponse);
+						$this -> set('returnData', $retunData);
 					}
 				} else {
-					$data['success'] = array('isSuccess' => false);
-					$data['isTimeOut'] = false;
-					$data['errors'] = array($this -> UserUpload -> validationErrors);
+					$retunData = array();
+					$uploadResponse = array();
+					$uploadResponse['error'] = $this -> UserUpload -> validationErrors;
+					array_push($retunData, $uploadResponse);
+					$this -> set('returnData', $retunData);
 				}
 			} else {
-				$data['success'] = array('isSuccess' => false);
-				$data['isTimeOut'] = false;
-				$data['errors'][0] = array('totalAllowed' => 'You have reached the maximum number of uploads allowed.');
+				$retunData = array();
+				$uploadResponse = array();
+				$uploadResponse['error'] = __('You have reached your upload limit');
+				array_push($retunData, $uploadResponse);
+				$this -> set('returnData', $retunData);
 			}
-
 		} else {
-			//If they are not logged in and are trying to access this then just time them out
-			$data['success'] = array('isSuccess' => false);
-			$data['isTimeOut'] = true;
-			$data['data'] = array();
+			$retunData = array();
+			$uploadResponse = array();
+			$uploadResponse['error'] = __('Invalid Request');
+			array_push($retunData, $uploadResponse);
+			$this -> set('returnData', $retunData);
 		}
-
-		$this -> set('aUpload', $data);
-
 	}
 
-	public function delete() {
-		$data = array();
-		$this -> checkLogIn();
-		$this -> request -> data = Sanitize::clean($this -> request -> data);
-		debug($this -> request -> data);
-		//Grab the user name from the request
-		$uploadName = $this -> request -> data['UserUpload']['name'];
-		//TODO: update the error, so it doesn't log the user out,
-		if (!empty($uploadName)) {
-			$userUpload = $this -> UserUpload -> findByName($uploadName);
-			$this -> request -> data = $userUpload;
-			debug($userUpload);
+	public function remove($id) {
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to add an item.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if (!empty($id)) {
+			$userUpload = $this -> UserUpload -> findById($id);
 			if (!empty($userUpload)) {
 				if ($userUpload['UserUpload']['user_id'] === $this -> getUserId()) {
 					$this -> UserUpload -> id = $userUpload['UserUpload']['id'];
 					if ($this -> UserUpload -> delete($userUpload['UserUpload']['id'])) {
-						$data['success'] = array('isSuccess' => true);
-						$data['isTimeOut'] = false;
-						$data['data'] = array();
+						$retunData = array();
+						$uploadResponse = array();
+						array_push($retunData, $uploadResponse);
+						$this -> set('returnData', $retunData);
 					} else {
-						$data['success'] = array('isSuccess' => false);
-						$data['isTimeOut'] = false;
-						$data['errors'] = array($this -> UserUpload -> validationErrors);
-					}
+						$retunData = array();
+						$uploadResponse = array();
+						$uploadResponse['error'] = $this -> UserUpload -> validationErrors;
 
+						$this -> set('returnData', $retunData);
+					}
 				} else {
-					//return success false, trying to update upload user doesn't have access too
-					$data['success'] = array('isSuccess' => false);
-					$data['isTimeOut'] = true;
-					$data['data'] = array();
+					$retunData = array();
+					$uploadResponse = array();
+					$uploadResponse['error'] = __('Invalid Request');
+					array_push($retunData, $uploadResponse);
+					$this -> set('returnData', $retunData);
 				}
 			} else {
-				//return success false, invalid request
-				$data['success'] = array('isSuccess' => false);
-				$data['isTimeOut'] = true;
-				$data['data'] = array();
+				$retunData = array();
+				$uploadResponse = array();
+				$uploadResponse['error'] = __('Invalid Request');
+				array_push($retunData, $uploadResponse);
+				$this -> set('returnData', $retunData);
 			}
 		} else {
-			//return success false, invalid request
-			$data['success'] = array('isSuccess' => false);
-			$data['isTimeOut'] = true;
-			$data['data'] = array();
+			$retunData = array();
+			$uploadResponse = array();
+			$uploadResponse['error'] = __('Invalid Request');
+			array_push($retunData, $uploadResponse);
+			$this -> set('returnData', $retunData);
 		}
-		debug($data);
-		$this -> set('aUpload', $data);
+	}
+
+	public function gallery() {
+		// TODO: Going to need a privacy setting for uploads, that is separate from the stash
+		// because when I allow for more stashes, it won't make sense
+		$this -> paginate = array('limit' => 25, 'order' => array('created' => 'desc'), 'contain' => array('User'));
+		$userUploads = $this -> paginate('UserUpload');
+		$this -> set(compact('userUploads'));
 	}
 
 }

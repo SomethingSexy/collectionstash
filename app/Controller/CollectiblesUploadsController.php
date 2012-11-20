@@ -152,11 +152,7 @@ class CollectiblesUploadsController extends AppController {
 				$data['errors'] = array('message', __('Invalid request.'));
 				$this -> set('returnData', $data);
 			}
-
 		}
-
-		$data['error'] = 'test';
-		$this -> set('returnData', $data);
 	}
 
 	/**

@@ -117,23 +117,23 @@ class Edit extends AppModel {
 					$this -> bindModel(array('belongsTo' => array('Attribute')));
 					// At this point it has to be true, if this method returns
 					// false then we will end up stopping everything
-					$success = $this -> Attribute -> denyEdit($value['id']);
+					$success = $this -> Attribute -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('Attribute')));
 				} else if ($value['edit_type'] === 'AttributesCollectible') {
 					$this -> bindModel(array('belongsTo' => array('AttributesCollectible')));
-					$success = $this -> AttributesCollectible -> denyEdit($value['id']);
+					$success = $this -> AttributesCollectible -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('AttributesCollectible')));
 				} else if ($value['edit_type'] === 'CollectiblesUpload') {
 					$this -> bindModel(array('belongsTo' => array('CollectiblesUpload')));
-					$success = $this -> CollectiblesUpload -> denyEdit($value['id']);
+					$success = $this -> CollectiblesUpload -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('CollectiblesUpload')));
 				} else if ($value['edit_type'] === 'Tag') {
 					$this -> bindModel(array('belongsTo' => array('CollectiblesTag')));
-					$success = $this -> CollectiblesTag -> denyEdit($value['id']);
+					$success = $this -> CollectiblesTag -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('CollectiblesTag')));
 				} else if ($value['edit_type'] === 'Collectible') {
 					$this -> bindModel(array('belongsTo' => array('Collectible')));
-					$success = $this -> Collectible -> denyEdit($value['id'], $approvalUserId);
+					$success = $this -> Collectible -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('Collectible')));
 				}
 			}

@@ -42,7 +42,6 @@ class ImageComponent extends Component {
 			$img = $this -> _getImageById();
 		}
 		list($width, $height, $type, $attr) = getimagesize(WWW_ROOT . $this -> _htmlImage());
-		debug($height);
 		if ($img) {
 			
 			$returnArray = array();

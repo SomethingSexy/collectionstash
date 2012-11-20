@@ -43,29 +43,6 @@
 	
 	<script>
 		$(function() {
-			$("#login-dialog").dialog({
-				'autoOpen' : false,
-				'width' : 'auto',
-				'height' : 'auto',
-				'resizable' : false,
-				'modal' : true,
-				'buttons' : [{
-					'text' : 'Login',
-					'class' : 'btn btn-primary',
-					"click" : function() {
-						$('#UserLoginFormDialog').submit();
-					}
-				}]
-
-			});
-
-			$('#login-link').click(function() {
-				$('#UserUsername').val('');
-				$('#UserPassword').val('');
-				$('#UserLoginForm').find('#UserUsername').next('div.error-message').remove();
-				$('#login-dialog').dialog('open');
-				return false;
-			});
 			$('#q').focus(function() {
 				var firstTime = $('#q').data('firstTime');
 				if ( typeof firstTime === "undefined") {
@@ -73,7 +50,6 @@
 					$('#q').data('firstTime', false);
 				}
 			});
-
 		});
 	</script>
 	<script type="text/javascript">
@@ -142,12 +118,6 @@
 							<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'addSelectType', 'controller' => 'collectibles')); ?>
 						</li>
 						<?php } ?>
-						<li>
-							<?php echo $this -> Html -> link('Tags', array('admin' => false, 'controller' => 'tags')); ?>
-						</li>
-						<li>
-							<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
-						</li>
 						<li class="dropdown">
 							<?php echo $this -> Html -> link('Catalog<b class="caret"></b>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							
@@ -155,6 +125,12 @@
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
 								<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
 							</ul>
+						</li>
+						<li>
+							<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
+						</li>
+						<li>
+							<?php echo $this -> Html -> link('Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
 						</li>
 						<li>
 							<a href="/comments/"><?php echo __('Discussion') . '<span class="beta inner-text">Beta</span>'; ?></a>
@@ -189,7 +165,7 @@
 								{
 							?>
 							<li>
-								<a id='login-link' href="/users/login"><?php echo __('Login'); ?></a>
+								<a href="/users/login"><?php echo __('Login'); ?></a>
 							</li>
 							<?php
 							if (Configure::read('Settings.registration.open')) {
@@ -242,7 +218,7 @@
 				<li>Request a Feature</li>-->
 			</div>
 			<ul class="links unstyled">
-				<li>&copy; Collection Stash</li>
+				<li>&copy; Collection Stash v<?php echo Configure::read('Settings.version'); ?></li>
 			</ul>
 		
 	
@@ -252,47 +228,6 @@
 	 */
 		?>
 		<?php echo $this -> element('sql_dump'); ?>
-
-		<div id="login-dialog" class="dialog" title="Login">
-			<div class="component component-dialog">
-				<div class="inside" >
-					<div class="component-view">
-						<?php echo $this -> Form -> create('User', array('action' => 'login', 'id' => 'UserLoginFormDialog')); ?>
-						<fieldset>
-							<ul class="form-fields dialog-fields unstyled">
-								<li>
-									<div class="input text">
-										<div class="label-wrapper">
-											<label for="UserUsername"><?php echo __('Username'); ?></label>
-										</div>
-										<input id="UserUsername" type="text" maxlength="50" name="data[User][username]">
-									</div>
-								</li>
-								<li>
-									<?php echo $this -> Form -> input('password', array('label' => __('Password'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
-								</li>
-								<li>
-									<div class="input checkbox">
-										<div class="label-wrapper">
-											<label for="CollectibleExclusive"><?php echo __('Remember Me'); ?></label>
-										</div>
-										<?php echo $this -> Form -> input('auto_login', array('type' => 'checkbox', 'label' => false, 'div' => false)); ?>
-									</div>
-								</li>
-							</ul>
-							<?php
-							if (isset($request_params)) {
-								echo $this -> Form -> hidden('fromPage', array('value' => $this -> here . $request_params));
-							} else {
-								echo $this -> Form -> hidden('fromPage', array('value' => $this -> here));
-							}
-							?>
-						</fieldset>
-						<?php echo $this -> Form -> end(); ?>
-					</div>
-				</div>
-			</div>
-		</div>
 		
 		<div id="modal-gallery" class="modal modal-gallery hide fade" tabindex="-1">
 		    <div class="modal-header">
