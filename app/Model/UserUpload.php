@@ -31,29 +31,6 @@ class UserUpload extends AppModel {
 
 		}
 
-		// if (isset($uploadData['UserUpload']) && !empty($uploadData['UserUpload']) && isset($uploadData['UserUpload']['file']) && !empty($uploadData['UserUpload']['file'])) {
-		// if (isset($uploadData['UserUpload']['file']['error']) && empty($uploadData['UserUpload']['file']['error'])) {
-		// if (count($uploadData['UserUpload']) == 1) {
-		// //TODO check here to see if an error is set already
-		// if ($uploadData['UserUpload']['file']['name'] != '' || $uploadData['UserUpload']['url'] != '') {
-		// $validUpload = true;
-		// } else {
-		// $this -> validationErrors['file'] = 'Image is required.';
-		// }
-		// } else {
-		// $this -> validationErrors['file'] = 'Image is required.';
-		// }
-		// } else {
-		// if ($uploadData['UserUpload']['file']['error'] === 2) {
-		// $this -> validationErrors['file'] = 'The image you are uploading exceeds the file size limit.';
-		// } else {
-		// $this -> validationErrors['file'] = 'There was an issue uploading the image.';
-		// }
-		// }
-		// } else {
-		// $this -> validationErrors['file'] = 'Image is required.';
-		// }
-
 		return $validUpload;
 	}
 

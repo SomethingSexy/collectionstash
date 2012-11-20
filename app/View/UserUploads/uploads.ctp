@@ -1,158 +1,187 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false));?>
+<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false)); ?>
+<?php
+echo $this -> Minify -> script('js/jquery.iframe-transport', array('inline' => false));
+echo $this -> Minify -> script('js/cors/jquery.postmessage-transport', array('inline' => false));
+echo $this -> Minify -> script('js/jquery.getimagedata', array('inline' => false));
+echo $this -> Minify -> script('js/jquery.fileupload', array('inline' => false));
+echo $this -> Minify -> script('js/jquery.fileupload-fp', array('inline' => false));
+echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => false));
+
+echo $this -> Minify -> script('js/locale', array('inline' => false));
+?>
 <div id="user-uploads-component" class="component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo $username . '\'s' .__(' uploads', true)
-			?></h2>
+			<h2><?php echo $username . '\'s' .__(' uploads', true)?></h2>
 			<div class="actions">
 				<ul></ul>
 			</div>
 		</div>
-		<?php echo $this -> element('flash');?>
+		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
-			<div class="upload-component">
-				<div class="stats">
-					<span class="count"><?php echo __('Images') . ': <span id="user-count">' . $uploadCount . '</span>/' . Configure::read('Settings.User.uploads.total-allowed');?></span>
-				</div>
-				<form enctype="multipart/form-data" method="POST" action="/user_uploads/add.json" id="uploadForm" encoding="multipart/form-data">
-					<label>Image:</label>
-					<input type="hidden" value="2097152" name="MAX_FILE_SIZE">
-					<input id="upload-add-field" class="image-field" type="file" name="data[UserUpload][file]">
-					<input id="upload-add-button" class="add-button" type="submit" value="Add">
-				</form>
-				<div id="upload-error" class="upload-error">
-					<span class="error-message"></span>
-				</div>
+			<div class="stats">
+				<span class="count"><?php echo __('Images') . ': <span id="user-count">' . $uploadCount . '</span>/' . Configure::read('Settings.User.uploads.total-allowed'); ?></span>
 			</div>
-			<div id="images" class="images">
-				<?php
-
-				foreach ($uploads as $key => $value) {
-					echo '<div class="image" data-name="' . $value['UserUpload']['name'] . '" data-id="' . $value['UserUpload']['id'] . '">';
-					echo '<div class="image-container">';
-					echo '<a href="/user_uploads/upload/' . $value['UserUpload']['name'] . '">' . $this -> FileUpload -> image($value['UserUpload']['name'], array('width' => 100, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'])) . '</a>';
-					echo '</div>';
-					// echo '<div class="metadata">';
-					// echo $value['UserUpload']['title'];
-					// echo '</div>';
-					echo '<div class="actions">';
-					echo '<a class="link" href="/user_uploads/upload/' . $value['UserUpload']['name'] . '">Edit</a> | ';
-					echo '<a class="link delete">Delete</a>';
-					echo '</div>';
-					echo '</div>';
-				}
-				?>
-			</div>
+			<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
+				<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+				<div class="row fileupload-buttonbar">
+					<div class="span7">
+						<!-- The fileinput-button span is used to style the file input field as button -->
+						<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
+							<input type="file" name="data[UserUpload][file]" multiple>
+						</span>
+						<!--<button type="submit" class="btn btn-primary start">
+						<i class="icon-upload icon-white"></i>
+						<span>Start upload</span>
+						</button>
+						<button type="reset" class="btn btn-warning cancel">
+						<i class="icon-ban-circle icon-white"></i>
+						<span>Cancel upload</span>
+						</button>
+						<button type="button" class="btn btn-danger delete">
+						<i class="icon-trash icon-white"></i>
+						<span>Delete</span>
+						</button>
+						<input type="checkbox" class="toggle">-->
+					</div>
+					<!-- The global progress information -->
+					<div class="span5 fileupload-progress fade">
+						<!-- The global progress bar -->
+						<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+							<div class="bar" style="width:0%;"></div>
+						</div>
+						<!-- The extended global progress information -->
+						<div class="progress-extended">
+							&nbsp;
+						</div>
+					</div>
+				</div>
+				<!-- The loading indicator is shown during file processing -->
+				<div class="fileupload-loading"></div>
+				<br>
+				<div id="dropzone" class="fade well">
+					Drop files here
+				</div>
+				<br>
+				<!-- The table listing the files available for upload/download -->
+				<table role="presentation" class="table table-striped">
+					<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+				</table>
+			</form>
 		</div>
 	</div>
 </div>
 <script>
-	$(function() {
-		var biggestHeight = 0;
-		$('#images .image img').each(function() {
-			var imgHeight = $(this).height();
-			if(imgHeight > biggestHeight) {
-				biggestHeight = imgHeight;
-			}
-		});
-		$('#images .image').css('min-height', biggestHeight);
-		$(document).on('click', '#images .image .actions a.delete', function(event) {
-			var $image = $(this).parent('div.actions').parent('div.image');
-			var $img = $image.children('div.image-container');
-			var $actions = $image.children('div.actions');
-			var imageName = $(this).parent('div.actions').parent('div.image').attr('data-name');
-			var requestData = 'data[UserUpload][name]=' + imageName;
-			$.ajax({
-				url : '/user_uploads/delete.json',
-				data : requestData,
-				dataType : 'json',
-				type : 'POST',
-				beforeSend : function(xhr) {
-					var $loaderImg = $('<img class="loader-image"></img').attr('src', '/img/ajax-loader-circle.gif');
-					$img.hide();
-					$actions.hide();
-					$image.append($loaderImg);
-				},
-				success : function(data) {
-					if(data.success.isSuccess) {
-						//This saves me a DB call
-						$('#user-count').text(parseInt($('#user-count').text()) - 1);
-						$image.remove();
-					} else {
-						if(data.isTimeout) {
-							window.location = '/users/login';
-						} else {
-							$image.children('.loader-image').remove();
-							$image.children().show();
-						}
-					}
-				},
-				error : function(jqXHR, textStatus, errorThrown) {
+		$(function() {
 
-				},
-				complete : function(jqXHR, textStatus) {
+	$('#fileupload').fileupload({
+		dropZone : $('#dropzone'),
+		 error: function (jqXHR, textStatus, errorThrown) {
+        // Called for each failed chunk upload
+	    },
+	    success: function (data, textStatus, jqXHR) {
+	        // Called for each successful chunk upload
+	    }
+	});
+	$('#fileupload').bind('fileuploaddone', function (e, data) {
+		console.log(data.result);	
+	});
+	
+	$('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
 
-				}
-			});
-		});
-		$('#uploadForm').ajaxForm({
-			dataType : 'json',
-			beforeSubmit : function(a, f, o) {
-				$('#upload-error').children('span.error-message').text('');
-				if($('#upload-add-field').val() === '') {
-					return false;
-				} else {
-					var $img = $('<img></img').attr('src', '/img/ajax-loader-circle.gif');
-					var $imgWrapper = $('<div></div>').addClass('image-loader').addClass('image');
-					$imgWrapper.append($img);
-					$('#images').prepend($imgWrapper);
-					$('#upload-add-button').attr('disabled', 'disabled');
-					return true;
-				}
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				//console.log("errors");
-			},
-			success : function(data) {
-				if(data.success.isSuccess) {
-					var $out = $('#uploadOutput');
-					var $img = $('<img></img').attr('src', data.data.imageLocation);
-					var $imageContainer = $('<div></div>').addClass('image-container');
-					$imageContainer.append($img);
-					if(data.data.imageHeight > biggestHeight) {
-						$('#images .image').css('min-height', data.data.imageHeight);
-					}
-					//build actions
-					var $actions = $('<div></div>').addClass('actions');
-					var $edit = $('<a></a>').addClass('link').attr('href', '/user_uploads/upload/' + data.data.imageName).text('Edit');
-					var $delete = $('<a></a>').addClass('link delete').text('Delete');
-					$actions.append($edit).append(' | ').append($delete);
-					$('#images div.image:first-child').children().remove();
-					$('#images div.image:first-child').removeClass('image-loader');
-					$('#images div.image:first-child').attr('data-name', data.data.imageName);
-					$('#images div.image:first-child').prepend($imageContainer);
-					$('#images div.image:first-child').append($actions);
-					//using id cause I am lazy and it is faster
-					$('#user-count').text(data.data.count);
-				} else {
-					if(data.isTimeout) {
-						window.location = '/users/login';
-					} else {
-						$('#images div.image:first-child').remove();
-						if(data.errors[0]['totalAllowed']) {
-							$('#upload-error').children('span.error-message').text(data.errors[0]['totalAllowed']);
-						} else if(data.errors[0]['file']) {
-							$('#upload-error').children('span.error-message').text(data.errors[0]['file']);
-						} else {
-							$('#upload-error').children('span.error-message').text('Sorry, there was a problem with your upload.');
-						}
-					}
-				}
-			},
-			complete : function(xhr) {
-				$('#upload-add-button').removeAttr('disabled');
-			}
-		});
+	$('#fileupload').fileupload('option', {
+		url : '/user_uploads/add',
+		maxFileSize : 2097152,
+		maxNumberOfFiles : <?php echo Configure::read('Settings.User.uploads.total-allowed'); ?>,
+		acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
+		process : [{
+				action : 'load',
+				fileTypes : /^image\/(gif|jpeg|png)$/,
+				maxFileSize : 2097152 // 2MB
+			}, {
+				action : 'resize',
+				maxWidth : 1440,
+				maxHeight : 900
+			}, {
+				action : 'save'
+		}]
+	});
+	
+	$('#fileupload').bind('fileuploaddestroy', function(e, data) {
+		var filename = data.url.substring(data.url.indexOf("=") + 1);
+		//console.log(data);
 	});
 
+	var that = $('#fileupload');
+	that.fileupload('option', 'done').call(that, null, {
+		result : <?php echo $this -> Js -> object($uploads); ?>
+	});
+
+});
+
+</script>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+	{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-upload fade">
+	<td class="preview"><span class="fade"></span></td>
+	<td class="name"><span>{%=file.name%}</span></td>
+	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+	{% if (file.error) { %}
+	<td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+	{% } else if (o.files.valid && !i) { %}
+	<td>
+	<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+	</td>
+	<td class="start">{% if (!o.options.autoUpload) { %}
+	<button class="btn btn-primary">
+	<i class="icon-upload icon-white"></i>
+	<span>{%=locale.fileupload.start%}</span>
+	</button>
+	{% } %}</td>
+	{% } else { %}
+	<td colspan="2"></td>
+	{% } %}
+	<td class="cancel">{% if (!i) { %}
+	<button class="btn btn-warning">
+	<i class="icon-ban-circle icon-white"></i>
+	<span>{%=locale.fileupload.cancel%}</span>
+	</button>
+	{% } %}</td>
+	</tr>
+	{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+	{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-download fade">
+	{% if (file.error) { %}
+	<td></td>
+	<td class="name"><span>{%=file.name%}</span></td>
+	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+	<td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+	{% } else { %}
+	<td class="preview">{% if (file.thumbnail_url) { %}
+	<a href="{%=file.url%}" title="{%=file.name%}" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+	{% } %}</td>
+	<td class="name">
+	<a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+	</td>
+	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+	<td colspan="2"><span>{% if(file.pending) { %} {%=file.pendingText %} {% } %}</span></td>
+	<td class="edit">
+	<a class="btn" href="{%=file.edit_url%}">
+	<i class="icon-pencil icon-white"></i>
+	<span>Edit</span>
+	</a>
+	</td>
+	{% } %}
+	<td class="delete">
+	<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+	<i class="icon-trash icon-white"></i>
+	<span>{%=locale.fileupload.destroy%}</span>
+	</button>
+	</td>
+	</tr>
+	{% } %}
 </script>

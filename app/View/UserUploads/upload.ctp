@@ -53,8 +53,8 @@
 			if(!$(this).parent('div.metadata').hasClass('empty')){
 				$input.val($(this).text());
 			}
-			var $addButton = $('<input></input>').addClass('add-button').attr('type', 'button').val('Submit');
-			var $cancelButton = $('<input></input>').addClass('cancel-button').attr('type', 'button').val('Cancel');
+			var $addButton = $('<button></button>').addClass('btn').addClass('btn-primary').addClass('add-button').text('Submit');
+			var $cancelButton = $('<button></button>').addClass('btn').addClass('cancel-button').text('Cancel');
 			$inputWrapper.append($input).append($addButton).append($cancelButton);
 			$(this).parent().append($inputWrapper);
 		});

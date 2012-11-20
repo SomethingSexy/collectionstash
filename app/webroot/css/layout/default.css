@@ -856,11 +856,11 @@ div.radio label {
 	width: 100%;
 	margin-top: 25px;
 }
-#my-stashes-component .inside .component-view .tiles {
+.tiles {
 	float: left;
 	width: 100%;
 }
-#my-stashes-component .inside .component-view .tiles .tile {
+.tiles .tile {
 	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	float: left;
 	margin: 10px;
@@ -870,11 +870,11 @@ div.radio label {
 	background-color: #FFF;
 }
 
-#my-stashes-component .inside .component-view .tiles .tile.photo {
+.tiles .tile.photo {
 	height: 275px;
 }
 
-#my-stashes-component .inside .component-view .tiles .tile div.image {
+.tiles .tile div.image {
 	/*height: 150px;*/
 	text-align: center;
 	width: 200px;
@@ -882,22 +882,22 @@ div.radio label {
 	margin: auto;
 }
 
-#my-stashes-component .inside .component-view .tiles .tile.photo div.image {
+.tiles .tile.photo div.image {
 	height: 225px;
 }
 
-#my-stashes-component .inside .component-view .tiles .tile .description {
+.tiles .tile .description {
 	/*font-size: 0.7em;*/
 	margin-top: 5px;
 	color: #606060;
 	float: left;
 	width: 100%;
 }
-#my-stashes-component .inside .component-view .tiles .tile .header {
+.tiles .tile .header {
 	margin-bottom: 0.313em;
 	text-align: center;
 }
-#my-stashes-component .inside .component-view .tiles .tile .header a {
+.tiles .tile .header a {
 	/*font-size: 1em;*/
 	font-weight: 400;
 	line-height: 1.231em;
@@ -908,17 +908,17 @@ div.radio label {
 	-o-transition: color 0.3s ease 0s;
 	transition: color 0.3s ease 0s;
 }
-#my-stashes-component .inside .component-view .tiles .tile .header a:hover {
+.tiles .tile .header a:hover {
 	color: #606060;
 }
-#my-stashes-component .inside .component-view .tiles .tile .user-detail {
+.tiles .tile .user-detail {
 	color: #606060;
 	/*font-size: 0.7em;*/
 	text-align: center;
 	margin-top: 5px;
 	margin-left: 0;
 }
-#my-stashes-component .inside .component-view .tiles .tile .user-detail li {
+.tiles .tile .user-detail li {
 	display: inline-block;
 }
 

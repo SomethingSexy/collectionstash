@@ -215,7 +215,7 @@ class CollectiblesUpload extends AppModel {
 	/**
 	 * This method will deny the edit, in which case we will be deleting it
 	 */
-	public function denyEdit($editId) {
+	public function denyEdit($editId, $email = true) {
 		$retVal = false;
 		debug($editId);
 		// Grab the fields that will need to updated
@@ -240,10 +240,10 @@ class CollectiblesUpload extends AppModel {
 
 		}
 
-		if ($retVal) {
-			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'])));
-			$message = 'We have denied the following collectible upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($collectiblesUploadEditVersion['CollectiblesUploadEdit']['edit_user_id'], $message);
+		if ($retVal && $email) {
+			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectiblesUploadEdit['CollectiblesUploadEdit']['collectible_id'])));
+			$message = 'We have denied the following collectible upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEdit['CollectiblesUploadEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
+			$this -> notifyUser($collectiblesUploadEdit['CollectiblesUploadEdit']['edit_user_id'], $message);
 		}
 
 		return $retVal;
