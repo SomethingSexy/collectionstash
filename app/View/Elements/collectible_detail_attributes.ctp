@@ -163,4 +163,3 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 	}
 	?>
 </div>
-

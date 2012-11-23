@@ -422,19 +422,20 @@ AddAttributes.prototype.submit = function() {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				$.blockUI({
-					message : 'Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
@@ -576,19 +577,20 @@ AddCollectibleAttributes.prototype.submit = function() {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				$.blockUI({
-					message : 'Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
@@ -745,19 +747,20 @@ AddExistingCollectibleAttributes.prototype.submit = function() {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				$.blockUI({
-					message : 'Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
@@ -904,11 +907,16 @@ RemoveAttributes.prototype.submit = function(attribute) {
 	var self = this;
 
 	var id = attribute.getAttributeData().id;
-
+	var url = '/attributes/remove.json';
+	// If we are passing in an override admin or the options are set to admin mode
+	if (self.options.adminPage) {
+		url = '/admin/attributes/remove.json'
+	}
 	$('#AttributeRemoveForm').ajaxSubmit({
+
 		// dataType identifies the expected content type of the server response
 		dataType : 'json',
-		url : '/attributes/remove.json',
+		url : url,
 		beforeSubmit : function(formData, jqForm, options) {
 			formData.push({
 				name : '_method',
@@ -927,20 +935,20 @@ RemoveAttributes.prototype.submit = function(attribute) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				$.blockUI({
-					message : 'Removal has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
-
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
@@ -1053,20 +1061,20 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 				if (responseText.response.isSuccess) {
 					self.$dialog.dialog('close');
 					$.blockUI({
-						message : 'Removal has been submitted!',
+						message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
+						showOverlay : false,
 						css : {
-							border : 'none',
-							padding : '15px',
-							backgroundColor : ' #F1F1F1',
-							'-webkit-border-radius' : '10px',
-							'-moz-border-radius' : '10px',
-							color : '#222',
-							background : 'none repeat scroll 0 0 #F1F1F',
-							'border-radius' : '5px 5px 5px 5px',
-							'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+							top : '100px',
+							'background-color': '#DFF0D8',
+						    border: '1px solid #D6E9C6',
+						    'border-radius': '4px 4px 4px 4px',
+						    color: '#468847',
+						    'margin-bottom': '20px',
+						    padding: '8px 35px 8px 14px',
+						    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+							'z-index': 999999
 						},
-						timeout : 1000
-
+						timeout : 2000
 					});
 				} else {
 					if (responseText.response.errors) {
@@ -1234,20 +1242,20 @@ UpdateAttributes.prototype.submit = function(attribute) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
-					message : 'Update has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Update has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
-
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
@@ -1362,20 +1370,20 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
-					message : 'Update has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>Update has been submitted!',
+					showOverlay : false,
 					css : {
-						border : 'none',
-						padding : '15px',
-						backgroundColor : ' #F1F1F1',
-						'-webkit-border-radius' : '10px',
-						'-moz-border-radius' : '10px',
-						color : '#222',
-						background : 'none repeat scroll 0 0 #F1F1F',
-						'border-radius' : '5px 5px 5px 5px',
-						'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+						top : '100px',
+						'background-color': '#DFF0D8',
+					    border: '1px solid #D6E9C6',
+					    'border-radius': '4px 4px 4px 4px',
+					    color: '#468847',
+					    'margin-bottom': '20px',
+					    padding: '8px 35px 8px 14px',
+					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index': 999999
 					},
-					timeout : 1000
-
+					timeout : 2000
 				});
 			} else {
 				if (responseText.response.errors) {
