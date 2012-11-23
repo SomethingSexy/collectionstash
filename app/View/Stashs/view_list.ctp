@@ -51,7 +51,7 @@
 		echo '<thead>';
 		echo '<tr>';
 		echo '<th></th>';
-		echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer<i class="icon-caret-up"></i>', array('escape' => false)) . '</th>';
+		echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer') . '</th>';
 		echo '<th>' . $this -> Paginator -> sort('Collectible.name', 'Name') . '</th>';
 		echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
 		echo '<th>' . $this -> Paginator -> sort('cost', 'Price Paid') . '</th>';

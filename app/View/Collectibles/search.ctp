@@ -1,12 +1,14 @@
 <div class="component" id="collectibles-list-component">
 	<div class="inside" >
-		<div class="component-title">
-			<h2>
-			<?php echo __('Search Results');?>
-			</h2>
-		</div>
 		<?php echo $this -> element('flash');?>
 		<div class="component-view">
+			<div class="title">
+				<h3><?php echo __('Search Results'); ?></h3>
+			    <div class="btn-group views">
+			    	<?php echo '<a class="btn" href="/stashs/view/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>'; ?>
+			    	<?php echo '<a class="btn" href="/stashs/view/' . $stashUsername . '/list"><i class="icon-list"></i></a>'; ?>
+			    </div>
+			</div>
 			<?php echo $this -> element('search_filters', array('searchUrl'=>'/collectibles/search'));?>
 			<div class="collectibles view" data-toggle="modal-gallery" data-target="#modal-gallery">				
 				<?php

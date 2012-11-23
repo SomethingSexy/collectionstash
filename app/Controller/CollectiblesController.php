@@ -863,7 +863,27 @@ class CollectiblesController extends AppController {
 		debug($this -> request -> params['paging']['Collectible']);
 		if ($this -> request -> isAjax()) {
 			$this -> render('searchJson');
+		} else {
+			$this -> set('viewType', 'list');
+			$this -> render('searchList');
 		}
+
+	}
+
+	function searchTiles($type = 'list') {
+		/*
+		 * Call the parent method now, that method handles pretty much everything now
+		 */
+		$this -> searchCollectible();
+		// I can use this to pull the pagination data off the request and pass it to the view
+		// although in the JSON view, I should be able to pull all of the data off the request
+		// and build out the JSON object and send that down, with access to the pagination
+		// information.  I can pass it as meta data that the client side script can then use
+		// to know how to make the next set of requests
+		debug($this -> request -> params['paging']['Collectible']);
+
+		$this -> set('viewType', 'tiles');
+		$this -> render('searchTiles');
 
 	}
 
