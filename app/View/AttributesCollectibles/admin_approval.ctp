@@ -194,7 +194,7 @@ echo $this -> Minify -> script('js/cs.attribute', array('inline' => false));
 						echo '</tbody>';
 						echo '</table>';
 					} else {
-						echo '<div class="standard-list empty"><ul>';
+						echo '<div class="standard-list empty"><ul class="unstyled">';
 						echo '<li>No Collectibles are linked to this item.</li>';
 						echo '<ul><div>';
 					}
