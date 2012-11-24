@@ -22,7 +22,7 @@ unset($urlparams['url']);
  			?>
 			<div class="collectibles view" data-toggle="modal-gallery" data-target="#modal-gallery">				
 				<?php
-				echo '<table class="table">';
+				echo '<table class="table table-striped">';
 				echo '<thead>';
 				echo '<tr>';
 				echo '<th> </th>';
