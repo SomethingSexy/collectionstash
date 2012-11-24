@@ -14,11 +14,11 @@ unset($urlparams['url']);
 			    </div>
 			</div>
 			<?php
-				$url = '/collectibles/search/list';
-				if ($viewType === 'tiles') {
-					$url = '/collectibles/searchTiles/';
-				}
-				echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
+			$url = '/collectibles/search/list';
+			if ($viewType === 'tiles') {
+				$url = '/collectibles/searchTiles/';
+			}
+			echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
  			?>
 			<div class="collectibles view" data-toggle="modal-gallery" data-target="#modal-gallery">				
 				<?php
@@ -27,6 +27,7 @@ unset($urlparams['url']);
 				echo '<tr>';
 				echo '<th> </th>';
 				echo '<th>' . $this -> Paginator -> sort('name', 'Name') . '</th>';
+				echo '<th>' . $this -> Paginator -> sort('Collectible.variant', 'Variant', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Type', array('escape' => false)) . '</th>';
@@ -52,7 +53,16 @@ unset($urlparams['url']);
 					} else {
 						echo '<td> </td>';
 					}
-					echo '<td>' . $collectible['Collectible']['name'] . '</td>';
+					echo '<td>' . $collectible['Collectible']['name'];
+					if ($collectible['Collectible']['exclusive']) {
+						 echo __(' - Exclusive');
+					}
+					echo '</td>';
+					if($collectible['Collectible']['variant']){
+						echo '<td>'. __('Yes') .'</td>';
+					} else {
+						echo '<td>' . __('No') .' </td>';
+					}
 					echo '<td>' . $collectible['Manufacture']['title'] . '</td>';
 					echo '<td>' . $collectible['License']['name'] . '</td>';
 					echo '<td>' . $collectible['Collectibletype']['name'] . '</td>';
