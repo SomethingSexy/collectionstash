@@ -1109,6 +1109,9 @@ div.radio label {
 	vertical-align: top;
 	color: #999999;
 }
+.two-column-page .inside .page .view .manufacturer.detail {
+	overflow: hidden;
+}
 .attribute.detail dl dd.changed, .collectible.detail dl dd.changed {
 	font-weight: bold;
 	color: red;
