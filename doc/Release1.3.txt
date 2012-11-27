@@ -40,6 +40,8 @@ cake -app D:\Development\wamp\www\app build_attribute_category_path
 
 cake -app D:\Development\wamp\www\app uploads_converter
 
+cake -app D:\Development\wamp\www\app add_new_stash
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
