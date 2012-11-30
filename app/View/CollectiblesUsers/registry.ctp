@@ -25,7 +25,7 @@
 					if ($value['User']['Stash'][0]['privacy'] === '0') {
 						echo '<tr>';
 						echo '<td>';
-						echo '<a href="/stashs/view/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
+						echo '<a href="/stash/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
 						echo '</td>';
 						if ($showEditionSize) {
 							echo '<td>';
@@ -58,7 +58,7 @@
 					if ($value['User']['Stash'][0]['privacy'] === '0') {
 						echo '<tr>';
 						echo '<td>';
-						echo '<a href="/stashs/view/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
+						echo '<a href="/wishlist/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
 						echo '</td>';
 						echo '</tr>';
 					}

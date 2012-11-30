@@ -1796,9 +1796,6 @@ div.paging span a:hover {
 /***********************************
  * Registry component
  */
-#registry-component .inside .component-view .standard-list {
-	width: 250px;
-}
 #registry-component .inside .component-view .standard-list.edition-size {
 	width: 500px;
 }
