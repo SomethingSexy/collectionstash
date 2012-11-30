@@ -2,7 +2,7 @@
 $config['Settings'] = Configure::read('Settings');
 
 $config['Settings'] = Set::merge($config['Settings'], array(
-	'version' => '1.6.1',
+	'version' => '1.7',
   	'title' => 'My Application',
   	'registration' => array(
   		'open' => true,
