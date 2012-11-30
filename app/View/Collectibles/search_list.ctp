@@ -1,3 +1,4 @@
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <?php
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
@@ -20,7 +21,7 @@ unset($urlparams['url']);
 			}
 			echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
  			?>
-			<div class="collectibles view" data-toggle="modal-gallery" data-target="#modal-gallery">				
+			<div class="collectibles view stashable" data-toggle="modal-gallery" data-target="#modal-gallery">				
 				<?php
 				echo '<table class="table table-striped">';
 				echo '<thead>';
@@ -32,7 +33,7 @@ unset($urlparams['url']);
 				echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Type', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.specialized_type_id', 'Manufacturer Type', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Owned By', array('escape' => false)) . '</th>';
+				echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false)) . '</th>';
 				echo '<th>' . __('Actions') . '</th>';
 				echo '</tr>';
 
@@ -55,13 +56,13 @@ unset($urlparams['url']);
 					}
 					echo '<td>' . $collectible['Collectible']['name'];
 					if ($collectible['Collectible']['exclusive']) {
-						 echo __(' - Exclusive');
+						echo __(' - Exclusive');
 					}
 					echo '</td>';
-					if($collectible['Collectible']['variant']){
-						echo '<td>'. __('Yes') .'</td>';
+					if ($collectible['Collectible']['variant']) {
+						echo '<td>' . __('Yes') . '</td>';
 					} else {
-						echo '<td>' . __('No') .' </td>';
+						echo '<td>' . __('No') . ' </td>';
 					}
 					echo '<td>' . $collectible['Manufacture']['title'] . '</td>';
 					echo '<td>' . $collectible['License']['name'] . '</td>';
@@ -82,7 +83,9 @@ unset($urlparams['url']);
 					echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 					echo '<ul class="dropdown-menu">';
 					if ($isLoggedIn) {
-						echo '<li><a title="Add to stash" href="/collectibles_users/add/' . $collectible['Collectible']['id'] . '">Add to Stash</a></li>';
+						echo '<li><a title="Add to Stash" href="/collectibles_users/add/' . $collectible['Collectible']['id'] . '">Add to Stash</a></li>';
+						echo '<li><a data-stash-type="Default" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#">Quick Add to Stash</a></li>';
+						echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#">Add to Wishlist</a></li>';
 					}
 
 					echo '<li>';

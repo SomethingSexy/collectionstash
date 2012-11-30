@@ -907,6 +907,10 @@ div.radio label {
 	display: inline-block;
 }
 
+.tiles .tile .add-to-stash {
+	float: right;
+}
+
 #my-stashes-component .inside .component-view .comments-container {
 	margin-top: 0;
 }

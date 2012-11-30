@@ -66,5 +66,12 @@ class Stash extends AppModel {
 		return $stats;
 	}
 
+	/**
+	 * Given a user id and a stash type, return the stash
+	 */
+	public function getStash($userId, $stashType = 'Default') {
+		return $this -> find('first', array('conditions' => array('Stash.user_id' => $userId, 'Stash.name' => $stashType)));
+	}
+
 }
 ?>

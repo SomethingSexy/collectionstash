@@ -1,3 +1,4 @@
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <?php
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
@@ -26,7 +27,7 @@ echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 				echo '<div id="titles-nav" class="hidden">';
 				echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 				echo '</div>';
-				echo '<div class="tiles" data-toggle="modal-gallery" data-target="#modal-gallery">';
+				echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 				foreach ($collectibles as $collectible) {
 					echo '<div class="tile">';
@@ -51,12 +52,11 @@ echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 					echo '<ul class="user-detail">';
 					echo '<li>';
 					echo '</ul>';
-					echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to stash">';
+					echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to Stash">';
 					echo '<img src="/img/icon/add_stash_link_25x25.png">';
 					echo  '</a>';
+					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
 					echo '</li>';
-
-
 					echo '</div>';
 				}
 				echo '</div>';
@@ -100,5 +100,5 @@ echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 				$container.masonry('appended', $newElems, true);
 			});
 		});
-	});
+	}); 
 </script>

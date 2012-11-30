@@ -21,7 +21,7 @@ class User extends AppModel {
 	//password
 	'new_password' => array('samePass' => array('rule' => array('validateSamePassword'), 'required' => true, 'allowEmpty' => false, 'message' => 'Password and confirm password are not the same.'), 'validChars' => array('rule' => array('validatePasswordChars'), 'last' => true, 'message' => 'Must be at least 8 characters long and contain one uppercase and one numeric.')),
 	//email
-	'email' => array('validValues' => array('rule' => array('email', true), 'required' => true, 'allowEmpty' => false,  'message' => 'Enter a valid email'),
+	'email' => array('validValues' => array('rule' => array('email', true), 'required' => true, 'allowEmpty' => false, 'message' => 'Enter a valid email'),
 	//Unique email
 	'uniqueEmail' => array('rule' => array('isUnqiueEmail'), 'message' => 'A user with that email already exists.')),
 	//first
@@ -188,10 +188,14 @@ class User extends AppModel {
 		$userData['Stash'] = array();
 		$userData['Stash']['0'] = array();
 		$userData['Stash']['0']['name'] = 'Default';
-		$userData['Stash']['0']['total_count'] = 0;
 		//Need to put this here to create the entity
 		// TODO: Update Stash to use the EntityTypeBehavior to automate this shit
 		$userData['Stash']['0']['EntityType']['type'] = 'stash';
+		$userData['Stash']['1'] = array();
+		$userData['Stash']['1']['name'] = 'Wishlist';
+		//Need to put this here to create the entity
+		// TODO: Update Stash to use the EntityTypeBehavior to automate this shit
+		$userData['Stash']['1']['EntityType']['type'] = 'stash';
 		if ($this -> saveAssociated($userData, array('deep' => true))) {
 			//Find the user
 			$user = $this -> find("first", array('conditions' => array('User.id' => $this -> id)));

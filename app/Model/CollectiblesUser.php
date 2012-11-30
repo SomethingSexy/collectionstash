@@ -16,9 +16,9 @@ class CollectiblesUser extends AppModel {
 	//'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true), 'edition_sizeRule-1' => array('rule' => array('validateEditionSizeAndAP'), 'message' => 'Cannot have an edition size and be an artist\'s proof.')),
 	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true)),
 	//condition
-	'condition_id' => array('rule' => 'numeric', 'required' => true, 'message' => 'Required.'),
+	'condition_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid condition.'),
 	//merchant
-	'merchant_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Required.'),
+	'merchant_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid Merchant.'),
 	//purchase date
 	'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
 	//artist proof
@@ -42,8 +42,10 @@ class CollectiblesUser extends AppModel {
 	}
 
 	function beforeSave() {
-		$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
-		$this -> data['CollectiblesUser']['cost'] = str_replace(',', '', $this -> data['CollectiblesUser']['cost']);
+		if (isset($this -> data['CollectiblesUser']['cost'])) {
+			$this -> data['CollectiblesUser']['cost'] = str_replace('$', '', $this -> data['CollectiblesUser']['cost']);
+			$this -> data['CollectiblesUser']['cost'] = str_replace(',', '', $this -> data['CollectiblesUser']['cost']);
+		}
 
 		if (isset($this -> data['CollectiblesUser']['purchase_date'])) {
 			if (empty($this -> data['CollectiblesUser']['purchase_date'])) {
@@ -157,13 +159,50 @@ class CollectiblesUser extends AppModel {
 	 */
 	public function getListOfUsersWho($collectibleId, $editionSize = false) {
 		if ($editionSize) {
-			$data = $this -> find("all", array('order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		} else {
-			$data = $this -> find("all", array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		}
 
 		debug($data);
 		return $data;
+	}
+
+	public function getListOfUserWishlist($collectibleId) {
+		$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Wishlist"'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+		return $data;
+	}
+
+	public function add($data, $userId, $stashType = 'Default') {
+		$retVal = array();
+		$retVal['response'] = array();
+		$retVal['response']['isSuccess'] = false;
+		$retVal['response']['message'] = '';
+		$retVal['response']['code'] = 0;
+		$retVal['response']['errors'] = array();
+
+		if (empty($data) || empty($userId)) {
+			array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+			return $retVal;
+		}
+
+		// Give the user id and the stash type, we need to figure out what
+		// stash to add this too
+		$stash = $this -> Stash -> getStash($userId, $stashType);
+		if (!empty($stash)) {
+			$data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
+			$data['CollectiblesUser']['user_id'] = $userId;
+			if ($this -> save($data)) {
+				$retVal['response']['isSuccess'] = true;
+			} else {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
+				$retVal['response']['errors'] = $errors;
+			}
+		}
+
+		return $retVal;
+
 	}
 
 }
