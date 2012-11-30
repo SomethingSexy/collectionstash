@@ -43,6 +43,8 @@ class CollectiblesUsersController extends AppController {
 
 	/**
 	 * This method adds a collectible to a user's stash
+	 *
+	 * TODO: Update this at some point to make it ajax
 	 */
 	public function add($id = null) {
 		$this -> checkLogIn();
@@ -51,7 +53,7 @@ class CollectiblesUsersController extends AppController {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency')));
 			if (!empty($this -> request -> data)) {
 				if (isset($collectible) && !empty($collectible)) {
-					
+
 					//This returns all collectibles in this stash if I ever need them
 					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => false, 'conditions' => array('Stash.user_id' => $user['User']['id'])));
 					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
@@ -139,43 +141,57 @@ class CollectiblesUsersController extends AppController {
 		//probably make them all the same at some point TODO
 		if ($this -> request -> isAjax()) {
 			$data = array();
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$data['response']['errors'] = array();
+			//must be logged in to post comment
 			if (!$this -> isLoggedIn()) {
-				$data['success'] = array('isSuccess' => false);
-				$data['error']['message'] = __('You must be logged in to remove your collectible.');
+				$error = array('message' => __('You must be logged in to add an item.'));
+				$error['inline'] = false;
+
+				array_push($data['response']['errors'], $error);
 				$this -> set('removeCollectiblesUsers', $data);
 				return;
 			}
-			if (($this -> request -> is('post') || $this -> request -> is('put')) && isset($this -> request -> data['CollectiblesUsers']['id'])) {
-				$this -> request -> data = Sanitize::clean($this -> request -> data);
-				$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $this -> request -> data['CollectiblesUsers']['id']), 'contain' => array('User')));
-				if (isset($collectiblesUser) && !empty($collectiblesUser)) {
-					$loggedInUserId = $this -> getUserId();
-					if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
-						if ($this -> CollectiblesUser -> delete($this -> request -> data['CollectiblesUsers']['id'])) {
-							$data['success'] = array('isSuccess' => true);
-							$this -> set('removeCollectiblesUsers', $data);
-							return;
+			if ($this -> request -> is('post') || $this -> request -> is('put')) {
+				$id = Sanitize::clean($id);
+
+				if (!is_null($id) && is_numeric($id)) {
+					$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User')));
+					if (isset($collectiblesUser) && !empty($collectiblesUser)) {
+						$loggedInUserId = $this -> getUserId();
+						if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
+							if ($this -> CollectiblesUser -> delete($id)) {
+								$data['response']['isSuccess'] = true;
+								$this -> set('removeCollectiblesUsers', $data);
+								return;
+							} else {
+								$data['response']['isSuccess'] = false;
+								array_push($data['response']['errors'], array('message' => __('Invalid request.')));
+								$this -> set('removeCollectiblesUsers', $data);
+								return;
+							}
 						} else {
-							$data['success'] = array('isSuccess' => false);
-							$data['error']['message'] = __('Invalid access.');
+							$data['response']['isSuccess'] = false;
+							array_push($data['response']['errors'], array('message' => __('Invalid request.')));
 							$this -> set('removeCollectiblesUsers', $data);
 							return;
 						}
 					} else {
-						$data['success'] = array('isSuccess' => false);
-						$data['error']['message'] = __('Invalid access.');
+						$data['response']['isSuccess'] = false;
+						array_push($data['response']['errors'], array('message' => __('Invalid request.')));
 						$this -> set('removeCollectiblesUsers', $data);
 						return;
 					}
 				} else {
-					$data['success'] = array('isSuccess' => false);
-					$data['error']['message'] = __('Invalid collectible.');
+					$data['response']['isSuccess'] = false;
+					array_push($data['response']['errors'], array('message' => __('Invalid request.')));
 					$this -> set('removeCollectiblesUsers', $data);
 					return;
 				}
 			} else {
-				$data['success'] = array('isSuccess' => false);
-				$data['error']['message'] = __('Invalid request.');
+				$data['response']['isSuccess'] = false;
+				array_push($data['response']['errors'], array('message' => __('Invalid request.')));
 				$this -> set('removeCollectiblesUsers', $data);
 				return;
 			}
@@ -209,14 +225,58 @@ class CollectiblesUsersController extends AppController {
 
 	}
 
+	// I might maintain 2 add functions because they will do different things
+	// Quick add will be for when you are adding something without entering any
+	// information or you are adding to your wishlist.
+	public function quickAdd($id, $type = 'Default') {
+		$data = array();
+		$data['response'] = array();
+		$data['response']['isSuccess'] = false;
+		$data['response']['errors'] = array();
+		//must be logged in to post comment
+		if (!$this -> isLoggedIn()) {
+			$error = array('message' => __('You must be logged in to add an item.'));
+			$error['inline'] = false;
+
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$id = Sanitize::clean($id);
+			$type = Sanitize::clean($type);
+			$collectiblesUser = array();
+			$collectiblesUser['CollectiblesUser']['collectible_id'] = $id;
+			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUserId(), $type);
+
+			if ($response) {
+				$this -> set('returnData', $response);
+			} else {
+				//Something really fucked up
+				$data['response']['isSuccess'] = false;
+				array_push($data['response']['errors'], array('message' => __('Invalid request.')));
+				$this -> set('returnData', $data);
+			}
+		} else {
+			$data['response']['isSuccess'] = false;
+			array_push($data['response']['errors'], array('message' => __('Invalid request.')));
+			$this -> set('returnData', $data);
+			return;
+		}
+	}
+
 	public function registry($id = null) {
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			if (!empty($collectible)) {
 				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id, $collectible['Collectible']['numbered']);
+				
+				$wishlist = $this -> CollectiblesUser -> getListOfUserWishlist($id);
 				debug($usersWho);
 				$this -> set('showEditionSize', $collectible['Collectible']['numbered']);
 				$this -> set('registry', $usersWho);
+				
+				$this -> set('wishlist', $wishlist);
 			} else {
 				$this -> redirect("/", null, true);
 			}

@@ -13,6 +13,7 @@
 		<div class="component-view">
 			<?php
 			if (isset($registry) && !empty($registry)) {
+				echo '<h4>Owned:</h4>';
 				echo '<table class="table">';
 				echo '<tr>';
 				echo '<th>' . __('User name', true) . '</th>';
@@ -45,6 +46,24 @@
 				echo '<li>No one owns this collectible.</li>';
 				echo '</ul>';
 				echo '</div>';
+			}
+
+			if (isset($wishlist) && !empty($wishlist)) {
+				echo '<h4>Wishlisted:</h4>';
+				echo '<table class="table">';
+				echo '<tr>';
+				echo '<th>' . __('User name', true) . '</th>';
+				echo '</tr>';
+				foreach ($wishlist as $key => $value) {
+					if ($value['User']['Stash'][0]['privacy'] === '0') {
+						echo '<tr>';
+						echo '<td>';
+						echo '<a href="/stashs/view/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
+						echo '</td>';
+						echo '</tr>';
+					}
+				}
+				echo '</table>';
 			}
 			?>
 		</div>

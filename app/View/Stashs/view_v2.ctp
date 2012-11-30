@@ -1,15 +1,38 @@
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div id="my-stashes-component" class="component">
 	<div class="inside">
 		<div class="component-title">
-			<h2><?php echo $stashUsername . '\'s' .__(' stash', true)
+			<h2><?php
+			echo $stashUsername . '\'s';
+			if ($stashType === 'default') {
+				echo __(' stash', true);
+			} else {
+				echo __(' wishlist', true);
+			}
 			?></h2>
 		</div>
 		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
 			<div class="actions stash">
 				<ul class="nav nav-pills">
-					<li class="selected">
-					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
+					<?php
+					if ($stashType === 'default') {
+						echo '<li class="selected">';
+					} else {
+						echo '<li>';
+					}
+					?>
+					
+					<?php echo '<a href="/stash/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
+					</li>
+					<?php
+					if ($stashType === 'wishlist') {
+						echo '<li class="selected">';
+					} else {
+						echo '<li>';
+					}
+					?>
+					<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?>
 					</li>
 					<li>
 					<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
@@ -21,7 +44,7 @@
 				<h3><?php echo __('Collectibles'); ?></h3>
 				<div class="btn-group actions">
 						<?php
-						if (isset($myStash) && $myStash) {
+						if (isset($myStash) && $myStash && $stashType === 'default') {
 							echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i></a>';
 						}
 						if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
@@ -41,8 +64,15 @@
 						?>
 				</div>
 			    <div class="btn-group views">
-			    	<?php echo '<a class="btn" href="/stashs/view/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>'; ?>
-			    	<?php echo '<a class="btn" href="/stashs/view/' . $stashUsername . '/list"><i class="icon-list"></i></a>'; ?>
+			    	<?php
+					$currentStash = 'stash';
+					if ($stashType === 'wishlist') {
+						$currentStash = 'wishlist';
+					}
+
+					echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>';
+					echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
+ 					?>
 			    </div>
 			</div>
 	<?php
@@ -50,10 +80,10 @@
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
-		echo '<div class="tiles" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
+		echo '<div class="tiles stashable" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 		foreach ($collectibles as $key => $myCollectible) {
-			echo '<div class="tile">';
+			echo '<div class="tile stash-item">';
 			if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
@@ -68,8 +98,13 @@
 			} else {
 				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
 			}
+
 			echo '<div class="header">';
-			echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['name'] . ' By ' . $myCollectible['Collectible']['Manufacture']['title'] . '</a>';
+			if ($stashType === 'default') {
+				echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['name'] . ' By ' . $myCollectible['Collectible']['Manufacture']['title'] . '</a>';
+			} else {
+				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['name'] . ' By ' . $myCollectible['Collectible']['Manufacture']['title'] . '</a>';
+			}
 			echo '</div>';
 
 			$detail = '';
@@ -84,15 +119,22 @@
 				}
 			}
 			echo '<ul class="user-detail">';
-			echo '<li class="date">';
-			echo $this -> Time -> format('F jS, Y', $myCollectible['CollectiblesUser']['created'], null);
+			echo '<li class="">';
+			if ($stashType === 'default') {
+				echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
+			}
+			echo '<a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
 			echo '</li>';
 			echo '</ul>';
 			echo '</div>';
 		}
 		echo '</div>';
 	} else {
-		echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
+		if ($stashType === 'default') {
+			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
+		} else {
+			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</div>';
+		}
 	}
 	?>
 		</div>

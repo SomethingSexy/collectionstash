@@ -31,7 +31,8 @@
 			</li>	
           </ul>
         </fieldset>
-      <?php echo $this -> Form -> end(__('Submit', true)); ?>
+        <input type="submit" value="Submit" class="btn btn-primary">
+      <?php echo $this -> Form -> end(); ?>
           </div>    
   </div>
 </div>

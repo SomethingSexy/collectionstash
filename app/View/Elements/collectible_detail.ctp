@@ -1,5 +1,6 @@
 <?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/cs.stash', array('inline' => false)); ?>
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
 	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
@@ -30,7 +31,7 @@ if (!isset($showTags)) {
 	$showTags = false;
 }
 ?>
-<div class="component" id="collectible-detail">
+<div class="component stashable" id="collectible-detail">
 	<div class="inside">
 		<div class="component-title">
 			<h2><?php echo $title; ?></h2>
@@ -45,6 +46,7 @@ if (!isset($showTags)) {
 						$userSubscribed = 'true';
 					}
 					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
 				}
 				
 				?>
@@ -53,7 +55,7 @@ if (!isset($showTags)) {
 					echo $this -> Html -> link('<i class="icon-group"></i>', '/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'], array('title' => 'Registry', 'escape' => false, 'class' => 'btn'));
 				}
 				if (isset($showHistory) && $showHistory) {
-					echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
+					//echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
 				}
 				if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
 					if ($collectibleDetail['Collectible']['variant']) {
