@@ -9,8 +9,9 @@
 			<div class="actions stash">
 				<ul class="nav nav-pills">
 					<li>
-					<?php echo '<a href="/stashs/view/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
+					<?php echo '<a href="/stash/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
 					</li>
+					<li><?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?></li>
 					<li class="selected">
 					<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
 					</li>
