@@ -118,14 +118,16 @@
 					$detail .= '<li>' . __('Artist\'s Proof') . '</li>';
 				}
 			}
-			echo '<ul class="user-detail">';
-			echo '<li class="">';
-			if ($stashType === 'default') {
-				echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
+			if (isset($myStash) && $myStash) {
+				echo '<ul class="user-detail">';
+				echo '<li class="">';
+				if ($stashType === 'default') {
+					echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
+				}
+				echo '<a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
+				echo '</li>';
+				echo '</ul>';
 			}
-			echo '<a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
-			echo '</li>';
-			echo '</ul>';
 			echo '</div>';
 		}
 		echo '</div>';
@@ -179,5 +181,5 @@
 
 		$('#comments').comments();
 
-	});
+	}); 
 </script>
