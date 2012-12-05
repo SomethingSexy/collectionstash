@@ -1,0 +1,102 @@
+Activity
+- User comments
+- User Adds Collectible Stash
+- User Removes Collectible Stash
+- User updates collectible in stash
+- User Adds Collectible Wishlist
+- User removes collectible wishlist
+- User adds photo 
+- User submits new collectible database
+- User edits collectible
+
+- Admin approves new collectible
+- Admin approves collectible edit
+- Admin approves new part
+- Admin approves part edit
+
+Activity Type
+- User comments
+- User 
+
+
+
+Activites Table
+- Do we want a visible attribute--? There might be activity we want to record but not show it ---like when we do admin submitting of changes
+
+
+
+
+
+
+ActivityEvent
+
+- Eventually we will need to modify the subscription stuff so that you subscribe to users
+- We will also want to eventually add a collectibles_activities table so that we can use that to maintain history on a collectible 
+
+
+
+JSON
+
+Example: User posts comment to Collectible
+
+ {
+    "published": "2011-02-10T15:04:55Z",
+    "actor": {
+      "url": "http://example.org/martin",
+      "objectType" : "user",
+      "id": "",
+      "image": {
+        "url": "http://example.org/martin/image",
+        "width": 250,
+        "height": 250
+      },
+      "displayName": "Martin Smith"
+    },
+    "verb": "post",
+    "object" : {
+      "url": "http://example.org/blog/2011/02/entry",
+      "id": "comment_id"
+      "data" : {
+          "comment" : 'blah'
+      }
+    },
+    "target" : {
+      "url": "http://example.org/blog/",
+      "objectType": "collectible",
+      "id": "collectible_id",
+      "displayName": "Collectible Name"
+    }
+  }
+  
+Example: User adds collectible to Stash
+
+ {
+    "published": "2011-02-10T15:04:55Z",
+    "actor": {
+      "url": "http://example.org/martin",
+      "objectType" : "person",
+      "id": "tag:example.org,2011:martin",
+      "image": {
+        "url": "http://example.org/martin/image",
+        "width": 250,
+        "height": 250
+      },
+      "displayName": "Martin Smith"
+    },
+    "verb": "add",
+    "object" : {
+      "url": "http://example.org/blog/2011/02/entry",
+      "id": "collectible_id"
+      "data" : {
+        "displayName": "Collectible Name"    
+      }
+      
+    },
+    "target" : {
+      "url": "http://example.org/blog/",
+      "objectType": "stash",
+      "id": "stash_id",
+      "displayName": "Martin's Stash"
+    }
+  }  
+ 
