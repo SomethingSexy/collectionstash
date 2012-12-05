@@ -48,10 +48,13 @@ linux: ./cake
 ./cake -app /var/www/collectionstash/app attributes_converter
 ./cake -app /var/www/collectionstash/app uploads_converter
 
+./cake -app /var/www/collectionstash/app add_new_stash
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
  
   ./vendors/cakeshell attributes_converter -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
+  
+   ./vendors/cakeshell add_new_stash -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
