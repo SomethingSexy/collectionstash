@@ -15,8 +15,16 @@ Activity
 - Admin approves part edit
 
 Activity Type
-- User comments
-- User 
+- add comment
+- submit collectible
+- submit edit collectible
+- add collectible stash
+- remove collectible stash
+- add photo
+- user join
+- new collectible approved
+- edit approved
+
 
 
 
