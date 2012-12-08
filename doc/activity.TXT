@@ -30,7 +30,9 @@ Activity Type
 
 Activites Table
 - Do we want a visible attribute--? There might be activity we want to record but not show it ---like when we do admin submitting of changes
-
+- We will probably want an activity display table that will process the activity table and merge activities so that if say in the last 24 hours someone has add 100 collectibles
+  that gets merged into one activity
+- we will still maintain the main acitivity table to be the master of all activity
 
 
 
