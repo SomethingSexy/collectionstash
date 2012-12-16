@@ -42,6 +42,8 @@ cake -app D:\Development\wamp\www\app uploads_converter
 
 cake -app D:\Development\wamp\www\app add_new_stash
 
+cake -app D:\Development\wamp\www\app total_existing_points
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
