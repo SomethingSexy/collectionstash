@@ -1,4 +1,6 @@
 <?php
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class Collectible extends AppModel {
 	public $name = 'Collectible';
 	public $belongsTo = array('EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'User' => array('counterCache' => true), 'Currency');
@@ -541,28 +543,20 @@ class Collectible extends AppModel {
 			}
 
 			if (isset($collectible['CollectiblesUpload'])) {
+				// This should also update the revision for the upload
+				// since we are only allowing one on submission this should be fine
 				$collectible['CollectiblesUpload'][0]['revision_id'] = $revisionId;
 				$collectible['CollectiblesUpload'][0]['status_id'] = 2;
+				$collectible['CollectiblesUpload'][0]['Upload']['revision_id'] = $revisionId;
+				$collectible['CollectiblesUpload'][0]['Upload']['id'] = $collectible['CollectiblesUpload'][0]['upload_id'];
 			}
 
 			$this -> create();
 			debug($collectible);
-			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {
-				$id = $this -> Collectible -> id;
+			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {				$dataSource -> commit();
+				$id = $this -> id;
 				$addCollectible = $this -> findById($id);
-				//TODO: This stuff needs to be updated to do the same for the tags, although this is kind of caca
-				if (!empty($addCollectible['CollectiblesUpload'])) {
-					//Update the current one
-					//Doing this so that we will trigger the revision
-					$this -> CollectiblesUpload -> Upload -> id = $addCollectible['CollectiblesUpload'][0]['Upload']['id'];
-					if (!$this -> CollectiblesUpload -> Upload -> saveField('revision_id', $revisionId)) {
-						//If it fails, let it pass but log the problem.
-						$this -> log('Failed to update the upload with the collectible id and revision id for collectible ' . $addCollectible['Collectible']['id'] . ' and upload id ' . $addCollectible['Upload']['id'], 'error');
-						$dataSource -> rollback();
-						return false;
-					}
-				}
-				$dataSource -> commit();
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $addCollectible, 'object' => $addCollectible, 'type' => 'Collectible')));
 				return true;
 			} else {
 				$dataSource -> rollback();

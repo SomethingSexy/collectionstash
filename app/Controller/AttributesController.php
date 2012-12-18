@@ -95,7 +95,7 @@ class AttributesController extends AppController {
 		$manufactures = $this -> Attribute -> Manufacture -> getManufactureList();
 		$this -> set(compact('manufactures'));
 		$filters = $this -> _getFilters();
-		debug($filters);
+		debug($attributes);
 		$this -> set(compact('filters'));
 		$this -> set(compact('saveSearchFilters'));
 	}

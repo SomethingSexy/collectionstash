@@ -204,6 +204,12 @@ if (!isset($adminMode)) {
 					});
 
 					addCollectiblesAttributes.init();
+					
+					$('.standard-list.attributes > table > tbody> tr > td.popup').popover({
+						placement : 'bottom',
+						html : 'true',
+						trigger : 'click'
+					});
 
 				}); 
 </script>

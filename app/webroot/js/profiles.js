@@ -16,31 +16,24 @@ var inviteAccount = function() {
 
 		if(data.responseData.Invites) {
 			if(data.responseData.Invites.length > 0) {
-										// echo '<li class="title">';
-						// echo '<span class="attribute-name">'.__('Part', true).'</span>';
-						// echo '<span class="attribute-description">'.__('Description', true).'</span>';
-						// echo '</li>';
-				$titleLi = $('<li></li>').addClass('title');
-				$titleLi.append($('<span></span>').text('Email')).append($('<span></span>').text('Status'));
-				$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').append($titleLi);
-				var $li;
+				var $row;
 				$.each(data.responseData.Invites, function(key, value){
-					$li = $('<li></li>').append($('<span></spann').text(value.Invite.email));
+					$row = $('<tr></tr>').append($('<td></td>').text(value.Invite.email));
 					var status = '';
 					if(value.Invite.registered === false){
 						status = 'Not registered';
 					} else {
 						status = 'Registered';
 					}
-					$li.append($('<span></spann').text(status));
-					$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').append($li)
+					$row.append($('<td></td>').text(status));
+					$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('table').append($row)
 				});
 					
 				
 			} else {
 				$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').addClass('empty');
-				var $li = $('<li></li>').text('You have not invited anyone to Collection Stash.');
-				$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('ul').append($li);
+				var $li = $('<tr></tr>').append('<td colspan="2"></td>').text('You have not invited anyone to Collection Stash.');
+				$('#account-invites').children('div.body').children('.account.detail.view').children('div.standard-list').children('table').append($li);
 			}
 		}
 		$('#account-invites').children('div.body').children('.account.detail.view').show();

@@ -13,6 +13,9 @@ class UsersController extends AppController {
 	 * This is the main index into this controller, it will display a list of users.
 	 */
 	function index() {
+				$users = $this -> User -> find("first", array('conditions' => array('User.id' => 1)));
+debug($users);
+		
 		// This max limit is not desirable, fix later to put the actual paging in the view code
 		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'), 'limit' => 50);
 

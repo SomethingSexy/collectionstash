@@ -234,7 +234,7 @@ class CollectibleEditsController extends AppController {
 			} else {
 
 				$this -> loadModel('Collectible');
-				//$newCollectible['Collectible']['action'] = 'E';
+
 				$action = array();
 				$action['Action']['action_type_id'] = 2;
 				$returnData = $this -> Collectible -> saveEdit($newCollectible, $newCollectible['Collectible']['base_id'], $this -> getUserId(), $action);

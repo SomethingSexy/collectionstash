@@ -1,5 +1,6 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('ActivityTypes', 'Lib/Activity');
 class CommentsController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify', 'Time');
@@ -98,6 +99,8 @@ class CommentsController extends AppController {
 				$data['success'] = array('isSuccess' => true);
 				$commentId = $this -> Comment -> id;
 				$comment = $this -> Comment -> findById($commentId);
+				$entity = $this -> Comment -> EntityType -> getEntityCore($comment['Comment']['entity_type_id']);
+				debug($entity);
 				$lastestComments = array();
 
 				if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
@@ -110,6 +113,8 @@ class CommentsController extends AppController {
 					$data['comments'] = $lastestComments['comments'];
 				}
 				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Comment.add', $this, array('userId' => $this -> request -> data['Comment']['user_id'], 'entityTypeId' => $this -> request -> data['Comment']['entity_type_id'])));
+
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this -> getUser(), 'comment' => $comment, 'entity' => $entity)));
 				$this -> set('comments', $data);
 
 			} else {
