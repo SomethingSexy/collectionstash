@@ -1,6 +1,8 @@
 <?php
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Wizard', 'Tree');
@@ -825,7 +827,8 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
 		debug($collectible);
 		if (!empty($collectible) && $collectible['Collectible']['state'] === '0') {
 			$this -> set('collectible', $collectible);
@@ -869,7 +872,7 @@ class CollectiblesController extends AppController {
 		}
 
 	}
-	
+
 	/**
 	 * We need to two methods because the tile stuff using the infinite scroll
 	 * which uses the standard HTML response to parse out the contents
@@ -1087,6 +1090,8 @@ class CollectiblesController extends AppController {
 							}
 
 						}
+
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $this -> getUser(), 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
 
 						$this -> __sendApprovalEmail(true, $collectible['User']['email'], $collectible['User']['username'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);
 

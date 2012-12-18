@@ -1,6 +1,7 @@
 <?php
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
@@ -11,7 +12,6 @@ class CollectiblesUsersController extends AppController {
 			//TODO should be more model behavior but whateves
 			//First lets grab the collectible user
 			$collectiblesUser = $this -> CollectiblesUser -> getUserCollectible($id);
-			debug($collectiblesUser);
 			if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 				//First see if the person viewing this collectible is logged in
 				$this -> set('stashUsername', $collectiblesUser['User']['username']);
@@ -55,7 +55,7 @@ class CollectiblesUsersController extends AppController {
 				if (isset($collectible) && !empty($collectible)) {
 
 					//This returns all collectibles in this stash if I ever need them
-					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => false, 'conditions' => array('Stash.user_id' => $user['User']['id'])));
+					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.user_id' => $user['User']['id'])));
 					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
 					$this -> request -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
 					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
@@ -64,6 +64,7 @@ class CollectiblesUsersController extends AppController {
 						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
 						//This should be in the model I think
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectible, 'stash' => $stash)));
 						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
 						return;
 					} else {
@@ -77,7 +78,6 @@ class CollectiblesUsersController extends AppController {
 				}
 			}
 			$collectibles = $this -> CollectiblesUser -> find("all", array('contain' => array('Collectible' => array('CollectiblesUpload' => array('Upload'), 'Collectibletype', 'Manufacture')), 'conditions' => array('CollectiblesUser.collectible_id' => $id, 'CollectiblesUser.user_id' => $user['User']['id'])));
-			debug($collectibles);
 			$this -> set(compact('collectibles'));
 			$this -> set('collectible', $collectible);
 			$this -> set('conditions', $this -> CollectiblesUser -> Condition -> find('list', array('order' => 'name')));
@@ -94,12 +94,12 @@ class CollectiblesUsersController extends AppController {
 	 */
 	function edit($id = null) {
 		$this -> checkLogIn();
-		debug($this -> request -> data);
+
 		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Merchant', 'Collectible' => array('Currency'))));
 		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 			$loggedInUserId = $this -> getUserId();
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
-				debug($collectiblesUser);
+
 				if (!empty($this -> request -> data)) {
 					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof');
 					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
@@ -112,7 +112,6 @@ class CollectiblesUsersController extends AppController {
 					}
 
 				} else {
-					debug($collectiblesUser);
 					$this -> request -> data = $collectiblesUser;
 				}
 				$this -> set('collectible', $collectiblesUser);
@@ -157,13 +156,14 @@ class CollectiblesUsersController extends AppController {
 				$id = Sanitize::clean($id);
 
 				if (!is_null($id) && is_numeric($id)) {
-					$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User')));
+					$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible', 'Stash')));
 					if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 						$loggedInUserId = $this -> getUserId();
 						if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 							if ($this -> CollectiblesUser -> delete($id)) {
 								$data['response']['isSuccess'] = true;
 								$this -> set('removeCollectiblesUsers', $data);
+								$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $this -> getUser(), 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
 								return;
 							} else {
 								$data['response']['isSuccess'] = false;
@@ -204,6 +204,7 @@ class CollectiblesUsersController extends AppController {
 					if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 						if ($this -> CollectiblesUser -> delete($id)) {
 							$this -> Session -> setFlash(__('Your collectible has been successfully removed.', true), null, null, 'success');
+							$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $this -> getUser(), 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
 							$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $collectiblesUser['User']['username']), null, true);
 						} else {
 							$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
@@ -247,7 +248,7 @@ class CollectiblesUsersController extends AppController {
 			$type = Sanitize::clean($type);
 			$collectiblesUser = array();
 			$collectiblesUser['CollectiblesUser']['collectible_id'] = $id;
-			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUserId(), $type);
+			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUser(), $type);
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -270,12 +271,12 @@ class CollectiblesUsersController extends AppController {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			if (!empty($collectible)) {
 				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id, $collectible['Collectible']['numbered']);
-				
+
 				$wishlist = $this -> CollectiblesUser -> getListOfUserWishlist($id);
-				debug($usersWho);
+
 				$this -> set('showEditionSize', $collectible['Collectible']['numbered']);
 				$this -> set('registry', $usersWho);
-				
+
 				$this -> set('wishlist', $wishlist);
 			} else {
 				$this -> redirect("/", null, true);

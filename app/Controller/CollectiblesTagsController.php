@@ -102,7 +102,6 @@ class CollectiblesTagsController extends AppController {
 							$success = $this -> CollectiblesTag -> save($tagToSave);
 						}
 					} else {
-
 						//TODO: need to handle action on multiple
 						foreach ($tagsToSave['CollectiblesTag'] as $key => $tag) {
 							$tagToSave = array();
@@ -115,16 +114,13 @@ class CollectiblesTagsController extends AppController {
 							debug($tag['Action']);
 							$success = $this -> CollectiblesTag -> saveEdit($tagToSave, $baseId, $this -> getUserId(), $tag);
 						}
-
 					}
-
 				}
 			}
-			debug($success);
+
 			if ($success || is_array($success)) {
 				$this -> Session -> setFlash(__('Your edit has been successfully submitted!', true), null, null, 'success');
-				//$this -> redirect(array('controller' => 'collectibles', 'action' => 'view', $collectible_id));
-				debug($confirmTags);
+
 				$this -> set('collectibleId', $collectible_id);
 				$this -> set('tags', $confirmTags);
 				$this -> render('confirm');
@@ -143,7 +139,7 @@ class CollectiblesTagsController extends AppController {
 					}
 					array_push($errorTags['CollectiblesTag'], $errorTag);
 				}
-				debug($errorTags);
+
 				$this -> request -> data = $errorTags['CollectiblesTag'];
 			}
 
@@ -157,7 +153,7 @@ class CollectiblesTagsController extends AppController {
 			} else {
 				$this -> Session -> write('collectible.edit.admin-mode', false);
 			}
-			debug($this -> Session -> read('collectible.edit.admin-mode'));
+
 			$tags = $this -> CollectiblesTag -> find('all', array('conditions' => array('CollectiblesTag.collectible_id' => $collectible_id), 'contain' => array('Tag')));
 			$this -> request -> data = $tags;
 		}

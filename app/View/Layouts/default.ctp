@@ -27,16 +27,21 @@
 	echo $this -> Minify -> css('css/thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> css('css/layout/default');
 
+	echo $this -> Minify -> script('js/thirdparty/json2');
+	// There is an issue when I minify this one myself
+	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('js/jquery-1.7');
+	echo $this -> Minify -> script('js/thirdparty/backbone');
 	echo $this -> Minify -> script('js/jquery-ui-1.8.18');
 	echo $this -> Minify -> script('js/jquery-plugins');
 	echo $this -> Minify -> script('js/jquery.autocomplete');
+	// Replace this with dust eventually
 	echo $this -> Minify -> script('js/thirdparty/tmpl');
 	echo $this -> Minify -> script('js/thirdparty/load-image');
 	echo $this -> Minify -> script('js/thirdparty/canvas-to-blob');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
-	echo $this -> Minify -> script('js/thirdparty/json2');
+	echo $this -> Minify -> script('js/thirdparty/dust-full-1.1.1');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	

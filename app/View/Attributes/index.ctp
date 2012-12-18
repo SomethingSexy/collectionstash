@@ -28,6 +28,7 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 			<table class="table table-striped">
 				<?php
 				echo '<thead><tr>';
+				echo '<th> </td>';
 				echo '<th class="category">' . $this -> Paginator -> sort('attribute_category_id', 'Category') . '</th>';
 				echo '<th class="name">' . $this -> Paginator -> sort('name', 'Name') . '</th>';
 				echo '<th class="description">' . __('Description') . '</th>';
@@ -59,20 +60,22 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 
 					$hasCollectibles = ($hasCollectibles) ? 'true' : 'false';
 
-					$popup = '<ul>';
 					if (!empty($attribute['AttributesCollectible'])) {
+						$popup = '<ul>';
 						foreach ($attribute['AttributesCollectible'] as $key => $collectible) {
 							$popup .= '<li>';
-							$popup .= $collectible['Collectible']['name'];
+							$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
 							$popup .= '</li>';
 						}
+						$popup .= '</ul>';
 					} else {
-						$popup .= '<li>' . __('None') . '</li>';
+						$popup = "<ul class='unstyled'>";
+						$popup .= '<li>' . __('Not attached to any collectibles') . '</li>';
+						$popup .= '</ul>';
 					}
 
-					$popup .= '</ul>';
-
-					echo '<tr data-content="' . $popup . '" data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
+					echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
+					echo '<td title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></td>';
 					echo '<td data-id="' . $attribute['AttributeCategory']['id'] . '" class="category">';
 					echo $attribute['AttributeCategory']['path_name'];
 					echo '</td>';
@@ -146,25 +149,25 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 			$element : $('.standard-list.attributes')
 		});
 		removeAttributes.init();
-		
+
 		var updateAttributes = new UpdateAttributes({
 			$element : $('.standard-list.attributes')
 		});
 		updateAttributes.init();
-		
+
 		var addAttributes = new AddAttributes({
-			
+
 		});
-		
+
 		addAttributes.init();
 
-		$('.standard-list.attributes.index > table > tbody> tr').popover({
+		$('.standard-list.attributes.index > table > tbody> tr > td.popup').popover({
 			placement : 'bottom',
 			html : 'true',
-			trigger : 'hover'
+			trigger : 'click'
 		});
 
-	});
+	}); 
 </script>
 
 <?php echo $this -> element('attribute_remove_dialog'); ?>

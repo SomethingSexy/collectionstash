@@ -1,7 +1,7 @@
 <?php
 App::import('Core', 'Validation');
 App::uses('CakeEvent', 'Event');
-App::uses('BlogEventListener', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUser extends AppModel {
 
 	public $name = 'CollectiblesUser';
@@ -173,7 +173,7 @@ class CollectiblesUser extends AppModel {
 		return $data;
 	}
 
-	public function add($data, $userId, $stashType = 'Default') {
+	public function add($data, $user, $stashType = 'Default') {
 		$retVal = array();
 		$retVal['response'] = array();
 		$retVal['response']['isSuccess'] = false;
@@ -181,19 +181,25 @@ class CollectiblesUser extends AppModel {
 		$retVal['response']['code'] = 0;
 		$retVal['response']['errors'] = array();
 
-		if (empty($data) || empty($userId)) {
+		if (empty($data) || empty($user)) {
 			array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
 			return $retVal;
 		}
 
 		// Give the user id and the stash type, we need to figure out what
 		// stash to add this too
-		$stash = $this -> Stash -> getStash($userId, $stashType);
+		$stash = $this -> Stash -> getStash($user['User']['id'], $stashType);
 		if (!empty($stash)) {
 			$data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
-			$data['CollectiblesUser']['user_id'] = $userId;
+			$data['CollectiblesUser']['user_id'] = $user['User']['id'];
 			if ($this -> save($data)) {
 				$retVal['response']['isSuccess'] = true;
+				//TODO: Need to update to get this to work
+				//$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
+				debug($stash);
+				// We need to get some data to handle this event
+				$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $data['CollectiblesUser']['collectible_id'])));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectible, 'stash' => $stash)));
 			} else {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');

@@ -70,6 +70,8 @@ Configure::load('config');
 App::uses('CakeEventManager', 'Event');
 App::uses('EntityChangeEventListener', 'Event');
 App::uses('NotifyEventListener', 'Event');
+App::uses('ActivityEventListener', 'Event');
 CakeEventManager::instance() -> attach(new EntityChangeEventListener());
 CakeEventManager::instance() -> attach(new NotifyEventListener());
+CakeEventManager::instance() -> attach(new ActivityEventListener());
 ?>

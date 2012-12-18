@@ -31,7 +31,10 @@ class User extends AppModel {
 
 	function beforeSave() {
 		//Make sure there is no space around the email, seems to be an issue with sending when there is
-		$this -> data['User']['email'] = trim($this -> data['User']['email']);
+		if (isset($this -> data['User']['email'])) {
+			$this -> data['User']['email'] = trim($this -> data['User']['email']);
+		}
+
 		return true;
 	}
 

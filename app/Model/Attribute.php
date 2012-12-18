@@ -12,6 +12,8 @@
  *
  *
  */
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class Attribute extends AppModel {
 	public $name = 'Attribute';
 	public $hasMany = array('AttributesCollectible' => array('dependent' => true));
@@ -186,6 +188,8 @@ class Attribute extends AppModel {
 			$retVal['response']['data']['Attribute'] = array();
 			$retVal['response']['data']['Attribute']['id'] = $attributeId;
 			$retVal['response']['isSuccess'] = true;
+			$addAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId)));
+			$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $addAttribute, 'object' => $addAttribute, 'type' => 'Attribute')));
 		} else {
 			$retVal['response']['isSuccess'] = false;
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
@@ -228,7 +232,10 @@ class Attribute extends AppModel {
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['code'] = 1;
 					if ($retVal) {
+						$approver = $this -> User -> find('first', array('conditions'=> array('User.id'=> $userId)));
+						$submitter = $this -> User -> find('first', array('conditions'=> array('User.id'=> $attribute['Attribute']['user_id'])));
 						$message = 'We have approved the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $approver, 'object' => $attribute, 'target' => $submitter, 'type' => 'Attribute')));
 						$this -> notifyUser($attribute['Attribute']['user_id'], $message);
 					}
 				} else {

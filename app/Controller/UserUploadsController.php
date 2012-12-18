@@ -1,5 +1,7 @@
 <?php
 App::uses('Sanitize', 'Utility');
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class UserUploadsController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify', 'Time');
@@ -191,10 +193,10 @@ class UserUploadsController extends AppController {
 						$uploadResponse['name'] = $upload['UserUpload']['name'];
 						$uploadResponse['delete_url'] = '/user_uploads/remove/' . $upload['UserUpload']['id'];
 						$uploadResponse['delete_type'] = 'POST';
-						$uploadResponse['edit_url'] = '/user_uploads/upload/' . $value['UserUpload']['id'];
+						$uploadResponse['edit_url'] = '/user_uploads/upload/' . $upload['UserUpload']['id'];
 						array_push($retunData, $uploadResponse);
 						$this -> set('returnData', $retunData);
-
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_PHOTO, 'user' => $this -> getUser(), 'photo' => $upload)));
 					} else {
 						$retunData = array();
 						$uploadResponse = array();

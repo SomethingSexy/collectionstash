@@ -12,6 +12,8 @@
  * 				Ugh, what if I add type back to either "Attribute" or "Collectile"? then I can get rid of the other EditsCollectibles]
  * 				It will make the behavior a lot easier.  We will just have to do lookups on everything
  */
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class Edit extends AppModel {
 	public $name = 'Edit';
 	public $actsAs = array('Containable');
@@ -165,6 +167,9 @@ class Edit extends AppModel {
 		//save off the user id of the user who did the edit
 		$userId = $edit['Edit']['user_id'];
 
+		$submitter = $this -> User -> find('first', array('contain' => false, 'conditions' => array('User.id' => $userId)));
+		$approver = $this -> User -> find('first', array('contain' => false, 'conditions' => array('User.id' => $approvalUserId)));
+
 		// Start the transaction here because
 		// each model will handle saving itself
 		$dataSource = $this -> getDataSource();
@@ -208,6 +213,9 @@ class Edit extends AppModel {
 			$editFields['status'] = 1;
 			if ($this -> saveAll($editFields, array('validate' => false))) {
 				$dataSource -> commit();
+				// We need to trigger an approval event here...we need to pass in the edit object, from there we should be able to
+				// get the user id that will be the target of the activity
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_EDIT, 'edit' => $edit, 'target' => $submitter, 'user' => $approver)));
 				return true;
 			} else {
 				$dataSource -> rollback();

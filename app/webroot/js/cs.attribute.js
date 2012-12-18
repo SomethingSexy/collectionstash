@@ -280,10 +280,12 @@ AttributesBase.prototype = {
 								if ( typeof attribute.Attribute.AttributeCategory !== 'undefined') {
 									var pathName = attribute.Attribute.AttributeCategory.path_name;
 									var name = attribute.Attribute.name;
-									var description = attribute.Attribute.description;
+									if (name === '') {
+										name = attribute.Attribute.description;
+									}
 
 									var $attributeItem = $('<li></li>').addClass('attribute').attr('data-id', attribute.Attribute.id).attr('data-attribute', JSON.stringify(attribute.Attribute));
-									$attributeItem.html('<span class="category">' + pathName + ' - </span> ' + name + ' ' + description);
+									$attributeItem.html('<span class="category">' + pathName + ' - </span> ' + name + ' - ' + attribute.count);
 									$attributeList.append($attributeItem);
 								}
 
@@ -426,14 +428,14 @@ AddAttributes.prototype.submit = function() {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});
@@ -581,14 +583,14 @@ AddCollectibleAttributes.prototype.submit = function() {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});
@@ -751,14 +753,14 @@ AddExistingCollectibleAttributes.prototype.submit = function() {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});
@@ -939,14 +941,14 @@ RemoveAttributes.prototype.submit = function(attribute) {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});
@@ -1065,14 +1067,14 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 						showOverlay : false,
 						css : {
 							top : '100px',
-							'background-color': '#DFF0D8',
-						    border: '1px solid #D6E9C6',
-						    'border-radius': '4px 4px 4px 4px',
-						    color: '#468847',
-						    'margin-bottom': '20px',
-						    padding: '8px 35px 8px 14px',
-						    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-							'z-index': 999999
+							'background-color' : '#DFF0D8',
+							border : '1px solid #D6E9C6',
+							'border-radius' : '4px 4px 4px 4px',
+							color : '#468847',
+							'margin-bottom' : '20px',
+							padding : '8px 35px 8px 14px',
+							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+							'z-index' : 999999
 						},
 						timeout : 2000
 					});
@@ -1246,14 +1248,14 @@ UpdateAttributes.prototype.submit = function(attribute) {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});
@@ -1374,14 +1376,14 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color': '#DFF0D8',
-					    border: '1px solid #D6E9C6',
-					    'border-radius': '4px 4px 4px 4px',
-					    color: '#468847',
-					    'margin-bottom': '20px',
-					    padding: '8px 35px 8px 14px',
-					    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index': 999999
+						'background-color' : '#DFF0D8',
+						border : '1px solid #D6E9C6',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#468847',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
 					},
 					timeout : 2000
 				});

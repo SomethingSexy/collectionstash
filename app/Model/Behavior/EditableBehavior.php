@@ -1,5 +1,6 @@
 <?php
-
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 /**
  * This should also handle the logic for committing the edit to the main model I think
  *
@@ -144,6 +145,7 @@ class EditableBehavior extends ModelBehavior {
 				$savedEdit = $Model -> findEdit($id);
 				$returnEdit = $savedEdit;
 				$returnEdit[$Model -> alias] = $savedEdit[$Model -> EditModel -> alias];
+				$Model -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_EDIT, 'editType' => $Model -> alias, 'edit' => $returnEdit, 'user' => $returnEdit, 'type' => 'edit')));
 				unset($returnEdit[$Model -> EditModel -> alias]);
 				unset($returnEdit[$Model -> alias . 'Edit']);
 				$retVal = $returnEdit;
@@ -160,7 +162,8 @@ class EditableBehavior extends ModelBehavior {
 					$value['edit_id'] = $editId;
 				}
 				if ($Model -> EditModel -> saveAll($saveEdit, array('validate' => false, 'deep' => true))) {
-
+					$edit = $Model -> findEdit($Model -> EditModel -> id);
+					$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_EDIT, 'editType' => $Model -> alias, 'edit' => $edit, 'user' => $edit, 'type' => 'edit')));
 				} else {
 					$Model -> EditModel -> Edit -> delete($editId);
 					$succesful = false;

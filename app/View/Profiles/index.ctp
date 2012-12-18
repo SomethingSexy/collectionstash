@@ -18,7 +18,13 @@
 						<p id="account-invites-left"><?php //__('You have '); echo $invitesLeft; __(' invites left.'); ?></p>
 					</div>
 					<div class="standard-list">
-						<ul></ul>
+						<table class="table">
+							<tr>
+								<th><?php echo __('Email'); ?></th>
+								<th><?php echo __('Status');?></th>
+							</tr>
+							
+						</table>
 					</div>
 					<button class="btn btn-primary" id="invite-user"><?php echo __('Invite');?></button> 
 				</div>

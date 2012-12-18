@@ -1,6 +1,8 @@
 <?php
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class InvitesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'FileUpload.FileUpload', 'Minify');
@@ -80,6 +82,7 @@ class InvitesController extends AppController {
 						}
 						$this -> Session -> write('user', $user);
 						$this -> set('aInvites', array('success' => array('isSuccess' => true, 'message' => __('You have successfully invited a user.', true))));
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_INVITE, 'user' => $user)));
 					} else {
 						$this -> set('aInvites', array('success' => array('isSuccess' => false), 'isTimeOut' => false, 'errors' => array($this -> Invite -> validationErrors)));
 					}

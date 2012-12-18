@@ -79,11 +79,28 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$attributeCollectibleJSON .= '"count" : "' . $attribute['count'] . '"';
 			$attributeCollectibleJSON .= '}';
 
+			if (!empty($attribute['Attribute']['AttributesCollectible'])) {
+				$popup = '<ul>';
+				foreach ($attribute['Attribute']['AttributesCollectible'] as $key => $collectible) {
+					$popup .= '<li>';
+					$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
+					$popup .= '</li>';
+				}
+				$popup .= '</ul>';
+			} else {
+				$popup = "<ul class='unstyled'>";
+				$popup .= '<li>' . __('Not attached to any collectibles') . '</li>';
+				$popup .= '</ul>';
+			}
+
+
+
 			$outputAttribtes .= '<tr data-attribute=\'' . $attributeJSON . '\' data-attribute-collectible=\'' . $attributeCollectibleJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="true" data-attribute-collectible-id="' . $attribute['id'] . '">';
+			// That means this is a new one, so we don't need the info icon
 			if ($attribute['Attribute']['status_id'] === '2') {
 				$outputAttribtes .= '<td><i class="icon-plus"></i></td>';
 			} else {
-				$outputAttribtes .= '<td></td>';
+				$outputAttribtes .= '<td title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></td>';;
 			}
 
 			$outputAttribtes .= '<td class="category">';
