@@ -58,6 +58,15 @@ linux: ./cake
   
    ./vendors/cakeshell add_new_stash -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
+
+
+
+   ./vendors/cakeshell total_existing_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
+
+
+
+
+
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
