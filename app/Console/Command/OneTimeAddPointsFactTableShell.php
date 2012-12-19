@@ -19,7 +19,12 @@ class OneTimeAddPointsFactTableShell extends AppShell {
 			$saveData['UserPointFact']['month'] = 11;
 			$saveData['UserPointFact']['year'] = 2012;
 			$saveData['UserPointFact']['user_id'] = $user['User']['id'];
-			$saveData['UserPointFact']['points'] = $user['User']['points'];
+			if(is_null($user['User']['points']) || empty($user['User']['points'])) {
+				$saveData['UserPointFact']['points'] = 0;
+			} else{
+				$saveData['UserPointFact']['points'] = $user['User']['points'];
+			}
+			
 			$this -> UserPointFact -> create();
 			if ($this -> UserPointFact -> save($saveData)) {
 
