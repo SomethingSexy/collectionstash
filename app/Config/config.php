@@ -35,7 +35,7 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 		'uploads' => array(
 			'allowed' => true,
 			'root-folder' => 'user_uploads',
-			'total-allowed' => 50
+			'total-allowed' => 100
 		)
 	)
 ));
