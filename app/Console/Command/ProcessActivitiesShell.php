@@ -38,7 +38,8 @@ class ProcessActivitiesShell extends AppShell {
 				$saveData['UserPointFact'] = array();
 				$saveData['UserPointFact']['month'] = $month;
 				$saveData['UserPointFact']['year'] = $year;
-
+				
+				// Figure out the id of the user we are adding the score for
 				// Add comment
 				if ($activity['ActivityType']['id'] === '1') {
 					// user id
