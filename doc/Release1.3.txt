@@ -44,6 +44,8 @@ cake -app D:\Development\wamp\www\app add_new_stash
 
 cake -app D:\Development\wamp\www\app total_existing_points
 
+cake -app D:\Development\wamp\www\app process_activities
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
@@ -51,6 +53,8 @@ linux: ./cake
 ./cake -app /var/www/collectionstash/app uploads_converter
 
 ./cake -app /var/www/collectionstash/app add_new_stash
+
+./cake -app /var/www/collectionstash/app total_existing_points
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
  
@@ -70,10 +74,13 @@ linux: ./cake
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
+  
 
 cron
 
 /var/www/collectionstash/vendors/cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
 /var/www/collectionstash/vendors/cakeshell.sh send_email -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+/var/www/collectionstash/vendors/cakeshell.sh process_activities -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
