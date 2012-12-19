@@ -14,6 +14,7 @@ class OneTimeAddPointsFactTableShell extends AppShell {
 		$users = $this -> User -> find("all", array('contain' => false));
 
 		foreach ($users as $key => $user) {
+			debug($user);
 			$saveData = array();
 			$saveData['UserPointFact'] = array();
 			$saveData['UserPointFact']['month'] = 11;
