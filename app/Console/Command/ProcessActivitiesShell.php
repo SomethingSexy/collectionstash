@@ -27,7 +27,7 @@ class ProcessActivitiesShell extends AppShell {
 
 		$points = $this -> Point -> find('list', array('fields' => array('Point.activity_type_id', 'Point.points')));
 
-		debug($month);
+		debug($activities);
 
 		foreach ($activities as $key => $activity) {
 			$score = $points[$activity['ActivityType']['id']];
@@ -93,8 +93,6 @@ class ProcessActivitiesShell extends AppShell {
 				// added already
 
 				$userFact = $this -> getFact($saveData['UserPointFact']['user_id'], $month, $year);
-
-				debug($userFact);
 				
 				$this -> updateFact($userFact, $score);
 
@@ -108,7 +106,6 @@ class ProcessActivitiesShell extends AppShell {
 
 	private function getFact($userId, $month, $year) {
 		$userFact = $this -> UserPointFact -> find('first', array('contain' => false, 'conditions' => array('UserPointFact.user_id' => $userId, 'UserPointFact.month' => $month, 'UserPointFact.year' => $year)));
-		debug($userFact);
 		if (!$userFact) {
 			$saveData = array();
 			$saveData['UserPointFact'] = array();
@@ -116,6 +113,7 @@ class ProcessActivitiesShell extends AppShell {
 			$saveData['UserPointFact']['year'] = $year;
 			$saveData['UserPointFact']['user_id'] = $userId;
 			$saveData['UserPointFact']['points'] = 0;
+			$this -> UserPointFact -> create();
 			if ($this -> UserPointFact -> save($saveData)) {
 				$id = $this -> UserPointFact -> id;
 				$userFact = $this -> UserPointFact -> find('first', array('conditions' => array('UserPointFact.id' => $id)));
