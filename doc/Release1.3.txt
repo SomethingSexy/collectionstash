@@ -46,6 +46,8 @@ cake -app D:\Development\wamp\www\app total_existing_points
 
 cake -app D:\Development\wamp\www\app process_activities
 
+cake -app D:\Development\wamp\www\app one_time_add_points_fact_table
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
@@ -55,6 +57,8 @@ linux: ./cake
 ./cake -app /var/www/collectionstash/app add_new_stash
 
 ./cake -app /var/www/collectionstash/app total_existing_points
+
+./cake -app /var/www/collectionstash/app process_activities
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
  
