@@ -1047,7 +1047,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 		if ($id && is_numeric($id) && isset($this -> request -> data['Approval']['approve'])) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'Upload', 'AttributesCollectible')));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible')));
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$notes = $this -> request -> data['Approval']['notes'];
 			//Approve
