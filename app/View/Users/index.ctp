@@ -12,6 +12,7 @@
 						<th><?php echo $this -> Paginator -> sort('created', 'Join Date'); ?></th>
 						<th><?php echo $this -> Paginator -> sort('collectibles_user_count', 'Collectible Count'); ?></th>
 						<th><?php echo $this -> Paginator -> sort('user_upload_count', 'Photo Count'); ?></th>
+						<th><?php echo $this -> Paginator -> sort('points', 'Nuts'); ?></th>
 					</tr>					
 				</thead>
 				<tbody>
@@ -19,7 +20,7 @@
 				foreach ($users as $user) {
 					echo '<tr>';
 					echo '<td>';
-					echo $this -> Html -> link($user['User']['username'] . ' (' . $user['User']['points'] . ')' , array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username']));
+					echo $this -> Html -> link($user['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username']));
 					echo '</td>';
 					echo '<td>';
 					$datetime = strtotime($user['User']['created']);
@@ -31,6 +32,9 @@
 					echo '</td>';
 					echo '<td>';
 					echo $user['User']['user_upload_count'];
+					echo '</td>';
+					echo '<td>';
+					echo $user['User']['points'];
 					echo '</td>';
 					echo '</tr>';
 				}
