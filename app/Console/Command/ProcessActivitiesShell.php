@@ -38,7 +38,7 @@ class ProcessActivitiesShell extends AppShell {
 				$saveData['UserPointFact'] = array();
 				$saveData['UserPointFact']['month'] = $month;
 				$saveData['UserPointFact']['year'] = $year;
-				
+
 				// Figure out the id of the user we are adding the score for
 				// Add comment
 				if ($activity['ActivityType']['id'] === '1') {
@@ -93,7 +93,7 @@ class ProcessActivitiesShell extends AppShell {
 				// added already
 
 				$userFact = $this -> getFact($saveData['UserPointFact']['user_id'], $month, $year);
-				
+
 				$this -> updateFact($userFact, $score);
 
 			}
@@ -119,6 +119,11 @@ class ProcessActivitiesShell extends AppShell {
 				$userFact = $this -> UserPointFact -> find('first', array('conditions' => array('UserPointFact.id' => $id)));
 			}
 		}
+		
+		// We want this to update
+		if (isset($saveData['UserPointFact']['modified'])) {
+			unset($saveData['UserPointFact']['modified']);
+		}
 
 		return $userFact;
 	}
@@ -127,8 +132,8 @@ class ProcessActivitiesShell extends AppShell {
 		// Since we are updating everyone one at a time and not in batch, I should be able to take the current
 		// one passed in, add the score and then save...the next time through we will be retrieving the
 		// fact again so that we can update it
-		$userFact['UserPointFact']['points'] = $userFact['UserPointFact']['points']  + $score;
-		
+		$userFact['UserPointFact']['points'] = $userFact['UserPointFact']['points'] + $score;
+
 		$this -> UserPointFact -> save($userFact);
 	}
 
