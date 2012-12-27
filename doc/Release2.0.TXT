@@ -1,0 +1,9 @@
+Release Tasks
+- Make non nullable fields nullable
+- Add status_id column to collectibles, collectibles_rev
+- Run Conversion Process to convert old collectible state => status tables
+- remove state column
+
+
+TODO Tasks
+- Update all places that look for state field for collectible and have them look for status_id

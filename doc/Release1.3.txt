@@ -50,6 +50,8 @@ cake -app D:\Development\wamp\www\app one_time_add_points_fact_table
 
 cake -app D:\Development\wamp\www\app process_points
 
+cake -app D:\Development\wamp\www\app one_time_update_collectible_status
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
