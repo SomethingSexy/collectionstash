@@ -27,8 +27,6 @@ class ProcessActivitiesShell extends AppShell {
 
 		$points = $this -> Point -> find('list', array('fields' => array('Point.activity_type_id', 'Point.points')));
 
-		debug($activities);
-
 		foreach ($activities as $key => $activity) {
 			$score = $points[$activity['ActivityType']['id']];
 			if ($score !== '0') {
@@ -121,8 +119,8 @@ class ProcessActivitiesShell extends AppShell {
 		}
 		
 		// We want this to update
-		if (isset($saveData['UserPointFact']['modified'])) {
-			unset($saveData['UserPointFact']['modified']);
+		if (isset($userFact['UserPointFact']['modified'])) {
+			unset($userFact['UserPointFact']['modified']);
 		}
 
 		return $userFact;
@@ -133,6 +131,8 @@ class ProcessActivitiesShell extends AppShell {
 		// one passed in, add the score and then save...the next time through we will be retrieving the
 		// fact again so that we can update it
 		$userFact['UserPointFact']['points'] = $userFact['UserPointFact']['points'] + $score;
+
+		debug($userFact);
 
 		$this -> UserPointFact -> save($userFact);
 	}
