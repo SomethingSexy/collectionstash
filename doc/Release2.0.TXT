@@ -1,4 +1,9 @@
 Release Tasks
+- Update to Cake Version 2.2.4
+- You will also need to modify app/Config/core.php. Change the value of LOG_ERROR to LOG_ERR:
+- define('LOG_ERROR', LOG_ERR);
+
+
 - Make non nullable fields nullable
 - Add status_id column to collectibles, collectibles_rev
 - Run Conversion Process to convert old collectible state => status tables
