@@ -20,13 +20,13 @@
  *
  */
 App::uses('AppHelper', 'View/Helper');
-require_once(dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Vendor' . DS . 'Uploader.php');
+require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Vendor' . DS . 'Uploader.php');
 App::uses('Uploader', 'Vendor');
-require_once(dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Config' . DS . 'FileUploadSettings.php');
+require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Config' . DS . 'FileUploadSettings.php');
 App::uses('FileUploadSettings', 'Config');
 // App::import('Config', 'FileUpload.file_upload_settings');
 //App::import('Vendor', 'PhpThumbFactory', array('file' => 'ThumbLib.inc.php'));
-App::uses('PhpThumbFactory','Vendor');
+App::uses('PhpThumbFactory', 'Vendor');
 App::uses('RResizeImage', 'Lib');
 class FileUploadHelper extends AppHelper {
 	public $helpers = array('Html', 'Form');
@@ -56,10 +56,10 @@ class FileUploadHelper extends AppHelper {
 	 * - resizeThumbOnly: will only resize the image down -- not up past the original's size (true by default)
 	 */
 	var $options = array('width' => 0, 'height' => 0, //0 means no resizing
-		'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
-		'imagePathOnly' => false, //if true, will only return the requested image_path
-		'autoResize' => true, //if true, will resize the file automatically if given a valid width.
-		'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
+	'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
+	'imagePathOnly' => false, //if true, will only return the requested image_path
+	'autoResize' => true, //if true, will resize the file automatically if given a valid width.
+	'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
 	);
 
 	/**
@@ -69,12 +69,13 @@ class FileUploadHelper extends AppHelper {
 
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
-		
+
 		$this -> FileUploadSettings = new FileUploadSettings;
 
 		//setup settings
 		$this -> settings = array_merge($this -> FileUploadSettings -> defaults, $this -> options);
 	}
+
 	/**
 	 * Reset the helper to its initial state
 	 * @access public
@@ -115,12 +116,12 @@ class FileUploadHelper extends AppHelper {
 		} elseif (is_int($name)) {
 			$img = $this -> _getImageById();
 		}
-		
+
 		if ($img) {
 			return $img;
 		}
 
-		$this -> log("Unable to find image ". $name);
+		$this -> log("Unable to find image " . $name);
 		return false;
 	}
 
@@ -141,6 +142,10 @@ class FileUploadHelper extends AppHelper {
 		} else {
 			return "<input type='file' name='data[{$configs['var']}][" . $this -> inputCount++ . "]' />";
 		}
+	}
+
+	function getUploadDirectory() {
+		return $this -> settings['uploadDir'];
 	}
 
 	/**
@@ -268,7 +273,7 @@ class FileUploadHelper extends AppHelper {
 		} else {
 			$image = $this -> _getImagePath();
 		}
-		
+
 		$options = $this -> options;
 		//copy
 		//unset the default options
