@@ -68,11 +68,6 @@ a {
 }
 a.link {
 	cursor: pointer;
-	color: #606060;
-	/*text-decoration: underline;*/
-}
-a:visited {
-	color: #606060;
 }
 a:hover {
 	text-decoration: none;
@@ -669,36 +664,36 @@ div.radio label {
 	margin-bottom: 10px;
 }
 /*
-.standard-list ul {
+ .standard-list ul {
 
-	border-left: 1px solid #D8D8D8;
-	border-right: 1px solid #D8D8D8;
-	border-top: 1px solid #D8D8D8;
-}
-.standard-list ul li {
-	overflow: hidden;
-	/*border-bottom: 1px solid #E1E1E1;
-	color: #606060;
-}
-.standard-list ul li:nth-child(odd) {
-	/*background-color: #EEE;
-}
-.standard-list ul li span {
-	padding: 1em;
-}
-.standard-list ul li.title {
-	background: #D2E3F1;
-	border-top: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
-	color: #74A4BE;
-}
-.standard-list ul li.title span {
-	vertical-align: middle;
-	color: #369;
-	padding: 1em;
-	background: #D2E3F1;
-	font-weight: bold;
-} */
+ border-left: 1px solid #D8D8D8;
+ border-right: 1px solid #D8D8D8;
+ border-top: 1px solid #D8D8D8;
+ }
+ .standard-list ul li {
+ overflow: hidden;
+ /*border-bottom: 1px solid #E1E1E1;
+ color: #606060;
+ }
+ .standard-list ul li:nth-child(odd) {
+ /*background-color: #EEE;
+ }
+ .standard-list ul li span {
+ padding: 1em;
+ }
+ .standard-list ul li.title {
+ background: #D2E3F1;
+ border-top: 1px solid #CCC;
+ border-bottom: 1px solid #CCC;
+ color: #74A4BE;
+ }
+ .standard-list ul li.title span {
+ vertical-align: middle;
+ color: #369;
+ padding: 1em;
+ background: #D2E3F1;
+ font-weight: bold;
+ } */
 .table tr th a.asc {
 	background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
 	padding-right: 20px;
@@ -715,9 +710,9 @@ div.radio label {
 	background: none;
 }
 /*
-.standard-list ul li span {
-	float: left;
-}*/
+ .standard-list ul li span {
+ float: left;
+ }*/
 /**
  * 	This is the new list code where we put the padding
  * on the spans instead of the li so the text doesn't run
