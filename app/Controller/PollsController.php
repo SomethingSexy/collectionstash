@@ -32,13 +32,26 @@ class PollsController extends AppController {
 		// needs to be logged in
 		// needs to be valid poll
 		// can only vote once
+		if ($this -> isLoggedIn()) {
+			if (is_numeric($pollOptionId)) {
 
-		$vote = array();
-		$vote['Vote']['poll_option_id'] = $pollOptionId;
-		$vote['Vote']['poll_id'] = 1;
-		$vote['Vote']['user_id'] = $this -> getUserId();
+				$vote = $this -> Poll -> Vote -> find('first', array('conditions' => array('Vote.user_id' => $this -> getUserId(), 'Vote.poll_id' => 1)));
+				if (empty($vote)) {
+					$vote = array();
+					$vote['Vote']['poll_option_id'] = $pollOptionId;
+					$vote['Vote']['poll_id'] = 1;
+					$vote['Vote']['user_id'] = $this -> getUserId();
 
-		$this -> Poll -> Vote -> saveAll($vote);
+					$this -> Poll -> Vote -> saveAll($vote);
+				} else {
+					$this -> Session -> setFlash(__('Nice try, you can only vote once!', true), null, null, 'error');
+				}
+			} else {
+				$this -> Session -> setFlash(__('Invalid request.', true), null, null, 'error');
+			}
+		} else {
+			$this -> Session -> setFlash(__('You must be logged in to vote.', true), null, null, 'error');
+		}
 
 		$this -> redirect(array('action' => 'index'));
 	}
