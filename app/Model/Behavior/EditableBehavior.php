@@ -163,7 +163,7 @@ class EditableBehavior extends ModelBehavior {
 				}
 				if ($Model -> EditModel -> saveAll($saveEdit, array('validate' => false, 'deep' => true))) {
 					$edit = $Model -> findEdit($Model -> EditModel -> id);
-					$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_EDIT, 'editType' => $Model -> alias, 'edit' => $edit, 'user' => $edit, 'type' => 'edit')));
+					$Model -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_EDIT, 'editType' => $Model -> alias, 'edit' => $edit, 'user' => $edit, 'type' => 'edit')));
 				} else {
 					$Model -> EditModel -> Edit -> delete($editId);
 					$succesful = false;

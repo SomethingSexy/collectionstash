@@ -1,6 +1,3 @@
-<?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/cs.stash', array('inline' => false)); ?>
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
 	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
@@ -30,16 +27,64 @@ if (!isset($adminMode)) {
 if (!isset($showTags)) {
 	$showTags = false;
 }
+if (!isset($showImage)) {
+	$showImage = true;
+}
+if (!isset($showAttributes)) {
+	$showAttributes = true;
+}
+if (!isset($showStatus)) {
+	$showStatus = false;
+}
+if (!isset($allowStatusEdit)) {
+	$allowStatusEdit = false;
+}
+
+echo $this -> Minify -> script('js/jquery.comments', array('inline' => false));
+echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
+echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
+echo $this -> Html -> script('models/model.status', array('inline' => false));
+echo $this -> Html -> script('views/view.status', array('inline' => false));
+echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
-<div class="component stashable" id="collectible-detail">
-	<div class="inside">
-		<div class="component-title">
-			<h2><?php echo $title; ?></h2>
-			<div class="btn-group actions">
+<script>
+			var collectibleStatus = {
+	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
+		,
+		status:
+<?php echo json_encode($collectibleDetail['Status']); ?>};<?php
+if ($showStatus) {
+	echo 'var showStatus = true;';
+} else {
+	echo 'var showStatus = false;';
+}
+	?><?php
+	if ($allowStatusEdit) {
+		echo 'var allowStatusEdit = true;';
+	} else {
+		echo 'var allowStatusEdit = false;';
+	}
+?></script>
+
+<div id="collectible-container" class="span12">
+	<div class="row spacer">
+		<div class="span3"><h2><?php echo $title; ?></h2></div>
+		<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
+		<div class="span9">
+			<div class="btn-group actions pull-right">
 				<?php
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
 					echo '<a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
 				}
+				if (isset($isLoggedIn) && $isLoggedIn === true) {
+					if ($adminMode) {
+						echo '<a class="btn" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i></a>';
+					} else {
+						echo '<a class="btn" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i></a>';
+					}
+
+				}
+
 				if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
 					$userSubscribed = 'false';
 					if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
@@ -48,7 +93,6 @@ if (!isset($showTags)) {
 					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
 					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
 				}
-				
 				?>
 				<?php
 				if ($showWho) {
@@ -58,18 +102,84 @@ if (!isset($showTags)) {
 					//echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
 				}
 				if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn) {
-					if ($collectibleDetail['Collectible']['variant']) {
-						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar variant collectible type with the same manufacturer.', true), 'escape' => false, 'class'=>'btn'));
-					} else {
-						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/false/', array('title' => __('Add a similar collectible type with the same manufacturer.', true), 'escape' => false, 'class'=>'btn'));
-					}
-					if (!$collectibleDetail['Collectible']['variant']) {
-						echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickAdd/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true), 'escape' => false, 'class'=> 'btn btn-warning'));
-					}
+					echo $this -> Html -> link('<i class="icon-plus"></i>', '/collectibles/quickCreate/' . $collectibleDetail['Collectible']['id'] . '/true', array('title' => __('Add a varaint of this collectible.', true), 'escape' => false, 'class' => 'btn btn-warning'));
 				}
-				?>
+				?>	
 			</div>
 		</div>
+		<?php } ?>
+	</div>
+
+	<div id="status-container" class="row spacer">
+	
+	</div>
+
+	<div class="row spacer">
+		<div class="span4">
+			<?php
+			if ($showImage) {
+				echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
+			}
+			?>
+		</div>
+		<div class="span8">
+			<?php echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags)); ?>
+		</div>
+	</div>	
+	
+	<div class="row">
+				
+		<div class="span12">
+	
+		<?php
+		if (isset($showTags) && $showTags === true) {
+			echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+		}
+		?>
+		</div>
+	</div>		
+	<div class="row">	
+		<div class="span12">	
+			<?php
+			if ($showAttributes) {
+				echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
+				<script>
+					$(function() {
+						// If we are in admin mode, we need to pass that in to these methods so that they can
+						// do specific things based on that
+
+						$('.attributes > table > tbody> tr > td > span.popup').popover({
+							placement : 'bottom',
+							html : 'true',
+							trigger : 'click'
+						});
+
+					});
+				</script>
+		
+			<?php } ?>
+		</div>
+	</div>	
+	<div class="row">
+		
+		<div class="span12">
+			
+			<?php
+			if (isset($showVariants) && $showVariants) {
+				echo $this -> element('collectible_variant_list', array());
+			}
+			?>
+			
+		</div>
+		
+	</div>
+	
+</div>
+
+
+
+<div class="component stashable" id="collectible-detail">
+	<div class="inside">
 		<div class="component-view">
 			<?php
 			if(isset($isLoggedIn) && $isLoggedIn === true)
@@ -82,20 +192,13 @@ if (!isset($showTags)) {
 				<?php echo __('See something that is inaccurate? Login or register to help us maintain the most accurate collectible database.'); ?>
 			</div>
 			<?php } ?>
-			<?php
-			echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
-			?>
-			<?php
-			if (isset($showVariants) && $showVariants) {
-				echo $this -> element('collectible_variant_list', array());
-			}
-			?>
+			<?php ?>
 			<?php if(isset($showComments) && $showComments) {
 			?>
 			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
 			<script>
 				//lazy do doing here
-				$(function(){
+				$(function() {
 					$('#comments').comments();
 				});
 			</script>
@@ -120,8 +223,8 @@ if ($adminMode) {
 			</fieldset>
 			</form>
 			<div class="links">
-				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve');?></button>
-				<button id="deny-button" class="btn"><?php echo __('Deny');?></button>
+				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
+				<button id="deny-button" class="btn"><?php echo __('Deny'); ?></button>
 			</div>
 			<script>
 				//Eh move this out of here

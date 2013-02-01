@@ -66,7 +66,7 @@ a {
 	/* font-weight: bold;*/
 	text-decoration: none;
 }
-a.link {
+a:link {
 	cursor: pointer;
 }
 a:hover {
@@ -971,13 +971,13 @@ div.radio label {
 	float: left;
 	width: 100%;
 }
-/*#collectible-detail .component-view*/
-.collectible.tags {
-	float: left;
-	width: 100%;
-	overflow: hidden;
-	margin-top: 10px;
-}
+/*#collectible-detail .component-view
+ .collectible.tags {
+ float: left;
+ width: 100%;
+ overflow: hidden;
+ margin-top: 10px;
+ }*/
 /*#collectible-detail .component-view*/
 .collectible.tags .tag {
 	/*font-size: 0.75em;*/
@@ -2440,7 +2440,7 @@ div.paging span a:hover {
 }
 
 /**
- * 	Bootstrap overrides
+ * 	Bootstrap overrides or anything since I started using boostrap
  */
 .tab-content {
 	overflow: hidden;
@@ -2453,9 +2453,34 @@ div.paging span a:hover {
 .radio, .checkbox {
 	padding-left: 0;
 }
-
 .spacer {
-	margin-top: 40px; /* define margin as you see fit */
+	margin-top: 20px;
+}
+.well.user-stats .dl-horizontal dt {
+	width: 200px;
+}
+
+.well.user-stats .dl-horizontal dd {
+	margin-left: 215px;
+}
+
+.well .paging {
+	float: none;
+}
+
+#tree span {
+	cursor: pointer;
+}
+/* fixes problem with typeahead in modals */
+.typeahead {
+	z-index: 1051;
+}
+.edits table tr, .submissions table tr {
+	cursor: pointer;
+}
+.new .thumbnails,
+.pending .thumbnails {
+    margin-left: 50px;
 }
 /*
  * Cake BS

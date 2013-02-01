@@ -45,7 +45,7 @@ unset($urlparams['url']);
 						foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 							if ($upload['primary']) {
 								echo '<td>';
-								echo '<a rel="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 50, 'height' => 50)) . '</a>';
+								echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 50, 'height' => 50)) . '</a>';
 								echo '</td>';
 								break;
 							}
@@ -60,7 +60,7 @@ unset($urlparams['url']);
 					}
 					echo '</td>';
 					if ($collectible['Collectible']['variant']) {
-						echo '<td>' . __('Yes') . '</td>';
+						echo '<td><a href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Yes') . '</a></td>';
 					} else {
 						echo '<td>' . __('No') . ' </td>';
 					}

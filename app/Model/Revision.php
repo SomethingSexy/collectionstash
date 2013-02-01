@@ -10,6 +10,7 @@ class Revision extends AppModel {
 	public $ADD = 'A';
 	public $EDIT = 'E';
 	public $APPROVED = 'P';
+	public $DRAFT = 'D';
 
 	public function buildRevision($userId, $action, $notes = null) {
 		$revision = array();

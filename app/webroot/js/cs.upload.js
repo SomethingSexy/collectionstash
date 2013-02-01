@@ -55,7 +55,7 @@
 					}
 				});
 
-				$(this.options.element).on('click', function() {
+				this.options.$element.on('click', function() {
 					$.blockUI({
 						message : 'Loading...',
 						css : {

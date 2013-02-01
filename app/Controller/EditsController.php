@@ -128,7 +128,7 @@ class EditsController extends AppController {
 	function userHistory() {
 		$this -> checkLogIn();
 		$userId = $this -> getUserId();
-		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), "limit" => 25);
+		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), "limit" => 10);
 
 		$edits = $this -> paginate('Edit');
 		debug($edits);

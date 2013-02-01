@@ -124,4 +124,18 @@ class AppModel extends Model {
 
 		CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
 	}
+
+	public function buildDefaultResponse() {
+		$retVal = array();
+		$retVal['response'] = array();
+		$retVal['response']['isSuccess'] = false;
+		$retVal['response']['message'] = '';
+		$retVal['response']['code'] = 0;
+		$retVal['response']['data'] = array();
+		//Maybe this should be an error code
+		$retVal['response']['errors'] = array();
+
+		return $retVal;
+	}
+
 }

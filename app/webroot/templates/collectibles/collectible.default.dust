@@ -1,0 +1,244 @@
+<form class="form-horizontal well">
+	<fieldset>
+		<legend>
+			Manufacturer Details
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputManufacturer">Manufacturer</label>
+			<div class="controls">
+				<select id="inputManufacturer" name="manufacture_id">
+					<option value=""></option>
+					{#manufacturers collectibleId=collectible.manufacture_id}
+					<option value="{id}" {@eq key="{id}" value="{collectibleId}"}selected{/eq}>{title}</option>
+					{/manufacturers}
+				</select>
+			</div>
+		</div>
+		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath}
+		<div class="control-group">
+			<label class="control-label" for="inputBrand">Brand</label>
+			<div class="controls">
+				<select id="inputBrand" name="license_id">
+					{#LicensesManufacture}
+					<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
+					{/LicensesManufacture}
+				</select>
+			</div>
+		</div>
+		{#series_id seriesId=seriesId seriesPath=seriesPath}
+		<div class="control-group">
+			<label class="control-label" for="inputName">Category</label>
+			<div class="controls">
+				<button id="buttonSeries" type="button" class="btn">
+					{seriesPath}
+				</button>
+				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
+			</div>
+		</div>
+		{/series_id}
+		{/manufacturer}
+
+		<div class="control-group">
+			<label class="control-label" for="inputName">Name</label>
+			<div class="controls">
+				<input type="text" id="inputName" name="name" value="{collectible.name}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputDescription">Description</label>
+			<div class="controls">
+				<textarea id="inputDescription" rows="6" name="description">{collectible.description}</textarea>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Original Retail Price</label>
+			<div class="controls controls-row">
+				<div class="input-prepend">
+					<span class="add-on">$</span>
+					<input type="text" id="inputMsrp" name="msrp" value="{collectible.msrp}">
+				</div>
+
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Currency</label>
+			<div class="controls controls-row">
+				<select id="CollectibleCurrencyId" name="currency_id">
+					{#currencies}
+					<option value="{Currency.id}">{Currency.iso_code}</option>
+					{/currencies}
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Release Year</label>
+			<div class="controls controls-row">
+				<select name="release">
+					<option value=""></option>
+					{#years year=collectible.release}
+					<option {@eq key="{.}" value="{year}"}selected{/eq} value="{.}">{.}</option>
+					{/years}
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputCode">Product Code</label>
+			<div class="controls">
+				<input type="text" id="inputCode" name="code" value="{collectible.code}">
+				<span class="help-inline">This is the item code or product code given by the manufacture.</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputUpc">Product UPC</label>
+			<div class="controls">
+				<input type="text" id="inputUpc" name="upc" value="{collectible.upc}">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Collectible Details
+		</legend>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#collectible.limited}checked{/collectible.limited} type="checkbox" value="true" name="limited" id="inputLimited">
+					Limited Edition</label>
+			</div>
+		</div>
+		{#collectible.limited editionSize=collectible.edition_size numbered=collectible.numbered}
+		<div class="control-group editions-size">
+			<label class="control-label" for="inputEditionSize">Edition Size</label>
+			<div class="controls">
+				<input type="text" id="inputEditionSize" name="edition_size" value="{editionSize}">
+				<span class="help-inline">This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.</span>
+			</div>
+		</div>
+		{#editionSize}
+		<div class="control-group numbered">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#numbered}checked{/numbered} type="checkbox" value="true" name="numbered" id="inputNumbered">
+					Numbered</label>
+				<span class="help-inline">A collectible is considered numbered if it has an edition size and is indivudually numbered.</span>
+			</div>
+		</div>
+		{/editionSize}
+		{/collectible.limited}
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#collectible.exclusive}checked{/collectible.exclusive} type="checkbox" value="true" name="exclusive">
+					Exclusive</label>
+				<span class="help-inline">Indicates if this collectible is exclusive to any one place.</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputRetailer">Venue / Exclusive Retailer</label>
+			<div class="controls">
+				<input autocomplete="off" type="text" id="inputRetailer" name="retailer" value="{collectible.retailer}">
+				<span class="help-inline">If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.</span>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Collectible Specs
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Scale</label>
+			<div class="controls controls-row">
+				<select name="scale_id">
+					<option value=""></option>
+					{#scales scale=collectible.scale_id}
+					<option {@eq key="{Scale.id}" value="{scale}"}selected{/eq} value="{Scale.id}">{Scale.scale}</option>
+					{/scales}
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputUpc">Number of Pieces</label>
+			<div class="controls">
+				<input type="number" id="inputPieces" name="pieces" value="{collectible.pieces}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Weight</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputWeight" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
+					<span class="add-on">lbs</span>
+				</div>
+
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Length</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputLength" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Width</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputWidth" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Depth</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputDepth" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Reference
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputUpc">URL</label>
+			<div class="controls">
+				<input type="text" id="inputURL" name="url" value="{collectible.url}">			
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
+			Save changes
+		</button>
+	</div>
+</form>
+
+<div id="seriesModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Change Series</h3>
+	</div>
+	<div class="modal-body">
+	
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary" autocomplete="off">
+			Save
+		</button>
+	</div>
+</div>

@@ -458,10 +458,11 @@ AddAttributes.prototype.submit = function() {
 
 var AddCollectibleAttributes = function(options) {
 	this.options = $.extend({
-		$element : ''
+		$element : '',
+		$context : '',
+		success : function() {
+		}
 	}, options);
-
-	this.collectibleId = this.options.$element.attr('data-collectible-id');
 }
 
 AddCollectibleAttributes.prototype = Object.create(AttributesBase.prototype);
@@ -471,6 +472,8 @@ AddCollectibleAttributes.prototype = Object.create(AttributesBase.prototype);
  */
 AddCollectibleAttributes.prototype.init = function() {
 	var self = this;
+	this.collectibleId = this.options.$element.attr('data-collectible-id');
+
 	this.$dialog = $('#attribute-collectible-add-dialog').dialog({
 		height : 'auto',
 		width : 'auto',
@@ -479,7 +482,7 @@ AddCollectibleAttributes.prototype.init = function() {
 		resizable : false,
 	});
 
-	$('#add-new-item-link').on('click', function() {
+	$('#add-new-item-link', this.options.$context).on('click', function() {
 		var $element = $(this);
 		self.open();
 	});
@@ -594,6 +597,8 @@ AddCollectibleAttributes.prototype.submit = function() {
 					},
 					timeout : 2000
 				});
+
+				self.options.success(responseText.response.data);
 			} else {
 				if (responseText.response.errors) {
 					$.each(responseText.response.errors, function(index, value) {
@@ -615,10 +620,12 @@ AddCollectibleAttributes.prototype.submit = function() {
  */
 var AddExistingCollectibleAttributes = function(options) {
 	this.options = $.extend({
-		$element : ''
+		$element : '',
+		$context : '',
+		success : function() {
+		}
 	}, options);
 
-	this.collectibleId = this.options.$element.attr('data-collectible-id');
 }
 
 AddExistingCollectibleAttributes.prototype = Object.create(AttributesBase.prototype);
@@ -628,6 +635,7 @@ AddExistingCollectibleAttributes.prototype = Object.create(AttributesBase.protot
  */
 AddExistingCollectibleAttributes.prototype.init = function() {
 	var self = this;
+	this.collectibleId = this.options.$element.attr('data-collectible-id');
 	this.$dialog = $('#attribute-collectible-add-existing-dialog').dialog({
 		height : 'auto',
 		width : 'auto',
@@ -636,7 +644,7 @@ AddExistingCollectibleAttributes.prototype.init = function() {
 		resizable : false,
 	});
 
-	$('#add-existing-item-link').on('click', function() {
+	$('#add-existing-item-link', this.options.$context).on('click', function() {
 		var $element = $(this);
 		self.open();
 	});
@@ -764,6 +772,8 @@ AddExistingCollectibleAttributes.prototype.submit = function() {
 					},
 					timeout : 2000
 				});
+
+				self.options.success(responseText.response.data);
 			} else {
 				if (responseText.response.errors) {
 					$.each(responseText.response.errors, function(index, value) {
@@ -782,7 +792,12 @@ AddExistingCollectibleAttributes.prototype.submit = function() {
 
 var RemoveAttributes = function(options) {
 	this.options = $.extend({
-		$element : ''
+		$element : '',
+		$openElement : null,
+		$dataElement : null,
+		$context : '',
+		success : function() {
+		}
 	}, options);
 }
 
@@ -816,7 +831,7 @@ RemoveAttributes.prototype.init = function() {
 		$replacementItem.show();
 	});
 
-	this.options.$element.children('table').find('tr').children('.actions').find('a.remove-attribute').on('click', function() {
+	this.options.$element.children('table').on('click', 'tr .actions a.remove-attribute', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
@@ -935,6 +950,7 @@ RemoveAttributes.prototype.submit = function(attribute) {
 		// has been received
 		success : function(responseText, statusText, xhr, $form) {
 			if (responseText.response.isSuccess) {
+				responseText.response.data.id = id;
 				self.$dialog.dialog('close');
 				$.blockUI({
 					message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
@@ -952,6 +968,7 @@ RemoveAttributes.prototype.submit = function(attribute) {
 					},
 					timeout : 2000
 				});
+				self.options.success(responseText.response.data);
 			} else {
 				if (responseText.response.errors) {
 					$.each(responseText.response.errors, function(index, value) {
@@ -973,7 +990,12 @@ RemoveAttributes.prototype.submit = function(attribute) {
  */
 var RemoveAttributeLinks = function(options) {
 	this.options = $.extend({
-		$element : ''
+		$element : '',
+		$openElement : null,
+		$dataElement : null,
+		$context : '',
+		success : function() {
+		}
 	}, options);
 }
 
@@ -1061,6 +1083,7 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 			// has been received
 			success : function(responseText, statusText, xhr, $form) {
 				if (responseText.response.isSuccess) {
+					responseText.response.data.id = id;
 					self.$dialog.dialog('close');
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
@@ -1078,6 +1101,7 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 						},
 						timeout : 2000
 					});
+					self.options.success(responseText.response.data);
 				} else {
 					if (responseText.response.errors) {
 						$.each(responseText.response.errors, function(index, value) {
@@ -1101,12 +1125,26 @@ var UpdateAttributes = function(options) {
 	this.options = $.extend({
 		$element : '',
 		$openElement : null,
-		$dataElement : null
+		$dataElement : null,
+		$context : '',
+		success : function() {
+		}
 	}, options);
 }
 
 UpdateAttributes.prototype = Object.create(AttributesBase.prototype);
 
+UpdateAttributes.prototype.openDialog = function(element) {
+	var self = this;
+	if (self.options.$dataElement) {
+		self.open(new Attribute({
+			$element : self.options.$dataElement
+		}));
+	} else {
+		var $element = $(element);
+		self.open(self.getAttribute($element));
+	}
+}
 /**
  *Setup the main dialog for removing also add any events
  */
@@ -1124,19 +1162,15 @@ UpdateAttributes.prototype.init = function() {
 
 	if (this.options.$openElement) {
 		$openElement = this.options.$openElement;
+		$openElement.on('click', function() {
+			self.openDialog(this);
+		});
 	} else {
 		$openElement = this.options.$element.children('table').find('tr').children('.actions').find('a.edit-attribute-link');
+		this.options.$element.children('table').on('click', 'a.edit-attribute-link', function() {
+			self.openDialog(this);
+		});
 	}
-	$openElement.on('click', function() {
-		if (self.options.$dataElement) {
-			self.open(new Attribute({
-				$element : self.options.$dataElement
-			}));
-		} else {
-			var $element = $(this);
-			self.open(self.getAttribute($element));
-		}
-	});
 
 	this.$attributeCategory = this.$dialog.children('.component-dialog').children('.inside').children('.component-view').find('.attribute-category');
 
@@ -1240,7 +1274,7 @@ UpdateAttributes.prototype.submit = function(attribute) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				var message = 'Update has been submitted!';
-				if (self.options.adminPage) {
+				if (self.options.adminPage || !responseText.response.data.isEdit) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
@@ -1259,6 +1293,8 @@ UpdateAttributes.prototype.submit = function(attribute) {
 					},
 					timeout : 2000
 				});
+
+				self.options.success(responseText.response.data);
 			} else {
 				if (responseText.response.errors) {
 					$.each(responseText.response.errors, function(index, value) {
@@ -1277,7 +1313,12 @@ UpdateAttributes.prototype.submit = function(attribute) {
 
 var UpdateCollectibleAttributes = function(options) {
 	this.options = $.extend({
-		$element : ''
+		$element : '',
+		$openElement : null,
+		$dataElement : null,
+		$context : '',
+		success : function() {
+		}
 	}, options);
 }
 
@@ -1296,7 +1337,7 @@ UpdateCollectibleAttributes.prototype.init = function() {
 		resizable : false,
 	});
 
-	this.options.$element.children('table').find('tr').children('.actions').find('a.edit-attribute-collectible-link').on('click', function() {
+	this.options.$element.children('table').on('click', 'tr .actions a.edit-attribute-collectible-link', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
@@ -1368,7 +1409,7 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
 				var message = 'Update has been submitted!';
-				if (self.options.adminPage) {
+				if (self.options.adminPage || !responseText.response.data.isEdit) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
@@ -1387,6 +1428,7 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 					},
 					timeout : 2000
 				});
+				self.options.success(responseText.response.data);
 			} else {
 				if (responseText.response.errors) {
 					$.each(responseText.response.errors, function(index, value) {
@@ -1401,125 +1443,5 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 			}
 		}
 	});
-};
-/**
- *This is going to be the object that handles adding collectible attributes during
- * the contribute process.  This needs to extend the base one so that it can do stuff slightly differently
- */
-var ContributeAddCollectibleAttributes = function(options) {
-	this.options = $.extend({
-		$element : ''
-	}, options);
-
-}
-
-ContributeAddCollectibleAttributes.prototype = Object.create(AddCollectibleAttributes.prototype);
-
-/**
- * Overriding, instead of submitting to the server, we will add it to the page
- */
-ContributeAddCollectibleAttributes.prototype.submit = function() {
-	this._validateAttribute(function() {
-
-		var $form = this.$dialog.find('form');
-		var row = $('<tr></tr>');
-
-		var categoryName = $('.change-attribute-category-link', $form).text();
-		var categoryId = $(':input[name="data[Attribute][attribute_category_id]"]', $form).val();
-		var name = $(':input[name="data[Attribute][name]"]', $form).val();
-		var description = $(':input[name="data[Attribute][description]"]', $form).val();
-		var manId = $(':input[name="data[Attribute][manufacture_id]"] option:selected', $form).val();
-		var manName = $(':input[name="data[Attribute][manufacture_id]"] option:selected', $form).text();
-		var scaleId = $(':input[name="data[Attribute][scale_id]"] option:selected', $form).val();
-		var scaleName = $(':input[name="data[Attribute][scale_id]"] option:selected', $form).text();
-		var count = $(':input[name="data[AttributesCollectible][count]"]', $form).val();
-
-		var categoryCol = $('<td></td>').text(categoryName);
-		var nameCol = $('<td></td>').text(name);
-		var descCol = $('<td></td>').text(description);
-		var manCol = $('<td></td>').text(categoryName);
-		var scaleCol = $('<td></td>').text(scaleName);
-		var countCol = $('<td></td>').text(count);
-		var action = $('<td></td>').html('<div class="btn-group"><a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a> <ul class="dropdown-menu"> <li><a class="link remove-attribute" title="Remove Part">Remove Part</a></li></ul></div>');
-
-		row.append(categoryCol).append(nameCol).append(descCol).append(manCol).append(scaleCol).append(countCol).append(action);
-
-		//var $hiddenId = $('<input/>').attr('type', 'hidden').attr('name', 'data[Attribute][' + this.attributeNumber + '][id]').val(attributeId);
-		var $hiddenDescription = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][Attribute][description]').val(description);
-		var $hiddenName = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][Attribute][name]').val(name);
-		var $hiddenCategory = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][Attribute][attribute_category_id]').val(categoryId);
-		var $hiddenManId = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][Attribute][manufacture_id]').val(manId);
-		var $hiddenScaleId = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][Attribute][scale_id]').val(scaleId);
-		var $hiddenCount = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][count]').val(count);
-
-		row.append($hiddenDescription).append($hiddenName).append($hiddenCategory).append($hiddenManId).append($hiddenScaleId).append($hiddenCount);
-
-		$('#collectible-attributes-list').children('table').append(row);
-
-		attributeNumber++;
-		this.$dialog.dialog('close');	});
-};
-
-var ContributeAddExistingCollectibleAttributes = function(options) {
-	this.options = $.extend({
-		$element : ''
-	}, options);
-
-}
-
-ContributeAddExistingCollectibleAttributes.prototype = Object.create(AddExistingCollectibleAttributes.prototype);
-
-ContributeAddExistingCollectibleAttributes.prototype.submit = function() {
-	this._validateAttributesCollectible(function() {
-
-		var $form = this.$dialog.find('form');
-		var row = $('<tr></tr>');
-
-		var count = $(':input[name="data[AttributesCollectible][count]"]', $form).val();
-		var attributeId = $(':input[name="data[AttributesCollectible][attribute_id]"]', $form).val();
-
-		var categoryCol = $('<td></td>').text(this.selectedAttribute.AttributeCategory.path_name);
-		var nameCol = $('<td></td>').text(this.selectedAttribute.name);
-		var descCol = $('<td></td>').text(this.selectedAttribute.description);
-		var manCol = $('<td></td>').text(this.selectedAttribute.Manufacture.title);
-		var scaleCol = $('<td></td>').text(this.selectedAttribute.Scale.scale);
-		var countCol = $('<td></td>').text(count);
-		var action = $('<td></td>').html('<div class="btn-group"><a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a> <ul class="dropdown-menu"> <li><a class="link remove-attribute" title="Remove Part">Remove Part</a></li></ul></div>');
-
-		row.append(categoryCol).append(nameCol).append(descCol).append(manCol).append(scaleCol).append(countCol).append(action);
-
-		var $hiddenCount = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][count]').val(count);
-		var $hiddenAttributeId = $('<input/>').attr('type', 'hidden').attr('name', 'data[AttributesCollectible][' + attributeNumber + '][attribute_id]').val(attributeId);
-
-		row.append($hiddenAttributeId).append($hiddenCount);
-
-		$('#collectible-attributes-list').children('table').append(row);
-
-		attributeNumber++;
-		this.$dialog.dialog('close');
-	});
-};
-
-var ContributeRemoveAttribute = function(options) {
-	this.options = $.extend({
-		$element : ''
-	}, options);
-
-}
-/**
- *Setup the main dialog for removing also add any events
- */
-ContributeRemoveAttribute.prototype.init = function() {
-	var self = this;
-
-	this.options.$element.children('table').on('click', 'tr > td > div > ul > li > a.remove-attribute', function() {
-		var $element = $(this);
-		$element.closest('tr').remove();
-
-		// if (attributeNumber > 0) {
-		// attributeNumber--;
-		// }
-	});
-
 };
 

@@ -1,0 +1,15 @@
+<div class="alert {@eq key="{hasErrors}" value="true" type="boolean"}alert-error{/eq}">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<h4>Oops! Something wasn't filled out correctly.</h4>
+	{@eq key="{hasErrors}" value="true" type="boolean"}
+		<ul>
+		{#errors}
+			{#message}
+			<li>{.}</li>
+			{/message}
+		
+		{/errors}
+	
+		</ul>
+	{/eq}
+</div>

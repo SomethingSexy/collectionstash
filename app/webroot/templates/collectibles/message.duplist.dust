@@ -1,0 +1,40 @@
+<div class="alert">
+	<button type="button" class="close" data-dismiss="alert">
+		&times;
+	</button>
+	<h4>Warning! Potential duplicate collectible detected.</h4>
+	Don't panic, but we migth have a found a collectible that exists in our database already that is similar to what you are trying to add.  Browse the list below and see if it is already there.  If it doesn't,  you can ignore this warning, otherwise just delete this draft.
+
+	<table class="table thumbnails" data-toggle="modal-gallery" data-target="#modal-gallery">
+		<thead>
+
+		</thead>
+		<tbody>
+			{#collectibles uploadDirectory=uploadDirectory}
+			<tr>
+				{#CollectiblesUpload uploadDirectory=uploadDirectory}
+					{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+						<td><div class="span1"><a data-gallery="gallery" class="thumbnail" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></div></td>
+					{/primary}
+				{:else}
+					{:else}
+					<td><div class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></div></td>
+				{/CollectiblesUpload}
+
+				<td>{Collectible.name}{@eq key="{Collectible.exclusive}" value="true" type="boolean"} - Exclusive{/eq}</td>
+
+				{@eq key="{Collectible.variant}" value="true" type="boolean"}
+				<td>Variant</td>
+				{/eq}
+				{@eq key="{Collectible.variant}" value="false" type="boolean"}
+				<td>Not a variant</td>
+				{/eq}
+				<td>{Manufacture.title}</td>
+				<td>{License.name}</td>
+				<td>{Collectibletype.name}</td>
+			</tr>
+			{/collectibles}
+		</tbody>
+	</table>
+
+</div>

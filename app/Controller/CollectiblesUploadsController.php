@@ -97,7 +97,6 @@ class CollectiblesUploadsController extends AppController {
 			$uploadResponse['pending'] = false;
 			$uploadResponse['allowDelete'] = true;
 			$uploadResponse['primary'] = $value['CollectiblesUpload']['primary'];
-			
 
 			array_push($returnData['response']['data'], $uploadResponse);
 		}
@@ -156,10 +155,6 @@ class CollectiblesUploadsController extends AppController {
 	}
 
 	/**
-	 * Now that the gist of this is working, it needs to be updated so that we are creating
-	 * an edit version of the image.  This will add a new edit to the collectibles_uploads (like attributes_Collectibles)
-	 * and a new upload
-	 *
 	 *
 	 */
 	public function upload() {
@@ -194,11 +189,18 @@ class CollectiblesUploadsController extends AppController {
 					$uploadResponse['size'] = intval($upload['Upload']['size']);
 					$uploadResponse['name'] = $upload['Upload']['name'];
 					// this should be the id of the new pending collectible
-					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['Edit']['CollectiblesUpload']['id'] . '/true';
+					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/true';
 					$uploadResponse['delete_type'] = 'POST';
 					$uploadResponse['id'] = $this -> request -> data['CollectiblesUpload']['collectible_id'];
-					$uploadResponse['pending'] = true;
-					$uploadResponse['pendingText'] = __('Pending Approval');
+					
+					if ($upload['isEdit']) {
+						$uploadResponse['pending'] = true;
+						$uploadResponse['pendingText'] = __('Pending Approval');
+					} else {
+						$uploadResponse['pending'] = false;
+					}
+
+					//TODO: Need to figure these two properties out
 					$uploadResponse['owner'] = true;
 					$uploadResponse['allowDelete'] = true;
 

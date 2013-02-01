@@ -3,7 +3,7 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 	var $name = 'User';
 	var $actsAs = array('Containable');
-	var $hasMany = array('Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Subscription' => array('dependent' => true));
+	var $hasMany = array('Edit', 'Collectible', 'UserPointFact', 'Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Subscription' => array('dependent' => true));
 	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
 	var $hasOne = array('Profile' => array('dependent' => true));
 
@@ -122,8 +122,8 @@ class User extends AppModel {
 	}
 
 	public function getUser($username) {
-		$this -> recursive = 0;
-		return $this -> findByUsername($username);
+		$retVal = $this -> find('first', array('contain' => array('Profile'), 'conditions' => array('User.username' => $username)));
+		return $retVal;
 	}
 
 	public function getAllCollectiblesByUser($username) {

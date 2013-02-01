@@ -1,61 +1,79 @@
-<?php echo $this -> element('account_top'); ?>
+<?php
+// Build out a similar structure for this search result
+$paging = $this -> Paginator -> params();
+$urlparams = $this -> request -> query;
+unset($urlparams['url']);
+$returnData = array();
+$returnData['metadata'] = array();
+$returnData['metadata']['paging'] = $paging;
+$returnData['metadata']['url'] = $this -> Paginator -> url();
+$returnData['metadata']['params'] = $urlparams;
+$returnData['results'] = $edits;
 
-	<div class="title">
-		<h2><?php echo __('History'); ?></h2>
-	</div>
-	<?php echo $this -> element('flash'); ?>
-	<div class="standard-list edit-history-list">
-		<table class="table">
-			<tr class="title">
-				<th><?php echo __('Name'); ?></th>
-				<th><?php echo __('Details'); ?></th>
-				<th><?php echo $this -> Paginator -> sort('created', 'Date Added'); ?></th>
-				<th><?php echo $this -> Paginator -> sort('status', 'State'); ?></th>
-			</tr>
-			<?php
-			foreach ($edits as $edit) {
-				echo '<tr>';
-				echo '<td class="collectible-name">';
-				if ($edit['Edits'][0]['edit_type'] === 'Attribute') {
-					echo $this -> Html -> link($edit['Edits'][0]['base_id'], array('admin' => false, 'controller' => 'attributes', 'action' => 'view', $edit['Edits'][0]['base_id']));
-				} else {
-					echo $this -> Html -> link($edit['Edits'][0]['base_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['Edits'][0]['base_id']));
-				}
+// Might be easier for me to build out all of the paging HTMl here
+$pagingHtml = '';
+$pagingHtml .= '<p>';
+$pagingHtml .= $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
+$pagingHtml .= '</p>';
+$pagingHtml .= $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));
+$pagingHtml .= $this -> Paginator -> numbers(array('separator' => false));
 
-				echo '</td>';
-				echo '<td class="type">';
-				echo __('Future Use');
-				echo '</td>';
-				echo '<td class="timestamp">';
-				$datetime = strtotime($edit['Edit']['created']);
-				$mysqldate = date("m/d/y g:i A", $datetime);
-				echo $mysqldate;
-				echo '</td>';
-				echo '<td class="status">';
-				if ($edit['Edit']['status'] === '0') {
-					echo __('Pending');
-				} else if ($edit['Edit']['status'] === '1') {
-					echo __('Approved');
-				} else if ($edit['Edit']['status'] === '2') {
-					echo __('Denied');
-				}
-				echo '</td>';
+$pagingHtml .= $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 
-				echo '</tr>';
-			}
- ?>
-		</table>
-	</div>
-	<div class="paging">
-		<p>
-			<?php
-			echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
-			?>
-		</p>
-		<?php echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled')); ?>
-		<?php echo $this -> Paginator -> numbers(array('separator' => false)); ?>
-		<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled')); ?>
-	</div>
+$returnData['metadata']['pagingHtml'] = $pagingHtml;
 
-<?php echo $this -> element('account_bottom'); ?>
+//
+// {
+// "metadata": {
+// "host": "api.examplestore.com",
+// "path": "\/catalog\/search",
+// "query": "query=manafucturer+name&facets%5B0%5D=fieldType%3Arelease",
+// "page": 1,
+// "perPage": 10,
+// "count": 209,
+// "totalPages": 21,
+// "nextQuery": "query=manafucturer+name&facets%5B0%5D=fieldType%3Arelease&page=2",
+// "perPageOptions": [
+// {
+// "value": 50,
+// "applyQuery": "query=manafucturer+name&facets%5B0%5D=fieldType%3Arelease&perPage=50"
+// },
+// {
+// "value": 100,
+// "applyQuery": "query=manafucturer+name&facets%5B0%5D=fieldType%3Arelease&perPage=100"
+// },
+// {
+// "value": 150,
+// "applyQuery": "query=manafucturer+name&facets%5B0%5D=fieldType%3Arelease&perPage=150"
+// }
+// ],
+// "facets": {
+// "fields": {
+// "": [
+//
+// ]
+// }
+// },
+// "appliedFacets": [
+//
+// ],
+// "spellcheck": {
+// "suggestions": [
+//
+// ]
+// }
+// },
+// "results": [
+// {
+// "id": 188183,
+// "type": "product",
+// "name": "Product Name",
+// "slug": "product-slug",
+// "release": "2012-12-11",
+// ...
+// },
+// ... //next 9 results
+// }
 
+echo $this -> Js -> object($returnData);
+?>

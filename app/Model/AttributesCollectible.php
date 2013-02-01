@@ -43,13 +43,29 @@ class AttributesCollectible extends AppModel {
 		// We can only update the count
 		unset($this -> validate['attribute_id']);
 		if ($this -> validates()) {
+			// Now let's check to see if we need to update this based
+			// on collectible status
+			// If we are already auto updating, no need to check
+			if ($autoUpdate === 'false' || $autoUpdate === false) {
+				// find the AttributesCollectible and then use that to get the collectible id
+				$currentVersion = $this -> find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attributesCollectible['AttributesCollectible']['id'])));
+				$isDraft = $this -> Collectible -> isStatusDraft($currentVersion['AttributesCollectible']['collectible_id']);
+				debug($isDraft);
+				if ($isDraft) {
+					$autoUpdate = true;
+				}
+			}
+
 			// If we are automatically approving it, then save it directly
-			if ($autoUpdate) {
+			if ($autoUpdate === true || $autoUpdate === 'true') {
 				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> EDIT, null);
 				$attributesCollectible = array_merge($attributesCollectible, $revision);
 				//$this -> id = $attribute['Attribute']['id'];
 				if ($this -> saveAll($attributesCollectible, array('validate' => false))) {
+					$updatedVersion = $this -> find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $this -> id)));
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data'] = $updatedVersion['AttributesCollectible'];
+					$retVal['response']['data']['isEdit'] = false;
 				}
 			} else {
 				$action = array();
@@ -60,6 +76,7 @@ class AttributesCollectible extends AppModel {
 				$attributesCollectible['AttributesCollectible']['attribute_id'] = $attribute['AttributesCollectible']['attribute_id'];
 				if ($this -> saveEdit($attributesCollectible, $attributesCollectible['AttributesCollectible']['id'], $userId, $action)) {
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = true;
 				}
 			}
 
@@ -93,7 +110,18 @@ class AttributesCollectible extends AppModel {
 
 		unset($attribute['AttributesCollectible']['reason']);
 		$currentVersion = $this -> findById($attribute['AttributesCollectible']['id']);
-		if ($autoUpdate) {
+
+		if ($autoUpdate === 'false' || $autoUpdate === false) {
+			// find the AttributesCollectible and then use that to get the collectible id
+			$currentVersion = $this -> find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attribute['AttributesCollectible']['id'])));
+			$isDraft = $this -> Collectible -> isStatusDraft($currentVersion['AttributesCollectible']['collectible_id']);
+			debug($isDraft);
+			if ($isDraft) {
+				$autoUpdate = true;
+			}
+		}
+
+		if ($autoUpdate === true || $autoUpdate === 'true') {
 
 			$dataSource = $this -> getDataSource();
 			$dataSource -> begin();
@@ -121,11 +149,14 @@ class AttributesCollectible extends AppModel {
 				$dataSource -> rollback();
 			}
 
+			$retVal['response']['data']['isEdit'] = false;
+
 		} else {
 			// Doing this so that we have a record of the current version
 
 			if ($this -> saveEdit($currentVersion, $attribute['AttributesCollectible']['id'], $userId, $action)) {
 				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data']['isEdit'] = true;
 			} else {
 				$retVal['response']['isSuccess'] = false;
 			}
@@ -207,13 +238,34 @@ class AttributesCollectible extends AppModel {
 					return $attributeAddResponse;
 				}			}
 
-			if ($autoUpdate) {
+			// Now let's check to see if we need to update this based
+			// on collectible status
+			// If we are already auto updating, no need to check
+			if ($autoUpdate === 'false' || $autoUpdate === false) {
+				$isDraft = $this -> Collectible -> isStatusDraft($data['AttributesCollectible']['collectible_id']);
+				debug($isDraft);
+				if ($isDraft) {
+					$autoUpdate = true;
+				}
+			}
+
+			if ($autoUpdate === true || $autoUpdate === 'true') {
 				unset($data['Attribute']);
 				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
 				$data = array_merge($data, $revision);
 				if ($this -> saveAll($data, array('validate' => false))) {
 					$dataSource -> commit();
+
+					// Return what we just added
+					$attributesCollectibleId = $this -> id;
+					// Hopefully this won't be a performance issue at this level
+					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
+
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data'] = $attributesCollectible['AttributesCollectible'];
+					$retVal['response']['data']['Attribute'] = $attributesCollectible['Attribute'];
+					$retVal['response']['data']['Revision'] = $attributesCollectible['Revision'];
+					$retVal['response']['data']['isEdit'] = false;
 				} else {
 					$dataSource -> rollback();
 				}
@@ -224,7 +276,10 @@ class AttributesCollectible extends AppModel {
 				if ($this -> saveEdit($data, null, $userId, $action)) {
 					// Only commit when the save edit is successful
 					$dataSource -> commit();
+					// I am not sure we ever need to return what we just
+					// submitted if it is an edit
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = true;
 				} else {
 					$dataSource -> rollback();
 				}

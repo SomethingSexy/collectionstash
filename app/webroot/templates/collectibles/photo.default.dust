@@ -1,0 +1,16 @@
+<ul class="thumbnails" id="upload-link">
+	{#uploads uploadDirectory=uploadDirectory}
+		{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+			<li class="span4"><a class="thumbnail" href="#"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+		{/primary}
+		{:else}
+		<li class="span4"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
+	{/uploads}
+	
+	{#uploads uploadDirectory=uploadDirectory}
+		{@ne key="{primary}" value="true" type="boolean"}
+			<li class="span2"><a class="thumbnail" href="#"><img src="/{uploadDirectory}/{Upload.name}" alt=""></a></li>
+		{/ne}
+	{/uploads}
+
+</ul>

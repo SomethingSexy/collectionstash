@@ -4,7 +4,7 @@ class TagsController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify');
 
 	public function getTagList() {
-		$query = $this -> params['named']['query'];
+		$query = $this -> request -> query['query'];
 		$tags = $this -> Tag -> find('list', array('fields' => array('Tag.id', 'Tag.tag'), 'conditions' => array('Tag.tag LIKE' => $query . '%', 'Tag.active' => 1)));
 		$keys = array_keys($tags);
 		$values = array_values($tags);

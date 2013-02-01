@@ -1,12 +1,3 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false)); ?>
-<!-- This is eventuall going to have to be used as a component and a dialog when adding from the adding collectible process -->
-<?php
-
-echo $this -> Minify -> script('js/jquery.treeview', array('inline' => false));
-echo $this -> Minify -> script('js/cs.core.tree', array('inline' => false));
-echo $this -> Minify -> script('js/cs.attribute', array('inline' => false));
-?>
-
 <?php
 if (!isset($adminMode)) {
 	$adminMode = false;
@@ -16,36 +7,19 @@ $lastKey = 0;
 $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 ?>
 
-<div class="collectible detail attributes">
-	<div class="detail title">
-		<h3><?php echo __('Parts and Accessories'); ?></h3>
-			<?php
-			if (isset($showEdit) && $showEdit) {
-				echo '<div class="btn-group">
-    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-    Action
-    <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-		<li><a id="add-new-item-link" class="link" title=' . __('') . '>Add New Item</a>
-		</li>
-		<li><a id="add-existing-item-link" class="link" title=' . __('') . '>Add Existing Item</a>
-		</li>
-    </ul>
-    </div>';
-			}
-			?>
-	
-	</div>
+<div class="well">
+
+	<h3><?php echo __('Parts and Accessories'); ?></h3>
+
 	<?php
 	// TO be able to handle editing both the attribute and the attributecollectible easier
 	// I am going to put the JSON object as a data attribute on each row
 	if ($attributeEmpty) {
-		echo '<div class="standard-list attributes collectible empty" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
+
 		echo '<ul class="unstyled">';
 		echo '<li>No Parts or Accessories have been added</li>';
 		echo '</ul>';
-		echo '</div>';
+
 	} else {
 		$outputAttribtes = '';
 		$added = false;
@@ -82,9 +56,12 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			if (!empty($attribute['Attribute']['AttributesCollectible'])) {
 				$popup = '<ul>';
 				foreach ($attribute['Attribute']['AttributesCollectible'] as $key => $collectible) {
-					$popup .= '<li>';
-					$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
-					$popup .= '</li>';
+					if (!empty($collectible['Collectible']['name'])) {
+						$popup .= '<li>';
+						$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
+						$popup .= '</li>';
+					}
+
 				}
 				$popup .= '</ul>';
 			} else {
@@ -93,14 +70,13 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				$popup .= '</ul>';
 			}
 
-
-
 			$outputAttribtes .= '<tr data-attribute=\'' . $attributeJSON . '\' data-attribute-collectible=\'' . $attributeCollectibleJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="true" data-attribute-collectible-id="' . $attribute['id'] . '">';
 			// That means this is a new one, so we don't need the info icon
 			if ($attribute['Attribute']['status_id'] === '2') {
 				$outputAttribtes .= '<td><i class="icon-plus"></i></td>';
 			} else {
-				$outputAttribtes .= '<td title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></td>';;
+				$outputAttribtes .= '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
+				;
 			}
 
 			$outputAttribtes .= '<td class="category">';
@@ -122,36 +98,12 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			// Going to use the modified date and the last person on the revision who did something to it
 			$outputAttribtes .= '<td class="user">' . $attribute['Revision']['User']['username'] . '</td>';
 			$outputAttribtes .= '<td class="created">' . $attribute['modified'] . '</td>';
-			$outputAttribtes .= '<td class="actions">';
-			if (isset($showEdit) && $showEdit) {
-				$outputAttribtes .= '<div class="btn-group">
-			    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-			    Action
-			    <span class="caret"></span>
-			    </a>
-			    <ul class="dropdown-menu">
-					<li><a class="link edit-attribute-collectible-link" title=' . __('Edit Collectible Part<') . '>Edit Collectible Part</a>
-					</li>
-					<li><a class="link edit-attribute-link" title=' . __('Edit Part') . '>Edit Part</a>
-					</li>
-					<li><a class="link remove-link" title=' . __('Remove Collectible Part') . '>Remove Collectible Part</a>
-					</li>
-					<li><a class="link remove-attribute" title=' . __('Remove Part') . '>Remove Part</a>
-					</li>
-			    </ul>
-			    </div>';
-			} else {
-				$outputAttribtes .= ' ';
-			}
-
-			$outputAttribtes .= '</td>';
-
 			$outputAttribtes .= '</tr>';
 			$added = true;
 		}
 
 		if ($added) {
-			echo '<div class="standard-list attributes collectible" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
+			echo '<div class="attributes collectible" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
 			echo '<table class="table table-striped">';
 			echo '<thead><tr>';
 			echo '<th></th>';
@@ -163,7 +115,6 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			echo '<th title="' . __('The amount of items of this type this collectible has.') . '" class="count">' . __('Count', true) . '</th>';
 			echo '<th class="user" title="' . __('The user who performed the last action on this item.') . '">' . __('Added By') . '</th>';
 			echo '<th class="created">' . __('Last Modified') . '</th>';
-			echo '<th class="actions"> </th>';
 			echo '</tr></thead>';
 			echo '<tbody>';
 			echo $outputAttribtes;

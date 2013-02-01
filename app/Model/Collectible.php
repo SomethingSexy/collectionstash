@@ -3,9 +3,9 @@ App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class Collectible extends AppModel {
 	public $name = 'Collectible';
-	public $belongsTo = array('EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.state' => 0)), 'User' => array('counterCache' => true), 'Currency');
+	public $belongsTo = array('Status', 'EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
 	public $hasMany = array('CollectiblesUser', 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
-	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id')), 'Containable', 'Sluggable' => array(
+	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -172,6 +172,11 @@ class Collectible extends AppModel {
 				$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
 				$results['seriesPath'] = $fullSeriesPath;
 			}
+
+			if (isset($results['retailer_id']) && !empty($results['retailer_id'])) {
+				$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $results['retailer_id'])));
+				$results['retailer'] = $existingRetailer['Retailer']['name'];
+			}
 		}
 		return $results;
 	}
@@ -234,7 +239,12 @@ class Collectible extends AppModel {
 	}
 
 	function validateManufactureId($check) {
+		if (is_null($check['manufacture_id'])) {
+			return false;
+		}
+
 		$result = $this -> Manufacture -> find('count', array('id' => $check['manufacture_id']));
+
 		return $result > 0;
 	}
 
@@ -250,6 +260,12 @@ class Collectible extends AppModel {
 	}
 
 	function validateCollectibleType($check) {
+		// if we don't have a valid manufacturer yet, then we can't validate
+		// this so return true for now
+		if (is_null($this -> data['Collectible']['manufacture_id'])) {
+			return true;
+		}
+
 		$result = $this -> Manufacture -> CollectibletypesManufacture -> find('first', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'CollectibletypesManufacture.collectibletype_id' => $check['collectibletype_id']), 'contain' => false));
 		debug($result);
 		if ($result) {
@@ -318,20 +334,33 @@ class Collectible extends AppModel {
 		return $this -> find('all');
 	}
 
-	public function getPendingCollectibles() {
-		$collectible = $this -> find("all", array('conditions' => array('Collectible.state' => 1)));
+	/**
+	 * This will get all pending collectibles
+	 */
+	public function getPendingCollectibles($options = array()) {
+		if (isset($options['conditions'])) {
+			$options = array_merge($options['conditions'], array('Collectible.status_id' => 2));
+		} else {
+			$options['conditions'] = array('Collectible.status_id' => 2);
+		}
+
+		if (!isset($options['contain'])) {
+			$options['contain'] = array('Status', 'CollectiblesUpload' => array('Upload'));
+		}
+
+		$collectible = $this -> find("all", $options);
 
 		return $collectible;
 	}
 
 	public function getNumberOfPendingCollectibles() {
-		$count = $this -> find("count", array('conditions' => array('Collectible.state' => 1)));
+		$count = $this -> find("count", array('conditions' => array('Collectible.status_id' => 2)));
 
 		return $count;
 	}
 
 	public function getPendingCollectiblesByUserId($userId) {
-		$count = $this -> find("count", array('conditions' => array('Collectible.user_id' => $userId, 'Collectible.state' => 1)));
+		$count = $this -> find("count", array('conditions' => array('Collectible.user_id' => $userId, 'Collectible.status_id' => 2)));
 		return $count;
 	}
 
@@ -349,7 +378,7 @@ class Collectible extends AppModel {
 	 * the given id.
 	 */
 	public function getCollectibleVariants($collectibleId) {
-		$collectibles = $this -> find('all', array('contain' => array('CollectiblesUpload' => array('Upload')), 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId, 'Collectible.state' => 0)));
+		$collectibles = $this -> find('all', array('contain' => array('CollectiblesUpload' => array('Upload')), 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId, 'Collectible.status_id' => 4)));
 
 		return $collectibles;
 	}
@@ -358,7 +387,7 @@ class Collectible extends AppModel {
 	 * This method will return a count of all collectibles that have been approved
 	 */
 	public function getCollectibleCount() {
-		$collectiblesCount = $this -> find('count', array('conditions' => array('Collectible.state' => 0)));
+		$collectiblesCount = $this -> find('count', array('conditions' => array('Collectible.status_id' => 4)));
 		return $collectiblesCount;
 	}
 
@@ -403,6 +432,9 @@ class Collectible extends AppModel {
 				array_push($conditions, array('AND' => array('Collectible.variant_collectible_id' => $collectible['Collectible']['variant_collectible_id'])));
 			}
 			debug($conditions);
+
+			// Since collectibles are added from the beginning, make sure to exclude this one
+			array_push($conditions, array('NOT' => array('Collectible.id' => array($collectible['Collectible']['id']))));
 
 			$returnList = $this -> find("all", array("conditions" => array($conditions), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'))));
 		}
@@ -499,73 +531,302 @@ class Collectible extends AppModel {
 		return $retVal;
 	}
 
-	public function add($collectible, $userId) {
+	/**
+	 * This method is used to copy a collectible and save it (mainly for variant creating purposes)
+	 */
+	public function createCopy($collectibleId, $userId, $variant = false) {
+		$retVal = $this -> buildDefaultResponse();
 
-		/* Since they confirmed, now set to pending = 1.  I really don't like how
-		 this is setup right now but it works because of the image thing.
-		 A 1 means that this collectible needs to be approved by an admin first
-		 *
-		 * TODO: If we are not auto approving, then do we need to make sure that attributes_collectible is set to not active?
-		 * */
-		$pendingState = '1';
-		if (Configure::read('Settings.Approval.auto-approve') == 'true') {
-			$pendingState = '0';
+		$collectible = $this -> find("first", array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('CollectiblesTag', 'AttributesCollectible')));
+		if (!$collectible) {
+			$retVal['response']['isSuccess'] = false;
+			return;
 		}
-
-		$collectible['Collectible']['state'] = $pendingState;
-
-		//user id of the person who added this collectible
 		$collectible['Collectible']['user_id'] = $userId;
+		$collectible['Collectible']['status_id'] = 1;
 
-		//Adding this here, we need to clean this up later and put it all in the model
+		$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> DRAFT, null);
+		$collectible['Revision'] = $revision['Revision'];
 		$collectible['EntityType']['type'] = 'collectible';
 
-		$dataSource = $this -> getDataSource();
-		$dataSource -> begin();
+		if ($variant) {
+			$collectible['Collectible']['variant'] = true;
+			$collectible['Collectible']['variant_collectible_id'] = $collectible['Collectible']['id'];
+		}
 
-		$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
-		if ($this -> Revision -> save($revision)) {
-			$revisionId = $this -> Revision -> id;
-			$collectible['Collectible']['revision_id'] = $revisionId;
+		unset($collectible['Collectible']['id']);
+		unset($collectible['Collectible']['revision_id']);
+		unset($collectible['Collectible']['entity_type_id']);
+		unset($collectible['Collectible']['created']);
+		unset($collectible['Collectible']['modified']);
+		unset($collectible['Collectible']['collectibles_user_count']);
 
-			if (isset($collectible['AttributesCollectible']) && !empty($collectible['AttributesCollectible'])) {
-				foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
-					$collectible['AttributesCollectible'][$key]['revision_id'] = $revisionId;
-					// If the attribute id is set, that means this is an existing attribute we are adding,
-					// otherwise if I don't have an attribute id, then this is a new one
-					if (!isset($attributesCollectible['attribute_id']) && isset($attributesCollectible['Attribute'])) {
-						$collectible['AttributesCollectible'][$key]['Attribute']['revision_id'] = $revisionId;
-						$collectible['AttributesCollectible'][$key]['Attribute']['user_id'] = $userId;
-						$collectible['AttributesCollectible'][$key]['Attribute']['EntityType']['type'] = 'attribute';
-						$collectible['AttributesCollectible'][$key]['Attribute']['status_id'] = 2;
-					}
+		// Then we need to loop through each
+		foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
+			unset($collectible['AttributesCollectible'][$key]['revision_id']);
+			unset($collectible['AttributesCollectible'][$key]['collectible_id']);
+			unset($collectible['AttributesCollectible'][$key]['id']);
+
+		}
+		foreach ($collectible['CollectiblesTag'] as $key => $collectiblesTag) {
+			unset($collectible['CollectiblesTag'][$key]['revision_id']);
+			unset($collectible['CollectiblesTag'][$key]['collectible_id']);
+			unset($collectible['CollectiblesTag'][$key]['id']);
+		}
+
+		debug($collectible);
+		$this -> set($collectible);
+
+		// no need to check if it validates because it is all internal
+		if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {
+			$retVal['response']['isSuccess'] = true;
+			$retVal['response']['data']['collectible_id'] = $this -> id;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * this method creates the initial collectible, used when adding
+	 */
+	public function createInitial($collectibleTypeId, $userId) {
+		$retVal = $this -> buildDefaultResponse();
+
+		$collectible['Collectible'] = array();
+		$collectible['Collectible']['user_id'] = $userId;
+		$collectible['Collectible']['collectibletype_id'] = $collectibleTypeId;
+		$collectible['Collectible']['status_id'] = 1;
+		$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> DRAFT, null);
+		$collectible['Revision'] = $revision['Revision'];
+		$collectible['EntityType']['type'] = 'collectible';
+
+		$this -> set($collectible);
+		// Only field we need to validate
+		if ($this -> User -> validates(array('fieldList' => array('collectibletype_id')))) {
+			// valid
+			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {
+				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data']['id'] = $this -> id;
+			} else {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
+				$retVal['response']['errors'] = $errors;
+			}
+		} else {
+			// invalid
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+	}
+
+	public function getCollectible($id) {
+		$retVal = $this -> buildDefaultResponse();
+
+		if (!$id) {
+			$retVal['response']['isSuccess'] = false;
+			$retVal['response']['errors'] = array('message', __('Invalid request.'));
+		}
+		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
+		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
+		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
+
+		// so let's do this manually and try that out
+		if (!empty($collectible['AttributesCollectible'])) {
+			// ok if we have some of these
+			// loop through each one
+			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
+				//'AttributesCollectible' => array('Collectible' )
+				if (!empty($attributesCollectible['Attribute'])) {
+					$existingAttributeCollectibles = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
+					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
+				}
+			}
+		}
+
+		if (!empty($collectible)) {
+			$variants = $this -> getCollectibleVariants($id);
+			$retVal['response']['data']['collectible'] = $collectible;
+			$retVal['response']['data']['variants'] = $variants;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			// Missing
+			$retVal['response']['code'] = 1;
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * This is the method that now gets called anytime we need to save changes
+	 * to a collectible (core data).  It will figure out the status
+	 * of the collectible and whether it should submit an edit or
+	 */
+	public function saveCollectible($collectible, $user, $autoUpdate = false) {
+		// Given id, look up status
+		// if it is anything but active allow real time update
+		// if it is draft,  the only person who can update it is an admin
+		// or the user who submitted it
+
+		// other make it an edit
+
+		if ($autoUpdate === 'false' || $autoUpdate === false) {
+			$isDraft = $this -> isStatusDraft($collectible['Collectible']['id']);
+			if ($isDraft) {
+				$autoUpdate = true;
+			}
+		}
+
+		// make sure no hackers :)
+		unset($collectible['Collectible']['user_id']);
+
+		// TODO: Since they can update anything they want at any time
+		// we will have to make all of the validation rules not required
+		if ($autoUpdate === true || $autoUpdate === 'true') {
+			$this -> id = $collectible['Collectible']['id'];
+
+			$this -> save($collectible, array('validate' => false));
+
+		} else {
+			$action = array();
+			$action['Action']['action_type_id'] = 2;
+			$returnData = $this -> saveEdit($collectible, $collectible['Collectible']['id'], $user['User']['id'], $action);
+		}
+
+	}
+
+	/**
+	 * This will handle removing the collectible.  If the collectible is
+	 * a draft and it is the user who submitted it, then automatically
+	 * delete it.
+	 *
+	 * If it is submitted, do not allow delete unless by an admin
+	 *
+	 * If it is active, do not allow delete unless by an admin
+	 *
+	 * Edit is not supported yet
+	 */
+	public function remove($collectibleId, $user) {
+		$retVal = $this -> buildDefaultResponse();
+		$collectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleId)));
+		if (!empty($collectible)) {
+			$allowDelete = false;
+			if ($collectible['Collectible']['status_id'] === '1') {
+				if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+					$allowDelete = true;
+				}
+			} else if ($collectible['Collectible']['status_id'] === '2') {
+				if ($user['User']['admin']) {
+					$allowDelete = true;
+				}
+			} else if ($collectible['Collectible']['status_id'] === '4') {
+				if ($user['User']['admin']) {
+					$allowDelete = true;
+				}
+			} else {
+				$retVal['response']['isSuccess'] = false;
+				array_push($retVal['response']['errors'], array('message' => __('You do not have permission to do that.')));
+			}
+
+			if ($allowDelete) {
+				if ($this -> delete($collectibleId)) {
+					$retVal['response']['isSuccess'] = true;
+				} else {
+					$retVal['response']['isSuccess'] = false;
+					array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
 				}
 			}
 
-			if (isset($collectible['CollectiblesUpload'])) {
-				// This should also update the revision for the upload
-				// since we are only allowing one on submission this should be fine
-				$collectible['CollectiblesUpload'][0]['revision_id'] = $revisionId;
-				$collectible['CollectiblesUpload'][0]['status_id'] = 2;
-				$collectible['CollectiblesUpload'][0]['Upload']['revision_id'] = $revisionId;
-				$collectible['CollectiblesUpload'][0]['Upload']['id'] = $collectible['CollectiblesUpload'][0]['upload_id'];
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+
+		}
+
+		return $retVal;
+
+	}
+
+	/**
+	 * This method will update the status of a collectible, mainly from the user's perspective
+	 * If the change the status from draft to submitted then we will need to run a validation check
+	 * against the collectible (tags and attributes will be automatically validated and we can have a collectible without a photo)
+	 */
+	public function updateStatus($collectible, $user, $ignoreDupCheck = false) {
+		$retVal = $this -> buildDefaultResponse();
+		$this -> read(null, $collectible);
+		debug($this -> data);
+		// first see if it is valid
+		if ($this -> validates()) {
+			// if it is valid
+			$status = $this -> data['Collectible']['status_id'];
+
+			if ($status === '1') {
+				$status = 2;
+			} else if ($status === '2') {
+				$status = 1;
 			}
 
-			$this -> create();
-			debug($collectible);
-			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {				$dataSource -> commit();
-				$id = $this -> id;
-				$addCollectible = $this -> findById($id);
-				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $addCollectible, 'object' => $addCollectible, 'type' => 'Collectible')));
-				return true;
-			} else {
-				$dataSource -> rollback();
-				return false;
+			// Based on the status we are changing too
+			// If we are submitted it, then we need to
+			// do a check to see if a similar collectible
+			// exists
+			if ($status == 2) {
+				$dupList = $this -> doesCollectibleExist($this -> data);
+				debug($dupList);
+				if (!empty($dupList) && !$ignoreDupCheck) {
+					$retVal['response']['isSuccess'] = false;
+					$retVal['response']['data']['dupList'] = $dupList;
+					return $retVal;
+				}
+			}
+
+			unset($this -> data);
+
+			if ($this -> saveField('status_id', $status, false)) {
+				$statusDetail = $this -> Status -> find('first', array('contain' => false, 'conditions' => array('Status.id' => $status)));
+				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data']['status'] = $statusDetail['Status'];
 			}
 		} else {
-			$dataSource -> rollback();
-			return false;
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Collectible');
+			$retVal['response']['errors'] = $errors;
 		}
+
+		return $retVal;
+	}
+
+	/**
+	 * Get the status of a collectible
+	 */
+	public function getStatus($collectibleId) {
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status')));
+
+		if ($collectible && !empty($collectible)) {
+			return $collectible['Status'];
+		} else {
+			return null;
+		}
+	}
+
+	public function isStatusDraft($collectibleId) {
+		$retVal = false;
+		$status = $this -> getStatus($collectibleId);
+		if (!is_null($status)) {
+			if ($status['id'] === '1') {
+				$retVal = true;
+			}
+		}
+
+		return $retVal;
 	}
 
 }
