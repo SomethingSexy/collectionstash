@@ -30,7 +30,12 @@
 			<label class="control-label" for="inputName">Category</label>
 			<div class="controls">
 				<button id="buttonSeries" type="button" class="btn">
-					{seriesPath}
+					{@if cond="('{seriesPath}' !== '')"}
+						{seriesPath}
+						{:else}
+						Select
+					{/if}
+					
 				</button>
 				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
 			</div>
