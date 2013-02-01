@@ -22,7 +22,7 @@ class AppController extends Controller {
 		// Since I am not using auth to it's fullest right now
 		// we need to allow all, the individual methods will
 		// figure out if they need a user to be logged in
-		$this -> Auth -> allow('*');
+		$this -> Auth -> allow();
 
 		if ($this -> request -> isAjax()) {
 			Configure::write('debug', 0);			$this -> layout = 'ajax';
