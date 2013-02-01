@@ -504,7 +504,7 @@ class CollectiblesController extends AppController {
 	function newCollectibles() {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
-		$this -> paginate = array('order' => array('Collectible.modified' => 'desc'), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
+		$this -> paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}
@@ -512,7 +512,7 @@ class CollectiblesController extends AppController {
 	function pending() {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
-		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('Collectibletype', 'Manufacture', 'Status'), 'limit' => 5);
+		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}
