@@ -49,7 +49,7 @@
 						echo '</td>';
 						echo '<td class="action">';
 						if ($edit['edit_type'] === 'Collectible') {
-							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectible_edits', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
 						} else if ($edit['edit_type'] === 'Attribute') {
 							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'attributes', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
 						} else if ($edit['edit_type'] === 'Upload') {

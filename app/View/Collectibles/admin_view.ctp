@@ -13,6 +13,7 @@
 		'showAddedDate' => true,
 		'collectibleDetail' => $collectible,
 		'showAddStash' => false,
-		'adminMode' => true
+		'adminMode' => true,
+		'showTags' => true
 	));		
 ?>

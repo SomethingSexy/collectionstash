@@ -88,24 +88,35 @@ class Attribute extends AppModel {
 	 * This method will be used when we are updating an attribute
 	 */
 	public function update($attribute, $userId, $autoUpdate = false) {
-		$retVal = array();
-		$retVal['response'] = array();
-		$retVal['response']['isSuccess'] = false;
-		$retVal['response']['message'] = '';
-		$retVal['response']['code'] = 0;
-		//Maybe this should be an error code
-		$retVal['response']['errors'] = array();
+		$retVal = $this -> buildDefaultResponse();
 		$this -> set($attribute);
 		$validCollectible = true;
 		if ($this -> validates()) {
 			// If we are automatically approving it, then save it directly
-			if ($autoUpdate) {
+
+			if ($autoUpdate === 'false' || $autoUpdate === false) {
+				// Because we set the attributes add to submitted, check both
+				if ($this -> isStatusDraft($attribute['Attribute']['id']) || $this -> isStatusSubmitted($attribute['Attribute']['id'])) {
+					$autoUpdate = true;
+				}
+			}
+
+			if ($autoUpdate === true || $autoUpdate === 'true') {
 				unset($attribute['AttributesCollectible']);
 				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> EDIT, null);
 				$attribute = array_merge($attribute, $revision);
 				//$this -> id = $attribute['Attribute']['id'];
 				if ($this -> saveAll($attribute, array('validate' => false))) {
+					// Given an update we need to
+					$attributeId = $this -> id;
+					$updatedAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name'))))));
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['Attribute'] = $updatedAttribute['Attribute'];
+					$retVal['response']['data']['Attribute']['Manufacture'] = $updatedAttribute['Manufacture'];
+					$retVal['response']['data']['Attribute']['Scale'] = $updatedAttribute['Scale'];
+					$retVal['response']['data']['Attribute']['AttributeCategory'] = $updatedAttribute['AttributeCategory'];
+					$retVal['response']['data']['Attribute']['AttributesCollectible'] = $updatedAttribute['AttributesCollectible'];
+					$retVal['response']['data']['isEdit'] = false;
 				}
 			} else {
 				$action = array();
@@ -113,6 +124,7 @@ class Attribute extends AppModel {
 
 				if ($this -> saveEdit($attribute, $attribute['Attribute']['id'], $userId, $action)) {
 					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = true;
 				}
 			}
 
@@ -129,13 +141,7 @@ class Attribute extends AppModel {
 	 * This method will be used when we are trying to remove an attribute
 	 */
 	public function remove($attribute, $userId, $autoUpdate = false) {
-		$retVal = array();
-		$retVal['response'] = array();
-		$retVal['response']['isSuccess'] = false;
-		$retVal['response']['message'] = '';
-		$retVal['response']['code'] = 0;
-		//Maybe this should be an error code
-		$retVal['response']['errors'] = array();
+		$retVal = $this -> buildDefaultResponse();
 		// There will be an ['Attribute']['reason'] - input field
 		// if this attribute is tied to a collectible, are we replacing
 		// with an existing attriute? Or removing completely, which will
@@ -156,23 +162,66 @@ class Attribute extends AppModel {
 			$currentVersion['Attribute']['replace_attribute_id'] = $attribute['Attribute']['replace_attribute_id'];
 		}
 
-		if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $userId, $action)) {
-			$retVal['response']['isSuccess'] = true;
-		} else {
-			$retVal['response']['isSuccess'] = false;
+		if ($autoUpdate === 'false' || $autoUpdate === false) {
+			// Because we set the attributes add to submitted, check both
+			if ($this -> isStatusDraft($attribute['Attribute']['id']) || $this -> isStatusSubmitted($attribute['Attribute']['id'])) {
+				$autoUpdate = true;
+			}
 		}
+
+		if ($autoUpdate === true || $autoUpdate === 'true') {
+			$proceed = true;
+			debug($attribute['Attribute']['replace_attribute_id']);
+			// If we have a replacement, then lets update all of those first
+			if (isset($attribute['Attribute']['replace_attribute_id']) && !empty($attribute['Attribute']['replace_attribute_id'])) {
+				$replacementAttribute = $attribute['Attribute']['replace_attribute_id'];
+
+				// Find all attributes collectibles that have this attribute id
+				$updateAttributesCollectible = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id'])));
+				// Need to manually specify the modified field because updateAll is very dumb, only does what you tell it to do
+				// Now update all attributes collectibles with the replacement id
+				if ($this -> AttributesCollectible -> updateAll(array('AttributesCollectible.attribute_id' => $replacementAttribute, 'AttributesCollectible.modified' => 'NOW()'), array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id']))) {
+
+					// Seems like a lot of redundancy
+					// Since updateAll does not trigger afterSave we need to manually create revisions
+					foreach ($updateAttributesCollectible as $key => $value) {
+						debug($value['AttributesCollectible']['id']);
+						// TODO: This is not working
+						$this -> AttributesCollectible -> id = $value['AttributesCollectible']['id'];
+						$this -> AttributesCollectible -> createRevision();
+					}
+
+					$proceed = true;
+				} else {
+					$proceed = false;
+				}
+			}
+
+			// If the update of the attributes failed then don't try the delete
+			// If I am not replacing and it is linked, this delete will automatically delete
+			// all dependent AttributesCollectible rows
+			if ($proceed) {
+				if ($this -> delete($attribute['Attribute']['id'])) {
+					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = false;
+				}
+			}
+
+		} else {
+			if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $userId, $action)) {
+				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data']['isEdit'] = true;
+			} else {
+				$retVal['response']['isSuccess'] = false;
+			}
+		}
+
 		debug($retVal);
 		return $retVal;
 	}
 
 	public function addAttribute($attribute, $userId) {
-		$retVal = array();
-		$retVal['response'] = array();
-		$retVal['response']['isSuccess'] = false;
-		$retVal['response']['message'] = '';
-		$retVal['response']['code'] = 0;
-		//Maybe this should be an error code
-		$retVal['response']['errors'] = array();
+		$retVal = $this -> buildDefaultResponse();
 
 		// An id of 2 means it is submitted
 		$attribute['Attribute']['status_id'] = 2;
@@ -209,11 +258,7 @@ class Attribute extends AppModel {
 	 * 		5: Attribute has been approved already
 	 */
 	public function approve($id, $approval, $userId) {
-		$retVal = array();
-		$retVal['response'] = array();
-		$retVal['response']['isSuccess'] = false;
-		$retVal['response']['message'] = '';
-		$retVal['response']['code'] = 0;
+		$retVal = $this -> buildDefaultResponse();
 
 		$attribute = $this -> find('first', array('conditions' => array('Attribute.id' => $id), 'contain' => array('User', 'Manufacture', 'Scale', 'Status')));
 
@@ -232,8 +277,8 @@ class Attribute extends AppModel {
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['code'] = 1;
 					if ($retVal) {
-						$approver = $this -> User -> find('first', array('conditions'=> array('User.id'=> $userId)));
-						$submitter = $this -> User -> find('first', array('conditions'=> array('User.id'=> $attribute['Attribute']['user_id'])));
+						$approver = $this -> User -> find('first', array('conditions' => array('User.id' => $userId)));
+						$submitter = $this -> User -> find('first', array('conditions' => array('User.id' => $attribute['Attribute']['user_id'])));
 						$message = 'We have approved the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $approver, 'object' => $attribute, 'target' => $submitter, 'type' => 'Attribute')));
 						$this -> notifyUser($attribute['Attribute']['user_id'], $message);
@@ -430,6 +475,43 @@ class Attribute extends AppModel {
 
 			return $results;
 		}
+	}
+
+	/**
+	 * Get the status of a collectible
+	 */
+	public function getStatus($attributeId) {
+		$attribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('Status')));
+
+		if ($attribute && !empty($attribute)) {
+			return $attribute['Status'];
+		} else {
+			return null;
+		}
+	}
+
+	public function isStatusDraft($attributeId) {
+		$retVal = false;
+		$status = $this -> getStatus($attributeId);
+		if (!is_null($status)) {
+			if ($status['id'] === '1') {
+				$retVal = true;
+			}
+		}
+
+		return $retVal;
+	}
+
+	public function isStatusSubmitted($attributeId) {
+		$retVal = false;
+		$status = $this -> getStatus($attributeId);
+		if (!is_null($status)) {
+			if ($status['id'] === '2') {
+				$retVal = true;
+			}
+		}
+
+		return $retVal;
 	}
 
 }

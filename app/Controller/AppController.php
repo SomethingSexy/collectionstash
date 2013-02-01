@@ -18,9 +18,9 @@ class AppController extends Controller {
 
 		// Process logic
 		'active' => true, 'redirect' => true, 'requirePrompt' => true);
-		
+
 		// Since I am not using auth to it's fullest right now
-		// we need to allow all, the individual methods will 
+		// we need to allow all, the individual methods will
 		// figure out if they need a user to be logged in
 		$this -> Auth -> allow('*');
 
@@ -386,7 +386,8 @@ class AppController extends Controller {
 
 		$listSize = Configure::read('Settings.Search.list-size');
 
-		array_push($conditions, array('Collectible.state' => '0'));
+		// When doing this search, we only want to see the active ones
+		array_push($conditions, array('Collectible.status_id' => '4'));
 		//See if a search was set
 		if (isset($search)) {
 			//Is the search an empty string?

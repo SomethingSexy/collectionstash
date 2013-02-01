@@ -192,6 +192,7 @@ class AttributesCollectiblesController extends AppController {
 	 *
 	 */
 	public function update() {
+		debug($this -> isLoggedIn());
 		if (!$this -> isLoggedIn()) {
 			$data['response'] = array();
 			$data['response']['isSuccess'] = false;

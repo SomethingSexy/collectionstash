@@ -7,14 +7,15 @@ echo $this -> Minify -> script('js/jquery.fileupload-fp', array('inline' => fals
 echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => false));
 
 echo $this -> Minify -> script('js/locale', array('inline' => false));
-echo $this -> Minify -> script('js/cs.upload', array('inline' => false));
+echo $this -> Html -> script('cs.upload', array('inline' => false));
 ?>
 <script>
 		$(function() {
-			$('#fileupload').balls({
-				'collectibleId' : <?php echo $uploadId; ?>,
-				'element' : '#upload-link'
-			});
+			//TODO: Need to fix this for user uploads
+			// $('#fileupload').balls({
+				// 'collectibleId' : <?php echo $uploadId; ?>,
+				// 'element' : '#upload-link'
+			// });
 		});
 
 		$(document).bind('drop', function(e) {
@@ -174,7 +175,7 @@ echo $this -> Minify -> script('js/cs.upload', array('inline' => false));
 	<td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
 	{% } else { %}
 	<td class="preview">{% if (file.thumbnail_url) { %}
-	<a href="{%=file.url%}" title="{%=file.name%}" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+	<a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
 	{% } %}</td>
 	<td class="name">
 	<a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
@@ -183,7 +184,7 @@ echo $this -> Minify -> script('js/cs.upload', array('inline' => false));
 	<td colspan="2"><span>{% if(file.pending) { %} {%=file.pendingText %} {% } %}</span></td>
 	{% } %}
 	<td class="delete">
-	{% if(file.allowDelete &&  !file.primary){ %}
+	{% if(file.allowDelete){ %}
 	<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
 	<i class="icon-trash icon-white"></i>
 	<span>{%=locale.fileupload.destroy%}</span>

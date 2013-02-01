@@ -32,6 +32,8 @@
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('js/jquery-1.7');
 	echo $this -> Minify -> script('js/thirdparty/backbone');
+	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
+	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
 	echo $this -> Minify -> script('js/jquery-ui-1.8.18');
 	echo $this -> Minify -> script('js/jquery-plugins');
 	echo $this -> Minify -> script('js/jquery.autocomplete');
@@ -42,6 +44,7 @@
 	echo $this -> Minify -> script('js/thirdparty/bootstrap');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('js/thirdparty/dust-full-1.1.1');
+	echo $this -> Minify -> script('js/thirdparty/dust-helpers-1.1.0');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	
@@ -120,7 +123,7 @@
 						<?php  } ?>
 						<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
 						<li>
-							<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'addSelectType', 'controller' => 'collectibles')); ?>
+							<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
 						</li>
 						<?php } ?>
 						<li class="dropdown">
@@ -247,10 +250,9 @@
 		        <a class="btn modal-download" target="_blank"><i class="icon-download"></i> Download</a>
 		    </div>
 		</div>
-		
 		<?php
 		echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
-		?>
+			?>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
 </html>

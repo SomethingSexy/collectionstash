@@ -1,48 +1,33 @@
+<div class="well">
+ <h2><?php echo __('Variants'); ?></h2>
+
 <?php if (!empty($variants)) { ?>
-	<div class="component variant-list">
-	  <div class="inside" >
-	     <div class="component-title">
-	      <h2><?php echo __('Variants'); ?></h2>
-	    </div>
-	    <div class="component-view">
-	      <div class="collectibles view">
-	        <?php  
-	        foreach ($variants as $variant):
-	        ?>
-	        	<div class="collectible item">
-	        		<div class="collectible image">
-						<?php
-						if (!empty($variant['CollectiblesUpload'])) {
-							foreach ($variant['CollectiblesUpload'] as $key => $upload) {
-								if ($upload['primary']) {
-									echo '<a href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
-									echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false, 'width' => 150, 'height' => 150));
-									echo '</a>';
-									break;
-								}
-							}
-						} else {
-							echo '<img src="/img/silhouette_thumb.png"/>';
+	<ul class="thumbnails">
+	<?php  
+	foreach ($variants as $variant):
+	?>
+		
+			<li class="span3">
+				<?php
+				if (!empty($variant['CollectiblesUpload'])) {
+					foreach ($variant['CollectiblesUpload'] as $key => $upload) {
+						if ($upload['primary']) {
+							echo '<a  class="thumbnail" href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false, 'width' => 150, 'height' => 150));
+							echo '</a>';
+							break;
 						}
-					?>
-					</div>
-	          </div>
-	        <?php endforeach; ?>      
-	      </div>
-	    </div>
-	  </div>
-	</div>	
+					}
+				} else {
+					echo '<a class="thumbnail" href="/collectibles/view/' . $variant['Collectible']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
+				}
+			?>
+			</li>
+	<?php endforeach; ?>      
+	</ul>
 <?php } else { ?>
-	<div class="component variant-list" id="collectibles-list-component">
-	  <div class="inside" >
-	     <div class="component-title">
-	      <h2><?php echo __('Variants'); ?></h2>
-	    </div>
-	    <div class="component-view">
-	      <div class="collectibles view empty">
-			<p><?php echo __('This collectible has no variants.'); ?></p>	
-	      </div>
-	    </div>
-	  </div>
-	</div>		
-<?php	  }
+
+	<p><?php echo __('This collectible has no variants.'); ?></p>	
+	
+<?php	  }?>
+</div>

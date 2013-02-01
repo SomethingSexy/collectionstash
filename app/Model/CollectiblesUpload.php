@@ -13,6 +13,20 @@ class CollectiblesUpload extends AppModel {
 	//upload id field
 	'upload_id' => array('rule' => array('validateUploadId'), 'required' => true, 'message' => 'Must be a valid image.'));
 
+	public function beforeSave($options = array()) {
+		// Before we save check to see if there is an existin image that is the primary
+		// if not, set
+		debug($this -> data['CollectiblesUpload']);
+		if (!empty($this -> data['CollectiblesUpload']['primary']) && !$this -> data['CollectiblesUpload']['primary']) {
+			$primary = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $this -> data['CollectiblesUpload']['collectible_id'], 'CollectiblesUpload.primary' => 1)));
+			debug($primary);
+			if (empty($primary)) {
+				$this -> data['CollectiblesUpload']['primary'] = true;
+			}
+		}
+		return true;
+	}
+
 	function validateUploadId($check) {
 		if (!isset($check['upload_id']) || empty($check['upload_id'])) {
 			return false;
@@ -43,8 +57,33 @@ class CollectiblesUpload extends AppModel {
 
 		unset($upload['CollectiblesUpload']['reason']);
 		$currentVersion = $this -> findById($upload['CollectiblesUpload']['id']);
-		if ($autoUpdate) {
 
+		// Now let's check to see if we need to update this based
+		// on collectible status
+		// If we are already auto updating, no need to check
+		if ($autoUpdate === 'false' || $autoUpdate === false) {
+			$isDraft = $this -> Collectible -> isStatusDraft($currentVersion['CollectiblesUpload']['collectible_id']);
+			debug($isDraft);
+			if ($isDraft) {
+				$autoUpdate = true;
+			}
+		}
+
+		if ($autoUpdate === true || $autoUpdate === 'true') {
+			if ($this -> delete($currentVersion['CollectiblesUpload']['id'])) {
+				// After we delete the collectible, we need to check and see if
+				// we are deleting a primary, if so and there are other
+				// uploads, set the first one as the primary
+
+				if ($currentVersion['CollectiblesUpload']['primary']) {
+					$firstExisting = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $currentVersion['CollectiblesUpload']['collectible_id'])));
+					// if we do have one
+					if (!empty($firstExisting)) {
+						$this -> id = $firstExisting['CollectiblesUpload']['id'];
+						$this -> saveField('primary', true, false);
+					}
+				}
+			}
 		} else {
 			// Doing this so that we have a record of the current version
 
@@ -61,6 +100,9 @@ class CollectiblesUpload extends AppModel {
 	 * Right now we are only support adding new uploads to collectibles
 	 *
 	 * We are not linking uploads yet
+	 *
+	 * TODO: This needs to be update to check the status of the collectible we are adding this too
+	 *       if it is anything other than active, it will automatically add
 	 */
 	public function add($data, $userId, $autoUpdate = false) {
 		// Check to see if there is an upload id, if so then we are adding
@@ -103,14 +145,14 @@ class CollectiblesUpload extends AppModel {
 					// Just in case
 					$dataSource -> rollback();
 					$retVal['response']['isSuccess'] = false;
-					$errors = $this -> convertErrorsJSON($this -> Attribute -> validationErrors, 'Attribute');
+					$errors = $this -> convertErrorsJSON($this -> Upload -> validationErrors, 'Upload');
 					$retVal['response']['errors'] = $errors;
 					return $retVal;
 				}
 				$upload = array();
 				$upload['Upload'] = $data['Upload'];
 
-				// Now we need to kick off a save of the attribute
+				// Now we need to kick off a save of the upload
 				$uploadAddResponse = $this -> Upload -> add($upload, $userId);
 
 				if ($uploadAddResponse && $uploadAddResponse['response']['isSuccess']) {
@@ -125,7 +167,18 @@ class CollectiblesUpload extends AppModel {
 				}
 			}
 
-			if ($autoUpdate) {
+			// Now let's check to see if we need to update this based
+			// on collectible status
+			// If we are already auto updating, no need to check
+			if ($autoUpdate === 'false' || $autoUpdate === false) {
+				$isDraft = $this -> Collectible -> isStatusDraft($data['CollectiblesUpload']['collectible_id']);
+				debug($isDraft);
+				if ($isDraft) {
+					$autoUpdate = true;
+				}
+			}
+
+			if ($autoUpdate === true || $autoUpdate === 'true') {
 				unset($data['Upload']);
 				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
 				$data = array_merge($data, $revision);
@@ -134,6 +187,7 @@ class CollectiblesUpload extends AppModel {
 					$collectiblesUpload = $this -> find('first', array('conditions' => array('CollectiblesUpload.id' => $this -> id)));
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $collectiblesUpload;
+					$retVal['response']['data']['isEdit'] = false;
 				} else {
 					$dataSource -> rollback();
 				}
@@ -146,7 +200,8 @@ class CollectiblesUpload extends AppModel {
 					$dataSource -> commit();
 					$retVal['response']['isSuccess'] = true;
 					// Returning the new edit version on this array, kind of lame but need a place to put it
-					$retVal['response']['data']['Edit'] = $savedEdit;
+					$retVal['response']['data'] = $savedEdit;
+					$retVal['response']['data']['isEdit'] = true;
 				} else {
 					$dataSource -> rollback();
 				}
@@ -195,6 +250,19 @@ class CollectiblesUpload extends AppModel {
 			// delete a pending removal.
 			if ($this -> delete($collectiblesUploadEditVersion['CollectiblesUploadEdit']['base_id'])) {
 				if ($this -> Upload -> delete($collectiblesUploadEditVersion['Upload']['id'])) {
+
+					// After we delete the collectible, we need to check and see if
+					// we are deleting a primary, if so and there are other
+					// uploads, set the first one as the primary
+					if ($collectiblesUploadEditVersion['CollectiblesUploadEdit']['primary']) {
+						$firstExisting = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'])));
+						// if we do have one
+						if (!empty($firstExisting)) {
+							$this -> id = $firstExisting['CollectiblesUpload']['id'];
+							$this -> saveField('primary', true, false);
+						}
+					}
+
 					$retVal = true;
 				}
 			}

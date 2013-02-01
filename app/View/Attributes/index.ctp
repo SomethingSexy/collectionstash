@@ -63,9 +63,12 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					if (!empty($attribute['AttributesCollectible'])) {
 						$popup = '<ul>';
 						foreach ($attribute['AttributesCollectible'] as $key => $collectible) {
-							$popup .= '<li>';
-							$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
-							$popup .= '</li>';
+							if (!empty($collectible['Collectible']['name'])) {
+								$popup .= '<li>';
+								$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
+								$popup .= '</li>';
+							}
+
 						}
 						$popup .= '</ul>';
 					} else {
@@ -75,7 +78,7 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					}
 
 					echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
-					echo '<td title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></td>';
+					echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
 					echo '<td data-id="' . $attribute['AttributeCategory']['id'] . '" class="category">';
 					echo $attribute['AttributeCategory']['path_name'];
 					echo '</td>';
@@ -161,13 +164,13 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 
 		addAttributes.init();
 
-		$('.standard-list.attributes.index > table > tbody> tr > td.popup').popover({
+		$('.standard-list.attributes.index > table > tbody> tr > td > span.popup').popover({
 			placement : 'bottom',
 			html : 'true',
 			trigger : 'click'
 		});
 
-	}); 
+	});
 </script>
 
 <?php echo $this -> element('attribute_remove_dialog'); ?>

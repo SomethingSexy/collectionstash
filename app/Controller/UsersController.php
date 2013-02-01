@@ -10,17 +10,69 @@ class UsersController extends AppController {
 	}
 
 	/**
+	 * User home dashboard
+	 */
+	public function home() {
+		// user
+		$user = $this -> getUser();
+		debug($user);
+		$this -> set(compact('user'));
+
+		//stashes
+		$stashes = $this -> User -> Stash -> find('all', array('conditions' => array('Stash.user_id' => $this -> getUserId()), 'contain' => false));
+		$this -> set(compact('stashes'));
+		debug($stashes);
+		// user_point_facts
+		$pointsYear = $this -> User -> UserPointFact -> getUserTotalPointsCurrentYear($this -> getUserId());
+		$pointsMonth = $this -> User -> UserPointFact -> getUserTotalPointsCurrentMonth($this -> getUserId());
+		$this -> set(compact('pointsYear'));
+		$this -> set(compact('pointsMonth'));
+		// Previous
+		$previousPointsMonth = $this -> User -> UserPointFact -> getUserTotalPointsPreivousMonth($this -> getUserId());
+		$this -> set(compact('previousPointsMonth'));
+
+		$monthlyLeaders = $this -> User -> UserPointFact -> getCurrentMonthlyLeaders();
+
+		$this -> set(compact('monthlyLeaders'));
+
+		$previousMonthlyLeaders = $this -> User -> UserPointFact -> getPreviousMonthyLeaders();
+
+		$this -> set(compact('previousMonthlyLeaders'));
+
+		// This is all the collectibles submitted by the user
+		$total = $this -> User -> Collectible -> find('count', array('conditions' => array('Collectible.user_id' => $this -> getUserId())));
+		$collectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.user_id' => $this -> getUserId()), 'contain' => array('Collectibletype', 'Manufacture', 'Status'), 'limit' => 10));
+
+		$collectibles = json_encode($collectibles);
+
+		$this -> set(compact('collectibles'));
+		$this -> set(compact('total'));
+
+		$totalEdits = $this -> User -> Edit -> find('count', array('conditions' => array('Edit.user_id' => $this -> getUserId())));
+		$edits = $this -> User -> Edit -> find('all', array('conditions' => array('Edit.user_id' => $this -> getUserId()), 'limit' => 10));
+
+		$edits = json_encode($edits);
+		$this -> set(compact('edits'));
+		$this -> set(compact('totalEdits'));
+
+		// Now grab the pending collectible
+		$pending = $this -> User -> Collectible -> getPendingCollectibles(array('limit' => 5));
+		$totalPending = $this -> User -> Collectible -> getNumberOfPendingCollectibles();
+		$pending = json_encode($pending);
+		$this -> set(compact('pending'));
+		$this -> set(compact('totalPending'));
+
+		$newCollectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5));
+		$newCollectibles = json_encode($newCollectibles);
+		$this -> set(compact('newCollectibles'));
+	}
+
+	/**
 	 * This is the main index into this controller, it will display a list of users.
 	 */
 	function index() {
-		$users = $this -> User -> find("first", array('conditions' => array('User.id' => 1)));
-		debug($users);
-
-		// This max limit is not desirable, fix later to put the actual paging in the view code
 		$this -> paginate = array('conditions' => array('User.admin !=' => 1), 'contain' => false, 'order' => array('User.username' => 'ASC'), 'limit' => 50);
-
 		$users = $this -> paginate('User');
-
 		$this -> set(compact('users'));
 	}
 

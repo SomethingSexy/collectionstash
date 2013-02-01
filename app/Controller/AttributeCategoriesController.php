@@ -7,26 +7,28 @@
  * Remember when adding new categories we will need to update the path name
  *
  * This will also handle moving categories to other categories for us...admin
- * 
+ *
  * 		//Shit is completely out of order, need to fix this TODO
-		$this -> Attribute -> AttributeCategory -> recover('parent');
+ $this -> Attribute -> AttributeCategory -> recover('parent');
  */
 class AttributeCategoriesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify');
 
-	// function add() {
-	//
-	// $data['Attribute']['parent_id'] = '1';
-	// $data['Attribute']['name'] = 'Body';
-	// $this -> Attribute -> save($data);
-	// $this -> render(false);
-	// }
+	public function get() {
+		$returnData = $this -> AttributeCategory -> get();
 
-	public function getAttributeList($id = null) {
-		$attributes = $this -> AttributeCategory -> getAttributeList($id);
-		debug($attributes);
-		$this -> set('aAttributes', $attributes);
+		$this -> autoRender = false;
+		$view = new View($this, false);
+		$view -> set('categories', $returnData['response']['data']);
+
+		/* Grab output into variable without the view actually outputting! */
+		$view_output = $view -> render('tree');
+		$returnData['response']['data'] = $view_output;
+		$this -> autoRender = true;
+
+		$this -> set(compact('returnData'));
 	}
+
 }
 ?>

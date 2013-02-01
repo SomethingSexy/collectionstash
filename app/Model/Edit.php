@@ -23,8 +23,17 @@ class Edit extends AppModel {
 		if ($primary) {
 			foreach ($results as $key => $val) {
 				if (isset($val['Edit']['id'])) {
+					//TODO: remove when we update edit to use Status table
+					if ($val['Edit']['status'] === '0') {
+						$results[$key]['Status']['status'] = 'Submitted';
+					} else if ($val['Edit']['status'] === '1') {
+						$results[$key]['Status']['status'] = 'Approved';
+					} else if ($val['Edit']['status'] === '2') {
+						$results[$key]['Status']['status'] = 'Declined';
+					}	
+
 					$results[$key]['Edits'] = array();
-					debug($val);
+
 					$this -> bindModel(array('belongsTo' => array('Collectible')));
 					$collectibleEdit = $this -> Collectible -> findEditsByEditId($val['Edit']['id']);
 					$this -> unbindModel(array('belongsTo' => array('Collectible')));
@@ -37,7 +46,7 @@ class Edit extends AppModel {
 
 					$this -> bindModel(array('belongsTo' => array('Attribute')));
 					$attribute = $this -> Attribute -> findEditsByEditId($val['Edit']['id']);
-					debug($attribute);
+
 					$this -> unbindModel(array('belongsTo' => array('Attribute')));
 					if (!empty($attribute)) {
 						//Since there is only 1 allowed, just assume for now

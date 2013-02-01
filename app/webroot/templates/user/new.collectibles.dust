@@ -1,0 +1,7 @@
+<ul class="thumbnails">
+
+</ul>
+{@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
+<a data-slide="prev" href="#myCarousel" class="left previous carousel-control">‹</a>
+{/gt}
+<a data-slide="next" href="#myCarousel" class="right next carousel-control">›</a>

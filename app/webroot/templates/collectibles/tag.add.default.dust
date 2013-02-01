@@ -1,0 +1,9 @@
+<div class="control-group">
+	<div class="input-append">
+		<input autocomplete="off" type="text" id="inputTag" name="tag" value="">
+		<button class="btn add-tag" type="button">
+			Add
+		</button>
+	</div>
+	<span class="help-block inline-error"></span>
+</div>

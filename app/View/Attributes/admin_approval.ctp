@@ -114,6 +114,7 @@
 					<?php
 					echo '<div class="standard-list empty"><table class="table">';
 					echo '<thead><tr>';
+					echo '<th></th>';
 					echo '<th class="name">';
 					echo __('Collectible Name');
 					echo '</th>';
@@ -124,6 +125,11 @@
 					if (isset($attributesCollectible) && !empty($attributesCollectible)) {
 						foreach ($attributesCollectible as $key => $value) {
 							echo '<tr>';
+							if($value['Collectible']['status_id'] === '1'){
+								echo '<td><i class="icon-plus"></i></td>';
+							} else {
+								echo '<td> </td>';
+							}
 							echo '<td class="name">';
 							echo $value['Collectible']['name'];
 							echo '</td>';

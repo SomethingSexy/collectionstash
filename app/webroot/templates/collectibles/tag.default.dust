@@ -1,0 +1,1 @@
+<span data-id="{modelId}">{Tag.tag}</span> <a class="link remove-tag">Remove</a>

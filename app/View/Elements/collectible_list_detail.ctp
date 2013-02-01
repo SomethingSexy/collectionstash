@@ -62,7 +62,7 @@ if(isset($speciazliedType)) {
 			echo __('Status');
 			echo '</dt>';
 			echo '<dd>';
-			if ($collectible['state'] == 0) {
+			if ($collectible['status_id'] == 4) {
 				echo __('Approved');
 			} else {
 				echo __('Pending Approval');

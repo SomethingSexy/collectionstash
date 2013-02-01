@@ -1,0 +1,33 @@
+<div class="well attributes collectible" data-collectible-id="{collectibleId}">
+	<h3>Parts and Accessories</h3>
+	<div class="btn-group">
+		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
+		<ul class="dropdown-menu">
+			<li>
+				<a id="add-new-item-link" class="link" title=' . __('') . '>Add New Item</a>
+			</li>
+			<li>
+				<a id="add-existing-item-link" class="link" title=' . __('') . '>Add Existing Item</a>
+			</li>
+		</ul>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th></th>
+				<th class="category">Category</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Manufacturer</th>
+				<th>Scale</th>
+				<th title="The amount of items of this type this collectible has." class="count">Count</th>
+				<th class="user" title="The user who performed the last action on this item.">Added By</th>
+				<th class="created">Last Modified</th>
+				<th class="actions"></th>
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+</div>
