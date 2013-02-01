@@ -158,7 +158,7 @@ class CollectiblesUploadsController extends AppController {
 	 *
 	 */
 	public function upload() {
-
+		$this -> layout = 'ajax';
 		$data = array();
 		//must be logged in to post comment
 		if (!$this -> isLoggedIn()) {
