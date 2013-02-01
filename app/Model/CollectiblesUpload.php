@@ -17,7 +17,7 @@ class CollectiblesUpload extends AppModel {
 		// Before we save check to see if there is an existin image that is the primary
 		// if not, set
 		debug($this -> data['CollectiblesUpload']);
-		if (!empty($this -> data['CollectiblesUpload']['primary']) && !$this -> data['CollectiblesUpload']['primary']) {
+		if (!isset($this -> data['CollectiblesUpload']['primary']) || !$this -> data['CollectiblesUpload']['primary']) {
 			$primary = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $this -> data['CollectiblesUpload']['collectible_id'], 'CollectiblesUpload.primary' => 1)));
 			debug($primary);
 			if (empty($primary)) {
