@@ -19,6 +19,7 @@
 			<label class="control-label" for="inputBrand">Brand</label>
 			<div class="controls">
 				<select id="inputBrand" name="license_id">
+					<option value=""></option>
 					{#LicensesManufacture}
 					<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
 					{/LicensesManufacture}
@@ -71,6 +72,7 @@
 			<label class="control-label" for="inputMsrp">Currency</label>
 			<div class="controls controls-row">
 				<select id="CollectibleCurrencyId" name="currency_id">
+					<option value=""></option>
 					{#currencies}
 					<option value="{Currency.id}">{Currency.iso_code}</option>
 					{/currencies}

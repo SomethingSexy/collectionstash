@@ -47,8 +47,12 @@ class Series extends AppModel {
 		}
 
 		// $series = $this -> find('threaded', array('conditions' => array('Series.id' => $manufacturer['Manufacture']['id'])));
+
+		$parent = $this -> find('first', array('contain' => false, 'conditions' => array('Series.id' => $manufacturer['Manufacture']['id'])));
+		$series = $this -> find('threaded', array('conditions' => array('Series.lft >=' => $parent['Series']['lft'], 'Series.rght <=' => $parent['Series']['rght'])));
 		// With this one we need to include the parent, otherwise it won't work
-		$series = $this -> children($manufacturer['Manufacture']['id']);
+
+		// $series = $this -> children($manufacturer['Manufacture']['id']);
 		$retVal['response']['data'] = $series;
 		$retVal['response']['isSuccess'] = true;
 		return $retVal;
