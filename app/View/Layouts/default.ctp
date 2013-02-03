@@ -31,7 +31,7 @@
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('js/jquery-1.7');
-	echo $this -> Minify -> script('js/thirdparty/backbone');
+	echo $this -> Html -> script('thirdparty/backbone');
 	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
 	echo $this -> Minify -> script('js/jquery-ui-1.8.18');

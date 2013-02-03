@@ -428,7 +428,16 @@ var CollectibleView = Backbone.View.extend({
 		}
 
 		//setup model events
-		this.model.on("change:manufacture_id", this.render, this);
+		this.model.on("change:manufacture_id", function() {
+			this.model.set({
+				seriesPath : '',
+				'series_id' : null,
+				'license_id' : null
+			}, {
+				silent : true
+			});
+			this.render();
+		}, this);
 		this.model.on("change:limited", this.render, this);
 		this.model.on("change:edition_size", this.render, this);
 		this.model.on("change:series_id", this.render, this);
@@ -452,7 +461,7 @@ var CollectibleView = Backbone.View.extend({
 			this.model.set({
 				seriesPath : name,
 				'series_id' : id
-			})
+			});
 		}, this);
 
 		this.model.on('sync', this.onModelSaved, this);
