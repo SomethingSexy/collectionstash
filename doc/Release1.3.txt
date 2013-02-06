@@ -68,6 +68,11 @@ linux: ./cake
 
 ./cake -app /var/www/collectionstash/app one_time_add_points_fact_table
 
+
+   ./cake -app /var/www/collectionstash/app one_time_update_collectible_status
+
+
+
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
  
   ./vendors/cakeshell attributes_converter -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
