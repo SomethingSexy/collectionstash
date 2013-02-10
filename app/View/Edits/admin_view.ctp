@@ -34,6 +34,8 @@
 							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
 						} else if ($edit['edit_type'] === 'CollectiblesUpload') {
 							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
+						} else if ($edit['edit_type'] === 'ArtistsCollectible') {
+							echo $this -> Html -> link($edit['collectible_id'], array('admin' => false, 'controller' => 'collectibles', 'action' => 'view', $edit['collectible_id']));
 						}
 						echo '</td>';
 						echo '<td class="user-id">';
@@ -60,6 +62,8 @@
 							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles_tags', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
 						} else if ($edit['edit_type'] === 'CollectiblesUpload') {
 							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'collectibles_uploads', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
+						} else if ($edit['edit_type'] === 'ArtistsCollectible') {
+							echo $this -> Html -> link('Approve', array('admin' => true, 'controller' => 'artists_collectibles', 'action' => 'approval', $editDetail['Edit']['id'], $edit['id']));
 						}
 
 						echo '</td>';

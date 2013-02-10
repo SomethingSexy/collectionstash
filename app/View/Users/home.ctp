@@ -140,13 +140,13 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
 <div class="row spacer">
 	<div class="span6">
 		<div class="well submissions">
-			<h3>Submissions</h3>
+			<h3>My Submissions</h3>
 
 		</div>
 	</div>
 	<div class="span6">
 		<div class="well edits">
-			<h3>Edits</h3>
+			<h3>My Edits</h3>
 		</div>
 	</div>
 </div>

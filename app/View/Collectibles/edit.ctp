@@ -27,16 +27,20 @@ var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?
 <div id="message-container" class="row spacer">
 
 </div>
-<div class="row">
-	<div id="edit-container" class="span12">
-		<div class="row">
+<div id="edit-container" class="row">
+	<div id="photo-container" span="span4">
 
-		</div>
+	</div>
+	<div id="collectible-container" span="span8">
+	
 	</div>
 </div>
+
 <div id="attributes-container" class="row"></div>
 
-<div id="tags-container" class="row"></div>
+
+
+
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
 <?php echo $this -> element('attribute_remove_dialog'); ?>

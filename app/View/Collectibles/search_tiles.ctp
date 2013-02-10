@@ -46,7 +46,7 @@ echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 						echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
 					}
 					echo '<div class="header">';
-					echo $this -> Html -> link($collectible['Collectible']['name'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
+					echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 					echo '</div>';
 
 					echo '<ul class="user-detail">';

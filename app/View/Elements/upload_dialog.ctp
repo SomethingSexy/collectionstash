@@ -7,17 +7,8 @@ echo $this -> Minify -> script('js/jquery.fileupload-fp', array('inline' => fals
 echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => false));
 
 echo $this -> Minify -> script('js/locale', array('inline' => false));
-echo $this -> Html -> script('cs.upload', array('inline' => false));
 ?>
 <script>
-		$(function() {
-			//TODO: Need to fix this for user uploads
-			// $('#fileupload').balls({
-				// 'collectibleId' : <?php echo $uploadId; ?>,
-				// 'element' : '#upload-link'
-			// });
-		});
-
 		$(document).bind('drop', function(e) {
 			var url = $(e.originalEvent.dataTransfer.getData('text/html')).filter('img').attr('src');
 			if (url) {
@@ -57,82 +48,90 @@ echo $this -> Html -> script('cs.upload', array('inline' => false));
 			}, 100);
 		});
 </script>
-<div id="upload-dialog" class="dialog attribute" title="Add Photo">
-	<div class="component component-dialog">
-		<div class="inside" >
-			<?php echo $this -> element('flash'); ?>
-			<div class="component-info">
-				<div>
-					<?php echo __('This will allow you to sumbit photos for the collectible you are viewing.  Each photo you submit will require approval from an admin.  All pending photos are indicated below.  If you submitted an incorrect photo and it is still pending you can delete it, otherwise you can also submit for approval the removal of a photo.  Note, you can only delete pending photos that you added.  Currently, you cannot delete the primary photo.')
-					?>
-					<p><?php echo __('Image requirements:'); ?></p>
-					<ul>
-						<li><?php echo __('The image must be less than 2MB.'); ?></li>
-					</ul>
-					<p><?php echo __('Image recommendations:'); ?></p>
-					<ul>
-						<li><?php echo __('The image should be at least 150 x 150 pixels.'); ?></li>
-						<li><?php echo __('This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it\'s width.'); ?></li>
-						<li><?php echo __('Please try and use a professionally shot photo.'); ?></li>
-					</ul>
+
+
+
+
+
+
+
+<div id="upload-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Upload Photo</h3>
+	</div>
+	<div class="modal-body">
+		<?php echo $this -> element('flash'); ?>
+	
+		<p><?php echo __('This will allow you to sumbit photos for the collectible you are viewing.  Each photo you submit will require approval from an admin.  All pending photos are indicated below.  If you submitted an incorrect photo and it is still pending you can delete it, otherwise you can also submit for approval the removal of a photo.  Note, you can only delete pending photos that you added.  Currently, you cannot delete the primary photo.')
+		?></p>
+		<p><?php echo __('Image requirements:'); ?></p>
+		<ul>
+			<li><?php echo __('The image must be less than 2MB.'); ?></li>
+		</ul>
+		<p><?php echo __('Image recommendations:'); ?></p>
+		<ul>
+			<li><?php echo __('The image should be at least 150 x 150 pixels.'); ?></li>
+			<li><?php echo __('This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it\'s width.'); ?></li>
+			<li><?php echo __('Please try and use a professionally shot photo.'); ?></li>
+		</ul>
+		
+		<div class='component-message error'>
+			<span></span>
+		</div>
+		<!-- The file upload form used as target for the file upload widget -->
+		<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
+			<input id="upload-collectible-id" type="hidden" name="<?php echo $uploadName; ?>" value="<?php echo $uploadId; ?>" />
+			<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+			<div class="row fileupload-buttonbar">
+				<div class="span7">
+					<!-- The fileinput-button span is used to style the file input field as button -->
+					<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
+						<input type="file" name="data[Upload][file]" multiple>
+					</span>
+				</div>
+				<div class="span7 url-upload">
+					<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Upload URL</span>
+						<input autocomplete="off" type="text" name="data[Upload][url]" class="url-upload-input" value="">
+							<button id="upload-url" class="btn" type="button">
+								Upload
+							</button>
+					</span>
+				</div>
+				<!-- The global progress information -->
+				<div class="span5 fileupload-progress fade">
+					<!-- The global progress bar -->
+					<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+						<div class="bar" style="width:0%;"></div>
+					</div>
+					<!-- The extended global progress information -->
+					<div class="progress-extended">
+						&nbsp;
+					</div>
 				</div>
 			</div>
-			<div class='component-message error'>
-				<span></span>
-			</div>
-			<div class="component-view">
-				<!-- The file upload form used as target for the file upload widget -->
-				<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
-					<input type="hidden" name="<?php echo $uploadName; ?>" value="<?php echo $uploadId; ?>" />
-					<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-					<div class="row fileupload-buttonbar">
-						<div class="span7">
-							<!-- The fileinput-button span is used to style the file input field as button -->
-							<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
-								<input type="file" name="data[Upload][file]" multiple>
-							</span>
-							<!--<button type="submit" class="btn btn-primary start">
-							<i class="icon-upload icon-white"></i>
-							<span>Start upload</span>
-							</button>
-							<button type="reset" class="btn btn-warning cancel">
-							<i class="icon-ban-circle icon-white"></i>
-							<span>Cancel upload</span>
-							</button>
-							<button type="button" class="btn btn-danger delete">
-							<i class="icon-trash icon-white"></i>
-							<span>Delete</span>
-							</button>
-							<input type="checkbox" class="toggle">-->
-						</div>
-						<!-- The global progress information -->
-						<div class="span5 fileupload-progress fade">
-							<!-- The global progress bar -->
-							<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-								<div class="bar" style="width:0%;"></div>
-							</div>
-							<!-- The extended global progress information -->
-							<div class="progress-extended">
-								&nbsp;
-							</div>
-						</div>
-					</div>
-					<!-- The loading indicator is shown during file processing -->
-					<div class="fileupload-loading"></div>
-					<br>
-					<div id="dropzone" class="fade well">
-						Drop files here
-					</div>
-					<br>
-					<!-- The table listing the files available for upload/download -->
-					<table role="presentation" class="table table-striped">
-						<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
-					</table>
-				</form>
-			</div>
-		</div>
+			<!-- The loading indicator is shown during file processing -->
+			<div class="fileupload-loading"></div>
+			<br>
+			<!-- <div id="dropzone" class="fade well">
+				Drop files here
+			</div>-->
+			<br>
+			<!-- The table listing the files available for upload/download -->
+			<table role="presentation" class="table table-striped">
+				<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+			</table>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
 	</div>
 </div>
+
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 	{% for (var i=0, file; file=o.files[i]; i++) { %}

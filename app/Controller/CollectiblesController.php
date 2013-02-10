@@ -269,6 +269,41 @@ class CollectiblesController extends AppController {
 		}
 	}
 
+	// This will handle the updating of artists
+	public function artist($adminMode = false, $id = null) {
+		// WE are handling one tag at a time here
+		// if it is a put, then we are adding
+		// if it is a delete then we are removing
+		debug($adminMode);
+
+		if ($adminMode === true || $adminMode === 'true') {
+			if (!$this -> isUserAdmin()) {
+				$this -> response -> statusCode(401);
+				return;
+			}
+		}
+
+		if ($this -> request -> isPost()) {
+			$collectible['ArtistsCollectible'] = $this -> request -> input('json_decode', true);
+			$response = $this -> Collectible -> ArtistsCollectible -> add($collectible, $this -> getUser(), $adminMode);
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
+			$this -> set('returnData', $response);
+			// we need to check the response here
+		} else if ($this -> request -> isDelete()) {
+			$collectible['ArtistsCollectible'] = array();
+			$collectible['ArtistsCollectible']['id'] = $id;
+			$response = $this -> Collectible -> ArtistsCollectible -> remove($collectible, $this -> getUser(), $adminMode);
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
+			$this -> set('returnData', $response);
+		}
+	}
+
 	/**
 	 * this method will be used to allow them to delete a collectible
 	 */
@@ -281,6 +316,16 @@ class CollectiblesController extends AppController {
 		$collectibleTypeId = $returnData['response']['data']['collectible']['Collectible']['collectibletype_id'];
 		// We will also want to get the manufacturers and their licenses right away
 		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
+
+		// also based on the type of collectible we might want to get all brands
+		// right now this is for prints that might not have a manufacturer and
+		// just in case we want to link it to a brand
+		if ($collectibleTypeId === Configure::read('Settings.CollectibleTypes.Print')) {
+			$brands = $this -> Collectible -> License -> find('all', array('contain' => false));
+			$returnData['response']['data']['brands'] = $brands;
+		} else {
+			$returnData['response']['data']['brands'] = array();
+		}
 
 		$manList = array();
 		foreach ($manufacturerCollectibletypes as $key => $value) {
@@ -311,7 +356,7 @@ class CollectiblesController extends AppController {
 		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
 		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
 		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('ArtistsCollectible' => array('Artist'), 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
 		// so let's do this manually and try that out
 		if (!empty($collectible['AttributesCollectible'])) {
@@ -393,22 +438,6 @@ class CollectiblesController extends AppController {
 		$this -> searchCollectible();
 		$this -> set('viewType', 'tiles');
 		$this -> render('searchTiles');
-
-	}
-
-	function catalog() {
-		//Updated to use modified desc, instead of created so I will get the latest ones added.
-		$recentlyAddedCollectibles = $this -> Collectible -> find('all', array('limit' => 20, 'conditions' => array('Collectible.status_id' => '4'), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'License'), 'order' => array('Collectible.modified' => 'desc')));
-		$this -> set(compact('recentlyAddedCollectibles'));
-
-		$manufactures = $this -> Collectible -> Manufacture -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('Manufacture.collectible_count' => 'desc')));
-		$this -> set(compact('manufactures'));
-
-		$licenses = $this -> Collectible -> License -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('License.collectible_count' => 'desc')));
-		$this -> set(compact('licenses'));
-
-		$collectibletypes = $this -> Collectible -> Collectibletype -> find('all', array('limit' => 10, 'contain' => false, 'order' => array('Collectibletype.collectible_count' => 'desc')));
-		$this -> set(compact('collectibletypes'));
 
 	}
 
@@ -537,7 +566,7 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CollectiblesTag' => array('Tag'), 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('ArtistsCollectible' => array('Artist'), 'CollectiblesTag' => array('Tag'), 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Revision'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 		$this -> set('collectible', $collectible);
 		debug($collectible);
 

@@ -107,7 +107,7 @@ class StashsController extends AppController {
 					//If the privacy is 0 or you are viewing your own stash then always show
 					//or if it is set to 1 and this person is logged in also show.
 					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
-						$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype')));
+						$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id', 'edition_size'), 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
 						$collectibles = $this -> paginate('CollectiblesUser');
 						$this -> set(compact('collectibles'));
 						$this -> set('stash', $user['Stash'][0]);

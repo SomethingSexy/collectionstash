@@ -1,75 +1,64 @@
-<div id="my-stashes-component" class="component edit-stash">
-	<div class="inside">
-		<div class="component-title">
-			<h2><?php echo __('Stash Edit', true)
-			?></h2>
-			<div class="actions icon">
-				<ul>
-					<?php
-
-					echo '<li><a title="Add Collectibles" class="link add-stash-link" href="/collectibles/search"><img src="/img/icon/add_stash_link_25x25.png"/></a></li>';
-					?>
-				</ul>
-			</div>
-		</div>
+<div id="my-stashes-component" class="well edit-stash">
+		<h2><?php echo __('Stash Edit', true)
+		?></h2>
 		<?php echo $this -> element('flash'); ?>
-		<div class="component-info">
+		
 			<p>
 				<?php echo __('Welcome to the Stash edit page!  Here you can edit the collectibles in your stash or edit the stash as a whole.  While in Edit Mode, you can select to edit individual collectibles by clicking on the link.  If you want to sort your collectibles, you can use the Sort Mode.  To sort your collectibles in the order you want, click on Sort Mode.  Then you can drag and drop the collectibles in the order you wish.  Once you have your stash looking just how you want, click save!'); ?>
 			</p>
+	
+		
+		<div class="links">
+			<ul>
+				<li class="mode">
+					<a class="sort-mode link"><?php echo __('Sort Mode'); ?></a> |
+				</li>
+				<li class="mode selected">
+					<a class="edit-mode link"><?php echo __('Edit Mode'); ?></a>
+				</li>
+				<li class="mode-button">
+				   <button id="submit-sort"><?php echo __('Save'); ?> </button>
+				</li>
+			</ul>
 		</div>
-		<div class="component-view">
-			<div class="links">
-				<ul>
-					<li class="mode">
-						<a class="sort-mode link"><?php echo __('Sort Mode'); ?></a> |
-					</li>
-					<li class="mode selected">
-						<a class="edit-mode link"><?php echo __('Edit Mode'); ?></a>
-					</li>
-					<li class="mode-button">
-					   <button id="submit-sort"><?php echo __('Save'); ?> </button>
-					</li>
-				</ul>
-			</div>
-            <div id="edit-error-message" class="component-message error hidden">
-                <span><div class="message"></div></span>
-            </div>
-			<?php
-			if (isset($collectibles) && !empty($collectibles)) {
-				echo '<div id="tiles" data-username="' . $stashUsername . '">';
+        <div id="edit-error-message" class="component-message error hidden">
+            <span><div class="message"></div></span>
+        </div>
+		<?php
+		if (isset($collectibles) && !empty($collectibles)) {
+			echo '<div id="tiles" data-username="' . $stashUsername . '">';
 
-				echo '<div class="glimpse edit-mode">';
-				foreach ($collectibles as $key => $myCollectible) {
-					echo '<div class="image" data-id="' . $myCollectible['CollectiblesUser']['id'] . '">';
-					echo '<div class="image-container">';
-					if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
-						foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
-							if ($upload['primary']) {
-								echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'width' => 150, 'height' => 150)) . '</a>';
-								break;
-							}
+			echo '<div class="glimpse edit-mode">';
+			foreach ($collectibles as $key => $myCollectible) {
+				echo '<div class="image" data-id="' . $myCollectible['CollectiblesUser']['id'] . '">';
+				echo '<div class="image-container">';
+				if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
+					foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
+						if ($upload['primary']) {
+							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'width' => 150, 'height' => 150)) . '</a>';
+							break;
 						}
-					} else {
-						echo '<img src="/img/silhouette_thumb.png"/>';
 					}
-					echo '</div>';
-					echo '<div class="actions">';
-					echo '<a class="link" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">View</a> | ';
-					echo '<a class="link" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '">Edit</a> | ';
-					echo '<a class="link delete">Delete</a>';
-					echo '<form class="remove-form" action="/collectibles_users/remove/' . $myCollectible['CollectiblesUser']['id'] . '" method="post"></form>';
-					echo '</div>';
-					echo '</div>';
+				} else {
+					echo '<img src="/img/silhouette_thumb.png"/>';
 				}
 				echo '</div>';
+				echo '<div class="actions">';
+				echo '<a class="link" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">View</a> | ';
+				echo '<a class="link" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '">Edit</a> | ';
+				echo '<a class="link delete">Delete</a>';
+				echo '<form class="remove-form" action="/collectibles_users/remove/' . $myCollectible['CollectiblesUser']['id'] . '" method="post"></form>';
 				echo '</div>';
-			} else {
-				echo '<p class="">' . __('You have no colletibles in your stash!', true) . '</p>';
+				echo '</div>';
 			}
-			?>
-		</div>
-	</div>
+			echo '</div>';
+			echo '</div>';
+		} else {
+			echo '<p class="">' . __('You have no colletibles in your stash!', true) . '</p>';
+		}
+		?>
+
+
 </div>
 <?php
 echo $this -> Form -> create('Stash', array('url' => '/stashs/edit'));

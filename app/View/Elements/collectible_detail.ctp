@@ -1,6 +1,17 @@
 <?php
 if (isset($setPageTitle) && $setPageTitle) {
-	$this -> set("title_for_layout", $collectibleDetail['Manufacture']['title'] . ' - ' . $collectibleDetail['License']['name'] . ' - ' . $collectibleDetail['Collectible']['name']);
+	$pageTitle = '';
+	if (!empty($collectibleDetail['Manufacture']['title'])) {
+		$pageTitle .= $collectibleDetail['Manufacture']['title'] . ' - ';
+	}
+
+	if (!empty($collectibleDetail['License']['name'])) {
+		$pageTitle .= $collectibleDetail['License']['name'] . ' - ';
+	}
+	
+	$pageTitle .= $collectibleDetail['Collectible']['name'];
+
+	$this -> set("title_for_layout", $pageTitle);
 }
 $this -> set('description_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name']);
 $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
@@ -48,7 +59,7 @@ echo $this -> Html -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 <script>
-			var collectibleStatus = {
+						var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:
@@ -66,11 +77,11 @@ if ($showStatus) {
 	}
 ?></script>
 
-<div id="collectible-container" class="span12">
+<div id="collectible-container" class="span12 stashable">
 	<div class="row spacer">
-		<div class="span3"><h2><?php echo $title; ?></h2></div>
+		<div class="span8"><h2><?php echo $title; ?></h2></div>
 		<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
-		<div class="span9">
+		<div class="span4">
 			<div class="btn-group actions pull-right">
 				<?php
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
@@ -123,21 +134,27 @@ if ($showStatus) {
 			?>
 		</div>
 		<div class="span8">
+			<?php
+			if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+				echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+			}
+			?>
+			
 			<?php echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags)); ?>
+			<?php
+			if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
+				echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+			}
+			?>
+			<?php
+			if (isset($showTags) && $showTags === true) {
+				echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+			}
+			?>
+		
 		</div>
 	</div>	
-	
-	<div class="row">
-				
-		<div class="span12">
-	
-		<?php
-		if (isset($showTags) && $showTags === true) {
-			echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
-		}
-		?>
-		</div>
-	</div>		
+		
 	<div class="row">	
 		<div class="span12">	
 			<?php
@@ -178,7 +195,7 @@ if ($showStatus) {
 
 
 
-<div class="component stashable" id="collectible-detail">
+<div class="component" id="collectible-detail">
 	<div class="inside">
 		<div class="component-view">
 			<?php

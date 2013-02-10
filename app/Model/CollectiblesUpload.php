@@ -122,7 +122,7 @@ class CollectiblesUpload extends AppModel {
 		$retVal['response']['data'] = array();
 		$this -> set($data);
 		$validCollectible = true;
-		debug($data);
+
 		// If we have an upload, that means
 		// we are saving a collectible upload and creating a new
 		// upload at the same time, we don't have to validate
@@ -154,7 +154,7 @@ class CollectiblesUpload extends AppModel {
 
 				// Now we need to kick off a save of the upload
 				$uploadAddResponse = $this -> Upload -> add($upload, $userId);
-
+				debug($uploadAddResponse);
 				if ($uploadAddResponse && $uploadAddResponse['response']['isSuccess']) {
 					debug($uploadAddResponse);
 					$retVal['response']['data'] = $uploadAddResponse['response']['data'];

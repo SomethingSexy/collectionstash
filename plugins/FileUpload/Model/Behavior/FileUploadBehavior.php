@@ -25,9 +25,9 @@
  * @author: Nick Baker
  * @link: http://www.webtechnick.com
  */
-require_once(dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Vendor' . DS . 'Uploader.php');
+require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Vendor' . DS . 'Uploader.php');
 App::uses('Uploader', 'Vendor');
-require_once(dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Config' . DS . 'FileUploadSettings.php');
+require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . 'Config' . DS . 'FileUploadSettings.php');
 App::uses('FileUploadSettings', 'Config');
 class FileUploadBehavior extends ModelBehavior {
 
@@ -62,8 +62,7 @@ class FileUploadBehavior extends ModelBehavior {
 	 *
 	 */
 	function beforeSave(&$Model) {
-	  
-		//debug($Model);
+
 		$url = false;
 
 		if (!empty($Model -> data[$Model -> alias]['url'])) {
@@ -87,10 +86,17 @@ class FileUploadBehavior extends ModelBehavior {
 			$Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']][$this -> options[$Model -> alias]['fields']['type']] = $info['content_type'];
 			$Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']]['tmp_name'] = $tmpDir . DIRECTORY_SEPARATOR . $urlFile;
 			$Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']]['error'] = '0';
+			debug($Model -> alias);
 
 			$url = true;
+
+			// Since the upload is happening before we save, we need to trigger a validate here
+			if (!$Model -> validateURl()) {
+				return false;
+			}
+
 		}
-     
+
 		//This checks to see if the file array is set in the data that is passed in.
 		if (isset($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']])) {
 			//Here we are setting the $file variable to the data was that was passed into this model
@@ -132,15 +138,44 @@ class FileUploadBehavior extends ModelBehavior {
 	 * presents the user the errors.
 	 */
 	function beforeValidate(&$Model) {
-
-		if (!empty($Model -> data[$Model -> alias]['url'])) {
-
-		} else if (isset($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']])) {
+		if (isset($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']])) {
 			$file = $Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']];
 			$this -> Uploader[$Model -> alias] -> file = $file;
 			if ($this -> Uploader[$Model -> alias] -> hasUpload()) {
+
 				if ($this -> Uploader[$Model -> alias] -> checkFile() && $this -> Uploader[$Model -> alias] -> checkType() && $this -> Uploader[$Model -> alias] -> checkSize()) {
+
 					$Model -> beforeValidate();
+				} else {
+
+					$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = $this -> Uploader[$Model -> alias] -> showErrors();
+				}
+			} else {
+
+				if (isset($this -> options[$Model -> alias]['required']) && $this -> options[$Model -> alias]['required']) {
+					$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = 'Select file to upload';
+				} else if (!empty($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']][$this -> options[$Model -> alias]['fields']['name']])) {
+					$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = 'Please verify the size and type of the image.';
+				}
+			}
+		} else if (isset($this -> options[$Model -> alias]['required']) && $this -> options[$Model -> alias]['required']) {
+
+			$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = 'No File';
+		}
+
+		return $Model -> beforeValidate();
+	}
+
+	function validateURl(&$Model) {
+		$retVal = false;
+		
+		if (isset($Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']])) {
+			$file = $Model -> data[$Model -> alias][$this -> options[$Model -> alias]['fileVar']];
+			$this -> Uploader[$Model -> alias] -> file = $file;
+			if ($this -> Uploader[$Model -> alias] -> hasUpload()) {
+			
+				if ($this -> Uploader[$Model -> alias] -> checkFile() && $this -> Uploader[$Model -> alias] -> checkType() && $this -> Uploader[$Model -> alias] -> checkSize()) {
+					$retVal = true;
 				} else {
 					$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = $this -> Uploader[$Model -> alias] -> showErrors();
 				}
@@ -151,11 +186,12 @@ class FileUploadBehavior extends ModelBehavior {
 					$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = 'Please verify the size and type of the image.';
 				}
 			}
-		} elseif (isset($this -> options[$Model -> alias]['required']) && $this -> options[$Model -> alias]['required']) {
+		} else if (isset($this -> options[$Model -> alias]['required']) && $this -> options[$Model -> alias]['required']) {
+
 			$Model -> validationErrors[$this -> options[$Model -> alias]['fileVar']] = 'No File';
 		}
 
-		return $Model -> beforeValidate();
+		return $retVal;
 	}
 
 	/**

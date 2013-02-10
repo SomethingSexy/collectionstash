@@ -18,8 +18,12 @@
 	{@eq key="{edit_type}" value="CollectiblesTag"}
 		Collectible Tag
 	{/eq}		
-	
-	
+	{@eq key="{edit_type}" value="Tag"}
+		Collectible Tag
+	{/eq}		
+	{@eq key="{edit_type}" value="ArtistsCollectible"}
+		Collectible Artist
+	{/eq}		
 	
 {/Edits}</td>
 <td>{Edit.created}</td>

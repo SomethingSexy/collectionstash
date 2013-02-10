@@ -93,7 +93,7 @@ class EditsController extends AppController {
 						$this -> Session -> setFlash(__('There was a problem denying the edit.', true), null, null, 'error');
 					}
 				}
-				
+
 				$this -> redirect(array('action' => 'index'), null, true);			} else {
 
 			}

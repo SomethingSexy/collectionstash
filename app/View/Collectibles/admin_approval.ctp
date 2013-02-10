@@ -351,6 +351,26 @@
 								echo '</dd>';
 							}
 							
+							if (isset($collectible['Collectible']['signed']) && !empty($collectible['Collectible']['signed']) || (isset($collectible['Collectible']['signed_changed']) && $collectible['Collectible']['signed_changed'])) {
+								echo '<dt>';
+								echo __('Signed');
+								echo '</dt>';
+
+								//Check if it is changed first
+								if (isset($collectible['Collectible']['signed_changed']) && $collectible['Collectible']['signed_changed']) {
+									echo '<dd class="changed">';
+								} else {
+									echo '<dd>';
+								}
+
+								if ($collectible['Collectible']['signed']) {
+									echo __('Yes');
+								} else {
+									echo __('No');
+								}
+								echo '</dd>';
+							}							
+							
 							if (isset($collectible['Collectible']['exclusive']) && !empty($collectible['Collectible']['exclusive']) || (isset($collectible['Collectible']['exclusive_changed']) && $collectible['Collectible']['exclusive_changed'])) {
 								echo '<dt>';
 								echo __('Exclusive');

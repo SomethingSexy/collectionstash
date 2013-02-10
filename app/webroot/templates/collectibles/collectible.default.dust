@@ -1,4 +1,13 @@
-<form class="form-horizontal well">
+<div class="well">
+<h3>{collectibleType.name}</h3>
+
+{@eq key="{collectibleType.id}" value="10"}
+<p>Prints can be setup in a few different ways depending on who produced the print or where it was sold.</p>
+<p>If the artist that created the print, was commissioned by a manufacturer or producer, then make sure to select the appropriate manufactuerer/producer.</p>
+<p>If the artist made the work on their own for a specific venue, then leave the manufacturer/producer field blank but add the venue.</p>
+<p>If the artist made the work on their own and printed it and sold it themselves, then leave the manufacturer/producer and the venue fields blank.</p>
+{/eq}
+<form class="form-horizontal">
 	<fieldset>
 		<legend>
 			Manufacturer Details
@@ -14,7 +23,7 @@
 				</select>
 			</div>
 		</div>
-		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath}
+		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath brands=brands renderBrandList=renderBrandList}
 		<div class="control-group">
 			<label class="control-label" for="inputBrand">Brand</label>
 			<div class="controls">
@@ -36,12 +45,26 @@
 						{:else}
 						Select
 					{/if}
-					
 				</button>
 				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
 			</div>
 		</div>
 		{/series_id}
+		{:else}
+			{@eq key="{renderBrandList}" value="true" type="boolean"}
+			<div class="control-group">
+				<label class="control-label" for="inputBrand">Brand</label>
+				<div class="controls">
+					<select id="inputBrand" name="license_id">
+						<option value=""></option>
+						{#brands}
+						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
+						{/brands}
+					</select>
+				</div>
+			</div>
+			
+			{/eq}
 		{/manufacturer}
 
 		<div class="control-group">
@@ -140,6 +163,14 @@
 		<div class="control-group">
 			<div class="controls">
 				<label class="checkbox">
+					<input {#collectible.signed}checked{/collectible.signed} type="checkbox" value="true" name="signed" id="inputSigned">
+					Signed</label>
+				<span class="help-inline">Indicates if this collectible is signed by someone as part of the sold piece.</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
 					<input {#collectible.exclusive}checked{/collectible.exclusive} type="checkbox" value="true" name="exclusive">
 					Exclusive</label>
 				<span class="help-inline">Indicates if this collectible is exclusive to any one place.</span>
@@ -229,7 +260,7 @@
 		</button>
 	</div>
 </form>
-
+</div>
 <div id="seriesModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">

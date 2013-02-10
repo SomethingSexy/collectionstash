@@ -45,12 +45,19 @@ class Upload extends AppModel {
 	public function isValidUpload($uploadData) {
 		$validUpload = false;
 		debug($uploadData);
-		if (isset($uploadData['Upload']) && !empty($uploadData['Upload']) && isset($uploadData['Upload']['file']) && !empty($uploadData['Upload']['file'])) {
-			if ($uploadData['Upload']['file']['name'] != '' || $uploadData['Upload']['url'] != '') {
-				$validUpload = true;
+		if (isset($uploadData['Upload']) && !empty($uploadData['Upload'])) {
+
+			if (isset($uploadData['Upload']['file']) && !empty($uploadData['Upload']['file'])) {
+				if ($uploadData['Upload']['file']['name'] != '') {
+					$validUpload = true;
+				}
+			} else if (isset($uploadData['Upload']['url']) && !empty($uploadData['Upload']['url'])) {
+				if ($uploadData['Upload']['url'] != '') {
+					$validUpload = true;
+				}
 			}
 		}
-
+		debug($validUpload);
 		return $validUpload;
 	}
 
@@ -77,6 +84,7 @@ class Upload extends AppModel {
 			$retVal['response']['data'] = $savedUpload;
 			$retVal['response']['isSuccess'] = true;
 		} else {
+			debug($this -> validationErrors);
 			$retVal['response']['isSuccess'] = false;
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Upload');
 			$retVal['response']['errors'] = $errors;
@@ -119,7 +127,7 @@ class Upload extends AppModel {
 
 		return $uploadFields;
 	}
-	
+
 	/**
 	 * More future use but used when approving collectible uploads
 	 */
