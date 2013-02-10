@@ -45,18 +45,12 @@ if (!isset($adminMode)) {
 	}
 	?>
 	
-	<dt>
-		<?php echo __('Manufacturer'); ?>
-	</dt>
-	<?php
-	if ($showCompareFields && isset($collectibleCore['Collectible']['manufacture_id_changed']) && $collectibleCore['Collectible']['manufacture_id_changed']) {
-		echo '<dd class="changed">';
-	} else {
-		echo '<dd>';
-	}
-	?>
-	<a href="<?php echo '/manufactures/view/' . $collectibleCore['Manufacture']['id']; ?>"> <?php echo $collectibleCore['Manufacture']['title']; ?></a>
-	</dd> <?php
+	
+	 <?php
+	
+	//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => '<a href="/manufactures/view/' . $collectibleCore['Manufacture']['id'] .'">'. $collectibleCore['Manufacture']['title'].'</a>'));
+	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => $collectibleCore['Manufacture']['title']));
+	
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('Brand', true), array('compare' => $showCompareFields));
@@ -97,6 +91,8 @@ if (!isset($adminMode)) {
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'edition_size'), __('Edition Size', true), array('compare' => $showCompareFields));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'numbered'), __('Numbered', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+	
+	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'signed'), __('Signed', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'pieces'), __('Number of Pieces', true), array('compare' => $showCompareFields));
 

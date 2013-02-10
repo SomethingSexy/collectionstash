@@ -4,8 +4,8 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class Collectible extends AppModel {
 	public $name = 'Collectible';
 	public $belongsTo = array('Status', 'EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
-	public $hasMany = array('CollectiblesUser', 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true));
-	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
+	public $hasMany = array('CollectiblesUser', 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true), 'ArtistsCollectible' => array('dependent' => true));
+	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('signed', 'name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
 	 * have to worry about updates and shit...
@@ -25,11 +25,11 @@ class Collectible extends AppModel {
 	//Opening this up because I don't see it being a big deal.
 	'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')),
 	//manufacture field
-	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
+	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => false, 'allowEmpty' => false, 'message' => 'Must be a valid manufacture.'),
 	//collectible type field
 	'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
 	//license filed
-	'license_id' => array('rule' => array('validateLicenseId'), 'message' => 'Brand/License must be valid for Manufacture.'),
+	'license_id' => array('rule' => array('validateLicenseId'), 'required' => false, 'allowEmpty' => false, 'message' => 'Brand/License must be valid for Manufacture.'),
 	//series field
 	'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
 	//description field
@@ -152,6 +152,7 @@ class Collectible extends AppModel {
 	}
 
 	function doAfterFind($results, $primary = false) {
+		debug($results);
 		if ($results) {
 			$showEditionSize = false;
 			//TODO not sure this is really needed anymore
@@ -177,6 +178,29 @@ class Collectible extends AppModel {
 				$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $results['retailer_id'])));
 				$results['retailer'] = $existingRetailer['Retailer']['name'];
 			}
+
+			if (isset($results['Manufacture']) || isset($results['ArtistsCollectible'])) {
+				$itemTitle = $results['name'] . ' By ';
+
+				if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+					if (!empty($results['ArtistsCollectible'])) {
+						// assume the first on is primary for now :)
+						$artist = $results['ArtistsCollectible'][0];
+						$itemTitle .= $artist['Artist']['name'];
+					} else if (!empty($results['Manufacture'])) {
+						// otherwise if there is a manufacturer, use that
+						$itemTitle .= $results['Manufacture']['title'];
+					}
+				} else {
+					$itemTitle .= $results['Manufacture']['title'];
+				}
+
+				$results['displayTitle'] = $itemTitle;
+			} else {
+				// fall back
+				$results['displayTitle'] = $results['name'];
+			}
+
 		}
 		return $results;
 	}
@@ -204,7 +228,6 @@ class Collectible extends AppModel {
 	}
 
 	function validateNumbered($check) {
-		debug($this -> data['Collectible']['limited'] === '1');
 		if (isset($check['numbered']) && $check['numbered'] === '1' && isset($this -> data['Collectible']['limited']) && $this -> data['Collectible']['limited'] === '1' && empty($this -> data['Collectible']['edition_size'])) {
 			return false;
 		}
@@ -239,24 +262,68 @@ class Collectible extends AppModel {
 	}
 
 	function validateManufactureId($check) {
-		if (is_null($check['manufacture_id'])) {
-			return false;
+		if (isset($check['manufacture_id']) && !empty($check['manufacture_id'])) {
+			$result = $this -> Manufacture -> find('count', array('id' => $check['manufacture_id']));
+			return $result > 0;
 		}
 
-		$result = $this -> Manufacture -> find('count', array('id' => $check['manufacture_id']));
-
-		return $result > 0;
 	}
 
 	function validateLicenseId($check) {
-		$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
 		debug($result);
-		if ($result) {
-			return true;
+		if (isset($check['license_id']) && !empty($check['license_id'])) {
+			$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
+			if ($result) {
+				return true;
 
-		} else {
-			return false;
+			} else {
+				return false;
+			}
 		}
+		return true;
+	}
+
+	/**
+	 * Validate license method for print types
+	 */
+	public function validatePrintLicenseId($check) {
+		debug($this -> data['Collectible']['manufacture_id']);
+		// first make sure it is set
+		if (isset($check['license_id']) && !empty($check['license_id'])) {
+			// then check to see if we have a valid manufacturer set
+			// if we do then do the standard check
+			if (isset($this -> data['Collectible']['manufacture_id']) && !empty($this -> data['Collectible']['manufacture_id'])) {
+				$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
+				if ($result) {
+					return true;
+
+				} else {
+					debug($this -> data['Collectible']['manufacture_id']);
+					return false;
+				}
+			} else {
+				// if they do not have a manufacturer and we know we are validating a print then we can
+				// just check to see that what they entered is a valid brand
+				$result = $this -> License -> find('first', array('contain' => false, 'conditions' => array('License.id' => $check['license_id'])));
+				if ($result) {
+					return true;
+
+				} else {
+					debug($this -> data['Collectible']['manufacture_id']);
+					return false;
+				}
+			}
+		} else if (isset($this -> data['Collectible']['manufacture_id']) && !empty($this -> data['Collectible']['manufacture_id'])) {
+			$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
+			if ($result) {
+				return true;
+
+			} else {
+				debug($this -> data['Collectible']['manufacture_id']);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	function validateCollectibleType($check) {
@@ -267,7 +334,6 @@ class Collectible extends AppModel {
 		}
 
 		$result = $this -> Manufacture -> CollectibletypesManufacture -> find('first', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'CollectibletypesManufacture.collectibletype_id' => $check['collectibletype_id']), 'contain' => false));
-		debug($result);
 		if ($result) {
 			return true;
 
@@ -447,11 +513,9 @@ class Collectible extends AppModel {
 		$retVal = false;
 		//Grab out edit collectible
 		$collectibleEditVersion = $this -> findEdit($editId);
-		debug($collectibleEditVersion);
 		$collectible = array();
 
 		$currentVersionCollectible = $this -> find("first", array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleEditVersion['CollectibleEdit']['base_id'])));
-		debug($currentVersionCollectible);
 		$collectible = $this -> compareEdit($collectibleEditVersion, $currentVersionCollectible);
 
 		/*
@@ -636,7 +700,7 @@ class Collectible extends AppModel {
 		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
 		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
 		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale'), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
 		// so let's do this manually and try that out
 		if (!empty($collectible['AttributesCollectible'])) {
@@ -759,46 +823,46 @@ class Collectible extends AppModel {
 	 * If the change the status from draft to submitted then we will need to run a validation check
 	 * against the collectible (tags and attributes will be automatically validated and we can have a collectible without a photo)
 	 */
-	public function updateStatus($collectible, $user, $ignoreDupCheck = false) {
+	public function updateStatus($collectibleId, $user, $ignoreDupCheck = false) {
 		$retVal = $this -> buildDefaultResponse();
-		$this -> read(null, $collectible);
-		debug($this -> data);
-		// first see if it is valid
-		if ($this -> validates()) {
-			// if it is valid
-			$status = $this -> data['Collectible']['status_id'];
+		$this -> read(null, $collectibleId);
+		// if it is valid
+		$status = $this -> data['Collectible']['status_id'];
+		if ($status === '1') {
+			$status = 2;
+		} else if ($status === '2') {
+			$status = 1;
+		}
 
-			if ($status === '1') {
-				$status = 2;
-			} else if ($status === '2') {
-				$status = 1;
+		//if we are changing it to a 2, then we need to validate
+		if ($status == 2) {
+			if (!$this -> validateCollectible()) {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Collectible');
+				$retVal['response']['errors'] = $errors;
+				return $retVal;
 			}
 
+			// if it validates, then also do dup checking
 			// Based on the status we are changing too
 			// If we are submitted it, then we need to
 			// do a check to see if a similar collectible
 			// exists
-			if ($status == 2) {
-				$dupList = $this -> doesCollectibleExist($this -> data);
-				debug($dupList);
-				if (!empty($dupList) && !$ignoreDupCheck) {
-					$retVal['response']['isSuccess'] = false;
-					$retVal['response']['data']['dupList'] = $dupList;
-					return $retVal;
-				}
-			}
+			$dupList = $this -> doesCollectibleExist($this -> data);
 
-			unset($this -> data);
-
-			if ($this -> saveField('status_id', $status, false)) {
-				$statusDetail = $this -> Status -> find('first', array('contain' => false, 'conditions' => array('Status.id' => $status)));
-				$retVal['response']['isSuccess'] = true;
-				$retVal['response']['data']['status'] = $statusDetail['Status'];
+			if (!empty($dupList) && !$ignoreDupCheck) {
+				$retVal['response']['isSuccess'] = false;
+				$retVal['response']['data']['dupList'] = $dupList;
+				return $retVal;
 			}
-		} else {
-			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Collectible');
-			$retVal['response']['errors'] = $errors;
+		}
+
+		unset($this -> data);
+		//change the status
+		if ($this -> saveField('status_id', $status, false)) {
+			$statusDetail = $this -> Status -> find('first', array('contain' => false, 'conditions' => array('Status.id' => $status)));
+			$retVal['response']['isSuccess'] = true;
+			$retVal['response']['data']['status'] = $statusDetail['Status'];
 		}
 
 		return $retVal;
@@ -809,7 +873,7 @@ class Collectible extends AppModel {
 	 */
 	public function getStatus($collectibleId) {
 		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status')));
-
+		debug($collectible);
 		if ($collectible && !empty($collectible)) {
 			return $collectible['Status'];
 		} else {
@@ -825,6 +889,37 @@ class Collectible extends AppModel {
 				$retVal = true;
 			}
 		}
+
+		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function validateCollectible() {
+
+		// for some reason I cannot get the validator() -> get field stuff to work so doing it manually
+		// If it is a print, then they do not have to enter a manufacturer or a brand
+		if ($this -> data['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+
+			// They don't have to select a manufacturer
+			$this -> validate['manufacture_id']['allowEmpty'] = true;
+			// They don't have to select a brand
+			//using unset here so it will go the validate method
+			unset($this -> validate['license_id']['allowEmpty']);
+
+			// If they do end up having a brand, we need to validate it differently
+			$this -> validate['license_id']['rule'] = array('validatePrintLicenseId');
+			debug($this -> validate['license_id']['rule']);
+			// $this -> validator() -> getField('manufacture_id') -> getRule('rule') -> message = 'This field cannot be left blank';
+
+			// However, if it is a print, then we need to make sure they have at least one artist added
+			if (empty($this -> data['ArtistsCollectible'])) {
+				$this -> validationErrors['arrtist'] = __('At least one artist is required.');
+			}
+		}
+
+		$retVal = $this -> validates();
 
 		return $retVal;
 	}

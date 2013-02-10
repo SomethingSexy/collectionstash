@@ -266,6 +266,7 @@ class Uploader {
 	 */
 	function _error($text) {
 		$this -> errors[] = __($text, true);
+		debug($this -> errors);
 	}
 
 	/**
@@ -277,7 +278,6 @@ class Uploader {
 	 */
 	function checkType($file = null) {
 		$this -> setFile($file);
-		debug($this -> file);
 		foreach ($this->options['allowedTypes'] as $ext => $types) {
 			if (!is_string($ext)) {
 				$ext = $types;
@@ -288,6 +288,7 @@ class Uploader {
 
 			$ext = strtolower('.' . str_replace('.', '', $ext));
 			$file_ext = strtolower($this -> _ext());
+			debug($ext);
 			debug($file_ext);
 			if ($file_ext == $ext) {
 				if (is_array($types) && !in_array($this -> file['type'], $types)) {
@@ -300,6 +301,7 @@ class Uploader {
 			}
 		}
 		CakeLog::write('error', 'The file ' . $this -> file['name'] . ' extension is not allowed.' . $this -> file['error']);
+		$this -> _error("{$this->file['type']} is not an allowed type.");
 		return false;
 	}
 
@@ -312,7 +314,6 @@ class Uploader {
 	 */
 	function checkFile($file = null) {
 		$this -> setFile($file);
-		debug($this -> file);
 		if ($this -> hasUpload() && $this -> file) {
 			if (isset($this -> file['error']) && $this -> file['error'] == UPLOAD_ERR_OK) {
 				return true;
@@ -333,7 +334,6 @@ class Uploader {
 	 */
 	function checkSize($file = null) {
 		$this -> setFile($file);
-		debug($this -> file);
 		if ($this -> hasUpload() && $this -> file) {
 			if (!$this -> options['maxFileSize']) {//We don't want to test maxFileSize
 				return true;

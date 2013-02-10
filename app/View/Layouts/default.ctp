@@ -31,7 +31,7 @@
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('js/jquery-1.7');
-	echo $this -> Html -> script('thirdparty/backbone');
+	echo $this -> Minify -> script('js/thirdparty/backbone');
 	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
 	echo $this -> Minify -> script('js/jquery-ui-1.8.18');
@@ -88,10 +88,10 @@
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>
-    <div class="navbar navbar-fixed-top">
+    <div id="header-navbar" class="navbar navbar-fixed-top">
 	    <div class="navbar-inner">
-		    <div class="container">
-		     
+		   <!-- <div class="container"> -->
+		   <div class="navbar-container">  
 			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
 			    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				    <span class="icon-bar"></span>
@@ -141,10 +141,10 @@
 							<?php echo $this -> Html -> link('Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
 						</li>
 						<li>
-							<a href="/comments/"><?php echo __('Discussion') . '<span class="beta inner-text">Beta</span>'; ?></a>
+							<a href="/comments/"><?php echo __('Discussion'); ?></a>
 						</li>									
 					</ul>
-					<form method="get" class="navbar-search" action="/collectibles/search">
+					<form method="get" class="navbar-search pull-right" action="/collectibles/search">
 						<input id="q" type="text" name="q" class="search-query" placeholder="Search">
 					</form>
 					<ul class="nav pull-right">

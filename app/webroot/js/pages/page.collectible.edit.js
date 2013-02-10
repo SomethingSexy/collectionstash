@@ -1,4 +1,5 @@
 // TODO: We will need a model that will fetch all of teh series information given a manufacturer
+var printId = '10';
 var pageEvents = _.extend({}, Backbone.Events);
 
 var ErrorModel = Backbone.Model.extend({});
@@ -74,10 +75,30 @@ var CollectibleModel = Backbone.Model.extend({
 var Collectibles = Backbone.Collection.extend({
 	model : CollectibleModel
 });
+var Brand = Backbone.Model.extend({});
+var Brands = Backbone.Collection.extend({
+	model : Brand
+});
 var CollectibleTagModel = Backbone.Model.extend({});
+var CollectibleTypeModel = Backbone.Model.extend({});
 var CollectibleUploadModel = Backbone.Model.extend({});
 var CollectibleUploads = Backbone.Collection.extend({
-	model : CollectibleUploadModel
+	model : CollectibleUploadModel,
+	initialize : function(models, options) {
+		this.id = options.id;
+	},
+	url : function() {
+		return '/collectibles_uploads/uploads/' + this.id;
+	},
+	parse : function(resp, xhr) {
+		var retVal = [];
+		_.each(resp, function(upload) {
+			var parsedUpload = upload.CollectiblesUpload;
+			parsedUpload['Upload'] = upload.Upload;
+			retVal.push(parsedUpload);
+		});
+		return retVal;
+	}
 })
 var ManufacturerModel = Backbone.Model.extend({});
 var CurrencyModel = Backbone.Model.extend({});
@@ -110,6 +131,17 @@ var TagModel = Backbone.Model.extend({
 var Tags = Backbone.Collection.extend({
 	model : TagModel,
 	urlRoot : '/collectibles/tags'
+});
+
+var ArtistModel = Backbone.Model.extend({
+	urlRoot : function() {
+		return '/collectibles/artist/' + adminMode + '/'
+	}
+});
+
+var Artists = Backbone.Collection.extend({
+	model : ArtistModel,
+	urlRoot : '/collectibles/artists'
 });
 
 var AttributesView = Backbone.View.extend({
@@ -345,8 +377,18 @@ var PhotoView = Backbone.View.extend({
 	events : {
 
 	},
-	initialize : function() {
-
+	initialize : function(options) {
+		this.eventManager = options.eventManager;
+		this.collection.on('reset', function() {
+			var self = this;
+			var data = {
+				uploads : this.collection.toJSON(),
+				uploadDirectory : uploadDirectory
+			};
+			dust.render(this.template, data, function(error, output) {
+				$(self.el).html(output);
+			});
+		}, this);
 	},
 	render : function() {
 		var self = this;
@@ -358,9 +400,109 @@ var PhotoView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
-		$('#fileupload').balls({
-			'collectibleId' : collectibleId,
-			'$element' : $('#upload-link', self.el)
+		$('#fileupload').fileupload({
+			//dropZone : $('#dropzone')
+		});
+		$('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
+
+		$('#fileupload').fileupload('option', {
+			url : '/collectibles_uploads/upload',
+			maxFileSize : 2097152,
+			acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
+			process : [{
+				action : 'load',
+				fileTypes : /^image\/(gif|jpeg|png)$/,
+				maxFileSize : 2097152 // 2MB
+			}, {
+				action : 'resize',
+				maxWidth : 1440,
+				maxHeight : 900
+			}, {
+				action : 'save'
+			}]
+		});
+
+		$('#fileupload').bind('fileuploaddestroy', function(e, data) {
+			var filename = data.url.substring(data.url.indexOf("=") + 1);
+			console.log(data);
+		});
+
+		$('#upload-dialog').on('hidden', function() {
+			$('#fileupload table tbody tr.template-download').remove();
+			pageEvents.trigger('upload:close');
+		});
+
+		$('#upload-url').on('click', function() {
+			var url = $.trim($('.url-upload-input').val());
+			if (url !== '') {
+				$.ajax({
+					dataType : 'json',
+					type : 'post',
+					data : $('#fileupload').serialize(),
+					url : '/collectibles_uploads/upload/',
+					beforeSend : function(formData, jqForm, options) {
+						$('.fileupload-progress').removeClass('fade').addClass('active');
+						$('.fileupload-progress .progress .bar').css('width', '100%');
+					},
+					success : function(data, textStatus, jqXHR) {
+						if (data && data.length) {
+							var that = $('#fileupload');
+							that.fileupload('option', 'done').call(that, null, {
+								result : data
+							});
+						} else if (data.response && !data.response.isSuccess) {
+							// most like an error
+							$('span', '.component-message.error').text(data.response.errors[0].message);
+
+						}
+					},
+					complete : function() {
+						$('.fileupload-progress').removeClass('active').addClass('fade');
+						$('.fileupload-progress .progress .bar').css('width', '0%');
+					}
+				});
+			}
+
+		});
+
+		$(self.el).on('click', '#upload-link', function() {
+			$.blockUI({
+				message : 'Loading...',
+				css : {
+					border : 'none',
+					padding : '15px',
+					backgroundColor : ' #F1F1F1',
+					'-webkit-border-radius' : '10px',
+					'-moz-border-radius' : '10px',
+					color : '#222',
+					background : 'none repeat scroll 0 0 #F1F1F',
+					'border-radius' : '5px 5px 5px 5px',
+					'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+				}
+			});
+
+			$.ajax({
+				dataType : 'json',
+				url : '/collectibles_uploads/view/' + collectibleId,
+				beforeSend : function(formData, jqForm, options) {
+
+				},
+				success : function(data, textStatus, jqXHR) {
+
+					if (data && data.response.data.length) {
+						var that = $('#fileupload');
+						that.fileupload('option', 'done').call(that, null, {
+							result : data.response.data
+						});
+					}
+
+					$.unblockUI();
+					$('.url-upload-input', '#upload-dialog').val('');
+					$('span', '.component-message.error').text('');
+					$('#upload-dialog').modal();
+
+				}
+			});
 		});
 
 		return this;
@@ -403,6 +545,8 @@ var CollectibleView = Backbone.View.extend({
 		this.currencies = options.currencies;
 		this.retailers = options.retailers;
 		this.scales = options.scales;
+		this.collectibleType = options.collectibleType;
+		this.brands = options.brands;
 		// this is information on the selected manufacturer
 		if (options.manufacturer) {
 			this.manufacturer = options.manufacturer;
@@ -496,10 +640,11 @@ var CollectibleView = Backbone.View.extend({
 			showOverlay : false,
 			css : {
 				top : '100px',
-				'background-color' : '#DFF0D8',
-				border : '1px solid #D6E9C6',
+				'background-color' : '#DDFADE',
+				border : '1px solid #93C49F',
+				'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
 				'border-radius' : '4px 4px 4px 4px',
-				color : '#468847',
+				color : '#333333',
 				'margin-bottom' : '20px',
 				padding : '8px 35px 8px 14px',
 				'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
@@ -510,16 +655,25 @@ var CollectibleView = Backbone.View.extend({
 	},
 	render : function() {
 		var self = this;
-
+		var collectibleType = this.collectibleType.toJSON();
 		var data = {
 			collectible : this.model.toJSON(),
 			manufacturers : this.manufacturers.toJSON(),
 			currencies : this.currencies.toJSON(),
 			years : this.years,
-			scales : this.scales.toJSON()
+			scales : this.scales.toJSON(),
+			collectibleType : collectibleType,
+			brands : this.brands.toJSON()
 		};
 		if (this.manufacturer) {
 			data.manufacturer = this.manufacturer.toJSON();
+			data.renderBrandList = false;
+		} else {
+			// if there is no manufacturer selected and the collectible type
+			// is a print
+			if (collectibleType.id === printId) {
+				data.renderBrandList = true;
+			}
 		}
 
 		dust.render(this.template, data, function(error, output) {
@@ -550,11 +704,20 @@ var CollectibleView = Backbone.View.extend({
 
 		this.manufacturer = selectedManufacturer;
 		// Change the id on the series
-		this.series.set({
-			id : this.manufacturer.get('id')
-		}, {
-			silent : true
-		});
+		if (this.manufacturer !== null) {
+			this.series.set({
+				id : this.manufacturer.get('id')
+			}, {
+				silent : true
+			});
+		} else {
+			this.series.set({
+				id : ''
+			}, {
+				silent : true
+			});
+		}
+
 	},
 	changeSeries : function(event) {
 		$.blockUI({
@@ -699,7 +862,7 @@ var DupListMessageView = Backbone.View.extend({
 
 var TagsView = Backbone.View.extend({
 	template : 'tags.edit',
-	className : "span12",
+	className : "span8 pull-right",
 	events : {
 		'click .save' : 'save',
 	},
@@ -773,10 +936,11 @@ var TagView = Backbone.View.extend({
 					showOverlay : false,
 					css : {
 						top : '100px',
-						'background-color' : '#DFF0D8',
-						border : '1px solid #D6E9C6',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
 						'border-radius' : '4px 4px 4px 4px',
-						color : '#468847',
+						color : '#333333',
 						'margin-bottom' : '20px',
 						padding : '8px 35px 8px 14px',
 						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
@@ -849,10 +1013,11 @@ var AddTagView = Backbone.View.extend({
 						showOverlay : false,
 						css : {
 							top : '100px',
-							'background-color' : '#DFF0D8',
-							border : '1px solid #D6E9C6',
+							'background-color' : '#DDFADE',
+							border : '1px solid #93C49F',
+							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
 							'border-radius' : '4px 4px 4px 4px',
-							color : '#468847',
+							color : '#333333',
 							'margin-bottom' : '20px',
 							padding : '8px 35px 8px 14px',
 							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
@@ -875,6 +1040,187 @@ var AddTagView = Backbone.View.extend({
 	}
 });
 
+var ArtistsView = Backbone.View.extend({
+	template : 'artists.edit',
+	className : "span8 pull-right",
+	events : {
+		'click .save' : 'save',
+	},
+	initialize : function(options) {
+		this.collectibleType = options.collectibleType;
+		this.collection.on('add', this.render, this);
+		this.collection.on('remove', this.render, this);
+	},
+	render : function() {
+		var self = this;
+		dust.render(this.template, {
+			total : this.collection.length,
+			collectibleType : this.collectibleType.toJSON()
+		}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		this.collection.each(function(tag) {
+			$('ul.artists', self.el).append(new ArtistView({
+				model : tag
+			}).render().el);
+		});
+
+		if (this.addArtistView) {
+			this.addArtistView.remove();
+		}
+		this.addArtistView = new AddArtistView({
+			collection : this.collection
+		});
+		$('.add-container', self.el).html(this.addArtistView.render().el);
+
+		return this;
+	},
+	save : function() {
+		this.collection.sync();
+	}
+});
+
+var ArtistView = Backbone.View.extend({
+	template : 'artist.edit',
+	className : "li",
+	tagName : 'li',
+	events : {
+		'click .remove-artist' : 'removeArtist'
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+		var self = this;
+		var artist = this.model.toJSON();
+		dust.render(this.template, artist, function(error, output) {
+			$(self.el).html(output);
+		});
+		return this;
+	},
+	removeArtist : function() {
+		this.model.destroy({
+			wait : true,
+			success : function(model, response) {
+				var message = "The artist has been successfully deleted!";
+				if (response.response.data) {
+					if (response.response.data.hasOwnProperty('isEdit')) {
+						if (response.response.data.isEdit) {
+							message = "Your edit has been successfully submitted!";
+						}
+					}
+				}
+
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
+				});
+			},
+		});
+	}
+});
+
+var AddArtistView = Backbone.View.extend({
+	template : 'artist.add',
+	events : {
+		'click .add-artist' : 'addArtist',
+		'keypress #inputArtist' : 'inputChange'
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+		var self = this;
+		dust.render(this.template, {}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		$('#inputArtist', self.el).typeahead({
+			source : function(query, process) {
+				$.get('/artists/getArtistList', {
+					query : query,
+				}, function(data) {
+					process(data.suggestions);
+				});
+			},
+			items : 100
+		});
+		return this;
+	},
+	inputChange : function() {
+		$('.inline-error', this.el).text('');
+		$('.control-group ', this.el).removeClass('error');
+	},
+	addArtist : function() {
+		var self = this;
+		var name = $('#inputArtist', self.el).val();
+		name = $.trim(name);
+		$('.inline-error', self.el).text('');
+		$('.control-group ', self.el).removeClass('error');
+		if (name !== '') {
+			this.collection.create({
+				'collectible_id' : collectibleId,
+				Artist : {
+					name : name
+				}
+			}, {
+				wait : true,
+				success : function(model, response) {
+					var message = "The artist has been successfully added!";
+					if (response.response.data) {
+						if (response.response.data.hasOwnProperty('isEdit')) {
+							if (response.response.data.isEdit) {
+								message = "Your edit has been successfully submitted!";
+							}
+						}
+					}
+
+					$.blockUI({
+						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+						showOverlay : false,
+						css : {
+							top : '100px',
+							'background-color' : '#DDFADE',
+							border : '1px solid #93C49F',
+							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+							'border-radius' : '4px 4px 4px 4px',
+							color : '#333333',
+							'margin-bottom' : '20px',
+							padding : '8px 35px 8px 14px',
+							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+							'z-index' : 999999
+						},
+						timeout : 2000
+					});
+				},
+				error : function(model, response) {
+					var responseObj = $.parseJSON(response.responseText)
+					if (responseObj.response && responseObj.response.errors) {
+						$('.control-group ', self.el).addClass('error');
+						$('.inline-error', self.el).text(responseObj.response.errors[0].message[0]);
+					}
+				}
+			});
+
+			$('#inputArtist', self.el).val('');
+		}
+	}
+});
+
 var hasDupList = false;
 
 $(function() {
@@ -889,7 +1235,7 @@ $(function() {
 		}
 	});
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate) {
+	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -900,6 +1246,9 @@ $(function() {
 		dust.loadSource(dust.compile(tagTemplate[0], 'tag.edit'));
 		dust.loadSource(dust.compile(addTagTemplate[0], 'tag.add'));
 		dust.loadSource(dust.compile(dupListTemplate[0], 'message.duplist'));
+		dust.loadSource(dust.compile(artistsTemplate[0], 'artists.edit'));
+		dust.loadSource(dust.compile(artistTemplate[0], 'artist.edit'));
+		dust.loadSource(dust.compile(addArtistTemplate[0], 'artist.add'));
 
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,
@@ -907,18 +1256,21 @@ $(function() {
 			cache : false,
 			success : function(data, textStatus, jqXHR) {
 				$.unblockUI();
-				console.log(data);
-				data.response.data.collectible.CollectiblesTag
+
 				// Setup the current model
 				var collectibleModel = new CollectibleModel(data.response.data.collectible.Collectible);
+				var collectibleTypeModel = new CollectibleTypeModel(data.response.data.collectible.Collectibletype);
 				// Setup the manufacturer list, this will contain all data for each manufacturer
 				var manufacturerList = new ManufacturerList(data.response.data.manufacturers);
 				var currencies = new Currencies(data.response.data.currencies);
 				var scales = new Scales(data.response.data.scales);
 				var attributes = new Attributes(data.response.data.collectible.AttributesCollectible);
-				var uploads = new CollectibleUploads(data.response.data.collectible.CollectiblesUpload);
-
+				var uploads = new CollectibleUploads(data.response.data.collectible.CollectiblesUpload, {
+					'id' : data.response.data.collectible.Collectible.id
+				});
+				var brands = new Brands(data.response.data.brands);
 				var tags = new Tags(data.response.data.collectible.CollectiblesTag);
+				var artists = new Artists(data.response.data.collectible.ArtistsCollectible);
 
 				var status = new Status();
 				status.set({
@@ -941,36 +1293,7 @@ $(function() {
 					}
 				});
 
-				var collectibleView = new CollectibleView({
-					model : collectibleModel,
-					manufacturers : manufacturerList,
-					manufacturer : selectedManufacturer,
-					currencies : currencies,
-					retailers : retailersArray,
-					scales : scales,
-					status : status
-				});
-
-				$('#edit-container .row').append(new PhotoView({
-					collection : uploads
-				}).render().el);
-				$('#edit-container .row').append(collectibleView.render().el);
-				$('#attributes-container').append(new AttributesView({
-					collection : attributes,
-					status : status
-				}).render().el);
-
-				$('#status-container').html(new StatusView({
-					model : status,
-					allowEdit : true
-				}).render().el);
-
-				$('#tags-container').append(new TagsView({
-					collection : tags
-				}).render().el);
-
-				// Make sure we only have one
-				var messageView = null;
+				// Setup global events
 				pageEvents.on('status:change:error', function(errors) {
 					if (messageView) {
 						messageView.remove();
@@ -1013,6 +1336,63 @@ $(function() {
 					});
 				});
 
+				pageEvents.on('upload:close', function() {
+					uploads.fetch();
+				});
+
+				// Setup views
+				var collectibleView = new CollectibleView({
+					model : collectibleModel,
+					manufacturers : manufacturerList,
+					manufacturer : selectedManufacturer,
+					currencies : currencies,
+					retailers : retailersArray,
+					scales : scales,
+					status : status,
+					collectibleType : collectibleTypeModel,
+					brands : brands
+				});
+
+				$('#photo-container').append(new PhotoView({
+					collection : uploads,
+					eventManager : pageEvents
+				}).render().el);
+
+				if (collectibleTypeModel.toJSON().id === printId) {
+					$('#collectible-container').append(new ArtistsView({
+						collection : artists,
+						collectibleType : collectibleTypeModel
+					}).render().el);
+					$('#collectible-container').append(collectibleView.render().el);
+				} else {
+					$('#collectible-container').append(collectibleView.render().el);
+					$('#collectible-container').append(new ArtistsView({
+						collection : artists,
+						collectibleType : collectibleTypeModel
+					}).render().el);
+				}
+
+				$('#attributes-container').append(new AttributesView({
+					collection : attributes,
+					status : status
+				}).render().el);
+
+				$('#status-container').html(new StatusView({
+					model : status,
+					allowEdit : true
+				}).render().el);
+
+				$('#collectible-container').append(new TagsView({
+					collection : tags
+				}).render().el);
+
+				// $('#artists-container').append(new ArtistsView({
+				// collection : artists
+				// }).render().el);
+
+				// Make sure we only have one
+				var messageView = null;
+
 				// If the status has changed and I am on the view
 				//page and they change the status and it is a draft
 				// go to the edit page
@@ -1025,6 +1405,7 @@ $(function() {
 				collectibleModel.on('destroy', function() {
 					window.location.href = '/users/home';
 				});
+
 			}
 		});
 	});

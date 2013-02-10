@@ -44,6 +44,8 @@ Router::connect('/wishlist/*', array('controller' => 'stashs', 'action' => 'wish
 
 Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => 'view'));
 
+Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
+
 
 
 /**

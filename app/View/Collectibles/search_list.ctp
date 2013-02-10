@@ -64,8 +64,17 @@ unset($urlparams['url']);
 					} else {
 						echo '<td>' . __('No') . ' </td>';
 					}
-					echo '<td>' . $collectible['Manufacture']['title'] . '</td>';
-					echo '<td>' . $collectible['License']['name'] . '</td>';
+				
+					if (!empty($collectible['Manufacture']['title'])) {
+						echo '<td>' . $collectible['Manufacture']['title'] . '</td>';
+					} else {
+						echo '<td>Not Recorded</td>';
+					}
+					if (!empty($collectible['License']['name'])) {
+						echo '<td>' . $collectible['License']['name'] . '</td>';
+					} else {
+						echo '<td>Not Recorded</td>';
+					}
 					echo '<td>' . $collectible['Collectibletype']['name'] . '</td>';
 					if (isset($collectible['SpecializedType']) && !empty($collectible['SpecializedType'])) {
 						echo '<td>' . $collectible['SpecializedType']['name'] . '</td>';

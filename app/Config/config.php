@@ -2,7 +2,7 @@
 $config['Settings'] = Configure::read('Settings');
 
 $config['Settings'] = Set::merge($config['Settings'], array(
-	'version' => '2.0.2',
+	'version' => '2.1',
   	'title' => 'My Application',
   	'registration' => array(
   		'open' => true,
@@ -37,6 +37,9 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 			'root-folder' => 'user_uploads',
 			'total-allowed' => 100
 		)
+	),
+	'CollectibleTypes' => array(
+		'Print' => '10'
 	)
 ));
 

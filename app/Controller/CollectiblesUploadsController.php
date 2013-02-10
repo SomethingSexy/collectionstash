@@ -189,16 +189,18 @@ class CollectiblesUploadsController extends AppController {
 					$uploadResponse['size'] = intval($upload['Upload']['size']);
 					$uploadResponse['name'] = $upload['Upload']['name'];
 					// this should be the id of the new pending collectible
-					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/true';
+
 					$uploadResponse['delete_type'] = 'POST';
 					$uploadResponse['id'] = $this -> request -> data['CollectiblesUpload']['collectible_id'];
-					
+
 					if ($upload['isEdit']) {
 						$uploadResponse['pending'] = true;
 						$uploadResponse['pendingText'] = __('Pending Approval');
 					} else {
 						$uploadResponse['pending'] = false;
 					}
+
+					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/'. $uploadResponse['pending'];
 
 					//TODO: Need to figure these two properties out
 					$uploadResponse['owner'] = true;
@@ -208,6 +210,7 @@ class CollectiblesUploadsController extends AppController {
 					$this -> set('returnData', $retunData);
 				} else {
 					// Need to figure out how the plugin handles errors
+					$this -> set('returnData', $response);
 				}
 
 			} else {
@@ -222,6 +225,16 @@ class CollectiblesUploadsController extends AppController {
 			$this -> set('returnData', $data);
 			return;
 		}	}
+
+	public function uploads($collectibleId) {
+		$returnData = array();
+
+		if (isset($collectibleId) && is_numeric($collectibleId)) {
+			$returnData = $this -> CollectiblesUpload -> find('all', array('contain' => array('Upload'), 'conditions' => array('CollectiblesUpload.collectible_id' => $collectibleId)));
+		}
+
+		$this -> set(compact('returnData'));
+	}
 
 	public function admin_approval($editId = null, $collectibleUploadEditId = null) {
 		$this -> checkLogIn();

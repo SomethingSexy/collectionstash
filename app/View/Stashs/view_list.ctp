@@ -1,18 +1,14 @@
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
-<div id="my-stashes-component" class="component">
-	<div class="inside">
-		<div class="component-title">
-			<h2><?php
-			echo $stashUsername . '\'s';
-			if ($stashType === 'default') {
-				echo __(' stash', true);
-			} else {
-				echo __(' wishlist', true);
-			}
-			?></h2>
-		</div>
+<div id="my-stashes-component" class="well">
+		<h2><?php
+		echo $stashUsername . '\'s';
+		if ($stashType === 'default') {
+			echo __(' stash', true);
+		} else {
+			echo __(' wishlist', true);
+		}
+		?></h2>
 		<?php echo $this -> element('flash'); ?>
-		<div class="component-view">
 			<div class="actions stash">
 				<ul class="nav nav-pills">
 					<?php
@@ -40,9 +36,9 @@
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
 				</ul>	
 			</div>
-			<div class="title">
+			<div class="title clearfix">
 				<h3><?php echo __('Collectibles'); ?></h3>
-				<div class="btn-group actions">
+				<div class="btn-group actions pull-left">
 						<?php
 						if (isset($myStash) && $myStash) {
 							echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i></a>';
@@ -63,7 +59,7 @@
 						}
 						?>
 				</div>
-			    <div class="btn-group views">
+			    <div class="btn-group views pull-right">
 			    	<?php
 					$currentStash = 'stash';
 					if ($stashType === 'wishlist') {
@@ -110,8 +106,13 @@
 			} else {
 				echo '<td> </td>';
 			}
-
-			echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
+			
+			if(!empty($myCollectible['Collectible']['Manufacture']['title'])) {
+				echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
+			} else {
+				echo '<td>N/A</td>';
+			}
+			
 			echo '<td>' . $myCollectible['Collectible']['name'] . '</td>';
 			if ($stashType === 'default') {
 				if (empty($myCollectible['Collectible']['edition_size'])) {
@@ -174,8 +175,6 @@
 		}
 	}
 	?>
-		</div>
-	</div>
 </div>
 <?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>

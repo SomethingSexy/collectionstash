@@ -30,7 +30,7 @@ class Edit extends AppModel {
 						$results[$key]['Status']['status'] = 'Approved';
 					} else if ($val['Edit']['status'] === '2') {
 						$results[$key]['Status']['status'] = 'Declined';
-					}	
+					}
 
 					$results[$key]['Edits'] = array();
 
@@ -85,6 +85,15 @@ class Edit extends AppModel {
 						$tags[0]['CollectiblesTagEdit']['edit_type'] = 'Tag';
 						//Since there is only 1 allowed, just assume for now
 						array_push($results[$key]['Edits'], $tags[0]['CollectiblesTagEdit']);
+					}
+
+					$this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
+					$artists = $this -> ArtistsCollectible -> findEditsByEditId($val['Edit']['id']);
+					$this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
+					if (!empty($artists)) {
+						$artists[0]['ArtistsCollectibleEdit']['edit_type'] = 'ArtistsCollectible';
+						//Since there is only 1 allowed, just assume for now
+						array_push($results[$key]['Edits'], $artists[0]['ArtistsCollectibleEdit']);
 					}
 
 					$this -> bindModel(array('belongsTo' => array('CollectiblesUpload')));
@@ -146,6 +155,10 @@ class Edit extends AppModel {
 					$this -> bindModel(array('belongsTo' => array('Collectible')));
 					$success = $this -> Collectible -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('Collectible')));
+				} else if ($value['edit_type'] === 'ArtistsCollectible') {
+					$this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
+					$success = $this -> ArtistsCollectible -> denyEdit($value['id'], $sendEmail);
+					$this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
 				}
 			}
 
@@ -185,7 +198,6 @@ class Edit extends AppModel {
 		$dataSource -> begin();
 		$success = true;
 		foreach ($edit['Edits'] as $key => $value) {
-			debug($value);
 			if ($success) {
 				// new model only handles attributes for now
 				if ($value['edit_type'] === 'Attribute') {
@@ -210,6 +222,10 @@ class Edit extends AppModel {
 					$this -> bindModel(array('belongsTo' => array('Collectible')));
 					$success = $this -> Collectible -> publishEdit($value['id'], $approvalUserId);
 					$this -> unbindModel(array('belongsTo' => array('Collectible')));
+				} else if ($value['edit_type'] === 'ArtistsCollectible') {
+					$this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
+					$success = $this -> ArtistsCollectible -> publishEdit($value['id'], $sendEmail);
+					$this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
 				}
 			}
 

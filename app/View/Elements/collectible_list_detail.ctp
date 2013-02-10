@@ -28,18 +28,27 @@ if (!isset($showStats)) {
 
 		}
 		?>
-		<dt>
-			Manufacturer:
-		</dt>
-		<dd>
-			<a href="<?php echo '/manufactures/view/' . $manufacture['id']; ?>"> <?php echo $manufacture['title']; ?></a>
-		</dd>
-		<dt>
-			<?php echo __('Brand'); ?>:
-		</dt>
-		<dd>
-			<?php echo $license['name']; ?>
-		</dd>
+		<?php
+		if (isset($manufacture['title'])) {
+			echo '<dt>';
+			echo __('Manufacturer:');
+			echo '</dt>';
+			echo '<dd>';
+			echo $manufacture['title'];
+			echo '</dd>';
+		}
+		?>
+
+		<?php
+		if (isset($license['name'])) {
+			echo '<dt>';
+			echo __('Brand:');
+			echo '</dt>';
+			echo '<dd>';
+			echo $license['name'];
+			echo '</dd>';
+		}
+		?>
 		<dt>
 			Type:
 		</dt>
@@ -76,12 +85,12 @@ if(isset($speciazliedType)) {
 			echo __('Owned By:');
 			echo '</dt>';
 			echo '<dd>';
-			if($collectible['collectibles_user_count'] === '0') {
-				echo $collectible['collectibles_user_count'];	
+			if ($collectible['collectibles_user_count'] === '0') {
+				echo $collectible['collectibles_user_count'];
 			} else {
-				echo $this -> Html -> link($collectible['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['id']));	
+				echo $this -> Html -> link($collectible['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['id']));
 			}
-			
+
 			echo '</dd>';
 		}
 		?>

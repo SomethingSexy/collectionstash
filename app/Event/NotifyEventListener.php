@@ -46,7 +46,6 @@ class NotifyEventListener implements CakeEventListener {
 		foreach ($subscriptions as $key => $subscription) {
 			array_push($data, array('user_id' => $subscription['Subscription']['user_id'], 'message' => $subscription['Subscription']['message']));
 		}
-		debug($event -> subject);
 		$event -> subject -> bindModel(array('belongsTo' => array('Notification')));
 		$event -> subject -> Notification -> saveAll($data);
 		$event -> subject -> unbindModel(array('belongsTo' => array('Notification')));

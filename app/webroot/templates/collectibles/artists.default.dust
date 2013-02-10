@@ -1,0 +1,10 @@
+<div class="well attributes collectible" data-collectible-id="{collectibleId}">
+	<h3>Artists</h3>
+	{@eq key="{collectibleType.id}" value="10"}
+	<p>The artist is always the most important part to any print!</p>
+	<p>Please add any and all artists or groups that might have worked on this piece.</p>
+	{/eq}
+	<p>The artist field is a typeahead field, please try and use any existing entries.</p>
+	<div class="add-container"> </div>
+	<ul class="artists"> </ul>
+</div>

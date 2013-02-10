@@ -3,9 +3,4 @@
 	<p>Add or remove tags for this collectible.  You can add up to 5.</p>
 	<div class="add-container"> </div>
 	<ul class="tags"> </ul>
-	<div class="form-actions">
-		<button class="btn btn-primary save" data-loading-text="Loading..." type="submit">
-			Save changes
-		</button>
-	</div>
 </div>
