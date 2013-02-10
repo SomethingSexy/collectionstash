@@ -3,7 +3,7 @@
 
 {@eq key="{collectibleType.id}" value="10"}
 <p>Prints can be setup in a few different ways depending on who produced the print or where it was sold.</p>
-<p>If the artist that created the print, was commissioned by a manufacturer or producer, then make sure to select the appropriate manufactuerer/producer.</p>
+<p>If the artist that created the print was commissioned by a manufacturer or producer, then make sure to select the appropriate manufacturer/producer.</p>
 <p>If the artist made the work on their own for a specific venue, then leave the manufacturer/producer field blank but add the venue.</p>
 <p>If the artist made the work on their own and printed it and sold it themselves, then leave the manufacturer/producer and the venue fields blank.</p>
 {/eq}
