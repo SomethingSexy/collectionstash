@@ -14,7 +14,7 @@ class CollectiblesUser extends AppModel {
 	'cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition size
 	//'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true), 'edition_sizeRule-1' => array('rule' => array('validateEditionSizeAndAP'), 'message' => 'Cannot have an edition size and be an artist\'s proof.')),
-	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'message' => 'Must be a valid edition size.', 'last' => true)),
+	'edition_size' => array('edition_sizeRule-1' => array('rule' => array('validateEditionSize'), 'allowEmpty' => true, 'message' => 'Must be a valid edition size.', 'last' => true)),
 	//condition
 	'condition_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid condition.'),
 	//merchant
