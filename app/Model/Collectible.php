@@ -719,6 +719,14 @@ class Collectible extends AppModel {
 			$variants = $this -> getCollectibleVariants($id);
 			$retVal['response']['data']['collectible'] = $collectible;
 			$retVal['response']['data']['variants'] = $variants;
+			if (isset($retVal['response']['data']['collectible']['Collectible']['description'])) {
+				// why the fuck do I need to do this?
+				$description = str_replace('\n', "\n", $retVal['response']['data']['collectible']['Collectible']['description']);
+				$description = str_replace('\r', "\r", $description);
+
+				$retVal['response']['data']['collectible']['Collectible']['description'] = $description;
+			}
+
 		} else {
 			$retVal['response']['isSuccess'] = false;
 			// Missing

@@ -314,6 +314,7 @@ class CollectiblesController extends AppController {
 	public function getCollectible($id) {
 		$returnData = $this -> Collectible -> getCollectible($id);
 		$collectibleTypeId = $returnData['response']['data']['collectible']['Collectible']['collectibletype_id'];
+
 		// We will also want to get the manufacturers and their licenses right away
 		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
 
