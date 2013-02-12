@@ -656,8 +656,10 @@ var CollectibleView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var collectibleType = this.collectibleType.toJSON();
+		var collectible = this.model.toJSON();
+
 		var data = {
-			collectible : this.model.toJSON(),
+			collectible : collectible,
 			manufacturers : this.manufacturers.toJSON(),
 			currencies : this.currencies.toJSON(),
 			years : this.years,
