@@ -582,6 +582,13 @@ var CollectibleView = Backbone.View.extend({
 			});
 			this.render();
 		}, this);
+		this.model.on('change:retailer', function() {
+			this.model.set({
+				'retailer_id' : null
+			}, {
+				silent : true
+			});
+		}, this);
 		this.model.on("change:limited", this.render, this);
 		this.model.on("change:edition_size", this.render, this);
 		this.model.on("change:series_id", this.render, this);
