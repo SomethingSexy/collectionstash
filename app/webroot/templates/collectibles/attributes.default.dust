@@ -4,10 +4,10 @@
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 		<ul class="dropdown-menu">
 			<li>
-				<a id="add-new-item-link" class="link" title=' . __('') . '>Add New Item</a>
+				<a id="add-new-item-link" class="link" title=''>Add New Item</a>
 			</li>
 			<li>
-				<a id="add-existing-item-link" class="link" title=' . __('') . '>Add Existing Item</a>
+				<a id="add-existing-item-link" class="link" title=''>Add Existing Item</a>
 			</li>
 		</ul>
 	</div>
