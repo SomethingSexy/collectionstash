@@ -217,6 +217,7 @@
 			<label class="control-label" for="inputUpc">Number of Pieces</label>
 			<div class="controls">
 				<input type="number" id="inputPieces" name="pieces" value="{collectible.pieces}">
+				<span class="help-inline">This is the number of parts and pieces this collectible has.</span>
 			</div>
 		</div>
 		<div class="control-group">
