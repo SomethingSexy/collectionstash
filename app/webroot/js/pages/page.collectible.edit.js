@@ -1,4 +1,8 @@
-// TODO: We will need a model that will fetch all of teh series information given a manufacturer
+/**
+ * TODO: Known Issues:
+ * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
+ *  exist in there
+ */
 var printId = '10';
 var pageEvents = _.extend({}, Backbone.Events);
 
@@ -100,7 +104,23 @@ var CollectibleUploads = Backbone.Collection.extend({
 		return retVal;
 	}
 })
-var ManufacturerModel = Backbone.Model.extend({});
+var ManufacturerModel = Backbone.Model.extend({
+	urlRoot : '/manufactures/manufacturer',
+	validation : {
+		title : [{
+			pattern : /^[A-Za-z0-9 _]*$/,
+			msg : 'Invalid characters'
+		}, {
+			required : true
+		}],
+		url : [{
+			pattern : 'url',
+			msg : 'Must be a valid url.'
+		}, {
+			required : false
+		}],
+	}
+});
 var CurrencyModel = Backbone.Model.extend({});
 var Currencies = Backbone.Collection.extend({
 	model : CurrencyModel
@@ -110,7 +130,14 @@ var Scales = Backbone.Collection.extend({
 	model : Scale
 });
 var SeriesModel = Backbone.Model.extend({
-	urlRoot : '/series/get'
+	url : function() {
+		var mode = "";
+		if (this.get('mode')) {
+			mode = "/" + this.get('mode');
+		}
+
+		return '/series/get/' + this.id + mode;
+	}
 });
 var ManufacturerList = Backbone.Collection.extend({
 	model : ManufacturerModel
@@ -528,6 +555,311 @@ var SeriesView = Backbone.View.extend({
 	}
 });
 
+var ManufacturerSeriesView = Backbone.View.extend({
+	template : 'manufacturer.series.add',
+	modal : 'modal',
+	events : {
+		'click .add-series' : 'showAdd',
+		'click .add.submit' : 'addSeries'
+	},
+	initialize : function(options) {
+		var self = this;
+		Backbone.Validation.bind(this, {
+			valid : function(view, attr, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+				// do something
+			},
+			invalid : function(view, attr, error, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
+				// do something
+			}
+		});
+		this.manufacturer = options.manufacturer;
+	},
+	remove : function() {
+		//this.model.off('change');
+		Backbone.View.prototype.remove.call(this);
+	},
+	renderBody : function() {
+		var self = this;
+		var data = {
+			manufacturer : this.manufacturer.toJSON()
+		};
+
+		dust.render(this.template, data, function(error, output) {
+			$('.modal-body', self.el).html(output);
+		});
+
+		$('.modal-body', self.el).append(this.model.toJSON().response.data);
+
+	},
+	render : function() {
+		var self = this;
+
+		dust.render(this.modal, {
+			modalId : 'manufacturerSeriesModal',
+			modalTitle : 'Manufacturer Categories'
+		}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		$(self.el).find('.btn-primary.save').remove();
+
+		this.renderBody();
+
+		return this;
+	},
+	showAdd : function(event) {
+		this.hideMessage();
+		var $target = $(event.currentTarget);
+		var $inputWrapper = $('<div></div>').addClass('item').addClass('input');
+		var $input = $('<input />').attr('type', 'input').attr('maxlength', '100');
+		var $submit = $('<button></button>').text('Submit').addClass('add').addClass('submit');
+		var $cancel = $('<button></button>').text('Cancel').addClass('add').addClass('cancel');
+		$inputWrapper.append($input);
+		$inputWrapper.append($submit);
+		$inputWrapper.append($cancel);
+		$target.parent('span.actions').after($inputWrapper);
+	},
+	closeAdd : function(event) {
+		var $target = $(event.currentTarget);
+		$target.parent('div.input').remove();
+	},
+	addSeries : function(event) {
+		var self = this;
+		var seriesId = $(event.currentTarget).parent('div.input').parent('li').children('span.name').attr('data-id');
+		var name = $(event.currentTarget).parent('div.input').children('input').val();
+		$.ajax({
+			url : '/series/add.json',
+			dataType : 'json',
+			data : 'data[Series][parent_id]=' + seriesId + '&data[Series][name]=' + name,
+			type : 'post',
+			beforeSend : function(xhr) {
+
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				var $messageContainer = $('.message-container', self.el);
+				$('h4', $messageContainer).text('');
+				$('ul', $messageContainer).empty();
+				if (jqXHR.status === 401) {
+					$('h4', $messageContainer).text('You must be logged in to do that!');
+				} else if (jqXHR.status === 400) {
+					var response = JSON.parse(jqXHR.responseText);
+					$('h4', $messageContainer).text('Oops! Something wasn\'t filled out correctly.');
+
+					if (response && response.response && response.response.errors) {
+						_.each(response.response.errors, function(error) {
+							_.each(error.message, function(message) {
+								$('ul', $messageContainer).append($('<li></li>').text(message));
+							});
+						});
+					}
+				} else {
+					$('h4', $messageContainer).text('Something really bad happened.');
+				}
+
+				$messageContainer.show();
+
+			},
+			success : function(data) {
+				self.hideMessage();
+				if (data.response.isSuccess) {
+					//TODO: Once this part is more backboney then we can just add
+					// render
+					// let's try and add it to the current list
+					var $parentLi = $(event.currentTarget).parent('div.input').parent('li');
+					var $ul = $('ul', $parentLi);
+					if ($ul.length === 0) {
+						$parentLi.append($('<ul></ul>'));
+						$ul = $('ul', $parentLi);
+					}
+
+					var $series = $('<li></li>');
+					$series.append('<span class="item name" data-id=" ' + data.response.data.id + '" data-path="' + data.response.data.name + '">' + data.response.data.name + '</span>');
+					$series.append('<span class="item actions"> <a class="action add-series"> Add</a></span>');
+					$ul.append($series);
+
+					self.closeAdd(event);
+					// first check to see if
+				} else {
+					//data.errors[0][name];
+				}
+			}
+		});
+	},
+	hideMessage : function() {
+		$('.message-container', this.el).hide();
+	}
+});
+
+var ManufacturerView = Backbone.View.extend({
+	template : 'manufacturer.add',
+	modal : 'modal',
+	events : {
+		"change #inputManName" : "fieldChanged",
+		"change #inputManUrl" : "fieldChanged",
+		'change textarea' : 'fieldChanged',
+		'click .save' : 'saveManufacturer',
+		'click .manufacturer-brand-add' : 'addBrand'
+
+	},
+	initialize : function(options) {
+		var self = this;
+		Backbone.Validation.bind(this, {
+			valid : function(view, attr, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+				// do something
+			},
+			invalid : function(view, attr, error, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
+				// do something
+			}
+		});
+
+		this.brands = options.brands;
+		this.brandArray = [];
+		options.brands.each(function(brand) {
+			self.brandArray.push(brand.get('License').name);
+		});
+		this.model.on('change:LicensesManufacture', this.renderBody, this);
+
+		this.mode = options.mode;
+		if (options.mode === 'edit') {
+			this.template = 'manufacturer.edit';
+		} else if (options.mode === 'add') {
+			this.template = 'manufacturer.add';
+		}
+	},
+	remove : function() {
+		this.model.off('change');
+		Backbone.View.prototype.remove.call(this);
+	},
+	renderBody : function() {
+		var self = this;
+		var data = {
+			manufacturer : this.model.toJSON()
+		};
+
+		dust.render(this.template, data, function(error, output) {
+			$('.modal-body', self.el).html(output);
+		});
+
+		$('#inputManBrand', self.el).typeahead({
+			source : this.brandArray,
+			items : 100
+		});
+	},
+	render : function() {
+		var self = this;
+
+		dust.render(this.modal, {
+			modalId : 'manufacturerModal',
+			modalTitle : 'Manufacturer'
+		}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		this.renderBody();
+
+		return this;
+	},
+	selectionChanged : function(e) {
+		var field = $(e.currentTarget);
+
+		var value = $("option:selected", field).val();
+
+		var data = {};
+
+		data[field.attr('name')] = value;
+
+		this.model.set(data);
+
+	},
+	fieldChanged : function(e) {
+		var field = $(e.currentTarget);
+		var data = {};
+		if (field.attr('type') === 'checkbox') {
+			if (field.is(':checked')) {
+				data[field.attr('name')] = true;
+			} else {
+				data[field.attr('name')] = false;
+			}
+		} else {
+			data[field.attr('name')] = field.val();
+		}
+
+		this.model.set(data);
+	},
+	saveManufacturer : function() {
+		var self = this;
+		if (this.model.isValid(true)) {
+			$('.btn-primary', this.el).button('loading');
+			this.model.save({}, {
+				error : function() {
+					$('.btn-primary', self.el).button('reset');
+				}
+			});
+		}
+
+	},
+	addBrand : function() {
+		var self = this;
+		$('.input-man-brand-error', self.el).text('');
+		var brand = $('#inputManBrand', self.el).val();
+		brand = $.trim(brand);
+		$('.inline-error', self.el).text('');
+		$('.control-group ', self.el).removeClass('error');
+		if (brand !== '') {
+			if (!this.model.get('LicensesManufacture')) {
+				this.model.set({
+					LicensesManufacture : []
+				}, {
+					silent : true
+				});
+			}
+
+			// Also check first to see if this exists already
+
+			var brands = this.model.get('LicensesManufacture');
+			var add = true;
+			_.each(brands, function(existingBrand) {
+				if (existingBrand.License && existingBrand.License.name) {
+					if (existingBrand.License.name.toLowerCase() === brand.toLowerCase()) {
+						add = false
+					}
+				}
+			});
+			if (add) {
+				brands.push({
+					License : {
+						name : brand
+					}
+				});
+				this.model.set({
+					LicensesManufacture : brands
+				}, {
+					silent : true
+				});
+				this.model.trigger("change:LicensesManufacture");
+			} else {
+				$('.input-man-brand-error', self.el).text('That brand has already been added.');
+				//$('.input-man-brand-error', self.el).closest('control-group').addClass('error');
+			}
+
+		}
+	}
+});
+
 var CollectibleView = Backbone.View.extend({
 	template : 'collectible.default.edit',
 	className : "span8",
@@ -537,7 +869,11 @@ var CollectibleView = Backbone.View.extend({
 		'click .save' : 'save',
 		"change input" : "fieldChanged",
 		"change select" : "selectionChanged",
-		'change textarea' : 'fieldChanged'
+		'change textarea' : 'fieldChanged',
+		'click .manufacturer-add' : 'addManufacturer',
+		'click .manufacturer-edit' : 'editManufacturer',
+		'click .manufacturer-add-brand' : 'editManufacturer',
+		'click .manufacturer-add-category' : 'editManufacturerSeries'
 	},
 	initialize : function(options) {
 		var self = this;
@@ -547,14 +883,22 @@ var CollectibleView = Backbone.View.extend({
 		this.scales = options.scales;
 		this.collectibleType = options.collectibleType;
 		this.brands = options.brands;
+		this.status = options.status;
 		// this is information on the selected manufacturer
 		if (options.manufacturer) {
 			this.manufacturer = options.manufacturer;
 			this.series = new SeriesModel({
 				id : this.manufacturer.get('id')
 			});
+			this.seriesEdit = new SeriesModel({
+				id : this.manufacturer.get('id'),
+				mode : 'edit'
+			});
 		} else {
 			this.series = new SeriesModel();
+			this.seriesEdit = new SeriesModel({
+				mode : 'edit'
+			});
 		}
 
 		// do other init things
@@ -592,6 +936,7 @@ var CollectibleView = Backbone.View.extend({
 		this.model.on("change:limited", this.render, this);
 		this.model.on("change:edition_size", this.render, this);
 		this.model.on("change:series_id", this.render, this);
+		this.manufacturers.on('add', this.render, this);
 		this.seriesView = null;
 		this.series.on('change', function() {
 			if (this.seriesView) {
@@ -607,6 +952,27 @@ var CollectibleView = Backbone.View.extend({
 			$('#seriesModal').modal();
 		}, this);
 
+		this.seriesEdit.on('change', function() {
+			var self = this;
+			if (this.manufacturerSeriesView) {
+				this.manufacturerSeriesView.remove();
+			}
+			this.manufacturerSeriesView = new ManufacturerSeriesView({
+				model : this.seriesEdit,
+				manufacturer : this.manufacturer
+			});
+
+			$.unblockUI();
+			$('body').append(this.manufacturerSeriesView.render().el);
+			$('#manufacturerSeriesModal', 'body').modal({
+				backdrop : 'static'
+			});
+
+			$('#manufacturerSeriesModal', 'body').on('hidden', function() {
+				self.manufacturerSeriesView.remove();
+			});
+		}, this);
+
 		pageEvents.on('series:select', function(id, name) {
 			$('#seriesModal').modal('hide');
 			this.model.set({
@@ -619,24 +985,20 @@ var CollectibleView = Backbone.View.extend({
 
 		Backbone.Validation.bind(this);
 
-		this.model.bind('validated:valid', function(model) {
-			$('.control-group.error', self.el).each(function() {
-				$(this).removeClass('error');
-				$(this).find('._error').remove();
-			});
-		});
-
-		this.model.bind('validated:invalid', function(model) {
-			// Remove all first
-			$('.control-group.error', self.el).each(function() {
-				$(this).removeClass('error');
-				$(this).find('._error').remove();
-			});
-			// Now add any back
-			$(':input.invalid', self.el).each(function() {
-				$(this).closest('.control-group').addClass('error');
-				$(this).after('<span class="help-block _error">' + $(this).attr('data-error') + '</span>');
-			});
+		Backbone.Validation.bind(this, {
+			valid : function(view, attr, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+				// do something
+			},
+			invalid : function(view, attr, error, selector) {
+				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
+				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
+				// do something
+			}
 		});
 
 	},
@@ -664,6 +1026,7 @@ var CollectibleView = Backbone.View.extend({
 		var self = this;
 		var collectibleType = this.collectibleType.toJSON();
 		var collectible = this.model.toJSON();
+		var status = this.status.toJSON();
 
 		var data = {
 			collectible : collectible,
@@ -683,6 +1046,15 @@ var CollectibleView = Backbone.View.extend({
 			if (collectibleType.id === printId) {
 				data.renderBrandList = true;
 			}
+		}
+
+		// If this collectible is submitted and we are
+		// editing it. Do not allow adding new
+		// manufacturer
+		if (status.status.id === '4') {
+			data.allowAddManufacturer = false;
+		} else {
+			data.allowAddManufacturer = true;
 		}
 
 		dust.render(this.template, data, function(error, output) {
@@ -809,6 +1181,170 @@ var CollectibleView = Backbone.View.extend({
 		this.model.set(data, {
 			forceUpdate : true
 		});
+	},
+	addManufacturer : function() {
+		var self = this;
+		if (this.manufacturerView) {
+			this.manufacturerView.remove();
+		}
+
+		var manufacturer = new ManufacturerModel();
+		manufacturer.set({
+			'CollectibletypesManufacture' : {
+				collectibletype_id : this.collectibleType.toJSON().id
+			}
+		}, {
+			silent : true
+		});
+
+		manufacturer.on('sync', function() {
+			$.blockUI({
+				message : '<button class="close" data-dismiss="alert" type="button">×</button>Your manufacturer has been added!',
+				showOverlay : false,
+				css : {
+					top : '100px',
+					'background-color' : '#DDFADE',
+					border : '1px solid #93C49F',
+					'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+					'border-radius' : '4px 4px 4px 4px',
+					color : '#333333',
+					'margin-bottom' : '20px',
+					padding : '8px 35px 8px 14px',
+					'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+					'z-index' : 999999
+				},
+				timeout : 2000
+			});
+
+			// unbind all
+			manufacturer.off();
+
+			this.manufacturers.add(manufacturer);
+
+			$('#manufacturerModal', 'body').modal('hide')
+
+		}, this);
+
+		this.manufacturerView = new ManufacturerView({
+			model : manufacturer,
+			brands : this.brands,
+			mode : 'add'
+		});
+
+		$('body').append(this.manufacturerView.render().el);
+
+		$('#manufacturerModal', 'body').modal({
+			backdrop : 'static'
+		});
+
+		$('#manufacturerModal', 'body').on('hidden', function() {
+			self.manufacturerView.remove();
+
+		});
+	},
+	editManufacturer : function() {
+		var self = this;
+		if (this.manufacturerView) {
+			this.manufacturerView.remove();
+		}
+
+		this.manufacturer.on('sync', function() {
+			$.blockUI({
+				message : '<button class="close" data-dismiss="alert" type="button">×</button>The manufacturer has been updated!',
+				showOverlay : false,
+				css : {
+					top : '100px',
+					'background-color' : '#DDFADE',
+					border : '1px solid #93C49F',
+					'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+					'border-radius' : '4px 4px 4px 4px',
+					color : '#333333',
+					'margin-bottom' : '20px',
+					padding : '8px 35px 8px 14px',
+					'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+					'z-index' : 999999
+				},
+				timeout : 2000
+			});
+			
+			this.render();
+
+			// unbind all
+			this.manufacturer.off();
+
+			$('#manufacturerModal', 'body').modal('hide')
+
+		}, this);
+
+		this.manufacturerView = new ManufacturerView({
+			model : this.manufacturer,
+			brands : this.brands,
+			mode : 'edit'
+		});
+
+		$('body').append(this.manufacturerView.render().el);
+
+		$('#manufacturerModal', 'body').modal({
+			backdrop : 'static'
+		});
+
+		$('#manufacturerModal', 'body').on('hidden', function() {
+			self.manufacturerView.remove();
+			// on close I need to make sure we do not have
+			// any brands attached to this manufacturer that are
+			// not officially saved
+			if (self.manufacturer.get('LicensesManufacture')) {
+				var brands = self.manufacturer.get('LicensesManufacture');
+
+				var len = brands.length;
+				while (len--) {
+					brand = brands[len];
+					if (!brand.hasOwnProperty('id')) {
+						brands.splice(len, 1);
+					}
+				}
+
+				self.manufacturer.set({
+					LicensesManufacture : brands
+				}, {
+					silent : true
+				});
+			}
+
+		});
+	},
+	editManufacturerSeries : function() {
+
+		$.blockUI({
+			message : 'Loading...',
+			css : {
+				border : 'none',
+				padding : '15px',
+				backgroundColor : ' #F1F1F1',
+				'-webkit-border-radius' : '10px',
+				'-moz-border-radius' : '10px',
+				color : '#222',
+				background : 'none repeat scroll 0 0 #F1F1F',
+				'border-radius' : '5px 5px 5px 5px',
+				'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+			}
+		});
+
+		// This is a little ghetto, there should
+		// be a better way to do this
+		// Do a clear to make sure we are always getting new data
+		// but then we need to set the id
+		// then do a fetch
+		this.seriesEdit.clear({
+			silent : true
+		});
+		this.seriesEdit.set({
+			id : this.manufacturer.get('id'),
+			mode : 'edit'
+		}, {
+			silent : true
+		});
+		this.seriesEdit.fetch();
 	}
 });
 
@@ -1244,7 +1780,7 @@ $(function() {
 		}
 	});
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate) {
+	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust'), $.get('/templates/collectibles/manufacturer.add.dust'), $.get('/templates/collectibles/manufacturer.edit.dust'), $.get('/templates/collectibles/modal.dust'), $.get('/templates/collectibles/manufacturer.series.add.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -1258,6 +1794,10 @@ $(function() {
 		dust.loadSource(dust.compile(artistsTemplate[0], 'artists.edit'));
 		dust.loadSource(dust.compile(artistTemplate[0], 'artist.edit'));
 		dust.loadSource(dust.compile(addArtistTemplate[0], 'artist.add'));
+		dust.loadSource(dust.compile(manufacturerAddTemplate[0], 'manufacturer.add'));
+		dust.loadSource(dust.compile(manufacturerEditTemplate[0], 'manufacturer.edit'));
+		dust.loadSource(dust.compile(modalTemplate[0], 'modal'));
+		dust.loadSource(dust.compile(manufacturerSeriesAddTemplate[0], 'manufacturer.series.add'));
 
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,

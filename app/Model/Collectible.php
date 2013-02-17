@@ -29,7 +29,8 @@ class Collectible extends AppModel {
 	//collectible type field
 	'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
 	//license filed
-	'license_id' => array('rule' => array('validateLicenseId'), 'required' => false, 'allowEmpty' => false, 'message' => 'Brand/License must be valid for Manufacture.'),
+	// updating so that a brand is now not officially required
+	'license_id' => array('rule' => array('validateLicenseId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Brand/License must be valid for Manufacture.'),
 	//series field
 	'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
 	//description field
@@ -152,7 +153,6 @@ class Collectible extends AppModel {
 	}
 
 	function doAfterFind($results, $primary = false) {
-		debug($results);
 		if ($results) {
 			$showEditionSize = false;
 			//TODO not sure this is really needed anymore
@@ -198,7 +198,12 @@ class Collectible extends AppModel {
 				$results['displayTitle'] = $itemTitle;
 			} else {
 				// fall back
-				$results['displayTitle'] = $results['name'];
+				if (isset($results['name'])) {
+					$results['displayTitle'] = $results['name'];
+				} else {
+					$results['displayTitle'] = '';
+				}
+
 			}
 
 		}
@@ -270,7 +275,6 @@ class Collectible extends AppModel {
 	}
 
 	function validateLicenseId($check) {
-		debug($result);
 		if (isset($check['license_id']) && !empty($check['license_id'])) {
 			$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
 			if ($result) {
@@ -313,16 +317,18 @@ class Collectible extends AppModel {
 					return false;
 				}
 			}
-		} else if (isset($this -> data['Collectible']['manufacture_id']) && !empty($this -> data['Collectible']['manufacture_id'])) {
-			$result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
-			if ($result) {
-				return true;
-
-			} else {
-				debug($this -> data['Collectible']['manufacture_id']);
-				return false;
-			}
 		}
+		// Not sure I need this one anymore
+		// else if (isset($this -> data['Collectible']['manufacture_id']) && !empty($this -> data['Collectible']['manufacture_id'])) {
+		// $result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
+		// if ($result) {
+		// return true;
+		//
+		// } else {
+		// debug($this -> data['Collectible']['manufacture_id']);
+		// return false;
+		// }
+		// }
 		return true;
 	}
 
@@ -881,7 +887,6 @@ class Collectible extends AppModel {
 	 */
 	public function getStatus($collectibleId) {
 		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status')));
-		debug($collectible);
 		if ($collectible && !empty($collectible)) {
 			return $collectible['Status'];
 		} else {
@@ -918,7 +923,6 @@ class Collectible extends AppModel {
 
 			// If they do end up having a brand, we need to validate it differently
 			$this -> validate['license_id']['rule'] = array('validatePrintLicenseId');
-			debug($this -> validate['license_id']['rule']);
 			// $this -> validator() -> getField('manufacture_id') -> getRule('rule') -> message = 'This field cannot be left blank';
 
 			// However, if it is a print, then we need to make sure they have at least one artist added

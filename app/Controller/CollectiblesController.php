@@ -239,8 +239,6 @@ class CollectiblesController extends AppController {
 		// WE are handling one tag at a time here
 		// if it is a put, then we are adding
 		// if it is a delete then we are removing
-		debug($adminMode);
-
 		if ($adminMode === true || $adminMode === 'true') {
 			if (!$this -> isUserAdmin()) {
 				$this -> response -> statusCode(401);
@@ -317,16 +315,11 @@ class CollectiblesController extends AppController {
 
 		// We will also want to get the manufacturers and their licenses right away
 		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
-
-		// also based on the type of collectible we might want to get all brands
-		// right now this is for prints that might not have a manufacturer and
-		// just in case we want to link it to a brand
-		if ($collectibleTypeId === Configure::read('Settings.CollectibleTypes.Print')) {
-			$brands = $this -> Collectible -> License -> find('all', array('contain' => false));
-			$returnData['response']['data']['brands'] = $brands;
-		} else {
-			$returnData['response']['data']['brands'] = array();
-		}
+		
+		// Get and return all brands, this is for adding new manufacturers
+		// and also used for types that might allow not having a manufacturer
+		$brands = $this -> Collectible -> License -> find('all', array('contain' => false));
+		$returnData['response']['data']['brands'] = $brands;
 
 		$manList = array();
 		foreach ($manufacturerCollectibletypes as $key => $value) {

@@ -2426,6 +2426,11 @@ div.paging span a:hover {
 #upload-dialog {
 	width: 720px;
 }
+
+#manufacturerModal .modal-body {
+	max-height: 500px;
+	min-height: 400px;
+}
 /*
  * Cake BS
  */

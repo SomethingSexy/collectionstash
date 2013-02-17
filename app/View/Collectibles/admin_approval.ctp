@@ -24,7 +24,7 @@
 								echo '<dd>';
 							}
 							?>
-							<a href="<?php echo '/manufactures/view/' . $collectible['Manufacture']['id'];?>"> <?php echo $collectible['Manufacture']['title'];?></a>
+							 <?php echo $collectible['Manufacture']['title'];?>
 							</dd> <?php
 
 							//If the value is set and not empty OR if something changed

@@ -7,7 +7,24 @@ class Series extends AppModel {
 
 	public $validate = array(
 	//name field
-	'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')));
+	'name' => array('maxLength' => array('rule' => array('maxLength', 200), 'allowEmpty' => false, 'message' => 'Invalid length.')));
+
+	public function add($data, $user, $autoUpdate = true) {
+		$retVal = $this -> buildDefaultResponse();
+		if ($this -> save($data)) {
+			$id = $this -> id;
+			$series = $this -> find('first', array('contain' => false, 'conditions' => array('Series.id' => $id)));
+			$retVal['response']['data'] = $series['Series'];
+
+			$retVal['response']['isSuccess'] = true;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Series');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+	}
 
 	/**
 	 * This method, given a series id will build the series name path.
@@ -38,7 +55,7 @@ class Series extends AppModel {
 			return $retVal;
 		}
 
-		$manufacturer = $this -> Manufacture -> find('first', array('conditions' => array('Manufacture.id' => $manufacturerId)));
+		$manufacturer = $this -> Manufacture -> find('first', array('contain' => false, 'conditions' => array('Manufacture.id' => $manufacturerId)));
 
 		if (empty($manufacturer)) {
 			$retVal['response']['isSuccess'] = false;

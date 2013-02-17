@@ -2,189 +2,235 @@
 App::uses('Sanitize', 'Utility');
 class ManufacturesController extends AppController {
 
-    public $helpers = array('Html', 'Js', 'Minify');
+	public $helpers = array('Html', 'Js', 'Minify');
 
-    /**
-     * This is the view for the public data
-     */
-    public function view($id = null) {
-        if (isset($id) && is_numeric($id)) {
-            $manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
-            if (!empty($manufacture)) {
-                //TODO: update this to use counter cache once I can add from the app
-                $licenseCount = $this -> Manufacture -> LicensesManufacture -> getLicenseCount($id);
-                $manufacture['Manufacture']['license_count'] = $licenseCount;
-                $collectibletypeCount = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibletypeCount($id);
-                $manufacture['Manufacture']['collectibletype_count'] = $collectibletypeCount;
-                $totalCollectibles = $this -> Manufacture -> Collectible -> getCollectibleCount();
+	public function manufacturer($id = null) {
 
-                if (is_numeric($totalCollectibles) && $totalCollectibles > 0) {
-                    $manCollectibleCount = $manufacture['Manufacture']['collectible_count'];
-                    $percentage = round($manCollectibleCount * 100 / $totalCollectibles) . '%';
-                    $manufacture['Manufacture']['percentage_of_total'] = $percentage;
-                }
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			return;
+		}
 
-                $licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($id);
-                $this -> set(compact('licenses'));
+		if ($this -> request -> isPost()) {// create
+			$collectible['Manufacture'] = $this -> request -> input('json_decode', true);
+			$collectible['Manufacture'] = Sanitize::clean($collectible['Manufacture']);
+			$response = $this -> Manufacture -> add($collectible, $this -> getUser(), true);
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
 
-                $manufacturerCollectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $id)));
+			$this -> set('returnData', $response['response']['data']);
+		} else if ($this -> request -> isPut()) {//update
+			$collectible['Manufacture'] = $this -> request -> input('json_decode', true);
+			$collectible['Manufacture'] = Sanitize::clean($collectible['Manufacture']);
+			$response = $this -> Manufacture -> update($collectible, $this -> getUser(), true);
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
 
-                $highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
-                $lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
-                $manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
-                $manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
+			$this -> set('returnData', $response['response']['data']);
+		}
+	}
 
-                $lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
-                $highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
-                if (!empty($lowestEditionCollectible)) {
-                    $manufacture['Manufacture']['lowest_edition_size'] = $lowestEditionCollectible['Collectible']['edition_size'];
-                }
-                if (!empty($highestEditionCollectible)) {
-                    $manufacture['Manufacture']['highest_edition_size'] = $highestEditionCollectible['Collectible']['edition_size'];
-                }
+	/**
+	 * This is the view for the public data
+	 */
+	public function view($id = null) {
+		if (isset($id) && is_numeric($id)) {
+			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
+			if (!empty($manufacture)) {
+				//TODO: update this to use counter cache once I can add from the app
+				$licenseCount = $this -> Manufacture -> LicensesManufacture -> getLicenseCount($id);
+				$manufacture['Manufacture']['license_count'] = $licenseCount;
+				$collectibletypeCount = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibletypeCount($id);
+				$manufacture['Manufacture']['collectibletype_count'] = $collectibletypeCount;
+				$totalCollectibles = $this -> Manufacture -> Collectible -> getCollectibleCount();
 
-                $this -> set(compact('manufacture'));
-            } else {
-                $this -> redirect("/");
-            }
+				if (is_numeric($totalCollectibles) && $totalCollectibles > 0) {
+					$manCollectibleCount = $manufacture['Manufacture']['collectible_count'];
+					$percentage = round($manCollectibleCount * 100 / $totalCollectibles) . '%';
+					$manufacture['Manufacture']['percentage_of_total'] = $percentage;
+				}
 
-        } else {
-            $this -> redirect("/");
-        }
-    }
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesByManufactureId($id);
+				$this -> set(compact('licenses'));
 
-    /*
-     * This action will display a list of manufacturers
-     */
-    public function admin_list() {
-        $this -> checkLogIn();
-        $this -> checkAdmin();
+				$manufacturerCollectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $id)));
 
-        $manufacturers = $this -> Manufacture -> getManufactures();
+				$highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
+				$lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
+				$manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
+				$manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
 
-        $this -> set(compact('manufacturers'));
-    }
+				$lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
+				$highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
+				if (!empty($lowestEditionCollectible)) {
+					$manufacture['Manufacture']['lowest_edition_size'] = $lowestEditionCollectible['Collectible']['edition_size'];
+				}
+				if (!empty($highestEditionCollectible)) {
+					$manufacture['Manufacture']['highest_edition_size'] = $highestEditionCollectible['Collectible']['edition_size'];
+				}
 
-    /**
-     * Admin view for manufacturer
-     */
-    public function admin_view($manufacturer_id = null) {
-        $this -> checkLogIn();
-        $this -> checkAdmin();
-        if (isset($manufacturer_id) && is_numeric($manufacturer_id)) {
-            $manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $manufacturer_id), 'contain' => false));
-            if (!empty($manufacture)) {
-                $licenses = $this -> Manufacture -> LicensesManufacture -> getFullLicensesByManufactureId($manufacturer_id);
-                $this -> set(compact('licenses'));
+				$this -> set(compact('manufacture'));
+			} else {
+				$this -> redirect("/");
+			}
 
-                $collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($manufacturer_id);
-                $this -> set(compact('collectibletypes'));
+		} else {
+			$this -> redirect("/");
+		}
+	}
 
-                $this -> set(compact('manufacture'));
-            } else {
-               $this -> redirect("/");
-            }
+	/*
+	 * This action will display a list of manufacturers
+	 */
+	public function admin_list() {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
 
-        } else {
-           $this -> redirect("/");
-        }
-    }
+		$manufacturers = $this -> Manufacture -> getManufactures();
 
-    public function admin_add() {
-        $this -> checkLogIn();
-        $this -> checkAdmin();
-        if ($this -> request -> is('post') || $this -> request -> is('put')) {
-            if (!empty($this -> request -> data)) {
-                $this -> request -> data = Sanitize::clean($this -> request -> data);
-                if ($this -> Manufacture -> save($this -> request -> data)) {
-                    $this -> Session -> setFlash(__('The manufacturer was successfully added.', true), null, null, 'success');
-                    $this -> redirect(array('action' => 'view', $this -> Manufacture -> id));
-                } else {
-                    $this -> Session -> setFlash(__('There was a problem adding this manufacturer.', true), null, null, 'error');
-                }
-            }
-        } else {
+		$this -> set(compact('manufacturers'));
+	}
 
-        }
-    }
+	/**
+	 * Admin view for manufacturer
+	 */
+	public function admin_view($manufacturer_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if (isset($manufacturer_id) && is_numeric($manufacturer_id)) {
+			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $manufacturer_id), 'contain' => false));
+			if (!empty($manufacture)) {
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getFullLicensesByManufactureId($manufacturer_id);
+				$this -> set(compact('licenses'));
 
-    public function admin_edit($manufacturer_id = null) {
-        $this -> checkLogIn();
-        $this -> checkAdmin();
-        if ($this -> request -> is('post') || $this -> request -> is('put')) {
-            if (!empty($this -> request -> data)) {
-                $this -> request -> data = Sanitize::clean($this -> request -> data);
-                if ($this -> Manufacture -> save($this -> request -> data)) {
-                    $this -> Session -> setFlash(__('The manufacturer was successfully updated.', true), null, null, 'success');
-                    $this -> redirect(array('action' => 'view', $this -> Manufacture -> id));
-                } else {
-                    $this -> Session -> setFlash(__('There was a problem updating this manufacturer.', true), null, null, 'error');
-                }
-            }
-        } else {
-            if (!isset($manufacturer_id) && !is_numeric($manufacturer_id)) {
-                $this -> redirect(array('action' => 'list'));
-                return;
-            }
-            $manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $manufacturer_id), 'contain' => false));
-            if (empty($manufacture)) {
-                $this -> redirect(array('action' => 'list'));
-                return;
-            }
-            $this -> request -> data = $manufacture;
-        }
-    }
+				$collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($manufacturer_id);
+				$this -> set(compact('collectibletypes'));
 
-    public function admin_add_license($manufacturer_id = null) {
-        $this -> checkLogIn();
-        $this -> checkAdmin();
-        $this -> set(compact('manufacturer_id'));
-        //at minimum we need a manufacturer id
-        if ($this -> request -> is('post')) {
-            if (!empty($this -> request -> data)) {
-                foreach ($this -> request -> data['LicensesManufacture'] as $key => &$value) {
-                    $value['manufacture_id'] = $manufacturer_id;
-                }
-            }
-            if ($this -> Manufacture -> LicensesManufacture -> saveMany($this -> request -> data['LicensesManufacture'])) {
-                $this -> Session -> setFlash(__('The licenses were successfully associated.', true), null, null, 'success');
-                $this -> redirect(array('action' => 'view', $manufacturer_id));
-            } else {
-                $this -> Session -> setFlash(__('There was a problem associated the licenses to the manufacturer.', true), null, null, 'error');
-                $licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacturer_id);
-                $this -> set(compact('licenses'));
-            }
-        } else {
-            $licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacturer_id);
-            $this -> set(compact('licenses'));
-        }
-    }
+				$this -> set(compact('manufacture'));
+			} else {
+				$this -> redirect("/");
+			}
 
-    public function admin_add_collectibletype($manufacturer_id = null){
-        $this -> checkLogIn();
-        $this -> checkAdmin();
-        $this -> set(compact('manufacturer_id'));
-        //at minimum we need a manufacturer id
-        if ($this -> request -> is('post')) {
-            if (!empty($this -> request -> data)) {
-                foreach ($this -> request -> data['CollectibletypesManufacture'] as $key => &$value) {
-                    $value['manufacture_id'] = $manufacturer_id;
-                }
-            }
-            if ($this -> Manufacture -> CollectibletypesManufacture -> saveMany($this -> request -> data['CollectibletypesManufacture'])) {
-                $this -> Session -> setFlash(__('The collectible type were successfully associated.', true), null, null, 'success');
-                $this -> redirect(array('action' => 'view', $manufacturer_id));
-            } else {
-                $this -> Session -> setFlash(__('There was a problem associated the collectible type to the manufacturer.', true), null, null, 'error');
-                $collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypesNotAssMan($manufacturer_id);
-                $this -> set(compact('collectibletypes'));
-            }
-        } else {
-            $collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypesNotAssMan($manufacturer_id);
-            debug($collectibletypes);
-            $this -> set(compact('collectibletypes'));
-        }        
-    }
+		} else {
+			$this -> redirect("/");
+		}
+	}
+
+	public function admin_add() {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			if (!empty($this -> request -> data)) {
+				$this -> request -> data = Sanitize::clean($this -> request -> data);
+				if ($this -> Manufacture -> save($this -> request -> data)) {
+					$this -> Session -> setFlash(__('The manufacturer was successfully added.', true), null, null, 'success');
+					$this -> redirect(array('action' => 'view', $this -> Manufacture -> id));
+				} else {
+					$this -> Session -> setFlash(__('There was a problem adding this manufacturer.', true), null, null, 'error');
+				}
+			}
+		} else {
+
+		}
+	}
+
+	public function admin_delete($id) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if (is_numeric($id)) {
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			if ($this -> Manufacture -> delete($id)) {
+				$this -> Session -> setFlash(__('The manufacturer was successfully deleted.', true), null, null, 'success');
+				$this -> redirect(array('action' => 'admin_list'));
+			} else {
+				$this -> Session -> setFlash(__('There was a problem deleting this manufacturer.', true), null, null, 'error');
+				$this -> redirect(array('action' => 'view', $this -> Manufacture -> id));
+			}
+
+		} else {
+			$this -> redirect(array('action' => 'admin_list'));
+		}
+	}
+
+	public function admin_edit($manufacturer_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			if (!empty($this -> request -> data)) {
+				$this -> request -> data = Sanitize::clean($this -> request -> data);
+				if ($this -> Manufacture -> save($this -> request -> data)) {
+					$this -> Session -> setFlash(__('The manufacturer was successfully updated.', true), null, null, 'success');
+					$this -> redirect(array('action' => 'view', $this -> Manufacture -> id));
+				} else {
+					$this -> Session -> setFlash(__('There was a problem updating this manufacturer.', true), null, null, 'error');
+				}
+			}
+		} else {
+			if (!isset($manufacturer_id) && !is_numeric($manufacturer_id)) {
+				$this -> redirect(array('action' => 'list'));
+				return;
+			}
+			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $manufacturer_id), 'contain' => false));
+			if (empty($manufacture)) {
+				$this -> redirect(array('action' => 'list'));
+				return;
+			}
+			$this -> request -> data = $manufacture;
+		}
+	}
+
+	public function admin_add_license($manufacturer_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		$this -> set(compact('manufacturer_id'));
+		//at minimum we need a manufacturer id
+		if ($this -> request -> is('post')) {
+			if (!empty($this -> request -> data)) {
+				foreach ($this -> request -> data['LicensesManufacture'] as $key => &$value) {
+					$value['manufacture_id'] = $manufacturer_id;
+				}
+			}
+			if ($this -> Manufacture -> LicensesManufacture -> saveMany($this -> request -> data['LicensesManufacture'])) {
+				$this -> Session -> setFlash(__('The licenses were successfully associated.', true), null, null, 'success');
+				$this -> redirect(array('action' => 'view', $manufacturer_id));
+			} else {
+				$this -> Session -> setFlash(__('There was a problem associated the licenses to the manufacturer.', true), null, null, 'error');
+				$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacturer_id);
+				$this -> set(compact('licenses'));
+			}
+		} else {
+			$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacturer_id);
+			$this -> set(compact('licenses'));
+		}
+	}
+
+	public function admin_add_collectibletype($manufacturer_id = null) {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+		$this -> set(compact('manufacturer_id'));
+		//at minimum we need a manufacturer id
+		if ($this -> request -> is('post')) {
+			if (!empty($this -> request -> data)) {
+				foreach ($this -> request -> data['CollectibletypesManufacture'] as $key => &$value) {
+					$value['manufacture_id'] = $manufacturer_id;
+				}
+			}
+			if ($this -> Manufacture -> CollectibletypesManufacture -> saveMany($this -> request -> data['CollectibletypesManufacture'])) {
+				$this -> Session -> setFlash(__('The collectible type were successfully associated.', true), null, null, 'success');
+				$this -> redirect(array('action' => 'view', $manufacturer_id));
+			} else {
+				$this -> Session -> setFlash(__('There was a problem associated the collectible type to the manufacturer.', true), null, null, 'error');
+				$collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypesNotAssMan($manufacturer_id);
+				$this -> set(compact('collectibletypes'));
+			}
+		} else {
+			$collectibletypes = $this -> Manufacture -> CollectibletypesManufacture -> getCollectibleTypesNotAssMan($manufacturer_id);
+			debug($collectibletypes);
+			$this -> set(compact('collectibletypes'));
+		}
+	}
 
 }
 ?>

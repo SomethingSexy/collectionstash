@@ -53,5 +53,28 @@ class LicensesManufacture extends AppModel {
 			AND licenses_manufactures.manufacture_id =' . $manufactureId . ')')));
 	}
 
+	public function processLicense($brand, $userId) {
+		$retVal = array();
+		// if there is already an id, that means this is
+		// an existing one
+		if (isset($brand['id']) && !empty($brand['id'])) {
+			$retVal = $brand;
+			return $retVal;
+		}
+		if (isset($brand['License']['name']) && !empty($brand['License']['name'])) {
+			$result = $this -> License -> find("first", array('contain' => false, 'conditions' => array('LOWER(License.name)' => strtolower($brand['License']['name']))));
+			if (!empty($result)) {
+				$retVal['license_id'] = $result['License']['id'];
+
+			} else {
+				$retVal['License'] = array();
+				$retVal['License']['name'] = $brand['License']['name'];
+				$retVal['License']['user_id'] = $userId;
+			}
+		}
+
+		return $retVal;
+	}
+
 }
 ?>
