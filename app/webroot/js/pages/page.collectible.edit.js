@@ -710,21 +710,31 @@ var ManufacturerView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		var self = this;
-		Backbone.Validation.bind(this, {
-			valid : function(view, attr, selector) {
-				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
-				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
-				// do something
-			},
-			invalid : function(view, attr, error, selector) {
-				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
-				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
-				// do something
-			}
-		});
+
+		this.mode = options.mode;
+		if (options.mode === 'edit') {
+			this.template = 'manufacturer.edit';
+		} else if (options.mode === 'add') {
+			this.template = 'manufacturer.add';
+		}
+
+		if (this.mode === 'add') {
+			Backbone.Validation.bind(this, {
+				valid : function(view, attr, selector) {
+					view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
+					view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+					view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+					// do something
+				},
+				invalid : function(view, attr, error, selector) {
+					view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
+					view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+					view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
+					view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
+					// do something
+				}
+			});
+		}
 
 		this.brands = options.brands;
 		this.brandArray = [];
@@ -733,12 +743,6 @@ var ManufacturerView = Backbone.View.extend({
 		});
 		this.model.on('change:LicensesManufacture', this.renderBody, this);
 
-		this.mode = options.mode;
-		if (options.mode === 'edit') {
-			this.template = 'manufacturer.edit';
-		} else if (options.mode === 'add') {
-			this.template = 'manufacturer.add';
-		}
 	},
 	remove : function() {
 		this.model.off('change');
