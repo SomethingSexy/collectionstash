@@ -802,7 +802,11 @@ var ManufacturerView = Backbone.View.extend({
 	},
 	saveManufacturer : function() {
 		var self = this;
-		if (this.model.isValid(true)) {
+		var isValid = true;
+		if (this.mode === 'add') {
+			isValid = this.model.isValid(true);
+		}
+		if (isValid) {
 			$('.btn-primary', this.el).button('loading');
 			this.model.save({}, {
 				error : function() {
@@ -1266,7 +1270,7 @@ var CollectibleView = Backbone.View.extend({
 				},
 				timeout : 2000
 			});
-			
+
 			this.render();
 
 			// unbind all
