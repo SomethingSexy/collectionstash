@@ -11,6 +11,8 @@ class Series extends AppModel {
 
 	public function add($data, $user, $autoUpdate = true) {
 		$retVal = $this -> buildDefaultResponse();
+		$data['Series']['user_id'] = $user['User']['id'];
+		debug($data);
 		if ($this -> save($data)) {
 			$id = $this -> id;
 			$series = $this -> find('first', array('contain' => false, 'conditions' => array('Series.id' => $id)));
