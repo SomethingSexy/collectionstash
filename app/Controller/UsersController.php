@@ -38,6 +38,8 @@ class UsersController extends AppController {
 		$previousMonthlyLeaders = $this -> User -> UserPointFact -> getPreviousMonthyLeaders();
 
 		$this -> set(compact('previousMonthlyLeaders'));
+		
+		// $this -> User -> UserPointFact -> getYearlyLeaders();
 
 		// This is all the collectibles submitted by the user
 		$total = $this -> User -> Collectible -> find('count', array('conditions' => array('Collectible.user_id' => $this -> getUserId())));

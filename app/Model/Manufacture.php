@@ -2,7 +2,7 @@
 class Manufacture extends AppModel {
 	public $name = 'Manufacture';
 	public $belongsTo = array('Series');
-	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id'), 'LicensesManufacture', 'CollectibletypesManufacture');
+	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id', 'dependent' => true), 'LicensesManufacture' => array('dependent' => true), 'CollectibletypesManufacture' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
 	public $validate = array(
@@ -12,6 +12,90 @@ class Manufacture extends AppModel {
 	'series_id' => array('rule' => array('numeric'), 'allowEmpty' => true, 'message' => 'Please select a valid category.'),
 	//url
 	'url' => array('rule' => 'url', 'allowEmpty' => true, 'message' => 'Must be a valid url.'), );
+
+	public function add($data, $user, $autoUpdate = false) {
+		$retVal = $this -> buildDefaultResponse();
+
+		if (isset($data['Manufacture']['LicensesManufacture']) && !empty($data['Manufacture']['LicensesManufacture'])) {
+			//array of brand names
+			$brands = $data['Manufacture']['LicensesManufacture'];
+			$brandMans['LicensesManufacture'] = array();
+			foreach ($brands as $key => $value) {
+				$brand = $this -> LicensesManufacture -> processLicense($value, $user['User']['id']);
+				array_push($brandMans['LicensesManufacture'], $brand);
+			}
+			$data['LicensesManufacture'] = $brandMans['LicensesManufacture'];
+		}
+
+		if (isset($data['Manufacture']['CollectibletypesManufacture']) && !empty($data['Manufacture']['CollectibletypesManufacture'])) {
+			$data['CollectibletypesManufacture'] = array();
+
+			array_push($data['CollectibletypesManufacture'], $data['Manufacture']['CollectibletypesManufacture']);
+		}
+
+		unset($data['Manufacture']['CollectibletypesManufacture']);
+		unset($data['Manufacture']['LicensesManufacture']);
+
+		// Also by default let's add a series
+		$data['Series'] = array();
+		$data['Series']['name'] = $data['Manufacture']['title'];
+		$data['Series']['parent_id'] = null;
+		$data['Manufacture']['user_id'] = $user['User']['id'];
+
+		if ($this -> saveAll($data, array('deep' => true))) {
+			$id = $this -> id;
+			$manufacturer = $this -> find('first', array('contain' => array('LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
+
+			$retVal['response']['data'] = $manufacturer['Manufacture'];
+			$retVal['response']['data']['LicensesManufacture'] = $manufacturer['LicensesManufacture'];
+			$retVal['response']['isSuccess'] = true;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Manufacture');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+	}
+
+	public function update($data, $user, $autoUpdate = false) {
+		$retVal = $this -> buildDefaultResponse();
+
+		if (isset($data['Manufacture']['LicensesManufacture']) && !empty($data['Manufacture']['LicensesManufacture'])) {
+			//array of brand names
+			$brands = $data['Manufacture']['LicensesManufacture'];
+			$brandMans['LicensesManufacture'] = array();
+			foreach ($brands as $key => $value) {
+				$brand = $this -> LicensesManufacture -> processLicense($value, $user['User']['id']);
+				array_push($brandMans['LicensesManufacture'], $brand);
+			}
+			$data['LicensesManufacture'] = $brandMans['LicensesManufacture'];
+		}
+
+		if (isset($data['Manufacture']['CollectibletypesManufacture']) && !empty($data['Manufacture']['CollectibletypesManufacture'])) {
+			$data['CollectibletypesManufacture'] = array();
+
+			array_push($data['CollectibletypesManufacture'], $data['Manufacture']['CollectibletypesManufacture']);
+		}
+
+		unset($data['Manufacture']['CollectibletypesManufacture']);
+		unset($data['Manufacture']['LicensesManufacture']);
+		
+		if ($this -> saveAll($data, array('deep' => true))) {
+			$id = $this -> id;
+			$manufacturer = $this -> find('first', array('contain' => array('LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
+
+			$retVal['response']['data'] = $manufacturer['Manufacture'];
+			$retVal['response']['data']['LicensesManufacture'] = $manufacturer['LicensesManufacture'];
+			$retVal['response']['isSuccess'] = true;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Manufacture');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+	}
 
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));

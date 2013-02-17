@@ -39,6 +39,11 @@ class UserPointFact extends AppModel {
 		return $this -> getMonthlyLeaders($month, $year);
 	}
 
+	public function getYearlyLeaders() {
+		$year = date("Y");
+		return $this -> getLeadersByYear($year);
+	}
+
 	/**
 	 * This will return a users total points for the year
 	 */
@@ -81,8 +86,11 @@ class UserPointFact extends AppModel {
 	/**
 	 * This will return the top 5 users for the year
 	 */
-	public function getYearlyLeaders($year) {
+	public function getLeadersByYear($year) {
+		// TODO get to work
+		$retVal = $this -> find('all', array('contain'=> false, 'group' => 'UserPointFact.user_id', 'conditions' => array('UserPointFact.year' => '2012')));
 
+		return $retVal;
 	}
 
 }

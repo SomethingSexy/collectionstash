@@ -1,0 +1,43 @@
+<form class="form-horizontal">
+	<fieldset>
+		<legend>
+			Details
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputManName">Name</label>
+			<div class="controls">
+				<input type="text" id="inputManName" name="title" value="{manufacturer.title|s}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputManUrl">URL</label>
+			<div class="controls">
+				<input type="text" id="inputManUrl" name="url" value="{manufacturer.url|s}">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Brands
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputManBrand">Brand</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input id="inputManBrand" type="text" value="" name="brand" maxlength="200" autocomplete="off">
+					<button class="btn manufacturer-brand-add" type="button">
+						Add
+					</button>
+				</div>
+				<span class="help-block input-man-brand-error"></span>
+			</div>
+		</div>
+		<ul class="manufacturer-brands">
+			{#manufacturer.LicensesManufacture}
+			<li>
+				{License.name}
+			</li>
+			{/manufacturer.LicensesManufacture}
+		</ul>
+	</fieldset>
+</form>

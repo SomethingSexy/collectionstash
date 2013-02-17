@@ -14,38 +14,52 @@
 		</legend>
 		<div class="control-group">
 			<label class="control-label" for="inputManufacturer">Manufacturer</label>
-			<div class="controls">
-				<select id="inputManufacturer" name="manufacture_id">
-					<option value=""></option>
-					{#manufacturers collectibleId=collectible.manufacture_id}
-					<option value="{id}" {@eq key="{id}" value="{collectibleId}"}selected{/eq}>{title}</option>
-					{/manufacturers}
-				</select>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<select id="inputManufacturer" name="manufacture_id">
+						<option value=""></option>
+						{#manufacturers collectibleId=collectible.manufacture_id}
+						<option value="{id}" {@eq key="{id}" value="{collectibleId}"}selected{/eq}>{title}</option>
+						{/manufacturers}
+					</select>
+					{#collectible.manufacture_id}
+						<button class="btn manufacturer-edit" type="button">Edit</button>
+					{/collectible.manufacture_id}
+					{@eq key="{allowAddManufacturer}" value="true" type="boolean"}
+					<button class="btn manufacturer-add" type="button">Add</button>
+					{/eq}
+				</div>
 			</div>
 		</div>
 		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath brands=brands renderBrandList=renderBrandList}
 		<div class="control-group">
 			<label class="control-label" for="inputBrand">Brand</label>
-			<div class="controls">
-				<select id="inputBrand" name="license_id">
-					<option value=""></option>
-					{#LicensesManufacture}
-					<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
-					{/LicensesManufacture}
-				</select>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<select id="inputBrand" name="license_id">
+						<option value=""></option>
+						{#LicensesManufacture}
+						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
+						{/LicensesManufacture}
+					</select>
+					<button class="btn manufacturer-add-brand" type="button">Add</button>
+				</div>
 			</div>
 		</div>
 		{#series_id seriesId=seriesId seriesPath=seriesPath}
 		<div class="control-group">
 			<label class="control-label" for="inputName">Category</label>
 			<div class="controls">
-				<button id="buttonSeries" type="button" class="btn">
-					{@if cond="('{seriesPath}' !== '')"}
-						{seriesPath}
-						{:else}
-						Select
-					{/if}
-				</button>
+				<div class="btn-group">
+					<button id="buttonSeries" type="button" class="btn">
+						{@if cond="('{seriesPath}' !== '')"}
+							{seriesPath}
+							{:else}
+							Select
+						{/if}
+					</button>
+					<button type="button" class="btn manufacturer-add-category">Edit Categories</button>
+				</div>
 				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
 			</div>
 		</div>
@@ -275,8 +289,7 @@
 		<button class="btn" data-dismiss="modal" aria-hidden="true">
 			Close
 		</button>
-		<button class="btn btn-primary" autocomplete="off">
-			Save
-		</button>
 	</div>
 </div>
+
+

@@ -3,8 +3,8 @@ App::uses('Sanitize', 'Utility');
 class SeriesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify', 'Tree');
-	
-	public function get($manufacturerId) {
+
+	public function get($manufacturerId, $mode = null) {
 		$returnData = $this -> Series -> getSeriesByManufacturer($manufacturerId);
 
 		$this -> autoRender = false;
@@ -12,8 +12,14 @@ class SeriesController extends AppController {
 		$view -> set('series', $returnData['response']['data']);
 
 		/* Grab output into variable without the view actually outputting! */
-		$view_output = $view -> render('tree');
-		$returnData['response']['data'] = $view_output;
+		if (!is_null($mode) && $mode === 'edit') {
+			$view_output = $view -> render('tree_edit');
+			$returnData['response']['data'] = $view_output;
+		} else {
+			$view_output = $view -> render('tree');
+			$returnData['response']['data'] = $view_output;
+		}
+
 		$this -> autoRender = true;
 
 		$this -> set(compact('returnData'));
@@ -22,6 +28,29 @@ class SeriesController extends AppController {
 	public function admin_list() {
 		$stuff = $this -> Series -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id'), 'order' => 'lft ASC'));
 		$this -> set('stuff', $stuff);
+	}
+
+	/**
+	 * For adding by users
+	 */
+	public function add() {
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			$this -> set('returnData', array());
+			return;
+		}
+		if ($this -> request -> isPost()) {// create
+			$this -> request -> data = Sanitize::clean($this -> request -> data);
+			$response = $this -> Series -> add($this -> request -> data, $this -> getUser(), true);
+
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
+			$this -> set('returnData', $response);
+		} else if ($this -> request -> isPut()) {//update
+
+		}
 	}
 
 	public function admin_add() {
