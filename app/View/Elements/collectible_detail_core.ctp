@@ -49,7 +49,7 @@ if (!isset($adminMode)) {
 	 <?php
 	
 	//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => '<a href="/manufactures/view/' . $collectibleCore['Manufacture']['id'] .'">'. $collectibleCore['Manufacture']['title'].'</a>'));
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => $collectibleCore['Manufacture']['title']));
+	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => '<a href="/manufacturer/' . $collectibleCore['Manufacture']['id'] .'/' . $collectibleCore['Manufacture']['slug'] . '">'. $collectibleCore['Manufacture']['title'].'</a>' ));
 	
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 

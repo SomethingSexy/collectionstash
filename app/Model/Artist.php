@@ -6,6 +6,15 @@ class Artist extends AppModel {
 
 	var $validate = array('name' => array('rule' => '/^[\\w\\s-.]+$/', 'required' => true, 'message' => 'Invalid characters'));
 
+	function doAfterFind($results, $primary = false) {
+		if ($results) {
+			$name = strtolower($results['name']);
+			$slug = str_replace(' ', '-', $name);
+			$results['slug'] = $slug;
+		}
+		return $results;
+	}
+
 	/**
 	 * This processes a single Collectibles Tag
 	 */

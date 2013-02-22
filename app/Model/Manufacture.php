@@ -13,6 +13,15 @@ class Manufacture extends AppModel {
 	//url
 	'url' => array('rule' => 'url', 'allowEmpty' => true, 'message' => 'Must be a valid url.'), );
 
+	function doAfterFind($results, $primary = false) {
+		if ($results) {
+			$name = strtolower($results['title']);
+			$slug = str_replace(' ', '-', $name);
+			$results['slug'] = $slug;
+		}
+		return $results;
+	}
+
 	public function add($data, $user, $autoUpdate = false) {
 		$retVal = $this -> buildDefaultResponse();
 
@@ -80,7 +89,7 @@ class Manufacture extends AppModel {
 
 		unset($data['Manufacture']['CollectibletypesManufacture']);
 		unset($data['Manufacture']['LicensesManufacture']);
-		
+
 		if ($this -> saveAll($data, array('deep' => true))) {
 			$id = $this -> id;
 			$manufacturer = $this -> find('first', array('contain' => array('LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
