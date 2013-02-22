@@ -2,7 +2,7 @@
 class Series extends AppModel {
 	public $name = 'Series';
 	public $useTable = 'series';
-	public $hasMany = array('Collectible', 'Manufacture');
+	public $hasMany = array('Collectible', 'Manufacture' => array('dependent' => true));
 	public $actsAs = array('Tree', 'Containable');
 
 	public $validate = array(
