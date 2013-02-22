@@ -2431,6 +2431,11 @@ div.paging span a:hover {
 	max-height: 500px;
 	min-height: 400px;
 }
+
+.manufacturer-collectibles {
+	float: left;
+	width: 100%;
+}
 /*
  * Cake BS
  */
