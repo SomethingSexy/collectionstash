@@ -1,7 +1,7 @@
 <?php
 class ArtistsController extends AppController {
 
-	public $helpers = array('Html', 'Js', 'Minify');
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js', 'Time');
 
 	public function getArtistList() {
 		$query = $this -> request -> query['query'];
@@ -12,16 +12,27 @@ class ArtistsController extends AppController {
 	}
 
 	public function index($id = null) {
+
+		if (!isset($id) || !is_numeric($id)) {
+
+			$this -> redirect("/");
+			return;
+		}
+		$artist = $this -> Artist -> find("first", array('conditions' => array('Artist.id' => $id), 'contain' => false));
+		if (empty($artist)) {
+			$this -> redirect("/");
+			return;
+		}
+
+		$this -> set(compact('artist'));
 		$joins = array();
 		array_push($joins, array('table' => 'artists_collectibles', 'alias' => 'ArtsitsCollectible', 'type' => 'inner', 'conditions' => array('Collectible.id = ArtsitsCollectible.collectible_id')));
 		array_push($joins, array('table' => 'artists', 'alias' => 'Artist', 'type' => 'inner', 'conditions' => array('ArtsitsCollectible.artist_id = Artist.id')));
 
 		$this -> loadModel('Collectible');
 
-		$this -> paginate = array('joins' => $joins, 'limit' => 25, 'conditions' => array('Artist.id' => $id), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
+		$this -> paginate = array('joins' => $joins, 'limit' => 25, 'conditions' => array('Artist.id' => $id, 'Collectible.status_id' => 4), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
 		$collectibles = $this -> paginate('Collectible');
-		
-		debug($collectibles);
 
 		$this -> set(compact('collectibles'));
 	}

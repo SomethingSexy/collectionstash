@@ -73,7 +73,7 @@ class ManufacturesController extends AppController {
 
 				$this -> loadModel('Collectible');
 
-				$this -> paginate = array('limit' => 25, 'conditions' => array('Collectible.manufacture_id' => $id), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
+				$this -> paginate = array('limit' => 25, 'conditions' => array('Collectible.manufacture_id' => $id, 'Collectible.status_id' => 4), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
 				$collectibles = $this -> paginate('Collectible');
 
 				$this -> set(compact('collectibles'));
