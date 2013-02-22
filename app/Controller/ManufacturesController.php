@@ -2,7 +2,7 @@
 App::uses('Sanitize', 'Utility');
 class ManufacturesController extends AppController {
 
-	public $helpers = array('Html', 'Js', 'Minify');
+	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js', 'Time');
 
 	public function manufacturer($id = null) {
 
@@ -35,7 +35,7 @@ class ManufacturesController extends AppController {
 	/**
 	 * This is the view for the public data
 	 */
-	public function view($id = null) {
+	public function index($id = null) {
 		if (isset($id) && is_numeric($id)) {
 			$manufacture = $this -> Manufacture -> find("first", array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
 			if (!empty($manufacture)) {
@@ -70,6 +70,13 @@ class ManufacturesController extends AppController {
 				if (!empty($highestEditionCollectible)) {
 					$manufacture['Manufacture']['highest_edition_size'] = $highestEditionCollectible['Collectible']['edition_size'];
 				}
+
+				$this -> loadModel('Collectible');
+
+				$this -> paginate = array('limit' => 25, 'conditions' => array('Collectible.manufacture_id' => $id), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
+				$collectibles = $this -> paginate('Collectible');
+
+				$this -> set(compact('collectibles'));
 
 				$this -> set(compact('manufacture'));
 			} else {

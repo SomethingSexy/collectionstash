@@ -46,6 +46,9 @@ Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => '
 
 Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
 
+Router::connect('/manufactures/view/*', array('controller' => 'manufactures', 'action' => 'index'));
+// since I can't spell right
+Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action' => 'index'));
 
 
 /**

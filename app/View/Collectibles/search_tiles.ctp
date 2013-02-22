@@ -48,16 +48,14 @@ echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 					echo '<div class="header">';
 					echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 					echo '</div>';
-
-					echo '<ul class="user-detail">';
-					echo '<li>';
-					echo '</ul>';
-					echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to Stash">';
-					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo  '</a>';
-					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
-					echo '</li>';
+					if ($isLoggedIn) {
+						echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to Stash">';
+						echo '<img src="/img/icon/add_stash_link_25x25.png">';
+						echo  '</a>';
+						echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
+					}
 					echo '</div>';
+					
 				}
 				echo '</div>';
 			     ?>
