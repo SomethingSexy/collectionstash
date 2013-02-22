@@ -50,7 +50,7 @@ Router::connect('/manufactures/view/*', array('controller' => 'manufactures', 'a
 // since I can't spell right
 Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action' => 'index'));
 
-
+Router::connect('/artist/*', array('controller' => 'artists', 'action' => 'index'));
 /**
  * Load all plugin routes.  See the CakePlugin documentation on
  * how to customize the loading of plugin routes.

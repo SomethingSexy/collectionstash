@@ -11,5 +11,20 @@ class ArtistsController extends AppController {
 		$this -> set('returnData', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
 	}
 
+	public function index($id = null) {
+		$joins = array();
+		array_push($joins, array('table' => 'artists_collectibles', 'alias' => 'ArtsitsCollectible', 'type' => 'inner', 'conditions' => array('Collectible.id = ArtsitsCollectible.collectible_id')));
+		array_push($joins, array('table' => 'artists', 'alias' => 'Artist', 'type' => 'inner', 'conditions' => array('ArtsitsCollectible.artist_id = Artist.id')));
+
+		$this -> loadModel('Collectible');
+
+		$this -> paginate = array('joins' => $joins, 'limit' => 25, 'conditions' => array('Artist.id' => $id), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
+		$collectibles = $this -> paginate('Collectible');
+		
+		debug($collectibles);
+
+		$this -> set(compact('collectibles'));
+	}
+
 }
 ?>
