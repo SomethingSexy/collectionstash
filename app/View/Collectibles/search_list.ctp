@@ -66,7 +66,7 @@ unset($urlparams['url']);
 					}
 				
 					if (!empty($collectible['Manufacture']['title'])) {
-						echo '<td>' . $collectible['Manufacture']['title'] . '</td>';
+						echo '<td>' . '<a href="/manufacturer/' . $collectible['Manufacture']['id'] .'/' . $collectible['Manufacture']['slug'] . '">'. $collectible['Manufacture']['title'].'</a>' . '</td>';
 					} else {
 						echo '<td>Not Recorded</td>';
 					}
