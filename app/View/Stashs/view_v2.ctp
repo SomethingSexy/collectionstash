@@ -96,11 +96,11 @@
 				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
 			}
 
-			echo '<div class="header">';			
+			echo '<div class="header">';
 			if ($stashType === 'default') {
 				echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			} else {
-				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle']  . '</a>';
+				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			}
 			echo '</div>';
 
@@ -115,16 +115,19 @@
 					$detail .= '<li>' . __('Artist\'s Proof') . '</li>';
 				}
 			}
+
+			echo '<ul class="user-detail">';
+			echo '<li class="">';
+			echo '<a class="btn" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-search"></i></a>';
 			if (isset($myStash) && $myStash) {
-				echo '<ul class="user-detail">';
-				echo '<li class="">';
 				if ($stashType === 'default') {
 					echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
 				}
 				echo '<a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
-				echo '</li>';
-				echo '</ul>';
 			}
+			echo '</li>';
+			echo '</ul>';
+
 			echo '</div>';
 		}
 		echo '</div>';
