@@ -315,7 +315,7 @@ class CollectiblesController extends AppController {
 
 		// We will also want to get the manufacturers and their licenses right away
 		$manufacturerCollectibletypes = $this -> Collectible -> Manufacture -> CollectibletypesManufacture -> find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
-		
+
 		// Get and return all brands, this is for adding new manufacturers
 		// and also used for types that might allow not having a manufacturer
 		$brands = $this -> Collectible -> License -> find('all', array('contain' => false));
@@ -535,7 +535,7 @@ class CollectiblesController extends AppController {
 	function pending() {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
-		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
+		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5, 'order' => array('Collectible.created' => 'desc'));
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}

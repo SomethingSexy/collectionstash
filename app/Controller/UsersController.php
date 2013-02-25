@@ -58,7 +58,7 @@ class UsersController extends AppController {
 		$this -> set(compact('totalEdits'));
 
 		// Now grab the pending collectible
-		$pending = $this -> User -> Collectible -> getPendingCollectibles(array('limit' => 5));
+		$pending = $this -> User -> Collectible -> getPendingCollectibles(array('limit' => 5, 'order' => array('Collectible.created' => 'desc')));
 		$totalPending = $this -> User -> Collectible -> getNumberOfPendingCollectibles();
 		$pending = json_encode($pending);
 		$this -> set(compact('pending'));
