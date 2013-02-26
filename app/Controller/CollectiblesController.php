@@ -359,7 +359,7 @@ class CollectiblesController extends AppController {
 			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
 				//'AttributesCollectible' => array('Collectible' )
 				if (!empty($attributesCollectible['Attribute'])) {
-					$existingAttributeCollectibles = $this -> Collectible -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
+					$existingAttributeCollectibles = $this -> Collectible -> AttributesCollectible -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name', 'status_id')))));
 					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
 				}
 			}
