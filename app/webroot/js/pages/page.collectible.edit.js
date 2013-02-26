@@ -81,7 +81,10 @@ var Collectibles = Backbone.Collection.extend({
 });
 var Brand = Backbone.Model.extend({});
 var Brands = Backbone.Collection.extend({
-	model : Brand
+	model : Brand,
+	comparator : function(brand) {
+		return brand.get("License").name.toLowerCase();
+	}
 });
 var CollectibleTagModel = Backbone.Model.extend({});
 var CollectibleTypeModel = Backbone.Model.extend({});
@@ -1047,6 +1050,10 @@ var CollectibleView = Backbone.View.extend({
 		};
 		if (this.manufacturer) {
 			data.manufacturer = this.manufacturer.toJSON();
+			// use this to sort but then add back to the manufacturer so we don't
+			// have to pass more data around
+			var brands = new Brands(data.manufacturer.LicensesManufacture);
+			data.manufacturer.LicensesManufacture = brands.toJSON();
 			data.renderBrandList = false;
 		} else {
 			// if there is no manufacturer selected and the collectible type
