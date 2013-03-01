@@ -86,25 +86,25 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
 			<h4>Points</h4>
 			<dl class="dl-horizontal">
 				<dt>
-					Total Points:
+					Total Nuts:
 				</dt>
 				<dd>
 					<?php echo $user['User']['points']; ?>
 				</dd>
 				<dt>
-					Points earned this month:
+					Nuts earned this month:
 				</dt>
 				<dd>
 					<?php echo $pointsMonth; ?>
 				</dd>
 				<dt>
-					Points earned last month:
+					Nuts earned last month:
 				</dt>
 				<dd>
 					<?php echo $previousPointsMonth; ?>
 				</dd>
 				<dt>
-					Points earned this year:
+					Nuts earned this year:
 				</dt>
 				<dd>
 					<?php echo $pointsYear; ?>
@@ -116,12 +116,12 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
 	</div>
 	<div class="span6">
 		<div class="well">
-			<h3>Nut Stats</h3>
+			<h3>Nut Stats <a href="/pages/nuts"><i class="icon-question-sign"></i></a></h3>
 			<h4>Current Month Leaders</h4>
 			<ol>
 				<?php
 				foreach ($monthlyLeaders as $key => $value) {
-					echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointFact']['points'] . ' points</li>';
+					echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointFact']['points'] . ' nuts</li>';
 				}
 				?>
 			</ol>
@@ -129,7 +129,7 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
 			<ol>
 				<?php
 				foreach ($previousMonthlyLeaders as $key => $value) {
-					echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointFact']['points'] . ' points</li>';
+					echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointFact']['points'] . ' nuts</li>';
 				}
 				?>
 			</ol>
