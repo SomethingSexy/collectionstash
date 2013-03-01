@@ -8,7 +8,7 @@
 
 <h3>Nut Contests</h3>
 <p>Each month we are holding contests to see who can earn the most nuts.</p>
-<p>The person who earns the most nuts each month will win an official Collection Stash 'Top Nut' T-Shirt.  We also might throw in some different prizes from time to time.</p>
+<p>The person who earns the most nuts each month will win an official Collection Stash 'Top Nut' T-Shirt.  We also might throw in some different prizes each month from time to time.</p>
 
 <h3>2013 Grand Prize</h3>
 <p>We are having a Grand Prize for the person who earns the most nuts for 2013.  The person who earns the most nuts for 2013 will win a <a href="/collectibles/view/2/sideshow-collectibles-friday-the-13th-jason-voorhees-statue">Sideshow Collectibles Friday the 13th Part 3 Jason Premium Format Figure.</a></p>
