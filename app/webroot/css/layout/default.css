@@ -2426,11 +2426,11 @@ div.paging span a:hover {
 #upload-dialog {
 	width: 720px;
 }
-
+/* On resolution 1280 x 720 this stopped the buttons from showing up
 #manufacturerModal .modal-body {
 	max-height: 500px;
 	min-height: 400px;
-}
+}*/
 
 .manufacturer-collectibles {
 	float: left;
