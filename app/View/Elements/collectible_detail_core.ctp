@@ -80,7 +80,7 @@ if (!isset($adminMode)) {
 	//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
 	//}
 	if ($adminMode) {
-		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'official'), __('Signed', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'official'), __('Official', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 	}
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'limited'), __('Limited Edition', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
