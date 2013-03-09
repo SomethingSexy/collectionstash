@@ -41,5 +41,9 @@ class Artist extends AppModel {
 		return $retVal;
 	}
 
+	public function getArtistList() {
+		return $this -> find('list', array('order' => array('Artist.name' => 'ASC')));
+	}
+
 }
 ?>

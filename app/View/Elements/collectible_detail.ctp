@@ -59,11 +59,9 @@ echo $this -> Html -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 <script>
-						var collectibleStatus = {
-	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
-		,
-		status:
-<?php echo json_encode($collectibleDetail['Status']); ?>};<?php
+var collectibleStatus = {
+	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
+	status:<?php echo json_encode($collectibleDetail['Status']); ?>};<?php
 if ($showStatus) {
 	echo 'var showStatus = true;';
 } else {
@@ -79,9 +77,32 @@ if ($showStatus) {
 
 <div id="collectible-container" class="span12 stashable">
 	<div class="row spacer">
-		<div class="span8"><h2><?php echo $title; ?></h2></div>
+		<div class="span12 page-header">
+			<h2 class="title"><?php echo $title; ?></h2>
+			<span>
+			<?php
+			// maybe collectible type here?
+			echo 'Type: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
+			
+			// if it has a manufacturer display that first
+			if(!empty($collectibleDetail['Collectible']['manufacture_id'])){
+				echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] .'/' . $collectibleDetail['Manufacture']['slug'] . '">'. $collectibleDetail['Manufacture']['title'].'</a> | ';
+			}
+			// just grab the first artist for now
+			if(!empty($collectibleDetail['ArtistsCollectible'])){
+				echo 'Artist: ' . $this -> Html -> link($collectibleDetail['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectibleDetail['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . ' | ';		
+			} 
+			
+			if($collectibleDetail['Collectible']['official']){
+				echo 'Official';
+			} else {
+				echo 'Unofficial';
+			}
+			?>
+			</span>
+		</div>
 		<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
-		<div class="span4">
+		<div class="span12">
 			<div class="btn-group actions pull-right">
 				<?php
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn) {
@@ -151,6 +172,14 @@ if ($showStatus) {
 				echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
 			}
 			?>
+
+			
+			<?php
+			if (isset($showVariants) && $showVariants) {
+				echo $this -> element('collectible_variant_list', array());
+			}
+			?>
+			
 		
 		</div>
 	</div>	
@@ -177,19 +206,7 @@ if ($showStatus) {
 			<?php } ?>
 		</div>
 	</div>	
-	<div class="row">
-		
-		<div class="span12">
-			
-			<?php
-			if (isset($showVariants) && $showVariants) {
-				echo $this -> element('collectible_variant_list', array());
-			}
-			?>
-			
-		</div>
-		
-	</div>
+
 	
 </div>
 

@@ -104,6 +104,15 @@ class Edit extends AppModel {
 						//Since there is only 1 allowed, just assume for now
 						array_push($results[$key]['Edits'], $collectiblesUploads[0]['CollectiblesUploadEdit']);
 					}
+
+					$this -> bindModel(array('belongsTo' => array('AttributesUpload')));
+					$attributesUploads = $this -> AttributesUpload -> findEditsByEditId($val['Edit']['id']);
+					$this -> unbindModel(array('belongsTo' => array('AttributesUpload')));
+					if (!empty($attributesUploads)) {
+						$attributesUploads[0]['AttributesUploadEdit']['edit_type'] = 'AttributesUpload';
+						//Since there is only 1 allowed, just assume for now
+						array_push($results[$key]['Edits'], $attributesUploads[0]['AttributesUploadEdit']);
+					}
 				}
 			}
 		}
@@ -159,6 +168,10 @@ class Edit extends AppModel {
 					$this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
 					$success = $this -> ArtistsCollectible -> denyEdit($value['id'], $sendEmail);
 					$this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
+				} else if ($value['edit_type'] === 'AttributesUpload') {
+					$this -> bindModel(array('belongsTo' => array('AttributesUpload')));
+					$success = $this -> AttributesUpload -> denyEdit($value['id'], $sendEmail);
+					$this -> unbindModel(array('belongsTo' => array('AttributesUpload')));
 				}
 			}
 
@@ -224,8 +237,12 @@ class Edit extends AppModel {
 					$this -> unbindModel(array('belongsTo' => array('Collectible')));
 				} else if ($value['edit_type'] === 'ArtistsCollectible') {
 					$this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
-					$success = $this -> ArtistsCollectible -> publishEdit($value['id'], $sendEmail);
+					$success = $this -> ArtistsCollectible -> publishEdit($value['id'], $approvalUserId);
 					$this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
+				} else if ($value['edit_type'] === 'AttributesUpload') {
+					$this -> bindModel(array('belongsTo' => array('AttributesUpload')));
+					$success = $this -> AttributesUpload -> publishEdit($value['id'], $approvalUserId);
+					$this -> unbindModel(array('belongsTo' => array('AttributesUpload')));
 				}
 			}
 

@@ -1,6 +1,6 @@
 <?php
 App::uses('Sanitize', 'Utility');
-class CollectiblesUploadsController extends AppController {
+class AttributesUploadsController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify', 'CollectibleDetail');
 
@@ -18,7 +18,7 @@ class CollectiblesUploadsController extends AppController {
 		if (!$this -> isLoggedIn()) {
 			$data['response'] = array();
 			$data['response']['isSuccess'] = false;
-			$error = array('message' => __('You must be logged in to edit photos.'));
+			$error = array('message' => __('You must be logged in to edit photos'));
 			$error['inline'] = false;
 			$data['response']['errors'] = array();
 			array_push($data['response']['errors'], $error);
@@ -34,13 +34,13 @@ class CollectiblesUploadsController extends AppController {
 		$returnData['response']['errors'] = array();
 		$returnData['response']['data'] = array();
 
-		$uploads = $this -> CollectiblesUpload -> find("all", array('contain' => array('Upload'), 'conditions' => array('CollectiblesUpload.collectible_id' => $collectibleId)));
-		$pending = $this -> CollectiblesUpload -> findPendingEdits(array('CollectiblesUploadEdit.collectible_id' => $collectibleId));
+		$uploads = $this -> AttributesUpload -> find("all", array('contain' => array('Upload'), 'conditions' => array('AttributesUpload.attribute_id' => $collectibleId)));
+		$pending = $this -> AttributesUpload -> findPendingEdits(array('AttributesUploadEdit.attribute_id' => $collectibleId));
 
 		foreach ($pending as $key => $value) {
 			if ($value['Action']['action_type_id'] === '4') {
 				foreach ($uploads as $key => $upload) {
-					if ($upload['CollectiblesUpload']['id'] === $value['CollectiblesUploadEdit']['base_id']) {
+					if ($upload['AttributesUpload']['id'] === $value['AttributesUploadEdit']['base_id']) {
 						unset($uploads[$key]);
 						break;
 					}
@@ -55,9 +55,9 @@ class CollectiblesUploadsController extends AppController {
 			$uploadResponse['type'] = $value['Upload']['type'];
 			$uploadResponse['size'] = intval($value['Upload']['size']);
 			$uploadResponse['name'] = $value['Upload']['name'];
-			$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $value['CollectiblesUploadEdit']['id'] . '/true';
+			$uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $value['AttributesUploadEdit']['id'] . '/true';
 			$uploadResponse['delete_type'] = 'POST';
-			$uploadResponse['id'] = $value['CollectiblesUploadEdit']['collectible_id'];
+			//$uploadResponse['id'] = $value['AttributesUploadEdit']['attribute_id'];
 
 			// Given the action, detemine what type of pending it is
 			$uploadResponse['pending'] = true;
@@ -67,7 +67,7 @@ class CollectiblesUploadsController extends AppController {
 				$uploadResponse['pendingText'] = __('Pending Removal');
 			}
 
-			if ($value['CollectiblesUploadEdit']['edit_user_id'] === $this -> getUserId()) {
+			if ($value['AttributesUploadEdit']['edit_user_id'] === $this -> getUserId()) {
 				$uploadResponse['owner'] = true;
 			} else {
 				$uploadResponse['owner'] = false;
@@ -91,16 +91,15 @@ class CollectiblesUploadsController extends AppController {
 			$uploadResponse['type'] = $value['Upload']['type'];
 			$uploadResponse['size'] = intval($value['Upload']['size']);
 			$uploadResponse['name'] = $value['Upload']['name'];
-			$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $value['CollectiblesUpload']['id'] . '/false';
+			$uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $value['AttributesUpload']['id'] . '/false';
 			$uploadResponse['delete_type'] = 'POST';
-			$uploadResponse['id'] = $value['CollectiblesUpload']['collectible_id'];
+			//$uploadResponse['id'] = $value['AttributesUpload']['attribute_id'];
 			$uploadResponse['pending'] = false;
 			$uploadResponse['allowDelete'] = true;
-			$uploadResponse['primary'] = $value['CollectiblesUpload']['primary'];
+			$uploadResponse['primary'] = $value['AttributesUpload']['primary'];
 
 			array_push($returnData['response']['data'], $uploadResponse);
 		}
-		debug($pending);
 
 		$this -> set('returnData', $returnData);
 	}
@@ -124,18 +123,16 @@ class CollectiblesUploadsController extends AppController {
 		 * If it is pending, we will look up the edit, check to see if it was done by that person
 		 * if so then we will delete it
 		 */
-		debug($pending);
 		if ($pending === 'true') {
-			$edit = $this -> CollectiblesUpload -> findEdit($id);
-			debug($edit);
+			$edit = $this -> AttributesUpload -> findEdit($id);
 			$this -> loadModel('Edit');
 			//TODO Check to make sure the person deleting it is the owner
 			// Going through the edit model because it will handle stuff for us
-			$this -> Edit -> denyEdit($edit['CollectiblesUploadEdit']['edit_id'], false);
+			$this -> Edit -> denyEdit($edit['AttributesUploadEdit']['edit_id'], false);
 		} else {
 			$upload = array();
-			$upload['CollectiblesUpload']['id'] = $id;
-			$response = $this -> CollectiblesUpload -> remove($upload, $this -> getUserId(), false);
+			$upload['AttributesUpload']['id'] = $id;
+			$response = $this -> AttributesUpload -> remove($upload, $this -> getUserId(), false);
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$retunData = array();
@@ -172,8 +169,7 @@ class CollectiblesUploadsController extends AppController {
 			return;
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$response = $this -> CollectiblesUpload -> add($this -> request -> data, $this -> getUserId());
-			debug($response);
+			$response = $this -> AttributesUpload -> add($this -> request -> data, $this -> getUserId());
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$upload = $response['response']['data'];
@@ -191,7 +187,7 @@ class CollectiblesUploadsController extends AppController {
 					// this should be the id of the new pending collectible
 
 					$uploadResponse['delete_type'] = 'POST';
-					$uploadResponse['id'] = $this -> request -> data['CollectiblesUpload']['collectible_id'];
+					$uploadResponse['id'] = $this -> request -> data['AttributesUpload']['attribute_id'];
 
 					if ($upload['isEdit']) {
 						$uploadResponse['pending'] = true;
@@ -200,7 +196,7 @@ class CollectiblesUploadsController extends AppController {
 						$uploadResponse['pending'] = false;
 					}
 
-					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/'. $uploadResponse['pending'];
+					$uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $upload['AttributesUpload']['id'] . '/'. $uploadResponse['pending'];
 
 					//TODO: Need to figure these two properties out
 					$uploadResponse['owner'] = true;
@@ -230,7 +226,7 @@ class CollectiblesUploadsController extends AppController {
 		$returnData = array();
 
 		if (isset($collectibleId) && is_numeric($collectibleId)) {
-			$returnData = $this -> CollectiblesUpload -> find('all', array('contain' => array('Upload'), 'conditions' => array('CollectiblesUpload.collectible_id' => $collectibleId)));
+			$returnData = $this -> AttributesUpload -> find('all', array('contain' => array('Upload'), 'conditions' => array('AttributesUpload.attribute_id' => $collectibleId)));
 		}
 
 		$this -> set(compact('returnData'));
@@ -240,13 +236,12 @@ class CollectiblesUploadsController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 		if ($editId && is_numeric($editId) && $collectibleUploadEditId && is_numeric($collectibleUploadEditId)) {
-			$this -> set('$collectibleUploadEditId', $collectibleUploadEditId);
+			$this -> set('collectibleUploadEditId', $collectibleUploadEditId);
 			$this -> set('editId', $editId);
 			if (empty($this -> request -> data)) {
-				$collectibleUpload = $this -> CollectiblesUpload -> getEditForApproval($collectibleUploadEditId);
+				$collectibleUpload = $this -> AttributesUpload -> getEditForApproval($collectibleUploadEditId);
 
 				if ($collectibleUpload) {
-					debug($collectibleUpload);
 					$this -> set(compact('collectibleUpload'));
 
 				} else {

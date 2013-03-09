@@ -80,7 +80,7 @@ if($collectible['Collectible']['showUserEditionSize'] && isset($collectible['Col
 						}
 						?>
 						<?php
-						if (isset($collectible['Condition']) && !empty($collectible['Condition'])) {
+						if (isset($collectible['Condition']) && !empty($collectible['Condition']['id'])) {
 							echo '<dt>';
 							echo __('Condition');
 							echo '</dt>';

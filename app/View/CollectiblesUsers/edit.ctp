@@ -39,7 +39,7 @@
                 <div class="label-wrapper">
                   <label for="CollectiblesUserConditionId"><?php echo __('Condition') ?></label>
                 </div> 
-                <?php echo $this->Form->input('condition_id', array('div' =>  false, 'label' => false));?>
+               	<?php echo $this -> Form -> input('condition_id', array('div' => false, 'label' => false, 'empty' => true)); ?>
               </li> 
               <li>
                 <div class="label-wrapper">

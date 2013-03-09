@@ -1,13 +1,11 @@
-
-	<h2><?php echo $manufacture['Manufacture']['title']
-			?></h2>	
+	<div class="page-header">
+		<h2><?php echo $manufacture['Manufacture']['title']?></h2>
+	</div>	
 		<span class="url"><?php echo $manufacture['Manufacture']['url']
 				?></span>
 	<div class="row">
 		<div class="span4">
-			<div class="well">
-				
-			
+			<div class="well">			
 				<dl class="dl-horizontal">
 		
 					<dt><?php echo __('Total Collectibles'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectible_count']

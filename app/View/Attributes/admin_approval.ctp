@@ -102,7 +102,8 @@
 						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'attribute_category_id'), __('Category', true), array('value' => $attribute['AttributeCategory']['path_name'], 'compare' => true));
 						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'name'), __('Name', true), array('compare' => true));
 						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'description'), __('Description', true), array('compare' => true));
-						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer', true), array('compare' => true));
+						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'manufacture_id'), __('Manufacturer', true), array('value' => $attribute['Manufacture']['title'],'compare' => true));
+						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'artist_id'), __('Artist', true), array('value' => $attribute['Artist']['name'], 'compare' => true));
 						echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'scale_id'), __('Scale', true), array('value' => $attribute['Scale']['scale'], 'compare' => true));
 						?>
 					</dl>					

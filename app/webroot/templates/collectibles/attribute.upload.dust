@@ -1,32 +1,30 @@
-<div id="upload-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="attribute-upload-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 			×
 		</button>
 		<h3 id="myModalLabel">Upload Photo</h3>
 	</div>
-	<div class="modal-body">
-		<?php echo $this -> element('flash'); ?>
-	
-		<p><?php echo __('This will allow you to sumbit photos for the collectible you are viewing.  Each photo you submit will require approval from an admin.  All pending photos are indicated below.  If you submitted an incorrect photo and it is still pending you can delete it, otherwise you can also submit for approval the removal of a photo.  Note, you can only delete pending photos that you added.  Currently, you cannot delete the primary photo.')
-		?></p>
-		<p><?php echo __('Image requirements:'); ?></p>
+	<div class="modal-body">	
+		<p>This will allow you to sumbit photos for the collectible you are viewing.  Each photo you submit will require approval from an admin.  All pending photos are indicated below.  If you submitted an incorrect photo and it is still pending you can delete it, otherwise you can also submit for approval the removal of a photo.  Note, you can only delete pending photos that you added.  Currently, you cannot delete the primary photo.
+		</p>
+		<p>Image requirements:</p>
 		<ul>
-			<li><?php echo __('The image must be less than 2MB.'); ?></li>
+			<li>The image must be less than 2MB.</li>
 		</ul>
-		<p><?php echo __('Image recommendations:'); ?></p>
+		<p>Image recommendations:</p>
 		<ul>
-			<li><?php echo __('The image should be at least 150 x 150 pixels.'); ?></li>
-			<li><?php echo __('This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it\'s width.'); ?></li>
-			<li><?php echo __('Please try and use a professionally shot photo.'); ?></li>
+			<li>The image should be at least 150 x 150 pixels.</li>
+			<li>This will be used as the default image for this collectible.  Thumbnails will look best if this image\'s height is bigger than it's width.</li>
+			<li>Please try and use a professionally shot photo.</li>
 		</ul>
 		
 		<div class='component-message error'>
 			<span></span>
 		</div>
 		<!-- The file upload form used as target for the file upload widget -->
-		<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
-			<input id="upload-collectible-id" type="hidden" name="<?php echo $uploadName; ?>" value="<?php echo $uploadId; ?>" />
+		<form class="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
+			<input id="upload-collectible-id" type="hidden" name="data[AttributesUpload][attribute_id]" value="{attribute.Attribute.id}" />
 			<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 			<div class="row fileupload-buttonbar">
 				<div class="span7">
@@ -38,7 +36,7 @@
 				<div class="span7 url-upload">
 					<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Upload URL</span>
 						<input autocomplete="off" type="text" name="data[Upload][url]" class="url-upload-input" value="">
-							<button id="upload-url" class="btn" type="button">
+							<button id="" class="btn upload-url" type="button">
 								Upload
 							</button>
 					</span>
@@ -74,3 +72,4 @@
 		</button>
 	</div>
 </div>
+

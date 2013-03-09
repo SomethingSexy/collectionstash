@@ -18,6 +18,19 @@
 			
 			" class="popup"><i class="icon-info-sign"></i></span></td>
 {/if}
+<td>
+	<ul class="thumbnails">
+		{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
+			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+				<li class="span1"><a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+			{/primary}
+			{:else}
+			<li class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
+		{/Attribute.AttributesUpload}
+		
+	</ul>
+	
+</td>
 <td class="category">{Attribute.AttributeCategory.path_name}</td>
 
 <td>{Attribute.name}</td>
@@ -27,7 +40,6 @@
 <td>{Attribute.Scale.scale}</td>
 <td class="count">{count}</td>
 <td class="user">{Revision.User.username}</td>
-<td class="created">{modified}</td>
 <td class="actions">
 <div class="btn-group">
 	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
@@ -36,6 +48,9 @@
 			<a class="link edit-attribute-collectible-link" title='Edit Collectible Part'>Edit Collectible Part</a>
 			</li>
 			<li><a class="link edit-attribute-link" title='Edit Part'>Edit Part</a>
+		</li>
+		<li>
+			<a class="link edit-attribute-photo-link" title='Edit Part Photos'>Edit Part Photos</a>
 		</li>
 		<li>
 			<a class="link remove-link" title='Remove Collectible Part'>Remove Collectible Part</a>

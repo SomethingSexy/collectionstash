@@ -79,6 +79,20 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				;
 			}
 
+			$outputAttribtes .= '<td><ul class="thumbnails"><li class="span1">';
+
+			if (!empty($attribute['Attribute']['AttributesUpload'])) {
+				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
+					if ($upload['primary']) {
+						$outputAttribtes .= '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
+						break;
+					}
+				}
+			} else {
+				$outputAttribtes .= '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+			}
+
+			$outputAttribtes .= '</li></ul></td>';
 			$outputAttribtes .= '<td class="category">';
 
 			$outputAttribtes .= $attribute['Attribute']['AttributeCategory']['path_name'] . '</td>';
@@ -97,16 +111,16 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '<td class="count">' . $attribute['count'] . '</td>';
 			// Going to use the modified date and the last person on the revision who did something to it
 			$outputAttribtes .= '<td class="user">' . $attribute['Revision']['User']['username'] . '</td>';
-			$outputAttribtes .= '<td class="created">' . $attribute['modified'] . '</td>';
 			$outputAttribtes .= '</tr>';
 			$added = true;
 		}
 
 		if ($added) {
 			echo '<div class="attributes collectible" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
-			echo '<table class="table table-striped">';
+			echo '<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">';
 			echo '<thead><tr>';
 			echo '<th></th>';
+			echo '<th>Photo</td>';
 			echo '<th class="category">' . __('Category') . '</th>';
 			echo '<th>' . __('Name', true) . '</th>';
 			echo '<th>' . __('Description', true) . '</th>';
@@ -114,7 +128,6 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			echo '<th>' . __('Scale', true) . '</th>';
 			echo '<th title="' . __('The amount of items of this type this collectible has.') . '" class="count">' . __('Count', true) . '</th>';
 			echo '<th class="user" title="' . __('The user who performed the last action on this item.') . '">' . __('Added By') . '</th>';
-			echo '<th class="created">' . __('Last Modified') . '</th>';
 			echo '</tr></thead>';
 			echo '<tbody>';
 			echo $outputAttribtes;

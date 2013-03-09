@@ -1,6 +1,6 @@
-
-	<h2><?php echo $artist['Artist']['name'];
-			?></h2>	
+	<div class="page-header">
+		<h2><?php echo $artist['Artist']['name'];?></h2>
+	</div>	
 	<div class="row">
 		<div class="span12">
 			<div class="well manufacturer-collectibles">

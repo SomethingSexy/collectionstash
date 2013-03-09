@@ -37,7 +37,7 @@ if (!isset($adminMode)) {
 		echo '</dd>';
 	}
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Status', 'Field' => 'status'), __('Status', true), array('compare' => $showCompareFields));
-	
+
 	if (isset($collectibleCore['Collectible']['exclusive']) && $collectibleCore['Collectible']['exclusive']) {
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields, 'postValue' => __(' - Exclusive', true)));
 	} else {
@@ -47,10 +47,10 @@ if (!isset($adminMode)) {
 	
 	
 	 <?php
-	
-	//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => '<a href="/manufactures/view/' . $collectibleCore['Manufacture']['id'] .'">'. $collectibleCore['Manufacture']['title'].'</a>'));
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields,'value' => '<a href="/manufacturer/' . $collectibleCore['Manufacture']['id'] .'/' . $collectibleCore['Manufacture']['slug'] . '">'. $collectibleCore['Manufacture']['title'].'</a>' ));
-	
+	if(!empty($collectibleCore['Collectible']['manufacture_id'])){
+		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields, 'value' => '<a href="/manufacturer/' . $collectibleCore['Manufacture']['id'] . '/' . $collectibleCore['Manufacture']['slug'] . '">' . $collectibleCore['Manufacture']['title'] . '</a>'));
+	}
+
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('Brand', true), array('compare' => $showCompareFields));
@@ -79,6 +79,9 @@ if (!isset($adminMode)) {
 	//} else {
 	//echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), __('Original Retail Price', true), array('compare' => $showCompareFields));
 	//}
+	if ($adminMode) {
+		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'official'), __('Signed', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
+	}
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'limited'), __('Limited Edition', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
@@ -91,7 +94,7 @@ if (!isset($adminMode)) {
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'edition_size'), __('Edition Size', true), array('compare' => $showCompareFields));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'numbered'), __('Numbered', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
-	
+
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'signed'), __('Signed', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'pieces'), __('Number of Pieces', true), array('compare' => $showCompareFields));

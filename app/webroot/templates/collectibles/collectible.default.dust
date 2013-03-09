@@ -10,7 +10,7 @@
 <form class="form-horizontal">
 	<fieldset>
 		<legend>
-			Manufacturer Details
+			Product Details
 		</legend>
 		<div class="control-group">
 			<label class="control-label" for="inputManufacturer">Manufacturer</label>
@@ -148,6 +148,14 @@
 		<legend>
 			Collectible Details
 		</legend>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#collectible.official}checked{/collectible.official} type="checkbox" value="true" name="official" id="inputOfficial">
+					Official</label>
+					<span class="help-inline"><strong>This indicates whether or not this collectible is officially licensed or a custom.</strong></span>
+			</div>
+		</div>
 		<div class="control-group">
 			<div class="controls">
 				<label class="checkbox">
