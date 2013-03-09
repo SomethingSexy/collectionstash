@@ -2417,10 +2417,10 @@ div.paging span a:hover {
 	margin-right: 30px;
 }
 
-#fileupload .fileupload-buttonbar div {
+.fileupload-buttonbar div {
 	margin-top: 10px;
 }
-#fileupload .url-upload input {
+.url-upload input {
 	margin-bottom: 0;
 }
 #attribute-upload-dialog,
