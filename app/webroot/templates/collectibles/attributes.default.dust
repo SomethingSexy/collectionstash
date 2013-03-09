@@ -1,6 +1,6 @@
 <div class="well attributes collectible" data-collectible-id="{collectibleId}">
 	<h3>Parts and Accessories</h3>
-	<div class="btn-group">
+	<div class="btn-group pull-right">
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 		<ul class="dropdown-menu">
 			<li>

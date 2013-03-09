@@ -123,6 +123,9 @@ class CollectiblesController extends AppController {
 		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
 		$this -> set(compact('manufactures'));
 
+		$artists = $this -> Collectible -> ArtistsCollectible -> Artist -> getArtistList();
+		$this -> set(compact('artists'));
+
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
 		$this -> set('adminMode', true);
