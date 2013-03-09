@@ -557,7 +557,7 @@ var AttributePhotoView = Backbone.View.extend({
 		});
 
 		$('.upload-url', self.el).on('click', function() {
-			var url = $.trim($('.url-upload-input').val());
+			var url = $.trim($('.url-upload-input', self.el).val());
 			if (url !== '') {
 				$.ajax({
 					dataType : 'json',
