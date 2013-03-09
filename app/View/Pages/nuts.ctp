@@ -22,23 +22,23 @@
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
 <h4>February</h4>
-<p>January's grand prize winner won a Collection Stash 'Top Nut' T-Shirt and a Mondo <a href="/collectibles/view/3398/mondo-nightmare-on-elm-street-a-nightmare-on-elm-street-print">A Nightmare On Elm Street print by Methane Studios</a></p>
+<p>February's grand prize winner won a Collection Stash 'Top Nut' T-Shirt and a Mondo <a href="/collectibles/view/3398/mondo-nightmare-on-elm-street-a-nightmare-on-elm-street-print">A Nightmare On Elm Street print by Methane Studios</a></p>
 <p>The runner ups all received Collection Stash 'Top Nut' stickers.</p>
-<ul>
+<ol>
 	<li>BuffyGirl with 29024 points</li>
 	<li>DarthSnoopy with 13149 points</li>
 	<li>EndoSickness with 6643 points</li>
 	<li>Spiderwebb13 with 4381 points</li>
 	<li>TheJosh with 3818 points</li>
-</ul>
+</ol>
 
 <h4>January</h4>
 <p>January's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
-<ul>
+<ol>
 	<li>DarthSnoopy with 20810 points</li>
 	<li>CollectionStash with 12250 points</li>
 	<li>Drakul with 8426 points</li>
 	<li>JosephCPR with 5400 points</li>
 	<li>TheJosh with 4456 points</li>
-</ul>
+</ol>
 
