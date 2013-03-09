@@ -1,6 +1,6 @@
 <div class="component" id="user-list-component">
 	<div class="inside">
-		<div class="component-title">
+		<div class="page-header">
 			<h2><?php echo __('Users'); ?></h2>
 		</div>
 		<div class="component-view">

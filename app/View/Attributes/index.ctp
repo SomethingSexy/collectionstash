@@ -10,18 +10,18 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 	Add filters to this page as well -->
 <div class="component" id="attribute-component">
 	<div class="inside">
-		<div class="component-title">
+		<div class="page-header">
 			<h2><?php echo __('Collectible Parts'); ?></h2>
-			<div class="btn-group">
-			    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-			    Action
-			    <span class="caret"></span>
-			    </a>
-			    <ul class="dropdown-menu">
-					<li><a id="add-new-item-link" class="link">Add New Item</a></li>
-			    </ul>
-		    </div>
 		</div>
+		<div class="btn-group pull-right">
+		    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		    Action
+		    <span class="caret"></span>
+		    </a>
+		    <ul class="dropdown-menu">
+				<li><a id="add-new-item-link" class="link">Add New Item</a></li>
+		    </ul>
+	    </div>
 		<div class="component-view">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
