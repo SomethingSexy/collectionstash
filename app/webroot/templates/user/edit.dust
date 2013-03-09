@@ -23,6 +23,9 @@
 	{/eq}		
 	{@eq key="{edit_type}" value="ArtistsCollectible"}
 		Collectible Artist
+	{/eq}	
+	{@eq key="{edit_type}" value="AttributesUpload"}
+		Part Photo
 	{/eq}		
 	
 {/Edits}</td>
