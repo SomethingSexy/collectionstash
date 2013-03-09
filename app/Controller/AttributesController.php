@@ -11,7 +11,7 @@ App::uses('Sanitize', 'Utility');
 class AttributesController extends AppController {
 
 	//'CollectibleDetail' should really be named Field Helper or something
-	public $helpers = array('Html', 'Js', 'Minify', 'Tree', 'CollectibleDetail');
+	public $helpers = array('Html', 'Js', 'Minify', 'Tree', 'CollectibleDetail', 'FileUpload.FileUpload');
 
 	// For attribute we might need some custom logic because it should return all underneath the selected category
 	public $filters = array('m' => array('model' => 'Attribute', 'id' => 'manufacture_id'), 'c' => array('model' => 'Attribute', 'id' => 'attribute_category_id'), 's' => array('model' => 'Attribute', 'id' => 'scale_id'));
@@ -81,7 +81,7 @@ class AttributesController extends AppController {
 		debug($tableFilters);
 
 		// TODO: Right now this is returning stuff that has not been approved yet...which is fine
-		$this -> paginate = array('conditions' => array($tableFilters, 'status_id' => 4), 'contain' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'order' => array('Attribute.attribute_category_id' => 'ASC'), 'limit' => 50);
+		$this -> paginate = array('conditions' => array($tableFilters, 'status_id' => 4), 'contain' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'order' => array('Attribute.attribute_category_id' => 'ASC'), 'limit' => 50);
 		$attributes = $this -> paginate('Attribute');
 		$this -> set(compact('attributes'));
 
@@ -94,6 +94,10 @@ class AttributesController extends AppController {
 
 		$manufactures = $this -> Attribute -> Manufacture -> getManufactureList();
 		$this -> set(compact('manufactures'));
+		
+		$artists = $this -> Attribute -> Artist -> getArtistList();
+		$this -> set(compact('artists'));
+		
 		$filters = $this -> _getFilters();
 		debug($attributes);
 		$this -> set(compact('filters'));

@@ -1,7 +1,7 @@
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <div id="latest-comments-component" class="component">
 	<div class="inside">
-		<div class="component-title">
+		<div class="page-header">
 			<h2><?php echo __('See what is being discussed...')
 			?></h2>
 		</div>

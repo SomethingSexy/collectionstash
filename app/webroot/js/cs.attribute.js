@@ -1226,6 +1226,7 @@ UpdateAttributes.prototype.open = function(attribute) {
 	$(':input[name="data[Attribute][name]"]', this.$dialog).val(attributeData.name);
 	$(':input[name="data[Attribute][description]"]', this.$dialog).val(attributeData.description);
 	$(':input[name="data[Attribute][manufacture_id]"]', this.$dialog).val(attributeData.manufacturerId);
+	$(':input[name="data[Attribute][artist_id]"]', this.$dialog).val(attributeData.artistId);
 	$(':input[name="data[Attribute][scale_id]"]', this.$dialog).val(attributeData.scaleId);
 	$('.change-attribute-category-link', this.$dialog).text(attributeData.categoryName);
 

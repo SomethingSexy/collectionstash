@@ -1,6 +1,6 @@
 <div id="gallery-component" class="component">
 	<div class="inside">
-		<div class="component-title">
+		<div class="page-header">
 			<h2><?php echo __('Gallery', true)?></h2>
 		</div>
 		<?php echo $this -> element('flash'); ?>

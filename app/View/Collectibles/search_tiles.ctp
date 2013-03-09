@@ -4,26 +4,25 @@ $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 ?>
 <div class="component" id="collectibles-list-component">
-<div class="inside" >
-<?php echo $this -> element('flash'); ?>
-<div class="component-view">
-<div class="title">
-<h3><?php echo __('Search Results'); ?></h3>
-<div class="btn-group views">
-<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
-<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
-</div>
-</div>
-
-<?php
-$url = '/collectibles/search/list';
-if ($viewType === 'tiles') {
-	$url = '/collectibles/searchTiles/';
-}
-echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
-?>
-<div data-toggle="modal-gallery" data-target="#modal-gallery">
-<?php
+	<div class="inside" >
+	<?php echo $this -> element('flash'); ?>
+	<div class="component-view">
+		<div class="page-header">
+			<h2><?php echo __('Search Results'); ?></h2>
+		</div>
+		<div class="btn-group pull-right">
+			<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
+			<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
+		</div>
+	<?php
+	$url = '/collectibles/search/list';
+	if ($viewType === 'tiles') {
+		$url = '/collectibles/searchTiles/';
+	}
+	echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
+	?>
+			<div data-toggle="modal-gallery" data-target="#modal-gallery">
+			<?php
 				echo '<div id="titles-nav" class="hidden">';
 				echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 				echo '</div>';

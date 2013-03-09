@@ -1,31 +1,42 @@
 <div id="admin-edit" class="two-column-page">
 	<div class="inside">
-		<?php echo $this -> element('admin_actions');?>
+		<?php echo $this -> element('admin_actions'); ?>
 		<div class="page collectibles-approval">
 			<div class="title">
-				<h2><?php echo __('Approval');?></h2>
+				<h2><?php echo __('Approval'); ?></h2>
 			</div>
-			<?php echo $this -> element('flash');?>
+			<?php echo $this -> element('flash'); ?>
 
 			<div class="collectible item">
 				<div class="collectible detail-wrapper">
 					<div class="collectible detail">
 						<div class="detail title">
-							<h3><?php echo __('Manufacture Details');?></h3>
+							<h3><?php echo __('Manufacture Details'); ?></h3>
 						</div>
 						<dl>
-							<dt>
-								<?php echo __('Manufacture');?>
-							</dt>
+			
 							<?php
-							if (isset($collectible['Collectible']['manufacture_id_changed']) && $collectible['Collectible']['manufacture_id_changed']) {
-								echo '<dd class="changed">';
-							} else {
-								echo '<dd>';
+							if (isset($collectible['Collectible']['manufacture_id']) && !empty($collectible['Collectible']['manufacture_id']) || isset($collectible['Collectible']['manufacture_id_changed']) && $collectible['Collectible']['manufacture_id_changed']) {
+								echo '<dt>';
+								echo __('Manufacture');
+								echo '</dt>';
+
+								//Check if it is changed first
+								if (isset($collectible['Collectible']['manufacture_id_changed']) && $collectible['Collectible']['manufacture_id_changed']) {
+									echo '<dd class="changed">';
+								} else {
+									echo '<dd>';
+								}
+
+								if (!empty($collectible['Collectible']['manufacture_id'])) {
+									echo $collectible['Manufacture']['title'];
+								} else {
+									echo __('Removed');
+								}
 							}
 							?>
-							 <?php echo $collectible['Manufacture']['title'];?>
-							</dd> <?php
+
+						   <?php
 
 							//If the value is set and not empty OR if something changed
 							if (isset($collectible['Collectible']['series_id']) && !empty($collectible['Collectible']['series_id']) || (isset($collectible['Collectible']['series_id_changed']) && $collectible['Collectible']['series_id_changed'])) {
@@ -269,27 +280,46 @@
 								}
 								echo '</dd>';
 							}
-                            
 
-                            if (isset($collectible['Collectible']['currency_id']) && !empty($collectible['Collectible']['currency_id']) || (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed'])) {
-                                echo '<dt>';
-                                echo __('Currency');
-                                echo '</dt>';
+							if (isset($collectible['Collectible']['currency_id']) && !empty($collectible['Collectible']['currency_id']) || (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed'])) {
+								echo '<dt>';
+								echo __('Currency');
+								echo '</dt>';
 
-                                //Check if it is changed first
-                                if (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed']) {
-                                    echo '<dd class="changed">';
-                                } else {
-                                    echo '<dd>';
-                                }
+								//Check if it is changed first
+								if (isset($collectible['Collectible']['currency_id_changed']) && $collectible['Collectible']['currency_id_changed']) {
+									echo '<dd class="changed">';
+								} else {
+									echo '<dd>';
+								}
 
-                                if (!empty($collectible['Collectible']['currency_id'])) {
-                                    echo $collectible['Currency']['iso_code'];
-                                } else {
-                                    echo __('Removed');
-                                }
-                                echo '</dd>';
-                            }                            
+								if (!empty($collectible['Collectible']['currency_id'])) {
+									echo $collectible['Currency']['iso_code'];
+								} else {
+									echo __('Removed');
+								}
+								echo '</dd>';
+							}
+
+							if (isset($collectible['Collectible']['official']) && !empty($collectible['Collectible']['official']) || (isset($collectible['Collectible']['official_changed']) && $collectible['Collectible']['official_changed'])) {
+								echo '<dt>';
+								echo __('Official');
+								echo '</dt>';
+
+								//Check if it is changed first
+								if (isset($collectible['Collectible']['official_changed']) && $collectible['Collectible']['official_changed']) {
+									echo '<dd class="changed">';
+								} else {
+									echo '<dd>';
+								}
+
+								if ($collectible['Collectible']['official']) {
+									echo __('Yes');
+								} else {
+									echo __('No');
+								}
+								echo '</dd>';
+							}
 
 							if (isset($collectible['Collectible']['limited']) && !empty($collectible['Collectible']['limited']) || (isset($collectible['Collectible']['limited_changed']) && $collectible['Collectible']['limited_changed'])) {
 								echo '<dt>';
@@ -350,7 +380,7 @@
 								}
 								echo '</dd>';
 							}
-							
+
 							if (isset($collectible['Collectible']['signed']) && !empty($collectible['Collectible']['signed']) || (isset($collectible['Collectible']['signed_changed']) && $collectible['Collectible']['signed_changed'])) {
 								echo '<dt>';
 								echo __('Signed');
@@ -369,8 +399,8 @@
 									echo __('No');
 								}
 								echo '</dd>';
-							}							
-							
+							}
+
 							if (isset($collectible['Collectible']['exclusive']) && !empty($collectible['Collectible']['exclusive']) || (isset($collectible['Collectible']['exclusive_changed']) && $collectible['Collectible']['exclusive_changed'])) {
 								echo '<dt>';
 								echo __('Exclusive');
@@ -410,7 +440,7 @@
 								}
 								echo '</dd>';
 							}
-							
+
 							if (isset($collectible['Collectible']['pieces']) && !empty($collectible['Collectible']['pieces']) || (isset($collectible['Collectible']['pieces_changed']) && $collectible['Collectible']['pieces_changed'])) {
 								echo '<dt>';
 								echo __('Pieces');
@@ -429,8 +459,8 @@
 									echo __('Removed');
 								}
 								echo '</dd>';
-							}							
-							
+							}
+
 							if (isset($collectible['Collectible']['product_weight']) && !empty($collectible['Collectible']['product_weight']) || (isset($collectible['Collectible']['product_weight_changed']) && $collectible['Collectible']['product_weight_changed'])) {
 								echo '<dt>';
 								echo __('Weight');
@@ -469,8 +499,8 @@
 									echo __('Removed');
 								}
 								echo '</dd>';
-							}						
-						
+							}
+
 							if (isset($collectible['Collectible']['product_width']) && !empty($collectible['Collectible']['product_width']) || (isset($collectible['Collectible']['product_width_changed']) && $collectible['Collectible']['product_width_changed'])) {
 								echo '<dt>';
 								echo __('Width');
@@ -489,7 +519,7 @@
 									echo __('Removed');
 								}
 								echo '</dd>';
-							}							
+							}
 
 							if (isset($collectible['Collectible']['product_depth']) && !empty($collectible['Collectible']['product_depth']) || (isset($collectible['Collectible']['product_depth_changed']) && $collectible['Collectible']['product_depth_changed'])) {
 								echo '<dt>';
@@ -509,14 +539,13 @@
 									echo __('Removed');
 								}
 								echo '</dd>';
-							}							
-						
+							}
 							?>
 						</dl>
 					</div>
 				</div>
 			</div>
-			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/edits/approval_2/' . $editId, 'id' => 'approval-form'));?>
+			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/edits/approval_2/' . $editId, 'id' => 'approval-form')); ?>
 			<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
 			<fieldset>
 				<ul class="form-fields unstyled">
@@ -531,8 +560,8 @@
 			</fieldset>
 			</form>
 			<div class="links">
-				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve');?></button>
-				<button id="deny-button" class="btn"><?php echo __('Deny');?></button>
+				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
+				<button id="deny-button" class="btn"><?php echo __('Deny'); ?></button>
 			</div>
 			<script>
 				//Eh move this out of here

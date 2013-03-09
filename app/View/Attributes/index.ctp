@@ -25,16 +25,16 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 		<div class="component-view">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
-			<table class="table table-striped">
+			<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
 				<?php
 				echo '<thead><tr>';
 				echo '<th> </td>';
+				echo '<td>Photo</td>';
 				echo '<th class="category">' . $this -> Paginator -> sort('attribute_category_id', 'Category') . '</th>';
 				echo '<th class="name">' . $this -> Paginator -> sort('name', 'Name') . '</th>';
 				echo '<th class="description">' . __('Description') . '</th>';
 				echo '<th class="manufacturer">' . $this -> Paginator -> sort('manufacture_id', 'Manufacturer') . '</th>';
 				echo '<th class="scale">' . $this -> Paginator -> sort('scale_id', 'Scale') . '</th>';
-				echo '<th class="created">' . $this -> Paginator -> sort('created', 'Created') . '</th>';
 				echo '<th class="actions"> </th>';
 				echo '</tr></thead><tbody>';
 				foreach ($attributes as $attribute) {
@@ -49,7 +49,19 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					} else {
 						$attributeJSON .= '"null" ,';
 					}
-					$attributeJSON .= '"manufacturerId" : "' . $attribute['Attribute']['manufacture_id'] . '",';
+					$attributeJSON .= '"manufacturerId" : ';
+					if (isset($attribute['Attribute']['manufacture_id']) && !is_null($attribute['Attribute']['manufacture_id'])) {
+						$attributeJSON .= '"' . $attribute['Attribute']['manufacture_id'] . '",';
+					} else {
+						$attributeJSON .= '"null" ,';
+					}
+					$attributeJSON .= '"artistId" : ';
+					if (isset($attribute['Attribute']['artist_id']) && !is_null($attribute['Attribute']['artist_id'])) {
+						$attributeJSON .= '"' . $attribute['Attribute']['artist_id'] . '",';
+					} else {
+						$attributeJSON .= '"null" ,';
+					}
+
 					$attributeJSON .= '"id" : "' . $attribute['Attribute']['id'] . '"';
 					$attributeJSON .= '}';
 
@@ -79,6 +91,21 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 
 					echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
 					echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
+					echo '<td><ul class="thumbnails"><li class="span1">';
+
+					if (!empty($attribute['AttributesUpload'])) {
+						foreach ($attribute['AttributesUpload'] as $key => $upload) {
+							if ($upload['primary']) {
+								echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
+								break;
+							}
+						}
+					} else {
+						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+					}
+
+					echo '</li></ul></td>';
+
 					echo '<td data-id="' . $attribute['AttributeCategory']['id'] . '" class="category">';
 					echo $attribute['AttributeCategory']['path_name'];
 					echo '</td>';
@@ -98,9 +125,6 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					echo '</td>';
 					echo '<td data-id="' . $attribute['Scale']['id'] . '"  class="scale">';
 					echo $attribute['Scale']['scale'];
-					echo '</td>';
-					echo '<td class="created">';
-					echo $attribute['Attribute']['created'];
 					echo '</td>';
 					echo '<td class="actions">';
 

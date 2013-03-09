@@ -78,7 +78,8 @@ class UserPointFact extends AppModel {
 	 */
 	public function getMonthlyLeaders($month, $year) {
 		$retVal = array();
-		$retVal = $this -> find('all', array('limit' => 5, 'order' => array('UserPointFact.points' => 'desc'), 'conditions' => array('UserPointFact.month' => $month, 'UserPointFact.year' => $year)));
+		// Here we are handling making sure that the admin account is not including in this list anymore...need a better long term solution
+		$retVal = $this -> find('all', array('limit' => 5, 'order' => array('UserPointFact.points' => 'desc'), 'conditions' => array('UserPointFact.month' => $month, 'UserPointFact.year' => $year, 'NOT' => array('UserPointFact.user_id' => array('1')))));
 
 		return $retVal;
 	}
@@ -88,7 +89,7 @@ class UserPointFact extends AppModel {
 	 */
 	public function getLeadersByYear($year) {
 		// TODO get to work
-		$retVal = $this -> find('all', array('contain'=> false, 'group' => 'UserPointFact.user_id', 'conditions' => array('UserPointFact.year' => '2012')));
+		$retVal = $this -> find('all', array('contain' => false, 'group' => 'UserPointFact.user_id', 'conditions' => array('UserPointFact.year' => '2012')));
 
 		return $retVal;
 	}

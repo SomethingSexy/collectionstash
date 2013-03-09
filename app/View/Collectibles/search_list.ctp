@@ -7,13 +7,13 @@ unset($urlparams['url']);
 	<div class="inside" >
 		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
-			<div class="title">
-				<h3><?php echo __('Search Results'); ?></h3>
-			    <div class="btn-group views">
-			    	<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
-			    	<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
-			    </div>
+			<div class="page-header">
+				<h2><?php echo __('Search Results'); ?></h2>
 			</div>
+			<div class="btn-group pull-right">
+		    	<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
+		    	<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
+		    </div>
 			<?php
 			$url = '/collectibles/search/list';
 			if ($viewType === 'tiles') {

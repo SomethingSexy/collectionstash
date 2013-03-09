@@ -84,6 +84,12 @@ class EditActivity extends BaseActivity {
 
 				$targetJSON = $this -> buildEditCollectiblesUploadTarget($this -> edit);
 				$retVal = array_merge($retVal, $targetJSON);
+			} else if ($this -> editType === 'AttributesUpload') {
+				$objectJSON = $this -> buildEditAttributesUploadObject($this -> edit);
+				$retVal = array_merge($retVal, $objectJSON);
+
+				$targetJSON = $this -> buildEditAttributesUploadTarget($this -> edit);
+				$retVal = array_merge($retVal, $targetJSON);
 			}
 
 		} else if ($this -> action === 'approve') {
@@ -155,6 +161,25 @@ class EditActivity extends BaseActivity {
 	private function buildEditCollectiblesUploadTarget($edit) {
 		// not sure I will be able to get the collectible name here yet
 		$targetJSON = $this -> buildTarget($edit['CollectiblesUpload']['collectible_id'], 'collectibles/view/' . $edit['CollectiblesUpload']['collectible_id'], 'collectible', null);
+
+		return $targetJSON;
+	}
+
+	private function buildEditAttributesUploadObject($edit) {
+		$data = array();
+		$data['edit_id'] = $edit['AttributesUpload']['edit_id'];
+		$data['action_id'] = $edit['Action']['id'];
+		$data['action_type_id'] = $edit['Action']['action_type_id'];
+		$data['type'] = $this -> editType;
+		// Set the id of the edit
+		$objectJSON = $this -> buildObject($edit['AttributesUpload']['edit_id'], null, 'edit', $data);
+
+		return $objectJSON;
+	}
+
+	private function buildEditAttributesUploadTarget($edit) {
+		// not sure I will be able to get the collectible name here yet
+		$targetJSON = $this -> buildTarget($edit['AttributesUpload']['attribute_id'], 'attributes/view/' . $edit['AttributesUpload']['attribute_id'], 'attribute', null);
 
 		return $targetJSON;
 	}

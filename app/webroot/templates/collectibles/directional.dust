@@ -1,0 +1,10 @@
+<div class="span12">
+	<div class="alert alert-info">
+		<button class="close" data-dismiss="alert" type="button">×</button>
+		<h4>Things to keep in mind</h4>
+		<p>Collection Stash is built to support all sorts of manufactured and produced collectibles, in both an official and unofficial capacity, including customs!</p>
+		<p>Not every collectible is made alike.  Some have manufacturers, some have artists and some have both!  Use your best judgment when adding this collectible.  If the collectible manufacturer does not exist you are able to add one.  Please make sure however that this manufacturer does not already existing.  Caution though! Even if it is not in the list below the manufacturer might exist.  If the manufacturer does exist but is not linked to this collectible type, just contact us and we will help you out!</p>
+		<p>Some collectibles might not have a manufacturer or producer but are made and sold by the artist themselves.  In these cases, you can add just an artist to indicate that.</p>
+		<p>Collection Stash also supports unofficial custom collectibles!  Currently, this includes customs that are made by artists or groups, sold and produced in quantities.  This does <strong>not</strong> include 1 of 1 items or personal customs or bashes.</p>
+	</div>
+</div>

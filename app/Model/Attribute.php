@@ -16,9 +16,9 @@ App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class Attribute extends AppModel {
 	public $name = 'Attribute';
-	public $hasMany = array('AttributesCollectible' => array('dependent' => true));
-	public $belongsTo = array('Status', 'Manufacture', 'Scale', 'AttributeCategory', 'Revision' => array('dependent' => true), 'User', 'EntityType' => array('dependent' => true));
-	public $actsAs = array('Revision' => array('model' => 'AttributeRev'), 'Containable', 'Editable' => array('type' => 'attribute', 'model' => 'AttributeEdit', 'modelAssociations' => array('belongsTo' => array('Scale', 'Manufacture', 'AttributeCategory')), 'compare' => array('name', 'description', 'scale_id', 'manufacture_id', 'attribute_category_id')));
+	public $hasMany = array('AttributesCollectible' => array('dependent' => true), 'AttributesUpload' => array('dependent' => true));
+	public $belongsTo = array('Status', 'Artist', 'Manufacture', 'Scale', 'AttributeCategory', 'Revision' => array('dependent' => true), 'User', 'EntityType' => array('dependent' => true));
+	public $actsAs = array('Revision' => array('model' => 'AttributeRev'), 'Containable', 'Editable' => array('type' => 'attribute', 'model' => 'AttributeEdit', 'modelAssociations' => array('belongsTo' => array('Scale', 'Manufacture', 'AttributeCategory', 'Artist')), 'compare' => array('name', 'description', 'scale_id', 'manufacture_id', 'attribute_category_id', 'artist_id')));
 	public $findMethods = array('standalone' => true, 'collectible' => true);
 
 	public $validate = array(
@@ -28,7 +28,9 @@ class Attribute extends AppModel {
 	//Opening this up because I don't see it being a big deal.
 	'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')),
 	//manufacture field
-	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => true, 'message' => 'Must be a valid manufacture.'),
+	'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Must be a valid manufacture.'),
+	//artist
+	'artist_id' => array('rule' => array('validateArtistId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Must be a valid artist.'),
 	//series field
 	'attribute_category_id' => array('rule' => array('validateCategoryId'), 'required' => true, 'message' => 'Please select a valid category.'),
 	//description field
@@ -42,6 +44,14 @@ class Attribute extends AppModel {
 	function validateManufactureId($check) {
 		if (isset($check['manufacture_id']) && !empty($check['manufacture_id']) && is_numeric($check['manufacture_id'])) {
 			$result = $this -> Manufacture -> find('count', array('id' => $check['manufacture_id']));
+			return $result > 0;
+		}
+		return false;
+	}
+
+	function validateArtistId($check) {
+		if (isset($check['artist_id']) && !empty($check['artist_id']) && is_numeric($check['artist_id'])) {
+			$result = $this -> Artist -> find('count', array('id' => $check['artist_id']));
 			return $result > 0;
 		}
 		return false;
@@ -393,6 +403,7 @@ class Attribute extends AppModel {
 			$attributeFields['Attribute']['name'] = $attributeEditVersion['AttributeEdit']['name'];
 			$attributeFields['Attribute']['description'] = $attributeEditVersion['AttributeEdit']['description'];
 			$attributeFields['Attribute']['manufacture_id'] = $attributeEditVersion['AttributeEdit']['manufacture_id'];
+			$attributeFields['Attribute']['artist_id'] = $attributeEditVersion['AttributeEdit']['artist_id'];
 			$attributeFields['Attribute']['scale_id'] = $attributeEditVersion['AttributeEdit']['scale_id'];
 			$attributeFields['Attribute']['id'] = $attributeEditVersion['AttributeEdit']['base_id'];
 			$attributeFields['Revision']['action'] = 'E';

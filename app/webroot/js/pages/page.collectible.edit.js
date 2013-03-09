@@ -106,7 +106,21 @@ var CollectibleUploads = Backbone.Collection.extend({
 		});
 		return retVal;
 	}
-})
+});
+// These two are used for the popup to add photos to an attribute
+var AttributeUploadModel = Backbone.Model.extend({});
+var AttributeUploads = Backbone.Collection.extend({
+	model : AttributeUploadModel,
+	initialize : function(models, options) {
+		this.id = options.id;
+	},
+	url : function() {
+		return '/attributes_uploads/view/' + this.id;
+	},
+	parse : function(resp, xhr) {
+		return resp.response.data;
+	}
+});
 var ManufacturerModel = Backbone.Model.extend({
 	urlRoot : '/manufactures/manufacturer',
 	validation : {
@@ -143,10 +157,23 @@ var SeriesModel = Backbone.Model.extend({
 	}
 });
 var ManufacturerList = Backbone.Collection.extend({
-	model : ManufacturerModel
+	model : ManufacturerModel,
+	comparator : function(man) {
+		return man.get("title").toLowerCase();
+	}
 });
 
-var AttributeModel = Backbone.Model.extend({});
+var AttributeModel = Backbone.Model.extend({
+	urlRoot : '/attributes_collectibles/attribute',
+	parse : function(resp, xhr) {
+		var retVal = {};
+		retVal = resp.AttributesCollectible;
+		retVal.Attribute = resp.Attribute;
+		retVal.Revision = resp.Revision;
+
+		return retVal;
+	}
+});
 
 var Attributes = Backbone.Collection.extend({
 	model : AttributeModel
@@ -345,6 +372,9 @@ var AttributesView = Backbone.View.extend({
 var AttributeView = Backbone.View.extend({
 	template : 'attribute.default.edit',
 	tagName : "tr",
+	events : {
+		'click .edit-attribute-photo-link' : 'addPhoto'
+	},
 	initialize : function(options) {
 		this.status = options.status;
 		this.model.on('change', this.render, this);
@@ -377,7 +407,18 @@ var AttributeView = Backbone.View.extend({
 		} else {
 			attribute.scaleId = null;
 		}
-		attribute.manufacturerId = attributeModel.Attribute['manufacture_id'];
+		if (attributeModel.Attribute['manufacture_id']) {
+			attribute.manufacturerId = attributeModel.Attribute['manufacture_id'];
+		} else {
+			attribute.manufacturerId = null;
+		}
+
+		if (attributeModel.Attribute['artist_id']) {
+			attribute.artistId = attributeModel.Attribute['artist_id'];
+		} else {
+			attribute.artistId = null;
+		}
+
 		attribute.id = attributeModel.Attribute.id;
 
 		var attributeCollectible = {};
@@ -386,6 +427,7 @@ var AttributeView = Backbone.View.extend({
 		attributeCollectible.categoryName = attributeModel.Attribute.AttributeCategory['path_name'];
 		attributeCollectible.count = attributeModel.count;
 
+		attributeModel.uploadDirectory = uploadDirectory;
 		dust.render(this.template, attributeModel, function(error, output) {
 			$(self.el).html(output);
 		});
@@ -397,10 +439,164 @@ var AttributeView = Backbone.View.extend({
 		});
 		$(self.el).attr('data-attribute', JSON.stringify(attribute));
 		$(self.el).attr('data-attribute-collectible', JSON.stringify(attributeCollectible));
+
+		return this;
+	},
+	addPhoto : function() {
+		var self = this;
+		var attribute = self.model.toJSON();
+		// Hmmm, well, it might make sense at some point
+		// to merge the upload stuff, directly into the attribute
+		// model data but the plugin requires it's data in a special
+		//format, so for now we are going to fetch each time we
+		// need it, oh well.
+
+		$.blockUI({
+			message : 'Loading...',
+			css : {
+				border : 'none',
+				padding : '15px',
+				backgroundColor : ' #F1F1F1',
+				'-webkit-border-radius' : '10px',
+				'-moz-border-radius' : '10px',
+				color : '#222',
+				background : 'none repeat scroll 0 0 #F1F1F',
+				'border-radius' : '5px 5px 5px 5px',
+				'box-shadow' : '0 0 10px rgba(0, 0, 0, 0.5)'
+			}
+		});
+
+		var uploads = new AttributeUploads([], {
+			'id' : attribute.Attribute.id
+		});
+
+		uploads.fetch({
+			success : function() {
+
+				if (self.photoEditView) {
+					self.photoEditView.remove();
+				}
+				self.photoEditView = new AttributePhotoView({
+					collection : uploads,
+					model : self.model
+				});
+
+				$.unblockUI();
+				$('body').append(self.photoEditView.render().el);
+				$('#attribute-upload-dialog', 'body').modal({
+					backdrop : 'static'
+				});
+
+				$('#attribute-upload-dialog', 'body').on('hidden', function() {
+					self.photoEditView.remove();
+					self.model.fetch();
+				});
+			}
+		});
+	}
+});
+var AttributePhotoView = Backbone.View.extend({
+	template : 'attribute.photo.edit',
+	className : "span4",
+	events : {
+
+	},
+	initialize : function(options) {
+		this.eventManager = options.eventManager;
+		// this.collection.on('reset', function() {
+		// var self = this;
+		// var data = {
+		// uploads : this.collection.toJSON(),
+		// uploadDirectory : uploadDirectory
+		// };
+		// dust.render(this.template, data, function(error, output) {
+		// $(self.el).html(output);
+		// });
+		// }, this);
+	},
+	render : function() {
+		var self = this;
+		var data = {
+			uploadDirectory : uploadDirectory,
+			attribute : this.model.toJSON()
+		};
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		$('.fileupload', self.el).fileupload({
+			//dropZone : $('#dropzone')
+		});
+		$('.fileupload', self.el).fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
+
+		$('.fileupload', self.el).fileupload('option', {
+			url : '/attributes_uploads/upload',
+			maxFileSize : 2097152,
+			acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
+			process : [{
+				action : 'load',
+				fileTypes : /^image\/(gif|jpeg|png)$/,
+				maxFileSize : 2097152 // 2MB
+			}, {
+				action : 'resize',
+				maxWidth : 1440,
+				maxHeight : 900
+			}, {
+				action : 'save'
+			}]
+		});
+
+		$('.fileupload', self.el).bind('fileuploaddestroy', function(e, data) {
+			var filename = data.url.substring(data.url.indexOf("=") + 1);
+			console.log(data);
+		});
+
+		$('.fileupload', self.el).on('hidden', function() {
+			$('#fileupload table tbody tr.template-download').remove();
+			pageEvents.trigger('upload:close');
+		});
+
+		$('.upload-url', self.el).on('click', function() {
+			var url = $.trim($('.url-upload-input').val());
+			if (url !== '') {
+				$.ajax({
+					dataType : 'json',
+					type : 'post',
+					data : $('.fileupload', self.el).serialize(),
+					url : '/attributes_uploads/upload/',
+					beforeSend : function(formData, jqForm, options) {
+						$('.fileupload-progress', self.el).removeClass('fade').addClass('active');
+						$('.fileupload-progress .progress .bar', self.el).css('width', '100%');
+					},
+					success : function(data, textStatus, jqXHR) {
+						if (data && data.length) {
+							var that = $('.fileupload', self.el);
+							that.fileupload('option', 'done').call(that, null, {
+								result : data
+							});
+						} else if (data.response && !data.response.isSuccess) {
+							// most like an error
+							$('span', '.component-message.error').text(data.response.errors[0].message);
+
+						}
+					},
+					complete : function() {
+						$('.fileupload-progress', self.el).removeClass('active').addClass('fade');
+						$('.fileupload-progress .progress .bar', self.el).css('width', '0%');
+					}
+				});
+			}
+
+		});
+
+		var that = $('.fileupload', self.el);
+		that.fileupload('option', 'done').call(that, null, {
+			result : self.collection.toJSON()
+		});
+
 		return this;
 	}
 });
-
 var PhotoView = Backbone.View.extend({
 	template : 'photo.default.edit',
 	className : "span4",
@@ -1795,7 +1991,7 @@ $(function() {
 		}
 	});
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust'), $.get('/templates/collectibles/manufacturer.add.dust'), $.get('/templates/collectibles/manufacturer.edit.dust'), $.get('/templates/collectibles/modal.dust'), $.get('/templates/collectibles/manufacturer.series.add.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate) {
+	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust'), $.get('/templates/collectibles/manufacturer.add.dust'), $.get('/templates/collectibles/manufacturer.edit.dust'), $.get('/templates/collectibles/modal.dust'), $.get('/templates/collectibles/manufacturer.series.add.dust'), $.get('/templates/collectibles/attribute.upload.dust'), $.get('/templates/collectibles/directional.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -1813,6 +2009,8 @@ $(function() {
 		dust.loadSource(dust.compile(manufacturerEditTemplate[0], 'manufacturer.edit'));
 		dust.loadSource(dust.compile(modalTemplate[0], 'modal'));
 		dust.loadSource(dust.compile(manufacturerSeriesAddTemplate[0], 'manufacturer.series.add'));
+		dust.loadSource(dust.compile(attributeUploadTemplate[0], 'attribute.photo.edit'));
+		dust.loadSource(dust.compile(directionalTemplate[0], 'directional.page'));
 
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,
@@ -1922,19 +2120,11 @@ $(function() {
 					eventManager : pageEvents
 				}).render().el);
 
-				if (collectibleTypeModel.toJSON().id === printId) {
-					$('#collectible-container').append(new ArtistsView({
-						collection : artists,
-						collectibleType : collectibleTypeModel
-					}).render().el);
-					$('#collectible-container').append(collectibleView.render().el);
-				} else {
-					$('#collectible-container').append(collectibleView.render().el);
-					$('#collectible-container').append(new ArtistsView({
-						collection : artists,
-						collectibleType : collectibleTypeModel
-					}).render().el);
-				}
+				$('#collectible-container').append(new ArtistsView({
+					collection : artists,
+					collectibleType : collectibleTypeModel
+				}).render().el);
+				$('#collectible-container').append(collectibleView.render().el);
 
 				$('#attributes-container').append(new AttributesView({
 					collection : attributes,
@@ -1968,6 +2158,10 @@ $(function() {
 
 				collectibleModel.on('destroy', function() {
 					window.location.href = '/users/home';
+				});
+				// view is overkill here
+				dust.render('directional.page', {}, function(error, output) {
+					$('#directional-text-container').html(output);
 				});
 
 			}

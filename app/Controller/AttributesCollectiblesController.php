@@ -24,6 +24,26 @@ App::uses('Sanitize', 'Utility');
 class AttributesCollectiblesController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify', 'Tree', 'CollectibleDetail');
 
+	function attribute($id) {
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			return;
+		}
+
+		if ($this -> request -> isPost()) {// create
+			$this -> response -> statusCode(401);
+			return;
+		} else if ($this -> request -> isPut()) {//update
+			$this -> response -> statusCode(401);
+			return;
+		} else {
+			//assume GET?
+			// not bothering with the response stuff here for just a get
+			$response = $this -> AttributesCollectible -> get($id);
+			$this -> set('returnData', $response);
+		}
+	}
+
 	/**
 	 * This method will return the history for a given attributes collectible
 	 */

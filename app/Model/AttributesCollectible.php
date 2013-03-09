@@ -30,6 +30,19 @@ class AttributesCollectible extends AppModel {
 		return true;
 	}
 
+	public function get($id) {
+		$retVal = array();
+		$retVal = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesUpload' => array('Upload')))));
+
+		// so let's do this manually and try that out
+		$retVal['Attribute']['AttributesCollectible'] = array();
+		if (!empty($retVal['AttributesCollectible']) && !empty($retVal['AttributesCollectible']['attribute_id'])) {
+			$existingAttributeCollectibles = $this -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $retVal['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
+			$retVal['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
+		}
+		return $retVal;
+	}
+
 	public function update($attributesCollectible, $userId, $autoUpdate = false) {
 		$retVal = array();
 		$retVal['response'] = array();

@@ -1,4 +1,4 @@
-<div id="upload-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="attribute-upload-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 			×
@@ -26,7 +26,7 @@
 		</div>
 		<!-- The file upload form used as target for the file upload widget -->
 		<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
-			<input id="upload-collectible-id" type="hidden" name="<?php echo $uploadName; ?>" value="<?php echo $uploadId; ?>" />
+			<input id="upload-collectible-id" type="hidden" name="<?php echo $uploadName; ?>" value="" />
 			<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 			<div class="row fileupload-buttonbar">
 				<div class="span7">
@@ -74,3 +74,4 @@
 		</button>
 	</div>
 </div>
+

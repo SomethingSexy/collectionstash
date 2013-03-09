@@ -37,6 +37,9 @@
 								<?php echo $this -> Form -> input('manufacture_id', array('empty' => true, 'label' => __('Manufacturer'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
 							</li>
 							<li>
+								<?php echo $this -> Form -> input('artist_id', array('empty' => true, 'label' => __('Artist'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
+							</li>
+							<li>
 								<?php echo $this -> Form -> input('scale_id', array('empty' => true, 'label' => __('Scale'), 'before' => '<div class="label-wrapper">', 'between' => '</div>')); ?>
 							</li>
 						</ul>
