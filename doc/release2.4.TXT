@@ -1,0 +1,42 @@
+We want to support:
+
+user customs - customs from user created parts
+
+bashes - custom from other parts
+
+original pieces
+
+
+All three of these share the same attribute of being an original 1/1 piece.
+
+
+Original piece would get added to an artist as a 1/1...do we need a special field for that?
+Have a way to indicate that when adding...force it to be 1/1...ask the user if they want it added
+to their stash right away...otherwise we need a claiming proces later?
+
+If they don't own it maybe it goes through the approval process?
+
+If someone goes throught the standard way to add a collectible and they set it to 1/1 warn them or give them an error message
+
+Work flow changes:
+- Submit New Collectible
+  -> Add Collectible
+    -> Original or Mass Produced
+       - Do we need a new page for this? Or do we have help text or tooltips that indicate how to add an original ?
+       - Do originals go through the approval process? If an original is being added, should I ask them if it is theirs? If so, it is automatically
+         added and does not need to go through the approval process? 
+  -> Add Custom
+    -> Bash or scratch
+       - These are automatically added to the user's stash, can only be updated and edited by them at anytime
+       - These do not go through the approval process.
+
+
+
+Customs
+  - Each custom will be added as a new collectible, this is so we can use everything but if it is a custom it can only be edited by the user who added it
+    and it can only be added to that person's stash.  That user should automatically be added as the artist as well.    
+  - new table customs?
+    - id, bash_collectible_id, custom_status_id 
+  - collectible table updates
+    - custom_id (this would be added to the collectible because each collectible would only have one custom row if it is a custom) 
+    - custom (boolean) - added just for ease of use I think
