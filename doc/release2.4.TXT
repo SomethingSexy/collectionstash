@@ -29,6 +29,8 @@ Work flow changes:
     -> Bash or scratch
        - These are automatically added to the user's stash, can only be updated and edited by them at anytime
        - These do not go through the approval process.
+    -> receipe
+        - FUTURE USE
 
 
 
@@ -39,6 +41,18 @@ Customs
     - id, bash_collectible_id, custom_status_id 
     - Custom Status - Draft / WIP / Complete
     - Create a custom to use as a receipe? Wouldn't be a legit custom but something you could put together for recommendations? 
+      - 
   - collectible table updates
     - custom_id (this would be added to the collectible because each collectible would only have one custom row if it is a custom) 
     - custom (boolean) - added just for ease of use I think
+  - Hide fields:
+    - product code
+    - product UPC
+    - all collectible details section
+    - URL should not be required
+  - rename fields
+    - release year = year made 
+    - price = cost    
+  - permissions
+    - user creating the custom is the only person who can update it...besides admin - changes go live
+    - what about parts? If the user added a new part and it is attached directly to the collectible, maybe they are the only ones with permission to update it, besides amdin? should be live
