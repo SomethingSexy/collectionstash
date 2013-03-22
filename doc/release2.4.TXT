@@ -37,6 +37,8 @@ Customs
     and it can only be added to that person's stash.  That user should automatically be added as the artist as well.    
   - new table customs?
     - id, bash_collectible_id, custom_status_id 
+    - Custom Status - Draft / WIP / Complete
+    - Create a custom to use as a receipe? Wouldn't be a legit custom but something you could put together for recommendations? 
   - collectible table updates
     - custom_id (this would be added to the collectible because each collectible would only have one custom row if it is a custom) 
     - custom (boolean) - added just for ease of use I think
