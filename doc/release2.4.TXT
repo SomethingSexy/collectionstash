@@ -56,3 +56,18 @@ Customs
   - permissions
     - user creating the custom is the only person who can update it...besides admin - changes go live
     - what about parts? If the user added a new part and it is attached directly to the collectible, maybe they are the only ones with permission to update it, besides amdin? should be live
+    
+    
+All the places you can add a collectible from
+  - collectibles/view
+      - permission check
+  - collectibles/catalog
+      - this won't have customs to start
+  - collectibles/searchTiles
+      - this won't have customs to start
+  - artists/index
+      - permission check
+  - manufacturers/index
+     - this won't have customs
+  
+  
