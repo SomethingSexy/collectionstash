@@ -56,7 +56,9 @@ Customs
   - permissions
     - user creating the custom is the only person who can update it...besides admin - changes go live
     - what about parts? If the user added a new part and it is attached directly to the collectible, maybe they are the only ones with permission to update it, besides amdin? should be live
-    
+  - Remove Add button from customs - DONE
+  - If it is a custom, put the name of the creator in the top bar, replacing artist - DONE 
+  - When adding Part...if unknown don't add manufacturer or artist if they are not know...default these to "Unknown" if that is the case
     
 All the places you can add a collectible from
   - collectibles/view
