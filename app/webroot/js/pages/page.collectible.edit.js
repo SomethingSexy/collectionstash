@@ -135,7 +135,7 @@ var ManufacturerModel = Backbone.Model.extend({
 			msg : 'Must be a valid url.'
 		}, {
 			required : false
-		}],
+		}]
 	}
 });
 var CurrencyModel = Backbone.Model.extend({});

@@ -3,7 +3,7 @@ var StatusView = Backbone.View.extend({
 	className : "span12",
 	events : {
 		'click .submit' : 'changeStatus',
-		'click .delete' : 'remove',
+		'click .delete' : 'remove'
 	},
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
