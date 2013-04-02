@@ -940,7 +940,7 @@ dust.nodes = {
         list = [];
 
     for (var i=0,len=keys.length; i<len; i++) {
-      if (Array.isArray(keys[i]))
+      if (dust.isArray(keys[i]))
         list.push(dust.compileNode(context, keys[i]));
       else
         list.push("\"" + keys[i] + "\"");
