@@ -2014,9 +2014,10 @@ $(function() {
 
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,
-			dataType : "json",
+			dataType : "text",
 			cache : false,
 			success : function(data, textStatus, jqXHR) {
+				data = JSON.parse(data);
 				$.unblockUI();
 
 				// Setup the current model
