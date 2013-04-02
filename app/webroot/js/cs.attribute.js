@@ -329,7 +329,7 @@ AddAttributes.prototype.init = function() {
 		width : 'auto',
 		modal : true,
 		autoOpen : false,
-		resizable : false,
+		resizable : false
 	});
 
 	$('#add-new-item-link').on('click', function() {
