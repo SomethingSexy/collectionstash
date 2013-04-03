@@ -8,6 +8,6 @@ if (isset($_SERVER['HTTP_ACCEPT']) && (strpos($_SERVER['HTTP_ACCEPT'], 'applicat
 	header('Content-type: text/plain; charset=UTF-8');
 }
 header("X-JSON: " . urlencode($content_for_layout));
-$this -> response -> type('json');
+//$this -> response -> type('json');
 echo $content_for_layout;
 ?>
