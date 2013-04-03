@@ -57,6 +57,7 @@ class UserUploadsController extends AppController {
 		if (Configure::read('Settings.User.uploads.allowed')) {
 			$uploads = $this -> UserUpload -> find('all', array('conditions' => array('UserUpload.user_id' => $this -> getUserId())));
 			$returnData = array();
+			$returnData['files'] = array();
 			foreach ($uploads as $key => $value) {
 				$resizedImg = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
 				$img = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
@@ -70,7 +71,7 @@ class UserUploadsController extends AppController {
 				$uploadResponse['edit_url'] = '/user_uploads/upload/' . $value['UserUpload']['id'];
 				$uploadResponse['delete_type'] = 'POST';
 
-				array_push($returnData, $uploadResponse);
+				array_push($returnData['files'], $uploadResponse);
 			}
 
 			//This is fucking bullshit but counter cache is not working right now
@@ -185,6 +186,7 @@ class UserUploadsController extends AppController {
 						$resizedImg = $this -> Image -> image($upload['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
 						$img = $this -> Image -> image($upload['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 						$retunData = array();
+						$retunData['files'] = array();
 						$uploadResponse = array();
 						$uploadResponse['url'] = $img['path'];
 						$uploadResponse['thumbnail_url'] = $resizedImg['path'];
@@ -194,7 +196,7 @@ class UserUploadsController extends AppController {
 						$uploadResponse['delete_url'] = '/user_uploads/remove/' . $upload['UserUpload']['id'];
 						$uploadResponse['delete_type'] = 'POST';
 						$uploadResponse['edit_url'] = '/user_uploads/upload/' . $upload['UserUpload']['id'];
-						array_push($retunData, $uploadResponse);
+						array_push($retunData['files'], $uploadResponse);
 						$this -> set('returnData', $retunData);
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_PHOTO, 'user' => $this -> getUser(), 'photo' => $upload)));
 					} else {

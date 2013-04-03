@@ -33,6 +33,7 @@ class CollectiblesUploadsController extends AppController {
 		$returnData['response']['code'] = 0;
 		$returnData['response']['errors'] = array();
 		$returnData['response']['data'] = array();
+		$returnData['response']['data']['files'] = array();
 
 		$uploads = $this -> CollectiblesUpload -> find("all", array('contain' => array('Upload'), 'conditions' => array('CollectiblesUpload.collectible_id' => $collectibleId)));
 		$pending = $this -> CollectiblesUpload -> findPendingEdits(array('CollectiblesUploadEdit.collectible_id' => $collectibleId));
@@ -79,7 +80,7 @@ class CollectiblesUploadsController extends AppController {
 				$uploadResponse['allowDelete'] = false;
 			}
 
-			array_push($returnData['response']['data'], $uploadResponse);
+			array_push($returnData['response']['data']['files'], $uploadResponse);
 		}
 
 		foreach ($uploads as $key => $value) {
@@ -98,7 +99,7 @@ class CollectiblesUploadsController extends AppController {
 			$uploadResponse['allowDelete'] = true;
 			$uploadResponse['primary'] = $value['CollectiblesUpload']['primary'];
 
-			array_push($returnData['response']['data'], $uploadResponse);
+			array_push($returnData['response']['data']['files'], $uploadResponse);
 		}
 		debug($pending);
 
@@ -182,6 +183,7 @@ class CollectiblesUploadsController extends AppController {
 					$resizedImg = $this -> Image -> image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
 					$img = $this -> Image -> image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 					$retunData = array();
+					$retunData['files'] = array();
 					$uploadResponse = array();
 					$uploadResponse['url'] = $img['path'];
 					$uploadResponse['thumbnail_url'] = $resizedImg['path'];
@@ -206,7 +208,7 @@ class CollectiblesUploadsController extends AppController {
 					$uploadResponse['owner'] = true;
 					$uploadResponse['allowDelete'] = true;
 
-					array_push($retunData, $uploadResponse);
+					array_push($retunData['files'], $uploadResponse);
 					$this -> set('returnData', $retunData);
 				} else {
 					// Need to figure out how the plugin handles errors
