@@ -111,6 +111,11 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	that.fileupload('option', 'done').call(that, null, {
 		result : <?php echo $this -> Js -> object($uploads); ?>
 	});
+	
+	$('#fileupload').on('fileuploadadd', function (e, data) {
+	
+	});
+
 
 });
 
