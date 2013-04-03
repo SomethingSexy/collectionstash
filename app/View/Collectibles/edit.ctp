@@ -67,10 +67,10 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	{% } %}
 	<td class="delete">
 	{% if(file.allowDelete){ %}
-	<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
-	<i class="icon-trash icon-white"></i>
-	<span>{%=locale.fileupload.destroy%}</span>
-	</button>
+         <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <i class="icon-trash icon-white"></i>
+                <span>Delete</span>
+            </button>
 {% } %}
 	</td>
 	</tr>

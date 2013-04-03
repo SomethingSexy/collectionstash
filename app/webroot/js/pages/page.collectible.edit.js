@@ -118,7 +118,7 @@ var AttributeUploads = Backbone.Collection.extend({
 		return '/attributes_uploads/view/' + this.id;
 	},
 	parse : function(resp, xhr) {
-		return resp.response.data;
+		return resp.response.data.files;
 	}
 });
 var ManufacturerModel = Backbone.Model.extend({
@@ -569,7 +569,7 @@ var AttributePhotoView = Backbone.View.extend({
 						$('.fileupload-progress .progress .bar', self.el).css('width', '100%');
 					},
 					success : function(data, textStatus, jqXHR) {
-						if (data && data.length) {
+						if (data && data.files.length) {
 							var that = $('.fileupload', self.el);
 							that.fileupload('option', 'done').call(that, null, {
 								result : data
@@ -591,7 +591,9 @@ var AttributePhotoView = Backbone.View.extend({
 
 		var that = $('.fileupload', self.el);
 		that.fileupload('option', 'done').call(that, null, {
-			result : self.collection.toJSON()
+			result : {
+				files : self.collection.toJSON()
+			}
 		});
 
 		return this;
@@ -648,11 +650,6 @@ var PhotoView = Backbone.View.extend({
 			}]
 		});
 
-		$('#fileupload').bind('fileuploaddestroy', function(e, data) {
-			var filename = data.url.substring(data.url.indexOf("=") + 1);
-			console.log(data);
-		});
-
 		$('#upload-dialog').on('hidden', function() {
 			$('#fileupload table tbody tr.template-download').remove();
 			pageEvents.trigger('upload:close');
@@ -671,7 +668,7 @@ var PhotoView = Backbone.View.extend({
 						$('.fileupload-progress .progress .bar').css('width', '100%');
 					},
 					success : function(data, textStatus, jqXHR) {
-						if (data && data.length) {
+						if (data && data.files.length) {
 							var that = $('#fileupload');
 							that.fileupload('option', 'done').call(that, null, {
 								result : data
@@ -715,7 +712,7 @@ var PhotoView = Backbone.View.extend({
 				},
 				success : function(data, textStatus, jqXHR) {
 
-					if (data && data.response.data.length) {
+					if (data && data.response.data.files.length) {
 						var that = $('#fileupload');
 						that.fileupload('option', 'done').call(that, null, {
 							result : data.response.data
