@@ -2013,6 +2013,15 @@ $(function() {
 			url : "/collectibles/getCollectible/" + collectibleId,
 			dataType : "json",
 			cache : false,
+			error : function(jqXHR, textStatus, errorThrown){
+				jqXHR;
+				textStatus;
+				errorThrown;
+			},
+			complete : function(jqXHR, textStatus){
+				jqXHR;
+				textStatus;
+			},
 			success : function(data, textStatus, jqXHR) {
 				$.unblockUI();
 
