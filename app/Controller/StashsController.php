@@ -43,7 +43,7 @@ class StashsController extends AppController {
 		$this -> set('myStash', true);
 		$this -> set('stashUsername', $user['User']['username']);
 
-		$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))),'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('fields' => array('id', 'name', 'manufacture_id', 'collectibletype_id'), 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype'))));
+		$collectibles = $this -> Stash -> CollectiblesUser -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))),'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype'))));
 
 		$this -> set(compact('collectibles'));
 
