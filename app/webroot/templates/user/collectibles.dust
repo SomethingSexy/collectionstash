@@ -3,7 +3,7 @@
 		<tr>
 			<th>Collectible Id</th>
 			<th>Name</th>
-			<th>Type</th>
+			<th>Platform</th>
 			<th>Date Submitted</th>
 			<th><a class="sort" data-sort="Collectible.status_id" {@eq key="{sort.sort}" value="Collectible.status_id"}data-direction="{sort.direction}" {/eq}>Status</a></th>
 		</tr>

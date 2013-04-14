@@ -87,7 +87,7 @@ class AttributesCollectiblesController extends AppController {
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUserId());
+			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUser());
 			if ($response) {
 				$this -> set('returnData', $response);
 			} else {
@@ -120,7 +120,7 @@ class AttributesCollectiblesController extends AppController {
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUserId(), true);
+			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUser(), true);
 			if ($response) {
 				$this -> set('returnData', $response);
 			} else {
@@ -155,7 +155,7 @@ class AttributesCollectiblesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUserId(), false);
+			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUser(), false);
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -189,7 +189,7 @@ class AttributesCollectiblesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUserId(), true);
+			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUser(), true);
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -227,7 +227,7 @@ class AttributesCollectiblesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUserId(), false);
+			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUser(), false);
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -260,7 +260,7 @@ class AttributesCollectiblesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUserId(), true);
+			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUser(), true);
 
 			if ($response) {
 				$this -> set('returnData', $response);

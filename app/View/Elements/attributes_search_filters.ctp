@@ -10,43 +10,34 @@ echo 'var searchUrl = "' . $searchUrl . '";';
 			$count = count($saveSearchFilters[$filterGroup['type']]);
 		}
 
-		echo '<div class="filter" data-type="' . $filterGroup['type'] . '">';
-		echo '<div class="filter-name">';
-		echo '<span class="name">';
+
+   		echo '<div class="btn-group filter" data-type="' . $filterGroup['type'] . '">';
+        echo '<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">';
+        
 		if ($count > 0) {
 			echo $count . __(' selected');
 		} else {
 			echo $filterGroup['label'];
 		}
-
-		echo '</span>';
-		if ($count > 0) {
-			echo '<a class="ui-icon ui-icon ui-icon-close"></a>';
-		} else {
-			echo '<a class="ui-icon ui-icon-triangle-1-s"></a>';
-		}
-		
-		echo '</div>';
-		echo '<div class="filter-list-container">';
-		echo '<div class="filter-list">';
-		echo '<ol>';
+		echo ' <span class="caret"></span>';
+		echo '</a>';
+        echo '<ul class="dropdown-menu">';
 		foreach ($filterGroup['filters'] as $key => $filter) {
+			echo '<li>';
+			echo '<input  data-filter="' . $filter['id'] . '" class="filter-links" type="checkbox" value="'. $filter['id'] .'"';
 			if (isset($saveSearchFilters[$filterGroup['type']]) && in_array($filter['id'], $saveSearchFilters[$filterGroup['type']])) {
-				echo '<li class="selected">';
-			} else {
-				echo '<li>';
+				echo ' checked ';	
 			}
-			echo '<a class="filter-links"  data-filter="' . $filter['id'] . '">';
-			echo $filter['label'];
-			echo '</a>';
+			
+			echo '/>';
+			echo '<label for="">' . $filter['label'] . '</label>';
 			echo '</li>';
 		}
-		echo '</ol>';
-		echo '</div>';
-		echo '</div>';
-
-		echo '</div>';
+        echo '</ul>';
+  
+        echo '</div>';
 	}
+
 	?>
 </div>
 <script>

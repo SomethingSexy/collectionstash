@@ -101,7 +101,6 @@ class CollectiblesUploadsController extends AppController {
 
 			array_push($returnData['response']['data']['files'], $uploadResponse);
 		}
-		debug($pending);
 
 		$this -> set('returnData', $returnData);
 	}
@@ -136,7 +135,7 @@ class CollectiblesUploadsController extends AppController {
 		} else {
 			$upload = array();
 			$upload['CollectiblesUpload']['id'] = $id;
-			$response = $this -> CollectiblesUpload -> remove($upload, $this -> getUserId(), false);
+			$response = $this -> CollectiblesUpload -> remove($upload, $this -> getUser(), false);
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$retunData = array();
@@ -173,7 +172,7 @@ class CollectiblesUploadsController extends AppController {
 			return;
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$response = $this -> CollectiblesUpload -> add($this -> request -> data, $this -> getUserId());
+			$response = $this -> CollectiblesUpload -> add($this -> request -> data, $this -> getUser());
 			debug($response);
 			if ($response) {
 				if ($response['response']['isSuccess']) {

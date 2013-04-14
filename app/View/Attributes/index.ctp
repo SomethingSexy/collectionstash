@@ -13,15 +13,19 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 		<div class="page-header">
 			<h2><?php echo __('Collectible Parts'); ?></h2>
 		</div>
-		<div class="btn-group pull-right">
-		    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-		    Action
-		    <span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu">
-				<li><a id="add-new-item-link" class="link">Add New Item</a></li>
-		    </ul>
-	    </div>
+		<?php
+			// Remove this for now because I would rather encourage people
+			// adding parts directly to collectibles instead
+			// <div class="btn-group pull-right">
+			// <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+			// Action
+			// <span class="caret"></span>
+			// </a>
+			// <ul class="dropdown-menu">
+			// <li><a id="add-new-item-link" class="link">Add New Item</a></li>
+			// </ul>
+			// </div>
+	 ?>
 		<div class="component-view">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
@@ -34,8 +38,9 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 				echo '<th class="name">' . $this -> Paginator -> sort('name', 'Name') . '</th>';
 				echo '<th class="description">' . __('Description') . '</th>';
 				echo '<th class="manufacturer">' . $this -> Paginator -> sort('manufacture_id', 'Manufacturer') . '</th>';
+				echo '<th class="artist">' . $this -> Paginator -> sort('artist_id', 'Artist') . '</th>';
 				echo '<th class="scale">' . $this -> Paginator -> sort('scale_id', 'Scale') . '</th>';
-				echo '<th class="actions"> </th>';
+				//echo '<th class="actions"> </th>';
 				echo '</tr></thead><tbody>';
 				foreach ($attributes as $attribute) {
 					$attributeJSON = '{';
@@ -123,24 +128,32 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					echo '<td data-id="' . $attribute['Manufacture']['id'] . '" class="manufacturer">';
 					echo $attribute['Manufacture']['title'];
 					echo '</td>';
-					echo '<td data-id="' . $attribute['Scale']['id'] . '"  class="scale">';
-					echo $attribute['Scale']['scale'];
-					echo '</td>';
-					echo '<td class="actions">';
-
-					if (isset($isLoggedIn) && $isLoggedIn === true) {
-						echo '<div class="btn-group">';
-						echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a>';
-						echo '<ul class="dropdown-menu">';
-						echo '<li><a class="link edit-attribute-link" title=' . __('Edit Part') . '>Edit Part</a>';
-						echo '</li>';
-						echo '<li><a class="link remove-attribute" title=' . __('Remove Part') . '>Remove Part</a>';
-						echo '</li>';
-						echo '</ul>';
-						echo '</div>';
+					echo '<td>';
+					if (!empty($attribute['Attribute']['artist_id'])) {
+						echo $attribute['Artist']['name'];
+					} else {
+						echo 'Not Recorded';
 					}
 
 					echo '</td>';
+					echo '<td data-id="' . $attribute['Scale']['id'] . '"  class="scale">';
+					echo $attribute['Scale']['scale'];
+					echo '</td>';
+					// echo '<td class="actions">';
+// 
+					// if (isset($isLoggedIn) && $isLoggedIn === true) {
+						// echo '<div class="btn-group">';
+						// echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a>';
+						// echo '<ul class="dropdown-menu">';
+						// echo '<li><a class="link edit-attribute-link" title=' . __('Edit Part') . '>Edit Part</a>';
+						// echo '</li>';
+						// echo '<li><a class="link remove-attribute" title=' . __('Remove Part') . '>Delete Part</a>';
+						// echo '</li>';
+						// echo '</ul>';
+						// echo '</div>';
+					// }
+// 
+					// echo '</td>';
 					echo '</tr>';
 				}
  ?>
@@ -194,7 +207,7 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 			trigger : 'click'
 		});
 
-	});
+	}); 
 </script>
 
 <?php echo $this -> element('attribute_remove_dialog'); ?>

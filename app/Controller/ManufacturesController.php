@@ -59,16 +59,26 @@ class ManufacturesController extends AppController {
 
 				$highestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
 				$lowestPriceCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
-				$manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
-				$manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
+
+				if (isset($highestPriceCollectible['Collectible'])) {
+					$manufacture['Manufacture']['highest_price'] = $highestPriceCollectible['Collectible']['msrp'];
+					$manufacture['Manufacture']['lowest_price'] = $lowestPriceCollectible['Collectible']['msrp'];
+				} else {
+					$manufacture['Manufacture']['highest_price'] = "-";
+					$manufacture['Manufacture']['lowest_price'] = "-";
+				}
 
 				$lowestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'asc'), 'contain' => array('Manufacture')));
 				$highestEditionCollectible = $this -> Manufacture -> Collectible -> find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id, "not" => array('Collectible.edition_size' => null)), 'order' => array('Collectible.edition_size' => 'desc'), 'contain' => array('Manufacture')));
 				if (!empty($lowestEditionCollectible)) {
 					$manufacture['Manufacture']['lowest_edition_size'] = $lowestEditionCollectible['Collectible']['edition_size'];
+				} else {
+					$manufacture['Manufacture']['lowest_edition_size'] = "-";
 				}
 				if (!empty($highestEditionCollectible)) {
 					$manufacture['Manufacture']['highest_edition_size'] = $highestEditionCollectible['Collectible']['edition_size'];
+				} else {
+					$manufacture['Manufacture']['highest_edition_size'] = "-";
 				}
 
 				$this -> loadModel('Collectible');

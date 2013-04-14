@@ -83,7 +83,7 @@
 
 							if (isset($collectible['Collectible']['collectibletype_id']) && !empty($collectible['Collectible']['collectibletype_id']) || (isset($collectible['Collectible']['collectibletype_id_changed']) && $collectible['Collectible']['collectibletype_id_changed'])) {
 								echo '<dt>';
-								echo __('Type');
+								echo __('Platform');
 								echo '</dt>';
 
 								//Check if it is changed first
@@ -103,7 +103,7 @@
 
 							if (isset($collectible['Collectible']['specialized_type_id']) && !empty($collectible['Collectible']['specialized_type_id']) || (isset($collectible['Collectible']['specialized_type_id_changed']) && $collectible['Collectible']['specialized_type_id_changed'])) {
 								echo '<dt>';
-								echo __('Manufacturer Type');
+								echo __('Manufacturer Platform');
 								echo '</dt>';
 
 								//Check if it is changed first

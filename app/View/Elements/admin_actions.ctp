@@ -50,7 +50,7 @@
             </ul>
         </li>
         <li>
-            <h3><?php echo __('Collectible Types');?></h3>
+            <h3><?php echo __('Collectible Platforms');?></h3>
             <ul class="unstyled">
                 <li>
                     <?php echo $this -> Html -> link('Add', array('admin' => true, 'controller' => 'collectibletypes', 'action' => 'add'), array('class' => 'link'));?>

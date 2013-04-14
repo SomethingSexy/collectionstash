@@ -50,7 +50,7 @@ if (!isset($showStats)) {
 		}
 		?>
 		<dt>
-			Type:
+			Platform:
 		</dt>
 		<dd>
 			<?php echo $collectibletype['name']; ?>
@@ -59,7 +59,7 @@ if (!isset($showStats)) {
 if(isset($speciazliedType)) {
 		?>
 		<dt>
-			Manufacturer Type:
+			Manufacturer Platform:
 		</dt>
 		<dd>
 			<?php echo $speciazliedType['name']; ?>

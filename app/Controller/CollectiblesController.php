@@ -7,17 +7,9 @@ class CollectiblesController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Tree');
 
-	// public $components = array('Wizard');
-
 	var $actsAs = array('Searchable.Searchable');
 
-	// function beforeFilter() {
-	// parent::beforeFilter();
-	// // $this -> Wizard -> steps = array('manufacture', array('variant' => 'variantFeatures'), 'attributes', 'tags', 'image', 'review');
-	// $this -> Wizard -> steps = array('manufacture', array('similar' => 'similarCollectibles'), 'attributes', 'tags', 'image', 'review');
-	// $this -> Wizard -> completeUrl = '/collectibles/confirm';
-	// $this -> Wizard -> loginRequired = true;
-	// }
+	public $filters = array('m' => array('model' => 'Collectible', 'id' => 'manufacture_id'), 'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id'), 'l' => array('model' => 'Collectible', 'id' => 'license_id'), 't' => array('model' => 'Tag', 'id' => 'id'), 'o' => array('custom' => true, 'id' => 'order'));
 
 	/**
 	 * This method will allow us to quick add a collectible from a selected collectible.
@@ -60,13 +52,12 @@ class CollectiblesController extends AppController {
 
 	/**
 	 * This will be used to create a new collectible, with just
-	 * the type to start
+	 * the type to start as well if they are trying to add a custom, original piece or a standard collectible
 	 */
-	public function create($collectibleTypeId = null) {
+	public function create($collectibleTypeId = null, $original = false, $custom = false) {
 		$this -> checkLogIn();
 		if ($collectibleTypeId && is_numeric($collectibleTypeId)) {
-			$response = $this -> Collectible -> createInitial($collectibleTypeId, $this -> getUserId());
-			debug($response);
+			$response = $this -> Collectible -> createInitial($collectibleTypeId, $original, $custom, $this -> getUserId());
 			if ($response['response']['isSuccess']) {
 				$this -> redirect(array('action' => 'edit', $response['response']['data']['id']));
 			} else {
@@ -117,15 +108,6 @@ class CollectiblesController extends AppController {
 		$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
 		$this -> set(compact('attributeCategories'));
 
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-		$this -> set(compact('scales'));
-
-		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
-		$this -> set(compact('manufactures'));
-
-		$artists = $this -> Collectible -> ArtistsCollectible -> Artist -> getArtistList();
-		$this -> set(compact('artists'));
-
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
 		$this -> set('adminMode', true);
@@ -144,24 +126,12 @@ class CollectiblesController extends AppController {
 		// If the status is draft, then the only person who can edit it is the person who submitted it
 		// If the status is submitted, then the only person who can edit it is the persno who submitted it and an admin
 		// If the status is active, then anyone can edit it
-		$collectible = $this -> Collectible -> find('first', array('contain' => array('Status'), 'conditions' => array('Collectible.id' => $id)));
+		$collectible = $this -> Collectible -> find('first', array('contain' => array('Status', 'User'), 'conditions' => array('Collectible.id' => $id)));
 
 		if (!empty($collectible)) {
-			$statusId = $collectible['Status']['id'];
-			$submittedUserId = $collectible['Collectible']['user_id'];
-			if ($statusId === '1') {
-				if ($submittedUserId !== $this -> getUserId()) {
-					$this -> render('editAccess');
-					return;
-				}
-			} else if ($statusId === '2') {
-				if ($submittedUserId !== $this -> getUserId() && !$this -> isUserAdmin()) {
-					$this -> render('editAccess');
-					return;
-				}
-
-			} else if ($statusId === '4') {
-				// always access
+			if (!$this -> Collectible -> isEditPermission($id, $this -> getUser())) {
+				$this -> render('editAccess');
+				return;
 			}
 		} else {
 			$this -> render('viewMissing');
@@ -169,17 +139,9 @@ class CollectiblesController extends AppController {
 		}
 
 		// This is the basic stuff to get for edit attributes
+		// This one will always be required
 		$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
 		$this -> set(compact('attributeCategories'));
-
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-		$this -> set(compact('scales'));
-
-		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
-		$this -> set(compact('manufactures'));
-
-		$artists = $this -> Collectible -> ArtistsCollectible -> Artist -> getArtistList();
-		$this -> set(compact('artists'));
 
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
@@ -199,8 +161,18 @@ class CollectiblesController extends AppController {
 			$collectible['Collectible'] = $this -> request -> input('json_decode', true);
 			$collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
 
-			$this -> Collectible -> saveCollectible($collectible, $this -> getUser(), $adminMode);
-			$this -> set('returnData', $this -> request -> input('json_decode'));
+			$response = $this -> Collectible -> saveCollectible($collectible, $this -> getUser(), $adminMode);
+
+			$request = $this -> request -> input('json_decode');
+			debug($request);
+			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
+				$this -> response -> statusCode(401);
+			} else {
+				// request becomes an actual object and not an array
+				$request -> isEdit = $response['response']['data']['isEdit'];
+			}
+
+			$this -> set('returnData', $request);
 		} else if ($this -> request -> isDelete()) {
 			// I think it makes sense to use rest delete
 			// for changing the status to a delete
@@ -311,8 +283,8 @@ class CollectiblesController extends AppController {
 	/**
 	 * this method will be used to allow them to delete a collectible
 	 */
-	public function delete() {
-
+	public function delete($id) {
+		$this -> Collectible -> remove($id, $this -> getUser());
 	}
 
 	public function getCollectible($id) {
@@ -345,6 +317,21 @@ class CollectiblesController extends AppController {
 		$currencies = $this -> Collectible -> Currency -> find("all", array('contain' => false, 'fields' => array('Currency.id', 'Currency.iso_code')));
 		$returnData['response']['data']['currencies'] = $currencies;
 
+		$artists = $this -> Collectible -> ArtistsCollectible -> Artist -> find("all", array('order' => array('Artist.name' => 'ASC'), 'contain' => false));
+		$returnData['response']['data']['artists'] = $artists;
+
+		$categories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find("all", array('contain' => false));
+		$returnData['response']['data']['categories'] = $categories;
+
+		$manufactures = $this -> Collectible -> Manufacture -> find('all', array('contain' => false));
+		$this -> set(compact('manufactures'));
+		$returnData['response']['data']['manufacturesList'] = $manufactures;
+		// If it is a custom, we need to get some other information as well
+		if ($returnData['response']['data']['collectible']['Collectible']['custom']) {
+			$customStatuses = $this -> Collectible -> CustomStatus -> find('all', array('contain' => false));
+			$returnData['response']['data']['customStatuses'] = $customStatuses;
+		}
+
 		$this -> set(compact('returnData'));
 	}
 
@@ -353,26 +340,20 @@ class CollectiblesController extends AppController {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
-		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
-		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('ArtistsCollectible' => array('Artist'), 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
-		// so let's do this manually and try that out
-		if (!empty($collectible['AttributesCollectible'])) {
-			// ok if we have some of these
-			// loop through each one
-			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
-				//'AttributesCollectible' => array('Collectible' )
-				if (!empty($attributesCollectible['Attribute'])) {
-					$existingAttributeCollectibles = $this -> Collectible -> AttributesCollectible -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name', 'status_id')))));
-					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
-				}
-			}
-		}
+		$collectible = $this -> Collectible -> getCollectible($id);
+		$collectible = $collectible['response']['data']['collectible'];
 
 		// View should also work for status of submitted and active
 		if (!empty($collectible) && ($collectible['Collectible']['status_id'] === '4' || $collectible['Collectible']['status_id'] === '2')) {
+			// Figure out all permissions
+			$editPermission = $this -> Collectible -> isEditPermission($collectible, $this -> getUser());
+			$this -> set('allowEdit', $editPermission);
+
+			$stashablePermission = $this -> Collectible -> isStashable($collectible, $this -> getUser());
+			$this -> set('isStashable', $stashablePermission);
+
+			// figure out how to merge this with the rest later
 			if ($collectible['Collectible']['status_id'] === '2') {
 				$this -> set('showStatus', true);
 				if ($collectible['Collectible']['user_id'] === $this -> getUserId()) {
@@ -386,23 +367,19 @@ class CollectiblesController extends AppController {
 				$this -> set('allowStatusEdit', false);
 			}
 
+			if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+				$this -> set('allowVariantAdd', false);
+			} else {
+				$this -> set('allowVariantAdd', true);
+			}
+
+			// Set and get all other info needed
 			$this -> set('collectible', $collectible);
 			$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
 			$this -> set('collectibleCount', $count);
 
 			$variants = $this -> Collectible -> getCollectibleVariants($id);
 			$this -> set('variants', $variants);
-
-			//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
-			$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
-			$this -> set(compact('attributeCategories'));
-
-			$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-			$this -> set(compact('scales'));
-
-			$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
-			$this -> set(compact('manufactures'));
-
 		} else {
 			$this -> render('viewMissing');
 		}
@@ -410,9 +387,9 @@ class CollectiblesController extends AppController {
 
 	function search() {
 		/*
-		 * Call the parent method now, that method handles pretty much everything now
+		 *For now update so we do not return originals and customs
 		 */
-		$this -> searchCollectible();
+		$this -> searchCollectible(array('Collectible.original' => false, 'Collectible.custom' => false));
 		// I can use this to pull the pagination data off the request and pass it to the view
 		// although in the JSON view, I should be able to pull all of the data off the request
 		// and build out the JSON object and send that down, with access to the pagination
@@ -435,7 +412,7 @@ class CollectiblesController extends AppController {
 		/*
 		 * Call the parent method now, that method handles pretty much everything now
 		 */
-		$this -> searchCollectible();
+		$this -> searchCollectible(array('Collectible.original' => false, 'Collectible.custom' => false));
 		$this -> set('viewType', 'tiles');
 		$this -> render('searchTiles');
 
@@ -520,12 +497,24 @@ class CollectiblesController extends AppController {
 	/**
 	 * This function right now will return the history of the collectibles the user has submitted.
 	 */
-	function userHistory() {
+	function userHistory($draft = false) {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
 		//Grab the user id of the person logged in
 		$userId = $this -> getUserId();
-		$this -> paginate = array('conditions' => array('Collectible.user_id' => $userId), 'contain' => array('Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
+
+		$conditions = array();
+		$conditions['Collectible.user_id'] = $userId;
+		// handle both cases
+		if ($draft === true || $draft === 'true') {
+			$conditions['Collectible.status_id'] = 1;
+		} else {
+			$conditions['OR'] = array();
+			$conditions['OR']['Collectible.status_id'] = 1;
+			$conditions['OR']['Collectible.custom_status_id'] = array('1', '2', '3');
+		}
+
+		$this -> paginate = array('conditions' => $conditions, 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}
@@ -533,7 +522,7 @@ class CollectiblesController extends AppController {
 	function newCollectibles() {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
-		$this -> paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
+		$this -> paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5);
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}
@@ -541,7 +530,7 @@ class CollectiblesController extends AppController {
 	function pending() {
 		//Make sure the user is logged in
 		$this -> checkLogIn();
-		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5, 'order' => array('Collectible.created' => 'desc'));
+		$this -> paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5, 'order' => array('Collectible.created' => 'desc'));
 		$collectibles = $this -> paginate('Collectible');
 		$this -> set(compact('collectibles'));
 	}
@@ -561,25 +550,54 @@ class CollectiblesController extends AppController {
 	function admin_view($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-
+		
 		if (!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
 		}
-		$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('ArtistsCollectible' => array('Artist'), 'CollectiblesTag' => array('Tag'), 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Revision', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$this -> set('collectible', $collectible);
-		debug($collectible);
 
-		//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
-		$attributeCategories = $this -> Collectible -> AttributesCollectible -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
-		$this -> set(compact('attributeCategories'));
+		$collectible = $this -> Collectible -> getCollectible($id);
+		$collectible = $collectible['response']['data']['collectible'];
 
-		$scales = $this -> Collectible -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-		$this -> set(compact('scales'));
+		// View should also work for status of submitted and active
+		if (!empty($collectible) && ($collectible['Collectible']['status_id'] === '4' || $collectible['Collectible']['status_id'] === '2')) {
+			// Figure out all permissions
+			$editPermission = $this -> Collectible -> isEditPermission($collectible, $this -> getUser());
+			$this -> set('allowEdit', $editPermission);
 
-		$manufactures = $this -> Collectible -> Manufacture -> getManufactureList();
-		$this -> set(compact('manufactures'));
+			$stashablePermission = $this -> Collectible -> isStashable($collectible, $this -> getUser());
+			$this -> set('isStashable', $stashablePermission);
 
+			// figure out how to merge this with the rest later
+			if ($collectible['Collectible']['status_id'] === '2') {
+				$this -> set('showStatus', true);
+				if ($collectible['Collectible']['user_id'] === $this -> getUserId()) {
+					$this -> set('allowStatusEdit', true);
+				} else {
+					$this -> set('allowStatusEdit', false);
+				}
+
+			} else {
+				$this -> set('showStatus', false);
+				$this -> set('allowStatusEdit', false);
+			}
+
+			if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+				$this -> set('allowVariantAdd', false);
+			} else {
+				$this -> set('allowVariantAdd', true);
+			}
+
+			// Set and get all other info needed
+			$this -> set('collectible', $collectible);
+			$count = $this -> Collectible -> getNumberofCollectiblesInStash($id);
+			$this -> set('collectibleCount', $count);
+
+			$variants = $this -> Collectible -> getCollectibleVariants($id);
+			$this -> set('variants', $variants);
+		} else {
+			$this -> render('viewMissing');
+		}
 	}
 
 	/**

@@ -7,6 +7,7 @@ var StatusView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
+		this.collectible = options.collectible ? options.collectible : {};
 		//this.model.on("change", this.render, this);
 	},
 	render : function() {
@@ -14,6 +15,9 @@ var StatusView = Backbone.View.extend({
 
 		var model = this.model.toJSON();
 		model.allowEdit = this.allowEdit;
+		if(this.collectible){
+			model.collectible = this.collectible.toJSON();
+		}
 		dust.render(this.template, model, function(error, output) {
 			$(self.el).html(output);
 		});

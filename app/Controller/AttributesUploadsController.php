@@ -133,7 +133,7 @@ class AttributesUploadsController extends AppController {
 		} else {
 			$upload = array();
 			$upload['AttributesUpload']['id'] = $id;
-			$response = $this -> AttributesUpload -> remove($upload, $this -> getUserId(), false);
+			$response = $this -> AttributesUpload -> remove($upload, $this -> getUser(), false);
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$retunData = array();
@@ -170,7 +170,7 @@ class AttributesUploadsController extends AppController {
 			return;
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$response = $this -> AttributesUpload -> add($this -> request -> data, $this -> getUserId());
+			$response = $this -> AttributesUpload -> add($this -> request -> data, $this -> getUser());
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$upload = $response['response']['data'];

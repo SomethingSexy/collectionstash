@@ -1,10 +1,15 @@
 <?php
+/**
+ * Decided against a Custom model/table for now because there was only one field.
+ *
+ * If I have other fields eventually then we can expand it into another table
+ */
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class Collectible extends AppModel {
 	public $name = 'Collectible';
-	public $belongsTo = array('Status', 'EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
-	public $hasMany = array('CollectiblesUser', 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true), 'ArtistsCollectible' => array('dependent' => true));
+	public $belongsTo = array('CustomStatus', 'Status', 'EntityType' => array('dependent' => true), 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Revision' => array('dependent' => true), 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
+	public $hasMany = array('CollectiblesUser' => array('dependent' => true), 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true), 'ArtistsCollectible' => array('dependent' => true));
 	public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('official', 'signed', 'name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
 	/**
 	 * Ok so I want to build slugs on the fly instead of a database field, cause then I would
@@ -99,14 +104,6 @@ class Collectible extends AppModel {
 
 		}
 
-		//Check to see if these are set, if they are not, default them to false
-		//8-30-11 commented this out because of edit collectible overriding existing data
-		// if (!isset($this -> data['Collectible']['exclusive'])) {
-		// $this -> data['Collectible']['exclusive'] = 0;
-		// }
-		// if (!isset($this -> data['Collectible']['variant'])) {
-		// $this -> data['Collectible']['variant'] = 0;
-		// }
 		if (isset($returnData['Collectible']['msrp'])) {
 			$returnData['Collectible']['msrp'] = str_replace('$', '', $returnData['Collectible']['msrp']);
 			$returnData['Collectible']['msrp'] = str_replace(',', '', $returnData['Collectible']['msrp']);
@@ -141,6 +138,16 @@ class Collectible extends AppModel {
 				}
 			}
 		}
+		// if it is a custom, also set official to false
+		// just to make sure nothing gets passed the client side
+		if (isset($returnData['Collectible']['custom']) && $returnData['Collectible']['custom']) {
+			$returnData['Collectible']['official'] = false;
+			$returnData['Collectible']['limited'] = true;
+			$returnData['Collectible']['edition_size'] = 1;
+		} else if (isset($returnData['Collectible']['original']) && $returnData['Collectible']['original']) {
+			$returnData['Collectible']['limited'] = true;
+			$returnData['Collectible']['edition_size'] = 1;
+		}
 
 		return $returnData;
 	}
@@ -153,58 +160,179 @@ class Collectible extends AppModel {
 		return $this -> processBeforeSave($editData);
 	}
 
-	function doAfterFind($results, $primary = false) {
+	/**
+	 * Decided to directly use afterFind to get more power
+	 * some dups in code but I think this gives me the ability
+	 * to do whatever I need
+	 */
+	function afterFind($results, $primary = false) {
 		if ($results) {
-			$showEditionSize = false;
-			//TODO not sure this is really needed anymore
-			if (isset($results['edition_size'])) {
-				if (is_numeric($results['edition_size'])) {
-					$showEditionSize = true;
+			// If it is primary handle all of these things
+			if ($primary) {
+				foreach ($results as $key => $val) {
+					if (isset($val['Collectible'])) {
+
+						$showEditionSize = false;
+						//TODO not sure this is really needed anymore
+						if (isset($val['Collectible']['edition_size'])) {
+							if (is_numeric($val['Collectible']['edition_size'])) {
+								$showEditionSize = true;
+							}
+						}
+						//TODO figure out a better way to do this
+						$results[$key]['Collectible']['showUserEditionSize'] = $showEditionSize;
+						//Cleans up default no set years
+						//Removing this now because of the edit...a release of 0000 just means no year...probably should allow null
+						if (isset($val['Collectible']['release']) && $val['Collectible']['release'] === '0000') {
+							$results[$key]['Collectible']['release'] = '';
+						}
+
+						if (isset($val['Collectible']['series_id']) && !empty($val['Collectible']['series_id'])) {
+							$fullSeriesPath = $this -> Series -> buildSeriesPathName($val['Collectible']['series_id']);
+							$results[$key]['Collectible']['seriesPath'] = $fullSeriesPath;
+						}
+
+						if (isset($val['Collectible']['retailer_id']) && !empty($val['Collectible']['retailer_id'])) {
+							$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $val['Collectible']['retailer_id'])));
+							$results[$key]['Collectible']['retailer'] = $existingRetailer['Retailer']['name'];
+						}
+
+						if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
+							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
+						} else if (isset($val['Manufacture']) || isset($val['ArtistsCollectible'])) {
+							$itemTitle = $val['Collectible']['name'] . ' By ';
+
+							if ($val['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+								if (!empty($val['ArtistsCollectible'])) {
+									// assume the first on is primary for now :)
+									$artist = $val['ArtistsCollectible'][0];
+									$itemTitle .= $artist['Artist']['name'];
+								} else if (!empty($val['Manufacture'])) {
+									// otherwise if there is a manufacturer, use that
+									$itemTitle .= $val['Manufacture']['title'];
+								}
+							} else {
+								$itemTitle .= $val['Manufacture']['title'];
+							}
+
+							$results[$key]['Collectible']['displayTitle'] = $itemTitle;
+						} else {
+
+							// fall back
+							if (isset($val['Collectible']['name'])) {
+								$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'];
+							} else {
+								$results[$key]['Collectible']['displayTitle'] = '';
+							}
+
+						}
+
+						if (isset($val['Collectible']['custom']) && !$val['Collectible']['custom']) {
+							unset($results[$key]['CustomStatus']);
+						}
+					}
 				}
-			}
-			//TODO figure out a better way to do this
-			$results['showUserEditionSize'] = $showEditionSize;
-			//Cleans up default no set years
-			//Removing this now because of the edit...a release of 0000 just means no year...probably should allow null
-			if (isset($results['release']) && $results['release'] === '0000') {
-				$results['release'] = '';
-			}
+			} else {
+				if (isset($results[$this -> primaryKey])) {
+					$showEditionSize = false;
+					//TODO not sure this is really needed anymore
+					if (isset($results['edition_size'])) {
+						if (is_numeric($results['edition_size'])) {
+							$showEditionSize = true;
+						}
+					}
+					//TODO figure out a better way to do this
+					$results['showUserEditionSize'] = $showEditionSize;
+					//Cleans up default no set years
+					//Removing this now because of the edit...a release of 0000 just means no year...probably should allow null
+					if (isset($results['release']) && $results['release'] === '0000') {
+						$results['release'] = '';
+					}
 
-			if (isset($results['series_id']) && !empty($results['series_id'])) {
-				$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
-				$results['seriesPath'] = $fullSeriesPath;
-			}
+					if (isset($results['series_id']) && !empty($results['series_id'])) {
+						$fullSeriesPath = $this -> Series -> buildSeriesPathName($results['series_id']);
+						$results['seriesPath'] = $fullSeriesPath;
+					}
 
-			if (isset($results['retailer_id']) && !empty($results['retailer_id'])) {
-				$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $results['retailer_id'])));
-				$results['retailer'] = $existingRetailer['Retailer']['name'];
-			}
+					if (isset($results['retailer_id']) && !empty($results['retailer_id'])) {
+						$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $results['retailer_id'])));
+						$results['retailer'] = $existingRetailer['Retailer']['name'];
+					}
 
-			if (isset($results['Manufacture']) || isset($results['ArtistsCollectible'])) {
-				$itemTitle = $results['name'] . ' By ';
+					if (isset($results['custom']) && $results['custom']) {
+						$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
+					} else if (isset($results['Manufacture']) || isset($results['ArtistsCollectible'])) {
+						$itemTitle = $results['name'] . ' By ';
 
-				if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
-					if (!empty($results['ArtistsCollectible'])) {
-						// assume the first on is primary for now :)
-						$artist = $results['ArtistsCollectible'][0];
-						$itemTitle .= $artist['Artist']['name'];
-					} else if (!empty($results['Manufacture'])) {
-						// otherwise if there is a manufacturer, use that
-						$itemTitle .= $results['Manufacture']['title'];
+						if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+							if (!empty($results['ArtistsCollectible'])) {
+								// assume the first on is primary for now :)
+								$artist = $results['ArtistsCollectible'][0];
+								$itemTitle .= $artist['Artist']['name'];
+							} else if (!empty($results['Manufacture'])) {
+								// otherwise if there is a manufacturer, use that
+								$itemTitle .= $results['Manufacture']['title'];
+							}
+						} else {
+							$itemTitle .= $results['Manufacture']['title'];
+						}
+
+						$results['displayTitle'] = $itemTitle;
+					} else {
+
+						// fall back
+						if (isset($results['name'])) {
+							$results['displayTitle'] = $results['name'];
+						} else {
+							$results['displayTitle'] = '';
+						}
+
+					}
+
+					if (isset($results['custom']) && !$results['custom']) {
+						unset($results['CustomStatus']);
 					}
 				} else {
-					$itemTitle .= $results['Manufacture']['title'];
-				}
 
-				$results['displayTitle'] = $itemTitle;
-			} else {
-				// fall back
-				if (isset($results['name'])) {
-					$results['displayTitle'] = $results['name'];
-				} else {
-					$results['displayTitle'] = '';
-				}
+					foreach ($results as $key => $val) {
+						$showEditionSize = false;
+						//TODO not sure this is really needed anymore
+						if (isset($val['Collectible']['edition_size'])) {
+							if (is_numeric($val['Collectible']['edition_size'])) {
+								$showEditionSize = true;
+							}
+						}
+						//TODO figure out a better way to do this
+						$results[$key]['Collectible']['showUserEditionSize'] = $showEditionSize;
+						//Cleans up default no set years
+						//Removing this now because of the edit...a release of 0000 just means no year...probably should allow null
+						if (isset($val['Collectible']['release']) && $val['Collectible']['release'] === '0000') {
+							$results[$key]['Collectible']['release'] = '';
+						}
 
+						if (isset($val['Collectible']['series_id']) && !empty($val['Collectible']['series_id'])) {
+							$fullSeriesPath = $this -> Series -> buildSeriesPathName($val['Collectible']['series_id']);
+							$results[$key]['Collectible']['seriesPath'] = $fullSeriesPath;
+						}
+
+						if (isset($val['Collectible']['retailer_id']) && !empty($val['Collectible']['retailer_id'])) {
+							$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $val['Collectible']['retailer_id'])));
+							$results[$key]['Collectible']['retailer'] = $existingRetailer['Retailer']['name'];
+						}
+
+						if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
+							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom');
+						} else {
+							// fall back
+							if (isset($val['Collectible']['name'])) {
+								$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'];
+							} else {
+								$results[$key]['Collectible']['displayTitle'] = '';
+							}
+
+						}
+					}
+				}
 			}
 
 		}
@@ -289,7 +417,7 @@ class Collectible extends AppModel {
 	}
 
 	/**
-	 * Validate license method for print types
+	 * Validate license method for print types, also going to be used for customs and originals
 	 */
 	public function validatePrintLicenseId($check) {
 		debug($this -> data['Collectible']['manufacture_id']);
@@ -319,17 +447,7 @@ class Collectible extends AppModel {
 				}
 			}
 		}
-		// Not sure I need this one anymore
-		// else if (isset($this -> data['Collectible']['manufacture_id']) && !empty($this -> data['Collectible']['manufacture_id'])) {
-		// $result = $this -> Manufacture -> LicensesManufacture -> find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this -> data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
-		// if ($result) {
-		// return true;
-		//
-		// } else {
-		// debug($this -> data['Collectible']['manufacture_id']);
-		// return false;
-		// }
-		// }
+
 		return true;
 	}
 
@@ -664,7 +782,7 @@ class Collectible extends AppModel {
 	/**
 	 * this method creates the initial collectible, used when adding
 	 */
-	public function createInitial($collectibleTypeId, $userId) {
+	public function createInitial($collectibleTypeId, $original, $custom, $userId) {
 		$retVal = $this -> buildDefaultResponse();
 
 		$collectible['Collectible'] = array();
@@ -675,11 +793,38 @@ class Collectible extends AppModel {
 		$collectible['Revision'] = $revision['Revision'];
 		$collectible['EntityType']['type'] = 'collectible';
 
+		// If it is a custom, indicate that
+		// also set the edition size to 1
+		// At this point we should also add the collectible user entry as well
+		if ($custom === true || $custom === 'true') {
+			$collectible['Collectible']['custom'] = $custom;
+			$collectible['Collectible']['edition_size'] = 1;
+			$collectible['Collectible']['limited'] = true;
+
+			//Get a stubbed collectibles user object
+			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
+			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
+			// create the initial custom table as well
+			$collectible['Collectible']['custom_status_id'] = 1;
+		} else if ($original === true || $original === 'true') {
+			// by default make the official false, however it could
+			// be true
+			$collectible['Collectible']['official'] = false;
+			$collectible['Collectible']['original'] = true;
+			// if it is an original piece, auto set the edition size to 1
+			// do I need a flag for this as well?
+			$collectible['Collectible']['edition_size'] = 1;
+			$collectible['Collectible']['limited'] = true;
+
+			//Get a stubbed collectibles user object
+			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
+			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
+		}
 		$this -> set($collectible);
 		// Only field we need to validate
 		if ($this -> User -> validates(array('fieldList' => array('collectibletype_id')))) {
 			// valid
-			if ($this -> saveAll($collectible, array('validate' => false, 'deep' => true))) {
+			if ($this -> saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
 				$retVal['response']['isSuccess'] = true;
 				$retVal['response']['data']['id'] = $this -> id;
 			} else {
@@ -707,7 +852,7 @@ class Collectible extends AppModel {
 		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
 		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
 		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
 		// so let's do this manually and try that out
 		if (!empty($collectible['AttributesCollectible'])) {
@@ -749,35 +894,46 @@ class Collectible extends AppModel {
 	 * of the collectible and whether it should submit an edit or
 	 */
 	public function saveCollectible($collectible, $user, $autoUpdate = false) {
+
+		$retVal = $this -> buildDefaultResponse();
 		// Given id, look up status
 		// if it is anything but active allow real time update
 		// if it is draft,  the only person who can update it is an admin
 		// or the user who submitted it
 
 		// other make it an edit
-
+		$hasPermission = false;
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
-			$isDraft = $this -> isStatusDraft($collectible['Collectible']['id']);
-			if ($isDraft) {
-				$autoUpdate = true;
-			}
+			$autoUpdate = $this -> allowAutoUpdate($collectible['Collectible']['id'], $user);
 		}
 
 		// make sure no hackers :)
 		unset($collectible['Collectible']['user_id']);
-
-		// TODO: Since they can update anything they want at any time
-		// we will have to make all of the validation rules not required
-		if ($autoUpdate === true || $autoUpdate === 'true') {
-			$this -> id = $collectible['Collectible']['id'];
-
-			$this -> save($collectible, array('validate' => false));
-
+		// Make sure they have the aibility to do anything
+		if ($this -> isEditPermission($collectible['Collectible']['id'], $user)) {
+			// TODO: Since they can update anything they want at any time
+			// we will have to make all of the validation rules not required
+			if ($autoUpdate === true || $autoUpdate === 'true') {
+				$this -> id = $collectible['Collectible']['id'];
+				// TODO: This will have to do a saveAssociated now, because
+				// we will
+				$this -> saveAssociated($collectible, array('validate' => false));
+				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data']['isEdit'] = false;
+			} else {
+				$action = array();
+				$action['Action']['action_type_id'] = 2;
+				$returnData = $this -> saveEdit($collectible, $collectible['Collectible']['id'], $user['User']['id'], $action);
+				if ($returnData) {
+					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = true;
+				}
+			}
 		} else {
-			$action = array();
-			$action['Action']['action_type_id'] = 2;
-			$returnData = $this -> saveEdit($collectible, $collectible['Collectible']['id'], $user['User']['id'], $action);
+			$retVal['response']['code'] = 401;
 		}
+
+		return $retVal;
 
 	}
 
@@ -797,7 +953,12 @@ class Collectible extends AppModel {
 		$collectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleId)));
 		if (!empty($collectible)) {
 			$allowDelete = false;
-			if ($collectible['Collectible']['status_id'] === '1') {
+			// If it is a custom or an original, just make sure the user ids match
+			if ($collectible['Collectible']['original'] || $collectible['Collectible']['custom']) {
+				if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+					$allowDelete = true;
+				}
+			} else if ($collectible['Collectible']['status_id'] === '1') {
 				if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
 					$allowDelete = true;
 				}
@@ -815,12 +976,15 @@ class Collectible extends AppModel {
 			}
 
 			if ($allowDelete) {
-				if ($this -> delete($collectibleId)) {
+				if ($this -> delete($collectibleId, true)) {
 					$retVal['response']['isSuccess'] = true;
 				} else {
 					$retVal['response']['isSuccess'] = false;
 					array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
 				}
+			} else {
+				$retVal['response']['isSuccess'] = false;
+				array_push($retVal['response']['errors'], array('message' => __('You do not have permission to do that.')));
 			}
 
 		} else {
@@ -843,14 +1007,30 @@ class Collectible extends AppModel {
 		$this -> read(null, $collectibleId);
 		// if it is valid
 		$status = $this -> data['Collectible']['status_id'];
-		if ($status === '1') {
-			$status = 2;
-		} else if ($status === '2') {
-			$status = 1;
+		//TODO: Handle originals
+
+		// custsom go from draft to active
+		if ($this -> data['Collectible']['custom'] || $this -> data['Collectible']['original']) {
+			// if the status is 1 change to 2 for a submit
+			if ($status === '1') {
+				$status = 4;
+			} else {
+				// should never happen
+			}
+			// also always ignore dup check for customs
+			$ignoreDupCheck = true;
+		} else {
+			// if the status is 1 change to 2 for a submit
+			if ($status === '1') {
+				$status = 2;
+			} else if ($status === '2') {
+				$status = 1;
+			}
+
 		}
 
-		//if we are changing it to a 2, then we need to validate
-		if ($status == 2) {
+		//if we are changing it to a 2 or 4, then we need to validate
+		if ($status == 2 || $status == 4) {
 			if (!$this -> validateCollectible()) {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Collectible');
@@ -863,13 +1043,16 @@ class Collectible extends AppModel {
 			// If we are submitted it, then we need to
 			// do a check to see if a similar collectible
 			// exists
-			$dupList = $this -> doesCollectibleExist($this -> data);
+			if (!$ignoreDupCheck) {
+				$dupList = $this -> doesCollectibleExist($this -> data);
 
-			if (!empty($dupList) && !$ignoreDupCheck) {
-				$retVal['response']['isSuccess'] = false;
-				$retVal['response']['data']['dupList'] = $dupList;
-				return $retVal;
+				if (!empty($dupList) && !$ignoreDupCheck) {
+					$retVal['response']['isSuccess'] = false;
+					$retVal['response']['data']['dupList'] = $dupList;
+					return $retVal;
+				}
 			}
+
 		}
 
 		unset($this -> data);
@@ -908,6 +1091,154 @@ class Collectible extends AppModel {
 	}
 
 	/**
+	 * This determines if they can update the collectible realtime
+	 * or it has to go through the edit process
+	 */
+	public function allowAutoUpdate($collectibleId, $user) {
+		$retVal = false;
+		// If they are an admin then they can always update
+		if ($user['User']['admin']) {
+			$retVal = true;
+			return $retVal;
+		}
+
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status', 'User')));
+		// IF status is 1 (draft) regardless of type
+		if ($collectible['Status']['id'] === '1') {
+			// if the user performing the action is the owner of the collectible or it is an admin
+			// auto update
+			if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		} else {
+			// now check type, if it custom or original then it can be updated at any point if permission is there
+			if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+				if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+					$retVal = true;
+				}
+			}
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * This is used to check if we can automatically add (status 4) an attribute
+	 * being added to a collectible
+	 */
+	public function allowAutoAddAttribute($collectibleId, $user) {
+		$retVal = false;
+		// If they are an admin then they can always update
+		if ($user['User']['admin']) {
+			$retVal = true;
+			return $retVal;
+		}
+
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status', 'User')));
+
+		// If the collectible is a custom or an original and the user who created the collectible
+		// is the one adding the attribute, then allow it
+		if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+			if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		} else {
+			// if it is mass-produced and they are adding
+			// it will always be status 2.  This is because
+			// when the mass-produced collectible is approved
+			// it will change them to status 4
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * This method will determine if the user has permissions to
+	 * update.
+	 *
+	 * TODO: WE might have to expand this eventually to say,
+	 * 		 if the user does not have permsission, then an
+	 * 		 edit it submitted and the ownwer of the collectible
+	 * 		 approves the eidt
+	 */
+	public function isEditPermission($check, $user) {
+		$retVal = false;
+
+		// if they are an admin then they always get persmission
+		if ($user['User']['admin']) {
+			$retVal = true;
+			return $retVal;
+		}
+
+		// setup to work for when we have the collectible object
+		// already or just the id
+		if (is_numeric($check) || is_string($check)) {
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
+			//lol
+		} else {
+			// assume object
+			$collectible = $check;
+		}
+
+		// if it is a draft or submitted, just need to make sure the user ids match
+		if ($collectible['Status']['id'] === '1' || $collectible['Status']['id'] === '2') {
+			if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		} else {
+			if ($collectible && !empty($collectible)) {
+				// right now for originals if you have to be the one who submitted it
+				if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+					if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+						$retVal = true;
+					}
+				} else {
+					// otherwise if it is a mass produced collectible then just
+					// return true cause anyone can edit it
+					$retVal = true;
+				}
+			}
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function isStashable($check, $user) {
+
+		$retVal = false;
+		if (is_numeric($check) || is_string($check)) {
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status')));
+			//lol
+		} else {
+			// assume object
+			$collectible = $check;
+		}
+
+		// if it is a draft or submitted, just need to make sure the user ids match
+		if ($collectible['Status']['id'] === '1' || $collectible['Status']['id'] === '2') {
+			// right now you can't
+		} else {
+			// if it is an active status
+			// right now for originals or customs you cannot add
+			if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
+				// if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
+				// $retVal = true;
+				// }
+			} else {
+				// otherwise if it is a mass produced collectible then just
+				// return true cause anyone can edit it
+				$retVal = true;
+			}
+
+		}
+
+		return $retVal;
+	}
+
+	/**
 	 *
 	 */
 	public function validateCollectible() {
@@ -916,6 +1247,30 @@ class Collectible extends AppModel {
 		// If it is a print, then they do not have to enter a manufacturer or a brand
 		if ($this -> data['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 
+			// They don't have to select a manufacturer
+			$this -> validate['manufacture_id']['allowEmpty'] = true;
+			// They don't have to select a brand
+			//using unset here so it will go the validate method
+			unset($this -> validate['license_id']['allowEmpty']);
+
+			// If they do end up having a brand, we need to validate it differently
+			$this -> validate['license_id']['rule'] = array('validatePrintLicenseId');
+			// $this -> validator() -> getField('manufacture_id') -> getRule('rule') -> message = 'This field cannot be left blank';
+
+			// However, if it is a print, then we need to make sure they have at least one artist added
+			if (empty($this -> data['ArtistsCollectible'])) {
+				$this -> validationErrors['arrtist'] = __('At least one artist is required.');
+			}
+		} else if ($this -> data['Collectible']['custom']) {
+			// They don't have to select a manufacturer
+			$this -> validate['manufacture_id']['allowEmpty'] = true;
+			// They don't have to select a brand
+			//using unset here so it will go the validate method
+			unset($this -> validate['license_id']['allowEmpty']);
+
+			// If they do end up having a brand, we need to validate it differently
+			$this -> validate['license_id']['rule'] = array('validatePrintLicenseId');
+		} else if ($this -> data['Collectible']['original']) {
 			// They don't have to select a manufacturer
 			$this -> validate['manufacture_id']['allowEmpty'] = true;
 			// They don't have to select a brand

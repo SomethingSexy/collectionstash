@@ -1,0 +1,57 @@
+<h3>Part</h3>
+{@eq key="{hasAttribute}" value="true" type="boolean"}
+<table class="table table-borderless">
+	<tr>
+		<td>
+		<ul class="thumbnails">
+			{#AttributesUpload uploadDirectory=uploadDirectory}
+			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+			<li class="span1">
+				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+			</li>
+			{/primary}
+			{:else}
+			<li class="span1">
+				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
+			</li>
+			{/AttributesUpload}
+
+		</ul></td>
+		<td>{path_name}</td>
+		<td>{name}</td>
+		<td>{description}</td>
+		<td>{Manufacture.title}</td>
+		<td>{Scale.scale}</td>
+	</tr>
+
+</table>
+{/eq}
+
+<div class='component-message error'>
+	<span></span>
+</div>
+<div class="attribute-form">
+	<form id="AttributesCollectibleAddForm" accept-charset="utf-8" method="post" data-form-model="AttributesCollectible" action="/collectibles/edit/676?url=collectibles%2Fedit%2F676">
+		<fieldset>
+			<div class="control-group">
+				<div class="controls">
+					<div class="btn-group">
+						<button id="select-attribute-link" class="btn submit" type="button">
+							Find By Collectible
+						</button>
+						<button id="select-attribute-link-by-part" class="btn delete" type="button">
+							Find By Part
+						</button>
+					</div>
+					<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputManUrl">Count</label>
+				<div class="controls">
+					<input id="AttributesCollectibleCount" type="number" required="required" name="data[AttributesCollectible][count]">
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>

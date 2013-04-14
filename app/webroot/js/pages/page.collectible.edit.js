@@ -2,6 +2,9 @@
  * TODO: Known Issues:
  * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
  *  exist in there
+ *
+ * TODO: Enhancements
+ *  - Update so that there is a standard modal view to render things too
  */
 var printId = '10';
 var pageEvents = _.extend({}, Backbone.Events);
@@ -73,6 +76,146 @@ var CollectibleModel = Backbone.Model.extend({
 		}, {
 			required : false
 		}]
+	}
+});
+
+var PaginatedPart = Backbone.Paginator.requestPager.extend({
+	filters : {},
+	paginator_core : {
+		// the type of the request (GET by default)
+		type : 'GET',
+
+		// the type of reply (jsonp by default)
+		dataType : 'json',
+
+		// the URL (or base URL) for the service
+		url : function() {
+			var queryString = '';
+			$.each(this.filters, function(index, filterGroup) {
+				if (filterGroup.length > 0) {
+					var length = filterGroup.length;
+					var filterQuery = index + '=';
+					$.each(filterGroup, function(index, filter) {
+						filterQuery += filter;
+
+						if (index !== length - 1) {
+							filterQuery += ',';
+						}
+					});
+					queryString += '&' + filterQuery;
+				}
+			});
+
+			var url = '/attributes/index/page:' + this.currentPage + '?' + queryString;
+
+			if (this.selectedSort) {
+				url = url + '/sort:' + this.selectedSort + '/direction:' + this.sortDirection;
+			}
+
+			return url;
+		}
+	},
+	paginator_ui : {
+		// the lowest page index your API allows to be accessed
+		firstPage : 1,
+
+		// which page should the paginator start from
+		// (also, the actual page the paginator is on)
+		currentPage : 1,
+
+		// how many items per page should be shown
+		perPage : 25,
+
+		// a default number of total pages to query in case the API or
+		// service you are using does not support providing the total
+		// number of pages for us.
+		// 10 as a default in case your service doesn't return the total
+		//totalPages : totalSubmissionPages,
+		//total : totalSubmission
+	},
+	server_api : {
+
+		// how many results the request should skip ahead to
+		// customize as needed. For the Netflix API, skipping ahead based on
+		// page * number of results per page was necessary.
+		'page' : function() {
+			return this.currentPage;
+		}
+	},
+	parse : function(response) {
+		// Be sure to change this based on how your results
+		// are structured (e.g d.results is Netflix specific)
+		var tags = response.results;
+		//Normally this.totalPages would equal response.d.__count
+		//but as this particular NetFlix request only returns a
+		//total count of items for the search, we divide.
+		this.totalPages = response.metadata.paging.pageCount;
+		this.paginator_ui.totalPages = response.metadata.paging.pageCount;
+		this.total = response.metadata.paging.count;
+		this.pagingHtml = response.metadata.pagingHtml;
+		return tags;
+	}
+});
+
+var PaginatedCollection = Backbone.Paginator.requestPager.extend({
+	model : CollectibleModel,
+	paginator_core : {
+		// the type of the request (GET by default)
+		type : 'GET',
+
+		// the type of reply (jsonp by default)
+		dataType : 'json',
+
+		// the URL (or base URL) for the service
+		url : function() {
+			var url = '/collectibles/search/page:' + this.currentPage + '?q=' + this.searchQuery;
+
+			if (this.selectedSort) {
+				url = url + '/sort:' + this.selectedSort + '/direction:' + this.sortDirection;
+			}
+
+			return url;
+		}
+	},
+	paginator_ui : {
+		// the lowest page index your API allows to be accessed
+		firstPage : 1,
+
+		// which page should the paginator start from
+		// (also, the actual page the paginator is on)
+		currentPage : 1,
+
+		// how many items per page should be shown
+		perPage : 25,
+
+		// a default number of total pages to query in case the API or
+		// service you are using does not support providing the total
+		// number of pages for us.
+		// 10 as a default in case your service doesn't return the total
+		//totalPages : totalSubmissionPages,
+		//total : totalSubmission
+	},
+	server_api : {
+
+		// how many results the request should skip ahead to
+		// customize as needed. For the Netflix API, skipping ahead based on
+		// page * number of results per page was necessary.
+		'page' : function() {
+			return this.currentPage;
+		}
+	},
+	parse : function(response) {
+		// Be sure to change this based on how your results
+		// are structured (e.g d.results is Netflix specific)
+		var tags = response.results;
+		//Normally this.totalPages would equal response.d.__count
+		//but as this particular NetFlix request only returns a
+		//total count of items for the search, we divide.
+		this.totalPages = response.metadata.paging.pageCount;
+		this.paginator_ui.totalPages = response.metadata.paging.pageCount;
+		this.total = response.metadata.paging.count;
+		this.pagingHtml = response.metadata.pagingHtml;
+		return tags;
 	}
 });
 
@@ -158,6 +301,14 @@ var SeriesModel = Backbone.Model.extend({
 });
 var ManufacturerList = Backbone.Collection.extend({
 	model : ManufacturerModel,
+	initialize : function(models) {
+		for (var i = 0; i < models.length; i++) {
+			if (models[i].Manufacture) {
+				models[i] = models[i].Manufacture;
+				delete models[i].Manufacture;
+			}
+		};
+	},
 	comparator : function(man) {
 		return man.get("title").toLowerCase();
 	}
@@ -201,84 +352,284 @@ var Artists = Backbone.Collection.extend({
 	urlRoot : '/collectibles/artists'
 });
 
+/**
+ *TODO : The methods to handle adding attributes
+ * should probably be rewritten when there is time
+ * to be more backboney
+ */
 var AttributesView = Backbone.View.extend({
 	template : 'attributes.default.edit',
 	className : "span12",
+	events : {
+		'click #add-existing-item-link' : 'addExisting',
+		'click #add-new-item-link' : 'addNew'
+	},
 	initialize : function(options) {
 		var self = this;
 		this.status = options.status;
+		this.artists = options.artists;
+		this.manufacturers = options.manufacturers;
+		this.categories = options.categories;
+		this.collectible = options.collectible;
+		this.scales = options.scales;
 		this.collection.on('remove', this.renderList, this);
 	},
 	render : function() {
 		var self = this;
 		var data = {
 			'collectibleId' : collectibleId,
+			collectible : this.collectible.toJSON()
 		};
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
 
-		// This should only be created once
-		this.addCollectiblesAttributes = new AddCollectibleAttributes({
-			'adminPage' : adminMode,
-			$element : $('.attributes.collectible', self.el),
-			$context : self.el,
-			success : function(data) {
-				if (data.isEdit === false) {
-					var attribute = new AttributeModel(data);
-
-					self.collection.add(attribute);
-					$('tbody', self.el).append(new AttributeView({
-						model : attribute,
-						status : self.status
-					}).render().el);
-				}
+		$('.modal-footer .save', '#attribute-collectible-add-new-dialog').click(function() {
+			var url = '/attributes_collectibles/add.json';
+			// If we are passing in an override admin or the options are set to admin mode
+			if (adminMode) {
+				url = '/admin/attributes_collectibles/add.json'
 			}
-		});
 
-		// Init here after we render
-		this.addCollectiblesAttributes.init();
+			$('#attribute-collectible-add-new-dialog').find('form').ajaxSubmit({
+				// dataType identifies the expected content type of the server response
+				dataType : 'json',
+				url : url,
+				beforeSubmit : function(formData, jqForm, options) {
+					formData.push({
+						name : '_method',
+						type : 'text',
+						value : 'POST'
+					});
+					formData.push({
+						name : 'data[AttributesCollectible][collectible_id]',
+						type : 'text',
+						value : collectibleId
+					});
+					$('#attribute-collectible-add-new-dialog').find('form').find('.error-message').remove();
 
-		this.addExistingCollectiblesAttributes = new AddExistingCollectibleAttributes({
-			'adminPage' : adminMode,
-			$element : $('.attributes.collectible', self.el),
-			$context : self.el,
-			success : function(data) {
-				if (data.isEdit === false) {
-					var attribute = new AttributeModel(data);
+				},
+				// success identifies the function to invoke when the server response
+				// has been received
+				success : function(responseText, statusText, xhr, $form) {
+					if (responseText.response.isSuccess) {
+						$('#attribute-collectible-add-new-dialog').modal('hide');
+						var message = 'Part has been submitted!';
+						if (!responseText.response.data.isEdit) {
+							message = 'Part has been added!';
+						}
 
-					self.collection.add(attribute);
-					$('tbody', self.el).append(new AttributeView({
-						model : attribute,
-						status : self.status
-					}).render().el);
-				}
-			}
-		});
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
+						});
 
-		this.addExistingCollectiblesAttributes.init();
+						var data = responseText.response.data;
+						if (data.isEdit === false) {
+							var attribute = new AttributeModel(data);
 
-		// Since this handles it for all, we need to handle
-		// it here
-		this.updateAttributes = new UpdateAttributes({
-			'adminPage' : adminMode,
-			$element : $('.attributes.collectible', self.el),
-			$context : self.el,
-			success : function(data) {
-				if (data.isEdit === false) {
-					// This will return the updated attribute data...we need
-					// to find the model and then update it
-					self.collection.each(function(attribute) {
-						if (attribute.toJSON().Attribute.id === data.Attribute.id) {
-							attribute.set({
-								Attribute : data.Attribute
+							self.collection.add(attribute);
+							$('tbody', self.el).append(new AttributeView({
+								model : attribute,
+								status : self.status,
+								artists : self.artists,
+								manufacturers : self.manufacturers,
+								categories : self.categories,
+								collectible : self.collectible,
+								scales : self.scales
+							}).render().el);
+						}
+					} else {
+						if (responseText.response.errors) {
+							$.each(responseText.response.errors, function(index, value) {
+								if (value.inline) {
+									$(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-collectible-add-new-dialog').find('form')).after('<div class="error-message">' + value.message + '</div>');
+								} else {
+									$('#attribute-collectible-add-new-dialog').find('.component-message.error').children('span').text(value.message);
+								}
+
 							});
 						}
-					});
-				} else {
-					// do nothing
+					}
 				}
+			});
+		});
+
+		//TODO: this should be in a modal view for this guy
+		$('.modal-footer .save', '#attribute-collectible-add-existing-dialog').click(function() {
+			var url = '/attributes_collectibles/add.json';
+			// If we are passing in an override admin or the options are set to admin mode
+			if (adminMode) {
+				url = '/admin/attributes_collectibles/add.json'
 			}
+
+			$('#attribute-collectible-add-existing-dialog').find('form').ajaxSubmit({
+				// dataType identifies the expected content type of the server response
+				dataType : 'json',
+				url : url,
+				beforeSubmit : function(formData, jqForm, options) {
+					formData.push({
+						name : '_method',
+						type : 'text',
+						value : 'POST'
+					});
+					formData.push({
+						name : 'data[AttributesCollectible][collectible_id]',
+						type : 'text',
+						value : collectibleId
+					});
+					//TODO:
+					//self._clearFormErrors();
+				},
+				// success identifies the function to invoke when the server response
+				// has been received
+				success : function(responseText, statusText, xhr, $form) {
+					if (responseText.response.isSuccess) {
+						$('#attribute-collectible-add-existing-dialog').modal('hide');
+						var message = 'Part has been added!';
+
+						if (responseText.response.data.hasOwnProperty('isEdit')) {
+							if (responseText.response.data.isEdit) {
+								message = 'Part has been submitted!';
+							}
+						}
+
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
+						});
+						var data = responseText.response.data;
+						if (data.isEdit === false) {
+							var attribute = new AttributeModel(data);
+
+							self.collection.add(attribute);
+							$('tbody', self.el).append(new AttributeView({
+								model : attribute,
+								status : self.status,
+								artists : self.artists,
+								manufacturers : self.manufacturers,
+								categories : self.categories,
+								collectible : self.collectible,
+								scales : self.scales
+							}).render().el);
+						}
+					} else {
+						if (responseText.response.errors) {
+							$.each(responseText.response.errors, function(index, value) {
+								if (value.inline) {
+									$(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-collectible-add-existing-dialog').find('form')).after('<div class="error-message">' + value.message + '</div>');
+								} else {
+									$('#attribute-collectible-add-existing-dialog').find('.component-message.error').children('span').text(value.message);
+								}
+
+							});
+						}
+					}
+				}
+			});
+		});
+
+		// Putting this at this level for now
+		$('.modal-footer .save', '#attribute-update-dialog').click(function() {
+			var url = '/attributes/update.json';
+			// If we are passing in an override admin or the options are set to admin mode
+			if (self.options.adminPage) {
+				url = '/admin/attributes/update.json'
+			}
+
+			$('#attribute-update-dialog').find('form').ajaxSubmit({
+				// dataType identifies the expected content type of the server response
+				dataType : 'json',
+				url : url,
+				beforeSubmit : function(formData, jqForm, options) {
+					$('#attribute-update-dialog').find('form').find('.error-message').remove();
+					formData.push({
+						name : '_method',
+						type : 'text',
+						value : 'POST'
+					});
+				},
+				// success identifies the function to invoke when the server response
+				// has been received
+				success : function(responseText, statusText, xhr, $form) {
+					if (responseText.response.isSuccess) {
+						$('#attribute-update-dialog').modal('hide');
+						var message = 'Update has been submitted!';
+						if (self.options.adminPage || !responseText.response.data.isEdit) {
+							message = 'The part was successfully updated!';
+						}
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
+						});
+						var data = responseText.response.data;
+						if (data.isEdit === false) {
+							// This will return the updated attribute data...we need
+							// to find the model and then update it
+							self.collection.each(function(attribute) {
+								if (attribute.toJSON().Attribute.id === data.Attribute.id) {
+									attribute.set({
+										Attribute : data.Attribute
+									});
+								}
+							});
+						} else {
+							// do nothing
+						}
+
+					} else {
+						if (responseText.response.errors) {
+							$.each(responseText.response.errors, function(index, value) {
+								if (value.inline) {
+									$(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-update-dialog')).after('<div class="error-message">' + value.message + '</div>');
+								} else {
+									$('#attribute-update-dialog').find('.component-message.error').children('span').text(value.message);
+								}
+
+							});
+						}
+					}
+				}
+			});
 		});
 
 		this.updateCollectibleAttributes = new UpdateCollectibleAttributes({
@@ -343,11 +694,16 @@ var AttributesView = Backbone.View.extend({
 		this.collection.each(function(attribute) {
 			$('tbody', self.el).append(new AttributeView({
 				model : attribute,
-				status : self.status
+				status : self.status,
+				artists : self.artists,
+				manufacturers : self.manufacturers,
+				categories : self.categories,
+				collectible : self.collectible,
+				scales : self.scales
 			}).render().el);
 		});
 
-		this.updateAttributes.init();
+		//this.updateAttributes.init();
 
 		this.updateCollectibleAttributes.init();
 
@@ -363,20 +719,138 @@ var AttributesView = Backbone.View.extend({
 		this.collection.each(function(attribute) {
 			$('tbody', self.el).append(new AttributeView({
 				model : attribute,
-				status : self.status
+				status : self.status,
+				artists : self.artists,
+				manufacturers : self.manufacturers,
+				categories : self.categories,
+				collectible : self.collectible,
+				scales : self.scales
 			}).render().el);
 		});
+	},
+	addNew : function() {
+		var self = this;
+
+		var attribute = new AttributeModel();
+		this.renderAddNewView(attribute);
+
+		$('#attribute-collectible-add-new-dialog').modal();
+
+		$('#attribute-collectible-add-new-dialog', 'body').on('hidden', function() {
+			self.addNewView.remove();
+		});
+	},
+	renderAddNewView : function(attribute) {
+		if (this.addNewView) {
+			this.addNewView.remove();
+		}
+
+		this.addNewView = new AddAttributeView({
+			model : attribute,
+			manufacturers : this.manufacturers,
+			artists : this.artists,
+			scales : this.scales,
+			collectible : this.collectible,
+			type : 'new'
+		});
+
+		this.addNewView.on('view:category:select', function() {
+			this.addNewView.remove();
+
+			this.addNewView = new AttributeCategoryView({
+
+				model : attribute
+			});
+
+			this.addNewView.on('change:attribute_category_id', function() {
+				this.renderAddNewView(attribute);
+			}, this);
+
+			$('.modal-body', '#attribute-collectible-add-new-dialog').html(this.addNewView.render().el);
+			$('.modal-footer .save', '#attribute-collectible-add-new-dialog').hide();
+
+		}, this);
+
+		$('.modal-body', '#attribute-collectible-add-new-dialog').html(this.addNewView.render().el);
+		$('.modal-footer .save', '#attribute-collectible-add-new-dialog').show();
+	},
+	addExisting : function() {
+		var self = this;
+
+		var attribute = new AttributeModel();
+
+		// when the attribute gets selected
+		// remove the view and then show the add
+		attribute.on('change', function() {
+			this.renderAddExistingView(attribute);
+		}, this);
+
+		this.renderAddExistingView(attribute);
+
+		$('#attribute-collectible-add-existing-dialog').modal();
+
+		$('#attribute-collectible-add-existing-dialog', 'body').on('hidden', function() {
+			self.addExistingView.remove();
+		});
+	},
+	renderAddExistingView : function(attribute) {
+		if (this.addExistingView) {
+			this.addExistingView.remove();
+		}
+		this.addExistingView = new AddExistingAttributeView({
+			model : attribute
+		});
+
+		this.addExistingView.on('view:search:collectible', function() {
+			this.addExistingView.remove();
+
+			this.addExistingView = new AddExistingAttributeCollectibleSearchView({
+				collection : new PaginatedCollection(),
+				model : attribute
+			});
+
+			$('.modal-body', '#attribute-collectible-add-existing-dialog').html(this.addExistingView.render().el);
+			$('.modal-footer .save', '#attribute-collectible-add-existing-dialog').hide();
+
+		}, this);
+
+		this.addExistingView.on('view:search:part', function() {
+			this.addExistingView.remove();
+
+			this.addExistingView = new AddExistingAttributePartSearchView({
+				collection : new PaginatedPart(),
+				model : attribute,
+				artists : this.artists,
+				manufacturers : this.manufacturers,
+				categories : this.categories
+			});
+
+			$('.modal-body', '#attribute-collectible-add-existing-dialog').html(this.addExistingView.render().el);
+			$('.modal-footer .save', '#attribute-collectible-add-existing-dialog').hide();
+
+		}, this);
+
+		$('.modal-body', '#attribute-collectible-add-existing-dialog').html(this.addExistingView.render().el);
+		$('.modal-footer .save', '#attribute-collectible-add-existing-dialog').show();
+
 	}
 });
 
 var AttributeView = Backbone.View.extend({
-	template : 'attribute.default.edit',
+	template : 'attributecollectible.default.edit',
 	tagName : "tr",
 	events : {
-		'click .edit-attribute-photo-link' : 'addPhoto'
+		'click .edit-attribute-photo-link' : 'addPhoto',
+		'click .edit-attribute-link' : 'edit',
+		'click .remove-duplicate-attribute' : 'duplicate'
 	},
 	initialize : function(options) {
 		this.status = options.status;
+		this.artists = options.artists;
+		this.manufacturers = options.manufacturers;
+		this.categories = options.categories;
+		this.collectible = options.collectible;
+		this.scales = options.scales;
 		this.model.on('change', this.render, this);
 	},
 	render : function() {
@@ -493,6 +967,72 @@ var AttributeView = Backbone.View.extend({
 				});
 			}
 		});
+	},
+	edit : function() {
+		var self = this;
+
+		this.renderEditView();
+
+		$('#attribute-update-dialog').modal();
+
+		$('#attribute-update-dialog', 'body').on('hidden', function() {
+			self.addEditView.remove();
+		});
+	},
+	renderEditView : function(attribute) {
+		var self = this;
+		if (this.addEditView) {
+			this.addEditView.remove();
+		}
+
+		this.addEditView = new AddAttributeView({
+			model : this.model,
+			manufacturers : this.manufacturers,
+			artists : this.artists,
+			scales : this.scales,
+			collectible : this.collectible,
+			type : 'edit'
+		});
+
+		this.addEditView.on('view:category:select', function() {
+			this.addEditView.remove();
+
+			this.addEditView = new AttributeCategoryView({
+				model : this.model
+			});
+
+			this.addEditView.on('change:attribute_category_id', function() {
+				this.renderEditView();
+			}, this);
+
+			$('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
+			$('.modal-footer .save', '#attribute-update-dialog').hide();
+
+		}, this);
+
+		$('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
+		$('.modal-footer .save', '#attribute-update-dialog').show();
+	},
+
+	duplicate : function() {
+		var self = this;
+		if (this.duplicateView) {
+			this.duplicateView.remove();
+		}
+		this.duplicateView = new AttributeDuplicateView({
+			artists : this.artists,
+			manufacturers : this.manufacturers,
+			categories : this.categories
+		});
+
+		$('body').append(this.duplicateView.render().el);
+		$('#attributeDuplicateModal', 'body').modal({
+			backdrop : 'static'
+		});
+
+		$('#attributeDuplicateModal', 'body').on('hidden', function() {
+			self.duplicateView.remove();
+		});
 	}
 });
 var AttributePhotoView = Backbone.View.extend({
@@ -544,11 +1084,6 @@ var AttributePhotoView = Backbone.View.extend({
 			}, {
 				action : 'save'
 			}]
-		});
-
-		$('.fileupload', self.el).bind('fileuploaddestroy', function(e, data) {
-			var filename = data.url.substring(data.url.indexOf("=") + 1);
-			console.log(data);
 		});
 
 		$('.fileupload', self.el).on('hidden', function() {
@@ -1065,7 +1600,6 @@ var ManufacturerView = Backbone.View.extend({
 });
 
 var CollectibleView = Backbone.View.extend({
-	template : 'collectible.default.edit',
 	className : "span8",
 	events : {
 		'change #inputManufacturer' : 'changeManufacturer',
@@ -1081,6 +1615,7 @@ var CollectibleView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		var self = this;
+		this.template = options.template;
 		this.manufacturers = options.manufacturers;
 		this.currencies = options.currencies;
 		this.retailers = options.retailers;
@@ -1208,8 +1743,13 @@ var CollectibleView = Backbone.View.extend({
 	},
 	onModelSaved : function(model, response, options) {
 		$('.save', this.el).button('reset');
+		var message = 'Your changes have been successfully saved!';
+		if (response.isEdit) {
+			message = 'Your edit has been successfully submitted!';
+		}
+
 		$.blockUI({
-			message : '<button class="close" data-dismiss="alert" type="button">×</button>Your changes have been successfully saved!',
+			message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 			showOverlay : false,
 			css : {
 				top : '100px',
@@ -1241,19 +1781,29 @@ var CollectibleView = Backbone.View.extend({
 			collectibleType : collectibleType,
 			brands : this.brands.toJSON()
 		};
-		if (this.manufacturer) {
+		// If it is a custom, we are not showing
+		// the manufacturer list cause it doesn't make sense
+		// but we do want to show the brand list
+		if (collectible.custom) {
+			data.renderManList = false;
+			data.renderBrandList = true;
+			data.customStatuses = this.options.customStatuses.toJSON();
+		} else if (this.manufacturer) {
+			data.renderManList = true;
 			data.manufacturer = this.manufacturer.toJSON();
 			// use this to sort but then add back to the manufacturer so we don't
 			// have to pass more data around
 			var brands = new Brands(data.manufacturer.LicensesManufacture);
 			data.manufacturer.LicensesManufacture = brands.toJSON();
+			// if there is a manufacturer, don't render the main brand
+			// list cause we will use the ones linked to that manufacturer
 			data.renderBrandList = false;
 		} else {
-			// if there is no manufacturer selected and the collectible type
-			// is a print
-			if (collectibleType.id === printId) {
-				data.renderBrandList = true;
-			}
+			// If there is no manufacturer selected, render the man list
+			// and the brand list
+			data.renderManList = true;
+			data.renderBrandList = true;
+
 		}
 
 		// If this collectible is submitted and we are
@@ -1973,10 +2523,668 @@ var AddArtistView = Backbone.View.extend({
 		}
 	}
 });
+/**
+ * This should be able to handle but adding an update
+ *
+ * If a model is added with an id, then it will be an update
+ * otherwise it will be an add
+ *
+ * TODO: Once this gets updated to use proper models, we can
+ * update the automatic field stuff, using data-name for
+ * now because we want to maintain the name attribute
+ */
+var AddAttributeView = Backbone.View.extend({
+	template : 'attribute.add.new',
+	events : {
+		'click .select-category' : 'selectCategory',
+		"change input" : "fieldChanged",
+		"change select" : "selectionChanged",
+		'change textarea' : 'fieldChanged',
+		'click .attribute-type' : 'toggleType'
+	},
+	initialize : function(options) {
+		this.manufacturers = options.manufacturers;
+		this.artists = options.artists;
+		this.scales = options.scales;
+		this.collectible = options.collectible;
+		// edit vs new
+		this.type = options.type;
+
+		var hasType = this.model.has('Attribute');
+
+		// default the attribute to be a custom one
+		if (this.collectible.get('custom') && !hasType) {
+			this.model.set({
+				'Attribute' : {
+					type : 'custom'
+				}
+			});
+		} else if (this.collectible.get('original') && !hasType) {
+			this.model.set({
+				'Attribute' : {
+					type : 'original'
+				}
+			});
+		} else if (!hasType) {
+			this.model.set({
+				'Attribute' : {
+					type : 'mass'
+				}
+			});
+		}
+	},
+	render : function() {
+		var self = this;
+		var data = this.model.toJSON();
+		data.manufacturers = this.manufacturers.toJSON();
+		data.artists = this.artists.toJSON();
+		data.scales = this.scales.toJSON();
+		// we need this to determine how to render the view
+		data.collectible = this.collectible.toJSON();
+
+		if (this.type === 'new') {
+			data.showCount = true;
+			data.showId = false;
+		} else {
+			data.showCount = false;
+			data.showId = true;
+		}
+
+		data['uploadDirectory'] = uploadDirectory;
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+		$(self.el).animate({
+			scrollTop : 0
+		});
+
+		return this;
+	},
+	selectCategory : function() {
+		this.trigger('view:category:select');
+	},
+	selectionChanged : function(e) {
+		var field = $(e.currentTarget);
+
+		var value = $("option:selected", field).val();
+		var type = field.attr('data-type');
+
+		var data = {};
+
+		if (type) {
+			// else we need to get the type
+			// set the new one
+			data = this.model.get(type);
+		}
+		data[field.attr('data-name')] = value;
+		// silent because we don't want to trigger a change
+		// if this is an edit
+		this.model.set(data, {
+			silent : true
+		});
+	},
+	fieldChanged : function(e) {
+
+		var field = $(e.currentTarget);
+		var type = field.attr('data-type');
+		var data = {};
+		if (type) {
+			// else we need to get the type
+			// set the new one
+			data = this.model.get(type);
+		}
+
+		if (field.attr('type') === 'checkbox') {
+			if (field.is(':checked')) {
+				data[field.attr('data-name')] = true;
+			} else {
+				data[field.attr('data-name')] = false;
+			}
+		} else {
+			data[field.attr('data-name')] = field.val();
+		}
+
+		// silent because we don't want to trigger a change
+		// if this is an edit
+		this.model.set(data, {
+			silent : true
+		});
+	},
+	toggleType : function(event) {
+		var field = $(event.currentTarget);
+
+		// silent because we don't want to trigger a change
+		// if this is an edit
+		this.model.set({
+			'type' : field.val()
+		}, {
+			silent : true
+		});
+
+		this.render();
+	}
+});
+
+var AttributeCategoryView = Backbone.View.extend({
+	//template : $('#attributes-category-tree').clone().html(),
+	events : {
+		'click .item' : 'selectCategory'
+	},
+	initialize : function(options) {
+	},
+	render : function() {
+		var self = this;
+		$(self.el).html($('#attributes-category-tree').clone().html());
+		$(self.el).animate({
+			scrollTop : 0
+		});
+		return this;
+	},
+	selectCategory : function(event) {
+		var categoryId = $(event.currentTarget).attr('data-id');
+		var categoryPath = $(event.currentTarget).attr('data-path-name');
+
+		var attribute = {
+			Attribute : {
+				AttributeCategory : {}
+			}
+		};
+		if (this.model.has('Attribute')) {
+			attribute.Attribute = this.model.get('Attribute');
+			if (!attribute.Attribute.hasOwnProperty('AttributeCategory')) {
+				attribute.Attribute.AttributeCategory = {};
+			}
+		}
+
+		attribute.Attribute.attribute_category_id = categoryId;
+		attribute.Attribute.AttributeCategory.path_name = categoryPath;
+
+		this.model.set(attribute, {
+			silent : true
+		});
+		this.trigger('change:attribute_category_id');
+	}
+});
+
+var AddExistingAttributeView = Backbone.View.extend({
+	template : 'attribute.add.existing',
+	events : {
+		'click #select-attribute-link' : 'searchCollectible',
+		'click #select-attribute-link-by-part' : 'searchPart'
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+		var self = this;
+		var data = this.model.toJSON();
+		if (data.hasOwnProperty('id')) {
+			data['hasAttribute'] = true;
+		} else {
+			data['hasAttribute'] = false;
+		}
+		data['uploadDirectory'] = uploadDirectory;
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		$(self.el).animate({
+			scrollTop : 0
+		});
+
+		return this;
+	},
+	searchCollectible : function() {
+		this.trigger('view:search:collectible');
+	},
+	searchPart : function() {
+		this.trigger('view:search:part');
+	}
+});
+
+var AddExistingAttributePartSearchView = Backbone.View.extend({
+	template : 'attribute.add.existing.search.part',
+	events : {
+		'click #filters .filter-links' : 'selectFilter',
+		'click a.page' : 'gotoPage',
+		'click a.next' : 'next',
+		'click a.previous' : 'previous',
+		'click tr.attribute' : 'selectAttribute'
+	},
+	initialize : function(options) {
+		var self = this;
+		this.artists = options.artists;
+		this.manufacturers = options.manufacturers;
+		this.categories = options.categories;
+		this.collection.filters = {};
+		this.collection.on('reset', function() {
+			$('table', self.el).empty();
+			_.each(this.collection.models, function(collectible) {
+				$('table', self.el).append(new AttributeSearchPartAttrView({
+					model : collectible
+				}).render().el);
+
+			});
+
+			var pagesArray = [];
+			// ya fuck you dust
+			for (var i = 1; i <= this.collection.paginator_ui.totalPages; i++) {
+				pagesArray.push(i);
+			}
+
+			var data = {
+				pages : pagesArray
+			};
+			if (this.collection.currentPage) {
+				data['paginator'] = {
+					currentPage : this.collection.currentPage,
+					firstPage : this.collection.firstPage,
+					perPage : this.collection.perPage,
+					totalPages : this.collection.totalPages,
+					total : this.collection.paginator_ui.total
+				}
+			} else {
+				data['paginator'] = this.collection.paginator_ui;
+			}
+
+			dust.render('paging', data, function(error, output) {
+				$('.paging', self.el).html(output);
+			});
+
+			$(self.el).animate({
+				scrollTop : 0
+			});
+		}, this)
+	},
+	render : function() {
+		var self = this;
+		dust.render(this.template, {
+			artists : this.artists.toJSON(),
+			manufacturers : this.manufacturers.toJSON(),
+			categories : this.categories.toJSON()
+		}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		return this;
+	},
+	selectFilter : function(event) {
+		var selectedType = $(event.currentTarget).closest('.filter').attr('data-type');
+		var selectedFilter = $(event.currentTarget).attr('data-filter');
+
+		if (!this.collection.filters.hasOwnProperty(selectedType)) {
+			this.collection.filters[selectedType] = [];
+		}
+
+		if ($(event.currentTarget).is(':checked')) {
+			this.collection.filters[selectedType].push(selectedFilter);
+		} else {
+			// remove it
+			this.collection.filters[selectedType].splice($.inArray(selectedFilter, this.collection.filters[selectedType]), 1);
+		}
+
+		this.collection.fetch();
+	},
+	gotoPage : function(e) {
+		e.preventDefault();
+		var page = $(e.target).text();
+		this.collection.goTo(page);
+	},
+	next : function(e) {
+		e.preventDefault();
+		if ( typeof this.collection.currentPage === 'undefined') {
+			this.collection.currentPage = 1;
+		}
+		this.collection.requestNextPage();
+	},
+	previous : function(e) {
+		e.preventDefault();
+		this.collection.requestPreviousPage();
+	},
+	selectAttribute : function(event) {
+		var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
+		this.model.clear({
+			silent : true
+		});
+		this.model.set(attribute);
+	}
+});
+
+var AddExistingAttributeCollectibleSearchView = Backbone.View.extend({
+	template : 'attribute.add.existing.search',
+	events : {
+		'click button.search' : 'searchCollectible',
+		'click a.page' : 'gotoPage',
+		'click a.next' : 'next',
+		'click a.previous' : 'previous',
+		'click li.attribute' : 'selectAttribute'
+	},
+	initialize : function(options) {
+		var self = this;
+		this.collection.on('reset', function() {
+			$('table', self.el).empty();
+			_.each(this.collection.models, function(collectible) {
+				// This renders the collectible
+				$('table.collectibles', self.el).append(new AttributeSearchCollectibleView({
+					model : collectible
+				}).render().el);
+
+				// This renders the parts
+				$('table.collectibles', self.el).append(new AttributeSearchCollectibleAttrView({
+					model : collectible
+				}).render().el);
+
+			});
+
+			var pagesArray = [];
+			// ya fuck you dust
+			for (var i = 1; i <= this.collection.paginator_ui.totalPages; i++) {
+				pagesArray.push(i);
+			}
+
+			var data = {
+				pages : pagesArray
+			};
+			if (this.collection.currentPage) {
+				data['paginator'] = {
+					currentPage : this.collection.currentPage,
+					firstPage : this.collection.firstPage,
+					perPage : this.collection.perPage,
+					totalPages : this.collection.totalPages,
+					total : this.collection.paginator_ui.total
+				}
+			} else {
+				data['paginator'] = this.collection.paginator_ui;
+			}
+
+			dust.render('paging', data, function(error, output) {
+				$('.paging', self.el).html(output);
+			});
+
+			$(self.el).animate({
+				scrollTop : 0
+			});
+		}, this)
+	},
+	render : function() {
+		var self = this;
+		dust.render(this.template, {}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		return this;
+	},
+	searchCollectible : function(event) {
+		// TODO: Update to not allow searching
+		// unless something was entered
+		event.preventDefault();
+		var query = $('.search-query', this.el).val();
+		this.collection.searchQuery = query;
+		this.collection.fetch();
+	},
+	gotoPage : function(e) {
+		e.preventDefault();
+		var page = $(e.target).text();
+		this.collection.goTo(page);
+	},
+	next : function(e) {
+		e.preventDefault();
+		if ( typeof this.collection.currentPage === 'undefined') {
+			this.collection.currentPage = 1;
+		}
+		this.collection.requestNextPage();
+	},
+	previous : function(e) {
+		e.preventDefault();
+		this.collection.requestPreviousPage();
+	},
+	selectAttribute : function(event) {
+		var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
+		this.model.clear({
+			silent : true
+		});
+		this.model.set(attribute);
+	}
+});
+
+var AttributeSearchCollectibleAttrView = Backbone.View.extend({
+	tagName : 'tr',
+	events : {
+
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+
+		// Update this to be a thumb nail, then the name and the manufacturer or artist, and then collectible type
+		// Then underneath a list of all parts
+
+		var self = this;
+		var collectible = this.model.toJSON();
+
+		var row = '<td colspan="4">';
+
+		if ($.isArray(collectible.AttributesCollectible) && collectible.AttributesCollectible.length > 0) {
+			row += '<ul class="unstyled">';
+
+			$.each(collectible.AttributesCollectible, function(index, attribute) {
+				// If there is no category then don't show it, I think this is a problem
+				// right now because we have some attributes that are still in the features list
+				if ( typeof attribute.Attribute.AttributeCategory !== 'undefined') {
+					var pathName = attribute.Attribute.AttributeCategory.path_name;
+					var name = attribute.Attribute.name;
+					if (name === '') {
+						name = attribute.Attribute.description;
+					}
+					row += '<li class="attribute" data-id="attribute.Attribute.id" data-attribute=\'' + JSON.stringify(attribute.Attribute) + '\'>';
+					row += '<table>';
+					var attribute = attribute;
+					attribute.AttributesUpload = attribute.Attribute.AttributesUpload;
+					attribute.uploadDirectory = uploadDirectory;
+
+					dust.render('attribute.default.edit', attribute, function(error, output) {
+						row += output;
+					});
+
+					row += '</table>';
+					row += '</li>';
+
+				}
+
+			});
+
+			row += '</ul>';
+
+		} else {
+			row += 'No Parts';
+		}
+		row += '</td>';
+		$(self.el).html(row);
+
+		return this;
+	},
+	buildRow : function() {
+
+	}
+});
+
+/**
+ *This view is for when we are searching for attributes by part/artist
+ * and then displaying those parts
+ */
+var AttributeSearchPartAttrView = Backbone.View.extend({
+	tagName : 'tr',
+	className : 'attribute',
+	template : 'attribute.default.edit',
+	events : {
+
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+		var self = this;
+		var attribute = this.model.toJSON();
+		attribute.uploadDirectory = uploadDirectory;
+
+		dust.render(this.template, attribute, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		var attrData = attribute.Attribute;
+		attrData.AttributesUpload = attribute.AttributesUpload;
+
+		$(self.el).attr('data-attribute', JSON.stringify(attrData));
+
+		return this;
+	},
+});
+
+var AttributeSearchCollectibleView = Backbone.View.extend({
+	tagName : 'tr',
+	events : {
+
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+
+		// Update this to be a thumb nail, then the name and the manufacturer or artist, and then collectible type
+		// Then underneath a list of all parts
+
+		var self = this;
+		var collectible = this.model.toJSON();
+		var row = '<td rowspan="2">' + collectible.Collectible.name;
+
+		if (collectible.Collectible.exclusive) {
+			row += ' | Exclusive';
+		}
+
+		if (collectible.Collectible.variant) {
+			row += ' | Variant';
+		}
+
+		row += '</td>';
+
+		row += '<td><ul class="thumbnails">';
+		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
+			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
+				if (collectibleUpload.primary) {
+					row += '<li class="span1"><a class="thumbnail" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a></li>';
+				}
+			});
+		} else {
+			row += '<li class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>';
+		}
+		row += '</ul></td>';
+
+		row += '<td>' + collectible.Collectibletype.name + '</td>';
+		row += '<td>' + collectible.Manufacture.title + '</td>';
+		row += '<td>' + collectible.License.name + '</td>';
+
+		var $listItem = $(self.el).html(row);
+
+		return this;
+	},
+});
+
+/**
+ * This view is for setting duplicates, this is a modal.
+ *
+ * This is how I should do all modals going forward
+ */
+var AttributeDuplicateView = Backbone.View.extend({
+	template : 'attribute.remove.duplicate',
+	modal : 'modal',
+	events : {
+		'click #select-attribute-link' : 'searchCollectible',
+		'click #select-attribute-link-by-part' : 'searchPart'
+	},
+	initialize : function(options) {
+		var self = this;
+		this.artists = options.artists;
+		this.manufacturers = options.manufacturers;
+		this.categories = options.categories;
+	},
+	remove : function() {
+		if (this.currentView) {
+			this.currentView.remove();
+		}
+		Backbone.View.prototype.remove.call(this);
+	},
+	renderBody : function() {
+		var self = this;
+		var data = {
+
+		};
+
+		dust.render(this.template, data, function(error, output) {
+			$('.modal-body', self.el).html(output);
+		});
+
+		//$('.modal-body', self.el).append(this.model.toJSON().response.data);
+
+	},
+	render : function() {
+		var self = this;
+
+		dust.render(this.modal, {
+			modalId : 'attributeDuplicateModal',
+			modalTitle : 'Remove Duplicate Part'
+		}, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		$(self.el).find('.btn-primary.save').remove();
+
+		this.renderBody();
+
+		return this;
+	},
+	hideMessage : function() {
+		$('.message-container', this.el).hide();
+	},
+	searchCollectible : function() {
+		var attribute = new Backbone.Model();
+		if (this.currentView) {
+			this.currentView.remove();
+		}
+
+		this.currentView = new AddExistingAttributeCollectibleSearchView({
+			collection : new PaginatedCollection(),
+			model : attribute
+		});
+
+		$('.modal-body', self.el).html(this.currentView.render().el);
+		$('.modal-footer .save', self.el).hide();
+	},
+	searchPart : function() {
+		var attribute = new Backbone.Model();
+		if (this.currentView) {
+			this.currentView.remove();
+		}
+
+		this.currentView = new AddExistingAttributePartSearchView({
+			collection : new PaginatedPart(),
+			model : attribute,
+			artists : this.artists,
+			manufacturers : this.manufacturers,
+			categories : this.categories
+		});
+
+		$('.modal-body', self.el).html(this.currentView.render().el);
+		$('.modal-footer .save', self.el).hide();
+	}
+});
 
 var hasDupList = false;
 
 $(function() {
+	//TODO Loading usless stuff depending on type.
+	// load data from server, populate objects then determine
+	// what templates to load from there
 	$.blockUI({
 		message : '<img src="/img/ajax-loader-circle.gif" />',
 		showOverlay : false,
@@ -1988,11 +3196,71 @@ $(function() {
 		}
 	});
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/collectible.default.dust'), $.get('/templates/collectibles/photo.default.dust'), $.get('/templates/collectibles/attributes.default.dust'), $.get('/templates/collectibles/attribute.default.dust'), $.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust'), $.get('/templates/collectibles/tags.default.dust'), $.get('/templates/collectibles/tag.default.dust'), $.get('/templates/collectibles/tag.add.default.dust'), $.get('/templates/collectibles/message.duplist.dust'), $.get('/templates/collectibles/artists.default.dust'), $.get('/templates/collectibles/artist.default.dust'), $.get('/templates/collectibles/artist.add.default.dust'), $.get('/templates/collectibles/manufacturer.add.dust'), $.get('/templates/collectibles/manufacturer.edit.dust'), $.get('/templates/collectibles/modal.dust'), $.get('/templates/collectibles/manufacturer.series.add.dust'), $.get('/templates/collectibles/attribute.upload.dust'), $.get('/templates/collectibles/directional.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate) {
+	$.when(
+	//
+	$.get('/templates/collectibles/collectible.default.dust'),
+	//
+	$.get('/templates/collectibles/photo.default.dust'),
+	//
+	$.get('/templates/collectibles/attributes.default.dust'),
+	//
+	$.get('/templates/collectibles/attributecollectible.default.dust'),
+	//
+	$.get('/templates/collectibles/status.dust'),
+	//
+	$.get('/templates/collectibles/message.dust'),
+	//
+	$.get('/templates/collectibles/tags.default.dust'),
+	//
+	$.get('/templates/collectibles/tag.default.dust'),
+	//
+	$.get('/templates/collectibles/tag.add.default.dust'),
+	//
+	$.get('/templates/collectibles/message.duplist.dust'),
+	//
+	$.get('/templates/collectibles/artists.default.dust'),
+	//
+	$.get('/templates/collectibles/artist.default.dust'),
+	//
+	$.get('/templates/collectibles/artist.add.default.dust'),
+	//
+	$.get('/templates/collectibles/manufacturer.add.dust'),
+	//
+	$.get('/templates/collectibles/manufacturer.edit.dust'),
+	//
+	$.get('/templates/collectibles/modal.dust'),
+	//
+	$.get('/templates/collectibles/manufacturer.series.add.dust'),
+	//
+	$.get('/templates/collectibles/attribute.upload.dust'),
+	//
+	$.get('/templates/collectibles/directional.dust'),
+	//
+	$.get('/templates/collectibles/attribute.add.existing.dust'),
+	//
+	$.get('/templates/collectibles/attribute.add.existing.search.dust'),
+	//
+	$.get('/templates/common/paging.dust'),
+	//
+	$.get('/templates/collectibles/directional.custom.dust'),
+	//
+	$.get('/templates/collectibles/collectible.custom.dust'),
+	//
+	$.get('/templates/collectibles/attribute.add.existing.search.part.dust'),
+	//
+	$.get('/templates/collectibles/attribute.default.dust'),
+	//
+	$.get('/templates/attributes/attributes.remove.duplicate.dust'),
+	//
+	$.get('/templates/collectibles/collectible.original.dust'),
+	//
+	$.get('/templates/collectibles/directional.original.dust'),
+	//
+	$.get('/templates/collectibles/attribute.add.new.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
-		dust.loadSource(dust.compile(attributeTemplate[0], 'attribute.default.edit'));
+		dust.loadSource(dust.compile(attributeTemplate[0], 'attributecollectible.default.edit'));
 		dust.loadSource(dust.compile(statusTemplate[0], 'status.edit'));
 		dust.loadSource(dust.compile(messageTemplate[0], 'message.edit'));
 		dust.loadSource(dust.compile(tagsTemplate[0], 'tags.edit'));
@@ -2008,19 +3276,25 @@ $(function() {
 		dust.loadSource(dust.compile(manufacturerSeriesAddTemplate[0], 'manufacturer.series.add'));
 		dust.loadSource(dust.compile(attributeUploadTemplate[0], 'attribute.photo.edit'));
 		dust.loadSource(dust.compile(directionalTemplate[0], 'directional.page'));
+		dust.loadSource(dust.compile(attributeAddExistingTemplate[0], 'attribute.add.existing'));
+		dust.loadSource(dust.compile(attributeAddExistingSearchTemplate[0], 'attribute.add.existing.search'));
+		dust.loadSource(dust.compile(directionalCustomTemplate[0], 'directional.custom'));
+		dust.loadSource(dust.compile(customTemplate[0], 'collectible.custom.edit'));
+		dust.loadSource(dust.compile(attributeAddExistingSearchPartTemplate[0], 'attribute.add.existing.search.part'));
+		dust.loadSource(dust.compile(partTemplate[0], 'attribute.default.edit'));
+		dust.loadSource(dust.compile(attributeRemoveDuplicate[0], 'attribute.remove.duplicate'));
+		dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
+		dust.loadSource(dust.compile(originalTemplate[0], 'collectible.original.edit'));
+		dust.loadSource(dust.compile(directionalOriginalTemplate[0], 'directional.original'));
+		dust.loadSource(dust.compile(attributeAddNewTemplate[0], 'attribute.add.new'));
 
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,
 			dataType : "json",
 			cache : false,
-			error : function(jqXHR, textStatus, errorThrown){
-				jqXHR;
-				textStatus;
-				errorThrown;
+			error : function(jqXHR, textStatus, errorThrown) { jqXHR;textStatus;errorThrown;
 			},
-			complete : function(jqXHR, textStatus){
-				jqXHR;
-				textStatus;
+			complete : function(jqXHR, textStatus) { jqXHR;textStatus;
 			},
 			success : function(data, textStatus, jqXHR) {
 				$.unblockUI();
@@ -2030,6 +3304,7 @@ $(function() {
 				var collectibleTypeModel = new CollectibleTypeModel(data.response.data.collectible.Collectibletype);
 				// Setup the manufacturer list, this will contain all data for each manufacturer
 				var manufacturerList = new ManufacturerList(data.response.data.manufacturers);
+				var allManufacturerList = new ManufacturerList(data.response.data.manufacturesList);
 				var currencies = new Currencies(data.response.data.currencies);
 				var scales = new Scales(data.response.data.scales);
 				var attributes = new Attributes(data.response.data.collectible.AttributesCollectible);
@@ -2109,7 +3384,7 @@ $(function() {
 				});
 
 				// Setup views
-				var collectibleView = new CollectibleView({
+				var collectibleViewData = {
 					model : collectibleModel,
 					manufacturers : manufacturerList,
 					manufacturer : selectedManufacturer,
@@ -2118,8 +3393,18 @@ $(function() {
 					scales : scales,
 					status : status,
 					collectibleType : collectibleTypeModel,
-					brands : brands
-				});
+					brands : brands,
+					template : 'collectible.default.edit'
+				};
+
+				if (collectibleModel.get('custom')) {
+					collectibleViewData.template = 'collectible.custom.edit';
+					collectibleViewData.customStatuses = new Backbone.Collection(data.response.data.customStatuses);
+				} else if (collectibleModel.get('original')) {
+					collectibleViewData.template = 'collectible.original.edit';
+				}
+				//TODO: At some point it might warrant a whole new view for customs
+				var collectibleView = new CollectibleView(collectibleViewData);
 
 				$('#photo-container').append(new PhotoView({
 					collection : uploads,
@@ -2134,11 +3419,17 @@ $(function() {
 
 				$('#attributes-container').append(new AttributesView({
 					collection : attributes,
-					status : status
+					status : status,
+					artists : new Backbone.Collection(data.response.data.artists),
+					manufacturers : allManufacturerList,
+					categories : new Backbone.Collection(data.response.data.categories),
+					collectible : collectibleModel,
+					scales : scales
 				}).render().el);
 
 				$('#status-container').html(new StatusView({
 					model : status,
+					collectible : collectibleModel,
 					allowEdit : true
 				}).render().el);
 
@@ -2157,7 +3448,7 @@ $(function() {
 				//page and they change the status and it is a draft
 				// go to the edit page
 				status.on('sync', function() {
-					if (this.toJSON().status.id === '2') {
+					if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
 						window.location.href = '/collectibles/view/' + this.id
 					}
 				}, status);
@@ -2165,10 +3456,22 @@ $(function() {
 				collectibleModel.on('destroy', function() {
 					window.location.href = '/users/home';
 				});
-				// view is overkill here
-				dust.render('directional.page', {}, function(error, output) {
-					$('#directional-text-container').html(output);
-				});
+				if (collectibleModel.get('custom')) {
+					// view is overkill here
+					dust.render('directional.custom', {}, function(error, output) {
+						$('#directional-text-container').html(output);
+					});
+				} else if (collectibleModel.get('original')) {
+					// view is overkill here
+					dust.render('directional.original', {}, function(error, output) {
+						$('#directional-text-container').html(output);
+					});
+				} else {
+					// view is overkill here
+					dust.render('directional.page', {}, function(error, output) {
+						$('#directional-text-container').html(output);
+					});
+				}
 
 			}
 		});

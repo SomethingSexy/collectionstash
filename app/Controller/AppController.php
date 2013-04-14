@@ -104,65 +104,6 @@ class AppController extends Controller {
 		}
 	}
 
-	public function setSearchData() {
-		/*
-		 * This data is read off of the search.ctp to draw the filter boxes, if you update
-		 * this make sure you update the corresponding search.ctp files
-		 *
-		 * TODO: Need to update this so that if a specific manufacture is selected
-		 * we only return those collectible types
-		 */
-		$manufactures = $this -> Session -> read('Manufacture_Search.filter');
-
-		if (!isset($manufactures)) {
-			$this -> loadModel('Manufacture');
-			$manufactures = $this -> Manufacture -> getManufactureSearchData();
-			$this -> Session -> write('Manufacture_Search.filter', $manufactures);
-		}
-
-		//For now, we allow one manufacture filter, if that is set regardless lets also
-		//reget the types
-		if (isset($this -> request -> data['Search']['Manufacture']['Filter'])) {
-			$this -> loadModel('CollectibletypesManufacture');
-			//Since we only allow one, for now but the interface is setup to handle multiple do this
-			reset($this -> request -> data['Search']['Manufacture']['Filter']);
-			// make sure array pointer is at first element
-			$firstKey = key($this -> request -> data['Search']['Manufacture']['Filter']);
-
-			$collectibleTypes = $this -> CollectibletypesManufacture -> getAllCollectibleTypeByManufactureId($firstKey);
-			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-
-			$this -> loadModel('LicensesManufacture');
-
-			$licenses = $this -> LicensesManufacture -> getFullLicensesByManufactureId($firstKey);
-			// debug($licenses);
-			$this -> Session -> write('License_Search.filter', $licenses);
-
-		} else {
-			$this -> loadModel('Collectibletype');
-			$collectibleTypes = $this -> Collectibletype -> getCollectibleTypeSearchData();
-			$this -> Session -> write('CollectibleType_Search.filter', $collectibleTypes);
-
-			$this -> loadModel('License');
-			$licenses = $this -> License -> getLicenses();
-			$this -> Session -> write('License_Search.filter', $licenses);
-		}
-
-		if (isset($this -> request -> data['Search']['Tag']['Filter'])) {
-			reset($this -> request -> data['Search']['Tag']['Filter']);
-			// make sure array pointer is at first element
-			$firstKey = key($this -> request -> data['Search']['Tag']['Filter']);
-			$this -> loadModel('Tag');
-			$tag = $this -> Tag -> find("first", array('conditions' => array('Tag.id' => $firstKey)));
-			$this -> Session -> write('Tag_Search.filter', $tag);
-		} else {
-			//If a tag is not set on this search, remove this from the session to be safe
-			$this -> Session -> delete('Tag_Search.filter');
-		}
-
-		// debug($collectibleTypes);
-	}
-
 	public function handleNotLoggedIn() {
 		$this -> Session -> setFlash('Your session has timed out.');
 		$this -> redirect(array('admin' => false, 'controller' => 'users', 'action' => 'login'), null, true);
@@ -192,53 +133,22 @@ class AppController extends Controller {
 	 * This should really be a component
 	 */
 	public function searchCollectible($conditions = null) {
-		//TODO clean up this code
 		$this -> loadModel('Collectible');
-		// debug($this->request->data);
+
 		$saveSearchFilters = array();
+		// handle this one separately for now as well
 		if (isset($this -> request -> query['q'])) {
 			$this -> request -> data['Search'] = array();
 			$this -> request -> data['Search']['search'] = '';
 			$this -> request -> data['Search']['search'] = $this -> request -> query['q'];
 		}
-		if (isset($this -> request -> query['m'])) {
-			//find all of this license
-			$this -> request -> data['Search']['Manufacture'] = array();
-			$this -> request -> data['Search']['Manufacture']['Filter'] = array();
-			$this -> request -> data['Search']['Manufacture']['Filter'][$this -> request -> query['m']] = 1;
-			$saveSearchFilters['manufacturer'] = $this -> request -> query['m'];
-		}
-		if (isset($this -> request -> query['l'])) {
-			//find all of this license
-			$this -> request -> data['Search']['License'] = array();
-			$this -> request -> data['Search']['License']['Filter'] = array();
-			$this -> request -> data['Search']['License']['Filter'][$this -> request -> query['l']] = 1;
-			$saveSearchFilters['license'] = $this -> request -> query['l'];
-		}
-		if (isset($this -> request -> query['ct'])) {
-			//find all of this license
-			$this -> request -> data['Search']['CollectibleType'] = array();
-			$this -> request -> data['Search']['CollectibleType']['Filter'] = array();
-			$this -> request -> data['Search']['CollectibleType']['Filter'][$this -> request -> query['ct']] = 1;
-			$saveSearchFilters['collectibletype'] = $this -> request -> query['ct'];
-		}
-		if (isset($this -> request -> query['t'])) {
-			//find all of this license
-			$this -> request -> data['Search']['Tag'] = array();
-			$this -> request -> data['Search']['Tag']['Filter'] = array();
-			$this -> request -> data['Search']['Tag']['Filter'][$this -> request -> query['t']] = 1;
-			$saveSearchFilters['tag'] = $this -> request -> query['t'];
-		}
+		// handle this one separately
 		if (isset($this -> request -> query['o'])) {
-			//find all of this license
-			$this -> request -> data['Search']['Order'] = array();
-			$this -> request -> data['Search']['Order']['Filter'] = array();
-			//Just setting a single filter for these now
-			$this -> request -> data['Search']['Order']['Filter'] = $this -> request -> query['o'];
-			$saveSearchFilters['order'] = $this -> request -> query['o'];
+
 		} else {
-			$saveSearchFilters['order'] = 'a';
+			$this -> request -> query['o'] = 'a';
 		}
+
 		if (isset($this -> request -> data['Search']['search']) && trim($this -> request -> data['Search']['search']) !== '') {
 			$search = $this -> request -> data['Search']['search'];
 			$search = ltrim($search);
@@ -246,129 +156,92 @@ class AppController extends Controller {
 			$saveSearchFilters['search'] = $search;
 		}
 
-		$this -> set(compact('saveSearchFilters'));
-		$this -> setSearchData();
-		//    array(
-		//       'OR'=>array(
-		//          array('Company.status' => 'active'),
-		//          'NOT'=>array(
-		//             array('Company.status'=> array('inactive', 'suspended'))
-		//          )
-		//       )
-		//   )
-		// )
-		// array(
-		// 'OR' => array(
-		//    array('Collectible.manufacture_id' => 'Future Holdings'),
-		//    array('Collectible.manufacture_id' => 'Future Holdings')
-		// ));
-		$filters = array();
-		$manFilters = array();
-		array_push($manFilters, array('AND' => array()));
-		//	debug($manFilters);
-		array_push($manFilters[0]['AND'], array('OR' => array()));
-		$filtersSet = false;
-		$manufactureFilterSet = false;
-		if (isset($this -> request -> data['Search']['Manufacture'])) {
-			foreach ($this -> request -> data['Search']['Manufacture']['Filter'] as $key => $value) {
-				if ($value != 0) {
-					array_push($manFilters[0]['AND'][0]['OR'], array('Collectible.manufacture_id' => $key));
-					$filtersSet = true;
-					$manufactureFilterSet = true;
+		// Here I need to check the query string for all possible filters
+		debug($this -> request -> query);
+
+		$currentFilters = array();
+		$currentFilters['Search'] = array();
+		foreach ($this -> filters as $filterkey => $filter) {
+			if (isset($this -> request -> query[$filterkey])) {
+
+				$queryValue = $this -> request -> query[$filterkey];
+				if (strpos($queryValue, ',') !== false) {
+					$queryValue = rtrim($queryValue, ",");
+					$queryValue = explode(",", $queryValue);
+				} else {
+					$queryValue = array($queryValue);
+				}
+
+				$currentFilters['Search'][$filterkey] = array();
+				foreach ($queryValue as $key => $value) {
+					array_push($currentFilters['Search'][$filterkey], $value);
+					if (!isset($saveSearchFilters[$filterkey])) {
+						$saveSearchFilters[$filterkey] = array();
+					}
+					array_push($saveSearchFilters[$filterkey], $value);
+				}
+
+			}
+		}
+
+		debug($saveSearchFilters);
+
+		if (isset($saveSearchFilters['t'])) {
+			reset($saveSearchFilters['t']);
+			// make sure array pointer is at first element
+			$firstKey = $saveSearchFilters['t'][0];
+			$this -> loadModel('Tag');
+			$tag = $this -> Tag -> find("first", array('contain' => false, 'conditions' => array('Tag.id' => $firstKey)));
+			$saveSearchFilters['tag'] = $tag['Tag'];
+		}
+
+		debug($currentFilters);
+		//If nothing is set, use alphabetical order as the default
+		$order = array();
+		$order['Collectible.name'] = 'ASC';
+		$tableFilters = array();
+		foreach ($currentFilters['Search'] as $filterKey => $filterGroup) {
+			// if the one we are looking at is a custom
+			if (!isset($this -> filters[$filterKey]['custom']) || !$this -> filters[$filterKey]['custom']) {
+				$modelFilters = array();
+				array_push($modelFilters, array('AND' => array()));
+				array_push($modelFilters[0]['AND'], array('OR' => array()));
+				$filtersSet = false;
+
+				foreach ($filterGroup as $key => $value) {
+					if ($value != 0) {
+						array_push($modelFilters[0]['AND'][0]['OR'], array($this -> filters[$filterKey]['model'] . '.' . $this -> filters[$filterKey]['id'] => $value));
+						$filtersSet = true;
+					}
+				}
+
+				if ($filtersSet) {
+					array_push($tableFilters, $modelFilters);
+				}
+			} else if ($filterKey === 'o') {
+				// there can only be on
+				$orderType = $filterGroup[0];
+				//reset order
+				$order = array();
+				switch ($orderType) {
+					case "n" :
+						$order['Collectible.modified'] = 'desc';
+						break;
+					case "o" :
+						$order['Collectible.created'] = 'ASC';
+						break;
+					case "a" :
+						$order['Collectible.name'] = 'ASC';
+						break;
+					case "d" :
+						$order['Collectible.name'] = 'desc';
+						break;
+					default :
+						$order['Collectible.name'] = 'ASC';
 				}
 			}
 		}
 
-		if ($manufactureFilterSet) {
-			array_push($filters, $manFilters);
-		}
-		//debug($filters);
-
-		$typeFilters = array();
-		array_push($typeFilters, array('AND' => array()));
-		array_push($typeFilters[0]['AND'], array('OR' => array()));
-		$collectibletypeFilterSet = false;
-		if (isset($this -> request -> data['Search']['CollectibleType'])) {
-			foreach ($this-> request -> data['Search']['CollectibleType']['Filter'] as $key => $value) {
-				if ($value != 0) {
-					array_push($typeFilters[0]['AND'][0]['OR'], array('Collectible.collectibletype_id' => $key));
-					$filtersSet = true;
-					$collectibletypeFilterSet = true;
-				}
-			}
-		}
-		//debug($typeFilters);
-		if ($collectibletypeFilterSet) {
-			array_push($filters, $typeFilters);
-		}
-		//debug($filters);
-
-		$licenseFilters = array();
-		array_push($licenseFilters, array('AND' => array()));
-		array_push($licenseFilters[0]['AND'], array('OR' => array()));
-		$licenseFilterSet = false;
-		if (isset($this -> request -> data['Search']['License'])) {
-			foreach ($this -> request -> data['Search']['License']['Filter'] as $key => $value) {
-				if ($value != 0) {
-					array_push($licenseFilters[0]['AND'][0]['OR'], array('Collectible.license_id' => $key));
-					$filtersSet = true;
-					$licenseFilterSet = true;
-				}
-			}
-		}
-		if ($licenseFilterSet) {
-			array_push($filters, $licenseFilters);
-		}
-		//debug($filters);
-
-		$tagFilters = array();
-		$tagFilterSet = false;
-		if (isset($this -> request -> data['Search']['Tag'])) {
-			foreach ($this -> request -> data['Search']['Tag']['Filter'] as $key => $value) {
-				if ($value != 0) {
-					array_push($tagFilters, array('Tag.id' => $key));
-					$filtersSet = true;
-					$tagFilterSet = true;
-
-				}
-			}
-		}
-
-		if (isset($this -> request -> data['Search']['Order'])) {
-			$orderType = $this -> request -> data['Search']['Order']['Filter'];
-			$order = array();
-			switch ($orderType) {
-				case "n" :
-					$order['Collectible.modified'] = 'desc';
-					break;
-				case "o" :
-					$order['Collectible.created'] = 'ASC';
-					break;
-				case "a" :
-					$order['Collectible.name'] = 'ASC';
-					break;
-				case "d" :
-					$order['Collectible.name'] = 'desc';
-					break;
-				default :
-					$order['Collectible.name'] = 'ASC';
-			}
-		} else {
-			//If nothing is set, use alphabetical order as the default
-			$order = array();
-			$order['Collectible.name'] = 'ASC';
-		}
-
-		/*
-		 * If this is set, write it to the session so that we know
-		 * we are using a tag filter to search on.  We need to make
-		 * sure the search is correct when this is happening.  If it is not
-		 * set, make sure we delete it.
-		 */
-		if ($tagFilterSet) {
-			array_push($filters, $tagFilters);
-
-		}
 		if (!isset($filters)) {
 			$filters = array();
 		}
@@ -377,9 +250,10 @@ class AppController extends Controller {
 		if (!is_array($conditions)) {
 			$conditions = array();
 		}
+	
 		$joins = array();
 		//Do some special logic here for tags because of how they are setup.
-		if (isset($tagFilterSet) && $tagFilterSet) {
+		if (isset($saveSearchFilters['t']) && $saveSearchFilters['t']) {
 			array_push($joins, array('table' => 'collectibles_tags', 'alias' => 'CollectiblesTag', 'type' => 'inner', 'conditions' => array('Collectible.id = CollectiblesTag.collectible_id')));
 			array_push($joins, array('table' => 'tags', 'alias' => 'Tag', 'type' => 'inner', 'conditions' => array('CollectiblesTag.tag_id = Tag.id')));
 		}
@@ -389,10 +263,11 @@ class AppController extends Controller {
 		// When doing this search, we only want to see the active ones
 		array_push($conditions, array('Collectible.status_id' => '4'));
 		//See if a search was set
+			debug($tableFilters);
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
 				$test = array();
@@ -402,16 +277,179 @@ class AppController extends Controller {
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $filters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
 			//This a search based on filters, not a search string
-			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture')), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $filters), 'limit' => $listSize);
+			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $tableFilters), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');
 
 		$this -> set('collectibles', $data);
+		debug($saveSearchFilters);
+		debug($tableFilters);
+		$filters = $this -> _getFilters($saveSearchFilters);
+		$this -> set(compact('filters'));
+		$this -> set(compact('saveSearchFilters'));
+
+	}
+
+	private function _getFilters($searchFilters) {
+
+		$searchFilterGroups = array();
+		$this -> loadModel('Manufacture');
+		$manufacturers = $this -> Manufacture -> find("all", array('order' => array('Manufacture.title' => 'ASC'), 'contain' => false));
+		//$categories = $this -> Attribute -> AttributeCategory -> find("all", array('contain' => false));
+		//$scales = $this -> Attribute -> Scale -> find("all", array('contain' => false));
+
+		$manufacturerSearchGroup = array();
+		$manufacturerSearchGroup['filters'] = array();
+		$manufacturerSearchGroup['selected'] = array();
+		$manufacturerSearchGroup['label'] = __('Manufacturer');
+		$manufacturerSearchGroup['type'] = 'm';
+		$manufacturerSearchGroup['allowMultiple'] = 'true';
+
+		foreach ($manufacturers as $key => $value) {
+			$serachFilter = array();
+			$serachFilter['id'] = $value['Manufacture']['id'];
+			$serachFilter['label'] = $value['Manufacture']['title'];
+			array_push($manufacturerSearchGroup['filters'], $serachFilter);
+		}
+		array_push($searchFilterGroups, $manufacturerSearchGroup);
+
+		// If a manufacturer is selected, let's filter our the filter data :)
+		if (isset($searchFilters['m'])) {
+
+			$this -> loadModel('CollectibletypesManufacture');
+
+			$collectibleTypes = $this -> CollectibletypesManufacture -> find('all', array('order' => array('Collectibletype.name' => 'ASC'), 'contain' => array('Collectibletype'), 'conditions' => array('CollectibletypesManufacture.manufacture_id' => $searchFilters['m'])));
+			$collectibleTypesSearchGroup = array();
+			$collectibleTypesSearchGroup['filters'] = array();
+			$collectibleTypesSearchGroup['selected'] = array();
+			$collectibleTypesSearchGroup['label'] = __('Platform');
+			$collectibleTypesSearchGroup['type'] = 'ct';
+			$collectibleTypesSearchGroup['allowMultiple'] = 'true';
+
+			foreach ($collectibleTypes as $key => $value) {
+				$serachFilter = array();
+				$serachFilter['id'] = $value['Collectibletype']['id'];
+				$serachFilter['label'] = $value['Collectibletype']['name'];
+				array_push($collectibleTypesSearchGroup['filters'], $serachFilter);
+			}
+			$collectibleTypesSearchGroup['filters'] = $this -> my_array_unique($collectibleTypesSearchGroup['filters']);
+			array_push($searchFilterGroups, $collectibleTypesSearchGroup);
+
+			$this -> loadModel('LicensesManufacture');
+
+			$licenses = $this -> LicensesManufacture -> find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $searchFilters['m'])));
+			$licenseSearchGroup = array();
+			$licenseSearchGroup['filters'] = array();
+			$licenseSearchGroup['selected'] = array();
+			$licenseSearchGroup['label'] = __('Brand');
+			$licenseSearchGroup['type'] = 'l';
+			$licenseSearchGroup['allowMultiple'] = 'true';
+
+			foreach ($licenses as $key => $value) {
+				$serachFilter = array();
+				$serachFilter['id'] = $value['License']['id'];
+				$serachFilter['label'] = $value['License']['name'];
+				array_push($licenseSearchGroup['filters'], $serachFilter);
+			}
+			$licenseSearchGroup['filters'] = $this -> my_array_unique($licenseSearchGroup['filters']);
+			array_push($searchFilterGroups, $licenseSearchGroup);
+
+		} else {
+			$this -> loadModel('Collectibletype');
+			$collectibleTypes = $this -> Collectibletype -> find("all", array('contain' => false));
+
+			$collectibleTypesSearchGroup = array();
+			$collectibleTypesSearchGroup['filters'] = array();
+			$collectibleTypesSearchGroup['selected'] = array();
+			$collectibleTypesSearchGroup['label'] = __('Platform');
+			$collectibleTypesSearchGroup['type'] = 'ct';
+			$collectibleTypesSearchGroup['allowMultiple'] = 'true';
+
+			foreach ($collectibleTypes as $key => $value) {
+				$serachFilter = array();
+				$serachFilter['id'] = $value['Collectibletype']['id'];
+				$serachFilter['label'] = $value['Collectibletype']['name'];
+				array_push($collectibleTypesSearchGroup['filters'], $serachFilter);
+			}
+			array_push($searchFilterGroups, $collectibleTypesSearchGroup);
+
+			$this -> loadModel('License');
+			$licenses = $this -> License -> find("all", array('contain' => false));
+
+			$licenseSearchGroup = array();
+			$licenseSearchGroup['filters'] = array();
+			$licenseSearchGroup['selected'] = array();
+			$licenseSearchGroup['label'] = __('Brand');
+			$licenseSearchGroup['type'] = 'l';
+			$licenseSearchGroup['allowMultiple'] = 'true';
+
+			foreach ($licenses as $key => $value) {
+				$serachFilter = array();
+				$serachFilter['id'] = $value['License']['id'];
+				$serachFilter['label'] = $value['License']['name'];
+				array_push($licenseSearchGroup['filters'], $serachFilter);
+			}
+			array_push($searchFilterGroups, $licenseSearchGroup);
+
+		}
+
+		$orderSearchGroup = array();
+		$orderSearchGroup['filters'] = array();
+		$orderSearchGroup['selected'] = array();
+		$orderSearchGroup['label'] = __('Order');
+		$orderSearchGroup['type'] = 'o';
+		$orderSearchGroup['allowMultiple'] = 'false';
+
+		$serachFilter = array();
+		$serachFilter['id'] = 'a';
+		$serachFilter['label'] = 'Ascending';
+		array_push($orderSearchGroup['filters'], $serachFilter);
+
+		$serachFilter = array();
+		$serachFilter['id'] = 'd';
+		$serachFilter['label'] = 'Descending';
+		array_push($orderSearchGroup['filters'], $serachFilter);
+
+		$serachFilter = array();
+		$serachFilter['id'] = 'n';
+		$serachFilter['label'] = 'Newest';
+		array_push($orderSearchGroup['filters'], $serachFilter);
+
+		$serachFilter = array();
+		$serachFilter['id'] = 'o';
+		$serachFilter['label'] = 'Oldest';
+		array_push($orderSearchGroup['filters'], $serachFilter);
+
+		array_push($searchFilterGroups, $orderSearchGroup);
+
+		return $searchFilterGroups;
+
+	}
+
+	function my_array_unique($array, $keep_key_assoc = false) {
+		$duplicate_keys = array();
+		$tmp = array();
+
+		foreach ($array as $key => $val) {
+			// convert objects to arrays, in_array() does not support objects
+			if (is_object($val))
+				$val = (array)$val;
+
+			if (!in_array($val, $tmp))
+				$tmp[] = $val;
+			else
+				$duplicate_keys[] = $key;
+		}
+
+		foreach ($duplicate_keys as $key)
+			unset($array[$key]);
+
+		return $keep_key_assoc ? $array : array_values($array);
 	}
 
 }

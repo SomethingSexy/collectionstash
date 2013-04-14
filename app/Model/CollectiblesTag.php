@@ -83,7 +83,6 @@ class CollectiblesTag extends AppModel {
 		$retVal = $this -> buildDefaultResponse();
 		$this -> Tag -> set($data['CollectiblesTag']);
 		$validCollectible = true;
-	
 
 		if ($this -> Tag -> validates()) {
 			// just in case
@@ -94,11 +93,7 @@ class CollectiblesTag extends AppModel {
 			// on collectible status
 			// If we are already auto updating, no need to check
 			if ($autoUpdate === 'false' || $autoUpdate === false) {
-				$isDraft = $this -> Collectible -> isStatusDraft($data['CollectiblesTag']['collectible_id']);
-				debug($isDraft);
-				if ($isDraft) {
-					$autoUpdate = true;
-				}
+				$autoUpdate = $this -> Collectible -> allowAutoUpdate($data['CollectiblesTag']['collectible_id'], $user);
 			}
 
 			if ($autoUpdate === true || $autoUpdate === 'true') {
@@ -154,11 +149,7 @@ class CollectiblesTag extends AppModel {
 		// on collectible status
 		// If we are already auto updating, no need to check
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
-			$isDraft = $this -> Collectible -> isStatusDraft($currentVersion['CollectiblesTag']['collectible_id']);
-			debug($isDraft);
-			if ($isDraft) {
-				$autoUpdate = true;
-			}
+			$autoUpdate = $this -> Collectible -> allowAutoUpdate($currentVersion['CollectiblesTag']['collectible_id'], $user);
 		}
 
 		if ($autoUpdate === true || $autoUpdate === 'true') {

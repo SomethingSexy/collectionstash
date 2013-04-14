@@ -73,5 +73,11 @@ class Stash extends AppModel {
 		return $this -> find('first', array('conditions' => array('Stash.user_id' => $userId, 'Stash.name' => $stashType)));
 	}
 
+	public function getStashId($userId, $stashType = 'Default') {
+		$stash = $this -> find('first', array('contain' => false, 'conditions' => array('Stash.user_id' => $userId, 'Stash.name' => $stashType)));
+
+		return $stash['Stash']['id'];
+	}
+
 }
 ?>

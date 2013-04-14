@@ -16,6 +16,7 @@
 				var self = this;
 
 				// First onload we need to see if any of the filters are selected
+				// TODO: Need to handle searches and tags
 				this.selectedFilters = {};
 
 				this.element.find('.filter').each(function() {
@@ -24,60 +25,31 @@
 						self.selectedFilters[type] = [];
 					}
 
-					$(this).children('.filter-list-container').children('.filter-list').children('ol').children('li').each(function() {
-						if ($(this).hasClass('selected')) {
-							self.selectedFilters[type].push($(this).children('a').attr('data-filter'));
+					$(this).children('ul').children('li').children('.filter-links').each(function() {
+						if ($(this).is(':checked')) {
+							self.selectedFilters[type].push($(this).attr('data-filter'));
 						}
 					});
 				});
 
-				//This is for clicking and opening up the filter box
-				this.element.find('.filter').not('.lock').click(function(e) {
-					if ($(e.target).hasClass('ui-icon-close')) {
-						var selectedType = $(e.target).closest('.filter').attr('data-type');
-
-						if (!self.selectedFilters.hasOwnProperty(selectedType)) {
-							self.selectedFilters[selectedType] = [];
-						} else {
-							self.selectedFilters[selectedType] = [];
-						}
-
-						var queryString = self._buildQueryString();
-
-						window.location.href = searchUrl + "?" + queryString;
-
-					} else {
-						$('#filters').children('.filter').children('.filter-list-container').hide();
-						var $node = $(e.target);
-						if ($(e.target).hasClass('name') || $(e.target).hasClass('ui-icon')) {
-							$node = $(e.target).parent('.filter-name').parent('.filter');
-						}
-
-						$node.find('.filter-list-container').show();
-					}
-				});
-
-				//This is for clicking anywhere else but the filter box and closing them
-				$('body').bind('click', function(e) {
-					if (!$(e.target).parent().is('.filter-name') && !$(e.target).is('div.filter') && !$(e.target).is('.filter-list-container') && !$(e.target).is('.filter-list') && !$(e.target).is('ol', '.filter-list') && !$(e.target).is('li', '.filter-list ol')) {
-						$('#filters').children('.filter').children('.filter-list-container').hide();
-					}
-				});
-
 				//This is for clicking a specific filter
-				this.element.children('.filter').children('.filter-list-container').children('.filter-list').children('ol').children('li').children('.filter-links').click(function() {
+				this.element.children('.filter').children('ul').children('li').children('.filter-links').click(function() {
 					var selectedType = $(this).closest('.filter').attr('data-type');
+					var allowMulitple = $(this).closest('.filter').attr('data-allow-multiple');
 					var selectedFilter = $(this).attr('data-filter');
 
 					if (!self.selectedFilters.hasOwnProperty(selectedType)) {
 						self.selectedFilters[selectedType] = [];
 					}
 
-					if ($(this).parent().hasClass('selected')) {
+					if ($(this).is(':checked')) {
+						if(allowMulitple === 'false'){
+							self.selectedFilters[selectedType] = [];
+						}
+						self.selectedFilters[selectedType].push(selectedFilter);
+					} else {
 						// remove it
 						self.selectedFilters[selectedType].splice($.inArray(selectedFilter, self.selectedFilters[selectedType]), 1);
-					} else {
-						self.selectedFilters[selectedType].push(selectedFilter);
 					}
 
 					// This will allow for multiples

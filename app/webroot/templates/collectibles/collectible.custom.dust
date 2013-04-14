@@ -1,0 +1,240 @@
+<div class="well">
+<h3>{collectibleType.name}</h3>
+<form class="form-horizontal">
+	<input type="hidden" value="false" name="official">
+	<fieldset>
+		<legend>
+			Custom Details
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Status</label>
+			<div class="controls controls-row">
+				<select id="CollectibleCurrencyId" name="custom_status_id">
+					{#customStatuses customStatusId=collectible.custom_status_id}
+					<option {@eq key="{CustomStatus.id}" value="{customStatusId}"}selected{/eq}  value="{CustomStatus.id}">{CustomStatus.status}</option>
+					{/customStatuses}
+				</select>
+				<span class="help-inline">Use this to indicate the status of your custom.</span>
+			</div>
+		</div>
+	</fieldset>
+	
+	
+	<fieldset>
+		<legend>
+			Product Details
+		</legend>
+		{@eq key="{renderManList}" value="true" type="boolean"}
+		<div class="control-group">
+			<label class="control-label" for="inputManufacturer">Manufacturer</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<select id="inputManufacturer" name="manufacture_id">
+						<option value=""></option>
+						{#manufacturers collectibleId=collectible.manufacture_id}
+						<option value="{id}" {@eq key="{id}" value="{collectibleId}"}selected{/eq}>{title}</option>
+						{/manufacturers}
+					</select>
+					{#collectible.manufacture_id}
+						<button class="btn manufacturer-edit" type="button">Edit</button>
+					{/collectible.manufacture_id}
+					{@eq key="{allowAddManufacturer}" value="true" type="boolean"}
+					<button class="btn manufacturer-add" type="button">Add</button>
+					{/eq}
+				</div>
+			</div>
+		</div>
+		{/eq}
+		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath brands=brands renderBrandList=renderBrandList}
+		<div class="control-group">
+			<label class="control-label" for="inputBrand">Brand</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<select id="inputBrand" name="license_id">
+						<option value=""></option>
+						{#LicensesManufacture}
+						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
+						{/LicensesManufacture}
+					</select>
+					<button class="btn manufacturer-add-brand" type="button">Add</button>
+				</div>
+			</div>
+		</div>
+		{#series_id seriesId=seriesId seriesPath=seriesPath}
+		<div class="control-group">
+			<label class="control-label" for="inputName">Category</label>
+			<div class="controls">
+				<div class="btn-group">
+					<button id="buttonSeries" type="button" class="btn">
+						{@if cond="('{seriesPath}' !== '')"}
+							{seriesPath}
+							{:else}
+							Select
+						{/if}
+					</button>
+					<button type="button" class="btn manufacturer-add-category">Edit Categories</button>
+				</div>
+				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
+			</div>
+		</div>
+		{/series_id}
+		{:else}
+			{@eq key="{renderBrandList}" value="true" type="boolean"}
+			<div class="control-group">
+				<label class="control-label" for="inputBrand">Brand</label>
+				<div class="controls">
+					<select id="inputBrand" name="license_id">
+						<option value=""></option>
+						{#brands}
+						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
+						{/brands}
+					</select>
+				</div>
+			</div>
+			
+			{/eq}
+		{/manufacturer}
+
+		<div class="control-group">
+			<label class="control-label" for="inputName">Name</label>
+			<div class="controls">
+				<input type="text" id="inputName" name="name" value="{collectible.name|s}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputDescription">Description</label>
+			<div class="controls">
+				<textarea id="inputDescription" rows="6" name="description">{collectible.description|s}</textarea>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Cost</label>
+			<div class="controls controls-row">
+				<div class="input-prepend">
+					<span class="add-on">$</span>
+					<input type="text" id="inputMsrp" name="msrp" value="{collectible.msrp}">
+				</div>
+
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Currency</label>
+			<div class="controls controls-row">
+				<select id="CollectibleCurrencyId" name="currency_id">
+					{#currencies currencyId=collectible.currency_id}
+					<option {@eq key="{Currency.id}" value="{currencyId}"}selected{/eq}  value="{Currency.id}">{Currency.iso_code}</option>
+					{/currencies}
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Year Made</label>
+			<div class="controls controls-row">
+				<select name="release">
+					<option value=""></option>
+					{#years year=collectible.release}
+					<option {@eq key="{.}" value="{year}"}selected{/eq} value="{.}">{.}</option>
+					{/years}
+				</select>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Collectible Specs
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputMsrp">Scale</label>
+			<div class="controls controls-row">
+				<select name="scale_id">
+					<option value=""></option>
+					{#scales scale=collectible.scale_id}
+					<option {@eq key="{Scale.id}" value="{scale}"}selected{/eq} value="{Scale.id}">{Scale.scale}</option>
+					{/scales}
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputUpc">Number of Pieces</label>
+			<div class="controls">
+				<input type="number" id="inputPieces" name="pieces" value="{collectible.pieces}">
+				<span class="help-inline">This is the number of parts and pieces this collectible has.</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Weight</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputWeight" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
+					<span class="add-on">lbs</span>
+				</div>
+
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Length</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputLength" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Width</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputWidth" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputWeight">Depth</label>
+			<div class="controls controls-row">
+				<div class="input-append">
+					<input type="number" id="inputDepth" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
+					<span class="add-on">inches</span>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Reference
+		</legend>
+		<div class="control-group">
+			<label class="control-label" for="inputUpc">URL</label>
+			<div class="controls">
+				<input type="text" id="inputURL" name="url" value="{collectible.url|s}">			
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
+			Save changes
+		</button>
+	</div>
+</form>
+</div>
+<div id="seriesModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Change Series</h3>
+	</div>
+	<div class="modal-body">
+	
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+	</div>
+</div>
+
+

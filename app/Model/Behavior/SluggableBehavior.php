@@ -68,14 +68,13 @@ class SluggableBehavior extends ModelBehavior {
 				$fields = $this -> options[$model -> alias]['displayField'];
 				$slug = '';
 				foreach ($fields as $key => $value) {
-					if(isset($d[$value['Model']]) && isset($d[$value['Model']][$value['Field']])) {
-						if(isset($value['Display']) && $d[$value['Model']][$value['Field']]) {
+					if (isset($d[$value['Model']]) && isset($d[$value['Model']][$value['Field']])) {
+						if (isset($value['Display']) && $d[$value['Model']][$value['Field']]) {
 							$slug .= $value['Display'] . ' ';
 						} else {
 							$slug .= $d[$value['Model']][$value['Field']] . ' ';
 						}
-						
-						
+
 					}
 				}
 				if ($this -> options[$model -> alias]['showPrimary']) {
@@ -83,10 +82,12 @@ class SluggableBehavior extends ModelBehavior {
 				} else {
 					$slug = $this -> __slug($slug, null, $this -> options[$model -> alias]['replacement']);
 				}
+				if (trim($slug) !== '') {
+					$d[$model -> alias]['slugField'] = $slug;
+				}
 
-				$d[$model -> alias]['slugField'] = $slug;
 			}
-			
+
 			$data[$i] = $d;
 		}
 		return $data;

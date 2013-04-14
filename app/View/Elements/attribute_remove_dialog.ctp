@@ -1,4 +1,4 @@
-<div id="attribute-remove-dialog" class="dialog attribute" title="Remove Part">
+<div id="attribute-remove-dialog" class="dialog attribute" title="Delete Part">
 	<div class="component component-dialog">
 		<div class="inside" >
 			<?php echo $this -> element('flash'); ?>
@@ -9,7 +9,7 @@
 				<div id="remove-attribute">
 					<div class="component-info">
 						<div class="attribute-attached">
-							<?php echo __('This part is linked to other collectibles.  Removing this part will remove the link to those collectibles that this part is linked too.'); ?>
+							<?php echo __('This part is linked to other collectibles.  Deleting this part will also remove it from those collectibles that this part is attached too.'); ?>
 						</div>
 						<div class="attribute-not-attached">
 							<?php echo __('This part is not linked to other collectibles.  Deleting this part  will remove it permanately.'); ?>
