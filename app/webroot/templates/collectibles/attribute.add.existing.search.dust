@@ -1,0 +1,17 @@
+<div class="item-search">
+	<div class="directional-text">
+		Search for a collectible that has the part you want to add. Use the search box to narrow your results. Select the collectible to see the list of parts for that collectible to select from.
+	</div>
+	<form class="form-search">
+		<div class="input-append">
+			<input type="text" name="q" class="span2 search-query">
+			<button type="submit" class="btn search">
+				Search
+			</button>
+		</div>
+	</form>
+	<div class="items">
+		<table class="table collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></table>
+	</div>
+	<div class="paging"></div>
+</div>

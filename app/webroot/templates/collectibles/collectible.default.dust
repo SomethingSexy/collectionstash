@@ -12,6 +12,7 @@
 		<legend>
 			Product Details
 		</legend>
+		{@eq key="{renderManList}" value="true" type="boolean"}
 		<div class="control-group">
 			<label class="control-label" for="inputManufacturer">Manufacturer</label>
 			<div class="controls controls-row">
@@ -31,6 +32,7 @@
 				</div>
 			</div>
 		</div>
+		{/eq}
 		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath brands=brands renderBrandList=renderBrandList}
 		<div class="control-group">
 			<label class="control-label" for="inputBrand">Brand</label>
@@ -109,9 +111,8 @@
 			<label class="control-label" for="inputMsrp">Currency</label>
 			<div class="controls controls-row">
 				<select id="CollectibleCurrencyId" name="currency_id">
-					<option value=""></option>
-					{#currencies}
-					<option value="{Currency.id}">{Currency.iso_code}</option>
+					{#currencies currencyId=collectible.currency_id}
+					<option {@eq key="{Currency.id}" value="{currencyId}"}selected{/eq}  value="{Currency.id}">{Currency.iso_code}</option>
 					{/currencies}
 				</select>
 			</div>

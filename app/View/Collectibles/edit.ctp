@@ -67,25 +67,25 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	{% } %}
 	<td class="delete">
 	{% if(file.allowDelete){ %}
-         <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                <i class="icon-trash icon-white"></i>
-                <span>Delete</span>
-            </button>
-{% } %}
+	<button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+	<i class="icon-trash icon-white"></i>
+	<span>Delete</span>
+	</button>
+	{% } %}
 	</td>
 	</tr>
 	{% } %}
 </script>
 <script>
-var collectibleId =<?php echo $collectibleId; ?>;
-var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
-<?php if(isset($adminMode) && $adminMode){
-	echo 'var adminMode = true;';	
-} else {
-	echo 'var adminMode = false;';	
-}?>
-
-</script>
+	var collectibleId =<?php echo $collectibleId; ?>;
+	var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
+	<?php
+	if (isset($adminMode) && $adminMode) {
+		echo 'var adminMode = true;';
+	} else {
+		echo 'var adminMode = false;';
+	}
+?></script>
 
 <!-- Each view will get a span -->
 <div id="status-container" class="row spacer">
@@ -102,20 +102,90 @@ var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?
 
 	</div>
 	<div id="collectible-container" span="span8">
-	
+
 	</div>
 </div>
 
 <div id="attributes-container" class="row"></div>
 
-
-
-
-
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
 <?php echo $this -> element('attribute_remove_dialog'); ?>
-<?php echo $this -> element('attribute_update_dialog'); ?>
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
-<?php echo $this -> element('attribute_collectible_add_dialog'); ?>
 <?php echo $this -> element('attribute_collectible_update_dialog'); ?>
-<?php echo $this -> element('attribute_collectible_add_existing_dialog'); ?>
+<!-- TODO Update this so we only have one modal -->
+<div id="attribute-collectible-add-existing-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Add Existing Collectible Part</h3>
+	</div>
+	<div class="modal-body">
+
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary save" autocomplete="off">
+			Add
+		</button>
+	</div>
+</div>
+<div id="attribute-collectible-add-new-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Add New Collectible Part</h3>
+	</div>
+	<div class="modal-body">
+
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary save" autocomplete="off">
+			Add
+		</button>
+	</div>
+</div>
+
+<div id="attribute-update-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h3 id="myModalLabel">Edit Part</h3>
+	</div>
+	<div class="modal-body">
+
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary save" autocomplete="off">
+			Submit
+		</button>
+	</div>
+</div>
+
+<?php
+//Temporary until we get features moved elswhere
+$featureAttributeIds = array(2, 4, 20, 3);
+foreach ($attributeCategories as $key => $value) {
+	if (in_array($value['AttributeCategory']['id'], $featureAttributeIds)) {
+		unset($attributeCategories[$key]);
+	}
+
+}
+// little bit of a hack but this helper is too convienent
+echo '<div id="attributes-category-tree" style="display: none">';
+echo $this -> Tree -> generate($attributeCategories, array('id' => 'tree', 'model' => 'AttributeCategory', 'element' => 'tree_attribute_node'));
+echo '</div>';
+?>

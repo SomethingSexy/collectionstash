@@ -1,0 +1,10 @@
+<div class="span12">
+	<div class="alert alert-info">
+		<button class="close" data-dismiss="alert" type="button">×</button>
+		<h4>Things to keep in mind</h4>
+		<p>You are adding a custom collectible!</p>
+		<p>Customs are a special type of collectible here at Collection Stash.  They are not mass-produced but collectibles that you have personally built or bashed together from existing parts.  You will be the only one able to add this to your stash.</p>
+		<p>Please try and be as detailed as possible with your customs, people will appreciate it more if you show all of the hard work you put into it.</p>
+		<p>If you are bashing this custom together, or you did not create all of the pieces make sure you give credit where credit is due.  If you bought a part from an artist, make sure you <strong>add</strong> that part as a mass-produced official or unofficial collectible.  Once that collectible has been approved, you can then <strong>link</strong> that part to your custom by using the "Add Existing Item" button below. </p>
+	</div>
+</div>

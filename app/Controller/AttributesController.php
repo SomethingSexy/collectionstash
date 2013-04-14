@@ -14,21 +14,13 @@ class AttributesController extends AppController {
 	public $helpers = array('Html', 'Js', 'Minify', 'Tree', 'CollectibleDetail', 'FileUpload.FileUpload');
 
 	// For attribute we might need some custom logic because it should return all underneath the selected category
-	public $filters = array('m' => array('model' => 'Attribute', 'id' => 'manufacture_id'), 'c' => array('model' => 'Attribute', 'id' => 'attribute_category_id'), 's' => array('model' => 'Attribute', 'id' => 'scale_id'));
+	public $filters = array('m' => array('model' => 'Attribute', 'id' => 'manufacture_id'), 'c' => array('model' => 'Attribute', 'id' => 'attribute_category_id'), 's' => array('model' => 'Attribute', 'id' => 'scale_id'), 'a' => array('model' => 'Attribute', 'id' => 'artist_id'));
 
-	// public function balls() {
-	// $data['AttributeCategory']['parent_id'] = '1';
-	// $data['AttributeCategory']['name'] = 'Document';
-	// $this -> Attribute -> AttributeCategory -> recover();
-	// $this -> render(false);
-	// }
 	/**
 	 * This method is used by the main catelog page to view all of the attributes
 	 */
 	public function index() {
-
 		// Here I need to check the query string for all possible filters
-		debug($this -> request -> query);
 
 		$saveSearchFilters = array();
 		$currentFilters = array();
@@ -56,8 +48,6 @@ class AttributesController extends AppController {
 			}
 		}
 
-		debug($currentFilters);
-
 		$tableFilters = array();
 		foreach ($currentFilters['Search'] as $filterKey => $filterGroup) {
 			$modelFilters = array();
@@ -77,31 +67,19 @@ class AttributesController extends AppController {
 			}
 		}
 
-		debug($saveSearchFilters);
-		debug($tableFilters);
-
 		// TODO: Right now this is returning stuff that has not been approved yet...which is fine
-		$this -> paginate = array('conditions' => array($tableFilters, 'status_id' => 4), 'contain' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'order' => array('Attribute.attribute_category_id' => 'ASC'), 'limit' => 50);
+		$this -> paginate = array('conditions' => array($tableFilters, 'status_id' => 4, 'type' => 'mass'), 'contain' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'order' => array('Attribute.attribute_category_id' => 'ASC'), 'limit' => 50);
 		$attributes = $this -> paginate('Attribute');
 		$this -> set(compact('attributes'));
 
-		//TODO: this should be a helper or something to get all of the data necessary to render the add attribute window
-		$attributeCategories = $this -> Attribute -> AttributeCategory -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
-		$this -> set(compact('attributeCategories'));
-
-		$scales = $this -> Attribute -> Scale -> find("list", array('fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-		$this -> set(compact('scales'));
-
-		$manufactures = $this -> Attribute -> Manufacture -> getManufactureList();
-		$this -> set(compact('manufactures'));
-		
-		$artists = $this -> Attribute -> Artist -> getArtistList();
-		$this -> set(compact('artists'));
-		
 		$filters = $this -> _getFilters();
-		debug($attributes);
+
 		$this -> set(compact('filters'));
 		$this -> set(compact('saveSearchFilters'));
+
+		if ($this -> request -> isAjax()) {
+			$this -> render('searchJson');
+		}
 	}
 
 	/**
@@ -115,7 +93,7 @@ class AttributesController extends AppController {
 		}
 
 		$attribute = $this -> Attribute -> find('first', array('conditions' => array('Attribute.id' => $id)));
-		debug($attribute);
+
 		if (!empty($attribute) && $attribute['Attribute']['status_id'] === '4') {
 			$this -> set(compact('attribute'));
 		} else {
@@ -142,7 +120,7 @@ class AttributesController extends AppController {
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 
-			$response = $this -> Attribute -> addAttribute($this -> request -> data, $this -> getUserId());
+			$response = $this -> Attribute -> addAttribute($this -> request -> data, $this -> getUser());
 			if ($response) {
 				$this -> set('returnData', $response);
 			} else {
@@ -180,7 +158,7 @@ class AttributesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> Attribute -> remove($this -> request -> data, $this -> getUserId());
+			$response = $this -> Attribute -> remove($this -> request -> data, $this -> getUser());
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -214,7 +192,7 @@ class AttributesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> Attribute -> remove($this -> request -> data, $this -> getUserId(), true);
+			$response = $this -> Attribute -> remove($this -> request -> data, $this -> getUser(), true);
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -248,7 +226,7 @@ class AttributesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> Attribute -> update($this -> request -> data, $this -> getUserId(), true);
+			$response = $this -> Attribute -> update($this -> request -> data, $this -> getUser(), true);
 			debug($response);
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -284,7 +262,7 @@ class AttributesController extends AppController {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 
-			$response = $this -> Attribute -> update($this -> request -> data, $this -> getUserId());
+			$response = $this -> Attribute -> update($this -> request -> data, $this -> getUser());
 
 			if ($response) {
 				$this -> set('returnData', $response);
@@ -435,7 +413,8 @@ class AttributesController extends AppController {
 	 */
 	private function _getFilters() {
 		$searchFilterGroups = array();
-		$manufacturers = $this -> Attribute -> Manufacture -> find("all", array('contain' => false));
+		$manufacturers = $this -> Attribute -> Manufacture -> find("all", array('order' => array('Manufacture.title' => 'ASC'), 'contain' => false));
+		$artists = $this -> Attribute -> Artist -> find("all", array('order' => array('Artist.name' => 'ASC'), 'contain' => false));
 		$categories = $this -> Attribute -> AttributeCategory -> find("all", array('contain' => false));
 		$scales = $this -> Attribute -> Scale -> find("all", array('contain' => false));
 
@@ -444,6 +423,7 @@ class AttributesController extends AppController {
 		$manufacturerSearchGroup['selected'] = array();
 		$manufacturerSearchGroup['label'] = __('Manufacturer');
 		$manufacturerSearchGroup['type'] = 'm';
+		$manufacturerSearchGroup['allowMultiple'] = 'true';
 
 		foreach ($manufacturers as $key => $value) {
 			$serachFilter = array();
@@ -453,11 +433,27 @@ class AttributesController extends AppController {
 		}
 		array_push($searchFilterGroups, $manufacturerSearchGroup);
 
+		$artistSearchGroup = array();
+		$artistSearchGroup['filters'] = array();
+		$artistSearchGroup['selected'] = array();
+		$artistSearchGroup['label'] = __('Artist');
+		$artistSearchGroup['type'] = 'a';
+		$artistSearchGroup['allowMultiple'] = 'true';
+
+		foreach ($artists as $key => $value) {
+			$serachFilter = array();
+			$serachFilter['id'] = $value['Artist']['id'];
+			$serachFilter['label'] = $value['Artist']['name'];
+			array_push($artistSearchGroup['filters'], $serachFilter);
+		}
+		array_push($searchFilterGroups, $artistSearchGroup);
+
 		$categorySearchGroup = array();
 		$categorySearchGroup['filters'] = array();
 		$categorySearchGroup['selected'] = array();
 		$categorySearchGroup['label'] = __('Categories');
 		$categorySearchGroup['type'] = 'c';
+		$categorySearchGroup['allowMultiple'] = 'true';
 		foreach ($categories as $key => $value) {
 			$serachFilter = array();
 			$serachFilter['id'] = $value['AttributeCategory']['id'];
@@ -471,6 +467,7 @@ class AttributesController extends AppController {
 		$scaleSearchGroup['selected'] = array();
 		$scaleSearchGroup['label'] = __('Scales');
 		$scaleSearchGroup['type'] = 's';
+		$scaleSearchGroup['allowMultiple'] = 'true';
 		foreach ($scales as $key => $value) {
 			$serachFilter = array();
 			$serachFilter['id'] = $value['Scale']['id'];

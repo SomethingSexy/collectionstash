@@ -100,7 +100,14 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '<td>' . $attribute['Attribute']['name'] . '</td>';
 
 			$outputAttribtes .= '<td>' . $attribute['Attribute']['description'] . '</td>';
-			$outputAttribtes .= '<td>' . $attribute['Attribute']['Manufacture']['title'] . '</td>';
+
+			if (isset($attribute['Attribute']['manufacture_id'])) {
+				$outputAttribtes .= '<td>' . $attribute['Attribute']['Manufacture']['title'] . '</td>';
+			} else if (isset($attribute['Attribute']['artist_id'])) {
+				$outputAttribtes .= '<td>' . $attribute['Attribute']['Artist']['name'] . '</td>';
+			} else {
+				$outputAttribtes .= '<td>Unknown</td>';
+			}
 
 			if (isset($attribute['Attribute']['Scale']['scale'])) {
 				$outputAttribtes .= '<td>' . $attribute['Attribute']['Scale']['scale'] . '</td>';
@@ -124,7 +131,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			echo '<th class="category">' . __('Category') . '</th>';
 			echo '<th>' . __('Name', true) . '</th>';
 			echo '<th>' . __('Description', true) . '</th>';
-			echo '<th>' . __('Manufacturer', true) . '</th>';
+			echo '<th>' . __('Maker', true) . '</th>';
 			echo '<th>' . __('Scale', true) . '</th>';
 			echo '<th title="' . __('The amount of items of this type this collectible has.') . '" class="count">' . __('Count', true) . '</th>';
 			echo '<th class="user" title="' . __('The user who performed the last action on this item.') . '">' . __('Added By') . '</th>';

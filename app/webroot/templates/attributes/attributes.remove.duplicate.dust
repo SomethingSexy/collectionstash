@@ -1,0 +1,24 @@
+<div class='component-message error'>
+	<span></span>
+</div>
+<p>Is this part duplicated by another part?  Use either method below to find the part that it is duplicated by.  This part will be will be replaced by the one you select.</p>
+<form accept-charset="utf-8" method="post" id="AttributeRemoveForm" data-form-model="Attribute" action="/attributes?url=attributes">
+	<fieldset>
+		<div class="control-group">
+			<div class="controls">
+				<div class="btn-group">
+					<button id="select-attribute-link" class="btn submit" type="button">
+						Find By Collectible
+					</button>
+					<button id="select-attribute-link-by-part" class="btn delete" type="button">
+						Find By Part
+					</button>
+				</div>
+				<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
+			</div>
+		</div>
+		<input type="hidden" value="0" id="AttributeLink_" name="data[Attribute][link]">
+		<input type="hidden" id="AttributeReplaceAttributeId" name="data[Attribute][replace_attribute_id]" value="">
+	</fieldset>
+</form>
+

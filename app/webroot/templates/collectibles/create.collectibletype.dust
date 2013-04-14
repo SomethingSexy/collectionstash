@@ -1,0 +1,8 @@
+<div class="well" id="collectibletypes-list-component">
+	<h2>Submit New Collectible</h2>
+    <div class="alert alert-info">
+    <p>Before you can submit a new collectible to Collection Stash you have to know what you want to add!  Think of a collectible as product that is made and sold.</p>
+    <p>Below is a list of collectible types that we currently support.  Find the one that best matches what you want to submit.  We are constantly adding new types so stay tuned for more information!</p>
+    </div>
+    {types|s}
+</div>

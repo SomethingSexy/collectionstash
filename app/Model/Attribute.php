@@ -37,7 +37,7 @@ class Attribute extends AppModel {
 	'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')));
 
 	function beforeSave() {
-		//Make sure there is no space around the email, seems to be an issue with sending when there is
+
 		return true;
 	}
 
@@ -97,51 +97,57 @@ class Attribute extends AppModel {
 	/**
 	 * This method will be used when we are updating an attribute
 	 */
-	public function update($attribute, $userId, $autoUpdate = false) {
+	public function update($attribute, $user, $autoUpdate = false) {
 		$retVal = $this -> buildDefaultResponse();
 		$this -> set($attribute);
 		$validCollectible = true;
-		if ($this -> validates()) {
-			// If we are automatically approving it, then save it directly
 
-			if ($autoUpdate === 'false' || $autoUpdate === false) {
-				// Because we set the attributes add to submitted, check both
-				if ($this -> isStatusDraft($attribute['Attribute']['id']) || $this -> isStatusSubmitted($attribute['Attribute']['id'])) {
-					$autoUpdate = true;
-				}
-			}
+		// If we are automatically approving it, then save it directly
+		if ($autoUpdate === 'false' || $autoUpdate === false) {
+			$autoUpdate = $this -> allowAutoUpdate($attribute['Attribute']['id'], $user);
+		}
 
-			if ($autoUpdate === true || $autoUpdate === 'true') {
-				unset($attribute['AttributesCollectible']);
-				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> EDIT, null);
-				$attribute = array_merge($attribute, $revision);
-				//$this -> id = $attribute['Attribute']['id'];
-				if ($this -> saveAll($attribute, array('validate' => false))) {
-					// Given an update we need to
-					$attributeId = $this -> id;
-					$updatedAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name'))))));
-					$retVal['response']['isSuccess'] = true;
-					$retVal['response']['data']['Attribute'] = $updatedAttribute['Attribute'];
-					$retVal['response']['data']['Attribute']['Manufacture'] = $updatedAttribute['Manufacture'];
-					$retVal['response']['data']['Attribute']['Scale'] = $updatedAttribute['Scale'];
-					$retVal['response']['data']['Attribute']['AttributeCategory'] = $updatedAttribute['AttributeCategory'];
-					$retVal['response']['data']['Attribute']['AttributesCollectible'] = $updatedAttribute['AttributesCollectible'];
-					$retVal['response']['data']['isEdit'] = false;
+		if ($this -> isEditPermission($attribute['Attribute']['id'], $user)) {
+			if ($this -> validates()) {
+
+				if ($autoUpdate === true || $autoUpdate === 'true') {
+					unset($attribute['AttributesCollectible']);
+					$revision = $this -> Revision -> buildRevision($user['User']['id'], $this -> Revision -> EDIT, null);
+					$attribute = array_merge($attribute, $revision);
+					//$this -> id = $attribute['Attribute']['id'];
+					if ($this -> saveAll($attribute, array('validate' => false))) {
+						// Given an update we need to
+						$attributeId = $this -> id;
+						$updatedAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name'))))));
+						$retVal['response']['isSuccess'] = true;
+						$retVal['response']['data']['Attribute'] = $updatedAttribute['Attribute'];
+						$retVal['response']['data']['Attribute']['Manufacture'] = $updatedAttribute['Manufacture'];
+						$retVal['response']['data']['Attribute']['Scale'] = $updatedAttribute['Scale'];
+						$retVal['response']['data']['Attribute']['AttributeCategory'] = $updatedAttribute['AttributeCategory'];
+						$retVal['response']['data']['Attribute']['AttributesCollectible'] = $updatedAttribute['AttributesCollectible'];
+						$retVal['response']['data']['isEdit'] = false;
+					}
+				} else {
+					$action = array();
+					$action['Action']['action_type_id'] = 2;
+
+					if ($this -> saveEdit($attribute, $attribute['Attribute']['id'], $user['User']['id'], $action)) {
+						$retVal['response']['isSuccess'] = true;
+						$retVal['response']['data']['isEdit'] = true;
+					}
 				}
+
 			} else {
-				$action = array();
-				$action['Action']['action_type_id'] = 2;
-
-				if ($this -> saveEdit($attribute, $attribute['Attribute']['id'], $userId, $action)) {
-					$retVal['response']['isSuccess'] = true;
-					$retVal['response']['data']['isEdit'] = true;
-				}
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
+				$retVal['response']['errors'] = $errors;
 			}
-
 		} else {
 			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
-			$retVal['response']['errors'] = $errors;
+			$error = array('message' => __('You do not have acceses to update this part.'));
+			$error['inline'] = false;
+			$retVal['response']['errors'] = array();
+			array_push($retVal['response']['errors'], $error);
 		}
 
 		return $retVal;
@@ -150,7 +156,7 @@ class Attribute extends AppModel {
 	/**
 	 * This method will be used when we are trying to remove an attribute
 	 */
-	public function remove($attribute, $userId, $autoUpdate = false) {
+	public function remove($attribute, $user, $autoUpdate = false) {
 		$retVal = $this -> buildDefaultResponse();
 		// There will be an ['Attribute']['reason'] - input field
 		// if this attribute is tied to a collectible, are we replacing
@@ -218,7 +224,7 @@ class Attribute extends AppModel {
 			}
 
 		} else {
-			if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $userId, $action)) {
+			if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $user['User']['id'], $action)) {
 				$retVal['response']['isSuccess'] = true;
 				$retVal['response']['data']['isEdit'] = true;
 			} else {
@@ -230,14 +236,39 @@ class Attribute extends AppModel {
 		return $retVal;
 	}
 
-	public function addAttribute($attribute, $userId) {
+	/**
+	 * TODO: Update this so that we support "custom" attributes as well.  This can ONLY be added through
+	 * the custom itself.  This will not be able to be added to other parts and the user will be able to
+	 * update them directly.
+	 *
+	 * How do we handle the cases where the user buys a single one off piece from someone else?
+	 * I suppose I could always leave them in a status 2 for now, that way the user can update
+	 * them at any point, and no one else can add them
+	 *
+	 * I suppose when adding the part, it can be added as either a custom or an original
+	 *  - make it a radio button and only if the collectible is a custom
+	 *  - otherwise if it is an original it will be automatically added as an original
+	 *  - This way the user who added the custom or original part will always be able
+	 *    to update it and it will be auto approved.
+	 *  - This will then enforce when adding customs, you have to either add an existing
+	 *    part or it has to be a custom/original piece. BAM
+	 *
+	 */
+	public function addAttribute($attribute, $user, $autoUpdate = false) {
 		$retVal = $this -> buildDefaultResponse();
 
-		// An id of 2 means it is submitted
-		$attribute['Attribute']['status_id'] = 2;
-		$attribute['Attribute']['user_id'] = $userId;
+		// Since we do not put attributes in the edit tables
+		// when adding, if we are auto updating, automatically
+		// set the status to a 4 which is approved
+		if ($autoUpdate === true || $autoUpdate === 'true') {
+			$attribute['Attribute']['status_id'] = 4;
+		} else {
+			$attribute['Attribute']['status_id'] = 2;
+		}
+
+		$attribute['Attribute']['user_id'] = $user['User']['id'];
 		$attribute['EntityType']['type'] = 'attribute';
-		$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
+		$revision = $this -> Revision -> buildRevision($user['User']['id'], $this -> Revision -> ADD, null);
 		$attribute = array_merge($attribute, $revision);
 		if ($this -> saveAssociated($attribute)) {
 			$attributeId = $this -> id;
@@ -519,6 +550,89 @@ class Attribute extends AppModel {
 		if (!is_null($status)) {
 			if ($status['id'] === '2') {
 				$retVal = true;
+			}
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * This determines if they can update the collectible realtime
+	 * or it has to go through the edit process
+	 */
+	public function allowAutoUpdate($attributeId, $user) {
+		$retVal = false;
+		// If they are an admin then they can always update
+		if ($user['User']['admin']) {
+			$retVal = true;
+			return $retVal;
+		}
+
+		$attribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('Status', 'User')));
+		// IF status is 1 (draft) or submitted
+		if ($attribute['Status']['id'] === '1' || $attribute['Status']['id'] === '2') {
+			// if the user performing the action is the owner of the collectible or it is an admin
+			// auto update
+			if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		} else {
+			// now check type, if it custom or original then it can be updated at any point if permission is there
+			if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original') {
+				if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+					$retVal = true;
+				}
+			}
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * This method will determine if the user has permissions to
+	 * update.
+	 *
+	 * TODO: WE might have to expand this eventually to say,
+	 * 		 if the user does not have permsission, then an
+	 * 		 edit it submitted and the ownwer of the collectible
+	 * 		 approves the eidt
+	 */
+	public function isEditPermission($check, $user) {
+		$retVal = false;
+
+		// if they are an admin then they always get persmission
+		if ($user['User']['admin']) {
+			$retVal = true;
+			return $retVal;
+		}
+
+		// setup to work for when we have the collectible object
+		// already or just the id
+		if (is_numeric($check) || is_string($check)) {
+			$attribute = $this -> find('first', array('conditions' => array('Attribute.id' => $check), 'contain' => array('Status', 'User')));
+			//lol
+		} else {
+			// assume object
+			$attribute = $check;
+		}
+
+		// if it is a draft or submitted, just need to make sure the user ids match
+		if ($attribute['Status']['id'] === '1' || $attribute['Status']['id'] === '2') {
+			if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		} else {
+			if ($attribute && !empty($attribute)) {
+				// right now for originals if you have to be the one who submitted it
+				if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original') {
+					if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+						$retVal = true;
+					}
+				} else {
+					// otherwise if it is a mass produced collectible then just
+					// return true cause anyone can edit it
+					$retVal = true;
+				}
 			}
 		}
 

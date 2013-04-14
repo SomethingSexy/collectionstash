@@ -13,7 +13,8 @@ $(function() {
 
 			$('#status-container').html(new StatusView({
 				model : status,
-				allowEdit : allowStatusEdit
+				allowEdit : allowStatusEdit,
+				collectible : new Backbone.Model(collectible)
 			}).render().el);
 
 			// If the status has changed and I am on the view
@@ -26,7 +27,8 @@ $(function() {
 			}, status);
 
 		});
-
+	} else {
+		$('#status-container').remove();
 	}
 
 });

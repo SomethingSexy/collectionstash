@@ -11,6 +11,10 @@
 			</li>
 		</ul>
 	</div>
+	{@eq key="{collectible.custom}" value="true" type="boolean"}
+		<p>When you are adding parts please try and add existing parts whenever possible.  If you do have to add a new part to the system and you purhaseed it from someone please add it as a <strong>new collectible</strong>, attaching that new part to the collectible.  Once it is approved you can add the existing part to your custom.</p>
+		<p>Otherwise, if you made a part for this piece you can add it here.</p>
+	{/eq}
 	<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
 		<thead>
 			<tr>
@@ -19,7 +23,7 @@
 				<th class="category">Category</th>
 				<th>Name</th>
 				<th>Description</th>
-				<th>Manufacturer</th>
+				<th>Maker</th>
 				<th>Scale</th>
 				<th title="The amount of items of this type this collectible has." class="count">Count</th>
 				<th class="user" title="The user who performed the last action on this item.">Added By</th>

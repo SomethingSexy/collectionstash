@@ -79,26 +79,43 @@ class CollectiblesUser extends AppModel {
 		return true;
 	}
 
-	function afterFind($results) {
-		// Create a dateOnly pseudofield using date field.
-		foreach ($results as $key => $val) {
-			if (isset($val['CollectiblesUser']['purchase_date'])) {
-				if ($val['CollectiblesUser']['purchase_date'] !== '0000-00-00') {
-					$results[$key]['CollectiblesUser']['purchase_date'] = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));
-				} else {
-					$results[$key]['CollectiblesUser']['purchase_date'] = '';
-				}
-			}
-			// If it has a merchant, add the merchant name to the merchant field for display purposes
-			if (isset($val['CollectiblesUser']['merchant_id']) && !is_null($val['CollectiblesUser']['merchant_id']) && !empty($val['CollectiblesUser']['merchant_id'])) {
-				if (isset($val['Merchant'])) {
-					$results[$key]['CollectiblesUser']['merchant'] = $val['Merchant']['name'];
-				}
-			} else {
-				unset($results[$key]['Merchant']);
-			}
+	function afterFind($results, $primary = false) {
 
+		if ($results && $primary) {
+			// Create a dateOnly pseudofield using date field.
+			foreach ($results as $key => $val) {
+				// make sure we check if the collectibleuser is set...this is for 
+				// cases when count is being called
+				if (isset($val['CollectiblesUser'])) {
+					if (isset($val['CollectiblesUser']['purchase_date'])) {
+						if ($val['CollectiblesUser']['purchase_date'] !== '0000-00-00') {
+							$results[$key]['CollectiblesUser']['purchase_date'] = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));
+						} else {
+							$results[$key]['CollectiblesUser']['purchase_date'] = '';
+						}
+					}
+					// If it has a merchant, add the merchant name to the merchant field for display purposes
+					if (isset($val['CollectiblesUser']['merchant_id']) && !is_null($val['CollectiblesUser']['merchant_id']) && !empty($val['CollectiblesUser']['merchant_id'])) {
+						if (isset($val['Merchant'])) {
+							$results[$key]['CollectiblesUser']['merchant'] = $val['Merchant']['name'];
+						}
+					} else {
+						unset($results[$key]['Merchant']);
+					}
+
+					// TODO: Filter out collectibles that have not been activated yet.  This is for customs and originals
+					// Might be better in the end to do a join on the table instead to remove those but for now this will be quickiest
+					if (isset($val['Collectible']) && !empty($val['Collectible'])) {
+						if ($val['Collectible']['original'] || $val['Collectible']['custom']) {
+							if ($val['Collectible']['status_id'] !== '4') {
+								unset($results[$key]);
+							}
+						}
+					}
+				}
+			}
 		}
+
 		return $results;
 	}
 
@@ -208,7 +225,20 @@ class CollectiblesUser extends AppModel {
 		}
 
 		return $retVal;
+	}
 
+	/**
+	 * This is used to create a stubbed out, default CollectiblesUser
+	 * object.  Used if an outside model wants to add a CollectiblesUser
+	 */
+	public function createDefault($userId) {
+		$retVal = array();
+
+		$stashId = $this -> Stash -> getStashId($userId);
+		$retVal['CollectiblesUser']['user_id'] = $userId;
+		$retVal['CollectiblesUser']['stash_id'] = $stashId;
+
+		return $retVal;
 	}
 
 }

@@ -1,0 +1,21 @@
+<div class="paging">
+	<p>
+		Page {paginator.currentPage} of {paginator.totalPages}, showing {paginator.perPage} collectibles out of {paginator.total} total.
+	</p>
+	{@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
+	<span> <a class="previous" rel="prev"><< previous</a> </span>
+	{/gt}
+	{#pages currentPage=paginator.currentPage}
+		{@eq key="{.}" value="{currentPage}"}
+			<span class="current">{.}</span>
+		{:else}
+			<span> <a class="page">{.}</a> </span>
+		{/eq}
+	
+	{/pages}
+	{@ne key="{paginator.total}" value="0"}
+		{@ne key="{paginator.totalPages}" value="{paginator.currentPage}" type="number"}
+		<span> <a class="next" rel="next">next >></a> </span>
+		{/ne}
+	{/ne}
+</div>

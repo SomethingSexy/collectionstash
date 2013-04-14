@@ -36,7 +36,10 @@ class AttributesUpload extends AppModel {
 		return $result > 0;
 	}
 
-	public function remove($upload, $userId, $autoUpdate = false) {
+	/**
+	 * TODO: This method should probably also have an edit permission check
+	 */
+	public function remove($upload, $user, $autoUpdate = false) {
 		$retVal = array();
 		$retVal['response'] = array();
 		$retVal['response']['isSuccess'] = false;
@@ -59,13 +62,10 @@ class AttributesUpload extends AppModel {
 		$currentVersion = $this -> findById($upload['AttributesUpload']['id']);
 
 		// Now let's check to see if we need to update this based
-		// on collectible status
+		// on attribute status
 		// If we are already auto updating, no need to check
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
-			if ($this -> Attribute -> isStatusDraft($currentVersion['AttributesUpload']['attribute_id']) || $this -> Attribute -> isStatusSubmitted($currentVersion['AttributesUpload']['attribute_id'])) {
-				$autoUpdate = true;
-			}
-
+			$autoUpdate = $this -> Attribute -> allowAutoUpdate($currentVersion['AttributesUpload']['attribute_upload'], $user);
 		}
 
 		if ($autoUpdate === true || $autoUpdate === 'true') {
@@ -86,7 +86,7 @@ class AttributesUpload extends AppModel {
 		} else {
 			// Doing this so that we have a record of the current version
 
-			if ($this -> saveEdit($currentVersion, $upload['AttributesUpload']['id'], $userId, $action)) {
+			if ($this -> saveEdit($currentVersion, $upload['AttributesUpload']['id'], $user['User']['id'], $action)) {
 				$retVal['response']['isSuccess'] = true;
 			} else {
 				$retVal['response']['isSuccess'] = false;
@@ -103,7 +103,7 @@ class AttributesUpload extends AppModel {
 	 * TODO: This needs to be update to check the status of the collectible we are adding this too
 	 *       if it is anything other than active, it will automatically add
 	 */
-	public function add($data, $userId, $autoUpdate = false) {
+	public function add($data, $user, $autoUpdate = false) {
 		// Check to see if there is an upload id, if so then we are adding
 		// from a previously selected collectible.  We can sumbit an edit for
 		// this with the type of add
@@ -152,7 +152,7 @@ class AttributesUpload extends AppModel {
 				$upload['Upload'] = $data['Upload'];
 
 				// Now we need to kick off a save of the upload
-				$uploadAddResponse = $this -> Upload -> add($upload, $userId);
+				$uploadAddResponse = $this -> Upload -> add($upload, $user['User']['id']);
 				debug($uploadAddResponse);
 				if ($uploadAddResponse && $uploadAddResponse['response']['isSuccess']) {
 					debug($uploadAddResponse);
@@ -169,15 +169,14 @@ class AttributesUpload extends AppModel {
 			// Now let's check to see if we need to update this based
 			// on collectible status
 			// If we are already auto updating, no need to check
+
 			if ($autoUpdate === 'false' || $autoUpdate === false) {
-				if ($this -> Attribute -> isStatusDraft($data['AttributesUpload']['attribute_id']) || $this -> Attribute -> isStatusSubmitted($data['AttributesUpload']['attribute_id'])) {
-					$autoUpdate = true;
-				}
+				$autoUpdate = $this -> Attribute -> allowAutoUpdate($data['AttributesUpload']['attribute_id'], $user);
 			}
 
 			if ($autoUpdate === true || $autoUpdate === 'true') {
 				unset($data['Upload']);
-				$revision = $this -> Revision -> buildRevision($userId, $this -> Revision -> ADD, null);
+				$revision = $this -> Revision -> buildRevision($user['User']['id'], $this -> Revision -> ADD, null);
 				$data = array_merge($data, $revision);
 				if ($this -> saveAll($data, array('validate' => false))) {
 					$dataSource -> commit();
@@ -191,7 +190,7 @@ class AttributesUpload extends AppModel {
 			} else {
 				$action = array();
 				$action['Action']['action_type_id'] = 1;
-				$savedEdit = $this -> saveEdit($data, null, $userId, $action);
+				$savedEdit = $this -> saveEdit($data, null, $user['User']['id'], $action);
 				if ($savedEdit) {
 					// Only commit when the save edit is successful
 					$dataSource -> commit();

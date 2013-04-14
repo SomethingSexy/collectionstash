@@ -98,7 +98,12 @@
 
 			echo '<div class="header">';
 			if ($stashType === 'default') {
-				echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+				if($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']){
+					echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+				} else {
+					echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+				}
+				
 			} else {
 				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			}

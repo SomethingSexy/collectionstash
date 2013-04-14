@@ -317,13 +317,13 @@ form .required label:after {
  display: block;
  margin-bottom: 3px;
  }
-fieldset legend {
-	color: #74A4BE;
-	border-bottom: 1px solid #CCCCCC;
-	width: 100%;
-	padding-bottom: 5px;
-	margin-bottom: 5px;
-}*/
+ fieldset legend {
+ color: #74A4BE;
+ border-bottom: 1px solid #CCCCCC;
+ width: 100%;
+ padding-bottom: 5px;
+ margin-bottom: 5px;
+ }*/
 .form-fields {
 	/*font-size: 0.75em;*/
 }
@@ -1757,98 +1757,98 @@ div.paging span a:hover {
 }
 /***************************************
  * Search filters
- */
-#filters {
-	float: left;
-	width: 100%;
-	margin-bottom: 10px;
-}
-#filters .search-query {
-	color: #656464;
-	padding-bottom: 0.5em;
-	overflow: hidden;
-}
-#filters .filter {
-	background-color: #E9F0F4;
-	border: 1px solid #FDB924;
-	color: #111111;
-	cursor: pointer;
-	/*height: 12px;*/
-	margin-right: 8px;
-	padding: 9px;
-	position: relative;
-	border-radius: 5px 5px 5px 5px;
-	float: left;
-}
-#filters .filter.lock {
-	color: #AAA;
-	cursor: default;
-}
-#filters .filter .filter-name {
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	float: left;
-}
-#filters .filter .filter-name span {
-	float: left;
-}
-#filters .filter .filter-name a {
-	float: left;
-	/*position: relative;
-	 top: -2px;*/
-}
-#filters .filter .filter-list-container {
-	border-radius: 4px 4px 4px 4px;
-	box-shadow: 0 0 3px #CCCCCC;
-	display: none;
-	position: absolute;
-	top: 42px;
-	z-index: 100;
-	background-color: #656464;
-	/*overflow:-moz-scrollbars-vertical!important;!overflow:hidden;*/
 
-}
-#filters .filter .filter-list-container .filter-list {
-	margin: 10px;
-}
-#filters .filter .filter-list-container .filter-list {
-	overflow-y: auto;
-	overflow-x: hidden;
-	max-height: 420px;
-}
-#filters .filter .filter-list ol {
-	background-color: white;
-	list-style: none outside none;
-	padding: 0;
-	margin: 0;
-}
-/*
+ #filters {
+ float: left;
+ width: 100%;
+ margin-bottom: 10px;
+ }
+ #filters .search-query {
+ color: #656464;
+ padding-bottom: 0.5em;
+ overflow: hidden;
+ }
+ #filters .filter {
+ background-color: #E9F0F4;
+ border: 1px solid #FDB924;
+ color: #111111;
+ cursor: pointer;
+ /*height: 12px;
+ margin-right: 8px;
+ padding: 9px;
+ position: relative;
+ border-radius: 5px 5px 5px 5px;
+ float: left;
+ }
+ #filters .filter.lock {
+ color: #AAA;
+ cursor: default;
+ }
+ #filters .filter .filter-name {
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ float: left;
+ }
+ #filters .filter .filter-name span {
+ float: left;
+ }
+ #filters .filter .filter-name a {
+ float: left;
+ /*position: relative;
+ top: -2px;
+ }
+ #filters .filter .filter-list-container {
+ border-radius: 4px 4px 4px 4px;
+ box-shadow: 0 0 3px #CCCCCC;
+ display: none;
+ position: absolute;
+ top: 42px;
+ z-index: 100;
+ background-color: #656464;
+ /*overflow:-moz-scrollbars-vertical!important;!overflow:hidden;
+
+ }
+ #filters .filter .filter-list-container .filter-list {
+ margin: 10px;
+ }
+ #filters .filter .filter-list-container .filter-list {
+ overflow-y: auto;
+ overflow-x: hidden;
+ max-height: 420px;
+ }
+ #filters .filter .filter-list ol {
+ background-color: white;
+ list-style: none outside none;
+ padding: 0;
+ margin: 0;
+ }
+ /*
  #filters .filter .filter-list ol li:first-child {
  border-top-left-radius: 4px;
  border-top-right-radius: 4px;
+ }
+ #filters .filter .filter-list ol li {
+ border-bottom: 1px solid #D9D9DB;
+ line-height: 20px;
+ margin: 0;
+ overflow: hidden;
+ padding: 10px 15px;
+ white-space: nowrap;
+ width: 250px;
+ }
+
+ #filters .filter .filter-list ol li.selected {
+ background-color: #FDB924;
+ }
+
+ #filters .filter .filter-list ol li:last-child {
+ border-bottom-left-radius: 4px;
+ border-bottom-right-radius: 4px;
+ }
+ #filters .filter .filter-list ol li a {
+ color: #0055A4;
+ text-decoration: none;
  }*/
-#filters .filter .filter-list ol li {
-	border-bottom: 1px solid #D9D9DB;
-	line-height: 20px;
-	margin: 0;
-	overflow: hidden;
-	padding: 10px 15px;
-	white-space: nowrap;
-	width: 250px;
-}
-
-#filters .filter .filter-list ol li.selected {
-	background-color: #FDB924;
-}
-
-#filters .filter .filter-list ol li:last-child {
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-}
-#filters .filter .filter-list ol li a {
-	color: #0055A4;
-	text-decoration: none;
-}
 /***************************************
  * User Uploads Component
  */
@@ -2423,15 +2423,14 @@ div.paging span a:hover {
 .url-upload input {
 	margin-bottom: 0;
 }
-#attribute-upload-dialog,
-#upload-dialog {
+#attribute-upload-dialog, #upload-dialog {
 	width: 720px;
 }
 /* On resolution 1280 x 720 this stopped the buttons from showing up
-#manufacturerModal .modal-body {
-	max-height: 500px;
-	min-height: 400px;
-}*/
+ #manufacturerModal .modal-body {
+ max-height: 500px;
+ min-height: 400px;
+ }*/
 
 .manufacturer-collectibles {
 	float: left;
@@ -2443,6 +2442,32 @@ div.paging span a:hover {
 .collectible-title-wrapper span {
 	margin-left: 10px;
 }
+.table.table-borderless td, .table.table-borderless th {
+	border-top: 0;
+}
+#create-container .mass-img {
+	margin-bottom: 45px;
+}
+#create-container .thumbnail {
+	height: 500px;
+}
+
+#filters .filter ul li {
+	padding: 5px;
+}
+#filters .filter ul li label {
+	white-space: normal;
+}
+
+#filters .filter a.dropdown-toggle {
+	position: relative;
+}
+#filters .filter ul {
+	max-height: 500px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 /*
  * Cake BS
  */

@@ -14,7 +14,7 @@
 					<dt><?php echo __('Percentage'); ?></dt><dd><?php echo $manufacture['Manufacture']['percentage_of_total']
 						?></dd>
 			
-					<dt><?php echo __('Total Collectible Types'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
+					<dt><?php echo __('Total Collectible Platforms'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
 						?></dd>
 			
 					<dt><?php echo __('Total Brands'); ?></dt><dd><?php echo $manufacture['Manufacture']['license_count']

@@ -1,0 +1,6 @@
+<td>{Collectible.id}</td>
+<td>{Collectible.name}</td>
+<td>{type}</td>
+<td>{Collectibletype.name}</td>
+<td>{Collectible.created}</td>
+<td>{Status.status}</td>

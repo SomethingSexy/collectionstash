@@ -6,6 +6,9 @@ var totalEdit = <?php echo $totalEdits; ?>;
 var totalEditPages = Math.ceil(totalEdit / 10);
 var totalPending = <?php echo $totalPending; ?>;
 var totalPendingPages = Math.ceil(totalPending / 10); 
+
+var totalWorks = <?php echo $totalWorks; ?>;
+var totalWorkPages = Math.ceil(totalWorks / 10); 
 </script>
 <?php echo $this -> Html -> script('pages/page.user.home', array('inline' => true)); ?>
 <script>
@@ -21,7 +24,11 @@ pending.reset(<?php echo $pending; ?>);
 var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
 
 var newCollectibles = new PaginatedNew();
-newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
+newCollectibles.reset(<?php echo $newCollectibles; ?>);
+
+var works = new PaginatedWorkCollection();
+works.reset(<?php echo $works; ?>);
+</script>
 
 <div class="row spacer">
 	<div class="span6">
@@ -137,6 +144,16 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);</script>
 		</div>
 	</div>
 </div>
+
+<div class="row spacer">
+	<div class="span12">
+		<div class="well work">
+			<h3>What I am working on</h3>
+
+		</div>
+	</div>
+</div>
+
 <div class="row spacer">
 	<div class="span6">
 		<div class="well submissions">

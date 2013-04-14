@@ -1,0 +1,9 @@
+<div class="span12">
+	<div class="alert alert-info">
+		<button class="close" data-dismiss="alert" type="button">×</button>
+		<h4>Things to keep in mind</h4>
+		<p>You are adding an original collectible!</p>
+		<p>Originals are a special type of collectible here at Collection Stash.  They are not mass-produced but collectibles that you had commissioned by someone else for yourself. You will be the only one able to add this to your stash.</p>
+
+	</div>
+</div>

@@ -3,7 +3,7 @@
         <?php echo $this -> element('admin_actions');?>
         <div class="page">
             <div class="title">
-                <h2><?php echo __('Add Collectible Type to Manufacturer');?></h2>
+                <h2><?php echo __('Add Collectible Platform to Manufacturer');?></h2>
             </div>
             <?php echo $this -> element('flash');?>
             <div class="licenses view">

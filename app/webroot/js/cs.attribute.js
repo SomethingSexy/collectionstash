@@ -423,8 +423,13 @@ AddAttributes.prototype.submit = function() {
 		success : function(responseText, statusText, xhr, $form) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
+				var message = 'Part has been submitted!';
+				if (!responseText.response.data.isEdit) {
+					message = 'Part has been added!';
+				}
+
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',
@@ -582,8 +587,13 @@ AddCollectibleAttributes.prototype.submit = function() {
 		success : function(responseText, statusText, xhr, $form) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
+				var message = 'Part has been submitted!';
+				if (!responseText.response.data.isEdit) {
+					message = 'Part has been added!';
+				}
+
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',
@@ -758,8 +768,13 @@ AddExistingCollectibleAttributes.prototype.submit = function() {
 		success : function(responseText, statusText, xhr, $form) {
 			if (responseText.response.isSuccess) {
 				self.$dialog.dialog('close');
+				var message = 'Part has been submitted!';
+				if (!responseText.response.data.isEdit) {
+					message = 'Part has been added!';
+				}
+
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Item has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',
@@ -955,8 +970,13 @@ RemoveAttributes.prototype.submit = function(attribute) {
 			if (responseText.response.isSuccess) {
 				responseText.response.data.id = id;
 				self.$dialog.dialog('close');
+				var message = 'Removal has been submitted!';
+				if (!responseText.response.data.isEdit) {
+					message = 'Part has been removed!';
+				}
+
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',
@@ -1017,8 +1037,7 @@ RemoveAttributeLinks.prototype.init = function() {
 		autoOpen : false,
 		resizable : false,
 	});
-
-	this.options.$element.children('table').find('tr').children('.actions').find('a.remove-link').on('click', function() {
+	this.options.$element.children('table').on('click', 'tr .actions a.remove-link', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
@@ -1089,8 +1108,12 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 				if (responseText.response.isSuccess) {
 					responseText.response.data.id = id;
 					self.$dialog.dialog('close');
+					var message = 'Removal has been submitted!';
+					if (!responseText.response.data.isEdit) {
+						message = 'Part has been removed!';
+					}
 					$.blockUI({
-						message : '<button class="close" data-dismiss="alert" type="button">×</button>Removal has been submitted!',
+						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,
 						css : {
 							top : '100px',
@@ -1284,7 +1307,7 @@ UpdateAttributes.prototype.submit = function(attribute) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Update has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',
@@ -1420,7 +1443,7 @@ UpdateCollectibleAttributes.prototype.submit = function(attribute) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>Update has been submitted!',
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
 					css : {
 						top : '100px',

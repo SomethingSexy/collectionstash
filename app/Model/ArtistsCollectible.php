@@ -79,7 +79,6 @@ class ArtistsCollectible extends AppModel {
 		$retVal = $this -> buildDefaultResponse();
 		$this -> Artist -> set($data['ArtistsCollectible']);
 		$validCollectible = true;
-	
 
 		if ($this -> Artist -> validates()) {
 			// just in case
@@ -90,10 +89,7 @@ class ArtistsCollectible extends AppModel {
 			// on collectible status
 			// If we are already auto updating, no need to check
 			if ($autoUpdate === 'false' || $autoUpdate === false) {
-				$isDraft = $this -> Collectible -> isStatusDraft($data['ArtistsCollectible']['collectible_id']);
-				if ($isDraft) {
-					$autoUpdate = true;
-				}
+				$autoUpdate = $this -> Collectible -> allowAutoUpdate($data['ArtistsCollectible']['collectible_id'], $user);
 			}
 
 			if ($autoUpdate === true || $autoUpdate === 'true') {
@@ -145,10 +141,7 @@ class ArtistsCollectible extends AppModel {
 		// on collectible status
 		// If we are already auto updating, no need to check
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
-			$isDraft = $this -> Collectible -> isStatusDraft($currentVersion['ArtistsCollectible']['collectible_id']);
-			if ($isDraft) {
-				$autoUpdate = true;
-			}
+			$autoUpdate = $this -> Collectible -> allowAutoUpdate($currentVersion['ArtistsCollectible']['collectible_id'], $user);
 		}
 
 		if ($autoUpdate === true || $autoUpdate === 'true') {
