@@ -59,12 +59,14 @@ echo $this -> Html -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 <script>
-var collectibleStatus = {
-	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
-	status: <?php echo json_encode($collectibleDetail['Status']); ?>
-};
-var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
-<?php
+	var collectibleStatus = {
+	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
+	,
+	status: 
+ <?php echo json_encode($collectibleDetail['Status']); ?>
+		};
+		var collectible =  
+ <?php echo json_encode($collectibleDetail['Collectible']); ?>;<?php
 if ($showStatus) {
 	echo 'var showStatus = true;';
 } else {
@@ -104,6 +106,10 @@ if ($showStatus) {
 						$userSubscribed = 'true';
 					}
 					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+
+				}
+
+				if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
 				}
 				?>

@@ -13,7 +13,10 @@
 	</div>
 	{@eq key="{collectible.custom}" value="true" type="boolean"}
 		<p>When you are adding parts please try and add existing parts whenever possible.  If you do have to add a new part to the system and you purhaseed it from someone please add it as a <strong>new collectible</strong>, attaching that new part to the collectible.  Once it is approved you can add the existing part to your custom.</p>
-		<p>Otherwise, if you made a part for this piece you can add it here.</p>
+		<p>You will only be able to add new custom or commissioned parts directly to this collectible. These parts will not be able to be shared.</p>
+	{/eq}
+	{@eq key="{collectible.original}" value="true" type="boolean"}
+		<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
 	{/eq}
 	<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
 		<thead>
