@@ -19,6 +19,9 @@
 		<label class="radio">
 			<input type="radio" class="attribute-type" data-type="Attribute" data-name="type"  name="data[Attribute][type]" id="optionsRadios2" value="original"  {@eq key="{Attribute.type}" value="original"}checked{/eq}>
 			This is an original part, commissioned by someone else.</label>
+		<label class="radio">
+			<input type="radio" class="attribute-type" data-type="Attribute" data-name="type"  name="data[Attribute][type]" id="optionsRadios3" value="generic"  {@eq key="{Attribute.type}" value="generic"}checked{/eq}>
+			This is a generic part.  I do not know where it came from.</label>
 		{/if}
 		{@if cond=" '{collectible.original}' && '{Attribute.type}' !== 'mass' "}
 			<input type="hidden" data-type="Attribute" data-name="type" name="data[Attribute][type]" value="{Attribute.type}">

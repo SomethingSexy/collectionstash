@@ -2653,11 +2653,20 @@ var AddAttributeView = Backbone.View.extend({
 	toggleType : function(event) {
 		var field = $(event.currentTarget);
 
+		var type = field.attr('data-type');
+
+		var data = {};
+
+		if (type) {
+			// else we need to get the type
+			// set the new one
+			data = this.model.get(type);
+		}
+		data[field.attr('data-name')] = field.val();
+
 		// silent because we don't want to trigger a change
 		// if this is an edit
-		this.model.set({
-			'type' : field.val()
-		}, {
+		this.model.set(data, {
 			silent : true
 		});
 
