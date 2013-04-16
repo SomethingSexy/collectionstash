@@ -578,7 +578,7 @@ class Attribute extends AppModel {
 			}
 		} else {
 			// now check type, if it custom or original then it can be updated at any point if permission is there
-			if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original') {
+			if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original' || $attribute['Attribute']['type'] === 'generic') {
 				if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
 					$retVal = true;
 				}
@@ -624,7 +624,7 @@ class Attribute extends AppModel {
 		} else {
 			if ($attribute && !empty($attribute)) {
 				// right now for originals if you have to be the one who submitted it
-				if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original') {
+				if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original' || $attribute['Attribute']['type'] === 'generic') {
 					if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
 						$retVal = true;
 					}
