@@ -2468,6 +2468,11 @@ div.paging span a:hover {
 	overflow-x: hidden;
 }
 
+#attribute-collectible-add-existing-dialog .modal-body {
+
+	min-height: 400px;
+}
+
 /*
  * Cake BS
  */
