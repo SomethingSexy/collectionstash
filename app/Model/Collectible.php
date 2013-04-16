@@ -1264,6 +1264,8 @@ class Collectible extends AppModel {
 		} else if ($this -> data['Collectible']['custom']) {
 			// They don't have to select a manufacturer
 			$this -> validate['manufacture_id']['allowEmpty'] = true;
+			$this -> validate['msrp']['allowEmpty'] = true;
+			$this -> validate['url']['allowEmpty'] = true;
 			// They don't have to select a brand
 			//using unset here so it will go the validate method
 			unset($this -> validate['license_id']['allowEmpty']);

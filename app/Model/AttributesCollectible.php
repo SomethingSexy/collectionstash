@@ -262,7 +262,7 @@ class AttributesCollectible extends AppModel {
 					// Return what we just added
 					$attributesCollectibleId = $this -> id;
 					// Hopefully this won't be a performance issue at this level
-					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
+					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
 
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $attributesCollectible['AttributesCollectible'];
