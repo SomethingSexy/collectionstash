@@ -2851,6 +2851,7 @@ var AddExistingAttributePartSearchView = Backbone.View.extend({
 		this.collection.requestPreviousPage();
 	},
 	selectAttribute : function(event) {
+		event.preventDefault();
 		var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
 		this.model.clear({
 			silent : true
@@ -2948,6 +2949,7 @@ var AddExistingAttributeCollectibleSearchView = Backbone.View.extend({
 		this.collection.requestPreviousPage();
 	},
 	selectAttribute : function(event) {
+		event.preventDefault();
 		var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
 		this.model.clear({
 			silent : true
