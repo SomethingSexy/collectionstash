@@ -59,13 +59,13 @@ echo $this -> Html -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 <script>
-	var collectibleStatus = {
+		var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
-	,
-	status: 
+		,
+		status:
  <?php echo json_encode($collectibleDetail['Status']); ?>
-		};
-		var collectible =  
+	};
+	var collectible =
  <?php echo json_encode($collectibleDetail['Collectible']); ?>;<?php
 if ($showStatus) {
 	echo 'var showStatus = true;';
@@ -153,7 +153,12 @@ if ($showStatus) {
 			} else if ($collectibleDetail['Collectible']['original']) {
 				echo 'Original | ';
 			} else {
-				echo 'Mass-Produced | ';
+				if ($collectibleDetail['Collectible']['official']) {
+					echo 'Mass-Produced | ';
+				} else {
+					echo 'Custom | ';
+				}
+
 			}
 
 			if ($collectibleDetail['Collectible']['official']) {
