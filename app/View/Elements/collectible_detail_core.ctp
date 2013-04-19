@@ -87,14 +87,15 @@ if (!isset($adminMode)) {
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('Product UPC', true), array('compare' => $showCompareFields));
+	if ($adminMode || $isLoggedIn || $collectibleCore['Collectible']['custom'] || $collectibleCore['Collectible']['original'] || $collectibleCore['Collectible']['official']) {
 
-	$msrpLabel = __('Original Retail Price', true);
-	if ($collectibleCore['Collectible']['custom'] || $collectibleCore['Collectible']['original']) {
-		$msrpLabel = __('Cost', true);
+		$msrpLabel = __('Original Retail Price', true);
+		if ($collectibleCore['Collectible']['custom'] || $collectibleCore['Collectible']['original']) {
+			$msrpLabel = __('Cost', true);
+		}
+
+		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), $msrpLabel, array('compare' => $showCompareFields, 'preValue' => $collectibleCore['Currency']['sign']));
 	}
-
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'msrp'), $msrpLabel, array('compare' => $showCompareFields, 'preValue' => $collectibleCore['Currency']['sign']));
-
 	if ($adminMode) {
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'official'), __('Official', true), array('compare' => $showCompareFields, 'value' => __('Yes', true)));
 	}

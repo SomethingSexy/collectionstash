@@ -42,7 +42,7 @@ class Collectible extends AppModel {
 	//description field
 	'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
 	//msrp
-	'msrp' => array('rule' => array('money', 'left'), 'required' => true, 'message' => 'Please supply a valid monetary amount.'),
+	'msrp' => array('rule' => array('money', 'left'), 'required' => false, 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition_size
 	'edition_size' => array('rule' => array('validateEditionSize'), 'allowEmpty' => true, 'message' => 'Must be numeric.'),
 	//retailer
@@ -273,7 +273,8 @@ class Collectible extends AppModel {
 								// otherwise if there is a manufacturer, use that
 								$itemTitle .= $results['Manufacture']['title'];
 							}
-						} else {
+						} else if (!empty($results['Manufacture'])) {
+							// otherwise if there is a manufacturer, use that
 							$itemTitle .= $results['Manufacture']['title'];
 						}
 
