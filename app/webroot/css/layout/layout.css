@@ -9,17 +9,16 @@ body {
 	padding-left: 20px;
 	float: left;
 }
-.footer .social {
-	padding-left: 20px;
+.social {
 	float: left;
 }
-.footer .social div {
+.social div {
 	padding: 5px;
 	float: left;
 	vertical-align: top;
 }
 
-.footer .social div .fb_iframe_widget iframe {
+.social div .fb_iframe_widget iframe {
 	position: static;
 }
 .footer .links {
