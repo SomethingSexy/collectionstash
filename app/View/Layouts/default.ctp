@@ -191,50 +191,37 @@
 	</div>
 	<header class="header"></header>
 	<div class="container">
-
 		<div class="row">
-
+			<div class="span12"><?php echo $content_for_layout; ?></div>
+		</div>	
+		<div class="row">
 			<div class="span12">
-					<?php echo $content_for_layout; ?>
-
+				<div class="row">
+					<div class="span6">
+						<div class="social">
+							<div>
+								<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
+							</div>
+							<div>
+								<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
+							</div>
+						</div>					
+					</div>
+					<div class="span6">
+						<ul class="links unstyled pull-right">
+							<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
+						</ul>
+					</div>	
+				</div>
+				<div class="row spacer">
+					<div class="span12">
+						<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
+					</div>
+				</div>
 			</div>
-
-		
 		</div>
+	</div>
 
-</div>
-<footer class="footer">
-		
-			<div class="logo">
-				<?php //echo $html->image('logo/collection_stash_logo_white.png', array('alt' => 'Collection Stash')) ?>
-			</div>
-			<div class="social">
-				<div>
-					<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
-				</div>
-				<div>
-					<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
-				</div>
-				<div>
-					
-				</div>
-				<!--<li>About Us</li>
-				<li>Contact Us</li>
-				<li>Donate</li>
-				<li>Report a Bug</li>
-				<li>Milestones</li>
-				<li>Request a Feature</li>-->
-			</div>
-			<ul class="links unstyled">
-				<li>&copy; Collection Stash v<?php echo Configure::read('Settings.version'); ?></li>
-			</ul>
-		
-	
-</footer>
-		<?php /**echo $this->element('sql_dump');
-	 echo $js->writeBuffer();
-	 */
-		?>
 		<?php echo $this -> element('sql_dump'); ?>
 		
 		<div id="modal-gallery" class="modal modal-gallery hide fade" tabindex="-1">
