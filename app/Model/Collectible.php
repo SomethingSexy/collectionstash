@@ -199,7 +199,7 @@ class Collectible extends AppModel {
 
 						if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
 							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
-						} else if (isset($val['Manufacture']) || isset($val['ArtistsCollectible'])) {
+						} else if ((isset($val['Manufacture']) && !empty($val['Manufacture'])) || (isset($val['ArtistsCollectible']) && !empty($val['ArtistsCollectible']))) {
 							$itemTitle = $val['Collectible']['name'] . ' By ';
 
 							if ($val['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
@@ -211,8 +211,12 @@ class Collectible extends AppModel {
 									// otherwise if there is a manufacturer, use that
 									$itemTitle .= $val['Manufacture']['title'];
 								}
-							} else {
+							} else if (!empty($val['Manufacture'])) {
 								$itemTitle .= $val['Manufacture']['title'];
+							} else if (!empty($val['ArtistsCollectible'])) {
+								// assume the first on is primary for now :)
+								$artist = $val['ArtistsCollectible'][0];
+								$itemTitle .= $artist['Artist']['name'];
 							}
 
 							$results[$key]['Collectible']['displayTitle'] = $itemTitle;
@@ -261,7 +265,7 @@ class Collectible extends AppModel {
 
 					if (isset($results['custom']) && $results['custom']) {
 						$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
-					} else if (isset($results['Manufacture']) || isset($results['ArtistsCollectible'])) {
+					} else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
 						$itemTitle = $results['name'] . ' By ';
 
 						if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
@@ -276,6 +280,10 @@ class Collectible extends AppModel {
 						} else if (!empty($results['Manufacture'])) {
 							// otherwise if there is a manufacturer, use that
 							$itemTitle .= $results['Manufacture']['title'];
+						} else if (!empty($results['ArtistsCollectible'])) {
+							// assume the first on is primary for now :)
+							$artist = $results['ArtistsCollectible'][0];
+							$itemTitle .= $artist['Artist']['name'];
 						}
 
 						$results['displayTitle'] = $itemTitle;
