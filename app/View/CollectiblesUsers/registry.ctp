@@ -37,6 +37,8 @@
 							echo '</td>';
 						}
 						echo '</tr>';
+					} else {
+						echo '<tr><td> Private Stash</td><td> - </td></tr>';
 					}
 				}
 				echo '</table>';
@@ -61,6 +63,8 @@
 						echo '<a href="/wishlist/' . $value['User']['username'] . '" class="link">' . $value['User']['username'] . '</a>';
 						echo '</td>';
 						echo '</tr>';
+					} else {
+						echo '<tr><td> Private Stash</td></tr>';
 					}
 				}
 				echo '</table>';
