@@ -810,6 +810,8 @@ class Collectible extends AppModel {
 			$collectible['Collectible']['edition_size'] = 1;
 			$collectible['Collectible']['limited'] = true;
 
+			//TODO: We should update this to not create the CollectibleUser until
+			// they change the status to Active
 			//Get a stubbed collectibles user object
 			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
 			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
@@ -825,6 +827,8 @@ class Collectible extends AppModel {
 			$collectible['Collectible']['edition_size'] = 1;
 			$collectible['Collectible']['limited'] = true;
 
+			//TODO: We should update this to not create the CollectibleUser until
+			// they change the status to Active
 			//Get a stubbed collectibles user object
 			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
 			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
