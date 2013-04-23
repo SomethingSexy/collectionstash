@@ -28,7 +28,7 @@
 					echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
 				}
 				echo '<div class="header">';
-				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
+				echo '<a href="/collectibles/view/' .$collectible['Collectible']['id'] . '/' . $collectible['Collectible']['slugField'].  '">' . $collectible['Collectible']['displayTitle'] . '</a>';
 				echo '</div>';
 			
 				if ($isLoggedIn) {
