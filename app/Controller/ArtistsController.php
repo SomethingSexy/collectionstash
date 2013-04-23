@@ -31,7 +31,7 @@ class ArtistsController extends AppController {
 
 		$this -> loadModel('Collectible');
 
-		$this -> paginate = array('joins' => $joins, 'limit' => 25, 'conditions' => array('Artist.id' => $id, 'Collectible.status_id' => 4), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
+		$this -> paginate = array('joins' => $joins, 'limit' => 25, 'conditions' => array('Artist.id' => $id, 'Collectible.status_id' => 4), 'contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'Collectibletype', 'ArtistsCollectible' => array('Artist')));
 		$collectibles = $this -> paginate('Collectible');
 
 		$this -> set(compact('collectibles'));
