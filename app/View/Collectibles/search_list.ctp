@@ -31,7 +31,7 @@ unset($urlparams['url']);
 				echo '<th>' . $this -> Paginator -> sort('Collectible.variant', 'Variant', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Type', array('escape' => false)) . '</th>';
+				echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('Collectible.specialized_type_id', 'Manufacturer Type', array('escape' => false)) . '</th>';
 				echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false)) . '</th>';
 				echo '<th>' . __('Actions') . '</th>';

@@ -91,6 +91,8 @@ class EditActivity extends BaseActivity {
 				$targetJSON = $this -> buildEditAttributesUploadTarget($this -> edit);
 				$retVal = array_merge($retVal, $targetJSON);
 			}
+			
+			// TODO: ArtistCollectible
 
 		} else if ($this -> action === 'approve') {
 

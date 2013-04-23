@@ -201,7 +201,7 @@ class Collectible extends AppModel {
 							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
 						} else if ((isset($val['Manufacture']) && !empty($val['Manufacture'])) || (isset($val['ArtistsCollectible']) && !empty($val['ArtistsCollectible']))) {
 							$itemTitle = $val['Collectible']['name'] . ' By ';
-						
+
 							if ($val['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 								if (!empty($val['ArtistsCollectible'])) {
 									// assume the first on is primary for now :)
@@ -216,7 +216,7 @@ class Collectible extends AppModel {
 							} else if (!empty($val['ArtistsCollectible'])) {
 								// assume the first on is primary for now :)
 								$artist = $val['ArtistsCollectible'][0];
-								
+
 								$itemTitle .= $artist['Artist']['name'];
 							}
 
@@ -268,7 +268,7 @@ class Collectible extends AppModel {
 						$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
 					} else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
 						$itemTitle = $results['name'] . ' By ';
-						
+
 						if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 							if (!empty($results['ArtistsCollectible'])) {
 								// assume the first on is primary for now :)
@@ -1022,12 +1022,14 @@ class Collectible extends AppModel {
 		// if it is valid
 		$status = $this -> data['Collectible']['status_id'];
 		//TODO: Handle originals
+		$triggerActivity = false;
 
 		// custsom go from draft to active
 		if ($this -> data['Collectible']['custom'] || $this -> data['Collectible']['original']) {
 			// if the status is 1 change to 2 for a submit
 			if ($status === '1') {
 				$status = 4;
+				$triggerActivity = true;
 			} else {
 				// should never happen
 			}
@@ -1075,6 +1077,13 @@ class Collectible extends AppModel {
 			$statusDetail = $this -> Status -> find('first', array('contain' => false, 'conditions' => array('Status.id' => $status)));
 			$retVal['response']['isSuccess'] = true;
 			$retVal['response']['data']['status'] = $statusDetail['Status'];
+			
+			//$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('User')));
+			// TODO: Does using the admin approve new activity type make sense in this case?
+			// TODO: Approve does not make sense...UPDATE this so that when we change status for this guy
+			// we create the CollectibleUser object and THEN we add an event that the user has added this collectible to their stash
+			//$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $user, 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
+
 		}
 
 		return $retVal;
