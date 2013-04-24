@@ -301,17 +301,23 @@
 		</p>
 		<img src="/img/documentation/part_add_existing_modal_search.png" class="img-polaroid">
 		<p></p>
-		<p>Once you select the part you want, you will be allowed to add the count.  Click "Add" to add it to your collectible.</p>
+		<p>
+			Once you select the part you want, you will be allowed to add the count.  Click "Add" to add it to your collectible.
+		</p>
 		<img src="/img/documentation/part_add_existing_modal_selected.png" class="img-polaroid">
-		<p></p>		
-		
-
+		<p></p>
+		<p>
+			The same process can be applied when searching for a part directly.
+		</p>
 		<h5>Adding Photos</h5>
 		<p>
 			After you add the part to the collectible, you can upload photos for that part.
 		</p>
 		<h5>Editing</h5>
-		<h5>Removongg Dupilicate Parts</h5>
+		<p>
+			Coming soon!
+		</p>
+		<h5>Removing Dupilicate Parts</h5>
 		<p>
 			Coming soon!
 		</p>
@@ -319,9 +325,28 @@
 		<p>
 			Coming soon!
 		</p>
-		<h5>When should I add a part vs making a new collectible?</h5>
+		<h5>When should I add a new part vs adding an existing part?</h5>
+		<p>
+			When adding parts, you should always be thinking whether or not this part should be added as a new part or it should be linked from an existing part.  If you know that the part you are added is shared with another collectible, please search for that collectible first to see if it has already been added.  Otherwise, add it as a new part but make sure to update any collectibles that might also have this part.
+		</p>
+
+		<h5>Adding Parts to Custom Collectibles</h5>
+		<p>
+			Customs are a unique collectible type because they are built or pieced together by you.  Because of this, we need to also indicate that with any <strong>new</strong> parts that are being added to a custom.  It is <strong>strongly</strong> encouraged to add existing parts to a custom when applicable.
+		</p>
+		<p>
+			If you are bashing together a custom from other parts, some of which you might <strong>be mass-produced</strong> then you <strong>need</strong> add that part as a <strong>mass-produced collectible</strong> first.  Then you can link that part to your custom. <a href="http://www.collectionstash.com/collectibles/view/3795">Here</a> is a great example of how that is done.
+		</p>
+		<p>
+			Otherwise, if the part you are adding was made by you, is a 1 or 1 commission from an artist, or is generic (not sure where it came from) then you can add it new, directly to the custom collectible.
+		</p>
+		<p>
+			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these threee options.
+		<img src="/img/documentation/part_add_custom_modal.png" class="img-polaroid">
 		<p></p>
-		<h5>Adding Parts to Original and Custom Collectibles</h5>
+
+		<h5>Adding Parts to Original Collectibles</h5>
+		<p>All parts added directly to an original collectible will be automatically labeled as "original" parts.  They cannot be shared/linked to other collectibles at this time.</p>
 
 		<h4 id="sumbit"> Submitting/Activating a Collectible </h4>
 
