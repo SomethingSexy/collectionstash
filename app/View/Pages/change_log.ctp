@@ -1,9 +1,8 @@
 <h2>Change Log</h2>
 
 <h3>Release Notes for v2.4</h3>
-<h4>Custom Collectibles</h4>
-
-<h4>Original Collectibles</h4>
+<h4>Custom and Original Collectibles</h4>
+<p>Read more about these brand new features in our <a href="/pages/collection_stash_documentation">A Guide to Collection Stash</a></p>
 
 <h3>Release Notes for v2.3</h3>
 <h4>Part Photos</h4>

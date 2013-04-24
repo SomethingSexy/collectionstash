@@ -15,18 +15,21 @@
 						<a href="#platforms"> <i class="icon-chevron-right"></i> Platforms </a>
 					</li>
 					<li>
+						<a href="#status"> <i class="icon-chevron-right"></i> Status </a>
+					</li>
+					<li>
 						<a href="#manufacturers"> <i class="icon-chevron-right"></i> Manufacturers </a>
 					</li>
 					<li>
 						<a href="#artists"> <i class="icon-chevron-right"></i> Artists </a>
 					</li>
 					<li>
+						<a href="#photos"> <i class="icon-chevron-right"></i> Photos </a>
+					</li>
+					<li>
 						<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
 					</li>
 				</ul>
-			</li>
-			<li>
-				<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
 			</li>
 		</ul>
 	</div>
@@ -77,7 +80,11 @@
 				Custom collectibles are ones that you built or bashed yourself.  This could be anything that you built completely from scratch or you pieced together from various custom or mass-produced parts.
 			</dd>
 		</dl>
-
+		
+		<h4 id="status">Status</h4>
+		<p>A collectible has a corresponding status.  That status might be different depending on the type of collectible it is and how far it has gone through the approval process (if applicable).</p>
+		<p>Regardless of type, all collectibles start in the draft status.  Once you get to the collectible form screen, after selecting a platform you will see this indicated at the top.</p>
+		<img src="/img/documentation/add_new_draft_status.png" class="img-polaroid">
 		<h4 id="platforms">Platform</h4>
 		<p>
 			Besides being of a specific type, each collectible has belongs to a platform.  The platform is basically the collectible category.  Ideally this could be anything but right now we have a predefined list of platforms for you to choose from.
@@ -157,10 +164,105 @@
 			Here is an example of <a href="http://www.collectionstash.com/artist/155/gentle-giant">Gentle Giant</a> being the sculptor for a <a href="http://www.collectionstash.com/collectibles/view/3683/diamond-select-toys-howard-the-duck-statue">statue</a> that was made by <a href="http://www.collectionstash.com/manufacturer/24/diamond-select-toys">Diamnod Select Toys.</a>
 		</p>
 
+		<h4 id="photos">Photos</h4>
+		<p>
+			Coming soon!
+		</p>
 		<h4 id="parts">Parts</h4>
-		<h5>Adding</h5>
+		<p>
+			Parts are all of the pieces that make up a collectible.  They can be anything and like a collector we like to know how our collectible is made and everything it contains.  This is important for keeping documentation on a collectible but it is also important for customizing!
+		</p>
+		<p>
+			A part should be added for each individual piece of the collectible.  If there are multiple of the same part, then only <strong>one</strong> should be added but the count should be adjusted.
+		</p>
+		<p>
+			Parts can also be shared amongst collectibles.  This feature allows us to indicate which part might be used across multiple different collectibles.  This also allows customers to build bashes and collectibles from other parts that were made.
+		</p>
+
+		<h5>Adding New Parts to a Collectible</h5>
+		<p>
+			New parts are displayed and added near the bottom of the collectible form.
+		</p>
+		<img src="/img/documentation/part_add_new_dropdown.png" class="img-polaroid">
+		<p></p>
+		<p>
+			When selected you will be presented with a modal dialog where you can fill out information about the part, this includes a category,name, description, manufacturer, artist, scale and count.
+		</p>
+		<img src="/img/documentation/part_add_new_modal.png" class="img-polaroid">
+		<p></p>
+		<p>
+			Below is a more indepth description of the fields that can be filled out for each part.
+		</p>
+		<dl class="dl-horizontal">
+			<dt>
+				Category
+			</dt>
+			<dd>
+				The part is required to be in a specific category.  Please find the category that best fits the part you are trying to add.  If you cannot find an appropriate category you can use the generic "Part" category.
+			</dd>
+			<dt>
+				Name
+			</dt>
+			<dd>
+				A short title for the part.  This is required.
+			</dd>
+			<dt>
+				Description
+			</dt>
+			<dd>
+				More detailed information about the part.  This is required.
+			</dd>
+			<dt>
+				Manufacturer
+			</dt>
+			<dd>
+				This indicates what manufacturer made the part.  This is optional.
+			</dd>
+			<dt>
+				Artist
+			</dt>
+			<dd>
+				This indicates what artist made the part.  This is optional.
+			</dd>
+			<dt>
+				Scale
+			</dt>
+			<dd>
+				This indicates the scale of the part relative to the scale of the collectible.  This is optional.
+			</dd>
+		</dl>
+
+		<p>
+			When a part is added to a collectible it also has the following attributes.  These attributes are tied to the relationship between the collectible and part, not to the part itself.
+		</p>
+		<dl class="dl-horizontal">
+			<dt>
+				Count
+			</dt>
+			<dd>
+				The total number of this part the collectible has.
+			</dd>
+		</dl>
+		<p>Here is an example of a part that was successfully added to a new collectible.</p>
+		<img src="/img/documentation/part_add_new_added.png" class="img-polaroid">
+		
+		<h5>Adding Existing Parts to a Collectible</h5>
+		<h5>Adding Photos</h5>
+		<p>
+			After you add the part to the collectible, you can upload photos for that part.
+		</p>
 		<h5>Editing</h5>
-		<h5>Linking</h5>
+		<h5>Removongg Dupilicate Parts</h5>
+		<p>
+			Coming soon!
+		</p>
+		<h5>Removing Parts</h5>
+		<p>
+			Coming soon!
+		</p>
+		<h5>When should I add a part vs making a new collectible?</h5>
+		<p></p>
+		<h5>Adding Parts to Original and Custom Collectibles</h5>
 
 		<h4> Approval Process</h4>
 
