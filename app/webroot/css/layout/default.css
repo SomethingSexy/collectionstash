@@ -1258,21 +1258,6 @@ div.radio label {
 	padding: 0;
 	border-left: none;
 }
-h1 {
-	margin: 0;
-	padding: 0;
-	min-height: 0;
-	background-color: #dedede;
-	text-indent: -9000px;
-	text-decoration: none;
-}
-h1 a {
-	min-height: 40px;
-	height: 40px;
-	display: block;
-	background: url(../images/wflogo.png) no-repeat left top;
-	overflow: hidden;
-}
 img, a img {
 	border: none;
 	-ms-interpolation-mode: bicubic;
