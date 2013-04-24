@@ -29,6 +29,12 @@
 					<li>
 						<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
 					</li>
+					<li>
+						<a href="#submit"> <i class="icon-chevron-right"></i> Submitting/Activating a Collectible </a>
+					</li>
+					<li>
+						<a href="#delete"> <i class="icon-chevron-right"></i> Deleting a Collectible </a>
+					</li>
 				</ul>
 			</li>
 		</ul>
@@ -80,11 +86,39 @@
 				Custom collectibles are ones that you built or bashed yourself.  This could be anything that you built completely from scratch or you pieced together from various custom or mass-produced parts.
 			</dd>
 		</dl>
-		
+
 		<h4 id="status">Status</h4>
-		<p>A collectible has a corresponding status.  That status might be different depending on the type of collectible it is and how far it has gone through the approval process (if applicable).</p>
-		<p>Regardless of type, all collectibles start in the draft status.  Once you get to the collectible form screen, after selecting a platform you will see this indicated at the top.</p>
+		<p>
+			A collectible has a corresponding status.  That status might be different depending on the type of collectible it is and how far it has gone through the approval process (if applicable).
+		</p>
+		<p>
+			Regardless of type, all collectibles start in the draft status.  Once you get to the collectible form screen, after selecting a platform you will see this indicated at the top.  This status bar will be visible on all collectibles that are in draft and submitted status.
+		</p>
 		<img src="/img/documentation/add_new_draft_status.png" class="img-polaroid">
+		<p></p>
+		<p>
+			A collectible can be in the following statuses.
+		</p>
+		<dl class="dl-horizontal">
+			<dt>
+				Draft
+			</dt>
+			<dd>
+				This means you are working on a new collectible.  It cannot be viewed by the public and it has not been submitted for approval if it is a mass-produced collectible.
+			</dd>
+			<dt>
+				Submitted
+			</dt>
+			<dd>
+				This means you are finished creating the collectible and are satisfied enough to submit it for approval.  Once it is in submitted status you cannot edit it.  However, if you need to make a change before it is approved you can change it back to Draft status and make your changes.  Collectibles in this status can be viewed by members but cannot be edited.
+			</dd>
+			<dt>
+				Active
+			</dt>
+			<dd>
+				This means the collectible was either approved by an admin (applies to mass-produced collectibles only) or it was actived by the user (applies to customs and originals).  It can be viewed by members and non-members.
+			</dd>
+		</dl>
 		<h4 id="platforms">Platform</h4>
 		<p>
 			Besides being of a specific type, each collectible has belongs to a platform.  The platform is basically the collectible category.  Ideally this could be anything but right now we have a predefined list of platforms for you to choose from.
@@ -243,9 +277,11 @@
 				The total number of this part the collectible has.
 			</dd>
 		</dl>
-		<p>Here is an example of a part that was successfully added to a new collectible.</p>
+		<p>
+			Here is an example of a part that was successfully added to a new collectible.
+		</p>
 		<img src="/img/documentation/part_add_new_added.png" class="img-polaroid">
-		
+
 		<h5>Adding Existing Parts to a Collectible</h5>
 		<h5>Adding Photos</h5>
 		<p>
@@ -264,9 +300,9 @@
 		<p></p>
 		<h5>Adding Parts to Original and Custom Collectibles</h5>
 
-		<h4> Approval Process</h4>
+		<h4 id="sumbit"> Submitting/Activating a Collectible </h4>
 
-		<h4>Edit Process</h4>
+		<h4 id="delete"> Deleting a Collectible </h4>
 
 	</div>
 
