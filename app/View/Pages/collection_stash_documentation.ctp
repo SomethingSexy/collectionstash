@@ -1,14 +1,29 @@
+<?php $this -> set("title_for_layout", __('A Guide to Collection Stash')); ?>
 <div class="row">
 	<div class="span3">
 		<ul class="nav nav-list">
 			<li>
 				<a href="#overview"> <i class="icon-chevron-right"></i> What is a Collectible? </a>
 			</li>
-			<li >
-				<a href="#mass-produced"> <i class="icon-chevron-right"></i> Mass-produced </a>
-			</li>
 			<li>
-				<a href="#customs"> <i class="icon-chevron-right"></i> Customs and Originals </a>
+				<a href="#submit-new"> <i class="icon-chevron-right"></i> Submitting a New Collectible </a>
+				<ul class="nav nav-list">
+					<li>
+						<a href="#types"> <i class="icon-chevron-right"></i> Types </a>
+					</li>
+					<li>
+						<a href="#platforms"> <i class="icon-chevron-right"></i> Platforms </a>
+					</li>
+					<li>
+						<a href="#manufacturers"> <i class="icon-chevron-right"></i> Manufacturers </a>
+					</li>
+					<li>
+						<a href="#artists"> <i class="icon-chevron-right"></i> Artists </a>
+					</li>
+					<li>
+						<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
+					</li>
+				</ul>
 			</li>
 			<li>
 				<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
@@ -30,7 +45,7 @@
 			Most collectibles describe the physical product that is sold, but they do not have to for the cases where you made the collectible yourself.  Each collectible is made up of parts, these parts are combined together to make a collectible that you can add to your stash.  Some might have one part, others might have hundreds.
 		</p>
 
-		<h3>Submitting a New Collectible</h3>
+		<h3 id="submit-new">Submitting a New Collectible</h3>
 
 		<p>
 			When submitting a new collectible you are presented with some options.  It is important to pick the right type of collectible, depending on what you are trying to add.
@@ -38,7 +53,7 @@
 
 		<img src="/img/documentation/submit_new_collectible_options.png" class="img-polaroid">
 
-		<h4>Types</h4>
+		<h4 id="types">Types</h4>
 		<p>
 			The following three types (hopefully!) should accurately describe every type of collectible you could own.  When adding a new collectible please try and find the type that best describes what you are adding.
 		</p>
@@ -63,12 +78,12 @@
 			</dd>
 		</dl>
 
-		<h4>Platform</h4>
+		<h4 id="platforms">Platform</h4>
 		<p>
 			Besides being of a specific type, each collectible has belongs to a platform.  The platform is basically the collectible category.  Ideally this could be anything but right now we have a predefined list of platforms for you to choose from.
 		</p>
 
-		<h4>Manufacturers</h4>
+		<h4 id="manufacturers">Manufacturers</h4>
 		<p>
 			Mass-produced and original collectibles can specify a manufacturer or producer.  This is the company or business that made or produced the collectible.  In most cases this is the place you bought it from or the name that is on the box!  Each manufacturer is linked to platforms and brands.  If you do not see what you are looking for you can edit them here.
 		</p>
@@ -76,10 +91,43 @@
 			Please note, a manufacturer is not required.  Some collectibles might not be made or produced by a company but instead are designed and produced by an individual person.  If that is the case, you will want to indicate the <a href="#artist">artist</a> instead.
 		</p>
 		<p>
-			You can add and edit manufacturers directly from the submit collectible form.  Detailed information is found in the <a href="#manufacturers">Manufacturers Section.</a>
+			You can add and edit manufacturers directly from the submit collectible form. </a>
 		</p>
 
-		<h4 id="artist">Artists</h4>
+		<h5>Manufacturer Information</h5>
+		<p>
+			The following pieces of information are directly linked to a manufacturer.
+		</p>
+		<dl class="dl-horizontal">
+			<dt>
+				Brands
+			</dt>
+			<dd>
+
+			</dd>
+			<dt>
+				Categories
+			</dt>
+			<dd>
+
+			</dd>
+			<dt>
+				Platforms
+			</dt>
+			<dd>
+
+			</dd>
+		</dl>
+
+		<h5>Adding New Manufacturers</h5>
+		<p>
+			Coming soon!
+		</p>
+		<h5>Editing Existing Manufacturers</h5>
+		<p>
+			Coming soon!
+		</p>
+		<h4 id="artists">Artists</h4>
 		<p>
 			Another major piece of information a collectible might have is an artist.  Every type of collectible can have artists and it is important to document and give credit to those people who worked to make that product.
 		</p>
@@ -97,44 +145,27 @@
 		</p>
 		<img src="/img/documentation/artist_form_search.png" class="img-polaroid">
 		<p></p>
-		<p>Here is an example of what it should look like when an artist has been added.</p>
+		<p>
+			Here is an example of what it should look like when an artist has been added.
+		</p>
 		<img src="/img/documentation/artist_form_add.png" class="img-polaroid">
 		<h5>Manufacturers that are also considered Artists</h5>
-		<p>In some cases, a manufacturer might be an artist on a collectible.  Ideally we would directly link that manufacturer to collectible but until that is supported, please add the manufacturer as an artist.</p>
-		<p>Here is an example of <a href="http://www.collectionstash.com/artist/155/gentle-giant">Gentle Giant</a> being the sculptor for a <a href="http://www.collectionstash.com/collectibles/view/3683/diamond-select-toys-howard-the-duck-statue">statue</a> that was made by <a href="http://www.collectionstash.com/manufacturer/24/diamond-select-toys">Diamnod Select Toys.</a> </p>		
-		
-		<h3 id="mass-prodiced">Mass-Produced</h3>
+		<p>
+			In some cases, a manufacturer might be an artist on a collectible.  Ideally we would directly link that manufacturer to collectible but until that is supported, please add the manufacturer as an artist.
+		</p>
+		<p>
+			Here is an example of <a href="http://www.collectionstash.com/artist/155/gentle-giant">Gentle Giant</a> being the sculptor for a <a href="http://www.collectionstash.com/collectibles/view/3683/diamond-select-toys-howard-the-duck-statue">statue</a> that was made by <a href="http://www.collectionstash.com/manufacturer/24/diamond-select-toys">Diamnod Select Toys.</a>
+		</p>
 
-		<h3 id="customs">Customs and Originals</h3>
+		<h4 id="parts">Parts</h4>
+		<h5>Adding</h5>
+		<h5>Editing</h5>
+		<h5>Linking</h5>
 
-		<h3 id="parts">Parts</h3>
-		<h4>Adding</h4>
-		<h4>Editing</h4>
-		<h4>Linking</h4>
+		<h4> Approval Process</h4>
 
-		<h3> Approval Process</h3>
+		<h4>Edit Process</h4>
 
-		<h3>Edit Process</h3>
-
-		<h3 id="manufacturers">Manufacturers</h3>
-		<h4>Information</h4>
-		<dl class="dl-horizontal">
-			<dt>
-				Brands
-			</dt>
-			<dd>
-
-			</dd>
-			<dt>
-				Categories
-			</dt>
-			<dd>
-
-			</dd>
-		</dl>
-
-		<h4>Adding</h4>
-		<h4>Editing</h4>
 	</div>
 
 </div>
