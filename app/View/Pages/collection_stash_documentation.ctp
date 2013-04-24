@@ -92,7 +92,7 @@
 			A collectible has a corresponding status.  That status might be different depending on the type of collectible it is and how far it has gone through the approval process (if applicable).
 		</p>
 		<p>
-			Regardless of type, all collectibles start in the draft status.  Once you get to the collectible form screen, after selecting a platform you will see this indicated at the top.  This status bar will be visible on all collectibles that are in draft and submitted status.
+			Regardless of type, all collectibles start in the draft status.  Once you get to the collectible form, after selecting a platform you will see this indicated at the top.  The status bar will be visible on all collectibles that are in draft and submitted status.
 		</p>
 		<img src="/img/documentation/add_new_draft_status.png" class="img-polaroid">
 		<p></p>
@@ -104,19 +104,19 @@
 				Draft
 			</dt>
 			<dd>
-				This means you are working on a new collectible.  It cannot be viewed by the public and it has not been submitted for approval if it is a mass-produced collectible.
+				This is a collectible you are working on.  It cannot be viewed by the public and it has not been submitted for approval if it is a mass-produced collectible.
 			</dd>
 			<dt>
 				Submitted
 			</dt>
 			<dd>
-				This means you are finished creating the collectible and are satisfied enough to submit it for approval.  Once it is in submitted status you cannot edit it.  However, if you need to make a change before it is approved you can change it back to Draft status and make your changes.  Collectibles in this status can be viewed by members but cannot be edited.
+				This a collectible you have finished creating and are satisfied enough to submit it for approval.  When it is in a submitted status you cannot edit it.  However, if you need to make a change before it is approved you can turn it back to a Draft status and make your changes.  Collectibles in this status can be viewed by members but cannot be edited.
 			</dd>
 			<dt>
 				Active
 			</dt>
 			<dd>
-				This means the collectible was either approved by an admin (applies to mass-produced collectibles only) or it was actived by the user (applies to customs and originals).  It can be viewed by members and non-members.
+				This a collectible that was either approved by an admin (applies to mass-produced collectibles only) or it was actived by the user (applies to customs and originals).  It can be viewed by members and non-members.
 			</dd>
 		</dl>
 		<h4 id="platforms">Platform</h4>
