@@ -47,11 +47,11 @@
 
 		<h3 id="overview">What is a Collectible?</h3>
 		<p>
-			A collectible here at Collection Stash can really be anything that you as a member might collect.  These can range from mass-produced action figures or toys to limited statues or rare customs.  These can be made in quantities or build individually by you.  We want you to be able to share and catalog your passions and shows us everything you collect.
-			Admittly we do not support all types of collectibles yet, we are striving for that!
+			A collectible here at Collection Stash can really be anything that you as a member might collect.  These can range from mass-produced action figures or toys to limited statues or rare customs.  These can be made in quantities or built individually by you.  We want you to be able to share and catalog your passions and show us everything you collect.
+			Admittedly we do not support all types of collectibles yet, we are striving for that!
 		</p>
 		<p>
-			Most collectibles describe the physical product that is sold, but they do not have to for the cases where you made the collectible yourself.  Each collectible is made up of parts, these parts are combined together to make a collectible that you can add to your stash.  Some might have one part, others might have hundreds.
+			Most collectibles describe the physical product that is sold, but they do not have to! This is the case when you made the collectible yourself.  Each product is made up of parts, when these parts are combined together they make a collectible that you can add to your stash.  Some might have one part, others might have hundreds.
 		</p>
 
 		<h3 id="submit-new">Submitting a New Collectible</h3>
@@ -64,26 +64,26 @@
 
 		<h4 id="types">Types</h4>
 		<p>
-			The following three types (hopefully!) should accurately describe every type of collectible you could own.  When adding a new collectible please try and find the type that best describes what you are adding.
+			The following three types should accurately describe every type of collectible you could own (hopefully!).  When adding a new collectible please try and find the type that best describes what you are adding.
 		</p>
 		<dl class="dl-horizontal">
 			<dt>
 				Mass-Produced
 			</dt>
 			<dd>
-				These are your standard collectibles that are made and sold in mass quantity.  This type of collectible contains both official (licensed) and unofficial (customs).  The main key with this type is that is must be something <strong>sold in mass quantities</strong>, whether that is off the shelf, online or from an artist.
+				This your standard collectible that is made and sold in mass quantity.  This type handles both official (licensed) and unofficial (customs) collectibles.  The main key is that is must be something <strong>sold in mass quantity</strong>, whether that is off the shelf, online or from an artist.
 			</dd>
 			<dt>
 				Original
 			</dt>
 			<dd>
-				Original collectibles are ones that are <strong>owned by you</strong> but made by someone else.  This is collectibles that either you comissioned personally or bought from someone where <strong>only one exist</strong>.
+				An original collectible is ones that is <strong>owned by you</strong> but made by someone else.  Whether you comissioned personally or bought from someone where <strong>only one must exist</strong>.
 			</dd>
 			<dt>
 				Custom
 			</dt>
 			<dd>
-				Custom collectibles are ones that you built or bashed yourself.  This could be anything that you built completely from scratch or you pieced together from various custom or mass-produced parts.
+				A custom collectible is one that you built or bashed yourself.  This could be anything that you made completely from scratch or you pieced together from various custom or mass-produced parts.
 			</dd>
 		</dl>
 
