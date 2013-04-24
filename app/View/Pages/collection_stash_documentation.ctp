@@ -121,18 +121,18 @@
 		</dl>
 		<h4 id="platforms">Platform</h4>
 		<p>
-			Besides being of a specific type, each collectible has belongs to a platform.  The platform is basically the collectible category.  Ideally this could be anything but right now we have a predefined list of platforms for you to choose from.
+			Besides being of a specific type, each collectible belongs to a platform.  The platform describes the collectible category.  Ideally this could be anything but right now we have a predefined list of platforms for you to choose from.
 		</p>
 
 		<h4 id="manufacturers">Manufacturers</h4>
 		<p>
-			Mass-produced and original collectibles can specify a manufacturer or producer.  This is the company or business that made or produced the collectible.  In most cases this is the place you bought it from or the name that is on the box!  Each manufacturer is linked to platforms and brands.  If you do not see what you are looking for you can edit them here.
+			Mass-produced and original collectibles can specify a manufacturer or producer.  This is the company or business that made or produced the collectible.  In most cases, this is the place you bought it from or the name that is on the box!  Each manufacturer is linked to platforms and brands.  If you do not see what you are looking for you can edit them here.
 		</p>
 		<p>
-			Please note, a manufacturer is not required.  Some collectibles might not be made or produced by a company but instead are designed and produced by an individual person.  If that is the case, you will want to indicate the <a href="#artist">artist</a> instead.
+			Please note, a manufacturer is not required.  Some collectibles might not be made or produced by a company but instead are designed and produced by an individual person.  If that is the case, you will want to indicate the <a href="#artists">artist</a> instead.
 		</p>
 		<p>
-			You can add and edit manufacturers directly from the submit collectible form. </a>
+			You can add and edit manufacturers directly from the collectible form. </a>
 		</p>
 
 		<h5>Manufacturer Information</h5>
@@ -177,7 +177,7 @@
 		</p>
 
 		<p>
-			The artist section can be found near the top of the collectible form.
+			The artist section can be found near the top of the collectible form. <strong>The first one you add will be the primary artist.</strong>
 		</p>
 		<img src="/img/documentation/artist_form.png" class="img-polaroid">
 		<p></p>
@@ -283,6 +283,29 @@
 		<img src="/img/documentation/part_add_new_added.png" class="img-polaroid">
 
 		<h5>Adding Existing Parts to a Collectible</h5>
+		<p>
+			You can also add parts from other collectibles to the current collectible you are adding.  This is especially helpful when we are trying to see what part might be shared across multiple collectibles.
+		</p>
+		<p>
+			To add an existing part to this collectible use the following option.
+		</p>
+		<img src="/img/documentation/part_add_existing_dropdown.png" class="img-polaroid">
+		<p></p>
+		<p>
+			When selected you will be presented with a modal dialog where you can search for parts either by collectible or by part.
+		</p>
+		<img src="/img/documentation/part_add_existing_modal.png" class="img-polaroid">
+		<p></p>
+		<p>
+			If you know the collectible that the part you want to add is attached to, then click "Find By Collectible".  You will be presented with a screen that will allow you to search for a collectible.  When you find the part you wish to add, click it.
+		</p>
+		<img src="/img/documentation/part_add_existing_modal_search.png" class="img-polaroid">
+		<p></p>
+		<p>Once you select the part you want, you will be allowed to add the count.  Click "Add" to add it to your collectible.</p>
+		<img src="/img/documentation/part_add_existing_modal_selected.png" class="img-polaroid">
+		<p></p>		
+		
+
 		<h5>Adding Photos</h5>
 		<p>
 			After you add the part to the collectible, you can upload photos for that part.
