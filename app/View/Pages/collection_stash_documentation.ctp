@@ -362,8 +362,10 @@
 		</p>
 		<h4>Adding Photos</h4>
 		<p>
-			After you add the part to the collectible, you can upload photos for that part.
+			After you add the part to the collectible, you can upload photos for that part by clicking the "Edit Part Photos" link as shown below.
 		</p>
+		<img src="/img/documentation/part_edit_photos.png" class="img-polaroid">
+		<p></p>
 		<h4>Editing</h4>
 		<p>
 			Coming soon!
@@ -402,8 +404,23 @@
 
 		<h3 id="sumbit"> Submitting/Activating a Collectible </h3>
 		<p>
-			Coming soon!
+			Depending on the type of collectible, when you are finished you might be either submitting the collectible for approval or instantly activiating it.
 		</p>
+		<p>
+			If the type of collectible is <strong>mass-produced</strong> it will be submitted for approval and await admin approval.  If an admin finds the collectible details to be accurate and it is not a duplicate it will be approved and moved to the Active status.
+		</p>
+		<p>
+			If the type of collectible is a<strong>custom or original</strong> you can activate it right away without approval.
+		</p>
+		<p>
+			To submit a mass-produced collectible for approval click the "Submit for approval" button near the top of the page.
+		</p>
+		<img src="/img/documentation/submit_approval.png" class="img-polaroid">
+		<p></p>
+		<p>When you click the button, it will go through the validate process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.</p>
+		<img src="/img/documentation/dup_check.png" class="img-polaroid">
+		<p></p>		
+		<p>This is an example of a duplication check when trying to submit a collectible called "Stormtroooper" for Sideshow Collectibles.</p>
 		<h3 id="delete"> Deleting a Collectible </h3>
 		<p>
 			Coming soon!
