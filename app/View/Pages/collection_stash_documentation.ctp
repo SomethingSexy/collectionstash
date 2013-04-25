@@ -401,9 +401,13 @@
 		</p>
 
 		<h3 id="sumbit"> Submitting/Activating a Collectible </h3>
-
+		<p>
+			Coming soon!
+		</p>
 		<h3 id="delete"> Deleting a Collectible </h3>
-
+		<p>
+			Coming soon!
+		</p>
 	</div>
 
 </div>
