@@ -48,7 +48,7 @@
 		<h2 id="overview">What is a Collectible?</h2>
 		<p>
 			A collectible here at Collection Stash can be anything that you, as a member, might collect.  These can range from mass-produced action figures or toys to limited statues or rare customs.  These can be made in quantities or built individually by you.  We want you to be able to catalog your passions and share everything you collect.
-			Admittedly we do not support all types of collectibles yet, we are striving for that!
+			Admittedly we do not yet support all types of collectibles; we are striving for that!
 		</p>
 		<p>
 			Most collectibles in Collection Stash describe the physical product that is sold, but they do not have to! This is the case when you made the collectible yourself.  Each product is made up of parts and when these parts are combined together they make a collectible that you can add to your stash.  Some products might have one part while other products might have hundreds.
@@ -88,7 +88,7 @@
 		</dl>
 		<h3 id="platforms">Platform</h3>
 		<p>
-			In addition to having a specific type, each collectible belongs to a platform.  The platform describes the collectible category.  Currently we have a predefined list of platforms for you to choose from.
+			In addition to having a specific type, each collectible belongs to a platform.  The platform describes the collectible category.  Currently we have a predefined list of platforms for you to choose from:
 		</p>
 		<ul>
 			<li>
@@ -147,7 +147,7 @@
 			Each collectible has a corresponding status.  The status may differ depending on the type of collectible and how far it is in the approval process (if applicable).
 		</p>
 		<p>
-			Regardless of type, all collectibles begin in the Draft status.  When you are on the collectible edit page, after selecting a platform you will see the Draft status indicated at the top.  The status bar will be visible on all collectibles that are in Draft and Submitted status.
+			Regardless of type, all collectibles begin in the Draft status.  When you are on the collectible edit page, after selecting a platform you will see the Draft status indicated at the top.  The status bar is visible on all collectibles that are in Draft and Submitted status.
 		</p>
 		<img src="/img/documentation/add_new_draft_status.png" class="img-polaroid">
 		<p></p>
@@ -165,19 +165,19 @@
 				Submitted
 			</dt>
 			<dd>
-				This a collectible you have finished creating and are ready to submit for approval.  When the collectible is in a submitted status, it cannot be edited.  If a change is needed before it is approved you can set it back to a Draft status and make your changes.  Collectibles in Submitted status can be viewed by members.
+				This is a collectible you have finished creating and are ready to submit for approval.  When the collectible is in a Submitted status, it cannot be edited.  If a change is needed before it is approved you can set it back to a Draft status and make your changes.  Collectibles in Submitted status can be viewed by members.
 			</dd>
 			<dt>
 				Active
 			</dt>
 			<dd>
-				This a collectible that was either approved by an admin (applies to mass-produced collectibles only) or was activated by the user (applies to customs and originals).  It can be viewed by members and non-members.
+				This is a collectible that was either approved by an admin (applies to mass-produced collectibles only) or was activated by the user (applies to customs and originals).  It can be viewed by members and non-members.
 			</dd>
 		</dl>
 
 		<h3 id="manufacturers">Manufacturers</h3>
 		<p>
-			Mass-produced and original collectibles can have a manufacturer or producer specified.  This is the company or business that made or produced the collectible.  In most cases this is the place you where you purchased the item, or the name that is on the box!  Each manufacturer is linked to platforms and brands.  If you do not see what you are looking for you can edit them here.
+			Mass-produced and original collectibles can have a manufacturer or producer specified.  This is the company or business that made or produced the collectible.  In most cases this is the place you where you purchased the item, or the name that is on the box!  Each manufacturer is linked to platforms and brands.  
 		</p>
 		<p>
 			Please note, a manufacturer is not required.  Some collectibles may not be manufactured or produced by a company but instead are designed and produced by an individual person.  If that is the case, you will want to indicate the <a href="#artists">artist</a> instead.
@@ -243,10 +243,10 @@
 		<img src="/img/documentation/artist_form_add.png" class="img-polaroid">
 		<h4>Manufacturers that are also considered Artists</h4>
 		<p>
-			In some cases, a manufacturer might be an artist on a collectible.  Ideally we would directly link that manufacturer to collectible but until that is supported, please add the manufacturer as an artist.
+			In some cases, a manufacturer might be an artist on a collectible.  In the future we plan to directly link that manufacturer to the collectible but until that is supported please add the manufacturer as an artist.
 		</p>
 		<p>
-			Here is an example of <a href="http://www.collectionstash.com/artist/155/gentle-giant">Gentle Giant</a> being the sculptor for a <a href="http://www.collectionstash.com/collectibles/view/3683/diamond-select-toys-howard-the-duck-statue">statue</a> that was made by <a href="http://www.collectionstash.com/manufacturer/24/diamond-select-toys">Diamnod Select Toys.</a>
+			Here is an example of <a href="http://www.collectionstash.com/artist/155/gentle-giant">Gentle Giant</a> being the sculptor for a <a href="http://www.collectionstash.com/collectibles/view/3683/diamond-select-toys-howard-the-duck-statue">statue</a> that was made by <a href="http://www.collectionstash.com/manufacturer/24/diamond-select-toys">Diamond Select Toys.</a>
 		</p>
 
 		<h3 id="photos">Photos</h3>
@@ -255,13 +255,13 @@
 		</p>
 		<h3 id="parts">Parts</h3>
 		<p>
-			Parts are all of the pieces that make up a collectible.  They can be anything and like a collector we like to know how our collectible is made and everything it contains.  This is important for keeping documentation on a collectible but it is also important for customizing!
+			Parts are all of the pieces that make up a collectible.  Like all collectors we like to know how our collectible is made and everything it contains.  It is important for keeping documentation on a collectible but it is also important for customizing!  
 		</p>
 		<p>
 			A part should be added for each individual piece of the collectible.  If there are multiple of the same part, then only <strong>one</strong> should be added but the count should be adjusted.
 		</p>
 		<p>
-			Parts can also be shared amongst collectibles.  This feature allows us to indicate which part might be used across multiple different collectibles.  This also allows customers to build bashes and collectibles from other parts that were made.
+			Parts can also be shared amongst collectibles.  This allows for the ability to indicate which part might be used across multiple different collectibles.  This also allows customers to build bashes and collectibles from other parts that were made.
 		</p>
 
 		<h4>Adding New Parts to a Collectible</h4>
@@ -271,12 +271,12 @@
 		<img src="/img/documentation/part_add_new_dropdown.png" class="img-polaroid">
 		<p></p>
 		<p>
-			When selected you will be presented with a modal dialog where you can fill out information about the part, this includes a category,name, description, manufacturer, artist, scale and count.
+			When selected you will be presented with a modal dialog where you can fill out information about the part including: category, name, description, manufacturer, artist, scale and count.
 		</p>
 		<img src="/img/documentation/part_add_new_modal.png" class="img-polaroid">
 		<p></p>
 		<p>
-			Below is a more indepth description of the fields that can be filled out for each part.
+			Below is a more in-depth description of the fields that can be populated for each part.
 		</p>
 		<dl class="dl-horizontal">
 			<dt>
@@ -318,7 +318,7 @@
 		</dl>
 
 		<p>
-			When a part is added to a collectible it also has the following attributes.  These attributes are tied to the relationship between the collectible and part, not to the part itself.
+			When a part is added to a collectible, another attribute is included in the relationship between the collectible and the part.
 		</p>
 		<dl class="dl-horizontal">
 			<dt>
@@ -335,10 +335,10 @@
 
 		<h4>Adding Existing Parts to a Collectible</h4>
 		<p>
-			You can also add parts from other collectibles to the current collectible you are adding.  This is especially helpful when we are trying to see what part might be shared across multiple collectibles.
+			You can also add parts from other collectibles to the current collectible being added.  This is especially helpful when trying to see if a part might be shared across multiple collectibles.
 		</p>
 		<p>
-			To add an existing part to this collectible use the following option.
+			To add an existing part to a collectible use the following option under Action:
 		</p>
 		<img src="/img/documentation/part_add_existing_dropdown.png" class="img-polaroid">
 		<p></p>
@@ -380,7 +380,7 @@
 		</p>
 		<h4>When should I add a new part vs adding an existing part?</h4>
 		<p>
-			When adding parts, you should always be thinking whether or not this part should be added as a new part or it should be linked from an existing part.  If you know that the part you are added is shared with another collectible, please search for that collectible first to see if it has already been added.  Otherwise, add it as a new part but make sure to update any collectibles that might also have this part.
+			When adding parts, consideration should be given to if it should be added as a new part or linked from an existing part.  If you know that the part you are adding is shared with another collectible, please search for that collectible first to see if it has already been added.  Otherwise, add it as a new part but make sure to update any collectibles that might also have this part.
 		</p>
 
 		<h4>Adding Parts to Custom Collectibles</h4>
@@ -388,13 +388,13 @@
 			Customs are a unique collectible type because they are built or pieced together by you.  Because of this, we need to also indicate that with any <strong>new</strong> parts that are being added to a custom.  It is <strong>strongly</strong> encouraged to add existing parts to a custom when applicable.
 		</p>
 		<p>
-			If you are bashing together a custom from other parts, some of which you might <strong>be mass-produced</strong> then you <strong>need</strong> add that part as a <strong>mass-produced collectible</strong> first.  Then you can link that part to your custom. <a href="http://www.collectionstash.com/collectibles/view/3795">Here</a> is a great example of how that is done.
+			If you are bashing together a custom from other parts, some of which might <strong>be mass-produced</strong> then you <strong>need</strong> to add that part as a <strong>mass-produced collectible</strong> first.  After that has been done, the part can be linked to your custom. <a href="http://www.collectionstash.com/collectibles/view/3795">Here</a> is a great example of how that is done.
 		</p>
 		<p>
-			Otherwise, if the part you are adding was made by you, is a 1 or 1 commission from an artist, or is generic (not sure where it came from) then you can add it new, directly to the custom collectible.
+			If the part you are adding was made by you, is a 1 for 1 commission from an artist, or is generic (not sure where it came from) then you can add it new, directly to the custom collectible.
 		</p>
 		<p>
-			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these threee options. <img src="/img/documentation/part_add_custom_modal.png" class="img-polaroid">
+			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these three options. <img src="/img/documentation/part_add_custom_modal.png" class="img-polaroid">
 		<p></p>
 
 		<h4>Adding Parts to Original Collectibles</h4>
@@ -404,20 +404,20 @@
 
 		<h3 id="sumbit"> Submitting/Activating a Collectible </h3>
 		<p>
-			Depending on the type of collectible, when you are finished you might be either submitting the collectible for approval or instantly activiating it.
+			Depending on the type of collectible being added, when you are finished you may be submitting the collectible for approval or instantly activating it.
 		</p>
 		<p>
-			If the type of collectible is <strong>mass-produced</strong> it will be submitted for approval and await admin approval.  If an admin finds the collectible details to be accurate and it is not a duplicate it will be approved and moved to the Active status.
+			If the type of collectible is <strong>mass-produced</strong> it will be submitted for approval and await approval by an admin.  If the collectible details are found to be accurate and it the collectible is not a duplicate within Collection Stash it will be approved and moved to the Active status.
 		</p>
 		<p>
-			If the type of collectible is a<strong>custom or original</strong> you can activate it right away without approval.
+			If the type of collectible is a <strong>custom or original</strong> you can activate it immediately without approval.
 		</p>
 		<p>
 			To submit a mass-produced collectible for approval click the "Submit for approval" button near the top of the page.
 		</p>
 		<img src="/img/documentation/submit_approval.png" class="img-polaroid">
 		<p></p>
-		<p>When you click the button, it will go through the validate process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.</p>
+		<p>When you click the button, the collectible will go through the validation process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.</p>
 		<img src="/img/documentation/dup_check.png" class="img-polaroid">
 		<p></p>		
 		<p>This is an example of a duplication check when trying to submit a collectible called "Stormtroooper" for Sideshow Collectibles.</p>
