@@ -814,8 +814,8 @@ class Collectible extends AppModel {
 			//TODO: We should update this to not create the CollectibleUser until
 			// they change the status to Active
 			//Get a stubbed collectibles user object
-			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
-			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
+			// $defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
+			// $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
 			// create the initial custom table as well
 			$collectible['Collectible']['custom_status_id'] = 1;
 		} else if ($original === true || $original === 'true') {
@@ -831,8 +831,8 @@ class Collectible extends AppModel {
 			//TODO: We should update this to not create the CollectibleUser until
 			// they change the status to Active
 			//Get a stubbed collectibles user object
-			$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
-			$collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
+			// $defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
+			// $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
 		}
 		$this -> set($collectible);
 		// Only field we need to validate
@@ -1021,15 +1021,14 @@ class Collectible extends AppModel {
 		$this -> read(null, $collectibleId);
 		// if it is valid
 		$status = $this -> data['Collectible']['status_id'];
-		//TODO: Handle originals
-		$triggerActivity = false;
 
+		$addCollectibleUser = false;
 		// custsom go from draft to active
 		if ($this -> data['Collectible']['custom'] || $this -> data['Collectible']['original']) {
 			// if the status is 1 change to 2 for a submit
 			if ($status === '1') {
 				$status = 4;
-				$triggerActivity = true;
+				$addCollectibleUser = true;
 			} else {
 				// should never happen
 			}
@@ -1077,13 +1076,11 @@ class Collectible extends AppModel {
 			$statusDetail = $this -> Status -> find('first', array('contain' => false, 'conditions' => array('Status.id' => $status)));
 			$retVal['response']['isSuccess'] = true;
 			$retVal['response']['data']['status'] = $statusDetail['Status'];
-			
-			//$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('User')));
-			// TODO: Does using the admin approve new activity type make sense in this case?
-			// TODO: Approve does not make sense...UPDATE this so that when we change status for this guy
-			// we create the CollectibleUser object and THEN we add an event that the user has added this collectible to their stash
-			//$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $user, 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
 
+			if ($addCollectibleUser) {
+				$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($user['User']['id'], $collectibleId);
+				$this -> CollectiblesUser -> add($defaultCollectiblesUser, $user);
+			}
 		}
 
 		return $retVal;
@@ -1221,6 +1218,30 @@ class Collectible extends AppModel {
 					$retVal = true;
 				}
 			}
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 *  This method will determine if we should trigger an activity from anything being edited or updated on a collectible
+	 */
+	public function triggerActivity($check, $user) {
+		$retVal = false;
+		if (is_numeric($check) || is_string($check)) {
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
+			//lol
+		} else {
+			// assume object
+			$collectible = $check;
+		}
+
+		/**
+		 * Only trigger activity when status is 4, everything else is assumed to be working on while building
+		 * the collectible
+		 */
+		if ($collectible['Status']['id'] === '4') {
+			$retVal = true;
 		}
 
 		return $retVal;

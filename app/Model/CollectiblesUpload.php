@@ -4,6 +4,8 @@
  * We need a before save setting, that checks to see if an upload exists for this
  * collectible already.  If it does not, it makes it the primary
  */
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUpload extends AppModel {
 	public $name = 'CollectiblesUpload';
 	public $belongsTo = array('Upload', 'Collectible', 'Revision' => array('dependent' => true));
@@ -178,6 +180,12 @@ class CollectiblesUpload extends AppModel {
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $collectiblesUpload;
 					$retVal['response']['data']['isEdit'] = false;
+
+					// However, we only want to trigger this activity on collectibles that have been APPROVED already
+					if ($this -> Collectible -> triggerActivity($data['CollectiblesUpload']['collectible_id'], $user)) {
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $collectiblesUpload, 'type' => 'CollectiblesUpload')));
+					}
+
 				} else {
 					$dataSource -> rollback();
 				}

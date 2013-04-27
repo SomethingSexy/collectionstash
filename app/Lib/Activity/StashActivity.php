@@ -17,7 +17,7 @@ class StashActivity extends BaseActivity {
 		debug($data);
 		$this -> action = $action;
 		$this -> user = $data['user']['User'];
-		$this -> collectible = $data['collectible']['Collectible'];
+		$this -> collectible = $data['collectible'];
 		// This should contain both the entity object
 		// and the model object that the entity is tied to
 		$this -> stash = $data['stash'];
@@ -32,7 +32,9 @@ class StashActivity extends BaseActivity {
 		$retVal = array_merge($retVal, $actorJSON);
 
 		// build the object we are acting on, in this case it is a comment
-		$objectJSON = $this -> buildObject($this -> collectible['id'], 'collectibles/view/' . $this -> collectible['id'], 'collectible', null);
+		// This should handle customs and originals by passing the $collectible data to the object
+		// then when we go to render we can determine if it is a custom or original 
+		$objectJSON = $this -> buildObject($this -> collectible['Collectible']['id'], 'collectibles/view/' . $this -> collectible['Collectible']['id'], 'collectible', $this -> collectible);
 		$retVal = array_merge($retVal, $objectJSON);
 
 		$stashDisplayname = 'Stash';

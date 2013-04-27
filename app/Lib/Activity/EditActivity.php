@@ -3,6 +3,8 @@ App::uses('BaseActivity', 'Lib/Activity');
 /**
  * Enhancements: When this eventually gets turned into something on the UI, we will want to expand the edit section so
  * we are better recording what was exactly sumbitted for an edit
+ * 
+ * This will handle all edits, both submitted and live ones (live right now is only for collectible and attribute being udpated)
  */
 class EditActivity extends BaseActivity {
 
@@ -90,9 +92,19 @@ class EditActivity extends BaseActivity {
 
 				$targetJSON = $this -> buildEditAttributesUploadTarget($this -> edit);
 				$retVal = array_merge($retVal, $targetJSON);
+			} else if ($this -> editType === 'ArtistsCollectible') {
+				$objectJSON = $this -> buildEditArtistsCollectibleObject($this -> edit);
+				$retVal = array_merge($retVal, $objectJSON);
+
+				$targetJSON = $this -> buildEditArtistsCollectibleTarget($this -> edit);
+				$retVal = array_merge($retVal, $targetJSON);
+			} else if ($this -> editType === 'AttributesCollectible') {
+				$objectJSON = $this -> buildEditAttributesCollectibleObject($this -> edit);
+				$retVal = array_merge($retVal, $objectJSON);
+
+				$targetJSON = $this -> buildEditAttributesCollectibleTarget($this -> edit);
+				$retVal = array_merge($retVal, $targetJSON);
 			}
-			
-			// TODO: ArtistCollectible
 
 		} else if ($this -> action === 'approve') {
 
@@ -124,7 +136,7 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditCollectibleTarget($edit) {
 		// If they change the name, that will get reflected here but eh not a huge deal right now
-		$targetJSON = $this -> buildTarget($edit['CollectibleEdit']['base_id'], 'collectibles/view/' . $edit['CollectibleEdit']['base_id'], 'collectible', $edit['CollectibleEdit']['name']);
+		$targetJSON = $this -> buildTarget($edit['CollectibleEdit']['base_id'], '/collectibles/view/' . $edit['CollectibleEdit']['base_id'], 'collectible', $edit['CollectibleEdit']['name']);
 
 		return $targetJSON;
 	}
@@ -143,7 +155,7 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditCollectibleTagTarget($edit) {
 		// not sure I will be able to get the collectible name here yet
-		$targetJSON = $this -> buildTarget($edit['CollectiblesTag']['collectible_id'], 'collectibles/view/' . $edit['CollectiblesTag']['collectible_id'], 'collectible', null);
+		$targetJSON = $this -> buildTarget($edit['CollectiblesTag']['collectible_id'], '/collectibles/view/' . $edit['CollectiblesTag']['collectible_id'], 'collectible', null);
 
 		return $targetJSON;
 	}
@@ -162,7 +174,7 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditCollectiblesUploadTarget($edit) {
 		// not sure I will be able to get the collectible name here yet
-		$targetJSON = $this -> buildTarget($edit['CollectiblesUpload']['collectible_id'], 'collectibles/view/' . $edit['CollectiblesUpload']['collectible_id'], 'collectible', null);
+		$targetJSON = $this -> buildTarget($edit['CollectiblesUpload']['collectible_id'], '/collectibles/view/' . $edit['CollectiblesUpload']['collectible_id'], 'collectible', null);
 
 		return $targetJSON;
 	}
@@ -181,7 +193,45 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditAttributesUploadTarget($edit) {
 		// not sure I will be able to get the collectible name here yet
-		$targetJSON = $this -> buildTarget($edit['AttributesUpload']['attribute_id'], 'attributes/view/' . $edit['AttributesUpload']['attribute_id'], 'attribute', null);
+		$targetJSON = $this -> buildTarget($edit['AttributesUpload']['attribute_id'], '/attributes/view/' . $edit['AttributesUpload']['attribute_id'], 'attribute', null);
+
+		return $targetJSON;
+	}
+
+	private function buildEditArtistsCollectibleObject($edit) {
+		$data = array();
+		$data['edit_id'] = $edit['ArtistsCollectible']['edit_id'];
+		$data['action_id'] = $edit['Action']['id'];
+		$data['action_type_id'] = $edit['Action']['action_type_id'];
+		$data['type'] = $this -> editType;
+		// Set the id of the edit
+		$objectJSON = $this -> buildObject($edit['ArtistsCollectible']['edit_id'], null, 'edit', $data);
+
+		return $objectJSON;
+	}
+
+	private function buildEditArtistsCollectibleTarget($edit) {
+		// not sure I will be able to get the collectible name here yet
+		$targetJSON = $this -> buildTarget($edit['ArtistsCollectible']['collectible_id'], '/collectibles/view/' . $edit['ArtistsCollectible']['collectible_id'], 'collectible', null);
+
+		return $targetJSON;
+	}
+
+	private function buildEditAttributesCollectibleObject($edit) {
+		$data = array();
+		$data['edit_id'] = $edit['AttributesCollectible']['edit_id'];
+		$data['action_id'] = $edit['Action']['id'];
+		$data['action_type_id'] = $edit['Action']['action_type_id'];
+		$data['type'] = $this -> editType;
+		// Set the id of the edit
+		$objectJSON = $this -> buildObject($edit['AttributesCollectible']['edit_id'], null, 'edit', $data);
+
+		return $objectJSON;
+	}
+
+	private function buildEditAttributesCollectibleTarget($edit) {
+		// not sure I will be able to get the collectible name here yet
+		$targetJSON = $this -> buildTarget($edit['AttributesCollectible']['collectible_id'], '/collectibles/view/' . $edit['AttributesCollectible']['collectible_id'], 'collectible', null);
 
 		return $targetJSON;
 	}

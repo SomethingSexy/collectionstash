@@ -19,7 +19,7 @@ foreach ($activites as $key => $activity) {
 			if (is_null($activity['Activity']['data'] -> target -> displayName)) {
 				echo 'Collectible';
 			} else {
-				echo $activity['Activity']['data'] -> target -> displayName;
+				echo 'to ' . $activity['Activity']['data'] -> target -> displayName;
 			}
 		}
 		echo '</div>';
