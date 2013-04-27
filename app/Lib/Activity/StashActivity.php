@@ -34,7 +34,7 @@ class StashActivity extends BaseActivity {
 		// build the object we are acting on, in this case it is a comment
 		// This should handle customs and originals by passing the $collectible data to the object
 		// then when we go to render we can determine if it is a custom or original 
-		$objectJSON = $this -> buildObject($this -> collectible['Collectible']['id'], 'collectibles/view/' . $this -> collectible['Collectible']['id'], 'collectible', $this -> collectible);
+		$objectJSON = $this -> buildObject($this -> collectible['Collectible']['id'], '/collectibles/view/' . $this -> collectible['Collectible']['id'], 'collectible', $this -> collectible);
 		$retVal = array_merge($retVal, $objectJSON);
 
 		$stashDisplayname = 'Stash';
