@@ -1,4 +1,6 @@
 <?php
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class AttributesCollectible extends AppModel {
 	public $name = 'AttributesCollectible';
 	//var $useTable = 'accessories_collectibles';
@@ -262,13 +264,19 @@ class AttributesCollectible extends AppModel {
 					// Return what we just added
 					$attributesCollectibleId = $this -> id;
 					// Hopefully this won't be a performance issue at this level
-					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
+					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Collectible', 'Revision' => array('User'), 'Attribute' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
 
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $attributesCollectible['AttributesCollectible'];
 					$retVal['response']['data']['Attribute'] = $attributesCollectible['Attribute'];
 					$retVal['response']['data']['Revision'] = $attributesCollectible['Revision'];
 					$retVal['response']['data']['isEdit'] = false;
+
+					// However, we only want to trigger this activity on collectibles that have been APPROVED already
+					if ($this -> Collectible -> triggerActivity($data['AttributesCollectible']['collectible_id'], $user)) {
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $attributesCollectible, 'type' => 'AttributesCollectible')));
+					}
+
 				} else {
 					$dataSource -> rollback();
 				}

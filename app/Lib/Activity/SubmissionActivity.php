@@ -1,8 +1,10 @@
 <?php
 App::uses('BaseActivity', 'Lib/Activity');
 /**
- * Enhancements: When this eventually gets turned into something on the UI, we will want to expand the edit section so
- * we are better recording what was exactly sumbitted for an edit
+ * This will handle all submissions of new collectibles and attributes and their approvals
+ * 
+ * This will also handle the live updating of collectibles, attributes and their associated data.
+ *
  */
 class SubmissionActivity extends BaseActivity {
 
@@ -34,6 +36,10 @@ class SubmissionActivity extends BaseActivity {
 	 * Admin approves new Collectible submitted by User A -- collectible is the object, user is the target
 	 *
 	 * Admin approves edit for Collectible submitted by User A -- collectible is the object, user is the target
+	 *
+	 * This will also handle directly adding new stuff
+	 *
+	 * User A adds new AttributesCollectible - object = attribute, target = collectible
 	 */
 	public function __construct($action, $data) {
 		// Action will either be submit or approve
@@ -47,10 +53,10 @@ class SubmissionActivity extends BaseActivity {
 
 		if ($this -> type === 'Collectible') {
 			$this -> object = $data['object']['Collectible'];
-		}
-
-		if ($this -> type === 'Attribute') {
+		} else if ($this -> type === 'Attribute') {
 			$this -> object = $data['object']['Attribute'];
+		} else {
+			$this -> object = $data['object'];
 		}
 
 		parent::__construct();
@@ -66,11 +72,37 @@ class SubmissionActivity extends BaseActivity {
 		$verbJSON = $this -> buildVerb($this -> action);
 		$retVal = array_merge($retVal, $verbJSON);
 		if ($this -> type === 'Collectible') {
-			$objectJSON = $this -> buildObject($this -> object['id'], 'collectibles/view/' . $this -> object['id'], 'collectible', array('type' => 'new', 'displayName' => $this -> object['name']));
+			$objectJSON = $this -> buildObject($this -> object['id'], '/collectibles/view/' . $this -> object['id'], 'collectible', array('type' => 'new', 'displayName' => $this -> object['name']));
 			$retVal = array_merge($retVal, $objectJSON);
 		} else if ($this -> type === 'Attribute') {
-			$objectJSON = $this -> buildObject($this -> object['id'], 'attributes/view/' . $this -> object['id'], 'attribute', array('type' => 'new', 'displayName' => $this -> object['name']));
+			$objectJSON = $this -> buildObject($this -> object['id'], '/attributes/view/' . $this -> object['id'], 'attribute', array('type' => 'new', 'displayName' => $this -> object['name']));
 			$retVal = array_merge($retVal, $objectJSON);
+		} else if ($this -> type === 'AttributesCollectible') {
+			// remove this if it has it
+			unset($this -> object['Attribute']['AttributesCollectible']);
+			$objectJSON = $this -> buildObject($this -> object['Attribute']['id'], '/attributes/view/' . $this -> object['Attribute']['id'], 'attribute', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> type === 'CollectiblesTag') {
+			$objectJSON = $this -> buildObject($this -> object['CollectiblesTag']['id'], null, 'tag', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> type === 'CollectiblesUpload') {
+			$objectJSON = $this -> buildObject($this -> object['CollectiblesUpload']['id'], '/files/' . $this -> object['Upload']['name'], 'photo', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> type === 'ArtistsCollectible') {
+			$objectJSON = $this -> buildObject($this -> object['ArtistsCollectible']['id'], '/artist/' . $this -> object['ArtistsCollectible']['id'] . '/' . $this -> object['ArtistsCollectible']['slug'], 'artist', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
 		}
 
 		if ($this -> action === 'approve') {

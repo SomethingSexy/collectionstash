@@ -11,5 +11,6 @@ class ActivityTypes {
 	public static $ADMIN_APPROVE_NEW = 8;
 	public static $ADMIN_APPROVE_EDIT = 9;
 	public static $USER_INVITE = 10;
+	public static $USER_ADD_NEW = 11;
 }
 ?>

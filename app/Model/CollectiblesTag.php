@@ -103,10 +103,15 @@ class CollectiblesTag extends AppModel {
 				debug($data);
 				if ($this -> saveAll($data, array('validate' => false))) {
 					$id = $this -> id;
-					$collectiblesTag = $this -> find('first', array('contain' => array('Tag'), 'conditions' => array('CollectiblesTag.id' => $id)));
+					$collectiblesTag = $this -> find('first', array('contain' => array('Tag', 'Collectible'), 'conditions' => array('CollectiblesTag.id' => $id)));
 
 					$retVal['response']['data'] = $collectiblesTag['CollectiblesTag'];
 					$retVal['response']['isSuccess'] = true;
+
+					// However, we only want to trigger this activity on collectibles that have been APPROVED already
+					if ($this -> Collectible -> triggerActivity($data['CollectiblesTag']['collectible_id'], $user)) {
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $collectiblesTag, 'type' => 'CollectiblesTag')));
+					}
 				} else {
 
 				}

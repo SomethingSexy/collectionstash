@@ -278,8 +278,8 @@ class Attribute extends AppModel {
 			$retVal['response']['data']['Attribute'] = array();
 			$retVal['response']['data']['Attribute']['id'] = $attributeId;
 			$retVal['response']['isSuccess'] = true;
-			$addAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId)));
-			$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $addAttribute, 'object' => $addAttribute, 'type' => 'Attribute')));
+			// since we can only add attributes through collectibles right
+			// now, do not do any event stuff here
 		} else {
 			$retVal['response']['isSuccess'] = false;
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');

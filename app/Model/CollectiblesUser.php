@@ -84,7 +84,7 @@ class CollectiblesUser extends AppModel {
 		if ($results && $primary) {
 			// Create a dateOnly pseudofield using date field.
 			foreach ($results as $key => $val) {
-				// make sure we check if the collectibleuser is set...this is for 
+				// make sure we check if the collectibleuser is set...this is for
 				// cases when count is being called
 				if (isset($val['CollectiblesUser'])) {
 					if (isset($val['CollectiblesUser']['purchase_date'])) {
@@ -211,11 +211,8 @@ class CollectiblesUser extends AppModel {
 			$data['CollectiblesUser']['user_id'] = $user['User']['id'];
 			if ($this -> save($data)) {
 				$retVal['response']['isSuccess'] = true;
-				//TODO: Need to update to get this to work
-				//$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
-				debug($stash);
 				// We need to get some data to handle this event
-				$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $data['CollectiblesUser']['collectible_id'])));
+				$collectible = $this -> Collectible -> find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $data['CollectiblesUser']['collectible_id'])));
 				$this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectible, 'stash' => $stash)));
 			} else {
 				$retVal['response']['isSuccess'] = false;
@@ -231,12 +228,13 @@ class CollectiblesUser extends AppModel {
 	 * This is used to create a stubbed out, default CollectiblesUser
 	 * object.  Used if an outside model wants to add a CollectiblesUser
 	 */
-	public function createDefault($userId) {
+	public function createDefault($userId, $collectibleId) {
 		$retVal = array();
 
 		$stashId = $this -> Stash -> getStashId($userId);
 		$retVal['CollectiblesUser']['user_id'] = $userId;
 		$retVal['CollectiblesUser']['stash_id'] = $stashId;
+		$retVal['CollectiblesUser']['collectible_id'] = $collectibleId;
 
 		return $retVal;
 	}
