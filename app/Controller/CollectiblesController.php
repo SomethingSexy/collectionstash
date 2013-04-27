@@ -507,11 +507,9 @@ class CollectiblesController extends AppController {
 		$conditions['Collectible.user_id'] = $userId;
 		// handle both cases
 		if ($draft === true || $draft === 'true') {
-			$conditions['Collectible.status_id'] = 1;
+			$conditions['OR'] = array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'));
 		} else {
-			$conditions['OR'] = array();
-			$conditions['OR']['Collectible.status_id'] = 1;
-			$conditions['OR']['Collectible.custom_status_id'] = array('1', '2', '3');
+			$conditions['Collectible.status_id'] = array(4, 2);
 		}
 
 		$this -> paginate = array('conditions' => $conditions, 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
@@ -550,7 +548,7 @@ class CollectiblesController extends AppController {
 	function admin_view($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-		
+
 		if (!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
 			$this -> redirect(array('action' => 'index'));
