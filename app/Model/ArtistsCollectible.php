@@ -98,7 +98,7 @@ class ArtistsCollectible extends AppModel {
 				$data = array_merge($data, $revision);
 				if ($this -> saveAll($data, array('validate' => false))) {
 					$id = $this -> id;
-					$collectibleArtist = $this -> find('first', array('contain' => array('Artist'), 'conditions' => array('ArtistsCollectible.id' => $id)));
+					$collectibleArtist = $this -> find('first', array('contain' => array('Artist', 'Collectible'), 'conditions' => array('ArtistsCollectible.id' => $id)));
 
 					$retVal['response']['data'] = $collectibleArtist['ArtistsCollectible'];
 					$retVal['response']['isSuccess'] = true;

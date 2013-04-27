@@ -639,5 +639,29 @@ class Attribute extends AppModel {
 		return $retVal;
 	}
 
+	/**
+	 *  This method will determine if we should trigger an activity from anything being edited or updated on a collectible
+	 */
+	public function triggerActivity($check, $user) {
+		$retVal = false;
+		if (is_numeric($check) || is_string($check)) {
+			$attribute = $this -> find('first', array('conditions' => array('Attribute.id' => $check), 'contain' => array('Status', 'User')));
+			//lol
+		} else {
+			// assume object
+			$attribute = $check;
+		}
+
+		/**
+		 * Only trigger activity when status is 4, everything else is assumed to be working on while building
+		 * the collectible
+		 */
+		if ($attribute['Status']['id'] === '4') {
+			$retVal = true;
+		}
+
+		return $retVal;
+	}
+
 }
 ?>

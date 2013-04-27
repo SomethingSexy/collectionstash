@@ -184,6 +184,12 @@ class AttributesUpload extends AppModel {
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $AttributesUpload;
 					$retVal['response']['data']['isEdit'] = false;
+
+					// However, we only want to trigger this activity on collectibles that have been APPROVED already
+					if ($this -> Attribute -> triggerActivity($data['AttributesUpload']['attribute_id'], $user)) {
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $AttributesUpload, 'type' => 'AttributesUpload')));
+					}
+
 				} else {
 					$dataSource -> rollback();
 				}

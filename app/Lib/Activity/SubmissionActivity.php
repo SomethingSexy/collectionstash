@@ -2,7 +2,7 @@
 App::uses('BaseActivity', 'Lib/Activity');
 /**
  * This will handle all submissions of new collectibles and attributes and their approvals
- * 
+ *
  * This will also handle the live updating of collectibles, attributes and their associated data.
  *
  */
@@ -102,6 +102,12 @@ class SubmissionActivity extends BaseActivity {
 			$retVal = array_merge($retVal, $objectJSON);
 
 			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> type === 'AttributesUpload') {
+			$objectJSON = $this -> buildObject($this -> object['AttributesUpload']['id'], '/files/' . $this -> object['Upload']['name'], 'photo', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Attribute']['id'], '/attributes/view/' . $this -> object['Attribute']['id'], 'attribute', $this -> object['Attribute']['name']);
 			$retVal = array_merge($retVal, $targetJSON);
 		}
 
