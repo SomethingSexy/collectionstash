@@ -31,7 +31,7 @@ foreach ($activites as $key => $activity) {
 				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '/' . $activity['Activity']['data'] -> object -> data -> name . '">' . $activity['Activity']['data'] -> object -> objectType . '</a> ';
 			}
 		} else if ($activity['Activity']['data'] -> object -> objectType === 'collectible') {
-			if ($activity['Activity']['activity_type_id'] === '6') {
+			if ($activity['Activity']['activity_type_id'] === '6' || $activity['Activity']['activity_type_id'] === '8') {
 				if (isset($activity['Activity']['data'] -> object -> data -> type)) {// old api
 					echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> displayName . '</a> ';
 				} else {// current
