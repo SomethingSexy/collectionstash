@@ -652,7 +652,7 @@ class CollectiblesController extends AppController {
 					$data['Revision']['notes'] = $this -> request -> data['Approval']['notes'];
 					if ($this -> Collectible -> saveAll($data, array('validate' => false))) {
 						//Ugh need to get this again so I can get the Revision id
-						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
+						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'), 'User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
 						//update with the new revision id
 						if (isset($collectible['CollectiblesUpload']) && !empty($collectible['CollectiblesUpload'])) {
 

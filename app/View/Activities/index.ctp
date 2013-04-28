@@ -30,10 +30,14 @@ foreach ($activites as $key => $activity) {
 			} else {
 				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '/' . $activity['Activity']['data'] -> object -> data -> name . '">' . $activity['Activity']['data'] -> object -> objectType . '</a> ';
 			}
-		} else if ($activity['Activity']['data'] -> object -> objectType === 'collectible' && $activity['Activity']['activity_type_id'] === '6') {
-			if (isset($activity['Activity']['data'] -> object -> data -> type)) {// old api
-				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> displayName . '</a> ';
-			} else {// current
+		} else if ($activity['Activity']['data'] -> object -> objectType === 'collectible') {
+			if ($activity['Activity']['activity_type_id'] === '6') {
+				if (isset($activity['Activity']['data'] -> object -> data -> type)) {// old api
+					echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> displayName . '</a> ';
+				} else {// current
+					echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> Collectible -> displayTitle . '</a> ';
+				}
+			} else {
 				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> Collectible -> displayTitle . '</a> ';
 			}
 		} else {
@@ -41,7 +45,13 @@ foreach ($activites as $key => $activity) {
 		}
 
 		if (isset($activity['Activity']['data'] -> target)) {
-			echo 'to <a href="' . $activity['Activity']['data'] -> target -> url . '">' . $activity['Activity']['data'] -> target -> displayName . '</a>';
+
+			if ($activity['Activity']['data'] -> verb === 'approve') {
+				echo 'submitted by ';
+			} else {
+				echo 'to ';
+			}
+			echo '<a href="' . $activity['Activity']['data'] -> target -> url . '">' . $activity['Activity']['data'] -> target -> displayName . '</a>';
 		}
 		echo '</div>';
 
