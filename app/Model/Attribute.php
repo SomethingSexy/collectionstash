@@ -126,6 +126,11 @@ class Attribute extends AppModel {
 						$retVal['response']['data']['Attribute']['AttributeCategory'] = $updatedAttribute['AttributeCategory'];
 						$retVal['response']['data']['Attribute']['AttributesCollectible'] = $updatedAttribute['AttributesCollectible'];
 						$retVal['response']['data']['isEdit'] = false;
+
+						// However, we only want to trigger this activity on collectibles that have been APPROVED already
+						if ($this -> triggerActivity($attribute['Attribute']['id'], $user)) {
+							$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_EDIT, 'user' => $user, 'edit' => $updatedAttribute, 'editType' => 'Attribute')));
+						}
 					}
 				} else {
 					$action = array();

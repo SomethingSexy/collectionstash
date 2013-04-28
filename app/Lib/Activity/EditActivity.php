@@ -3,7 +3,7 @@ App::uses('BaseActivity', 'Lib/Activity');
 /**
  * Enhancements: When this eventually gets turned into something on the UI, we will want to expand the edit section so
  * we are better recording what was exactly sumbitted for an edit
- * 
+ *
  * This will handle all edits, both submitted and live ones (live right now is only for collectible and attribute being udpated)
  */
 class EditActivity extends BaseActivity {
@@ -117,6 +117,21 @@ class EditActivity extends BaseActivity {
 
 			$targetJSON = $this -> buildTarget($this -> target['id'], '/stash/' . $this -> user['username'], 'user', $this -> user['username']);
 			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> action === 'edit') {// this is for the cases when we are live editing
+			$verbJSON = $this -> buildVerb('edit');
+			$retVal = array_merge($retVal, $verbJSON);
+			if ($this -> editType === 'Collectible') {
+				$targetJSON = $this -> buildTarget($this -> edit['Collectible']['id'], '/collectibles/view/' . $this -> edit['Collectible']['id'], 'collectible', $this -> edit['Collectible']['name']);
+				$retVal = array_merge($retVal, $targetJSON);
+			} else if ($this -> editType === 'Attribute') {
+				$targetJSON = $this -> buildTarget($this -> edit['Attribute']['id'], '/attributes/view/' . $this -> edit['Attribute']['id'], 'attribute', $this -> edit['Attribute']['name']);
+				$retVal = array_merge($retVal, $targetJSON);
+			}
+			// right now the only thing we have to support through this
+			// are collectibles and attributes
+
+			// we just need a target for this one
+
 		}
 
 		return $retVal;
