@@ -112,7 +112,7 @@ class SubmissionActivity extends BaseActivity {
 		}
 
 		if ($this -> action === 'approve') {
-			$targetJSON = $this -> buildTarget($this -> target['id'], '/stash/' . $this -> user['username'], 'user', $this -> user['username']);
+			$targetJSON = $this -> buildTarget($this -> target['id'], '/stash/' . $this -> target['username'], 'user', $this -> target['username']);
 			$retVal = array_merge($retVal, $targetJSON);
 		}
 
