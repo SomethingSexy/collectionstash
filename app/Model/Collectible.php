@@ -1027,6 +1027,7 @@ class Collectible extends AppModel {
 		// if it is valid
 		$status = $this -> data['Collectible']['status_id'];
 
+		$triggerActivity = false;
 		$addCollectibleUser = false;
 		// custsom go from draft to active
 		if ($this -> data['Collectible']['custom'] || $this -> data['Collectible']['original']) {
@@ -1043,6 +1044,7 @@ class Collectible extends AppModel {
 			// if the status is 1 change to 2 for a submit
 			if ($status === '1') {
 				$status = 2;
+				$triggerActivity = true;
 			} else if ($status === '2') {
 				$status = 1;
 			}
@@ -1082,9 +1084,13 @@ class Collectible extends AppModel {
 			$retVal['response']['isSuccess'] = true;
 			$retVal['response']['data']['status'] = $statusDetail['Status'];
 
+			// this will also handle triggering an activity event for adding
 			if ($addCollectibleUser) {
 				$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($user['User']['id'], $collectibleId);
 				$this -> CollectiblesUser -> add($defaultCollectiblesUser, $user);
+			} else if ($triggerActivity) {
+				$collectible = $this -> find('first', array('contain' => array('User', 'Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $collectibleId)));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $user, 'object' => $collectible, 'type' => 'Collectible')));
 			}
 		}
 

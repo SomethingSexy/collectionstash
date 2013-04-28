@@ -52,7 +52,7 @@ class SubmissionActivity extends BaseActivity {
 		}
 
 		if ($this -> type === 'Collectible') {
-			$this -> object = $data['object']['Collectible'];
+			$this -> object = $data['object'];
 		} else if ($this -> type === 'Attribute') {
 			$this -> object = $data['object']['Attribute'];
 		} else {
@@ -72,7 +72,7 @@ class SubmissionActivity extends BaseActivity {
 		$verbJSON = $this -> buildVerb($this -> action);
 		$retVal = array_merge($retVal, $verbJSON);
 		if ($this -> type === 'Collectible') {
-			$objectJSON = $this -> buildObject($this -> object['id'], '/collectibles/view/' . $this -> object['id'], 'collectible', array('type' => 'new', 'displayName' => $this -> object['name']));
+			$objectJSON = $this -> buildObject($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'] . '/' . $this -> object['Collectible']['slugField'], 'collectible', $this -> object);
 			$retVal = array_merge($retVal, $objectJSON);
 		} else if ($this -> type === 'Attribute') {
 			$objectJSON = $this -> buildObject($this -> object['id'], '/attributes/view/' . $this -> object['id'], 'attribute', array('type' => 'new', 'displayName' => $this -> object['name']));

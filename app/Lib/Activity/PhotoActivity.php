@@ -31,7 +31,7 @@ class PhotoActivity extends BaseActivity {
 		$retVal = array_merge($retVal, $actorJSON);
 
 		// Passing in the path where the photo can be found.. passing in the upload object in as teh data
-		$objectJSON = $this -> buildObject($this -> photo['id'], Configure::read('Settings.User.uploads.root-folder') . '/' . $this -> photo['user_id'], 'photo', $this -> photo);
+		$objectJSON = $this -> buildObject($this -> photo['id'], Configure::read('Settings.User.uploads.root-folder') . '/' . $this -> photo['user_id'] . '/' . $this -> photo['name'], 'photo', $this -> photo);
 		$retVal = array_merge($retVal, $objectJSON);
 
 		// Now add the target
