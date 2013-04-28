@@ -934,6 +934,11 @@ class Collectible extends AppModel {
 				$this -> saveAssociated($collectible, array('validate' => false));
 				$retVal['response']['isSuccess'] = true;
 				$retVal['response']['data']['isEdit'] = false;
+
+				// However, we only want to trigger this activity on collectibles that have been APPROVED already
+				if ($this -> triggerActivity($collectible['Collectible']['id'], $user)) {
+					$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_EDIT, 'user' => $user, 'edit' => $collectible, 'editType' => 'Collectible')));
+				}
 			} else {
 				$action = array();
 				$action['Action']['action_type_id'] = 2;

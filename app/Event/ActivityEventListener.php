@@ -84,6 +84,9 @@ class ActivityEventListener implements CakeEventListener {
 			case 11 :
 				$retVal = new SubmissionActivity('add', $data);
 				break;
+			case 12 :
+				$retVal = new EditActivity('edit', $data);
+				break;
 		}
 		return $retVal;
 	}
