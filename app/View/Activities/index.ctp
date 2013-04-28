@@ -40,6 +40,8 @@ foreach ($activites as $key => $activity) {
 			} else {
 				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> Collectible -> displayTitle . '</a> ';
 			}
+		} else if ($activity['Activity']['data'] -> object -> objectType === 'attribute') {
+			echo '<a href="' . $activity['Activity']['data'] -> object -> url . '"> part ' . $activity['Activity']['data'] -> object -> data -> Attribute  -> name  . '</a> ';
 		} else {
 			echo $activity['Activity']['data'] -> object -> objectType . ' ';
 		}
