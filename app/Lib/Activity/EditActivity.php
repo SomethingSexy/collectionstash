@@ -115,7 +115,7 @@ class EditActivity extends BaseActivity {
 			$objectJSON = $this -> buildObject($this -> edit['Edit']['id'], null, 'edit', array());
 			$retVal = array_merge($retVal, $objectJSON);
 
-			$targetJSON = $this -> buildTarget($this -> target['id'], '/stash/' . $this -> user['username'], 'user', $this -> user['username']);
+			$targetJSON = $this -> buildTarget($this -> target['id'], '/stash/' . $this -> target['username'], 'user', $this -> target['username']);
 			$retVal = array_merge($retVal, $targetJSON);
 		} else if ($this -> action === 'edit') {// this is for the cases when we are live editing
 			$verbJSON = $this -> buildVerb('edit');
