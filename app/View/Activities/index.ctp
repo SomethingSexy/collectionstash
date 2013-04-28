@@ -10,17 +10,38 @@ foreach ($activites as $key => $activity) {
 	// For the title, we need to construct: User verb object target
 	echo '<div class="row title">';
 
-	if ($activity['Activity']['activity_type_id'] === '6') {
-		echo '<div class="span5">' . $activity['Activity']['data'] -> verb . ' ' . $activity['Activity']['data'] -> object -> objectType . '</div>';
-
+	if ($activity['Activity']['activity_type_id'] === '12') {
+		echo '<div class="span5">' . $activity['Activity']['data'] -> verb . ' ';
+		if (is_null($activity['Activity']['data'] -> target -> displayName)) {
+			echo 'Collectible';
+		} else {
+			echo '<a href="' . $activity['Activity']['data'] -> target -> url . '">' . $activity['Activity']['data'] -> target -> displayName . '</a>';
+		}
+		echo '</div>';
 	} else {
-		echo '<div class="span5">' . $activity['Activity']['data'] -> verb . ' ' . $activity['Activity']['data'] -> object -> objectType . ' ';
-		if ($activity['Activity']['data'] -> target -> objectType === 'collectible') {
-			if (is_null($activity['Activity']['data'] -> target -> displayName)) {
-				echo 'Collectible';
+		echo '<div class="span5">' . $activity['Activity']['data'] -> verb . ' ';
+
+		// TODO: We need to find type collectible and type id === 6 and handle both new and old format
+
+		if ($activity['Activity']['data'] -> object -> objectType === 'photo' && $activity['Activity']['activity_type_id'] === '5') {
+			// need to handle old format, that does not contain the name
+			if (strstr($activity['Activity']['data'] -> object -> url, '.')) {
+				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> objectType . '</a> ';
 			} else {
-				echo 'to ' . $activity['Activity']['data'] -> target -> displayName;
+				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '/' . $activity['Activity']['data'] -> object -> data -> name . '">' . $activity['Activity']['data'] -> object -> objectType . '</a> ';
 			}
+		} else if ($activity['Activity']['data'] -> object -> objectType === 'collectible' && $activity['Activity']['activity_type_id'] === '6') {
+			if (isset($activity['Activity']['data'] -> object -> data -> type)) {// old api
+				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> displayName . '</a> ';
+			} else {// current
+				echo '<a href="' . $activity['Activity']['data'] -> object -> url . '">' . $activity['Activity']['data'] -> object -> data -> Collectible -> displayTitle . '</a> ';
+			}
+		} else {
+			echo $activity['Activity']['data'] -> object -> objectType . ' ';
+		}
+
+		if (isset($activity['Activity']['data'] -> target)) {
+			echo 'to <a href="' . $activity['Activity']['data'] -> target -> url . '">' . $activity['Activity']['data'] -> target -> displayName . '</a>';
 		}
 		echo '</div>';
 
@@ -28,9 +49,9 @@ foreach ($activites as $key => $activity) {
 	echo '</div>';
 	// end title
 
-	echo '<div class="row object">';
-	echo '<div class="span5">' . $activity['Activity']['data'] -> object -> id . '</div>';
-	echo '</div>';
+	//echo '<div class="row object">';
+	//echo '<div class="span5">' . $activity['Activity']['data'] -> object -> id . '</div>';
+	//echo '</div>';
 	// end object
 	echo '</div>';
 	// end action

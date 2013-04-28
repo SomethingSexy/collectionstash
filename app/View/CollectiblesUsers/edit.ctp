@@ -33,7 +33,12 @@
                 <div class="label-wrapper">
                     <label for="dialogCost"><?php echo __('How much did you pay?') ?><?php
 					if ($collectible['Collectible']['msrp']) {
-						echo '(Retail:' . $collectible['Currency']['sign'];
+						$currencySign = '$';
+						if (isset($collectible['Currency'])) {
+							$currencySign = $collectible['Currency']['sign'];
+						}
+
+						echo '(Retail:' . $currencySign;
 						echo $collectible['Collectible']['msrp'] . ')';
 					}
 				?> </label>
