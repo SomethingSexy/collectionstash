@@ -24,34 +24,6 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 		$outputAttribtes = '';
 		$added = false;
 		foreach ($collectibleCore['AttributesCollectible'] as $key => $attribute) {
-			// categoryId
-			// categoryName
-			// name
-			// description
-			// scaleId
-			// id
-			// manufacturerId
-			$attributeJSON = '{';
-			$attributeJSON .= '"categoryId" : "' . $attribute['Attribute']['AttributeCategory']['id'] . '",';
-			$attributeJSON .= '"categoryName" : "' . $attribute['Attribute']['AttributeCategory']['path_name'] . '",';
-			$attributeJSON .= '"name" : "' . $attribute['Attribute']['name'] . '",';
-			$attributeJSON .= '"description" : "' . $attribute['Attribute']['description'] . '",';
-			$attributeJSON .= '"scaleId" : ';
-			if (isset($attribute['Attribute']['scale_id']) && !is_null($attribute['Attribute']['scale_id'])) {
-				$attributeJSON .= '"' . $attribute['Attribute']['scale_id'] . '",';
-			} else {
-				$attributeJSON .= '"null" ,';
-			}
-			$attributeJSON .= '"manufacturerId" : "' . $attribute['Attribute']['manufacture_id'] . '",';
-			$attributeJSON .= '"id" : "' . $attribute['Attribute']['id'] . '"';
-			$attributeJSON .= '}';
-
-			$attributeCollectibleJSON = '{';
-			$attributeCollectibleJSON .= '"id" : "' . $attribute['id'] . '",';
-			$attributeCollectibleJSON .= '"attributeId" : "' . $attribute['attribute_id'] . '",';
-			$attributeCollectibleJSON .= '"categoryName" : "' . $attribute['Attribute']['AttributeCategory']['path_name'] . '",';
-			$attributeCollectibleJSON .= '"count" : "' . $attribute['count'] . '"';
-			$attributeCollectibleJSON .= '}';
 
 			if (!empty($attribute['Attribute']['AttributesCollectible'])) {
 				$popup = '<ul>';
@@ -70,16 +42,35 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				$popup .= '</ul>';
 			}
 
-			$outputAttribtes .= '<tr data-attribute=\'' . $attributeJSON . '\' data-attribute-collectible=\'' . $attributeCollectibleJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="true" data-attribute-collectible-id="' . $attribute['id'] . '">';
+			$outputAttribtes .= '<div class="span12 attribute">';
+
+			$outputAttribtes .= '<div class="row-fluid">';
+
+			$outputAttribtes .= '<div class="span10">';
+
 			// That means this is a new one, so we don't need the info icon
 			if ($attribute['Attribute']['status_id'] === '2') {
 				$outputAttribtes .= '<td><i class="icon-plus"></i></td>';
 			} else {
-				$outputAttribtes .= '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
-				;
+				$outputAttribtes .= '<span class="popup" data-trigger="manual" data-content="' . $popup . '" data-original-title="Part Information"><i class="icon-info-sign"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
+
+			}
+			
+
+			$outputAttribtes .= '</div>';
+			$outputAttribtes .= '<div class="span2 count">';
+			if ($attribute['attribute_collectible_type'] === 'added') {
+				$outputAttribtes .= '<span class="label label-success">' . __('Added') . '</span>';
+			} else if ($attribute['attribute_collectible_type'] === 'wanted') {
+				$outputAttribtes .= '<span class="label label-important">' . __('Wanted') . '</span>';
 			}
 
-			$outputAttribtes .= '<td><ul class="thumbnails"><li class="span1">';
+			$outputAttribtes .= '<span class="badge">' . $attribute['count'] . '</span>';
+			$outputAttribtes .= '</div>';
+			$outputAttribtes .= '</div>';
+
+			$outputAttribtes .= '<div class="row-fluid">';
+			$outputAttribtes .= '<div class="span1"><ul class="thumbnails"><li class="span12">';
 
 			if (!empty($attribute['Attribute']['AttributesUpload'])) {
 				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
@@ -92,54 +83,49 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				$outputAttribtes .= '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
 			}
 
-			$outputAttribtes .= '</li></ul></td>';
-			$outputAttribtes .= '<td class="category">';
+			$outputAttribtes .= '</li></ul></div>';
 
-			$outputAttribtes .= $attribute['Attribute']['AttributeCategory']['path_name'] . '</td>';
+			$outputAttribtes .= '<div class="span11">';
 
-			$outputAttribtes .= '<td>' . $attribute['Attribute']['name'] . '</td>';
-
-			$outputAttribtes .= '<td>' . $attribute['Attribute']['description'] . '</td>';
-
-			if (isset($attribute['Attribute']['manufacture_id'])) {
-				$outputAttribtes .= '<td>' . $attribute['Attribute']['Manufacture']['title'] . '</td>';
-			} else if (isset($attribute['Attribute']['artist_id'])) {
-				$outputAttribtes .= '<td>' . $attribute['Attribute']['Artist']['name'] . '</td>';
-			} else {
-				$outputAttribtes .= '<td>Unknown</td>';
-			}
-
+			$outputAttribtes .= '<div class="row-fluid"><div class="span12"><span class="name">' . $attribute['Attribute']['name'] . '</span></div></div>';
 			if (isset($attribute['Attribute']['Scale']['scale'])) {
-				$outputAttribtes .= '<td>' . $attribute['Attribute']['Scale']['scale'] . '</td>';
-			} else {
-				$outputAttribtes .= '<td> </td>';
+				$outputAttribtes .= '<div class="row-fluid"><div class="span12">' . $attribute['Attribute']['Scale']['scale'] . '</div></div>';
 			}
 
-			$outputAttribtes .= '<td class="count">' . $attribute['count'] . '</td>';
-			// Going to use the modified date and the last person on the revision who did something to it
-			$outputAttribtes .= '<td class="user">' . $attribute['Revision']['User']['username'] . '</td>';
-			$outputAttribtes .= '</tr>';
+			$outputAttribtes .= '<div class="row-fluid"><div class="span12">' . $attribute['Attribute']['description'] . '</div></div>';
+
+			$outputAttribtes .= '<div class="row-fluid"><div class="span12">';
+
+			if (isset($attribute['Attribute']['artist_id']) || isset($attribute['Attribute']['manufacture_id'])) {
+				if (isset($attribute['Attribute']['manufacture_id'])) {
+					$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Manufacture']['title'] . '</span>';
+				}
+				if (isset($attribute['Attribute']['artist_id'])) {
+					$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Artist']['name'] . '</span>';
+				}
+			} else {
+				$outputAttribtes .= '<span class="label">Unknown</span>';
+			}
+
+			$outputAttribtes .= '</div></div>';
+
+			$outputAttribtes .= '</div>';
+			// div class="span11"
+			$outputAttribtes .= '</div>';
+			// div class="row-fluid"
+			$outputAttribtes .= '<div class="row-fluid">';
+			$outputAttribtes .= '<div class="span12">';
+			$outputAttribtes .= '<div class="pull-right">' . $attribute['Revision']['User']['username'] . ' - ' . $this -> Time -> format('F jS, Y h:i A', $attribute['Attribute']['modified'], null) . '</div>';
+			$outputAttribtes .= '</div>';
+			$outputAttribtes .= '</div>';
+			$outputAttribtes .= '</div>';
+			// main div class="span12"
 			$added = true;
 		}
 
 		if ($added) {
-			echo '<div class="attributes collectible" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
-			echo '<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">';
-			echo '<thead><tr>';
-			echo '<th></th>';
-			echo '<th>Photo</td>';
-			echo '<th class="category">' . __('Category') . '</th>';
-			echo '<th>' . __('Name', true) . '</th>';
-			echo '<th>' . __('Description', true) . '</th>';
-			echo '<th>' . __('Maker', true) . '</th>';
-			echo '<th>' . __('Scale', true) . '</th>';
-			echo '<th title="' . __('The amount of items of this type this collectible has.') . '" class="count">' . __('Count', true) . '</th>';
-			echo '<th class="user" title="' . __('The user who performed the last action on this item.') . '">' . __('Added By') . '</th>';
-			echo '</tr></thead>';
-			echo '<tbody>';
+			echo '<div class="row-fluid attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">';
 			echo $outputAttribtes;
-			echo '</tbody>';
-			echo '</table>';
 			echo '</div>';
 		} else {
 			echo '<div class="attributes-list empty" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
