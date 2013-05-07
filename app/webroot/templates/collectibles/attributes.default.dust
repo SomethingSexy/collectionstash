@@ -1,16 +1,21 @@
 <div class="well attributes collectible" data-collectible-id="{collectibleId}">
 	<h3>Parts and Accessories</h3>
-	<div class="btn-group pull-right">
-		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
-		<ul class="dropdown-menu">
-			<li>
-				<a id="add-new-item-link" class="link" title=''>Add New Item</a>
-			</li>
-			<li>
-				<a id="add-existing-item-link" class="link" title=''>Add Existing Item</a>
-			</li>
-		</ul>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
+				<ul class="dropdown-menu">
+					<li>
+						<a id="add-new-item-link" class="link" title=''>Add New Item</a>
+					</li>
+					<li>
+						<a id="add-existing-item-link" class="link" title=''>Add Existing Item</a>
+					</li>
+				</ul>
+			</div>	
+		</div>
 	</div>
+
 	{@eq key="{collectible.custom}" value="true" type="boolean"}
 		<p>When you are adding parts please try and add existing parts whenever possible.  If you do have to add a new part to the system and you purhaseed it from someone please add it as a <strong>new collectible</strong>, attaching that new part to the collectible.  Once it is approved you can add the existing part to your custom.</p>
 		<p>You will only be able to add new custom or commissioned parts directly to this collectible. These parts will not be able to be shared.</p>
@@ -18,23 +23,7 @@
 	{@eq key="{collectible.original}" value="true" type="boolean"}
 		<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
 	{/eq}
-	<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
-		<thead>
-			<tr>
-				<th> </th>
-				<th>Photo</th>
-				<th class="category">Category</th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Maker</th>
-				<th>Scale</th>
-				<th title="The amount of items of this type this collectible has." class="count">Count</th>
-				<th class="user" title="The user who performed the last action on this item.">Added By</th>
-				<th class="actions"> </th>
-			</tr>
-		</thead>
-		<tbody>
+	<div class="row-fluid attributes-list spacer" data-toggle="modal-gallery" data-target="#modal-gallery">
 
-		</tbody>
-	</table>
+	</div>
 </div>

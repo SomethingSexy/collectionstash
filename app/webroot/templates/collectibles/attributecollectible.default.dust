@@ -1,61 +1,104 @@
-// That means this is a new one, so we don't need the info icon
-{@if cond="( {Attribute.status_id} == 2 )"}
-<td><i class="icon-plus"></i></td>
-{:else}
-<td> <span title="Part Information" data-content="
+<div class="row-fluid">
+	<div class="span10">
+		{@if cond="( {Attribute.status_id} == 2 )"}
+		<span><i class="icon-plus"></i></span>
+		{:else}
+		<span title="Part Information" data-content="
 
-			<ul>
-			{#Attribute.AttributesCollectible}
-				{@if cond="('{Collectible.name}' !== '')"}
-				<li>
-				<a href='/collectibles/view/{Collectible.id}'>{Collectible.name}</a>
-				</li>
-				{/if}
-			{:else}
-				<li>Not attached to any collectibles</li>
-			{/Attribute.AttributesCollectible}
-			</ul>
-			
-			" class="popup"><i class="icon-info-sign"></i></span></td>
-{/if}
-<td>
-	<ul class="thumbnails">
-		{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
+		<ul>
+		{#Attribute.AttributesCollectible}
+		{@if cond="('{Collectible.name}' !== '')"}
+		<li>
+		<a href='/collectibles/view/{Collectible.id}'>{Collectible.name}</a>
+		</li>
+		{/if}
+		{:else}
+		<li>Not attached to any collectibles</li>
+		{/Attribute.AttributesCollectible}
+		</ul>
+
+		" class="popup"><i class="icon-info-sign"></i></span>
+		{/if}
+		<span class="path">{Attribute.AttributeCategory.path_name}</span>
+	</div>
+	<div class="span2 count">
+		{@if cond="( '{attribute_collectible_type}' == 'added' )"}
+		<span class="label label-success">Added</span>
+		{/if}
+		{@if cond="( '{attribute_collectible_type}' == 'wanted' )"}
+		<span class="label label-important">Wanted</span>
+		{/if}
+
+		<span class="badge">{count}</span>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span1">
+		<ul class="thumbnails">
+			{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="span1"><a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+			<li class="span12">
+				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+			</li>
 			{/primary}
 			{:else}
-			<li class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
-		{/Attribute.AttributesUpload}
-		
-	</ul>
-	
-</td>
-<td class="category">{Attribute.AttributeCategory.path_name}</td>
+			<li class="span12">
+				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
+			</li>
+			{/Attribute.AttributesUpload}
 
-<td>{Attribute.name}</td>
+		</ul>
+	</div>
+	<div class="span11">
+		<div class="row-fluid">
+			<div class="span12">
+				<span class="name">{Attribute.name}</span>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				{Attribute.Scale.scale}
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				{Attribute.description}
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
+				{@if cond=" '{Attribute.manufacture_id}'"}
+				<span class="label">{Attribute.Manufacture.title}</span>
+				{/if}
+				{@if cond=" '{Attribute.artist_id}'"}
+				<span class="label">{Attribute.Artist.name}</span>
+				{/if}
+				{:else}
+				<span class="label">Unknown</span>
+				{/if}
+			</div>
+		</div>
+	</div>
+</div>
 
-<td>{Attribute.description}</td>
-{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
-	{@if cond=" '{Attribute.manufacture_id}'"}
-		<td>{Attribute.Manufacture.title}</td>
-	{:else}
-		<td>{Attribute.Artist.name}</td>
-	{/if}
-{:else}
-	<td>Unknown</td>
-{/if}
-	<td>{Attribute.Scale.scale}</td>
-<td class="count">{count}</td>
-<td class="user">{Revision.User.username}</td>
-<td class="actions">
-<div class="btn-group">
+<div class="row-fluid">
+	<div class="span12">
+		<div class="pull-right">
+			{Revision.User.username} - {Attribute.modified}
+		</div>
+	</div>
+</div>
+
+<div class="btn-group actions">
 	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 	<ul class="dropdown-menu">
 		<li>
 			<a class="link edit-attribute-collectible-link" title='Edit Collectible Part'>Edit Collectible Part</a>
-			</li>
-			<li><a class="link edit-attribute-link" title='Edit Part'>Edit Part</a>
+		</li>
+		<li>
+			<a class="link edit-attribute-link" title='Edit Part'>Edit Part</a>
 		</li>
 		<li>
 			<a class="link edit-attribute-photo-link" title='Edit Part Photos'>Edit Part Photos</a>
@@ -68,9 +111,8 @@
 			<a class="link remove-attribute" title='Delete Part'>Delete Part</a>
 		</li>
 		<!--<li>
-			<a class="link remove-duplicate-attribute" title='Delete Part'>Duplicate</a>
+		<a class="link remove-duplicate-attribute" title='Delete Part'>Duplicate</a>
 		</li>-->
 		{/allowRemoveAttribute}
 	</ul>
-</div></td>
-
+</div>

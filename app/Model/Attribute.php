@@ -118,13 +118,15 @@ class Attribute extends AppModel {
 					if ($this -> saveAll($attribute, array('validate' => false))) {
 						// Given an update we need to
 						$attributeId = $this -> id;
-						$updatedAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name'))))));
+						$updatedAttribute = $this -> find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('Artist', 'AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name'))))));
 						$retVal['response']['isSuccess'] = true;
 						$retVal['response']['data']['Attribute'] = $updatedAttribute['Attribute'];
 						$retVal['response']['data']['Attribute']['Manufacture'] = $updatedAttribute['Manufacture'];
 						$retVal['response']['data']['Attribute']['Scale'] = $updatedAttribute['Scale'];
 						$retVal['response']['data']['Attribute']['AttributeCategory'] = $updatedAttribute['AttributeCategory'];
 						$retVal['response']['data']['Attribute']['AttributesCollectible'] = $updatedAttribute['AttributesCollectible'];
+						$retVal['response']['data']['Attribute']['AttributesUpload'] = $updatedAttribute['AttributesUpload'];
+						$retVal['response']['data']['Attribute']['Artist'] = $updatedAttribute['Artist'];
 						$retVal['response']['data']['isEdit'] = false;
 
 						// However, we only want to trigger this activity on collectibles that have been APPROVED already
