@@ -442,7 +442,7 @@ var AttributesView = Backbone.View.extend({
 							var attribute = new AttributeModel(data);
 
 							self.collection.add(attribute);
-							$('tbody', self.el).append(new AttributeView({
+							$('.attribute-list', self.el).append(new AttributeView({
 								model : attribute,
 								status : self.status,
 								artists : self.artists,
@@ -529,7 +529,7 @@ var AttributesView = Backbone.View.extend({
 							var attribute = new AttributeModel(data);
 
 							self.collection.add(attribute);
-							$('tbody', self.el).append(new AttributeView({
+							$('.attribute-list', self.el).append(new AttributeView({
 								model : attribute,
 								status : self.status,
 								artists : self.artists,
@@ -907,11 +907,17 @@ var AttributeView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 		$(self.el).attr('data-id', this.model.toJSON().Attribute.id).attr('data-attribute-collectible-id', this.model.toJSON().id).attr('data-attached', true);
+		
 		$('span.popup', self.el).popover({
 			placement : 'bottom',
 			html : 'true',
-			trigger : 'click'
+			template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+		}).click(function(e) {
+			e.preventDefault();
+		}).mouseenter(function(e) {
+			$(this).popover('show');
 		});
+		
 		$(self.el).attr('data-attribute', JSON.stringify(attribute));
 		$(self.el).attr('data-attribute-collectible', JSON.stringify(attributeCollectible));
 
