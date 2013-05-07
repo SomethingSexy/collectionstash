@@ -839,7 +839,7 @@ var AttributesView = Backbone.View.extend({
 var AttributeView = Backbone.View.extend({
 	template : 'attributecollectible.default.edit',
 	tagName : "div",
-	className : 'span12 attribute',
+	className : 'row-fluid spacer attribute',
 	events : {
 		'click .edit-attribute-photo-link' : 'addPhoto',
 		'click .edit-attribute-link' : 'edit',
