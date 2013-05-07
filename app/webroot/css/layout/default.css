@@ -2458,6 +2458,30 @@ div.paging span a:hover {
 	min-height: 400px;
 }
 
+.attributes-list .attribute {
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.attributes-list .attribute .thumbnails > li {
+	margin-bottom: 0;
+}
+
+.attributes-list .attribute .name {
+	color: #555555;
+	font-weight: bold;
+}
+
+.attributes-list .attribute .path {
+	font-style: italic;
+	margin-left: 5px;
+}
+
+.attributes-list .attribute .label {
+	margin-right: 10px;
+}
+.attributes-list .attribute .count {
+	text-align: right;
+}
 /*
  * Cake BS
  */

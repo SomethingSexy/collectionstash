@@ -223,11 +223,15 @@ if ($showStatus) {
 						// If we are in admin mode, we need to pass that in to these methods so that they can
 						// do specific things based on that
 
-						$('.attributes > table > tbody> tr > td > span.popup').popover({
+						$('span.popup', '.attributes-list').popover({
 							placement : 'bottom',
 							html : 'true',
-							trigger : 'click'
-						});
+							template: '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+						}).click(function(e) {
+			                e.preventDefault() ;
+			            }).mouseenter(function(e) {
+			                $(this).popover('show');
+			            });
 
 					});
 				</script>

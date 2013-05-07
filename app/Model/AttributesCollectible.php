@@ -24,6 +24,52 @@ class AttributesCollectible extends AppModel {
 		return $result > 0;
 	}
 
+	function afterFind($results, $primary = false) {
+		if ($results) {
+			// If it is primary handle all of these things
+			if ($primary) {
+				foreach ($results as $key => $val) {
+					if (isset($val['AttributesCollectible'])) {
+						if (isset($val['AttributesCollectible']['attribute_collectible_type_id'])) {
+							$type = 'added';
+							if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '2') {
+								$type = 'wanted';
+							}
+
+							$results[$key]['Collectible']['attribute_collectible_type'] = $type;
+						}
+
+					}
+				}
+			} else {
+				if (isset($results[$this -> primaryKey])) {
+					if (isset($results['attribute_collectible_type_id']) && !empty($results['attribute_collectible_type_id'])) {
+						$type = 'added';
+						if ($val['attribute_collectible_type_id'] === '2') {
+							$type = 'wanted';
+						}
+
+						$results['attribute_collectible_type'] = $type;
+					}
+				} else {
+
+					foreach ($results as $key => $val) {
+						if (isset($val['AttributesCollectible']['attribute_collectible_type_id']) && !empty($val['AttributesCollectible']['attribute_collectible_type_id'])) {
+							$type = 'added';
+							if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '2') {
+								$type = 'wanted';
+							}
+
+							$results[$key]['AttributesCollectible']['attribute_collectible_type'] = $type;
+						}
+					}
+				}
+			}
+
+		}
+		return $results;
+	}
+
 	public function beforeSave($options = array()) {
 		if (isset($this -> data['Attribute'])) {
 
