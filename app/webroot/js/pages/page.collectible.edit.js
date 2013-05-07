@@ -692,7 +692,7 @@ var AttributesView = Backbone.View.extend({
 		});
 
 		this.collection.each(function(attribute) {
-			$('tbody', self.el).append(new AttributeView({
+			$('.attributes-list', self.el).append(new AttributeView({
 				model : attribute,
 				status : self.status,
 				artists : self.artists,
@@ -715,9 +715,9 @@ var AttributesView = Backbone.View.extend({
 	},
 	renderList : function() {
 		var self = this;
-		$('tbody', self.el).empty();
+		$('.attributes-list', self.el).empty();
 		this.collection.each(function(attribute) {
-			$('tbody', self.el).append(new AttributeView({
+			$('.attributes-list', self.el).append(new AttributeView({
 				model : attribute,
 				status : self.status,
 				artists : self.artists,
@@ -838,7 +838,8 @@ var AttributesView = Backbone.View.extend({
 
 var AttributeView = Backbone.View.extend({
 	template : 'attributecollectible.default.edit',
-	tagName : "tr",
+	tagName : "div",
+	className : 'span12 attribute',
 	events : {
 		'click .edit-attribute-photo-link' : 'addPhoto',
 		'click .edit-attribute-link' : 'edit',

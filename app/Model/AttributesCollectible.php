@@ -80,7 +80,7 @@ class AttributesCollectible extends AppModel {
 
 	public function get($id) {
 		$retVal = array();
-		$retVal = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesUpload' => array('Upload')))));
+		$retVal = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Artist', 'AttributesUpload' => array('Upload')))));
 
 		// so let's do this manually and try that out
 		$retVal['Attribute']['AttributesCollectible'] = array();

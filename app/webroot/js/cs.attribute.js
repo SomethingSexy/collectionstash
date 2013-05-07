@@ -136,7 +136,7 @@ AttributesBase.prototype = {
 
 	},
 	getAttribute : function($element) {
-		var $li = $element.closest('tr');
+		var $li = $element.closest('div.attribute');
 		var attribute = new Attribute({
 			$element : $li
 		});
@@ -1367,7 +1367,7 @@ UpdateCollectibleAttributes.prototype.init = function() {
 		resizable : false,
 	});
 
-	this.options.$element.children('table').on('click', 'tr .actions a.edit-attribute-collectible-link', function() {
+	this.options.$element.children('.attributes-list').on('click', 'div.attribute .actions a.edit-attribute-collectible-link', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
