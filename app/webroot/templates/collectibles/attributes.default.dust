@@ -23,7 +23,7 @@
 	{@eq key="{collectible.original}" value="true" type="boolean"}
 		<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
 	{/eq}
-	<div class="row-fluid attributes-list spacer" data-toggle="modal-gallery" data-target="#modal-gallery">
+	<div class="row-fluid attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">
 
 	</div>
 </div>

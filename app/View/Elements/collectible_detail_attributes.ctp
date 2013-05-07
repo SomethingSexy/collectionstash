@@ -42,7 +42,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				$popup .= '</ul>';
 			}
 
-			$outputAttribtes .= '<div class="span12 attribute">';
+			$outputAttribtes .= '<div class="row-fluid spacer"><div class="span12 attribute">';
 
 			$outputAttribtes .= '<div class="row-fluid">';
 
@@ -117,14 +117,16 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '<div class="pull-right">' . $attribute['Revision']['User']['username'] . ' - ' . $this -> Time -> format('F jS, Y h:i A', $attribute['Attribute']['modified'], null) . '</div>';
 			$outputAttribtes .= '</div>';
 			$outputAttribtes .= '</div>';
-			$outputAttribtes .= '</div>';
+			$outputAttribtes .= '</div></div>';
 			// main div class="span12"
 			$added = true;
 		}
 
 		if ($added) {
 			echo '<div class="row-fluid attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">';
+			echo '<div class="span12">';
 			echo $outputAttribtes;
+			echo '</div>';
 			echo '</div>';
 		} else {
 			echo '<div class="attributes-list empty" data-collectible-id="' . $collectibleCore['Collectible']['id'] . '">';
