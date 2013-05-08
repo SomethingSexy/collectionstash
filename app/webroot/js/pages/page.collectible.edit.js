@@ -902,6 +902,7 @@ var AttributeView = Backbone.View.extend({
 		attributeCollectible.attributeId = attributeModel['attribute_id'];
 		attributeCollectible.categoryName = attributeModel.Attribute.AttributeCategory['path_name'];
 		attributeCollectible.count = attributeModel.count;
+		attributeCollectible.attributeCollectibleTypeId = attributeModel['attribute_collectible_type_id'];
 
 		attributeModel.uploadDirectory = uploadDirectory;
 		dust.render(this.template, attributeModel, function(error, output) {
