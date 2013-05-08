@@ -50,7 +50,7 @@
 				<div class="control-group">
 					<label class="control-label" for="AttributesCollectibleAttributeCollectibleTypeId">Type</label>
 					<div class="controls">
-						<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="Attribute" data-name="artist_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
+						<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
 							<option value="1">Owned</option>
 							<option value="2">Wanted</option>
 							<option value="3">Preordered</option>

@@ -16,13 +16,25 @@
 					<?php echo $this -> Form -> create('AttributesCollectible', array('data-form-model' => 'AttributesCollectible', 'id' => 'AttributesCollectibleUpdateForm')); ?>
 					<fieldset>
 						<ul class="form-fields unstyled">
-		                    <li>
+							<li>
+								<div class="select">
+									<div class="label-wrapper ">
+										<label for="AttributesCollectibleCount">Type</label>
+									</div>
+									<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
+										<option value="1">Owned</option>
+										<option value="2">Wanted</option>
+										<option value="3">Preordered</option>
+									</select>
+								</div>
+							</li>
+							<li>
 								<?php echo $this -> Form -> input('count', array('label' => __('Count'), 'before' => '<div class="label-wrapper required">', 'between' => '</div>')); ?>
-							</li> 
+							</li>
 						</ul>
 					</fieldset>
 					<?php echo $this -> Form -> end(); ?>
-				</div>						
+				</div>
 			</div>
 		</div>
 	</div>
