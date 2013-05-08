@@ -442,7 +442,7 @@ var AttributesView = Backbone.View.extend({
 							var attribute = new AttributeModel(data);
 
 							self.collection.add(attribute);
-							$('.attribute-list', self.el).append(new AttributeView({
+							$('.attributes-list"', self.el).append(new AttributeView({
 								model : attribute,
 								status : self.status,
 								artists : self.artists,
@@ -529,7 +529,7 @@ var AttributesView = Backbone.View.extend({
 							var attribute = new AttributeModel(data);
 
 							self.collection.add(attribute);
-							$('.attribute-list', self.el).append(new AttributeView({
+							$('.attributes-list', self.el).append(new AttributeView({
 								model : attribute,
 								status : self.status,
 								artists : self.artists,
@@ -798,7 +798,8 @@ var AttributesView = Backbone.View.extend({
 			this.addExistingView.remove();
 		}
 		this.addExistingView = new AddExistingAttributeView({
-			model : attribute
+			model : attribute,
+			collectible : this.collectible
 		});
 
 		this.addExistingView.on('view:search:collectible', function() {
@@ -907,7 +908,7 @@ var AttributeView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 		$(self.el).attr('data-id', this.model.toJSON().Attribute.id).attr('data-attribute-collectible-id', this.model.toJSON().id).attr('data-attached', true);
-		
+
 		$('span.popup', self.el).popover({
 			placement : 'bottom',
 			html : 'true',
@@ -917,7 +918,7 @@ var AttributeView = Backbone.View.extend({
 		}).mouseenter(function(e) {
 			$(this).popover('show');
 		});
-		
+
 		$(self.el).attr('data-attribute', JSON.stringify(attribute));
 		$(self.el).attr('data-attribute-collectible', JSON.stringify(attributeCollectible));
 
@@ -2722,6 +2723,9 @@ var AttributeCategoryView = Backbone.View.extend({
 	}
 });
 
+/**
+ * Main view when adding an existing attribute
+ */
 var AddExistingAttributeView = Backbone.View.extend({
 	template : 'attribute.add.existing',
 	events : {
@@ -2729,7 +2733,8 @@ var AddExistingAttributeView = Backbone.View.extend({
 		'click #select-attribute-link-by-part' : 'searchPart'
 	},
 	initialize : function(options) {
-
+		// pssing in the collectible model, used to determine collectible type
+		this.collectible = options.collectible;
 	},
 	render : function() {
 		var self = this;
@@ -2740,6 +2745,9 @@ var AddExistingAttributeView = Backbone.View.extend({
 			data['hasAttribute'] = false;
 		}
 		data['uploadDirectory'] = uploadDirectory;
+		// if the collectible is a custom, then we will display
+		// the type field
+		data['collectible'] = this.collectible.toJSON();
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});

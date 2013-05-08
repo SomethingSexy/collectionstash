@@ -95,15 +95,27 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 
 			$outputAttribtes .= '<div class="row-fluid"><div class="span12">';
 
-			if (isset($attribute['Attribute']['artist_id']) || isset($attribute['Attribute']['manufacture_id'])) {
-				if (isset($attribute['Attribute']['manufacture_id'])) {
-					$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Manufacture']['title'] . '</span>';
+			if ($attribute['Attribute']['type'] === 'mass') {
+				if (isset($attribute['Attribute']['artist_id']) || isset($attribute['Attribute']['manufacture_id'])) {
+					if (isset($attribute['Attribute']['manufacture_id'])) {
+						$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Manufacture']['title'] . '</span>';
+					}
+					if (isset($attribute['Attribute']['artist_id'])) {
+						$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Artist']['name'] . '</span>';
+					}
+				} else {
+					$outputAttribtes .= '<span class="label">Unknown</span>';
 				}
+			} else if ($attribute['Attribute']['type'] === 'custom') {
+				$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['User']['username'] . '</span>';
+			} else if ($attribute['Attribute']['type'] === 'original') {
 				if (isset($attribute['Attribute']['artist_id'])) {
 					$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Artist']['name'] . '</span>';
+				} else {
+					$outputAttribtes .= '<span class="label">Unknown</span>';
 				}
 			} else {
-				$outputAttribtes .= '<span class="label">Unknown</span>';
+				$outputAttribtes .= '<span class="label">Generic</span>';
 			}
 
 			$outputAttribtes .= '</div></div>';
