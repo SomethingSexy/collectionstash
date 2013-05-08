@@ -34,8 +34,9 @@ class AttributesCollectible extends AppModel {
 							$type = 'added';
 							if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '2') {
 								$type = 'wanted';
+							} else if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '3') {
+								$type = 'preorder';
 							}
-
 							$results[$key]['AttributesCollectible']['attribute_collectible_type'] = $type;
 						}
 
@@ -47,6 +48,8 @@ class AttributesCollectible extends AppModel {
 						$type = 'added';
 						if ($val['attribute_collectible_type_id'] === '2') {
 							$type = 'wanted';
+						} else if ($val['attribute_collectible_type_id'] === '3') {
+							$type = 'preorder';
 						}
 
 						$results['attribute_collectible_type'] = $type;
@@ -58,6 +61,8 @@ class AttributesCollectible extends AppModel {
 							$type = 'added';
 							if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '2') {
 								$type = 'wanted';
+							} else if ($val['AttributesCollectible']['attribute_collectible_type_id'] === '3') {
+								$type = 'preorder';
 							}
 
 							$results[$key]['AttributesCollectible']['attribute_collectible_type'] = $type;

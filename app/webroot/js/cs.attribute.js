@@ -1391,6 +1391,7 @@ UpdateCollectibleAttributes.prototype.open = function(attribute) {
 	var attributeData = attribute.getAttributeCollectible();
 
 	$(':input[name="data[AttributesCollectible][count]"]', this.$dialog).val(attributeData.count);
+	// Also set the selected type
 
 	this.$dialog.dialog("option", "buttons", [{
 		text : 'Submit',

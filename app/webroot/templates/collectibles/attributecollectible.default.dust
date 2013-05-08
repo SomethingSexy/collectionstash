@@ -29,6 +29,9 @@
 			{@if cond="( '{attribute_collectible_type}' == 'wanted' )"}
 			<span class="label label-important">Wanted</span>
 			{/if}
+			{@if cond="( '{attribute_collectible_type}' == 'preorder' )"}
+			<span class="label label-warning">Preordered</span>
+			{/if}
 
 			<span class="badge">{count}</span>
 		</div>
@@ -51,7 +54,7 @@
 
 			</ul>
 		</div>
-		<div class="span11">
+		<div class="span9">
 			<div class="row-fluid">
 				<div class="span12">
 					<span class="name">{Attribute.name}</span>
@@ -70,26 +73,55 @@
 			<div class="row-fluid">
 				<div class="span12">
 					{@if cond="('{Attribute.type}' == 'mass' || '{Attribute.type}' == 'original' )"}
-						{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
-							{@if cond=" '{Attribute.manufacture_id}'"}
-								<span class="label">{Attribute.Manufacture.title}</span>
-							{/if}
-							{@if cond=" '{Attribute.artist_id}'"}
-								<span class="label">{Attribute.Artist.name}</span>
-							{/if}
-						{:else}
-							<span class="label">Unknown</span>
-						{/if}	
+					{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
+					{@if cond=" '{Attribute.manufacture_id}'"}
+					<span class="label">{Attribute.Manufacture.title}</span>
+					{/if}
+					{@if cond=" '{Attribute.artist_id}'"}
+					<span class="label">{Attribute.Artist.name}</span>
+					{/if}
+					{:else}
+					<span class="label">Unknown</span>
+					{/if}
 					{/if}
 					{@if cond="('{Attribute.type}' == 'custom')" }
-						<span class="label">{Attribute.User.username}</span>
+					<span class="label">{Attribute.User.username}</span>
 					{/if}
 					{@if cond="('{Attribute.type}' == 'generic')" }
-						<span class="label">Generic</span>
+					<span class="label">Generic</span>
 					{/if}
 				</div>
 			</div>
 		</div>
+		<div class="span2">
+			<div class="btn-group actions pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="link edit-attribute-collectible-link" title='Edit Collectible Part'>Edit Collectible Part</a>
+					</li>
+					<li>
+						<a class="link edit-attribute-link" title='Edit Part'>Edit Part</a>
+					</li>
+					<li>
+						<a class="link edit-attribute-photo-link" title='Edit Part Photos'>Edit Part Photos</a>
+					</li>
+					<li>
+						<a class="link remove-link" title='Remove Collectible Part'>Remove Part From Collectible</a>
+					</li>
+					{#allowRemoveAttribute}
+					<li>
+						<a class="link remove-attribute" title='Delete Part'>Delete Part</a>
+					</li>
+					<!--<li>
+					<a class="link remove-duplicate-attribute" title='Delete Part'>Duplicate</a>
+					</li>-->
+					{/allowRemoveAttribute}
+				</ul>
+			</div>
+
+		</div>
+
 	</div>
 
 	<div class="row-fluid">
@@ -98,31 +130,5 @@
 				{Revision.User.username} - {Attribute.modified}
 			</div>
 		</div>
-	</div>
-
-	<div class="btn-group actions">
-		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
-		<ul class="dropdown-menu">
-			<li>
-				<a class="link edit-attribute-collectible-link" title='Edit Collectible Part'>Edit Collectible Part</a>
-			</li>
-			<li>
-				<a class="link edit-attribute-link" title='Edit Part'>Edit Part</a>
-			</li>
-			<li>
-				<a class="link edit-attribute-photo-link" title='Edit Part Photos'>Edit Part Photos</a>
-			</li>
-			<li>
-				<a class="link remove-link" title='Remove Collectible Part'>Remove Part From Collectible</a>
-			</li>
-			{#allowRemoveAttribute}
-			<li>
-				<a class="link remove-attribute" title='Delete Part'>Delete Part</a>
-			</li>
-			<!--<li>
-			<a class="link remove-duplicate-attribute" title='Delete Part'>Duplicate</a>
-			</li>-->
-			{/allowRemoveAttribute}
-		</ul>
 	</div>
 </div>
