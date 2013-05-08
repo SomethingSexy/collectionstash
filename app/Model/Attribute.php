@@ -187,56 +187,61 @@ class Attribute extends AppModel {
 
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
 			// Because we set the attributes add to submitted, check both
-			if ($this -> isStatusDraft($attribute['Attribute']['id']) || $this -> isStatusSubmitted($attribute['Attribute']['id'])) {
-				$autoUpdate = true;
-			}
+			$autoUpdate = $this -> allowAutoUpdate($attribute['Attribute']['id'], $user);
 		}
+		if ($this -> isEditPermission($attribute['Attribute']['id'], $user)) {
+			if ($autoUpdate === true || $autoUpdate === 'true') {
+				$proceed = true;
+				debug($attribute['Attribute']['replace_attribute_id']);
+				// If we have a replacement, then lets update all of those first
+				if (isset($attribute['Attribute']['replace_attribute_id']) && !empty($attribute['Attribute']['replace_attribute_id'])) {
+					$replacementAttribute = $attribute['Attribute']['replace_attribute_id'];
 
-		if ($autoUpdate === true || $autoUpdate === 'true') {
-			$proceed = true;
-			debug($attribute['Attribute']['replace_attribute_id']);
-			// If we have a replacement, then lets update all of those first
-			if (isset($attribute['Attribute']['replace_attribute_id']) && !empty($attribute['Attribute']['replace_attribute_id'])) {
-				$replacementAttribute = $attribute['Attribute']['replace_attribute_id'];
+					// Find all attributes collectibles that have this attribute id
+					$updateAttributesCollectible = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id'])));
+					// Need to manually specify the modified field because updateAll is very dumb, only does what you tell it to do
+					// Now update all attributes collectibles with the replacement id
+					if ($this -> AttributesCollectible -> updateAll(array('AttributesCollectible.attribute_id' => $replacementAttribute, 'AttributesCollectible.modified' => 'NOW()'), array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id']))) {
 
-				// Find all attributes collectibles that have this attribute id
-				$updateAttributesCollectible = $this -> AttributesCollectible -> find('all', array('conditions' => array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id'])));
-				// Need to manually specify the modified field because updateAll is very dumb, only does what you tell it to do
-				// Now update all attributes collectibles with the replacement id
-				if ($this -> AttributesCollectible -> updateAll(array('AttributesCollectible.attribute_id' => $replacementAttribute, 'AttributesCollectible.modified' => 'NOW()'), array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id']))) {
+						// Seems like a lot of redundancy
+						// Since updateAll does not trigger afterSave we need to manually create revisions
+						foreach ($updateAttributesCollectible as $key => $value) {
+							debug($value['AttributesCollectible']['id']);
+							// TODO: This is not working
+							$this -> AttributesCollectible -> id = $value['AttributesCollectible']['id'];
+							$this -> AttributesCollectible -> createRevision();
+						}
 
-					// Seems like a lot of redundancy
-					// Since updateAll does not trigger afterSave we need to manually create revisions
-					foreach ($updateAttributesCollectible as $key => $value) {
-						debug($value['AttributesCollectible']['id']);
-						// TODO: This is not working
-						$this -> AttributesCollectible -> id = $value['AttributesCollectible']['id'];
-						$this -> AttributesCollectible -> createRevision();
+						$proceed = true;
+					} else {
+						$proceed = false;
 					}
-
-					$proceed = true;
-				} else {
-					$proceed = false;
 				}
-			}
 
-			// If the update of the attributes failed then don't try the delete
-			// If I am not replacing and it is linked, this delete will automatically delete
-			// all dependent AttributesCollectible rows
-			if ($proceed) {
-				if ($this -> delete($attribute['Attribute']['id'])) {
-					$retVal['response']['isSuccess'] = true;
-					$retVal['response']['data']['isEdit'] = false;
+				// If the update of the attributes failed then don't try the delete
+				// If I am not replacing and it is linked, this delete will automatically delete
+				// all dependent AttributesCollectible rows
+				if ($proceed) {
+					if ($this -> delete($attribute['Attribute']['id'])) {
+						$retVal['response']['isSuccess'] = true;
+						$retVal['response']['data']['isEdit'] = false;
+					}
 				}
-			}
 
-		} else {
-			if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $user['User']['id'], $action)) {
-				$retVal['response']['isSuccess'] = true;
-				$retVal['response']['data']['isEdit'] = true;
 			} else {
-				$retVal['response']['isSuccess'] = false;
+				if ($this -> saveEdit($currentVersion, $attribute['Attribute']['id'], $user['User']['id'], $action)) {
+					$retVal['response']['isSuccess'] = true;
+					$retVal['response']['data']['isEdit'] = true;
+				} else {
+					$retVal['response']['isSuccess'] = false;
+				}
 			}
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$error = array('message' => __('You do not have acceses to remove this part.'));
+			$error['inline'] = false;
+			$retVal['response']['errors'] = array();
+			array_push($retVal['response']['errors'], $error);
 		}
 
 		debug($retVal);
