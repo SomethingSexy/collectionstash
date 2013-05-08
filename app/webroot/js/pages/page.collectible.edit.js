@@ -442,7 +442,7 @@ var AttributesView = Backbone.View.extend({
 							var attribute = new AttributeModel(data);
 
 							self.collection.add(attribute);
-							$('.attributes-list"', self.el).append(new AttributeView({
+							$('.attributes-list', self.el).append(new AttributeView({
 								model : attribute,
 								status : self.status,
 								artists : self.artists,
