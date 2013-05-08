@@ -36,7 +36,7 @@ class AttributesCollectible extends AppModel {
 								$type = 'wanted';
 							}
 
-							$results[$key]['Collectible']['attribute_collectible_type'] = $type;
+							$results[$key]['AttributesCollectible']['attribute_collectible_type'] = $type;
 						}
 
 					}
@@ -244,7 +244,7 @@ class AttributesCollectible extends AppModel {
 		$retVal['response']['errors'] = array();
 		$this -> set($data);
 		$validCollectible = true;
-		debug($data);
+
 		// If we have an attribute, that means
 		// we are saving a collectible attribute and creating a new
 		// attribute at the same time, we don't have to validate
@@ -291,7 +291,6 @@ class AttributesCollectible extends AppModel {
 				$attributeAddResponse = $this -> Attribute -> addAttribute($attribute, $user, $this -> Collectible -> allowAutoAddAttribute($data['AttributesCollectible']['collectible_id'], $user));
 
 				if ($attributeAddResponse && $attributeAddResponse['response']['isSuccess']) {
-					debug($attributeAddResponse);
 					$attributeId = $attributeAddResponse['response']['data']['Attribute']['id'];
 					$data['AttributesCollectible']['attribute_id'] = $attributeId;
 				} else {
@@ -310,7 +309,7 @@ class AttributesCollectible extends AppModel {
 					// Return what we just added
 					$attributesCollectibleId = $this -> id;
 					// Hopefully this won't be a performance issue at this level
-					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Collectible', 'Revision' => array('User'), 'Attribute' => array('AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
+					$attributesCollectible = $this -> find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Collectible', 'Revision' => array('User'), 'Attribute' => array('User', 'AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
 
 					$retVal['response']['isSuccess'] = true;
 					$retVal['response']['data'] = $attributesCollectible['AttributesCollectible'];
@@ -347,8 +346,6 @@ class AttributesCollectible extends AppModel {
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'AttributesCollectible');
 			$retVal['response']['errors'] = $errors;
 		}
-
-		debug($retVal);
 
 		return $retVal;
 	}

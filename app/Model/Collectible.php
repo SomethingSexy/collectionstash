@@ -265,7 +265,12 @@ class Collectible extends AppModel {
 					}
 
 					if (isset($results['custom']) && $results['custom']) {
-						$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
+						if (isset($results['User'])) {
+							$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
+						} else {
+							$results['displayTitle'] = $results['name'] . __(' a custom');
+						}
+
 					} else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
 						$itemTitle = $results['name'] . ' By ';
 
@@ -866,7 +871,7 @@ class Collectible extends AppModel {
 		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
 		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
 		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
 		// so let's do this manually and try that out
 		if (!empty($collectible['AttributesCollectible'])) {
@@ -1265,7 +1270,7 @@ class Collectible extends AppModel {
 
 		$retVal = false;
 		if (is_numeric($check) || is_string($check)) {
-			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status')));
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
 			//lol
 		} else {
 			// assume object

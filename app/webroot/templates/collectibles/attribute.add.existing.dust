@@ -46,6 +46,14 @@
 					<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
 				</div>
 			</div>
+			{@if cond=" '{collectible.custom}'"}
+				<div class="control-group">
+					<label class="control-label" for="inputManUrl">Type</label>
+					<div class="controls">
+						<input id="AttributesCollectibleCount" type="number" required="required" name="data[AttributesCollectible][count]">
+					</div>
+				</div>				
+			{/if}
 			<div class="control-group">
 				<label class="control-label" for="inputManUrl">Count</label>
 				<div class="controls">
