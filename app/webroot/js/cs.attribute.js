@@ -849,7 +849,7 @@ RemoveAttributes.prototype.init = function() {
 		$replacementItem.show();
 	});
 
-	this.options.$element.children('table').on('click', 'tr .actions a.remove-attribute', function() {
+	this.options.$element.children('.attributes-list').on('click', 'div.attribute .actions a.remove-attribute', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
@@ -1037,7 +1037,7 @@ RemoveAttributeLinks.prototype.init = function() {
 		autoOpen : false,
 		resizable : false,
 	});
-	this.options.$element.children('table').on('click', 'tr .actions a.remove-link', function() {
+	this.options.$element.children('.attributes-list').on('click', 'div.attribute .actions a.remove-link', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
 	});
@@ -1045,6 +1045,10 @@ RemoveAttributeLinks.prototype.init = function() {
 
 RemoveAttributeLinks.prototype.reset = function() {
 	var self = this;
+	var $formFields = $('#attribute-remove-link-dialog').children('.component').children('.inside').children('.component-view').find('.form-fields');
+
+	$('textarea', $formFields).val('');
+	$('input[type=checkbox]', $formFields).attr('checked', false);
 };
 /**
  * This gets called everytime we open the remove dialog, we need to do some reset stuff
