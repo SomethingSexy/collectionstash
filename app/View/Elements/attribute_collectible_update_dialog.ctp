@@ -16,6 +16,9 @@
 					<?php echo $this -> Form -> create('AttributesCollectible', array('data-form-model' => 'AttributesCollectible', 'id' => 'AttributesCollectibleUpdateForm')); ?>
 					<fieldset>
 						<ul class="form-fields unstyled">
+							<?php 
+								if($collectible['Collectible']['custom']) {
+							?>
 							<li>
 								<div class="select">
 									<div class="label-wrapper ">
@@ -28,6 +31,7 @@
 									</select>
 								</div>
 							</li>
+							<?php } ?>
 							<li>
 								<?php echo $this -> Form -> input('count', array('label' => __('Count'), 'before' => '<div class="label-wrapper required">', 'between' => '</div>')); ?>
 							</li>

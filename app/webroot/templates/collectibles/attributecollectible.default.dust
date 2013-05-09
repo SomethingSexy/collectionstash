@@ -23,7 +23,7 @@
 			<span class="path">{Attribute.AttributeCategory.path_name}</span>
 		</div>
 		<div class="span2 count">
-			{@if cond="( {collectible.custom})"}
+			{@if cond="{collectible.custom}"}
 			{@if cond="( '{attribute_collectible_type}' == 'added' )"}
 			<span class="label label-success">Owned</span>
 			{/if}
