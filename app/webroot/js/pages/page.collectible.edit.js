@@ -643,7 +643,9 @@ var AttributesView = Backbone.View.extend({
 					self.collection.each(function(attribute) {
 						if (attribute.toJSON().id === data.id) {
 							attribute.set({
-								count : data.count
+								count : data.count,
+								attribute_collectible_type_id : data.attribute_collectible_type_id,
+								attribute_collectible_type : data.attribute_collectible_type
 							});
 						}
 					});
@@ -905,6 +907,7 @@ var AttributeView = Backbone.View.extend({
 		attributeCollectible.attributeCollectibleTypeId = attributeModel['attribute_collectible_type_id'];
 
 		attributeModel.uploadDirectory = uploadDirectory;
+		attributeModel.collectible = this.collectible.toJSON();
 		dust.render(this.template, attributeModel, function(error, output) {
 			$(self.el).html(output);
 		});
