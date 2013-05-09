@@ -48,7 +48,7 @@
 			</div>
 			{@if cond=" '{collectible.custom}'"}
 				<div class="control-group">
-					<label class="control-label" for="AttributesCollectibleAttributeCollectibleTypeId">Type</label>
+					<label class="control-label" for="AttributesCollectibleAttributeCollectibleTypeId">Status</label>
 					<div class="controls">
 						<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
 							<option value="1">Owned</option>

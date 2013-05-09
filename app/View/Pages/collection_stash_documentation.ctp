@@ -28,6 +28,26 @@
 					</li>
 					<li>
 						<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
+						<ul class="nav nav-list">
+							<li>
+								<a href="#parts-adding-new-parts"> <i class="icon-chevron-right"></i> Adding New Parts to a Collectible </a>
+							</li>
+							<li>
+								<a href="#parts-add-existing"> <i class="icon-chevron-right"></i> Adding Existing Parts to a Collectible </a>
+							</li>
+							<li>
+								<a href="#parts-photos"> <i class="icon-chevron-right"></i> Adding Photos </a>
+							</li>
+							<li>
+								<a href="#parts-when"> <i class="icon-chevron-right"></i> When should I add a new part vs adding an existing part? </a>
+							</li>
+							<li>
+								<a href="#parts-customs"> <i class="icon-chevron-right"></i> Adding Parts to Custom Collectibles </a>
+							</li>
+							<li>
+								<a href="#parts-original"> <i class="icon-chevron-right"></i> Adding Parts to Original Collectibles </a>
+							</li>
+						</ul>
 					</li>
 					<li>
 						<a href="#submit"> <i class="icon-chevron-right"></i> Submitting/Activating a Collectible </a>
@@ -177,7 +197,7 @@
 
 		<h3 id="manufacturers">Manufacturers</h3>
 		<p>
-			Mass-produced and original collectibles can have a manufacturer or producer specified.  This is the company or business that made or produced the collectible.  In most cases this is the place you where you purchased the item, or the name that is on the box!  Each manufacturer is linked to platforms and brands.  
+			Mass-produced and original collectibles can have a manufacturer or producer specified.  This is the company or business that made or produced the collectible.  In most cases this is the place you where you purchased the item, or the name that is on the box!  Each manufacturer is linked to platforms and brands.
 		</p>
 		<p>
 			Please note, a manufacturer is not required.  Some collectibles may not be manufactured or produced by a company but instead are designed and produced by an individual person.  If that is the case, you will want to indicate the <a href="#artists">artist</a> instead.
@@ -255,7 +275,7 @@
 		</p>
 		<h3 id="parts">Parts</h3>
 		<p>
-			Parts are all of the pieces that make up a collectible.  Like all collectors we like to know how our collectible is made and everything it contains.  It is important for keeping documentation on a collectible but it is also important for customizing!  
+			Parts are all of the pieces that make up a collectible.  Like all collectors we like to know how our collectible is made and everything it contains.  It is important for keeping documentation on a collectible but it is also important for customizing!
 		</p>
 		<p>
 			A part should be added for each individual piece of the collectible.  If there are multiple of the same part, then only <strong>one</strong> should be added but the count should be adjusted.
@@ -264,7 +284,7 @@
 			Parts can also be shared amongst collectibles.  This allows for the ability to indicate which part might be used across multiple different collectibles.  This also allows customers to build bashes and collectibles from other parts that were made.
 		</p>
 
-		<h4>Adding New Parts to a Collectible</h4>
+		<h4 id="parts-adding-new-parts">Adding New Parts to a Collectible</h4>
 		<p>
 			New parts are displayed and added near the bottom of the collectible form.
 		</p>
@@ -333,7 +353,7 @@
 		</p>
 		<img src="/img/documentation/part_add_new_added.png" class="img-polaroid">
 
-		<h4>Adding Existing Parts to a Collectible</h4>
+		<h4 id="parts-add-existing">Adding Existing Parts to a Collectible</h4>
 		<p>
 			You can also add parts from other collectibles to the current collectible being added.  This is especially helpful when trying to see if a part might be shared across multiple collectibles.
 		</p>
@@ -360,7 +380,7 @@
 		<p>
 			The same process can be applied when searching for a part directly.
 		</p>
-		<h4>Adding Photos</h4>
+		<h4 id="parts-photos">Adding Photos</h4>
 		<p>
 			After you add the part to the collectible, you can upload photos for that part by clicking the "Edit Part Photos" link as shown below.
 		</p>
@@ -378,12 +398,12 @@
 		<p>
 			Coming soon!
 		</p>
-		<h4>When should I add a new part vs adding an existing part?</h4>
+		<h4 id="parts-when">When should I add a new part vs adding an existing part?</h4>
 		<p>
 			When adding parts, consideration should be given to if it should be added as a new part or linked from an existing part.  If you know that the part you are adding is shared with another collectible, please search for that collectible first to see if it has already been added.  Otherwise, add it as a new part but make sure to update any collectibles that might also have this part.
 		</p>
 
-		<h4>Adding Parts to Custom Collectibles</h4>
+		<h4 id="parts-customs">Adding Parts to Custom Collectibles</h4>
 		<p>
 			Customs are a unique collectible type because they are built or pieced together by you.  Because of this, we need to also indicate that with any <strong>new</strong> parts that are being added to a custom.  It is <strong>strongly</strong> encouraged to add existing parts to a custom when applicable.
 		</p>
@@ -395,9 +415,33 @@
 		</p>
 		<p>
 			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these three options. <img src="/img/documentation/part_add_custom_modal.png" class="img-polaroid">
+		</p>
 		<p></p>
+		<p>
+			When adding existing parts to a custom you can also indicate a status.  These statuses can help you keep organized with what parts you already own, what parts you have ordered, and what parts you might need. Currently, this field is only applicable when you are adding an existing part to a collectible.  You can add the following statues any part added to a collectible.
+		</p>
+		<ul>
+			<li>
+				Owned
+			</li>
+			<li>
+				Preordered
+			</li>
+			<li>
+				Wanted
+			</li>
+		</ul>
 
-		<h4>Adding Parts to Original Collectibles</h4>
+		<p>
+			Status is indicated in the upper-right of the part card.
+		</p>
+		<img src="/img/documentation/part_card.png" class="img-polaroid">
+		<p></p>
+		<p>The status field can be selected when you add an existing part to a custom collectible using the Add Existing Part menu option.</p>
+		<img src="/img/documentation/part_add_existing_custom_modal.png" class="img-polaroid">
+		<p></p>
+		<p></p>
+		<h4 id="parts-original">Adding Parts to Original Collectibles</h4>
 		<p>
 			All parts added directly to an original collectible will be automatically labeled as "original" parts.  They cannot be shared/linked to other collectibles at this time.
 		</p>
@@ -417,10 +461,14 @@
 		</p>
 		<img src="/img/documentation/submit_approval.png" class="img-polaroid">
 		<p></p>
-		<p>When you click the button, the collectible will go through the validation process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.</p>
+		<p>
+			When you click the button, the collectible will go through the validation process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.
+		</p>
 		<img src="/img/documentation/dup_check.png" class="img-polaroid">
-		<p></p>		
-		<p>This is an example of a duplication check when trying to submit a collectible called "Stormtroooper" for Sideshow Collectibles.</p>
+		<p></p>
+		<p>
+			This is an example of a duplication check when trying to submit a collectible called "Stormtroooper" for Sideshow Collectibles.
+		</p>
 		<h3 id="delete"> Deleting a Collectible </h3>
 		<p>
 			Coming soon!
