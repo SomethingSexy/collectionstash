@@ -145,6 +145,10 @@ class CollectiblesController extends AppController {
 
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
+		
+		//TODO: This is here temporarily until all of the attribute modals are
+		// converted to backbone
+		$this -> set(compact('collectible'));
 	}
 
 	public function collectible($adminMode = false, $id = null) {
