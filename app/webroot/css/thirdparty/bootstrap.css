@@ -4154,7 +4154,7 @@ a.label:hover, a.badge:hover {
 	background-color: #983538;
 }
 .label-warning, .badge-warning {
-	background-color: #dd5600;
+	background-color: #F89406;
 }
 .label-warning[href], .badge-warning[href] {
 	background-color: #aa4200;

@@ -23,8 +23,9 @@
 			<span class="path">{Attribute.AttributeCategory.path_name}</span>
 		</div>
 		<div class="span2 count">
+			{@if cond="( {collectible.custom})"}
 			{@if cond="( '{attribute_collectible_type}' == 'added' )"}
-			<span class="label label-success">Added</span>
+			<span class="label label-success">Owned</span>
 			{/if}
 			{@if cond="( '{attribute_collectible_type}' == 'wanted' )"}
 			<span class="label label-important">Wanted</span>
@@ -32,7 +33,7 @@
 			{@if cond="( '{attribute_collectible_type}' == 'preorder' )"}
 			<span class="label label-warning">Preordered</span>
 			{/if}
-
+			{/if}
 			<span class="badge">{count}</span>
 		</div>
 	</div>

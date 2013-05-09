@@ -58,12 +58,14 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 
 			$outputAttribtes .= '</div>';
 			$outputAttribtes .= '<div class="span2 count">';
-			if ($attribute['attribute_collectible_type'] === 'added') {
-				$outputAttribtes .= '<span class="label label-success">' . __('Added') . '</span>';
-			} else if ($attribute['attribute_collectible_type'] === 'wanted') {
-				$outputAttribtes .= '<span class="label label-important">' . __('Wanted') . '</span>';
-			} else if ($attribute['attribute_collectible_type'] === 'preorder') {
-				$outputAttribtes .= '<span class="label label-warning">' . __('Preordered') . '</span>';
+			if ($collectibleCore['Collectible']['custom']) {
+				if ($attribute['attribute_collectible_type'] === 'added') {
+					$outputAttribtes .= '<span class="label label-success">' . __('Added') . '</span>';
+				} else if ($attribute['attribute_collectible_type'] === 'wanted') {
+					$outputAttribtes .= '<span class="label label-important">' . __('Wanted') . '</span>';
+				} else if ($attribute['attribute_collectible_type'] === 'preorder') {
+					$outputAttribtes .= '<span class="label label-warning">' . __('Preordered') . '</span>';
+				}
 			}
 
 			$outputAttribtes .= '<span class="badge">' . $attribute['count'] . '</span>';
