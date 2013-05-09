@@ -22,7 +22,7 @@
 							<li>
 								<div class="select">
 									<div class="label-wrapper ">
-										<label for="AttributesCollectibleCount">Type</label>
+										<label for="AttributesCollectibleCount">Status</label>
 									</div>
 									<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
 										<option value="1">Owned</option>
