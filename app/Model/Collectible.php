@@ -634,7 +634,7 @@ class Collectible extends AppModel {
 			foreach ($names as $key => $value) {
 				// in case any weird characters get in there that this will trim
 				$name = trim($value);
-				$regSearch['Collectible.name REGEXP'] = '[[:<:]]' . $name . '[[:>:]]';
+				array_push($regSearch, array('Collectible.name REGEXP' => '[[:<:]]' . $name . '[[:>:]]'));
 			}
 
 			// we need to add the name regex search to this array so that these will be bundled in an AND condition together
