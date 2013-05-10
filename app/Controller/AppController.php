@@ -281,7 +281,7 @@ class AppController extends Controller {
 				foreach ($names as $key => $value) {
 					// in case any weird characters get in there that this will trim
 					$name = trim($value);
-					$regSearch['Collectible.name REGEXP'] = '[[:<:]]' . $name . '[[:>:]]';
+					array_puch($regSearch, array('Collectible.name REGEXP' => '[[:<:]]' . $name . '[[:>:]]'));
 				}
 				array_push($test[0]['AND'][0]['OR'], $regSearch);
 				// keep this one a standard like
