@@ -627,7 +627,19 @@ class Collectible extends AppModel {
 
 			//Always add this last one:
 			//(Manufacturer AND License AND CollectibleType AND LIKE Name
-			array_push($orConditions, array('Collectible.manufacture_id' => $collectible['Collectible']['manufacture_id'], 'Collectible.license_id' => $collectible['Collectible']['license_id'], 'Collectible.collectibletype_id' => $collectible['Collectible']['collectibletype_id'], 'Collectible.name LIKE' => '%' . $collectible['Collectible']['name'] . '%'));
+
+			// Using regexp searches for dup list to better handle words out of order
+			$names = explode(' ', $collectible['Collectible']['name']);
+			$regSearch = array();
+			foreach ($names as $key => $value) {
+				// in case any weird characters get in there that this will trim
+				$name = trim($value);
+				$regSearch['Collectible.name REGEXP'] = '[[:<:]]' . $name . '[[:>:]]';
+			}
+
+			// we need to add the name regex search to this array so that these will be bundled in an AND condition together
+			array_push($orConditions, array('Collectible.manufacture_id' => $collectible['Collectible']['manufacture_id'], 'Collectible.license_id' => $collectible['Collectible']['license_id'], 'Collectible.collectibletype_id' => $collectible['Collectible']['collectibletype_id'], $regSearch));
+
 			//Now add all these to an OR
 			array_push($conditions, array('OR' => $orConditions));
 			/*

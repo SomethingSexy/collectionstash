@@ -250,7 +250,7 @@ class AppController extends Controller {
 		if (!is_array($conditions)) {
 			$conditions = array();
 		}
-	
+
 		$joins = array();
 		//Do some special logic here for tags because of how they are setup.
 		if (isset($saveSearchFilters['t']) && $saveSearchFilters['t']) {
@@ -263,7 +263,7 @@ class AppController extends Controller {
 		// When doing this search, we only want to see the active ones
 		array_push($conditions, array('Collectible.status_id' => '4'));
 		//See if a search was set
-			debug($tableFilters);
+		debug($tableFilters);
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
@@ -273,7 +273,18 @@ class AppController extends Controller {
 				$test = array();
 				array_push($test, array('AND' => array()));
 				array_push($test[0]['AND'], array('OR' => array()));
-				array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
+
+				//array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
+
+				$names = explode(' ', $search);
+				$regSearch = array();
+				foreach ($names as $key => $value) {
+					// in case any weird characters get in there that this will trim
+					$name = trim($value);
+					$regSearch['Collectible.name REGEXP'] = '[[:<:]]' . $name . '[[:>:]]';
+				}
+				array_push($test[0]['AND'][0]['OR'], $regSearch);
+				// keep this one a standard like
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
