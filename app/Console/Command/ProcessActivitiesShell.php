@@ -85,8 +85,15 @@ class ProcessActivitiesShell extends AppShell {
 					// user id
 					$userId = $data -> actor -> id;
 					$saveData['UserPointFact']['user_id'] = $userId;
+				} else if ($activity['ActivityType']['id'] === '11') {
+					// user id
+					$userId = $data -> actor -> id;
+					$saveData['UserPointFact']['user_id'] = $userId;
+				} else if ($activity['ActivityType']['id'] === '12') {
+					// user id
+					$userId = $data -> actor -> id;
+					$saveData['UserPointFact']['user_id'] = $userId;
 				}
-
 				// Now that we have a score and who to add it to, let's see if we have something
 				// added already
 
@@ -117,7 +124,7 @@ class ProcessActivitiesShell extends AppShell {
 				$userFact = $this -> UserPointFact -> find('first', array('conditions' => array('UserPointFact.id' => $id)));
 			}
 		}
-		
+
 		// We want this to update
 		if (isset($userFact['UserPointFact']['modified'])) {
 			unset($userFact['UserPointFact']['modified']);
