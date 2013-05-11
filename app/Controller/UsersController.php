@@ -75,6 +75,8 @@ class UsersController extends AppController {
 		$newCollectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5));
 		$newCollectibles = json_encode($newCollectibles);
 		$this -> set(compact('newCollectibles'));
+
+		$this -> layout = 'fluid';
 	}
 
 	/**
