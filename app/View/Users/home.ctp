@@ -2,8 +2,9 @@
 <div class="span3">
 	<div class="row-fluid spacer">
 		<div class="span12">
-			<div class="well ">
+			<div class="well activities">
 				<h3>Activity</h3>	
+				
 			</div>
 			
 		</div>
@@ -178,7 +179,11 @@ var totalPendingPages = Math.ceil(totalPending / 10);
 
 var totalWorks = <?php echo $totalWorks; ?>;
 var totalWorkPages = Math.ceil(totalWorks / 10); 
+
+var totalActivity = <?php echo $totalActivity; ?>;
+var totalActivityPages = Math.ceil(totalActivity / 10); 
 </script>
+<?php echo $this -> Html -> script('views/view.activity', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home', array('inline' => true)); ?>
 <script>
 
@@ -197,4 +202,7 @@ newCollectibles.reset(<?php echo $newCollectibles; ?>);
 
 var works = new PaginatedWorkCollection();
 works.reset(<?php echo $works; ?>);
+
+var activity = new PaginatedActivityCollection();
+activity.reset(<?php echo $activity;?>);
 </script>

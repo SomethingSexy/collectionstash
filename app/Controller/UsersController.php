@@ -75,10 +75,17 @@ class UsersController extends AppController {
 		$newCollectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5));
 		$newCollectibles = json_encode($newCollectibles);
 		$this -> set(compact('newCollectibles'));
-		
+
 		// Load initial activity
-		
+
+		// not sure how necessary count will be in the long run
+		// maybe this will be more needed when we have user subscribed activity
+		$totalActivity = $this -> User -> Activity -> find('count');
 		$activity = $this -> User -> Activity -> find('all', array('limit' => 10, 'order' => array('Activity.created' => 'desc')));
+
+		$activity = json_encode($activity);
+		$this -> set(compact('activity'));
+		$this -> set(compact('totalActivity'));
 
 		$this -> layout = 'fluid';
 	}
