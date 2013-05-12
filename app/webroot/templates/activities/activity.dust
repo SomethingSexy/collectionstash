@@ -14,6 +14,11 @@
 			</div>
 		{:else}
 			<div class="span5">{Activity.data.verb} 
+			<!-- 
+				TODO: If it is a verb edit, check target and display ie. user edited part <name>
+				TODO: If it is a submit edit (type 7) and there is no object or target, hide
+				TODO: If it is a submit edit(type 7) we need to check the target objectType for display purposes
+				-->
 			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute')"}
 				<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
 				{@if cond="( '{Activity.data.object.objectType}' === 'photo' )"}
