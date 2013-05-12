@@ -1,0 +1,81 @@
+
+
+	<div class="span6 actor">{Activity.data.actor.displayName}</div>
+	<div class="span6 action">
+		<!--For the title, we need to construct: User verb object target-->
+		<div class="row title">
+		{@if cond="( '{Activity.activity_type_id}' === '12' )"}
+			<div class="span5">{Activity.data.verb} 
+			{@if cond="( '{Activity.data.target.displayName}' === null )"}
+				Collectible
+			{:else}
+				<a href="' . $activity['Activity']['data'] -> target -> url . '">{Activity.data.target.displayName}</a>
+			{/if}
+			</div>
+		{:else}
+			<div class="span5">{Activity.data.verb} 
+			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute')"}
+				<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
+				{@if cond="( '{Activity.data.object.objectType}' === 'photo' )"}
+					{@if cond="( '{Activity.activity_type_id}' === '12' )"}
+						<!-- need to handle old format, that does not contain the name -->
+						{@if cond="( '{Activity.data.object.url}'.indexOf('.') !== -1)"}
+							<a href="{Activity.data.object.url}">{Activity.data.object.objectType}</a>
+						{:else}
+							<a href="{Activity.data.object.url}{Activity.data.object.data.name}">{Activity.data.object.objectType}</a>
+						{/if}
+					{:else}
+						{Activity.data.object.objectType} 
+					{/if}
+				
+				{/if}
+				
+				{@if cond="( '{Activity.data.object.objectType}' === 'collectible' )"}
+					{@if cond="( '{Activity.activity_type_id}' === '6' ||  '{Activity.activity_type_id}' === '8'  )"}
+						{@if cond="({Activity.data.object.data.type})"} <!-- old api -->
+							<a href="{Activity.data.object.url}">{Activity.data.object.data.displayName}</a>
+						{:else}
+							<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
+						{/if}
+					{:else}
+						<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
+					{/if}
+				
+				{/if}
+		
+				{@if cond="( '{Activity.data.object.objectType}' === 'attribute' )"}
+					<a href="{Activity.data.object.url}"> part {Activity.data.object.data.Attribute.name}</a>
+				{/if}
+			
+			{:else}
+				{Activity.data.object.objectType} 
+			{/if}
+			
+			{@eq key="{Activity.data.isTarget}" value="true" type="boolean"} 
+				{@if cond="( '{Activity.data.verb}' === 'approve' )"}
+					submitted by 
+				{:else}
+					to 
+				{/if} 
+				
+				{@empty cond="{Activity.data.target.displayName}"}
+					{@if cond="( '{Activity.data.target.objectType}' === 'collectible' )"}
+						<a href="{Activity.data.target.url}">Collectible</a>
+					{/if}
+					{@if cond="( '{Activity.data.target.objectType}' === 'attribute' )"}
+						<a href="{Activity.data.target.url}">Part</a>
+					{/if}					
+				{:else}
+					<a href="{Activity.data.target.url}">{Activity.data.target.displayName}</a>
+				{/empty}
+			
+			{/eq} 
+			</div>
+	
+		{/if}
+		</div>
+	<!-- end title -->
+	</div>
+	<!--  end action-->
+
+	<!--  end row activity-->

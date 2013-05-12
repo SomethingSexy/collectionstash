@@ -1,6 +1,60 @@
 var CollectibleModel = Backbone.Model.extend({});
 var EditModel = Backbone.Model.extend({});
 
+var PaginatedActivityCollection = Backbone.Paginator.requestPager.extend({
+	paginator_core : {
+		// the type of the request (GET by default)
+		type : 'GET',
+
+		// the type of reply (jsonp by default)
+		dataType : 'json',
+
+		// the URL (or base URL) for the service
+		url : function() {
+			var url = '/activities/page:' + this.currentPage;
+
+			return url;
+		}
+	},
+	paginator_ui : {
+		// the lowest page index your API allows to be accessed
+		firstPage : 1,
+
+		// which page should the paginator start from
+		// (also, the actual page the paginator is on)
+		currentPage : 1,
+
+		// how many items per page should be shown
+		perPage : 10,
+
+		// a default number of total pages to query in case the API or
+		// service you are using does not support providing the total
+		// number of pages for us.
+		// 10 as a default in case your service doesn't return the total
+		totalPages : totalSubmissionPages,
+		total : totalSubmission
+	},
+	server_api : {
+
+		// how many results the request should skip ahead to
+		// customize as needed. For the Netflix API, skipping ahead based on
+		// page * number of results per page was necessary.
+		'page' : function() {
+			return this.currentPage;
+		}
+	},
+	parse : function(response) {
+		// Be sure to change this based on how your results
+		// are structured (e.g d.results is Netflix specific)
+		var tags = response.results;
+		//Normally this.totalPages would equal response.d.__count
+		//but as this particular NetFlix request only returns a
+		//total count of items for the search, we divide.
+		this.totalPages = response.metadata.paging.pageCount;
+		return tags;
+	}
+});
+
 var PaginatedWorkCollection = Backbone.Paginator.requestPager.extend({
 	model : CollectibleModel,
 	paginator_core : {
@@ -801,9 +855,36 @@ var WorkView = Backbone.View.extend({
 	}
 });
 
+var ActivitiesView = Backbone.View.extend({
+	template : 'activities',
+	events : {
+
+	},
+	render : function() {
+		var self = this;
+		var data = {};
+
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		if (!this.collection.isEmpty()) {
+			this.collection.each(function(activity) {
+				$(self.el).append(new ActivityView({
+					model : activity
+				}).render().el);
+			});
+		} else {
+			//todo empty view
+		}
+
+		return this;
+	}
+});
+
 $(function() {
 
-	$.when($.get('/templates/user/collectible.dust'), $.get('/templates/user/collectibles.dust'), $.get('/templates/user/edit.dust'), $.get('/templates/user/edits.dust'), $.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/works.dust'), $.get('/templates/user/work.dust')).done(function(collectibleTemplate, collectiblesTemplate, editTemplate, editsTemplate, pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, worksTemplate, workTemplate) {
+	$.when($.get('/templates/user/collectible.dust'), $.get('/templates/user/collectibles.dust'), $.get('/templates/user/edit.dust'), $.get('/templates/user/edits.dust'), $.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/works.dust'), $.get('/templates/user/work.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust')).done(function(collectibleTemplate, collectiblesTemplate, editTemplate, editsTemplate, pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, worksTemplate, workTemplate, acitivitesTemplate, activityTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible'));
 		dust.loadSource(dust.compile(collectiblesTemplate[0], 'collectibles'));
 		dust.loadSource(dust.compile(editTemplate[0], 'edit'));
@@ -814,6 +895,8 @@ $(function() {
 		dust.loadSource(dust.compile(newCollectibleTemplate[0], 'new.collectible'));
 		dust.loadSource(dust.compile(worksTemplate[0], 'works'));
 		dust.loadSource(dust.compile(workTemplate[0], 'work'));
+		dust.loadSource(dust.compile(acitivitesTemplate[0], 'activities'));
+		dust.loadSource(dust.compile(activityTemplate[0], 'activity'));
 
 		$('.submissions').append(new CollectiblesView({
 			collection : submissions
@@ -833,6 +916,10 @@ $(function() {
 
 		$('.work').append(new WorksView({
 			collection : works
+		}).render().el);
+
+		$('.activities').append(new ActivitiesView({
+			collection : activity
 		}).render().el);
 
 	});

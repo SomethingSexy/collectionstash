@@ -44,7 +44,8 @@
 	echo $this -> Minify -> script('js/thirdparty/bootstrap');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('js/thirdparty/dust-full-1.1.1');
-	echo $this -> Minify -> script('js/thirdparty/dust-helpers-1.1.0');
+	echo $this -> Html -> script('thirdparty/dust-helpers-1.1.0');
+	echo $this -> Html -> script('cs.dust-helpers');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	
