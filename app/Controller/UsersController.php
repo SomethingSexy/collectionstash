@@ -75,6 +75,10 @@ class UsersController extends AppController {
 		$newCollectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5));
 		$newCollectibles = json_encode($newCollectibles);
 		$this -> set(compact('newCollectibles'));
+		
+		// Load initial activity
+		
+		$activity = $this -> User -> Activity -> find('all', array('limit' => 10, 'order' => array('Activity.created' => 'desc')));
 
 		$this -> layout = 'fluid';
 	}
