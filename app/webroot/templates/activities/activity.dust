@@ -79,6 +79,10 @@
 	
 		{/if}
 		</div>
+		
+		<div class="row">
+			{Activity.data.fancyDate}
+		</div>
 	<!-- end title -->
 	</div>
 	<!--  end action-->
