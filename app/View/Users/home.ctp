@@ -13,7 +13,7 @@
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="well user-stats">
-				<h3>Your Stats</h3>
+				<h3>My Stats</h3>
 				<dl class="dl-horizontal">
 					<dt>
 						Stash Count:
