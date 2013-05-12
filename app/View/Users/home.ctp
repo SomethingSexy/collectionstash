@@ -205,4 +205,6 @@ works.reset(<?php echo $works; ?>);
 
 var activity = new PaginatedActivityCollection();
 activity.reset(<?php echo $activity;?>);
+
+var serverTime = '<?php echo date('Y-m-d H:i:s');?>';
 </script>
