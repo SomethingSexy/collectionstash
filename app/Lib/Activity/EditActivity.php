@@ -74,6 +74,13 @@ class EditActivity extends BaseActivity {
 
 				$targetJSON = $this -> buildEditCollectibleTarget($this -> edit);
 				$retVal = array_merge($retVal, $targetJSON);
+			}
+			if ($this -> editType === 'Attribute') {
+				$objectJSON = $this -> buildEditAttributeObject($this -> edit);
+				$retVal = array_merge($retVal, $objectJSON);
+
+				$targetJSON = $this -> buildEditAttributeTarget($this -> edit);
+				$retVal = array_merge($retVal, $targetJSON);
 			} else if ($this -> editType === 'CollectiblesTag') {
 				$objectJSON = $this -> buildEditCollectibleTagObject($this -> edit);
 				$retVal = array_merge($retVal, $objectJSON);
@@ -152,6 +159,25 @@ class EditActivity extends BaseActivity {
 	private function buildEditCollectibleTarget($edit) {
 		// If they change the name, that will get reflected here but eh not a huge deal right now
 		$targetJSON = $this -> buildTarget($edit['CollectibleEdit']['base_id'], '/collectibles/view/' . $edit['CollectibleEdit']['base_id'], 'collectible', $edit['CollectibleEdit']['name']);
+
+		return $targetJSON;
+	}
+
+	private function buildEditAttributeObject($edit) {
+		$data = array();
+		$data['edit_id'] = $edit['AttributeEdit']['edit_id'];
+		$data['action_id'] = $edit['Action']['id'];
+		$data['action_type_id'] = $edit['Action']['action_type_id'];
+		$data['type'] = $this -> editType;
+		// Set the id of the edit
+		$objectJSON = $this -> buildObject($edit['AttributeEdit']['edit_id'], null, 'edit', $data);
+
+		return $objectJSON;
+	}
+
+	private function buildEditAttributeTarget($edit) {
+		// If they change the name, that will get reflected here but eh not a huge deal right now
+		$targetJSON = $this -> buildTarget($edit['AttributeEdit']['base_id'], '/attributes/view/' . $edit['AttributeEdit']['base_id'], 'attribute', $edit['AttributeEdit']['name']);
 
 		return $targetJSON;
 	}
