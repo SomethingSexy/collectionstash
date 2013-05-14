@@ -1,4 +1,4 @@
-<div class="span9 home">
+<div class="span8 home">
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="well user-stats">
@@ -156,7 +156,7 @@
 	</div>
 </div>
 
-<div class="span3 home">
+<div class="span4 home">
 	<div class="row-fluid spacer">
 		<div class="span12">
 			<div class="well activities-container">

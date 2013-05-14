@@ -1,26 +1,28 @@
 <div class="row-fluid action">
 		<!--For the title, we need to construct: User verb object target-->
 	<div class="span12">	
-		<span class="actor">{Activity.data.actor.displayName} </span>
+		
+		{@if cond="( '{Activity.data.actor.objectType}' === 'user' )"}	
+			<span class="actor"><a href="/stash/{Activity.data.actor.displayName}">{Activity.data.actor.displayName} </a></span>
+		{:else}
+			<span class="actor">{Activity.data.actor.displayName} </span>
+		{/if}
+	
 		{@if cond="( '{Activity.activity_type_id}' === '12' )"}
 			{Activity.data.verb} 
 			{@if cond="( '{Activity.data.target.displayName}' === null )"}
 				Collectible
 			{:else}
-				<a href="' . $activity['Activity']['data'] -> target -> url . '">{Activity.data.target.displayName}</a>
+				<a href="{Activity.data.target.url}">{Activity.data.target.displayName}</a>
 			{/if}
 		{:else}
-		
 			{@if cond="( '{Activity.activity_type_id}' === '7' )"}
-				submit edit
+				<span class="verb">submit edit </span>
 			{:else}
-				{Activity.data.verb} 
+				<span class="verb">{Activity.data.verb} </span> 
 			{/if}
-			
-			<!-- 
-		
-				-->
-			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute')"}
+			<!-- Checking for edit here because we don't want default behavior-->
+			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute' || '{Activity.data.object.objectType}' === 'edit' )"}
 				<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
 				{@if cond="( '{Activity.data.object.objectType}' === 'photo' )"}
 					{@if cond="( '{Activity.activity_type_id}' === '12' )"}
@@ -67,8 +69,6 @@
 				{/empty}
 			
 			{/eq} 
-		
-	
 		{/if}
 	</div>	
 </div>
