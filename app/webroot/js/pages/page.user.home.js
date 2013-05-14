@@ -893,6 +893,21 @@ var ActivitiesView = Backbone.View.extend({
 			});
 		}
 		$('.btn.load', this.el).button('reset');
+		var hideButton = false;
+		if (this.collection.currentPage) {
+			if (this.collection.currentPage === this.collection.totalPages) {
+				hideButton = true;
+			}
+		} else {
+			if (this.collection.paginator_ui.currentPage === this.collection.paginator_ui.totalPages) {
+				hideButton = true;
+			}
+		}
+
+		if (hideButton) {
+			$('.btn.load', this.el).hide();
+		}
+
 	},
 	next : function(e) {
 		e.preventDefault();
