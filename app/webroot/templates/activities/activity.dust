@@ -1,23 +1,24 @@
-
-
-	<div class="span6 actor">{Activity.data.actor.displayName}</div>
-	<div class="span6 action">
+<div class="row-fluid action">
 		<!--For the title, we need to construct: User verb object target-->
-		<div class="row title">
+	<div class="span12">	
+		<span class="actor">{Activity.data.actor.displayName} </span>
 		{@if cond="( '{Activity.activity_type_id}' === '12' )"}
-			<div class="span5">{Activity.data.verb} 
+			{Activity.data.verb} 
 			{@if cond="( '{Activity.data.target.displayName}' === null )"}
 				Collectible
 			{:else}
 				<a href="' . $activity['Activity']['data'] -> target -> url . '">{Activity.data.target.displayName}</a>
 			{/if}
-			</div>
 		{:else}
-			<div class="span5">{Activity.data.verb} 
+		
+			{@if cond="( '{Activity.activity_type_id}' === '7' )"}
+				submit edit
+			{:else}
+				{Activity.data.verb} 
+			{/if}
+			
 			<!-- 
-				TODO: If it is a verb edit, check target and display ie. user edited part <name>
-				TODO: If it is a submit edit (type 7) and there is no object or target, hide
-				TODO: If it is a submit edit(type 7) we need to check the target objectType for display purposes
+		
 				-->
 			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute')"}
 				<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
@@ -36,16 +37,7 @@
 				{/if}
 				
 				{@if cond="( '{Activity.data.object.objectType}' === 'collectible' )"}
-					{@if cond="( '{Activity.activity_type_id}' === '6' ||  '{Activity.activity_type_id}' === '8'  )"}
-						{@if cond="({Activity.data.object.data.type})"} <!-- old api -->
-							<a href="{Activity.data.object.url}">{Activity.data.object.data.displayName}</a>
-						{:else}
-							<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
-						{/if}
-					{:else}
-						<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
-					{/if}
-				
+					<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
 				{/if}
 		
 				{@if cond="( '{Activity.data.object.objectType}' === 'attribute' )"}
@@ -75,16 +67,14 @@
 				{/empty}
 			
 			{/eq} 
-			</div>
+		
 	
 		{/if}
-		</div>
+	</div>	
+</div>
 		
-		<div class="row">
-			{Activity.data.fancyDate}
-		</div>
-	<!-- end title -->
+<div class="row-fluid time">
+	<div class="span8 offset4">
+	{Activity.data.fancyDate}
 	</div>
-	<!--  end action-->
-
-	<!--  end row activity-->
+</div>

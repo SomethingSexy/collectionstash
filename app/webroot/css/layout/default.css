@@ -2358,6 +2358,13 @@ div.paging span a:hover {
 /**
  * 	Bootstrap overrides or anything since I started using boostrap
  */
+.well {
+	background-color: #F0F0F0;
+}
+
+.home .well {
+	background-color: #FFF;
+}
 .tab-content {
 	overflow: hidden;
 }
@@ -2488,6 +2495,8 @@ div.paging span a:hover {
 	text-align: center;
 	color: #EEEEEE;
 }
+
+
 /*
  * Cake BS
  */

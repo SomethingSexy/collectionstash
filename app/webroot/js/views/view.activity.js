@@ -29,13 +29,26 @@ var ActivityView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var data = this.model.toJSON();
-
+		console.log(data.Activity.id);
 		// dust doese not handle objects very well
 		if (!data.Activity.data.target) {
 			data.Activity.data.isTarget = false;
 		} else {
 			data.Activity.data.isTarget = true;
 		}
+		// old api we need to account for
+		if (data.Activity.data.object && data.Activity.data.object.objectType === 'collectible' && (data.Activity.activity_type_id === '6' || data.Activity.activity_type_id === '8'  )) {
+			if (data.Activity.data.object.data.type) {
+				data.Activity.data.object.data.Collectible = {
+					displayTitle : data.Activity.data.object.data.displayName
+				};
+
+			}
+		}
+
+		// TODO: If it is a verb edit, check target and display ie. user edited part <name>
+		// TODO: If it is a submit edit (type 7) and there is no object or target, hide
+		// TODO: If it is a submit edit(type 7) we need to check the target objectType for display purposes
 
 		if (data.Activity.data.published) {
 			var bits = data.Activity.data.published.split(/\D/);
