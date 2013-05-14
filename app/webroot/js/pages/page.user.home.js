@@ -11,7 +11,7 @@ var PaginatedActivityCollection = Backbone.Paginator.requestPager.extend({
 
 		// the URL (or base URL) for the service
 		url : function() {
-			var url = '/activities/page:' + this.currentPage;
+			var url = '/activities/index/page:' + this.currentPage;
 
 			return url;
 		}
@@ -858,7 +858,11 @@ var WorkView = Backbone.View.extend({
 var ActivitiesView = Backbone.View.extend({
 	template : 'activities',
 	events : {
-
+		'click .load' : 'next'
+	},
+	initialize : function() {
+		this.collection.on('change', this.renderActivities, this);
+		this.collection.on('reset', this.renderActivities, this);
 	},
 	render : function() {
 		var self = this;
@@ -870,7 +874,7 @@ var ActivitiesView = Backbone.View.extend({
 
 		if (!this.collection.isEmpty()) {
 			this.collection.each(function(activity) {
-				$(self.el).append(new ActivityView({
+				$('.activities', self.el).append(new ActivityView({
 					model : activity
 				}).render().el);
 			});
@@ -879,7 +883,26 @@ var ActivitiesView = Backbone.View.extend({
 		}
 
 		return this;
-	}
+	},
+	renderActivities : function() {
+		if (!this.collection.isEmpty()) {
+			this.collection.each(function(activity) {
+				$('.activities', self.el).append(new ActivityView({
+					model : activity
+				}).render().el);
+			});
+		}
+		$('.btn.load', this.el).button('reset');
+	},
+	next : function(e) {
+		e.preventDefault();
+		if ( typeof this.collection.currentPage === 'undefined') {
+			this.collection.currentPage = 1;
+		}
+		this.collection.requestNextPage();
+
+		$('.btn.load', this.el).button('loading');
+	},
 });
 
 $(function() {
@@ -918,7 +941,7 @@ $(function() {
 			collection : works
 		}).render().el);
 
-		$('.activities').append(new ActivitiesView({
+		$('.activities-container').append(new ActivitiesView({
 			collection : activity
 		}).render().el);
 
