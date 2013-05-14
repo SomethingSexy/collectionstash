@@ -2496,7 +2496,9 @@ div.paging span a:hover {
 	color: #EEEEEE;
 }
 
-
+#header-navbar .nav.pull-right li a i {
+	font-size: 140%;
+}
 /*
  * Cake BS
  */
