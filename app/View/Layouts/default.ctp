@@ -146,25 +146,22 @@
 							<a href="/comments/"><?php echo __('Discussion'); ?></a>
 						</li>									
 					</ul>
-					<form method="get" class="navbar-search pull-right" action="/collectibles/search">
-						<input id="q" type="text" name="q" class="search-query" placeholder="Search">
-					</form>
 					<ul class="nav pull-right">
 						<li>
-								<?php echo $this -> Html -> link('Home', array('admin' => false, 'controller' => '/')); ?>
+								<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
 							</li>
 							<?php
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
 		
 							<li>
-								<?php echo $this -> Html -> link('Profile', array('admin' => false, 'controller' => 'profiles')); ?>
+								<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
 							</li>
 							<?php
 							if($isUserAdmin)
 							{ ?>
 							<li>
-								<?php echo $this -> Html -> link('Admin', array('admin' => true, 'action' => 'index', 'controller' => 'collectibles')); ?>
+								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
 							</li>
 							<?php } ?>
 							<li>
@@ -186,6 +183,10 @@
 							}
 							?>					
 					</ul>
+					<form method="get" class="navbar-search pull-right" action="/collectibles/search">
+						<input id="q" type="text" name="q" class="search-query" placeholder="Search">
+					</form>
+
 			    </div>
 		     
 		    </div>
