@@ -2489,7 +2489,7 @@ div.paging span a:hover {
 .attributes-list .attribute .count {
 	text-align: right;
 }
-.footer {
+#footer {
 	background: url("/img/tile.png") repeat scroll 0 0 transparent;
 	background-color: #444444;
 	text-align: center;
