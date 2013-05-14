@@ -29,7 +29,7 @@ var ActivityView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var data = this.model.toJSON();
-		console.log(data.Activity.id);
+
 		// dust doese not handle objects very well
 		if (!data.Activity.data.target) {
 			data.Activity.data.isTarget = false;
