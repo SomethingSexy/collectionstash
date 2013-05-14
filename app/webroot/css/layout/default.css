@@ -2499,6 +2499,14 @@ div.paging span a:hover {
 #header-navbar .nav.pull-right li a i {
 	font-size: 140%;
 }
+
+.activities .activity {
+	border-top: 1px solid #DDDDDD;
+}
+
+.activities .activity .action {
+	margin-top: 5px;
+}
 /*
  * Cake BS
  */
