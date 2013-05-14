@@ -90,115 +90,117 @@
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>
-    <div id="header-navbar" class="navbar navbar-fixed-top">
-	    <div class="navbar-inner">
-		   <!-- <div class="container"> -->
-		   <div class="navbar-container">  
-			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-			    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-			    </a>
-			     
-				<?php
-				if (isset($isLoggedIn) && $isLoggedIn === true) {
-					echo '<a class="brand" href="#">' . __('Welcome, ') . $username . '</a>';
-				}
-				?>
-			    <!-- Be sure to leave the brand out there if you want it shown 
-			    	
-			    	-->
-			  
-			     
-			    <!-- Everything you want hidden at 940px or less, place within here -->
-			    <div class="nav-collapse collapse">
-					<ul class="nav">
-						<?php
-						if(isset($isLoggedIn) && $isLoggedIn === true)
-						{  ?>
-						<li>
-							<?php
-							echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
-							?>
-						</li>
-						<?php  } ?>
-						<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
-						<li>
-							<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
-						</li>
-						<?php } ?>
-						<li class="dropdown">
-							<?php echo $this -> Html -> link('Catalog<b class="caret"></b>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
-							
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
-								<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
-							</ul>
-						</li>
-						<li>
-							<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
-						</li>
-						<li>
-							<?php echo $this -> Html -> link('Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
-						</li>
-						<li>
-							<a href="/comments/"><?php echo __('Discussion'); ?></a>
-						</li>									
-					</ul>
-					<ul class="nav pull-right">
-						<li>
-								<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
-							</li>
+	<div id="wrap">
+	    <div id="header-navbar" class="navbar navbar-fixed-top">
+		    <div class="navbar-inner">
+			   <!-- <div class="container"> -->
+			   <div class="navbar-container">  
+				    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+				    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					    <span class="icon-bar"></span>
+					    <span class="icon-bar"></span>
+					    <span class="icon-bar"></span>
+				    </a>
+				     
+					<?php
+					if (isset($isLoggedIn) && $isLoggedIn === true) {
+						echo '<a class="brand" href="#">' . __('Welcome, ') . $username . '</a>';
+					}
+					?>
+				    <!-- Be sure to leave the brand out there if you want it shown 
+				    	
+				    	-->
+				  
+				     
+				    <!-- Everything you want hidden at 940px or less, place within here -->
+				    <div class="nav-collapse collapse">
+						<ul class="nav">
 							<?php
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
-		
 							<li>
-								<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
+								<?php
+								echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
+								?>
 							</li>
-							<?php
-							if($isUserAdmin)
-							{ ?>
+							<?php  } ?>
+							<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
 							<li>
-								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+								<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
 							</li>
 							<?php } ?>
-							<li>
-								<?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?>
+							<li class="dropdown">
+								<?php echo $this -> Html -> link('Catalog<b class="caret"></b>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+								
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
+									<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
+								</ul>
 							</li>
-							<?php  }
-								else
-								{
-							?>
 							<li>
-								<a href="/users/login"><?php echo __('Login'); ?></a>
+								<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
 							</li>
-							<?php
-							if (Configure::read('Settings.registration.open')) {
-								echo '<li>';
-								echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
-								echo '</li>';
-							}
-							}
-							?>					
-					</ul>
-					<form method="get" class="navbar-search pull-right" action="/collectibles/search">
-						<input id="q" type="text" name="q" class="search-query" placeholder="Search">
-					</form>
-
+							<li>
+								<?php echo $this -> Html -> link('Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
+							</li>
+							<li>
+								<a href="/comments/"><?php echo __('Discussion'); ?></a>
+							</li>									
+						</ul>
+						<ul class="nav pull-right">
+							<li>
+									<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
+								</li>
+								<?php
+								if(isset($isLoggedIn) && $isLoggedIn === true)
+								{  ?>
+			
+								<li>
+									<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
+								</li>
+								<?php
+								if($isUserAdmin)
+								{ ?>
+								<li>
+									<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+								</li>
+								<?php } ?>
+								<li>
+									<?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?>
+								</li>
+								<?php  }
+									else
+									{
+								?>
+								<li>
+									<a href="/users/login"><?php echo __('Login'); ?></a>
+								</li>
+								<?php
+								if (Configure::read('Settings.registration.open')) {
+									echo '<li>';
+									echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
+									echo '</li>';
+								}
+								}
+								?>					
+						</ul>
+						<form method="get" class="navbar-search pull-right" action="/collectibles/search">
+							<input id="q" type="text" name="q" class="search-query" placeholder="Search">
+						</form>
+	
+				    </div>
+			     
 			    </div>
-		     
 		    </div>
-	    </div>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="span12"><?php echo $content_for_layout; ?></div>
-		</div>	
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="span12"><?php echo $content_for_layout; ?></div>
+			</div>	
+		</div>
 	</div>
 	<footer>
-		<div class="footer">
+		<div id="footer">
 			<div class="container narrow">
 				<div class="row spacer">
 					<div class="span12">
