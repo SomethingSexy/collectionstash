@@ -22,6 +22,16 @@
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
 
+<h4>April</h4>
+<p>March's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+    <li>tacosunday with 77416 nuts</li>
+    <li>Firebird with 1405 nuts</li>
+	<li>SomethingSexy with 825 nuts</li>
+   	<li> BloodyFreak with 808 nuts</li>
+   	<li> bc1969 with 657 nuts</li>
+</ol>
+
 <h4>March</h4>
 <p>March's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
 <ol>
