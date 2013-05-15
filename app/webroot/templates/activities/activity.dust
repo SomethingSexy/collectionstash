@@ -20,7 +20,7 @@
 				<span class="verb">submitted edit </span>
 			{:else}
 				{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' )"}
-					{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' )"}
+					{@if cond="( '{Activity.data.verb}' === 'add' )"}
 						<span class="verb">added </span> 
 					{/if}
 					{@if cond="( '{Activity.data.verb}' === 'submit' )"}
