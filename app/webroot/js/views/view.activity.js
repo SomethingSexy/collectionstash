@@ -63,6 +63,8 @@ var ActivityView = Backbone.View.extend({
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
+		
+		$(this.el).attr('data-id', data.Activity.id);
 
 		return this;
 	}
