@@ -19,8 +19,13 @@
 			{@if cond="( '{Activity.activity_type_id}' === '7' )"}
 				<span class="verb">submitted edit </span>
 			{:else}
-				{@if cond="( '{Activity.data.verb}' === 'add' )"}
-					<span class="verb">added </span> 
+				{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' )"}
+					{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' )"}
+						<span class="verb">added </span> 
+					{/if}
+					{@if cond="( '{Activity.data.verb}' === 'submit' )"}
+						<span class="verb">submitted </span> 
+					{/if}
 				{:else}
 					<span class="verb">{Activity.data.verb} </span> 
 				{/if}
