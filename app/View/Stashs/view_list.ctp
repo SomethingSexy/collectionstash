@@ -93,26 +93,29 @@
 		echo '</thead>';
 		foreach ($collectibles as $key => $myCollectible) {
 			echo '<tr class="stash-item">';
+
+			echo '<td><ul class="thumbnails"><li class="span1">';
+
 			if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
-						echo '<td>';
-						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 50, 'height' => 50)) . '</a>';
-						echo '</td>';
+						echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
 						break;
 					}
 				}
 
 			} else {
-				echo '<td> </td>';
+				echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
 			}
-			
-			if(!empty($myCollectible['Collectible']['Manufacture']['title'])) {
+
+			echo '</li></ul></td>';
+
+			if (!empty($myCollectible['Collectible']['Manufacture']['title'])) {
 				echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
 			} else {
 				echo '<td>N/A</td>';
 			}
-			
+
 			echo '<td>' . $myCollectible['Collectible']['name'] . '</td>';
 			if ($stashType === 'default') {
 				if (empty($myCollectible['Collectible']['edition_size'])) {
@@ -215,5 +218,5 @@
 
 		$('#comments').comments();
 
-	}); 
+	});
 </script>
