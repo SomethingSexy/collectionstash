@@ -41,19 +41,23 @@ unset($urlparams['url']);
 				foreach ($collectibles as $collectible) {
 
 					echo '<tr>';
+
+					echo '<td><ul class="thumbnails"><li class="span1">';
+
 					if (!empty($collectible['CollectiblesUpload'])) {
 						foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 							if ($upload['primary']) {
-								echo '<td>';
-								echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 50, 'height' => 50)) . '</a>';
-								echo '</td>';
+								echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
 								break;
 							}
 						}
 
 					} else {
-						echo '<td> </td>';
+						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
 					}
+
+					echo '</li></ul></td>';
+
 					echo '<td>' . $collectible['Collectible']['name'];
 					if ($collectible['Collectible']['exclusive']) {
 						echo __(' - Exclusive');
@@ -64,9 +68,9 @@ unset($urlparams['url']);
 					} else {
 						echo '<td>' . __('No') . ' </td>';
 					}
-				
+
 					if (!empty($collectible['Manufacture']['title'])) {
-						echo '<td>' . '<a href="/manufacturer/' . $collectible['Manufacture']['id'] .'/' . $collectible['Manufacture']['slug'] . '">'. $collectible['Manufacture']['title'].'</a>' . '</td>';
+						echo '<td>' . '<a href="/manufacturer/' . $collectible['Manufacture']['id'] . '/' . $collectible['Manufacture']['slug'] . '">' . $collectible['Manufacture']['title'] . '</a>' . '</td>';
 					} else {
 						echo '<td>Not Recorded</td>';
 					}

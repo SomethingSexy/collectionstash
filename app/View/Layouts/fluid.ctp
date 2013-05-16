@@ -4,6 +4,7 @@
 	<title><?php echo $title_for_layout
 		?></title>
 	<?php echo $this -> Html -> meta('icon'); ?>
+	
 	<?php
 	if (isset($description_for_layout)) { echo "<meta name='description' content='" . $description_for_layout . "' />";
 	}
@@ -12,6 +13,7 @@
 	if (isset($keywords_for_layout)) { echo "<meta name='keywords' content='" . $keywords_for_layout . "' />";
 	}
 	?>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<?php
 	echo $this -> Minify -> css('css/layout/reset');
 	echo $this -> Minify -> css('css/thirdparty/bootstrap');
@@ -155,7 +157,7 @@
 								{  ?>
 			
 								<li>
-									<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array( 'escape' => false, 'admin' => false)); ?>
+									<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
 								</li>
 								<?php
 								if($isUserAdmin)
