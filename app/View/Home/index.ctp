@@ -32,4 +32,7 @@
 </div>
 <hr>
 <h1>Customize with Collection Stash</h1>
-<p>Create, maintain, and share your custom toys and collectibles.  Use the Collection Stash platform to show-off your custom made accessories or collectibles.  </p>
+<p>Create, maintain, and share your custom toys and collectibles.  Use the Collection Stash platform to show-off your custom made accessories, allowing other members to add them to their own customs! </p>
+<p>
+<a class="btn btn-primary btn-large" href="/pages/collection_stash_documentation">Learn more</a>
+</p>
