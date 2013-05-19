@@ -2,11 +2,7 @@
     <h1><?php echo __('Welcome to Collection Stash'); ?><small><?php echo __(' Please log in'); ?></small></h1>
 </div>
 <?php echo $this -> element('flash'); ?>
-
-	
-
 <?php echo $this -> Form -> create('User', array('action' => 'login', 'class' => 'form-horizontal')); ?>
-
 <div class="control-group">
 	<label class="control-label" for="UserUsername"><?php echo __('Username'); ?></label>
 	<div class="controls">
