@@ -1,90 +1,60 @@
-#stage {
-	background-color: #F1F1F1;
-	border: none;
-	box-shadow: none;
-	font-family: "League Gothic", sans-serif;
+.jumbotron:after {
+	bottom: 0;
+	content: "";
+	display: block;
+	left: 0;
+	opacity: 0.4;
+	position: absolute;
+	right: 0;
+	top: 0;
 }
 
-#home-components .component {
-	background-color: #F1F1F1;
-}
-
-#home-components h3 {
-	font-size: 3.5em;
-	padding-left: 350px;
-	color: #373535;
-	background: url("/img/logo/collection_stash_logo_white_x300.png") no-repeat scroll 0 0 transparent;
-	height: 5.5em;
-	margin-bottom: 0;
-}
-
-#home-components .site-information ul.information {
-	width: 700px;
-}
-
-#home-components .site-information ul.information li {
-	width: 300px;
-	text-align: left;
-	padding: 20px;
-}
-
-#home-components .site-information ul.information li h4 {
-	color: #373535;
-	font-size: 2em;
-	line-height: 27px;
-	float: left;
-	width: 100%;
-}
-
-#home-components .site-information ul.information li.third {
-	clear: left;
-}
-
-#home-components .site-information ul.information li .icon {
-	float: left;
-	margin-bottom: 20px;
-	width: 100%;
+.jumbotron {
+	background: url("/img/tile.png") repeat scroll 0 0 #444444;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+	color: #FFFFFF;
+	padding: 40px 0;
+	position: relative;
 	text-align: center;
-	height: 60px;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
+}
+.jumbotron .container {
+	position: relative;
+	z-index: 2;
 }
 
-#home-components .site-information ul.information li .text {
-	font-size: 0.9em;
+.masthead {
+	color: #FFFFFF;
+	margin-bottom: 0;
+	padding: 70px 0 80px;
 }
 
-
-
-#home-components .site-information .how-it-works {
-	list-style: decimal outside none;
-	margin: 0 0 9px 25px;
-	
-}
-
-#home-components .site-information .how-it-works li {
-	padding: 10px;
-}
-
-.login-registration .inside .component-view .login,
-.login-registration .inside .component-view .registration {
-	width: 300px;
-	float: left;
-	padding: 40px;
-}
-.login-registration .inside .component-view .login {
-	margin-left: 200px;
-}
-.login-registration .inside .component-view .registration {
-	border-left: 1px solid #C6C6C6; 
-	float: left;
-}
-
-.login-registration .inside .component-view div .form-fields li .label-wrapper {
-	float: none;
-	text-align: left;
-}
-
-.login-registration .inside .component-view div fieldset legend {
-	border: none;
+.masthead h1 {
+	color: #FFFFFF;
+	font-size: 120px;
+	letter-spacing: -2px;
+	line-height: 1;
 	font-weight: bold;
-	font-size: 1.6em;
+}
+
+.masthead p {
+	font-size: 40px;
+	font-weight: 200;
+	line-height: 1.25;
+}
+
+.home {
+	text-align: center;
+}
+
+.home h1 {
+	font-size: 60px;
+	font-weight: 200;
+	letter-spacing: -1px;
+	line-height: 1;
+	margin: 30px 0 30px;
+}
+.home p {
+	font-size: 16px;
+	line-height: 1.5;
 }

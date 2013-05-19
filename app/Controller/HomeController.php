@@ -6,7 +6,7 @@ class HomeController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 	}
-	
+
 	/**
 	 * This is going to do nothing for now.  The page has static text, unless the user is logged in then
 	 * they will see the catalog page.
@@ -14,6 +14,8 @@ class HomeController extends AppController {
 	public function index() {
 		if ($this -> isLoggedIn()) {
 			$this -> redirect(array('controller' => 'users', 'action' => 'home'));
+		} else {
+			$this -> layout = 'home';
 		}
 	}
 
