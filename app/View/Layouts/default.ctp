@@ -14,7 +14,6 @@
 	?>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?php
-	echo $this -> Minify -> css('css/layout/reset');
 	echo $this -> Minify -> css('css/thirdparty/bootstrap');
 	echo $this -> Minify -> css('css/thirdparty/bootstrap-responsive');
 	echo $this -> Minify -> css('css/thirdparty/datepicker');
