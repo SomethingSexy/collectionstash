@@ -5,6 +5,7 @@ Prior to release:
 New Table:
 - Transactions 
   - id, 
+    user_id (person who added it)
     collectible_id, 
     transaction_type_id (eBay, amazon, internal), 
     ext_transaction_id (item id for lookup), 
@@ -13,12 +14,13 @@ New Table:
     sale_price, (amount of the transaction), 
     number_of_bids, 
     status (active, completed), 
-    processed (have we internally processed), 
+    
     start_date, 
     end_date (same if internal), 
+    processed (have we internally processed), 
     created, 
     modified, 
-    user_id (person who added it)
+    
 
 
 If the user marks a collectible as sold and they did it on eBay they will then be asked to link the item number.  If they do we will add it as an eBay transaction, otherwise, an internal one 
