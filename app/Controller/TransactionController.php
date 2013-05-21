@@ -37,11 +37,79 @@ class TransactionController extends AppController {
 		//390595100332 - sold listing | ListingStatus = completed
 		//230981171092 - sold listing - buy it now
 		//230980042238 sold listing - buy it now - best offer accepted
-		$params = array('Version' => 821, 'ItemID' => '230980042238');
+		//260852933448  example of older one, ListStatus is completed but no transaction, has a QuantitySold 1 and a price
+		//160384368644 example of one that does not exist anymore
+		$params = array('Version' => 821, 'ItemID' => '160384368644');
 
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
 		// make the API call
 		debug($responseObj);
+	}
+
+	/**
+	 * This will be used to update and maintain transactions
+	 */
+	public function transaction($id = null) {
+		// need to be logged in
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			return;
+		}
+
+		// create
+		if ($this -> request -> isPost()) {
+			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
+			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
+
+			$response = $this -> Transaction -> createTransaction($transaction, $this -> getUser(), $adminMode);
+
+			$request = $this -> request -> input('json_decode');
+			debug($request);
+			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
+				$this -> response -> statusCode(401);
+			} else {
+				// request becomes an actual object and not an array
+				$request -> isEdit = $response['response']['data']['isEdit'];
+			}
+
+			$this -> set('returnData', $request);
+		} else if ($this -> request -> isPut()) {// update
+			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
+			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
+
+			$response = $this -> Transaction -> updatetTransaction($transaction, $this -> getUser(), $adminMode);
+
+			$request = $this -> request -> input('json_decode');
+			debug($request);
+			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
+				$this -> response -> statusCode(401);
+			} else {
+				// request becomes an actual object and not an array
+				$request -> isEdit = $response['response']['data']['isEdit'];
+			}
+
+			$this -> set('returnData', $request);
+		} else if ($this -> request -> isDelete()) {// delete
+			// I think it makes sense to use rest delete
+			// for changing the status to a delete
+			// although I am going to physically delete it
+			// not change the status :)
+			$response = $this -> Transaction -> remove($id, $this -> getUser());
+
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
+			$this -> set('returnData', $response);
+
+		}
+	}
+
+	/**
+	 * This will be used to retrieve multiple transactions, not sure if I will be using this one or not
+	 */
+	public function transactions() {
+
 	}
 
 }

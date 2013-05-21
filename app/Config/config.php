@@ -42,6 +42,7 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 		'Print' => '10'
 	),
 	'TransactionManager' => array(
+		'enabled' => true,
 		'eBay' => array(
 			'version' => '821',
 			'api_endpoint'=> 'https://api.ebay.com/ws/api.dll', // 'https://api.sandbox.ebay.com/ws/api.dll'
