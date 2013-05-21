@@ -1,0 +1,11 @@
+We need to handle activities for type Add New (this will handle customs, originals and admin activity that happens real time)
+- tag to collectible (only when active status)  - done
+- photo to collectible (only when active status) - done
+- part to collectible (only when active status) - done
+- artist to collectible (only when active status) - done
+- photo to part (only when part is active) - done
+
+
+We neeed to handle activities for type Edit when editing live
+- edit collectible
+- edit attribute
