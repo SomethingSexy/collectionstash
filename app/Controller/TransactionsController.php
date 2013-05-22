@@ -3,7 +3,7 @@ App::uses('Sanitize', 'Utility');
 /**
  * Need to enable PHP SSL and PHP_SOAP
  */
-class TransactionController extends AppController {
+class TransactionsController extends AppController {
 
 	public $helpers = array('Html', 'FileUpload.FileUpload', 'Minify');
 
@@ -61,23 +61,14 @@ class TransactionController extends AppController {
 			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
 			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
 
-			$response = $this -> Transaction -> createTransaction($transaction, $this -> getUser(), $adminMode);
+			$response = $this -> Transaction -> createTransaction($transaction, $this -> getUser());
 
-			$request = $this -> request -> input('json_decode');
-			debug($request);
-			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
-				$this -> response -> statusCode(401);
-			} else {
-				// request becomes an actual object and not an array
-				$request -> isEdit = $response['response']['data']['isEdit'];
-			}
-
-			$this -> set('returnData', $request);
+			$this -> set('returnData', $response);
 		} else if ($this -> request -> isPut()) {// update
 			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
 			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
 
-			$response = $this -> Transaction -> updatetTransaction($transaction, $this -> getUser(), $adminMode);
+			$response = $this -> Transaction -> updatetTransaction($transaction, $this -> getUser());
 
 			$request = $this -> request -> input('json_decode');
 			debug($request);

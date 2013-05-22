@@ -1,0 +1,58 @@
+<h3>Transaction History</h3>
+
+<div class="control-group">
+	<div class="input-append">
+		<input type="text" value="" name="item" id="inputTransactionItem" autocomplete="off">
+		<div class="btn-group open">
+			<button class="btn disabled" disabled="disabled">
+				eBay
+			</button>
+		</div>
+		<button type="button" class="btn add-transaction">
+			Add
+		</button>
+	</div><span class="help-block inline-error"></span>
+</div>
+
+<h4>Transactions</h4>
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th>Type</th>
+			<th>Item ID</th>
+			<th>User</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{#transactions}
+		<tr>
+			<td></td><td></td><td></td><td></td>
+		</tr>
+		{/transactions}
+	</tbody>
+</table>
+
+<h4>Pending Transactions</h4>
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th>Type</th>
+			<th>Item ID</th>
+			<th>User</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{#transactions}
+		{@if cond=" (!'{processed}') "}
+		{/if}
+		<tr>
+			<td>eBay</td>
+			<td>{ext_transaction_id}</td>
+			<td>{User.username}</td>
+			<td> </td>
+		</tr>
+		{/transactions}
+	</tbody>
+</table>

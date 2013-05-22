@@ -1,6 +1,6 @@
 <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 	<ul id="upload-link" class="thumbnails">
-		<li class="span4">
+		<li class="span12">
 			<?php
 			if (!empty($collectibleCore['CollectiblesUpload'])) {
 				foreach ($collectibleCore['CollectiblesUpload'] as $key => $upload) {

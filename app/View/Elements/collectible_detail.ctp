@@ -56,34 +56,62 @@ echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
 echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
 echo $this -> Html -> script('models/model.status', array('inline' => false));
 echo $this -> Html -> script('views/view.status', array('inline' => false));
+
+echo $this -> Html -> script('models/model.transaction', array('inline' => false));
+echo $this -> Html -> script('collections/collection.transactions', array('inline' => false));
+echo $this -> Html -> script('views/view.transactions', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
-<script>
-		var collectibleStatus = {
-	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
-		,
-		status:
- <?php echo json_encode($collectibleDetail['Status']); ?>
-	};
-	var collectible =
- <?php echo json_encode($collectibleDetail['Collectible']); ?>;<?php
-if ($showStatus) {
-	echo 'var showStatus = true;';
-} else {
-	echo 'var showStatus = false;';
-}
-	?><?php
-	if ($allowStatusEdit) {
-		echo 'var allowStatusEdit = true;';
-	} else {
-		echo 'var allowStatusEdit = false;';
-	}
-?></script>
+
 
 <div id="collectible-container" class="span12 stashable">
-	<div class="row spacer">
-		<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
-		<div class="span12">
+	<div class="row-fluid">
+		<div class="span8">
+			<div class="page-header">
+				<h1 class="title"><?php echo $title; ?></h1>
+				<span>
+				<?php
+				// maybe collectible type here?
+				echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
+	
+				// if it has a manufacturer display that first
+				if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
+					echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
+				}
+				// just grab the first artist for now
+				if (!empty($collectibleDetail['ArtistsCollectible']) && !$collectibleDetail['Collectible']['custom']) {
+					echo 'Artist: ' . $this -> Html -> link($collectibleDetail['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectibleDetail['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . ' | ';
+				} else if ($collectibleDetail['Collectible']['custom']) {
+					if (!$collectibleDetail['User']['admin']) {
+						echo 'Created By: ' . $this -> Html -> link($collectibleDetail['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $collectibleDetail['User']['username'])) . ' | ';
+					} else {
+						echo 'Created By: ' . $collectibleDetail['User']['username'] . ' | ';
+					}
+				}
+				if ($collectibleDetail['Collectible']['custom']) {
+					echo 'Custom | ';
+				} else if ($collectibleDetail['Collectible']['original']) {
+					echo 'Original | ';
+				} else {
+					if ($collectibleDetail['Collectible']['official']) {
+						echo 'Mass-Produced | ';
+					} else {
+						echo 'Custom | ';
+					}
+	
+				}
+	
+				if ($collectibleDetail['Collectible']['official']) {
+					echo 'Official';
+				} else {
+					echo 'Unofficial';
+				}
+				?>
+				</span>
+			</div>
+		</div>
+		<div class="span4">
+			<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
 			<div class="btn-group actions pull-right">
 				<?php
 				// check to make sure we can show stash, depending on where this is being
@@ -125,57 +153,10 @@ if ($showStatus) {
 				}
 				?>	
 			</div>
-		</div>
 		<?php } ?>
-		<div class="span12 page-header">
-			<h2 class="title"><?php echo $title; ?></h2>
-			<span>
-			<?php
-			// maybe collectible type here?
-			echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
-
-			// if it has a manufacturer display that first
-			if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
-				echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
-			}
-			// just grab the first artist for now
-			if (!empty($collectibleDetail['ArtistsCollectible']) && !$collectibleDetail['Collectible']['custom']) {
-				echo 'Artist: ' . $this -> Html -> link($collectibleDetail['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectibleDetail['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . ' | ';
-			} else if ($collectibleDetail['Collectible']['custom']) {
-				if (!$collectibleDetail['User']['admin']) {
-					echo 'Created By: ' . $this -> Html -> link($collectibleDetail['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $collectibleDetail['User']['username'])) . ' | ';
-				} else {
-					echo 'Created By: ' . $collectibleDetail['User']['username'] . ' | ';
-				}
-			}
-			if ($collectibleDetail['Collectible']['custom']) {
-				echo 'Custom | ';
-			} else if ($collectibleDetail['Collectible']['original']) {
-				echo 'Original | ';
-			} else {
-				if ($collectibleDetail['Collectible']['official']) {
-					echo 'Mass-Produced | ';
-				} else {
-					echo 'Custom | ';
-				}
-
-			}
-
-			if ($collectibleDetail['Collectible']['official']) {
-				echo 'Official';
-			} else {
-				echo 'Unofficial';
-			}
-			?>
-			</span>
 		</div>
 	</div>
-
-	<div id="status-container" class="row spacer">
-	
-	</div>
-
-	<div class="row spacer">
+	<div class="row-fluid spacer">
 		<div class="span4">
 			<?php
 			if ($showImage) {
@@ -184,63 +165,72 @@ if ($showStatus) {
 			?>
 		</div>
 		<div class="span8">
-			<?php
-			if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
-				echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
-			}
-			?>
-			
-			<?php echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags)); ?>
-			<?php
-			if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
-				echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
-			}
-			?>
-			<?php
-			if (isset($showTags) && $showTags === true) {
-				echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
-			}
-			?>
-
-			
-			<?php
-			if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
-				echo $this -> element('collectible_variant_list', array());
-			}
-			?>
-			
-		
-		</div>
-	</div>	
-		
-	<div class="row">	
-		<div class="span12">	
-			<?php
-			if ($showAttributes) {
-				echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
-				<script>
-					$(function() {
-						// If we are in admin mode, we need to pass that in to these methods so that they can
-						// do specific things based on that
-
-						$('span.popup', '.attributes-list').popover({
-							placement : 'bottom',
-							html : 'true',
-							template: '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
-						}).click(function(e) {
-			                e.preventDefault() ;
-			            }).mouseenter(function(e) {
-			                $(this).popover('show');
-			            });
-
-					});
-				</script>
-		
-			<?php } ?>
-		</div>
-	</div>	
-
+			<div id="status-container" class="row-fluid">
 	
+			</div>
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="row-fluid">
+						<div class="span6">
+							<?php
+							if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+								echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+							}
+							?>
+							
+							<?php echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags)); ?>
+							<?php
+							if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
+								echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+							}
+							?>
+							<?php
+							if (isset($showTags) && $showTags === true) {
+								echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+							}
+							?>
+				
+							
+							<?php
+							if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
+								echo $this -> element('collectible_variant_list', array());
+							}
+							?>							
+						</div>
+						<div class="span6" <?php if($collectibleDetail['Status']['id'] === '4') {  echo 'id="transactions"'; } ?>>
+	
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div class="span12">
+							<?php
+							if ($showAttributes) {
+								echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
+								<script>
+									$(function() {
+										// If we are in admin mode, we need to pass that in to these methods so that they can
+										// do specific things based on that
+				
+										$('span.popup', '.attributes-list').popover({
+											placement : 'bottom',
+											html : 'true',
+											template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+										}).click(function(e) {
+											e.preventDefault();
+										}).mouseenter(function(e) {
+											$(this).popover('show');
+										});
+				
+									});
+								</script>
+						
+							<?php } ?>							
+						</div>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
 </div>
 
 
@@ -309,3 +299,23 @@ if ($adminMode) {
 		</div>
 	</div>
 </div>
+<script>
+var collectibleStatus = {
+	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
+	status:<?php echo json_encode($collectibleDetail['Status']); ?>
+};
+var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
+var transactions = <?php echo json_encode($collectibleDetail['Transaction']); ?>;
+ <?php
+if ($showStatus) {
+	echo 'var showStatus = true;';
+} else {
+	echo 'var showStatus = false;';
+}
+	?><?php
+	if ($allowStatusEdit) {
+		echo 'var allowStatusEdit = true;';
+	} else {
+		echo 'var allowStatusEdit = false;';
+	}
+?></script>
