@@ -2507,6 +2507,18 @@ div.paging span a:hover {
 .activities .activity .action {
 	margin-top: 5px;
 }
+
+#collectible-container .page-header {
+	margin-bottom: 5px;
+	padding-bottom: 0;
+}
+
+#collectible-container .page-header span {
+	font-size: 18px;
+	color: #999999;
+	font-weight: normal;
+	line-height: 1;
+}
 /*
  * Cake BS
  */

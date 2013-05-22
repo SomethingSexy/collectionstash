@@ -1,10 +1,16 @@
 $(function() {
-	if (showStatus) {
-		// Get all of the data here
-		$.when($.get('/templates/collectibles/status.dust')).done(function(statusTemplate) {
+	// Get all of the data here
+	$.when($.get('/templates/collectibles/status.dust'), $.get('/templates/transactions/transactions.dust')).done(function(statusTemplate, transactionsTemplate) {
+		dust.loadSource(dust.compile(transactionsTemplate[0], 'transactions'));
+
+		var collectibleModel = new Backbone.Model(collectible);
+		var transactionsList = new Transactions(transactions);
+
+		if (showStatus) {
+
 			// since I am only loading one, don't need to index
 			// TODO: This page should use a different view template for different text
-			dust.loadSource(dust.compile(statusTemplate, 'status.edit'));
+			dust.loadSource(dust.compile(statusTemplate[0], 'status.edit'));
 
 			var status = new Status();
 			status.set(collectibleStatus, {
@@ -14,7 +20,7 @@ $(function() {
 			$('#status-container').html(new StatusView({
 				model : status,
 				allowEdit : allowStatusEdit,
-				collectible : new Backbone.Model(collectible)
+				collectible : collectibleModel
 			}).render().el);
 
 			// If the status has changed and I am on the view
@@ -26,9 +32,14 @@ $(function() {
 				}
 			}, status);
 
-		});
-	} else {
-		$('#status-container').remove();
-	}
+		} else {
+			$('#status-container').remove();
+		}
+
+		$('#transactions').html(new TransactionsView({
+			collectible : collectibleModel,
+			collection : transactionsList
+		}).render().el);
+	});
 
 });
