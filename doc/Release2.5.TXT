@@ -24,3 +24,8 @@ New Table:
 
 
 If the user marks a collectible as sold and they did it on eBay they will then be asked to link the item number.  If they do we will add it as an eBay transaction, otherwise, an internal one 
+
+
+
+
+cake -app D:\Development\wamp\www\app process_transactions
