@@ -19,7 +19,7 @@ class ProcessTransactionsShell extends AppShell {
 		foreach ($transactions as $key => $value) {
 			$transactionable = $factory -> getTransaction($value['Transaction']['transaction_type_id']);
 
-			$transactionable -> processTransaction();
+			$transactionable -> processTransaction($value);
 		}
 	}
 

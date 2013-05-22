@@ -1,5 +1,4 @@
 <?php
-App::uses('TransactionFactory', 'Lib/Transaction');
 class Transaction extends AppModel {
 	public $name = 'Transaction';
 	public $belongsTo = array('Collectible', 'User');
@@ -13,12 +12,6 @@ class Transaction extends AppModel {
 		$data['Transaction']['user_id'] = $user['User']['id'];
 		// right now we only support eBay which will be 1
 		$data['Transaction']['transaction_type_id'] = 1;
-
-		// first we are going to process it
-		$factory = new TransactionFactory();
-		$transactionable = $factory -> getTransaction($data['Transaction']['transaction_type_id']);
-
-		$transactionable -> processTransaction();
 
 		if ($this -> save($data)) {
 			$transactionId = $this -> id;

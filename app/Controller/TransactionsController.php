@@ -1,6 +1,7 @@
 <?php
 
 App::uses('Sanitize', 'Utility');
+App::uses('TransactionFactory', 'Lib/Transaction');
 /**
  * Need to enable PHP SSL and PHP_SOAP
  */
@@ -14,42 +15,16 @@ class TransactionsController extends AppController {
 	 */
 	public function index() {
 
-		$transactions = $this -> Transaction -> find('all', array('limit' => 50, 'conditions' => array('Transaction.processed' => 0)));
+		$transaction['Transaction'] = array();
+		$transaction['Transaction']['transaction_type_id'] = 1;
+		$transaction['Transaction']['ext_transaction_id'] = '230981171092';
 
-		debug($transactions);
+		// first we are going to process it
+		$factory = new TransactionFactory();
 
-		// Create headers to send with CURL request.
+		$transactionable = $factory -> getTransaction($transaction['Transaction']['transaction_type_id']);
 
-		$token = Configure::read('Settings.TransactionManager.eBay.auth_token');
-		$appId = Configure::read('Settings.TransactionManager.eBay.AppID');
-		//download when ready
-		$wsdl_url = APP . 'vendors' . DS . 'transactions' . DS . 'ebay' . DS . 'eBaySvc.wsdl';
-		// downloaded from http://developer.ebay.com/webservices/latest/eBaySvc.wsdl
-
-		$apiCall = 'GetItemTransactions';
-
-		$client = new SoapClient($wsdl_url, array('trace' => 1, 'exceptions' => true, 'location' => 'https://api.ebay.com/wsapi?callname=' . $apiCall . '&appid=' . $appId . '&siteid=0&version=821&routing=new'));
-
-		$requesterCredentials = new stdClass();
-		$requesterCredentials -> eBayAuthToken = $token;
-
-		$header = new SoapHeader('urn:ebay:apis:eBLBaseComponents', 'RequesterCredentials', $requesterCredentials);
-
-		// the API call parameters
-		//221229498879
-		//
-		//370144056958
-		//171041720659 - active biding list
-		//390595100332 - sold listing | ListingStatus = completed
-		//230981171092 - sold listing - buy it now
-		//230980042238 sold listing - buy it now - best offer accepted
-		//260852933448  example of older one, ListStatus is completed but no transaction, has a QuantitySold 1 and a price
-		//160384368644 example of one that does not exist anymore
-		$params = array('Version' => 821, 'ItemID' => '171041720659');
-
-		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
-		// make the API call
-		debug($responseObj);
+		$transactionable -> processTransaction($transaction);
 	}
 
 	/**
