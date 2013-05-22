@@ -18,7 +18,8 @@ class ProcessTransactionsShell extends AppShell {
 
 		foreach ($transactions as $key => $value) {
 			$transactionable = $factory -> getTransaction($value['Transaction']['transaction_type_id']);
-
+			
+			// TODO: This might return multiple transactions, if so we will have to add those
 			$transactionable -> processTransaction($value);
 		}
 	}
