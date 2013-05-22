@@ -17,7 +17,7 @@ class TransactionsController extends AppController {
 
 		$transaction['Transaction'] = array();
 		$transaction['Transaction']['transaction_type_id'] = 1;
-		$transaction['Transaction']['ext_transaction_id'] = '230981171092';
+		$transaction['Transaction']['ext_transaction_id'] = '390595100332';
 
 		// first we are going to process it
 		$factory = new TransactionFactory();
