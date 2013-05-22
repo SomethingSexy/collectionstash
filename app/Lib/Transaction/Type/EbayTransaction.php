@@ -99,11 +99,12 @@ class EbayTransaction extends Object implements Transactionable {
 			if ($responseObj -> ReturnedTransactionCountActual === 1) {
 				// single time
 				$responseObj -> TransactionArray -> Transaction;
-
+					
+					
 			} else if ($responseObj -> ReturnedTransactionCountActual > 1) {
 				// array of items
-
 				$responseObj -> TransactionArray -> Transaction;
+			
 			}
 		}
 
