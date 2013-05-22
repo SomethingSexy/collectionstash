@@ -1,4 +1,5 @@
 <?php
+
 App::uses('Sanitize', 'Utility');
 /**
  * Need to enable PHP SSL and PHP_SOAP
@@ -12,12 +13,17 @@ class TransactionsController extends AppController {
 	 * they will see the catalog page.
 	 */
 	public function index() {
+
+		$transactions = $this -> Transaction -> find('all', array('limit' => 50, 'conditions' => array('Transaction.processed' => 0)));
+
+		debug($transactions);
+
 		// Create headers to send with CURL request.
 
 		$token = Configure::read('Settings.TransactionManager.eBay.auth_token');
 		$appId = Configure::read('Settings.TransactionManager.eBay.AppID');
 		//download when ready
-		$wsdl_url = 'http://developer.ebay.com/webservices/latest/eBaySvc.wsdl';
+		$wsdl_url = APP . 'vendors' . DS . 'transactions' . DS . 'ebay' . DS . 'eBaySvc.wsdl';
 		// downloaded from http://developer.ebay.com/webservices/latest/eBaySvc.wsdl
 
 		$apiCall = 'GetItemTransactions';
@@ -39,7 +45,7 @@ class TransactionsController extends AppController {
 		//230980042238 sold listing - buy it now - best offer accepted
 		//260852933448  example of older one, ListStatus is completed but no transaction, has a QuantitySold 1 and a price
 		//160384368644 example of one that does not exist anymore
-		$params = array('Version' => 821, 'ItemID' => '160384368644');
+		$params = array('Version' => 821, 'ItemID' => '171041720659');
 
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
 		// make the API call

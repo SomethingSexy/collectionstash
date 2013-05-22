@@ -26,9 +26,11 @@
 	</thead>
 	<tbody>
 		{#transactions}
-		<tr>
-			<td></td><td></td><td></td><td></td>
-		</tr>
+			{@if cond=" ('{processed}') "}
+				<tr>
+					<td></td><td></td><td></td><td></td>
+				</tr>
+			{/if}
 		{/transactions}
 	</tbody>
 </table>
@@ -37,6 +39,7 @@
 <table class="table table-condensed">
 	<thead>
 		<tr>
+			<th>Date</th>
 			<th>Type</th>
 			<th>Item ID</th>
 			<th>User</th>
@@ -45,14 +48,15 @@
 	</thead>
 	<tbody>
 		{#transactions}
-		{@if cond=" (!'{processed}') "}
-		{/if}
-		<tr>
-			<td>eBay</td>
-			<td>{ext_transaction_id}</td>
-			<td>{User.username}</td>
-			<td> </td>
-		</tr>
+			{@if cond=" (!'{processed}') "}
+				<tr>
+					<td>{created}</td>	
+					<td>eBay</td>
+					<td>{ext_transaction_id}</td>
+					<td>{User.username}</td>
+					<td></td>
+				</tr>
+			{/if}
 		{/transactions}
 	</tbody>
 </table>
