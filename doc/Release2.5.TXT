@@ -1,5 +1,5 @@
 Prior to release:
-- Need to enable extension=php_soap.dll and extension=php_openssl.dll in php.ini
+- Need to enable extension=php_soap.dll and extension=php_openssl.dll in php.ini, need to make sure it is enabled for apache php and standard server
 
 
 New Table:
