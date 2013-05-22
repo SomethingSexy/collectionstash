@@ -7,6 +7,7 @@ var TransactionsView = Backbone.View.extend({
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
 		this.collectible = options.collectible;
+		this.collection.on('add', this.render, this);
 	},
 	render : function() {
 		var self = this;
@@ -22,14 +23,15 @@ var TransactionsView = Backbone.View.extend({
 		return this;
 	},
 	submit : function() {
+		var self = this;
 		var model = new TransactionModel({
 			'ext_transaction_id' : $('#inputTransactionItem', this.el).val(),
 			'collectible_id' : this.collectible.get('id')
 		});
 
 		model.save({}, {
-			success : function() {
-
+			success : function(model, response, options) {
+				self.collection.add(model);
 			},
 			error : function() {
 
