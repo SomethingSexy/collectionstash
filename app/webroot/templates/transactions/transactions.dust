@@ -18,10 +18,10 @@
 <table class="table table-condensed">
 	<thead>
 		<tr>
-			<th>Date</th>
 			<th>Type</th>
 			<th>Item ID</th>
 			<th>Current Price</th>
+			<th>Start Date</th>
 			<th>End Date</th>
 			<th>User</th>
 			<th></th>
@@ -31,10 +31,10 @@
 		{#listings}
 			{@if cond=" (!'{processed}') "}
 				<tr>
-					<td>{created}</td>	
 					<td>{type}</td>
 					<td>{ext_item_id}</td>
 					<td>{current_price}</td>
+					<td>{start_date}</td>
 					<td>{end_date}</td>
 					<td>{User.username}</td>
 					<td></td>
