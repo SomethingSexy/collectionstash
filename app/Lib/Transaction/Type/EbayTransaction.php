@@ -51,7 +51,7 @@ class EbayTransaction extends Object implements Transactionable {
 		// only process if Ack is success
 
 		if ($responseObj -> Ack !== 'Success') {
-			return;
+			return false;
 		}
 
 		$listType = $responseObj -> Item -> ListingType;
@@ -64,7 +64,7 @@ class EbayTransaction extends Object implements Transactionable {
 		//PersonalOffer second chance offer, we will store as BIN
 		//FixedPriceItem = multiple
 		if ($listType !== 'StoresFixedPrice' && $listType !== 'Chinese' && $listType !== 'PersonalOffer' && $listType !== 'FixedPriceItem') {
-			return;
+			return false;
 		}
 		// process the list type
 		if ($listType === 'StoresFixedPrice') {

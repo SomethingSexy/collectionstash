@@ -80,6 +80,19 @@ class Listing extends AppModel {
 
 		debug($data);
 
+		if (!$data) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = array();
+			$error = array();
+			$error['message'] = __('There was an error retrieving the item or the item was too old.');
+			$error['inline'] = false;
+			array_push($errors, $error);
+
+			$retVal['response']['errors'] = $errors;
+			
+			return $retVal;
+		}
+
 		if ($this -> saveAssociated($data)) {
 			$transactionId = $this -> id;
 			$transaction = $this -> find('first', array('contain' => array('User', 'Transaction'), 'conditions' => array('Listing.id' => $transactionId)));

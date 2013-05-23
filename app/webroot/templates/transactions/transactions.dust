@@ -1,5 +1,22 @@
 <h3>Listings and Transaction History</h3>
 
+{@if cond=" ('{errors}'.length === 0) "}
+
+{:else}
+	<div class="alert {@eq key="{hasErrors}" value="true" type="boolean"}alert-error{/eq}">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<h4>Oops! Something went wrong.</h4>
+		<ul>
+		{#errors}
+			{#message}
+			<li>{.}</li>
+			{/message}
+		
+		{/errors}
+		</ul>
+	</div>
+{/if}
+
 <div class="control-group">
 	<div class="input-append">
 		<input type="text" value="" name="item" placeholder="Item Number" id="inputListingItem" autocomplete="off">
@@ -14,59 +31,74 @@
 	</div><span class="help-block inline-error"></span>
 </div>
 
-<h4>Active Listings</h4>
-<table class="table table-condensed">
-	<thead>
-		<tr>
-			<th>Type</th>
-			<th>Item ID</th>
-			<th>Current Price</th>
-			<th>Start Date</th>
-			<th>End Date</th>
-			<th>User</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		{#listings}
-			{@if cond=" (!'{processed}') "}
+{@if cond=" ('{listings}'.length === 0) "}
+	<p>No listings have been added.</p>
+{:else}
+ 	<h4>Active Listings</h4>
+ 	{@eq key="{activeListings}" value="true" type="boolean"}
+		<table class="table table-condensed">
+			<thead>
 				<tr>
-					<td>{type}</td>
-					<td>{ext_item_id}</td>
-					<td>{current_price}</td>
-					<td>{start_date}</td>
-					<td>{end_date}</td>
-					<td>{User.username}</td>
-					<td></td>
+					<th>Type</th>
+					<th>Item ID</th>
+					<th>Current Price</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th>User</th>
+					<th></th>
 				</tr>
-			{/if}
-		{/listings}
-	</tbody>
-</table>
+			</thead>
+			<tbody>
+				{#listings}
+					{@if cond=" (!'{processed}') "}
+						<tr>
+							<td>{type}</td>
+							<td>{ext_item_id}</td>
+							<td>{current_price}</td>
+							<td>{start_date}</td>
+							<td>{end_date}</td>
+							<td>{User.username}</td>
+							<td></td>
+						</tr>
+					{/if}
+				{/listings}
+			</tbody>
+		</table> 	
+ 	{:else}
+ 		<p>There are no active listings.</p>
+ 	{/eq}
+	
+	<h4>Transactions</h4>
+	{@eq key="{completedTransactions}" value="true" type="boolean"}
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Listing name</th>
+					<th>Price</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#listings}
+					{@if cond=" ('{processed}') "}
+						{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
+						<tr>
+							<td>{type}</td>
+							<td>{listing_name}</td>
+							<td>{sale_price}</td>
+							<td>{sale_date}</td>
+						</tr>
+						{/Transaction}
+					{/if}
+				{/listings}
+			</tbody>
+		</table>	
+	{:else}
+ 		<p>There are no completed transactions.</p>
+ 	{/eq}
 
-<h4>Transactions</h4>
-<table class="table table-condensed">
-	<thead>
-		<tr>
-			<th>Type</th>
-			<th>Listing name</th>
-			<th>Price</th>
-			<th>Date</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#listings}
-			{@if cond=" ('{processed}') "}
-				{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
-				<tr>
-					<td>{type}</td>
-					<td>{listing_name}</td>
-					<td>{sale_price}</td>
-					<td>{sale_date}</td>
-				</tr>
-				{/Transaction}
-			{/if}
-		{/listings}
-	</tbody>
-</table>
+{/if}
+
+
 
