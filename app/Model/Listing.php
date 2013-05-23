@@ -2,6 +2,7 @@
 class Listing extends AppModel {
 	public $name = 'Listing';
 	public $belongsTo = array('Collectible', 'User');
+	public $hasMany = array('Transaction' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
 	public $validate = array('ext_transaction_id' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Transaction Id is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')));
