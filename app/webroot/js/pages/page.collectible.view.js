@@ -4,7 +4,7 @@ $(function() {
 		dust.loadSource(dust.compile(transactionsTemplate[0], 'transactions'));
 
 		var collectibleModel = new Backbone.Model(collectible);
-		var transactionsList = new Transactions(transactions);
+		var listingsList = new Listings(listings);
 
 		if (showStatus) {
 
@@ -38,7 +38,7 @@ $(function() {
 
 		$('#transactions').html(new TransactionsView({
 			collectible : collectibleModel,
-			collection : transactionsList
+			collection : listingsList
 		}).render().el);
 	});
 

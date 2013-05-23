@@ -1,18 +1,44 @@
-<h3>Transaction History</h3>
+<h3>Listings and Transactions History</h3>
 
 <div class="control-group">
 	<div class="input-append">
-		<input type="text" value="" name="item" id="inputTransactionItem" autocomplete="off">
+		<input type="text" value="" name="item" placeholder="Item Number" id="inputListingItem" autocomplete="off">
 		<div class="btn-group open">
 			<button class="btn disabled" disabled="disabled">
 				eBay
 			</button>
 		</div>
 		<button type="button" class="btn add-transaction">
-			Add
+			Add Listing
 		</button>
 	</div><span class="help-block inline-error"></span>
 </div>
+
+<h4>Active Listings</h4>
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Type</th>
+			<th>Item ID</th>
+			<th>User</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{#listings}
+			{@if cond=" (!'{processed}') "}
+				<tr>
+					<td>{created}</td>	
+					<td>eBay</td>
+					<td>{ext_item_id}</td>
+					<td>{User.username}</td>
+					<td></td>
+				</tr>
+			{/if}
+		{/listings}
+	</tbody>
+</table>
 
 <h4>Transactions</h4>
 <table class="table table-condensed">
@@ -35,28 +61,3 @@
 	</tbody>
 </table>
 
-<h4>Pending Transactions</h4>
-<table class="table table-condensed">
-	<thead>
-		<tr>
-			<th>Date</th>
-			<th>Type</th>
-			<th>Item ID</th>
-			<th>User</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		{#transactions}
-			{@if cond=" (!'{processed}') "}
-				<tr>
-					<td>{created}</td>	
-					<td>eBay</td>
-					<td>{ext_transaction_id}</td>
-					<td>{User.username}</td>
-					<td></td>
-				</tr>
-			{/if}
-		{/transactions}
-	</tbody>
-</table>

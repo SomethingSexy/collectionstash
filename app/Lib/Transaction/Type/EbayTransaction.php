@@ -39,7 +39,7 @@ class EbayTransaction extends Object implements Transactionable {
 		// 121097551501 - multiple for sale with a bunch sold
 
 		//261217151509 ended unsold
-		$params = array('Version' => 821, 'ItemID' => $data['Transaction']['ext_transaction_id']);
+		$params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id']);
 
 		// make the API call
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
