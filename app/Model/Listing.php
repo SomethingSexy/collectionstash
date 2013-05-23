@@ -7,7 +7,7 @@ class Listing extends AppModel {
 	public $actsAs = array('Containable');
 
 	//TODO: need to check duplicates
-	public $validate = array('ext_transaction_id' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Transaction Id is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')));
+	public $validate = array('ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.'), 'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.')));
 
 	function afterFind($results, $primary = false) {
 		if ($results) {
@@ -64,12 +64,35 @@ class Listing extends AppModel {
 		return $results;
 	}
 
+	function checkDuplicateItems($check) {
+		debug($check);
+		// we need these to proceed
+		if (empty($check['ext_item_id']) || empty($this -> data['Listing']['listing_type_id']) || empty($this -> data['Listing']['collectible_id'])) {
+			return false;
+		}
+
+		$count = $this -> find('count', array('contain' => false, 'conditions' => array('Listing.collectible_id' => $this -> data['Listing']['collectible_id'], 'Listing.ext_item_id' => $check['ext_item_id'], 'Listing.listing_type_id' => $this -> data['Listing']['listing_type_id'])));
+		debug($count);
+		// return true if none found
+		return $count === 0;
+	}
+
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
 		$data['Listing']['user_id'] = $user['User']['id'];
 		// right now we only support eBay which will be 1
 		$data['Listing']['listing_type_id'] = 1;
+
+		$this -> set($data['Listing']);
+		debug($this -> data);
+		// Validate first
+		if (!$this -> validates()) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
+			$retVal['response']['errors'] = $errors;
+			return $retVal;
+		}
 
 		$factory = new TransactionFactory();
 
@@ -89,7 +112,7 @@ class Listing extends AppModel {
 			array_push($errors, $error);
 
 			$retVal['response']['errors'] = $errors;
-			
+
 			return $retVal;
 		}
 
