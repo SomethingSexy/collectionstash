@@ -13,7 +13,7 @@ var TransactionsView = Backbone.View.extend({
 		var self = this;
 
 		var data = {
-			transactions : this.collection.toJSON()
+			listings : this.collection.toJSON()
 		};
 
 		dust.render(this.template, data, function(error, output) {
@@ -24,8 +24,8 @@ var TransactionsView = Backbone.View.extend({
 	},
 	submit : function() {
 		var self = this;
-		var model = new TransactionModel({
-			'ext_transaction_id' : $('#inputTransactionItem', this.el).val(),
+		var model = new ListingModel({
+			'ext_item_id' : $('#inputListingItem', this.el).val(),
 			'collectible_id' : this.collectible.get('id')
 		});
 

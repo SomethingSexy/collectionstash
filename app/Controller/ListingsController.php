@@ -5,7 +5,7 @@ App::uses('TransactionFactory', 'Lib/Transaction');
 /**
  * Need to enable PHP SSL and PHP_SOAP
  */
-class TransactionsController extends AppController {
+class ListingsController extends AppController {
 
 	public $helpers = array('Html', 'FileUpload.FileUpload', 'Minify');
 
@@ -15,14 +15,14 @@ class TransactionsController extends AppController {
 	 */
 	public function index() {
 
-		$transaction['Transaction'] = array();
-		$transaction['Transaction']['transaction_type_id'] = 1;
-		$transaction['Transaction']['ext_transaction_id'] = '121097551501';
+		$transaction['Listing'] = array();
+		$transaction['Listing']['listing_type_id'] = 1;
+		$transaction['Listing']['ext_item_id'] = '171041720659';
 
 		// first we are going to process it
 		$factory = new TransactionFactory();
 
-		$transactionable = $factory -> getTransaction($transaction['Transaction']['transaction_type_id']);
+		$transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
 
 		$transactionable -> processTransaction($transaction);
 	}
@@ -30,7 +30,7 @@ class TransactionsController extends AppController {
 	/**
 	 * This will be used to update and maintain transactions
 	 */
-	public function transaction($id = null) {
+	public function listing($id = null) {
 		// need to be logged in
 		if (!$this -> isLoggedIn()) {
 			$this -> response -> statusCode(401);
@@ -39,17 +39,17 @@ class TransactionsController extends AppController {
 
 		// create
 		if ($this -> request -> isPost()) {
-			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
-			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
+			$transaction['Listing'] = $this -> request -> input('json_decode', true);
+			$transaction['Listing'] = Sanitize::clean($transaction['Listing']);
 
-			$response = $this -> Transaction -> createTransaction($transaction, $this -> getUser());
+			$response = $this -> Listing -> createListing($transaction, $this -> getUser());
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isPut()) {// update
-			$transaction['Transaction'] = $this -> request -> input('json_decode', true);
-			$transaction['Transaction'] = Sanitize::clean($transaction['Transaction']);
+			$transaction['Listing'] = $this -> request -> input('json_decode', true);
+			$transaction['Listing'] = Sanitize::clean($transaction['Listing']);
 
-			$response = $this -> Transaction -> updatetTransaction($transaction, $this -> getUser());
+			$response = $this -> Listing -> updatetListing($transaction, $this -> getUser());
 
 			$request = $this -> request -> input('json_decode');
 			debug($request);
@@ -66,7 +66,7 @@ class TransactionsController extends AppController {
 			// for changing the status to a delete
 			// although I am going to physically delete it
 			// not change the status :)
-			$response = $this -> Transaction -> remove($id, $this -> getUser());
+			$response = $this -> Listing -> remove($id, $this -> getUser());
 
 			if (!$response['response']['isSuccess']) {
 				$this -> response -> statusCode(400);

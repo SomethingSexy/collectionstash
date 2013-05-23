@@ -57,8 +57,8 @@ echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
 echo $this -> Html -> script('models/model.status', array('inline' => false));
 echo $this -> Html -> script('views/view.status', array('inline' => false));
 
-echo $this -> Html -> script('models/model.transaction', array('inline' => false));
-echo $this -> Html -> script('collections/collection.transactions', array('inline' => false));
+echo $this -> Html -> script('models/model.listing', array('inline' => false));
+echo $this -> Html -> script('collections/collection.listings', array('inline' => false));
 echo $this -> Html -> script('views/view.transactions', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
@@ -305,7 +305,7 @@ var collectibleStatus = {
 	status:<?php echo json_encode($collectibleDetail['Status']); ?>
 };
 var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
-var transactions = <?php echo json_encode($collectibleDetail['Transaction']); ?>;
+var listings = <?php echo json_encode($collectibleDetail['Listing']); ?>;
  <?php
 if ($showStatus) {
 	echo 'var showStatus = true;';
