@@ -92,6 +92,7 @@ class EbayTransaction extends Object implements Transactionable {
 		$data['Listing']['end_date'] = $responseObj -> Item -> ListingDetails -> EndTime;
 		$data['Listing']['listing_name'] = $responseObj -> Item -> Title;
 		$data['Listing']['quantity'] = $responseObj -> Item -> Quantity;
+		$data['Listing']['quantity_sold'] = $responseObj -> Item -> SellingStatus -> QuantitySold;
 		$data['Listing']['url'] = $responseObj -> Item -> ListingDetails -> ViewItemURLForNaturalSearch;
 
 		// If active, gather some information but do not change processing flag
@@ -100,6 +101,8 @@ class EbayTransaction extends Object implements Transactionable {
 		} else if ($listingStatus === 'Ended') {// ended but we might still need to process to get the ConvertedAmountPaid
 			$data['Listing']['status'] = 'ended';
 		} else if ($listingStatus === 'Completed') {
+			// TODO How do we handle unsold stuff?
+			// It is completed by quantity sold = 0
 			$data['Listing']['status'] = 'completed';
 			$data['Listing']['processed'] = true;
 		}
