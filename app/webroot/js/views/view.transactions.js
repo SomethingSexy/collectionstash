@@ -19,10 +19,10 @@ var TransactionsView = Backbone.View.extend({
 		this.collection.each(function(listing) {
 			if (!listing.get('processed')) {
 				activeListings = true;
-			} else {
-				if (listing.get('Transaction').length > 0) {
-					completedTransactions = true;
-				}
+			}
+
+			if (listing.get('Transaction').length > 0) {
+				completedTransactions = true;
 			}
 		});
 
