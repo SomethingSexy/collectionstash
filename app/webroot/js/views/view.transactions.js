@@ -49,8 +49,11 @@ var TransactionsView = Backbone.View.extend({
 			'collectible_id' : this.collectible.get('id')
 		});
 
+		$('.add-transaction', this.el).button('loading');
+
 		model.save({}, {
 			success : function(model, response, options) {
+				$('.add-transaction', self.el).button('reset');
 				if (response.response.isSuccess) {
 					self.collection.add(model);
 				} else {
@@ -59,6 +62,7 @@ var TransactionsView = Backbone.View.extend({
 				}
 			},
 			error : function() {
+				$('.add-transaction', self.el).button('reset');
 				self.errors = [{
 					message : 'There was an issue with the request.',
 					inline : 'false'

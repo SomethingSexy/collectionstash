@@ -2013,6 +2013,7 @@ div.paging span a:hover {
 }
 .comments-container ol.comments {
 	overflow: hidden;
+	width: 900px;
 }
 .comments-container ol.comments li {
 	float: left;
@@ -2050,6 +2051,9 @@ div.paging span a:hover {
 .comments-container ol.comments li.comment .error-message {
 	float: right;
 	color: #c73e14;
+}
+.comments-container .post-comment-container form fieldset ul li {
+	width: inherit;
 }
 .comments-container .post-comment-container form fieldset ul li div.input div.label-wrapper {
 	width: auto;
