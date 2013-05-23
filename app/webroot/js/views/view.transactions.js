@@ -8,17 +8,37 @@ var TransactionsView = Backbone.View.extend({
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
 		this.collectible = options.collectible;
 		this.collection.on('add', this.render, this);
+		this.errors = [];
 	},
 	render : function() {
 		var self = this;
 
+		var activeListings = false;
+		var completedTransactions = false;
+
+		this.collection.each(function(listing) {
+			if (!listing.get('processed')) {
+				activeListings = true;
+			} else {
+				if (listing.get('Transaction').length > 0) {
+					completedTransactions = true;
+				}
+			}
+		});
+
 		var data = {
-			listings : this.collection.toJSON()
+			listings : this.collection.toJSON(),
+			errors : this.errors,
+			activeListings : activeListings,
+			completedTransactions : completedTransactions
 		};
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
+
+		//once we are done rendering clear errors
+		this.errors = [];
 
 		return this;
 	},
@@ -31,10 +51,19 @@ var TransactionsView = Backbone.View.extend({
 
 		model.save({}, {
 			success : function(model, response, options) {
-				self.collection.add(model);
+				if (response.response.isSuccess) {
+					self.collection.add(model);
+				} else {
+					self.errors = response.response.errors;
+					self.render();
+				}
 			},
 			error : function() {
-
+				self.errors = [{
+					message : 'There was an issue with the request.',
+					inline : 'false'
+				}];
+				self.render();
 			}
 		})
 
