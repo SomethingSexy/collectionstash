@@ -17,14 +17,20 @@
 			{/if}
 		{:else}
 			{@if cond="( '{Activity.activity_type_id}' === '7' )"}
-				<span class="verb">submitted edit </span>
+				<span class="verb">submitted </span>
 			{:else}
-				{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' )"}
+				{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' || '{Activity.data.verb}' === 'approve' || '{Activity.data.verb}' === 'remove')"}
 					{@if cond="( '{Activity.data.verb}' === 'add' )"}
 						<span class="verb">added </span> 
 					{/if}
 					{@if cond="( '{Activity.data.verb}' === 'submit' )"}
 						<span class="verb">submitted </span> 
+					{/if}
+					{@if cond="( '{Activity.data.verb}' === 'approve' )"}
+						<span class="verb">approved </span> 
+					{/if}
+					{@if cond="( '{Activity.data.verb}' === 'remove' )"}
+						<span class="verb">removed </span> 
 					{/if}
 				{:else}
 					<span class="verb">{Activity.data.verb} </span> 
@@ -63,14 +69,24 @@
 				{@if cond="( '{Activity.data.object.objectType}' === 'artist' )"}
 					<a href="/artist/{Activity.data.object.data.Artist.id}/{Activity.data.object.data.Artist.slug}"> artist {Activity.data.object.data.Artist.name}</a>
 				{/if}
+
+				{@if cond="( '{Activity.data.object.objectType}' === 'edit' )"}
+					edit
+				{/if}
 			
 			{:else}
 				{Activity.data.object.objectType} 
 			{/if}
 			
 			{@eq key="{Activity.data.isTarget}" value="true" type="boolean"} 
-				{@if cond="( '{Activity.data.verb}' === 'approve' )"}
-					submitted by 
+				{@if cond="( '{Activity.data.verb}' === 'approve' ||  '{Activity.data.verb}' === 'remove' )"}
+					{@if cond="( '{Activity.data.verb}' === 'approve' )"}
+						submitted by 
+					{/if}
+					
+					{@if cond="( '{Activity.data.verb}' === 'remove' )"}
+						from
+					{/if}
 				{:else}
 					to 
 				{/if} 

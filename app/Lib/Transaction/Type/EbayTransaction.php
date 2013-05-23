@@ -90,6 +90,7 @@ class EbayTransaction extends Object implements Transactionable {
 		$data['Listing']['end_date'] = $responseObj -> Item -> ListingDetails -> EndTime;
 		$data['Listing']['listing_name'] = $responseObj -> Item -> Title;
 		$data['Listing']['quantity'] = $responseObj -> Item -> Quantity;
+		$data['Listing']['url'] = $responseObj -> Item -> ListingDetails -> ViewItemURLForNaturalSearch ;
 
 		// If active, gather some information but do not change processing flag
 		if ($listingStatus === 'Active') {

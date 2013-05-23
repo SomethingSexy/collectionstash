@@ -9,6 +9,61 @@ class Listing extends AppModel {
 	//TODO: need to check duplicates
 	public $validate = array('ext_transaction_id' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Transaction Id is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')));
 
+	function afterFind($results, $primary = false) {
+		if ($results) {
+			// If it is primary handle all of these things
+			if ($primary) {
+				foreach ($results as $key => $val) {
+					if (isset($val['Listing'])) {
+						if (isset($val['Listing']['start_date'])) {
+							$datetime = strtotime($val['Listing']['start_date']);
+							$datetime = date("m/d/y g:i A", $datetime);
+							$results[$key]['Listing']['start_date'] = $datetime;
+						}
+						if (isset($val['Listing']['end_date'])) {
+							$datetime = strtotime($val['Listing']['end_date']);
+							$datetime = date("m/d/y g:i A", $datetime);
+							$results[$key]['Listing']['end_date'] = $datetime;
+						}
+					}
+				}
+			} else {
+				if (isset($results[$this -> primaryKey])) {
+
+					if (isset($results['start_date'])) {
+						$datetime = strtotime($results['start_date']);
+						$datetime = date("m/d/y g:i A", $datetime);
+						$results['start_date'] = $datetime;
+					}
+					if (isset($results['end_date'])) {
+						$datetime = strtotime($results['end_date']);
+						$datetime = date("m/d/y g:i A", $datetime);
+						$results['end_date'] = $datetime;
+					}
+				} else {
+
+					foreach ($results as $key => $val) {
+
+						if (isset($val['Listing'])) {
+							if (isset($val['Listing']['start_date'])) {
+								$datetime = strtotime($val['Listing']['start_date']);
+								$datetime = date("m/d/y g:i A", $datetime);
+								$results[$key]['Listing']['start_date'] = $datetime;
+							}
+							if (isset($val['Listing']['end_date'])) {
+								$datetime = strtotime($val['Listing']['end_date']);
+								$datetime = date("m/d/y g:i A", $datetime);
+								$results[$key]['Listing']['end_date'] = $datetime;
+							}
+						}
+					}
+				}
+			}
+
+		}
+		return $results;
+	}
+
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
@@ -19,7 +74,7 @@ class Listing extends AppModel {
 		$factory = new TransactionFactory();
 
 		$transactionable = $factory -> getTransaction($data['Listing']['listing_type_id']);
-		
+
 		// TODO: If it comes back with an error, do not save and send error message to user
 		$data = $transactionable -> processTransaction($data);
 
