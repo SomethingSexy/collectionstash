@@ -39,7 +39,9 @@ class EbayTransaction extends Object implements Transactionable {
 		// 121097551501 - multiple for sale with a bunch sold
 
 		//261217151509 ended unsold
-		$params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id']);
+
+		// setting returnall for now but we will need see performance
+		$params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id'], 'DetailLevel' => 'ReturnAll');
 
 		// make the API call
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
@@ -66,54 +68,87 @@ class EbayTransaction extends Object implements Transactionable {
 		}
 		// process the list type
 		if ($listType === 'StoresFixedPrice') {
-			$data['Transaction']['type'] = 'BIN';
+			$data['Listing']['type'] = 'BIN';
 		} else if ($listType === 'Chinese') {
-			$data['Transaction']['type'] = 'auction';
+			$data['Listing']['type'] = 'auction';
 			// if it is an aucion, store the number of bids
 			// there might not be a bid count if the time was unsold
 			if (isset($responseObj -> Item -> SellingStatus -> BidCount)) {
-				$data['Transaction']['number_of_bids'] = $responseObj -> Item -> SellingStatus -> BidCount;
+				$data['Listing']['number_of_bids'] = $responseObj -> Item -> SellingStatus -> BidCount;
 			}
 
 		} else if ($listType === 'PersonalOffer') {
-			$data['Transaction']['type'] = 'BIN';
+			$data['Listing']['type'] = 'BIN';
 		}
 
 		// this should all be the same
-		$data['Transaction']['listing_price'] = $responseObj -> Item -> SellingStatus -> ConvertedCurrentPrice;
+		$data['Listing']['listing_price'] = $responseObj -> Item -> StartPrice -> _;
+		$data['Listing']['current_price'] = $responseObj -> Item -> SellingStatus -> ConvertedCurrentPrice -> _;
+
+		// might have to conveert these
+		$data['Listing']['start_date'] = $responseObj -> Item -> ListingDetails -> StartTime;
+		$data['Listing']['end_date'] = $responseObj -> Item -> ListingDetails -> EndTime;
+		$data['Listing']['listing_name'] = $responseObj -> Item -> Title;
+		$data['Listing']['quantity'] = $responseObj -> Item -> Quantity;
 
 		// If active, gather some information but do not change processing flag
 		if ($listingStatus === 'Active') {
-			$data['Transaction']['status'] = 'active';
+			$data['Listing']['status'] = 'active';
 		} else if ($listingStatus === 'Ended') {// ended but we might still need to process to get the ConvertedAmountPaid
-			$data['Transaction']['status'] = 'ended';
+			$data['Listing']['status'] = 'ended';
 		} else if ($listingStatus === 'Completed') {
-			$data['Transaction']['status'] = 'completed';
+			$data['Listing']['status'] = 'completed';
+			$data['Listing']['processed'] = true; 
 		}
 
 		// now we need to see if there is a transaction
 
 		// we also need to handle multiple depending on the type.
+
+		//TransactionPrice only for Best Offer Items
+
+		// If StoresFixedPrice and BestOfferSale = true, check ConvertedTransactionPrice, for what they paid
+
+		// I think I always want the ConvertedTransactionPrice
+
+		// also want TransactionID for external
+
+		$transactions = array();
+		$transactions['Transaction'] = array();
+
 		if (isset($responseObj -> TransactionArray)) {
 
 			if ($responseObj -> ReturnedTransactionCountActual === 1) {
 				// single time
-				$responseObj -> TransactionArray -> Transaction;
-					
-					
+				$transaction = $this -> processItemTransaction($responseObj -> TransactionArray -> Transaction, $data['Listing']['collectible_id']);
+				array_push($transactions['Transaction'], $transaction);
+
 			} else if ($responseObj -> ReturnedTransactionCountActual > 1) {
 				// array of items
 				$responseObj -> TransactionArray -> Transaction;
-			
+
 			}
 		}
+		$data['Transaction'] = $transactions['Transaction'];
 
-	}	
-	
+		debug($data);
+		
+		return $data;
+	}
+
 	/**
 	 * This will process a single transasction
 	 */
-	private function processItemTransaction($transaction) {
+	private function processItemTransaction($ebayTransaction, $collectibleId) {
+		$retVal = array();
+
+		$retVal['ext_transaction_id'] = $ebayTransaction -> TransactionID;
+		$retVal['collectible_id'] = $collectibleId;
+		$retVal['sale_price'] = $ebayTransaction -> ConvertedTransactionPrice -> _;
+		$retVal['sale_date'] = $ebayTransaction -> CreatedDate;
+		$retVal['bestOffer'] = $ebayTransaction -> BestOfferSale;
+
+		return $retVal;
 
 	}
 

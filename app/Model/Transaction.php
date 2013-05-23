@@ -1,6 +1,6 @@
 <?php
 class Transaction extends AppModel {
-	public $name = 'Listing';
+	public $name = 'Transaction';
 	public $belongsTo = array('Collectible', 'Listing');
 	public $actsAs = array('Containable');
 
