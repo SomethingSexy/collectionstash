@@ -68,7 +68,7 @@
  		<p>There are no active listings.</p>
  	{/eq}
 	
-	<h4>Transactions</h4>
+	<h4>Completed Transactions</h4>
 	{@eq key="{completedTransactions}" value="true" type="boolean"}
 		<table class="table table-condensed">
 			<thead>

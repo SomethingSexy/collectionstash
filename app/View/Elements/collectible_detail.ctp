@@ -231,27 +231,10 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 			</div>
 		</div>
 	</div>	
-</div>
-
-
-
-<div class="component" id="collectible-detail">
-	<div class="inside">
-		<div class="component-view">
-			<?php
-			if(isset($isLoggedIn) && $isLoggedIn === true)
-			{
-			//Show something if logged in?
-			?>
-
-			<?php } else { ?>
-			<div class="helpful-hint-message alert alert-info">
-				<?php echo __('See something that is inaccurate? Login or register to help us maintain the most accurate collectible database.'); ?>
-			</div>
-			<?php } ?>
-			<?php ?>
-			<?php if(isset($showComments) && $showComments) {
-			?>
+	
+	<?php if(isset($showComments) && $showComments) {?>
+		<div class="row-fluid spacer">
+			<div class="span12">
 			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
 			<script>
 				//lazy do doing here
@@ -259,11 +242,21 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 					$('#comments').comments();
 				});
 			</script>
-			<?php } ?>
+			</div>
+		</div>
+	<?php } ?>
+</div>
+
 
 			<?php
 if ($adminMode) {
 			?>
+<div class="component" id="collectible-detail">
+	<div class="inside">
+		<div class="component-view">
+
+
+
 
 			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form')); ?>
 			<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
@@ -295,10 +288,11 @@ if ($adminMode) {
 				});
 
 			</script>
-			<?php } ?>
+		
 		</div>
 	</div>
 </div>
+	<?php } ?>
 <script>
 var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
