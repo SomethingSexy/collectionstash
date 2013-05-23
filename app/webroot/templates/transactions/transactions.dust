@@ -21,6 +21,8 @@
 			<th>Date</th>
 			<th>Type</th>
 			<th>Item ID</th>
+			<th>Current Price</th>
+			<th>End Date</th>
 			<th>User</th>
 			<th></th>
 		</tr>
@@ -30,8 +32,10 @@
 			{@if cond=" (!'{processed}') "}
 				<tr>
 					<td>{created}</td>	
-					<td>eBay</td>
+					<td>{type}</td>
 					<td>{ext_item_id}</td>
+					<td>{current_price}</td>
+					<td>{end_date}</td>
 					<td>{User.username}</td>
 					<td></td>
 				</tr>
@@ -45,19 +49,24 @@
 	<thead>
 		<tr>
 			<th>Type</th>
-			<th>Item ID</th>
-			<th>User</th>
-			<th></th>
+			<th>Listing name</th>
+			<th>Price</th>
+			<th>Date</th>
 		</tr>
 	</thead>
 	<tbody>
-		{#transactions}
+		{#listings}
 			{@if cond=" ('{processed}') "}
+				{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
 				<tr>
-					<td></td><td></td><td></td><td></td>
+					<td>{type}</td>
+					<td>{listing_name}</td>
+					<td>{sale_price}</td>
+					<td>{sale_date}</td>
 				</tr>
+				{/Transaction}
 			{/if}
-		{/transactions}
+		{/listings}
 	</tbody>
 </table>
 
