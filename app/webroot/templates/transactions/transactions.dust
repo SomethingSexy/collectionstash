@@ -81,16 +81,14 @@
 			</thead>
 			<tbody>
 				{#listings}
-					{@if cond=" ('{processed}') "}
-						{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
-						<tr>
-							<td>{type}</td>
-							<td>{listing_name}</td>
-							<td>{sale_price}</td>
-							<td>{sale_date}</td>
-						</tr>
-						{/Transaction}
-					{/if}
+					{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
+					<tr>
+						<td>{type}</td>
+						<td>{listing_name}</td>
+						<td>{sale_price}</td>
+						<td>{sale_date}</td>
+					</tr>
+					{/Transaction}
 				{/listings}
 			</tbody>
 		</table>	

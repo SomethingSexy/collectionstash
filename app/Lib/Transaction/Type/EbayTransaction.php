@@ -70,7 +70,7 @@ class EbayTransaction extends Object implements Transactionable {
 		if ($listType === 'StoresFixedPrice') {
 			$data['Listing']['type'] = 'BIN';
 		} else if ($listType === 'Chinese') {
-			$data['Listing']['type'] = 'auction';
+			$data['Listing']['type'] = 'Auction';
 			// if it is an aucion, store the number of bids
 			// there might not be a bid count if the time was unsold
 			if (isset($responseObj -> Item -> SellingStatus -> BidCount)) {
@@ -79,6 +79,8 @@ class EbayTransaction extends Object implements Transactionable {
 
 		} else if ($listType === 'PersonalOffer') {
 			$data['Listing']['type'] = 'BIN';
+		} else if ($listType === 'FixedPriceItem') {
+			$data['Listing']['type'] = 'Store';
 		}
 
 		// this should all be the same
@@ -90,7 +92,7 @@ class EbayTransaction extends Object implements Transactionable {
 		$data['Listing']['end_date'] = $responseObj -> Item -> ListingDetails -> EndTime;
 		$data['Listing']['listing_name'] = $responseObj -> Item -> Title;
 		$data['Listing']['quantity'] = $responseObj -> Item -> Quantity;
-		$data['Listing']['url'] = $responseObj -> Item -> ListingDetails -> ViewItemURLForNaturalSearch ;
+		$data['Listing']['url'] = $responseObj -> Item -> ListingDetails -> ViewItemURLForNaturalSearch;
 
 		// If active, gather some information but do not change processing flag
 		if ($listingStatus === 'Active') {
@@ -99,7 +101,7 @@ class EbayTransaction extends Object implements Transactionable {
 			$data['Listing']['status'] = 'ended';
 		} else if ($listingStatus === 'Completed') {
 			$data['Listing']['status'] = 'completed';
-			$data['Listing']['processed'] = true; 
+			$data['Listing']['processed'] = true;
 		}
 
 		// now we need to see if there is a transaction
@@ -126,14 +128,17 @@ class EbayTransaction extends Object implements Transactionable {
 
 			} else if ($responseObj -> ReturnedTransactionCountActual > 1) {
 				// array of items
-				$responseObj -> TransactionArray -> Transaction;
+				foreach ($responseObj -> TransactionArray -> Transaction as $key => $value) {
+					$transaction = $this -> processItemTransaction($value, $data['Listing']['collectible_id']);
+					array_push($transactions['Transaction'], $transaction);
+				}
 
 			}
 		}
 		$data['Transaction'] = $transactions['Transaction'];
 
 		debug($data);
-		
+
 		return $data;
 	}
 
