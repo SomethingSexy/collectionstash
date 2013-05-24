@@ -21,7 +21,7 @@ class ListingsController extends AppController {
 		$transaction['Listing']['collectible_id'] = '234';
 
 		$response = $this -> Listing -> createListing($transaction, $this -> getUser());
-		
+
 		debug($response);
 		// first we are going to process it
 		// $factory = new TransactionFactory();
