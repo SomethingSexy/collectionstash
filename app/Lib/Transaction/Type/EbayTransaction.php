@@ -137,7 +137,22 @@ class EbayTransaction extends Object implements Transactionable {
 				}
 
 			}
+		} else {
+			// there can be a chance on older ones that might not have transactions
+			// but are completed
+			if ($listingStatus === 'Completed' && $responseObj -> Item -> SellingStatus -> QuantitySold === 1) {
+				$transaction = array();
+
+				//$transaction['ext_transaction_id'] = $ebayTransaction -> TransactionID;
+				$transaction['collectible_id'] = $data['Listing']['collectible_id'];
+				$transaction['sale_price'] = $responseObj -> Item -> SellingStatus -> ConvertedCurrentPrice -> _;
+				$transaction['sale_date'] = $responseObj -> Item -> ListingDetails -> EndTime;
+
+				array_push($transactions['Transaction'], $transaction);
+			}
+
 		}
+
 		$data['Transaction'] = $transactions['Transaction'];
 
 		debug($data);

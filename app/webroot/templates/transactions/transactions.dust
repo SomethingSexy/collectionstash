@@ -44,7 +44,6 @@
 					<th>Current Price</th>
 					<th>Start Date</th>
 					<th>End Date</th>
-					<th>User</th>
 					<th> </th>
 				</tr>
 			</thead>
@@ -57,7 +56,6 @@
 							<td>{current_price}</td>
 							<td>{start_date}</td>
 							<td>{end_date}</td>
-							<td>{User.username}</td>
 							<td>
 								<div class="btn-group actions">
 									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
