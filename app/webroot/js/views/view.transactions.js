@@ -81,6 +81,8 @@ var TransactionsView = Backbone.View.extend({
 	},
 	deleteListing : function(event) {
 		$(event.currentTarget, this.el).attr('data-id');
+		var model = this.collection.get(modelId);
+		model.destroy();
 	},
 	flag : function(event) {
 		var modelId = $(event.currentTarget, this.el).attr('data-id');
