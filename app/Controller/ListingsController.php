@@ -58,6 +58,12 @@ class ListingsController extends AppController {
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {// delete
+
+			if (!$this -> isUserAdmin()) {
+				$this -> response -> statusCode(401);
+				return;
+			}
+
 			// I think it makes sense to use rest delete
 			// for changing the status to a delete
 			// although I am going to physically delete it

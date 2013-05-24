@@ -77,6 +77,10 @@ class Listing extends AppModel {
 		return $count === 0;
 	}
 
+	public function remove($data) {
+
+	}
+
 	/**
 	 * Used for updating, the only thing you can update right now from here
 	 * is the flagged
