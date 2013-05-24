@@ -38,7 +38,8 @@ $(function() {
 
 		$('#transactions').html(new TransactionsView({
 			collectible : collectibleModel,
-			collection : listingsList
+			collection : listingsList,
+			allowDeleteListing : allowDeleteListing
 		}).render().el);
 	});
 

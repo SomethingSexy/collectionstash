@@ -45,11 +45,11 @@
 					<th>Start Date</th>
 					<th>End Date</th>
 					<th>User</th>
-					<th></th>
+					<th> </th>
 				</tr>
 			</thead>
 			<tbody>
-				{#listings}
+				{#listings allowDeleteListing=allowDeleteListing}
 					{@if cond=" (!'{processed}') "}
 						<tr>
 							<td>{type}</td>
@@ -58,7 +58,18 @@
 							<td>{start_date}</td>
 							<td>{end_date}</td>
 							<td>{User.username}</td>
-							<td></td>
+							<td>
+								<div class="btn-group actions">
+									<a data-id="{id}" class="btn flag {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="Flag">
+										<i class=" icon-exclamation-sign"></i>
+									</a>
+									{@eq key="{allowDeleteListing}" value="true" type="boolean"}
+										<a data-id="{id}" class="btn delete" href="#" title="Delete">
+											<i class="icon-remove"></i>
+										</a>
+									{/eq}
+								</div>
+							</td>
 						</tr>
 					{/if}
 				{/listings}
@@ -77,16 +88,29 @@
 					<th>Listing name</th>
 					<th>Price</th>
 					<th>Date</th>
+					<th> </th>
 				</tr>
 			</thead>
 			<tbody>
-				{#listings}
-					{#Transaction type=type itemId=ext_item_id listing_name=listing_name}
+				{#listings allowDeleteListing=allowDeleteListing}
+					{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged}
 					<tr>
 						<td>{type}</td>
 						<td>{listing_name}</td>
 						<td>{sale_price}</td>
 						<td>{sale_date}</td>
+						<td>
+							<div class="btn-group actions">
+								<a data-id="{listing_id}" class="btn flag {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="Flag">
+									<i class=" icon-exclamation-sign"></i>
+								</a>
+								{@eq key="{allowDeleteListing}" value="true" type="boolean"}
+									<a data-id="{listing_id}" class="btn delete" href="#" title="Delete">
+										<i class="icon-remove"></i>
+									</a>
+								{/eq}
+							</div>
+						</td>
 					</tr>
 					{/Transaction}
 				{/listings}

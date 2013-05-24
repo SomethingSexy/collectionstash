@@ -300,6 +300,15 @@ var collectibleStatus = {
 };
 var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
 var listings = <?php echo json_encode($collectibleDetail['Listing']); ?>;
+
+ <?php
+if ($isUserAdmin) {
+	echo 'var allowDeleteListing = true;';
+} else {
+	echo 'var allowDeleteListing = false;';
+}
+	?>
+
  <?php
 if ($showStatus) {
 	echo 'var showStatus = true;';

@@ -77,6 +77,19 @@ class Listing extends AppModel {
 		return $count === 0;
 	}
 
+	/**
+	 * Used for updating, the only thing you can update right now from here
+	 * is the flagged
+	 */
+	public function updatetListing($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+
+		$this -> id = $data['Listing']['id'];
+		$this -> saveField('flagged', $data['Listing']['flagged']);
+
+		return $retVal;
+	}
+
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 

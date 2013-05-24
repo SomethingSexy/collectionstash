@@ -1,13 +1,19 @@
+// at some point we should probably break this out into transaction views
 var TransactionsView = Backbone.View.extend({
 	template : 'transactions',
 	className : 'well',
 	events : {
-		'click .add-transaction' : 'submit'
+		'click .add-transaction' : 'submit',
+		'click .flag' : 'flag',
+		'click .delete' : 'deleteListing'
+
 	},
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
+		this.allowDeleteListing = options.allowDeleteListing;
 		this.collectible = options.collectible;
 		this.collection.on('add', this.render, this);
+		this.collection.on('change:flagged', this.render, this);
 		this.errors = [];
 	},
 	render : function() {
@@ -30,7 +36,8 @@ var TransactionsView = Backbone.View.extend({
 			listings : this.collection.toJSON(),
 			errors : this.errors,
 			activeListings : activeListings,
-			completedTransactions : completedTransactions
+			completedTransactions : completedTransactions,
+			allowDeleteListing : this.allowDeleteListing
 		};
 
 		dust.render(this.template, data, function(error, output) {
@@ -70,6 +77,26 @@ var TransactionsView = Backbone.View.extend({
 				self.render();
 			}
 		})
+
+	},
+	deleteListing : function(event) {
+		$(event.currentTarget, this.el).attr('data-id');
+	},
+	flag : function(event) {
+		var modelId = $(event.currentTarget, this.el).attr('data-id');
+		var model = this.collection.get(modelId);
+
+		if (model.get('flagged')) {
+			model.set({
+				flagged : false
+			});
+		} else {
+			model.set({
+				flagged : true
+			});
+		}
+
+		model.save();
 
 	}
 });
