@@ -77,8 +77,20 @@ class Listing extends AppModel {
 		return $count === 0;
 	}
 
-	public function remove($data) {
+	/**
+	 *
+	 */
+	public function remove($id, $user) {
+		$retVal = $this -> buildDefaultResponse();
 
+		if ($this -> delete($id, true)) {
+			$retVal['response']['isSuccess'] = true;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+		}
+
+		return $retVal;
 	}
 
 	/**
