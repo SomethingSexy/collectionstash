@@ -84,8 +84,11 @@ class Listing extends AppModel {
 	public function updatetListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
-		$this -> id = $data['Listing']['id'];
-		$this -> saveField('flagged', $data['Listing']['flagged']);
+		$this -> id = $data['id'];
+		$this -> saveField('flagged', $data['flagged']);
+
+		$retVal['response']['data'] = $data;
+		$retVal['response']['isSuccess'] = true;
 
 		return $retVal;
 	}
