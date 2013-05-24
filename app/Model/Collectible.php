@@ -1103,6 +1103,7 @@ class Collectible extends AppModel {
 
 			// this will also handle triggering an activity event for adding
 			if ($addCollectibleUser) {
+				// TODO/FYI this adds an add to stash event, not an event type 11, so the points earned are a lot lower.
 				$defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($user['User']['id'], $collectibleId);
 				$this -> CollectiblesUser -> add($defaultCollectiblesUser, $user);
 			} else if ($triggerActivity) {

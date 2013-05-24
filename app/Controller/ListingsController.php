@@ -58,7 +58,7 @@ class ListingsController extends AppController {
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {// delete
-
+			// have to be a user admin to delete
 			if (!$this -> isUserAdmin()) {
 				$this -> response -> statusCode(401);
 				return;

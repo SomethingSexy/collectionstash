@@ -13,6 +13,7 @@ var TransactionsView = Backbone.View.extend({
 		this.allowMaintenance = options.allowDeleteListing;
 		this.collectible = options.collectible;
 		this.collection.on('add', this.render, this);
+		this.collection.on('remove', this.render, this);
 		this.collection.on('change:flagged', this.render, this);
 		this.errors = [];
 	},
@@ -80,7 +81,7 @@ var TransactionsView = Backbone.View.extend({
 
 	},
 	deleteListing : function(event) {
-		$(event.currentTarget, this.el).attr('data-id');
+		var modelId = $(event.currentTarget, this.el).attr('data-id');
 		var model = this.collection.get(modelId);
 		model.destroy();
 	},
