@@ -50,21 +50,13 @@ class ListingsController extends AppController {
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isPut()) {// update
-			$transaction['Listing'] = $this -> request -> input('json_decode', true);
-			$transaction['Listing'] = Sanitize::clean($transaction['Listing']);
+			$transaction = $this -> request -> input('json_decode', true);
+			// no need to clean for now on the update
+			//$transaction = Sanitize::clean($transaction);
 
 			$response = $this -> Listing -> updatetListing($transaction, $this -> getUser());
 
-			$request = $this -> request -> input('json_decode');
-			debug($request);
-			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
-				$this -> response -> statusCode(401);
-			} else {
-				// request becomes an actual object and not an array
-				$request -> isEdit = $response['response']['data']['isEdit'];
-			}
-
-			$this -> set('returnData', $request);
+			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {// delete
 			// I think it makes sense to use rest delete
 			// for changing the status to a delete

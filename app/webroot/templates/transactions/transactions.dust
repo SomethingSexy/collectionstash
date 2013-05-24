@@ -49,7 +49,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#listings allowDeleteListing=allowDeleteListing}
+				{#listings allowMaintenance=allowMaintenance}
 					{@if cond=" (!'{processed}') "}
 						<tr>
 							<td>{type}</td>
@@ -60,10 +60,10 @@
 							<td>{User.username}</td>
 							<td>
 								<div class="btn-group actions">
-									<a data-id="{id}" class="btn flag {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="Flag">
+									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 										<i class=" icon-exclamation-sign"></i>
 									</a>
-									{@eq key="{allowDeleteListing}" value="true" type="boolean"}
+									{@eq key="{allowMaintenance}" value="true" type="boolean"}
 										<a data-id="{id}" class="btn delete" href="#" title="Delete">
 											<i class="icon-remove"></i>
 										</a>
@@ -92,7 +92,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#listings allowDeleteListing=allowDeleteListing}
+				{#listings allowMaintenance=allowMaintenance}
 					{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged}
 					<tr>
 						<td>{type}</td>
@@ -101,10 +101,10 @@
 						<td>{sale_date}</td>
 						<td>
 							<div class="btn-group actions">
-								<a data-id="{listing_id}" class="btn flag {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="Flag">
+								<a data-id="{listing_id}" class="btn flag {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 									<i class=" icon-exclamation-sign"></i>
 								</a>
-								{@eq key="{allowDeleteListing}" value="true" type="boolean"}
+								{@eq key="{allowMaintenance}" value="true" type="boolean"}
 									<a data-id="{listing_id}" class="btn delete" href="#" title="Delete">
 										<i class="icon-remove"></i>
 									</a>

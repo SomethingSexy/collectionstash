@@ -10,7 +10,7 @@ var TransactionsView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
-		this.allowDeleteListing = options.allowDeleteListing;
+		this.allowMaintenance = options.allowDeleteListing;
 		this.collectible = options.collectible;
 		this.collection.on('add', this.render, this);
 		this.collection.on('change:flagged', this.render, this);
@@ -37,7 +37,7 @@ var TransactionsView = Backbone.View.extend({
 			errors : this.errors,
 			activeListings : activeListings,
 			completedTransactions : completedTransactions,
-			allowDeleteListing : this.allowDeleteListing
+			allowMaintenance : this.allowMaintenance
 		};
 
 		dust.render(this.template, data, function(error, output) {
@@ -84,19 +84,23 @@ var TransactionsView = Backbone.View.extend({
 	},
 	flag : function(event) {
 		var modelId = $(event.currentTarget, this.el).attr('data-id');
-		var model = this.collection.get(modelId);
 
-		if (model.get('flagged')) {
-			model.set({
-				flagged : false
-			});
-		} else {
-			model.set({
-				flagged : true
-			});
+		if (!$(event.currentTarget, this.el).hasClass('disabled')) {
+			var model = this.collection.get(modelId);
+
+			if (model.get('flagged')) {
+				model.set({
+					flagged : false
+				});
+			} else {
+				model.set({
+					flagged : true
+				});
+			}
+
+			model.save();
+
 		}
-
-		model.save();
 
 	}
 });
