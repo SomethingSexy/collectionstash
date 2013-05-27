@@ -65,14 +65,12 @@ class Listing extends AppModel {
 	}
 
 	function checkDuplicateItems($check) {
-		debug($check);
 		// we need these to proceed
 		if (empty($check['ext_item_id']) || empty($this -> data['Listing']['listing_type_id']) || empty($this -> data['Listing']['collectible_id'])) {
 			return false;
 		}
 
 		$count = $this -> find('count', array('contain' => false, 'conditions' => array('Listing.collectible_id' => $this -> data['Listing']['collectible_id'], 'Listing.ext_item_id' => $check['ext_item_id'], 'Listing.listing_type_id' => $this -> data['Listing']['listing_type_id'])));
-		debug($count);
 		// return true if none found
 		return $count === 0;
 	}
@@ -117,7 +115,7 @@ class Listing extends AppModel {
 		$data['Listing']['listing_type_id'] = 1;
 
 		$this -> set($data['Listing']);
-		debug($this -> data);
+
 		// Validate first
 		if (!$this -> validates()) {
 			$retVal['response']['isSuccess'] = false;
@@ -132,8 +130,6 @@ class Listing extends AppModel {
 
 		// TODO: If it comes back with an error, do not save and send error message to user
 		$data = $transactionable -> processTransaction($data);
-
-		debug($data);
 
 		if (!$data) {
 			$retVal['response']['isSuccess'] = false;
