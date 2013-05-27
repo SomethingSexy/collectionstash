@@ -4,6 +4,10 @@
  *
  *
  * This will run once every hour.
+ * 
+ * It will looking for any listings that have not finished processing and process them if it can.
+ * 
+ * It will have to sync up any transactions as well. 
  */
 App::uses('TransactionFactory', 'Lib/Transaction');
 class ProcessTransactionsShell extends AppShell {

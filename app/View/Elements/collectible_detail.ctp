@@ -307,7 +307,16 @@ if ($isUserAdmin) {
 } else {
 	echo 'var allowDeleteListing = false;';
 }
-	?>
+?>
+
+ <?php
+if ($isLoggedIn) {
+	echo 'var allowAddListing = true;';
+} else {
+	echo 'var allowAddListing = false;';
+}
+?>
+
 
  <?php
 if ($showStatus) {

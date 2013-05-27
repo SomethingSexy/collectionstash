@@ -16,7 +16,7 @@
 		</ul>
 	</div>
 {/if}
-
+{@eq key="{allowAdd}" value="true" type="boolean"}
 <div class="control-group">
 	<div class="input-append">
 		<input type="text" value="" name="item" placeholder="Item Number" id="inputListingItem" autocomplete="off">
@@ -30,7 +30,7 @@
 		</button>
 	</div><span class="help-block inline-error"></span>
 </div>
-
+{/eq}
 {@if cond=" ('{listings}'.length === 0) "}
 	<p>No listings have been added.</p>
 {:else}
@@ -48,7 +48,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#listings allowMaintenance=allowMaintenance}
+				{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
 					{@if cond=" (!'{processed}') "}
 						<tr>
 							<td>{type}</td>
@@ -58,9 +58,11 @@
 							<td>{end_date}</td>
 							<td>
 								<div class="btn-group actions">
+									{@eq key="{allowAdd}" value="true" type="boolean"}
 									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 										<i class=" icon-exclamation-sign"></i>
 									</a>
+									{/eq}
 									{@eq key="{allowMaintenance}" value="true" type="boolean"}
 										<a data-id="{id}" class="btn delete" href="#" title="Delete">
 											<i class="icon-remove"></i>
