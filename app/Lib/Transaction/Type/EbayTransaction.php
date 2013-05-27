@@ -46,8 +46,6 @@ class EbayTransaction extends Object implements Transactionable {
 		// make the API call
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
 
-		debug($responseObj);
-
 		// only process if Ack is success
 
 		if ($responseObj -> Ack !== 'Success') {
@@ -175,8 +173,6 @@ class EbayTransaction extends Object implements Transactionable {
 
 		}
 
-		debug($data);
-
 		return $data;
 	}
 
@@ -186,7 +182,7 @@ class EbayTransaction extends Object implements Transactionable {
 	private function processItemTransaction($ebayTransaction, $collectibleId) {
 		$retVal = array();
 
-		$retVal['ext_transaction_id'] = $ebayTransaction -> TransactionID;
+		$retVal['ext_transaction_id'] = $ebayTransaction -> OrderLineItemID;
 		$retVal['collectible_id'] = $collectibleId;
 		$retVal['sale_price'] = $ebayTransaction -> ConvertedTransactionPrice -> _;
 		$retVal['sale_date'] = $ebayTransaction -> CreatedDate;

@@ -197,8 +197,8 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 							}
 							?>							
 						</div>
-						<div class="span6" <?php if($collectibleDetail['Status']['id'] === '4') {  echo 'id="transactions"'; } ?>>
-	
+						<div class="span6" <?php if($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"'; } ?>>
+
 						</div>
 					</div>
 					<div class="row-fluid">
