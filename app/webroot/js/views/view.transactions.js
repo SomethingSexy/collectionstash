@@ -11,6 +11,7 @@ var TransactionsView = Backbone.View.extend({
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
 		this.allowMaintenance = options.allowDeleteListing;
+		this.allowAdd = options.allowAddListing;
 		this.collectible = options.collectible;
 		this.collection.on('add', this.render, this);
 		this.collection.on('remove', this.render, this);
@@ -38,7 +39,8 @@ var TransactionsView = Backbone.View.extend({
 			errors : this.errors,
 			activeListings : activeListings,
 			completedTransactions : completedTransactions,
-			allowMaintenance : this.allowMaintenance
+			allowMaintenance : this.allowMaintenance,
+			allowAdd : this.allowAdd
 		};
 
 		dust.render(this.template, data, function(error, output) {
@@ -69,12 +71,20 @@ var TransactionsView = Backbone.View.extend({
 					self.render();
 				}
 			},
-			error : function() {
+			error : function(model, xhr, options) {
 				$('.add-transaction', self.el).button('reset');
-				self.errors = [{
-					message : 'There was an issue with the request.',
-					inline : 'false'
-				}];
+				if (xhr && xhr.status) {
+					self.errors = [{
+						message : 'You must be logged in to submit listings.',
+						inline : 'false'
+					}];
+				} else {
+					self.errors = [{
+						message : 'There was an issue with the request.',
+						inline : 'false'
+					}];
+				}
+
 				self.render();
 			}
 		})
