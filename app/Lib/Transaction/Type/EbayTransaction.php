@@ -153,7 +153,27 @@ class EbayTransaction extends Object implements Transactionable {
 
 		}
 
-		$data['Transaction'] = $transactions['Transaction'];
+		// before we add them to the return data, let's see if we have any existing
+		// transactions that were adding previously
+		// This should only happen when we are processing existing ones that
+		// have not been completed before
+		if (!empty($data['Transaction'])) {
+			foreach ($transactions['Transaction'] as $key => $processedTransaction) {
+				$alreadyProcessed = false;
+				foreach ($data['Transaction'] as $key => $existingTransaction) {
+					if ($processedTransaction['ext_transaction_id'] === $existingTransaction['ext_transaction_id']) {
+						$alreadyProcessed = true;
+					}
+				}
+
+				if (!$alreadyProcessed) {
+					array_push($data['Transaction'], $processedTransaction);
+				}
+			}
+		} else {// otherwise just add all
+			$data['Transaction'] = $transactions['Transaction'];
+
+		}
 
 		debug($data);
 
