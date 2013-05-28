@@ -109,6 +109,12 @@ class SubmissionActivity extends BaseActivity {
 
 			$targetJSON = $this -> buildTarget($this -> object['Attribute']['id'], '/attributes/view/' . $this -> object['Attribute']['id'], 'attribute', $this -> object['Attribute']['name']);
 			$retVal = array_merge($retVal, $targetJSON);
+		} else if ($this -> type === 'Listing') {
+			$objectJSON = $this -> buildObject($this -> object['Listing']['id'], $this -> object['Listing']['url'], 'listing', $this -> object);
+			$retVal = array_merge($retVal, $objectJSON);
+
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'] . '/' . $this -> object['Collectible']['name'], 'collectible', $this -> object['Attribute']['name']);
+			$retVal = array_merge($retVal, $targetJSON);
 		}
 
 		if ($this -> action === 'approve') {

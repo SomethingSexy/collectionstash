@@ -40,7 +40,7 @@
 			<thead>
 				<tr>
 					<th>Type</th>
-					<th>Item ID</th>
+					<th>Listing name</th>
 					<th>Current Price</th>
 					<th>Start Date</th>
 					<th>End Date</th>
@@ -52,7 +52,7 @@
 					{@if cond=" (!'{processed}') "}
 						<tr>
 							<td>{type}</td>
-							<td>{ext_item_id}</td>
+							<td><a target="_blank" href="{url}">{listing_name}</a></td>
 							<td>{current_price}</td>
 							<td>{start_date}</td>
 							<td>{end_date}</td>
@@ -96,7 +96,7 @@
 					{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd}
 					<tr>
 						<td>{type}</td>
-						<td>{listing_name}</td>
+						<td><a target="_blank" href="{url}">{listing_name}</a></td>
 						<td>{sale_price}</td>
 						<td>{sale_date}</td>
 						<td>

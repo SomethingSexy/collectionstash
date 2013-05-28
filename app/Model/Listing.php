@@ -146,7 +146,7 @@ class Listing extends AppModel {
 
 		if ($this -> saveAssociated($data)) {
 			$transactionId = $this -> id;
-			$transaction = $this -> find('first', array('contain' => array('User', 'Transaction'), 'conditions' => array('Listing.id' => $transactionId)));
+			$transaction = $this -> find('first', array('contain' => array('User', 'Transaction', 'Collectible'), 'conditions' => array('Listing.id' => $transactionId)));
 			// As of now, we just need to the id but we
 			// can expand this later to return more if necessary
 			$retVal['response']['data'] = $transaction['Listing'];
@@ -155,6 +155,7 @@ class Listing extends AppModel {
 			$retVal['response']['isSuccess'] = true;
 			// since we can only add attributes through collectibles right
 			// now, do not do any event stuff here
+			$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_LISTING, 'user' => $user, 'object' => $transaction, 'type' => 'Listing')));
 		} else {
 			$retVal['response']['isSuccess'] = false;
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
