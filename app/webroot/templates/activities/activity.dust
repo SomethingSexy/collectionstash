@@ -38,7 +38,7 @@
 				
 			{/if}
 			<!-- Checking for edit here because we don't want default behavior-->
-			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute' || '{Activity.data.object.objectType}' === 'edit' || '{Activity.data.object.objectType}' === 'tag' || '{Activity.data.object.objectType}' === 'artist'  )"}
+			{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute' || '{Activity.data.object.objectType}' === 'edit' || '{Activity.data.object.objectType}' === 'tag' || '{Activity.data.object.objectType}' === 'artist' || '{Activity.data.object.objectType}' === 'listing' )"}
 				<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
 				{@if cond="( '{Activity.data.object.objectType}' === 'photo' )"}
 					{@if cond="( '{Activity.activity_type_id}' === '12' )"}
@@ -72,6 +72,10 @@
 
 				{@if cond="( '{Activity.data.object.objectType}' === 'edit' )"}
 					edit
+				{/if}
+				
+				{@if cond="( '{Activity.data.object.objectType}' === 'listing' )"}
+					<a target="_blank" href="{Activity.data.object.data.Listing.url}"> listing</a>
 				{/if}
 			
 			{:else}
