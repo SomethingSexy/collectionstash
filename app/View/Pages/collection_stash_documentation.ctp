@@ -491,6 +491,18 @@
 		<p>Here is an example of a collectible with some completed transactions.</p>
 		<img src="/img/documentation/listing_completed.png" class="img-polaroid">
 		<p></p>
+		<h3 id="listing-add"> Adding a Listing </h3>
+		<p>As of now, Collection Stash only supports eBay listings.  While logged in, you can add an eBay listing to a collectible by entering the item number from an eBay listing into the "Item Number" input field.</p>
+		<img src="/img/documentation/listing_add.png" class="img-polaroid">
+		<p></p>
+		<p>Once you have entered a valid eBay Item Number you will click the "Add Listing" button to submit the new listing.  This will validate the Item Number, load the listing information, and display it appropriately.  If the Item Number you entered is valid, the listing information will automatically display below.</p>
+		<p>This is an example of a listing that was added that is active.  This means the collectible is still available for purchase.</p>
+		<img src="/img/documentation/listing_add_listing.png" class="img-polaroid">
+		<p></p>
+		<p>Next to each active listing or completed transaction is an "!" icon.  You can click this icon to flag that there is a problem with this listing, either it is not valid or an incorrect listing for this collectible.  When you click this icon, it will notify an administrator to look into this listing.  Only an administrator and unflag a listing.</p>
+		<img src="/img/documentation/listing_add_flagged.png" class="img-polaroid">
+		<p></p>
+		<p>Currently all listings have to be entered in manually.  However, you can earn up to 50 nuts per valid listing you add to a collectible.</p>
 	</div>
 
 </div>
