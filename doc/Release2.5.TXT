@@ -29,3 +29,7 @@ If the user marks a collectible as sold and they did it on eBay they will then b
 
 
 cake -app D:\Development\wamp\www\app process_transactions
+
+
+
+/var/www/collectionstash/vendors/cakeshell.sh process_transactions -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
