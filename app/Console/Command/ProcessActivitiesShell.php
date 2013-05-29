@@ -93,6 +93,10 @@ class ProcessActivitiesShell extends AppShell {
 					// user id
 					$userId = $data -> actor -> id;
 					$saveData['UserPointFact']['user_id'] = $userId;
+				} else if ($activity['ActivityType']['id'] === '13') {
+					// user id
+					$userId = $data -> actor -> id;
+					$saveData['UserPointFact']['user_id'] = $userId;
 				}
 				// Now that we have a score and who to add it to, let's see if we have something
 				// added already
