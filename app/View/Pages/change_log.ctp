@@ -1,4 +1,19 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.5.0.1</h3>
+<p>When you add listings to a collectible, the listings will now show up on the Activity view on your Home page.  You will also be able to earn 50 nuts for each listing you add.</p>
+
+<h3>Release Notes for v2.5</h3>
+<p>Version 2.5 will see major updates to the Stash.</p>
+<p>The first release for 2.5 allows you to add eBay listings to a collectible.  Using the item number found on an eBay listing, you can enter it in the "Item Number" field found when viewing a collectible.  Once you click "Add Listing", Collection Stash will retrieve the listing details and display them back to you.</p> 
+<p>This will allow you to see what is currently avaliable and if collectibles have recently sold.  As of now, you will have to manually enter eBay listings as you come across them.</p>	
+	
+<p>Future enhancements for 2.5 will include:</p>
+<ul>
+	<li>Stash history.  You will be able to maintain a history of your evolving stash, indicating what you use to own and why it is not in your stash anymore.</li>
+	<li>Filters for your stash.</li>
+	<li>More details around your stash, including worth and statistics.</li>
+	<li>The ability to export your stash.</li>
+</ul>
 
 <h3>Release Notes for v2.4</h3>
 <h4>Custom and Original Collectibles</h4>

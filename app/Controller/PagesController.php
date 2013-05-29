@@ -31,39 +31,39 @@ App::uses('AppController', 'Controller');
  */
 class PagesController extends AppController {
 
-/**
- * Controller name
- *
- * @var string
- */
+	/**
+	 * Controller name
+	 *
+	 * @var string
+	 */
 	public $name = 'Pages';
 
-/**
- * Default helper
- *
- * @var array
- */
+	/**
+	 * Default helper
+	 *
+	 * @var array
+	 */
 	public $helpers = array('Html', 'Session', 'Minify');
 
-/**
- * This controller does not use a model
- *
- * @var array
- */
+	/**
+	 * This controller does not use a model
+	 *
+	 * @var array
+	 */
 	public $uses = array();
 
-/**
- * Displays a view
- *
- * @param mixed What page to display
- * @return void
- */
+	/**
+	 * Displays a view
+	 *
+	 * @param mixed What page to display
+	 * @return void
+	 */
 	public function display() {
 		$path = func_get_args();
 
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			$this -> redirect('/');
 		}
 		$page = $subpage = $title_for_layout = null;
 
@@ -76,7 +76,17 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
-		$this->set(compact('page', 'subpage', 'title_for_layout'));
-		$this->render(implode('/', $path));
+
+		$layout = Configure::read('Settings.Layout.Static.' . $page);
+
+		if (!$layout) {
+			$layout = 'default';
+		}
+
+		$this -> layout = $layout;
+
+		$this -> set(compact('page', 'subpage', 'title_for_layout'));
+		$this -> render(implode('/', $path));
 	}
+
 }
