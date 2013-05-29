@@ -53,6 +53,12 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 			'AppID' => 'Collecti-fc7c-44cb-b604-478517afbe7f',
 			'CertID'=> '542ce264-1ee9-40f7-a06b-2ccf5b57c442'
 		)
+	),
+	'Layout' => array(
+		'Static' => array(
+			'collection_stash_documentation' => 'fluid'
+		)
+	
 	)
 ));
 

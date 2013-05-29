@@ -45,7 +45,7 @@ class EbayTransaction extends Object implements Transactionable {
 
 		// make the API call
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
-
+		debug($responseObj);
 		// only process if Ack is success
 
 		if ($responseObj -> Ack !== 'Success') {

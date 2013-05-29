@@ -57,6 +57,14 @@
 					</li>
 				</ul>
 			</li>
+			<li>
+				<a href="#listings"> <i class="icon-chevron-right"></i> Sale Listings and Transactions</a>
+				<ul class="nav nav-list">
+					<li>
+						<a href="#listings-add"> <i class="icon-chevron-right"></i> Adding a Listing </a>
+					</li>
+				</ul>
+			</li>
 		</ul>
 	</div>
 	<div class="span9">
@@ -437,7 +445,9 @@
 		</p>
 		<img src="/img/documentation/part_card.png" class="img-polaroid">
 		<p></p>
-		<p>The status field can be selected when you add an existing part to a custom collectible using the Add Existing Part menu option.</p>
+		<p>
+			The status field can be selected when you add an existing part to a custom collectible using the Add Existing Part menu option.
+		</p>
 		<img src="/img/documentation/part_add_existing_custom_modal.png" class="img-polaroid">
 		<p></p>
 		<p></p>
@@ -473,6 +483,14 @@
 		<p>
 			Coming soon!
 		</p>
+		
+		<h2 id="listings">Sale Listings and Transactions</h2>
+		<p>Every collectible here at Collection Stash can contain sale and auction listings.  These listings can be used for reference to see what collectibles might be currently for sale and what a collectible might have recently sold for.  You can find these listings on the Collectible Information page.</p>
+		<img src="/img/documentation/listing.png" class="img-polaroid">
+		<p></p>
+		<p>Here is an example of a collectible with some completed transactions.</p>
+		<img src="/img/documentation/listing_completed.png" class="img-polaroid">
+		<p></p>
 	</div>
 
 </div>
