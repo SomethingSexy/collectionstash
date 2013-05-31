@@ -190,6 +190,9 @@ class CollectiblesController extends AppController {
 
 			$this -> set('returnData', $response);
 
+		} else if ($this -> request -> isGet()) {
+			$returnData = $this -> Collectible -> getCollectible($id);
+			$this -> set('returnData', $returnData['response']['data']['collectible']['Collectible']);
 		}
 
 	}

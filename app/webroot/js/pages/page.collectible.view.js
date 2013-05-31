@@ -2,7 +2,8 @@ $(function() {
 	// Get all of the data here
 	$.when($.get('/templates/collectibles/status.dust'), $.get('/templates/transactions/transactions.dust')).done(function(statusTemplate, transactionsTemplate) {
 		dust.loadSource(dust.compile(transactionsTemplate[0], 'transactions'));
-
+		// grab the template-stash-add
+		dust.loadSource(dust.compile($('#template-stash-add').html(), 'stash.add'));
 		var collectibleModel = new Backbone.Model(collectible);
 		var listingsList = new Listings(listings);
 
@@ -42,6 +43,33 @@ $(function() {
 			allowDeleteListing : allowDeleteListing,
 			allowAddListing : allowAddListing
 		}).render().el);
+
+		var stashAddView = null;
+		
+		// TODO: We need to do a call to see if the user
+		// akready owns this guy
+		
+		$('.add-stash-link').click(function(event) {
+			var collectibleUser = new CollectibleUserModel();
+
+			if (stashAddView) {
+				stashAddView.remove();
+				delete stashAddView;
+			}
+
+			stashAddView = new StashAddView({
+				collectible : collectibleModel,
+				model : collectibleUser
+			});
+
+			$('body').append(stashAddView.render().el);
+
+			$('#stash-add-dialog', 'body').on('hidden', function() {
+				stashAddView.remove();
+			});
+
+			$('#stash-add-dialog').modal();
+		});
 	});
 
 });
