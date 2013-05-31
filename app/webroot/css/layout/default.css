@@ -2523,6 +2523,9 @@ div.paging span a:hover {
 	font-weight: normal;
 	line-height: 1;
 }
+.datepicker {
+	z-index: 1151;
+}
 /*
  * Cake BS
  */

@@ -76,6 +76,9 @@
 			s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+	<script id="template-stash-add" type="text/x-tmpl">
+		<?php echo $this -> element('stash_add_dialog'); ?>	
+	</script>
 </head>
 <body>
 	<div id="fb-root"></div>

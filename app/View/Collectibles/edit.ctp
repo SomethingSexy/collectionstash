@@ -3,6 +3,7 @@ echo $this -> Minify -> script('js/jquery.form', array('inline' => false));
 echo $this -> Minify -> script('js/jquery.treeview', array('inline' => false));
 echo $this -> Minify -> script('js/cs.core.tree', array('inline' => false));
 echo $this -> Html -> script('cs.attribute', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible', array('inline' => false));
 echo $this -> Html -> script('models/model.status', array('inline' => false));
 echo $this -> Html -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.edit', array('inline' => false));

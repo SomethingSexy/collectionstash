@@ -54,12 +54,15 @@ if (!isset($allowStatusEdit)) {
 echo $this -> Minify -> script('js/jquery.comments', array('inline' => false));
 echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
 echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
-echo $this -> Html -> script('models/model.status', array('inline' => false));
-echo $this -> Html -> script('views/view.status', array('inline' => false));
+echo $this -> Minify -> script('js/models/model.status', array('inline' => false));
+echo $this -> Minify -> script('js/views/view.status', array('inline' => false));
 
-echo $this -> Html -> script('models/model.listing', array('inline' => false));
-echo $this -> Html -> script('collections/collection.listings', array('inline' => false));
-echo $this -> Html -> script('views/view.transactions', array('inline' => false));
+echo $this -> Minify -> script('js/models/model.listing', array('inline' => false));
+echo $this -> Minify -> script('js/collections/collection.listings', array('inline' => false));
+echo $this -> Minify -> script('js/views/view.transactions', array('inline' => false));
+echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 
@@ -73,7 +76,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				<?php
 				// maybe collectible type here?
 				echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
-	
+
 				// if it has a manufacturer display that first
 				if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
 					echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
@@ -98,9 +101,9 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 					} else {
 						echo 'Custom | ';
 					}
-	
+
 				}
-	
+
 				if ($collectibleDetail['Collectible']['official']) {
 					echo 'Official';
 				} else {
@@ -117,7 +120,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				// check to make sure we can show stash, depending on where this is being
 				// rendered, make sure they are logged in and then make sure thay have permission
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-					echo '<a title="Add to stash" class="link add-stash-link" href="/collectibles_users/add/' . $collectibleDetail['Collectible']['id'] . '"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
+					echo '<a title="Add to stash" class="link add-stash-link" data-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
 				}
 				if (isset($isLoggedIn) && $isLoggedIn === true) {
 					if ($adminMode) {
@@ -197,7 +200,10 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 							}
 							?>							
 						</div>
-						<div class="span6" <?php if($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"'; } ?>>
+						<div class="span6" <?php
+							if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
+							}
+ ?>>
 
 						</div>
 					</div>
@@ -210,7 +216,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 									$(function() {
 										// If we are in admin mode, we need to pass that in to these methods so that they can
 										// do specific things based on that
-				
+
 										$('span.popup', '.attributes-list').popover({
 											placement : 'bottom',
 											html : 'true',
@@ -220,7 +226,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 										}).mouseenter(function(e) {
 											$(this).popover('show');
 										});
-				
+
 									});
 								</script>
 						
@@ -294,12 +300,18 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-var collectibleStatus = {
-	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
-	status:<?php echo json_encode($collectibleDetail['Status']); ?>
-};
-var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
-var listings = <?php echo json_encode($collectibleDetail['Listing']); ?>;
+	var collectibleStatus = {
+	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
+	,
+	status:
+<?php echo json_encode($collectibleDetail['Status']); ?>
+		};
+		var collectible =  
+ <?php echo json_encode($collectibleDetail['Collectible']); ?>
+	;
+	var listings =  
+ <?php echo json_encode($collectibleDetail['Listing']); ?>
+	;
 
  <?php
 if ($isUserAdmin) {
@@ -307,18 +319,13 @@ if ($isUserAdmin) {
 } else {
 	echo 'var allowDeleteListing = false;';
 }
-?>
-
- <?php
+?><?php
 if ($isLoggedIn) {
 	echo 'var allowAddListing = true;';
 } else {
 	echo 'var allowAddListing = false;';
 }
-?>
-
-
- <?php
+?><?php
 if ($showStatus) {
 	echo 'var showStatus = true;';
 } else {
