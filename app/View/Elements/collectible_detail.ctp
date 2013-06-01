@@ -109,6 +109,17 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				} else {
 					echo 'Unofficial';
 				}
+				if ($isLoggedIn && $userCounts) {
+					foreach ($userCounts as $key => $value) {
+						if ($value['type'] === 'Default') {
+							echo ' | <span class="label label-success">' . $value['count'] . ' in Stash' . '</span>';
+						} else {
+							echo ' | <span class="label label-success">' . $value['count'] . ' in ' . $value['type'] . '</span>';
+						}
+
+					}
+
+				}
 				?>
 				</span>
 			</div>
@@ -201,8 +212,8 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 							?>							
 						</div>
 						<div class="span6" <?php
-							if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
-							}
+						if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
+						}
  ?>>
 
 						</div>
@@ -300,16 +311,16 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-	var collectibleStatus = {
+					var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
-	,
-	status:
+		,
+		status:
 <?php echo json_encode($collectibleDetail['Status']); ?>
-		};
-		var collectible =  
+	};
+	var collectible =
  <?php echo json_encode($collectibleDetail['Collectible']); ?>
 	;
-	var listings =  
+	var listings =
  <?php echo json_encode($collectibleDetail['Listing']); ?>
 	;
 

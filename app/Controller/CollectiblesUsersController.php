@@ -42,6 +42,38 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	/**
+	 * This will handle add, update, delete asynchronously
+	 */
+	public function collectible($id = null, $type = 'Default') {
+
+		if (!$this -> isLoggedIn()) {
+			$data['response'] = array();
+			$data['response']['isSuccess'] = false;
+			$error = array('message' => __('You must be logged in to add a collectible.'));
+			$error['inline'] = false;
+			$data['response']['errors'] = array();
+			array_push($data['response']['errors'], $error);
+			$this -> set('returnData', $data);
+			return;
+		}
+
+		if ($this -> request -> isPut()) {
+
+		} else if ($this -> request -> isPost()) {
+			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);
+			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
+
+			$response = $this -> CollectiblesUser -> add($collectible, $this -> getUser(), $type);
+
+			$this -> set('returnData', $response);
+		} else if ($this -> request -> isDelete()) {
+
+		} else if ($this -> request -> isGet()) {
+
+		}
+	}
+
+	/**
 	 * This method adds a collectible to a user's stash
 	 *
 	 * TODO: Update this at some point to make it ajax
