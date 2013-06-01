@@ -1,3 +1,8 @@
+<?php
+echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
+echo $this -> Html -> script('cs.stash', array('inline' => false));
+?>
 	<div class="page-header">
 		<h2><?php echo $manufacture['Manufacture']['title']?></h2>
 	</div>	
@@ -54,8 +59,10 @@
 			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 			echo '</div>';
 			echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
-			
+
 			foreach ($collectibles as $collectible) {
+				$collectibleJSON = json_encode($collectible['Collectible']);
+				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 				echo '<div class="tile">';
 				if (!empty($collectible['CollectiblesUpload'])) {
 					foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
@@ -66,7 +73,7 @@
 							break;
 						}
 					}
-			
+
 					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 				} else {
 					echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
@@ -74,11 +81,11 @@
 				echo '<div class="header">';
 				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 				echo '</div>';
-			
+
 				if ($isLoggedIn) {
-					echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to Stash">';
+					echo '<a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo  '</a>';
+					echo '</a>';
 					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
 				}
 				echo '</div>';
@@ -125,7 +132,7 @@
 				$container.masonry('appended', $newElems, true);
 			});
 		});
-	}); 
+	});
 </script>
 
 
