@@ -70,7 +70,7 @@
 			Close
 		</button>
 		<button class="btn btn-primary save" autocomplete="off">
-			Save
+			Add
 		</button>
 	</div>
 </div>

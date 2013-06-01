@@ -238,6 +238,5 @@ class CollectiblesUser extends AppModel {
 
 		return $retVal;
 	}
-
 }
 ?>

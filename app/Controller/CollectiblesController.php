@@ -388,6 +388,11 @@ class CollectiblesController extends AppController {
 			$variants = $this -> Collectible -> getCollectibleVariants($id);
 			$this -> set('variants', $variants);
 
+			if ($this -> isLoggedIn()) {
+				$userCounts = $this -> Collectible -> User -> Stash -> getCollectibleStashCount($id, $this -> getUser());
+				$this -> set(compact('userCounts'));
+			}
+
 			$this -> layout = 'fluid';
 		} else {
 			$this -> render('viewMissing');

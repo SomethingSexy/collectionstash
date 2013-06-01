@@ -1,5 +1,15 @@
 var CollectibleUserModel = Backbone.Model.extend({
-	urlRoot : function() {
-		return '/collectibles_user/collectible/';
+	url : function() {
+
+		var url = '/collectibles_users/collectible/' + this.id + '/';
+
+		if (this.stashType) {
+			url = url + this.stashType;
+		}
+
+		return url;
+	},
+	parse : function(response, xhr) {
+		return response.response.data;
 	}
 });
