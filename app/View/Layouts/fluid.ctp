@@ -77,7 +77,7 @@
 		})();
 	</script>
 	<script id="template-stash-add" type="text/x-tmpl">
-		<?php echo $this -> element('stash_add_dialog'); ?>	
+		<?php echo $this -> element('stash_add'); ?>	
 	</script>
 </head>
 <body>
@@ -233,7 +233,10 @@
 			</div>
 		</div>		
 	</footer>
-
+	<?php 
+	// list out any modals here that might be common
+	echo $this->element('stash_add_modal');
+	?>	
 		<?php echo $this -> element('sql_dump'); ?>
 		
 		<div id="modal-gallery" class="modal modal-gallery hide fade" tabindex="-1">

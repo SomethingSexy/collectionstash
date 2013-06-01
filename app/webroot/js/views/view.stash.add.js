@@ -4,7 +4,6 @@ var StashAddView = Backbone.View.extend({
 		"change input" : "fieldChanged",
 		"change select" : "selectionChanged",
 		'change textarea' : 'fieldChanged',
-		'click .save' : 'addCollectible'
 	},
 	initialize : function(options) {
 		this.collectible = options.collectible;
@@ -12,6 +11,14 @@ var StashAddView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var data = this.collectible.toJSON();
+		data.errors = this.errors;
+		data.inlineErrors = {};
+		_.each(this.errors, function(error) {
+			if (error.inline) {
+				data.inlineErrors[error.name] = error.message;
+			}
+		});
+
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
@@ -28,6 +35,8 @@ var StashAddView = Backbone.View.extend({
 			},
 			items : 100
 		});
+
+		this.errors = [];
 
 		return this;
 	},
@@ -61,30 +70,6 @@ var StashAddView = Backbone.View.extend({
 
 		this.model.set(data, {
 			forceUpdate : true
-		});
-	},
-	addCollectible : function() {
-		var self = this;
-		this.model.save({}, {
-			success : function(model, response, options) {
-				if (response.response.isSuccess) {
-					self.trigger('add:success');
-				} else {
-					if (response.response.errors) {
-						$.each(response.response.errors, function(index, value) {
-							if (value.inline) {
-								$(':input[name="' + value.name + '"]', self.el).after('<div class="error-message">' + value.message + '</div>');
-							} else {
-								$('#attribute-collectible-add-existing-dialog').find('.component-message.error').children('span').text(value.message);
-							}
-
-						});
-					}
-				}
-			},
-			error : function(model, xhr, options) {
-
-			}
 		});
 	}
 });
