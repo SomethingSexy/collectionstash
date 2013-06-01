@@ -39,7 +39,7 @@
 		</div>
 	</div>				
 	<div class="control-group {#inlineErrors.cost}error{/inlineErrors.cost}">
-		<label class="control-label" for="dialogCost">How much did you pay? (Retail:$600.00)</label>
+		<label class="control-label" for="dialogCost">How much did you pay? (Retail:${msrp})</label>
 		<div class="controls">
 			<input type="number" maxlength="23" step="any" id="dialogCost" name="cost">
 				{#inlineErrors.cost}

@@ -3,6 +3,129 @@
 	/* PUBLIC CLASS DEFINITION
 	 *
 	 * Add in here later whether or not we quick add or not - TODO
+	 *
+	 * This requires, Backbone, dust, stash model, stash view
+	 ** ============================== */
+
+	var StashFullAdd = function() {
+	}
+
+	StashFullAdd.prototype.initialize = function() {
+		dust.loadSource(dust.compile($('#template-stash-add').html(), 'stash.add'));
+		var self = this;
+		this.stashAddView = null;
+		this.collectibleUser = null;
+
+		$('#stash-add-dialog', 'body').on('hidden', function() {
+			self.stashAddView.remove();
+		});
+
+		$('#stash-add-dialog').on('click', '.save', function() {
+			self.collectibleUser.save({}, {
+				success : function(model, response, options) {
+					if (response.response.isSuccess) {
+						$('#stash-add-dialog').modal('hide');
+						var message = 'You have successfully added the collectible to your stash!';
+
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
+						});
+					} else {
+						if (response.response.errors) {
+							self.stashAddView.errors = response.response.errors;
+							self.stashAddView.render();
+						}
+					}
+				},
+				error : function(model, xhr, options) {
+
+				}
+			});
+
+		});
+
+	};
+
+	StashFullAdd.prototype.add = function(collectibleModel, stashType) {
+		this.stashType = stashType;
+
+		this.collectibleUser = new CollectibleUserModel({
+			'collectible_id' : collectibleModel.get('id')
+		});
+
+		this.collectibleUser.stashType = this.stashType;
+
+		if (this.stashAddView) {
+			this.stashAddView.remove();
+			delete this.stashAddView;
+		}
+
+		this.stashAddView = new StashAddView({
+			collectible : collectibleModel,
+			model : this.collectibleUser
+		});
+
+		$('.modal-body', '#stash-add-dialog').html(this.stashAddView.render().el);
+
+		$('#stash-add-dialog').modal();
+	};
+
+	/* BUTTON PLUGIN DEFINITION
+	 * ======================== */
+
+	$.fn.stashfulladd = function(option, model, stashType) {
+		return this.each(function() {
+			var $this = $(this);
+
+			if (option == 'add') {
+				stashFullAdd.add(model, stashType);
+			}
+		});
+	}
+
+	$.fn.stashfulladd.defaults = {
+
+	}
+
+	// only want one created really
+	var stashFullAdd = new StashFullAdd();
+
+	//$.fn.stashfulladd.Constructor = StashFullAdd
+
+	/* DATA-API
+	 * =============== */
+
+	$(function() {
+		stashFullAdd.initialize();
+		$('.stashable').on('click', 'a.add-full-to-stash', function(e) {
+			var $anchor = $(e.currentTarget)
+
+			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+
+			$anchor.stashfulladd('add', collectibleModel, 'Default');
+			e.preventDefault();
+		});
+	});
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
+
+	/* PUBLIC CLASS DEFINITION
+	 *
+	 * Add in here later whether or not we quick add or not - TODO
 	 ** ============================== */
 
 	var StashAdd = function(element, options) {
@@ -123,7 +246,7 @@
 	var StashRemove = function(element, options) {
 		this.$element = $(element);
 		this.$stashItem = this.$element.closest('.stash-item');
-		this.options = $.extend({}, $.fn.stashadd.defaults, options);
+		this.options = $.extend({}, $.fn.stashremove.defaults, options);
 		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
 		this.stashType = this.$element.attr('data-stash-type');
 		if (options.tiles) {
