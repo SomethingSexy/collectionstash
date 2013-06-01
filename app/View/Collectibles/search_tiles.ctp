@@ -1,4 +1,8 @@
-<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
+<?php
+echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
+echo $this -> Html -> script('cs.stash', array('inline' => false));
+?>
 <?php
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
@@ -29,7 +33,9 @@ unset($urlparams['url']);
 				echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 				foreach ($collectibles as $collectible) {
-					echo '<div class="tile">';
+					$collectibleJSON = json_encode($collectible['Collectible']);
+					$collectibleJSON = htmlentities(str_replace(array("\'","'"), array("\\\'","\'"), $collectibleJSON));
+					echo '<div class="tile" data-collectible=\'' . $collectibleJSON . '\'>';
 					if (!empty($collectible['CollectiblesUpload'])) {
 						foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 							if ($upload['primary']) {
@@ -48,7 +54,7 @@ unset($urlparams['url']);
 					echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 					echo '</div>';
 					if ($isLoggedIn) {
-						echo '<a class="link add-stash-link" href="/collectibles_users/add/' .$collectible['Collectible']['id'] .'" title="Add to Stash">';
+						echo '<a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 						echo '<img src="/img/icon/add_stash_link_25x25.png">';
 						echo  '</a>';
 						echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';

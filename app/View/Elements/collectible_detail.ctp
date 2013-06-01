@@ -53,7 +53,7 @@ if (!isset($allowStatusEdit)) {
 
 echo $this -> Minify -> script('js/jquery.comments', array('inline' => false));
 echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
-echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
+echo $this -> Html -> script('cs.stash', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.status', array('inline' => false));
 echo $this -> Minify -> script('js/views/view.status', array('inline' => false));
 
@@ -131,7 +131,8 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				// check to make sure we can show stash, depending on where this is being
 				// rendered, make sure they are logged in and then make sure thay have permission
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-					echo '<a title="Add to stash" class="link add-stash-link" data-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
+					$collectibleJSON = json_encode($collectibleDetail['Collectible']);
+					echo '<a title="Add to stash" class="link add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
 				}
 				if (isset($isLoggedIn) && $isLoggedIn === true) {
 					if ($adminMode) {
@@ -311,7 +312,7 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-					var collectibleStatus = {
+						var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:

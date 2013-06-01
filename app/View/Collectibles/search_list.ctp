@@ -1,4 +1,9 @@
-<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
+<?php
+echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
+echo $this -> Html -> script('cs.stash', array('inline' => false));
+?>
+
 <?php
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
@@ -39,7 +44,8 @@ unset($urlparams['url']);
 
 				echo '</thead>';
 				foreach ($collectibles as $collectible) {
-
+					$collectibleJSON = json_encode($collectible['Collectible']);
+					$collectibleJSON = htmlentities(str_replace(array("\'","'"), array("\\\'","\'"), $collectibleJSON));
 					echo '<tr>';
 
 					echo '<td><ul class="thumbnails"><li class="span1">';
@@ -96,7 +102,7 @@ unset($urlparams['url']);
 					echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 					echo '<ul class="dropdown-menu">';
 					if ($isLoggedIn) {
-						echo '<li><a title="Add to Stash" href="/collectibles_users/add/' . $collectible['Collectible']['id'] . '">Add to Stash</a></li>';
+						echo '<li><a title="Add to Stash" class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)">Add to Stash</a></li>';
 						echo '<li><a data-stash-type="Default" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#">Quick Add to Stash</a></li>';
 						echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#">Add to Wishlist</a></li>';
 					}
