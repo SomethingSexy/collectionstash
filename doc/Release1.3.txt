@@ -90,6 +90,9 @@ linux: ./cake
 
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+ 
+ 
+ bash cakeshell.sh process_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
   
 
