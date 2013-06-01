@@ -1,3 +1,3 @@
 <?php
-echo $this -> Js -> object($aTags);
+echo $this -> Js -> object($returnData);
 ?>
