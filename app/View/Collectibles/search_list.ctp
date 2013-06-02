@@ -79,7 +79,7 @@ unset($urlparams['url']);
 
 					echo '</li></ul></div>';
 
-					echo '<div class="span8">';
+					echo '<div class="span7">';
 					// name
 					echo '<div class="row-fluid">';
 					echo '<div class="span12">';
@@ -122,23 +122,9 @@ unset($urlparams['url']);
 					echo '</div>';
 
 					echo '</div>';
-					// end span 8
+					// end span 7
 
-					echo '<div class="span2">';
-					echo '<div class="row-fluid">';
-					echo '<div class="span12 count">';
-					echo '<span class="badge pull-right">';
-
-					if ($collectible['Collectible']['collectibles_user_count'] === '0') {
-						echo $collectible['Collectible']['collectibles_user_count'];
-					} else {
-						echo $this -> Html -> link($collectible['Collectible']['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['Collectible']['id']));
-					}
-
-					echo '</span>';
-					echo '</div>';
-					echo '</div>';
-
+					echo '<div class="span3">';
 					echo '<div class="row-fluid">';
 					echo '<div class="span12">';
 					echo '<div class="btn-group pull-right">';
@@ -159,9 +145,35 @@ unset($urlparams['url']);
 					echo '</div>';
 
 					echo '</div>';
-					//span 2
+					//span 3
 
 					echo '</div>';
+					
+					echo '<div class="row-fluid">';
+					echo '<div class="span12 count">';
+					echo '<span class="label">';
+
+					if ($collectible['Collectible']['collectibles_user_count'] === '0') {
+						echo $collectible['Collectible']['collectibles_user_count'] . ' Stashed';
+					} else {
+						echo $this -> Html -> link($collectible['Collectible']['collectibles_user_count'] . ' Stashed', array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['Collectible']['id']));
+					}
+					echo '</span>';
+					if ($isLoggedIn && $collectible['Collectible']['userCounts']) {
+						foreach ($collectible['Collectible']['userCounts'] as $key => $value) {
+							if ($value['type'] === 'Default') {
+								echo '<span class="label">' . $value['count'] . ' in your Stash' . '</span>';
+							} else {
+								echo '<span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
+							}
+
+						}
+
+					}
+					echo '</div>';
+					echo '</div>';
+					
+					
 					// row-fluid
 					echo '</div>';
 					// end span 12 collectible
@@ -194,7 +206,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory =    "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {
