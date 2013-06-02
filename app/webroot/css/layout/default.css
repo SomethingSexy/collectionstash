@@ -2529,7 +2529,9 @@ div.paging span a:hover {
 .datepicker {
 	z-index: 1151;
 }
-
+#collectibles-list-component .well {
+	background-color: #FFF;
+}
 #collectibles-list-component .collectibles .collectible .name {
 	color: #555555;
 	font-weight: bold
@@ -2542,6 +2544,10 @@ div.paging span a:hover {
 }
 #collectibles-list-component .collectibles .collectible {
 	border-bottom: 1px solid #DDDDDD;
+}
+
+#collectibles-list-component .collectible-detail .well {
+	width: auto;
 }
 @media only screen and (max-width: 800px) {
 	/* Force table to not be like tables anymore */

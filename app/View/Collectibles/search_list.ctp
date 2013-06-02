@@ -16,7 +16,7 @@ unset($urlparams['url']);
 			<?php echo $this -> element('flash'); ?>
 		
 			<div class="page-header">
-				<h2><?php echo __('Search Results'); ?></h2>
+				<h1><?php echo __('Search Results'); ?></h1>
 			</div>
 			<div class="btn-group pull-right">
 		    	<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
@@ -174,29 +174,36 @@ unset($urlparams['url']);
 			</div>
 			</div>
 		</div>
-		<div class="span5">
-		<div class="well" data-spy="affix">
-         <ul class="nav nav-list">
-           <li class="nav-header">Sidebar</li>
-           <li class="active"><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li class="nav-header">Sidebar</li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li class="nav-header">Sidebar</li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-           <li><a href="#">Link</a></li>
-         </ul>
-       </div>	
+		<div class="span5 collectible-detail">
+			<div class="well" data-spy="affix" data-offset-top="200">
+				<div class="page-header">
+					<h1><?php echo __('Collectible Detail'); ?></h1>
+				</div>
+				<div class="row-fluid">
+					<div span="span12">	
+					<?php
+					if (!empty($collectibles[0]['CollectiblesUpload'])) {
+						foreach ($collectibles[0]['CollectiblesUpload'] as $key => $upload) {
+							if ($upload['primary']) {
+								echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
+								break;
+							}
+						}
+
+					} else {
+						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+					}		
+					?>				
+					</div>
+				</div>
+				
+				
+       		</div>	
 		</div>
 	</div>
-	
-
 </div>
+
+
+<?php
+echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));
+?>
