@@ -132,6 +132,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				// rendered, make sure they are logged in and then make sure thay have permission
 				if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 					$collectibleJSON = json_encode($collectibleDetail['Collectible']);
+					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 					echo '<a title="Add to stash" class="link add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"/></a>';
 				}
 				if (isset($isLoggedIn) && $isLoggedIn === true) {
@@ -312,7 +313,7 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-						var collectibleStatus = {
+							var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:
