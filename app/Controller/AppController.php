@@ -263,7 +263,6 @@ class AppController extends Controller {
 		// When doing this search, we only want to see the active ones
 		array_push($conditions, array('Collectible.status_id' => '4'));
 		//See if a search was set
-		debug($tableFilters);
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
@@ -298,12 +297,12 @@ class AppController extends Controller {
 		$data = $this -> paginate('Collectible');
 
 		$this -> set('collectibles', $data);
-		debug($saveSearchFilters);
-		debug($tableFilters);
+		
 		$filters = $this -> _getFilters($saveSearchFilters);
 		$this -> set(compact('filters'));
 		$this -> set(compact('saveSearchFilters'));
-
+		
+		return $data;
 	}
 
 	private function _getFilters($searchFilters) {

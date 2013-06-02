@@ -2536,10 +2536,11 @@ div.paging span a:hover {
 	color: #555555;
 	font-weight: bold
 }
+#collectibles-list-component .collectibles .collectible .count .label,
 #collectibles-list-component .collectibles .collectible .labels .label {
 	margin-right: 10px;
 }
-#collectibles-list-component .collectibles .collectible .badge a {
+#collectibles-list-component .collectibles .collectible .label a {
 	color: #FFF;
 }
 #collectibles-list-component .collectibles .collectible {

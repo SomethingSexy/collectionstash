@@ -403,7 +403,7 @@ class CollectiblesController extends AppController {
 		/*
 		 *For now update so we do not return originals and customs
 		 */
-		$this -> searchCollectible(array('Collectible.original' => false, 'Collectible.custom' => false));
+		$collectibles = $this -> searchCollectible(array('Collectible.original' => false, 'Collectible.custom' => false));
 		// I can use this to pull the pagination data off the request and pass it to the view
 		// although in the JSON view, I should be able to pull all of the data off the request
 		// and build out the JSON object and send that down, with access to the pagination
@@ -412,6 +412,20 @@ class CollectiblesController extends AppController {
 		if ($this -> request -> isAjax()) {
 			$this -> render('searchJson');
 		} else {
+			// for now if it is a standard request we will want to return
+			// if the user owns this collectible, obviously only run this check if
+			// they are checked in
+
+			if ($this -> isLoggedIn()) {
+				// modify the return data and then set it again
+				foreach ($collectibles as $key => $value) {
+					$userCounts = $this -> Collectible -> User -> Stash -> getCollectibleStashCount($value['Collectible']['id'], $this -> getUser());
+					$collectibles[$key]['Collectible']['userCounts'] = $userCounts;
+				}
+
+				$this -> set(compact('collectibles'));
+			}
+
 			$this -> layout = 'fluid';
 			$this -> set('viewType', 'list');
 			$this -> render('searchList');
