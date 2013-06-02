@@ -3,7 +3,7 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 			×
 		</button>
-		<h3 id="myModalLabel">Add to Stash</h3>
+		<h3 id="myModalLabel">Add Collectible to Stash</h3>
 	</div>
 	<div class="modal-body">
 
