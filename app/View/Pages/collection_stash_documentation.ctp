@@ -1,71 +1,83 @@
 <?php $this -> set("title_for_layout", __('A Guide to Collection Stash')); ?>
-<div class="row">
+<div class="row-fluid">
 	<div class="span3">
-		<ul class="nav nav-list">
-			<li>
-				<a href="#overview"> <i class="icon-chevron-right"></i> What is a Collectible? </a>
-			</li>
-			<li>
-				<a href="#submit-new"> <i class="icon-chevron-right"></i> Submitting a New Collectible </a>
-				<ul class="nav nav-list">
-					<li>
-						<a href="#types"> <i class="icon-chevron-right"></i> Types </a>
-					</li>
-					<li>
-						<a href="#platforms"> <i class="icon-chevron-right"></i> Platforms </a>
-					</li>
-					<li>
-						<a href="#status"> <i class="icon-chevron-right"></i> Status </a>
-					</li>
-					<li>
-						<a href="#manufacturers"> <i class="icon-chevron-right"></i> Manufacturers </a>
-					</li>
-					<li>
-						<a href="#artists"> <i class="icon-chevron-right"></i> Artists </a>
-					</li>
-					<li>
-						<a href="#photos"> <i class="icon-chevron-right"></i> Photos </a>
-					</li>
-					<li>
-						<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
-						<ul class="nav nav-list">
-							<li>
-								<a href="#parts-adding-new-parts"> <i class="icon-chevron-right"></i> Adding New Parts to a Collectible </a>
-							</li>
-							<li>
-								<a href="#parts-add-existing"> <i class="icon-chevron-right"></i> Adding Existing Parts to a Collectible </a>
-							</li>
-							<li>
-								<a href="#parts-photos"> <i class="icon-chevron-right"></i> Adding Photos </a>
-							</li>
-							<li>
-								<a href="#parts-when"> <i class="icon-chevron-right"></i> When should I add a new part vs adding an existing part? </a>
-							</li>
-							<li>
-								<a href="#parts-customs"> <i class="icon-chevron-right"></i> Adding Parts to Custom Collectibles </a>
-							</li>
-							<li>
-								<a href="#parts-original"> <i class="icon-chevron-right"></i> Adding Parts to Original Collectibles </a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href="#submit"> <i class="icon-chevron-right"></i> Submitting/Activating a Collectible </a>
-					</li>
-					<li>
-						<a href="#delete"> <i class="icon-chevron-right"></i> Deleting a Collectible </a>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<a href="#listings"> <i class="icon-chevron-right"></i> Sale Listings and Transactions</a>
-				<ul class="nav nav-list">
-					<li>
-						<a href="#listings-add"> <i class="icon-chevron-right"></i> Adding a Listing </a>
-					</li>
-				</ul>
-			</li>
-		</ul>
+		<div class="well affix">
+			<ul class="nav nav-list">
+				<li>
+					<a href="#overview"> <i class="icon-chevron-right"></i> What is a Collectible? </a>
+				</li>
+				<li>
+					<a href="#stash"> <i class="icon-chevron-right"></i> Your Stash </a>
+					<ul class="nav nav-list">
+						<li>
+							<a href="#stash-add"> <i class="icon-chevron-right"></i> Adding Collectibles to your Stash </a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#submit-new"> <i class="icon-chevron-right"></i> Submitting a New Collectible </a>
+					<ul class="nav nav-list">
+						<li>
+							<a href="#types"> <i class="icon-chevron-right"></i> Types </a>
+						</li>
+						<li>
+							<a href="#platforms"> <i class="icon-chevron-right"></i> Platforms </a>
+						</li>
+						<li>
+							<a href="#status"> <i class="icon-chevron-right"></i> Status </a>
+						</li>
+						<li>
+							<a href="#manufacturers"> <i class="icon-chevron-right"></i> Manufacturers </a>
+						</li>
+						<li>
+							<a href="#artists"> <i class="icon-chevron-right"></i> Artists </a>
+						</li>
+						<li>
+							<a href="#photos"> <i class="icon-chevron-right"></i> Photos </a>
+						</li>
+						<li>
+							<a href="#parts"> <i class="icon-chevron-right"></i> Parts </a>
+							<ul class="nav nav-list">
+								<li>
+									<a href="#parts-adding-new-parts"> <i class="icon-chevron-right"></i> Adding New Parts to a Collectible </a>
+								</li>
+								<li>
+									<a href="#parts-add-existing"> <i class="icon-chevron-right"></i> Adding Existing Parts to a Collectible </a>
+								</li>
+								<li>
+									<a href="#parts-photos"> <i class="icon-chevron-right"></i> Adding Photos </a>
+								</li>
+								<li>
+									<a href="#parts-when"> <i class="icon-chevron-right"></i> When should I add a new part vs adding an existing part? </a>
+								</li>
+								<li>
+									<a href="#parts-customs"> <i class="icon-chevron-right"></i> Adding Parts to Custom Collectibles </a>
+								</li>
+								<li>
+									<a href="#parts-original"> <i class="icon-chevron-right"></i> Adding Parts to Original Collectibles </a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#submit"> <i class="icon-chevron-right"></i> Submitting/Activating a Collectible </a>
+						</li>
+						<li>
+							<a href="#delete"> <i class="icon-chevron-right"></i> Deleting a Collectible </a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#listings"> <i class="icon-chevron-right"></i> Sale Listings and Transactions</a>
+					<ul class="nav nav-list">
+						<li>
+							<a href="#listings-add"> <i class="icon-chevron-right"></i> Adding a Listing </a>
+						</li>
+					</ul>
+				</li>
+			</ul>			
+			
+		</div>
+
 	</div>
 	<div class="span9">
 		<h1>Collection Stash Documentation</h1>
@@ -81,7 +93,29 @@
 		<p>
 			Most collectibles in Collection Stash describe the physical product that is sold, but they do not have to! This is the case when you made the collectible yourself.  Each product is made up of parts and when these parts are combined together they make a collectible that you can add to your stash.  Some products might have one part while other products might have hundreds.
 		</p>
-
+		
+		<h2 id="stash">Your Stash</h2>
+		
+		<h3 id="stash-add">Adding Collectibles to your Stash</h3>
+		<p>There are many places throughout Collection Stash where you can add a collectible to your stash.  The <img src="/img/icon/add_stash_link_25x25.png"> icon indicates that you can add that collectible to your stash.</p>
+		<p>Here are some examples of where you will find the add to stash icon.</p>
+		
+		<img src="/img/documentation/stash_add_icon_example_1.png" class="img-polaroid">
+		<p>The collectible detail page.</p>
+		<p></p>
+		<img src="/img/documentation/stash_add_icon_example_2.png" class="img-polaroid">
+		<p>The collectible search page (tile view).</p>
+		<p></p>		
+		<img src="/img/documentation/stash_add_icon_example_3.png" class="img-polaroid">
+		<p>The collectible search page (list view).</p>
+		<p></p>		
+		<p>When you click the <img src="/img/icon/add_stash_link_25x25.png"> icon you will be prompted to fill out some information about the collectible you want to stash.  All of the fields are optional.</p>
+		<img src="/img/documentation/stash_add.png" class="img-polaroid">
+		<p></p>			
+		<p>Once you are done filling out the information you would like to add to your collectible, click the "Add" button to save the collectible to your Stash.  If there are no errors the collectible will be added to your stash and you will recieve a success message.</p>
+		<img src="/img/documentation/stash_add_success.png" class="img-polaroid">
+		<p></p>			
+		
 		<h2 id="submit-new">Submitting a New Collectible</h2>
 
 		<p>
