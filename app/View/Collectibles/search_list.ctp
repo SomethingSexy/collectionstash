@@ -116,6 +116,9 @@ unset($urlparams['url']);
 					if (!empty($collectible['Manufacture']['title'])) {
 						echo '<span class="label">' . $collectible['Manufacture']['title'] . '</span>';
 					}
+					if (!empty($collectible['ArtistsCollectible'])) {
+						echo '<span class="label">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
+					}
 
 					echo '</span>';
 					echo '</div>';
@@ -148,7 +151,7 @@ unset($urlparams['url']);
 					//span 3
 
 					echo '</div>';
-					
+
 					echo '<div class="row-fluid">';
 					echo '<div class="span12 count">';
 					echo '<span class="label">';
@@ -172,8 +175,7 @@ unset($urlparams['url']);
 					}
 					echo '</div>';
 					echo '</div>';
-					
-					
+
 					// row-fluid
 					echo '</div>';
 					// end span 12 collectible
@@ -206,7 +208,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory =    "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory =     "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {
