@@ -47,10 +47,13 @@ unset($urlparams['url']);
 				//
 				// echo '</thead>';
 				foreach ($collectibles as $collectible) {
+					$fullCollectibleJSON = json_encode($collectible);
+					$fullCollectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $fullCollectibleJSON));
+
 					$collectibleJSON = json_encode($collectible['Collectible']);
 					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 					echo '<div class="row-fluid spacer">';
-					echo '<div class="span12 collectible">';
+					echo '<div class="span12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
 					echo '<div class="row-fluid">';
 					//TODO: the problem is with the thumbnail/span1 in the table
 					echo '<div class="span2"><ul class="thumbnails"><li class="span12">';
@@ -176,26 +179,7 @@ unset($urlparams['url']);
 		</div>
 		<div class="span5 collectible-detail">
 			<div class="well" data-spy="affix" data-offset-top="200">
-				<div class="page-header">
-					<h1><?php echo __('Collectible Detail'); ?></h1>
-				</div>
-				<div class="row-fluid">
-					<div span="span12">	
-					<?php
-					if (!empty($collectibles[0]['CollectiblesUpload'])) {
-						foreach ($collectibles[0]['CollectiblesUpload'] as $key => $upload) {
-							if ($upload['primary']) {
-								echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
-								break;
-							}
-						}
-
-					} else {
-						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
-					}		
-					?>				
-					</div>
-				</div>
+				<p class="text-center lead">Select a collectible to see more detail here!</p>
 				
 				
        		</div>	
@@ -203,7 +187,9 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-
+<script>
+	var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
+</script>
 <?php
 echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));
 ?>

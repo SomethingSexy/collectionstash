@@ -2545,10 +2545,16 @@ div.paging span a:hover {
 #collectibles-list-component .collectibles .collectible {
 	border-bottom: 1px solid #DDDDDD;
 }
-
-#collectibles-list-component .collectible-detail .well {
-	width: auto;
+/* I think this is in the newest version of bootstrap so remove when that is added */
+#collectibles-list-component .collectible-detail .well .text-center {
+	text-align: center;
 }
+
+#collectibles-list-component .collectible-detail .well .test {
+	overflow-y: scroll;
+	height: 900px;
+}
+
 @media only screen and (max-width: 800px) {
 	/* Force table to not be like tables anymore */
 	#no-more-tables table, #no-more-tables thead, #no-more-tables tbody, #no-more-tables th, #no-more-tables td, #no-more-tables tr {
