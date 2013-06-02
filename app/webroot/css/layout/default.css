@@ -2553,7 +2553,7 @@ div.paging span a:hover {
 
 #collectibles-list-component .collectible-detail .well .test {
 	overflow-y: scroll;
-	height: 900px;
+	height: 700px;
 }
 a.btn.sort.asc {
     background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
