@@ -1,4 +1,7 @@
 <?php // this is actually going to be a dust template but I am loading it via PHP and placing it on the page for quickness ?>
+<div class="well">
+	<p>You are adding {name} to your stash.</p>
+</div>	
 {@if cond=" ('{errors}'.length === 0) "}
 
 {:else}
@@ -16,7 +19,7 @@
 		</ul>
 	</div>
 {/if}	
-	
+
 <form class="form-horizontal">
 	{@eq key="{numbered}" value="true" type="boolean"}
 		<div class="control-group {#inlineErrors.edition_size}error{/inlineErrors.edition_size}">
