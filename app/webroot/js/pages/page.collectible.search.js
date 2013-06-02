@@ -5,6 +5,7 @@ var CollectibleView = Backbone.View.extend({
 		var self = this;
 		var data = this.model.toJSON();
 		data.uploadDirectory = uploadDirectory;
+		data.isLogggedIn = isLogggedIn;
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
