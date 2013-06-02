@@ -11,6 +11,7 @@ var StashAddView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var data = this.collectible.toJSON();
+		data.model = this.model.toJSON();
 		data.errors = this.errors;
 		data.inlineErrors = {};
 		_.each(this.errors, function(error) {
