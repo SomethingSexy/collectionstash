@@ -1,5 +1,5 @@
 <div class="page-header">
-	<h1>{Collectible.name}</h1>
+	<h1>{Collectible.name|s}</h1>
 </div>
 <div class="row-fluid">
 	<div class="span12">
