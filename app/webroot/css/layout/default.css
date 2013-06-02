@@ -2554,6 +2554,15 @@ div.paging span a:hover {
 	overflow-y: scroll;
 	height: 900px;
 }
+a.btn.sort.asc {
+    background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
+    padding-right: 20px;
+}
+
+a.btn.sort.desc {
+    background: url("/img/icon/triangle_down.png") no-repeat scroll right center transparent;
+    padding-right: 20px;
+}
 
 @media only screen and (max-width: 800px) {
 	/* Force table to not be like tables anymore */
