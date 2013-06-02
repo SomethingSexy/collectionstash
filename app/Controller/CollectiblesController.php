@@ -412,6 +412,7 @@ class CollectiblesController extends AppController {
 		if ($this -> request -> isAjax()) {
 			$this -> render('searchJson');
 		} else {
+			$this -> layout = 'fluid';
 			$this -> set('viewType', 'list');
 			$this -> render('searchList');
 		}
