@@ -29,23 +29,30 @@ unset($urlparams['url']);
 			}
 			echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 			?>
+			<div class="row-fluid spacer">
+				<div class="span12">
+					<div class="btn-group">
+					<?php echo $this -> Paginator -> sort('name', 'Name', array('class' => 'btn sort')); ?>
+					</div>
+					<div class="btn-group">
+					<?php echo $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false, 'class' => 'btn sort')); ?>
+					</div>
+					<div class="btn-group">
+					<?php echo $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false, 'class' => 'btn sort')); ?>
+					</div>
+					<div class="btn-group">
+					<?php echo $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false, 'class' => 'btn sort')); ?>
+					</div>
+					<div class="btn-group">
+					<?php echo $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false, 'class' => 'btn sort')); ?>
+					</div>					
+				</div>
+				
+			</div>
+			
 			<div class="row-fluid stashable collectibles" data-toggle="modal-gallery" data-target="#modal-gallery">
 				<div span="span12">			
 				<?php
-				// echo '<table class="table table-striped">';
-				// echo '<thead>';
-				// echo '<tr>';
-				// echo '<th> </th>';
-				// echo '<th>' . $this -> Paginator -> sort('name', 'Name') . '</th>';
-				// echo '<th>' . $this -> Paginator -> sort('Collectible.variant', 'Variant', array('escape' => false)) . '</th>';
-				// echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false)) . '</th>';
-				// echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
-				// echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false)) . '</th>';
-				// echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false)) . '</th>';
-				// echo '<th>' . __('Actions') . '</th>';
-				// echo '</tr>';
-				//
-				// echo '</thead>';
 				foreach ($collectibles as $collectible) {
 					$fullCollectibleJSON = json_encode($collectible);
 					$fullCollectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $fullCollectibleJSON));
@@ -187,16 +194,15 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>
-	var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
+<script>var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+	";
 	<?php
 	if ($isLoggedIn) {
 		echo 'var isLogggedIn = true;';
 	} else {
 		echo 'var isLogggedIn = false;';
 	}
-	?>
-</script>
+	?></script>
 <?php
 echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));
 ?>
