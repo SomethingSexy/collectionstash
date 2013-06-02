@@ -68,8 +68,10 @@ linux: ./cake
 
 ./cake -app /var/www/collectionstash/app one_time_add_points_fact_table
 
+./cake -app /var/www/collectionstash/app one_time_add_points_fact_table
 
-   ./cake -app /var/www/collectionstash/app one_time_update_collectible_status
+
+   ./cake -app /var/www/collectionstash/app process_transactions
 
 
 
@@ -86,7 +88,7 @@ linux: ./cake
 
    ./vendors/cakeshell process_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
-
+  ./vendors/cakeshell process_transactions -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
@@ -94,7 +96,7 @@ linux: ./cake
  
  bash cakeshell.sh process_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
-  
+     bash cakeshell.sh process_transactions -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
 cron
 
