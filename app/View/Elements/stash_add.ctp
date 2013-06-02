@@ -1,6 +1,6 @@
 <?php // this is actually going to be a dust template but I am loading it via PHP and placing it on the page for quickness ?>
 <div class="well">
-	<p>You are adding {name} to your stash.</p>
+	<p>You are adding {name|s} to your stash.</p>
 </div>	
 {@if cond=" ('{errors}'.length === 0) "}
 
@@ -25,7 +25,7 @@
 		<div class="control-group {#inlineErrors.edition_size}error{/inlineErrors.edition_size}">
 			<label class="control-label" for="CollectiblesUserEditionSize">Edition Number (Total: {edition_size})</label>
 			<div class="controls">
-				<input type="number" id="CollectiblesUserEditionSize" name="edition_size">
+				<input type="number" id="CollectiblesUserEditionSize" name="edition_size" value="{model.edition_size}">
 					{#inlineErrors.edition_size}
 						<span class="help-inline">{.}</span>
 					{/inlineErrors.edition_size}
@@ -35,7 +35,7 @@
 	<div class="control-group {#inlineErrors.artist_proof}error{/inlineErrors.artist_proof}">
 		<label class="control-label" for="CollectiblesUserArtistProof">Artist's Proof</label>
 		<div class="controls">
-			<input type="checkbox" id="CollectiblesUserArtistProof" value="1" name="artist_proof">
+			<input type="checkbox" id="CollectiblesUserArtistProof" value="1" name="artist_proof" {#model.artist_proof}checked{/model.artist_proof}>
 			{#inlineErrors.artist_proof}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.artist_proof}
@@ -44,7 +44,7 @@
 	<div class="control-group {#inlineErrors.cost}error{/inlineErrors.cost}">
 		<label class="control-label" for="dialogCost">How much did you pay? (Retail:${msrp})</label>
 		<div class="controls">
-			<input type="number" maxlength="23" step="any" id="dialogCost" name="cost">
+			<input type="number" maxlength="23" step="any" id="dialogCost" name="cost" value="{model.cost}">
 				{#inlineErrors.cost}
 					<span class="help-inline">{.}</span>
 				{/inlineErrors.cost}
@@ -79,7 +79,7 @@
 	<div class="control-group {#inlineErrors.merchant}error{/inlineErrors.merchant}">
 		<label class="control-label" for="CollectiblesUserMerchantId">Where did you purchase the collectible?</label>
 		<div class="controls">
-			<input type="text" id="CollectiblesUserMerchantId" maxlength="150" name="merchant" autocomplete="off">
+			<input type="text" id="CollectiblesUserMerchantId" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
 			{#inlineErrors.merchant}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.merchant}
@@ -88,7 +88,7 @@
 	<div class="control-group {#inlineErrors.purchase_date}error{/inlineErrors.purchase_date}">
 		<label class="control-label" for="CollectiblesUserPurchaseDate">When did you purchase this collectible?</label>
 		<div class="controls">
-			<input type="text" id="CollectiblesUserPurchaseDate" maxlength="8" name="purchase_date">
+			<input type="text" id="CollectiblesUserPurchaseDate" maxlength="8" name="purchase_date" value="{model.purchase_date}">
 			{#inlineErrors.purchase_date}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.purchase_date}

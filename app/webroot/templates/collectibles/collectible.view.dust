@@ -25,9 +25,9 @@
 			<dt>Name</dt>
 			<dd>
 			{@eq key="Collectible.exclusive" value="true" type="boolean"}
-				{Collectible.name} - Exclusive
+				{Collectible.name|s} - Exclusive
 			{:else}
-				{Collectible.name}
+				{Collectible.name|s}
 			{/eq}
 			</dd>
 			{#Manufacture.title}
@@ -63,7 +63,7 @@
 			
 			{#Collectible.description}
 			<dt>Description</dt>
-			<dd>{.}</dd>			
+			<dd>{.|s}</dd>			
 			{/Collectible.description}				
 			
 			{#Collectible.code}
