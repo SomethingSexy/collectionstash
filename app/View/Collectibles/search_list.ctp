@@ -83,7 +83,7 @@ unset($urlparams['url']);
 					}
 
 					if ($collectible['Collectible']['variant']) {
-						echo ' | <a href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Variant') . '</a>';
+						echo ' | <a target="_blank" href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Variant') . '</a>';
 					}
 					echo '</span>';
 					echo '</div>';
@@ -189,6 +189,13 @@ unset($urlparams['url']);
 
 <script>
 	var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
+	<?php
+	if ($isLoggedIn) {
+		echo 'var isLogggedIn = true;';
+	} else {
+		echo 'var isLogggedIn = false;';
+	}
+	?>
 </script>
 <?php
 echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));

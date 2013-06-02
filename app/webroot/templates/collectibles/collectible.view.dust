@@ -18,3 +18,75 @@
 		</ul>
 	</div>
 </div>
+<div class="row-fluid">
+	<div class="span12">
+		<h2>Collectible Details</h2>
+		<dl class="">
+			<dt>Name</dt>
+			<dd>
+			{@eq key="Collectible.exclusive" value="true" type="boolean"}
+				{Collectible.name} - Exclusive
+			{:else}
+				{Collectible.name}
+			{/eq}
+			</dd>
+			{#Manufacture.title}
+				<dt>Manufacturer</dt>
+				<dd>{.}</dd>
+			{/Manufacture.title}
+			<dt>Category</dt>
+			<dd>{Collectible.seriesPath}</dd>
+			{#License.name}
+			<dt>Brand</dt>
+			<dd>{.}</dd>			
+			{/License.name}
+			<dt>Platform</dt>
+			<dd>{Collectibletype.name}</dd>				
+			{#Collectible.variant variantCollectibleId=Collectible.variant_collectible_id}
+			<dt>Variant</dt>
+			<dd><a target="_blank" href="/collectibles/view/{variantCollectibleId}">Yes</a></dd>			
+			{/Collectible.variant}			
+			
+			{#Scale.scale}
+			<dt>Scale</dt>
+			<dd>{.}</dd>			
+			{/Scale.scale}			
+
+			{#Collectible.release custom=Collectible.custom original=Collectible.original}
+				{@if cond="( '{custom}' || '{original}' )"}
+					<dt>Year Made</dt>
+				{:else}
+					<dt>Release Year</dt>
+				{/if}
+				<dd>{.}</dd>	
+			{/Collectible.release}		
+			
+			{#Collectible.description}
+			<dt>Description</dt>
+			<dd>{.}</dd>			
+			{/Collectible.description}				
+			
+			{#Collectible.code}
+			<dt>Product code</dt>
+			<dd>{.}</dd>			
+			{/Collectible.code}				
+			
+			{#Collectible.upc}
+			<dt>Product UPC</dt>
+			<dd>{.}</dd>			
+			{/Collectible.upc}	
+			
+			{#Collectible.msrp isLogggedIn=isLogggedIn custom=Collectible.custom original=Collectible.original official=Collectible.official currency=Currency.sign}
+				{@if cond="( '{custom}' || '{original}' )"}
+					<dt>Cost</dt>
+				{:else}
+					<dt>Original Retail Price</dt>
+				{/if}
+			
+			<dd>{#currency}{.}{:else}${/currency}{.}</dd>			
+			
+			{/Collectible.msrp}								
+
+		</dl>
+	</div>
+</div>
