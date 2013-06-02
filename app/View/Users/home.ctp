@@ -2,7 +2,7 @@
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="well user-stats">
-				<h3>My Stats</h3>
+				<h3>Your Stats</h3>
 				<dl class="dl-horizontal">
 					<dt>
 						Stash Count:
@@ -117,7 +117,7 @@
 	<div class="row-fluid spacer">
 		<div class="span12">
 			<div class="well work">
-				<h3>What I am working on</h3>
+				<h3>What you are working on</h3>
 	
 			</div>
 		</div>
@@ -126,13 +126,13 @@
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="well submissions">
-				<h3>My Submissions</h3>
+				<h3>Your Submissions</h3>
 	
 			</div>
 		</div>
 		<div class="span6">
 			<div class="well edits">
-				<h3>My Edits</h3>
+				<h3>Your Edits</h3>
 			</div>
 		</div>
 	</div>
