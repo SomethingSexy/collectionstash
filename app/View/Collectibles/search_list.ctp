@@ -8,10 +8,13 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 ?>
-<div class="component" id="collectibles-list-component">
-	<div class="inside" >
-		<?php echo $this -> element('flash'); ?>
-		<div class="component-view">
+
+<div id="collectibles-list-component" class="span12">
+	<div class="row-fluid">
+		<div class="span7">
+			<div class="well">
+			<?php echo $this -> element('flash'); ?>
+		
 			<div class="page-header">
 				<h2><?php echo __('Search Results'); ?></h2>
 			</div>
@@ -25,30 +28,32 @@ unset($urlparams['url']);
 				$url = '/collectibles/searchTiles/';
 			}
 			echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
- 			?>
-			<div class="collectibles view stashable" data-toggle="modal-gallery" data-target="#modal-gallery">				
+			?>
+			<div class="row-fluid stashable collectibles" data-toggle="modal-gallery" data-target="#modal-gallery">
+				<div span="span12">			
 				<?php
-				echo '<table class="table table-striped">';
-				echo '<thead>';
-				echo '<tr>';
-				echo '<th> </th>';
-				echo '<th>' . $this -> Paginator -> sort('name', 'Name') . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.variant', 'Variant', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('Collectible.specialized_type_id', 'Manufacturer Type', array('escape' => false)) . '</th>';
-				echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false)) . '</th>';
-				echo '<th>' . __('Actions') . '</th>';
-				echo '</tr>';
-
-				echo '</thead>';
+				// echo '<table class="table table-striped">';
+				// echo '<thead>';
+				// echo '<tr>';
+				// echo '<th> </th>';
+				// echo '<th>' . $this -> Paginator -> sort('name', 'Name') . '</th>';
+				// echo '<th>' . $this -> Paginator -> sort('Collectible.variant', 'Variant', array('escape' => false)) . '</th>';
+				// echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false)) . '</th>';
+				// echo '<th>' . $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false)) . '</th>';
+				// echo '<th>' . $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false)) . '</th>';
+				// echo '<th>' . $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false)) . '</th>';
+				// echo '<th>' . __('Actions') . '</th>';
+				// echo '</tr>';
+				//
+				// echo '</thead>';
 				foreach ($collectibles as $collectible) {
 					$collectibleJSON = json_encode($collectible['Collectible']);
-					$collectibleJSON = htmlentities(str_replace(array("\'","'"), array("\\\'","\'"), $collectibleJSON));
-					echo '<tr>';
-
-					echo '<td><ul class="thumbnails"><li class="span1">';
+					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+					echo '<div class="row-fluid spacer">';
+					echo '<div class="span12 collectible">';
+					echo '<div class="row-fluid">';
+					//TODO: the problem is with the thumbnail/span1 in the table
+					echo '<div class="span2"><ul class="thumbnails"><li class="span12">';
 
 					if (!empty($collectible['CollectiblesUpload'])) {
 						foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
@@ -62,43 +67,71 @@ unset($urlparams['url']);
 						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
 					}
 
-					echo '</li></ul></td>';
+					echo '</li></ul></div>';
 
-					echo '<td>' . $collectible['Collectible']['name'];
+					echo '<div class="span8">';
+					// name
+					echo '<div class="row-fluid">';
+					echo '<div class="span12">';
+					echo '<span class="name">';
+					echo $collectible['Collectible']['name'];
 					if ($collectible['Collectible']['exclusive']) {
-						echo __(' - Exclusive');
+						echo __(' | Exclusive');
 					}
-					echo '</td>';
+
 					if ($collectible['Collectible']['variant']) {
-						echo '<td><a href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Yes') . '</a></td>';
-					} else {
-						echo '<td>' . __('No') . ' </td>';
+						echo ' | <a href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Variant') . '</a>';
 					}
+					echo '</span>';
+					echo '</div>';
+					// span10
+					echo '</div>';
 
-					if (!empty($collectible['Manufacture']['title'])) {
-						echo '<td>' . '<a href="/manufacturer/' . $collectible['Manufacture']['id'] . '/' . $collectible['Manufacture']['slug'] . '">' . $collectible['Manufacture']['title'] . '</a>' . '</td>';
-					} else {
-						echo '<td>Not Recorded</td>';
-					}
+					echo '<div class="row-fluid">';
+					echo '<div class="span12">';
+					echo '<span class="description">';
+
+					echo $collectible['Collectible']['description'];
+					echo '</span>';
+					echo '</div>';
+					echo '</div>';
+
+					echo '<div class="row-fluid">';
+					echo '<div class="span12">';
+					echo '<span class="labels">';
+					echo '<span class="label">' . $collectible['Collectibletype']['name'] . '</span>';
 					if (!empty($collectible['License']['name'])) {
-						echo '<td>' . $collectible['License']['name'] . '</td>';
-					} else {
-						echo '<td>Not Recorded</td>';
+						echo '<span class="label">' . $collectible['License']['name'] . '</span>';
 					}
-					echo '<td>' . $collectible['Collectibletype']['name'] . '</td>';
-					if (isset($collectible['SpecializedType']) && !empty($collectible['SpecializedType'])) {
-						echo '<td>' . $collectible['SpecializedType']['name'] . '</td>';
-					} else {
-						echo '<td> </td>';
-					}
-					if ($collectible['Collectible']['collectibles_user_count'] === '0') {
-						echo '<td>' . $collectible['Collectible']['collectibles_user_count'] . '</td>';
-					} else {
-						echo '<td>' . $this -> Html -> link($collectible['Collectible']['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['Collectible']['id'])) . '</td>';
+					if (!empty($collectible['Manufacture']['title'])) {
+						echo '<span class="label">' . $collectible['Manufacture']['title'] . '</span>';
 					}
 
-					echo '<td>';
-					echo '<div class="btn-group">';
+					echo '</span>';
+					echo '</div>';
+					echo '</div>';
+
+					echo '</div>';
+					// end span 8
+
+					echo '<div class="span2">';
+					echo '<div class="row-fluid">';
+					echo '<div class="span12 count">';
+					echo '<span class="badge pull-right">';
+
+					if ($collectible['Collectible']['collectibles_user_count'] === '0') {
+						echo $collectible['Collectible']['collectibles_user_count'];
+					} else {
+						echo $this -> Html -> link($collectible['Collectible']['collectibles_user_count'], array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['Collectible']['id']));
+					}
+
+					echo '</span>';
+					echo '</div>';
+					echo '</div>';
+
+					echo '<div class="row-fluid">';
+					echo '<div class="span12">';
+					echo '<div class="btn-group pull-right">';
 					echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 					echo '<ul class="dropdown-menu">';
 					if ($isLoggedIn) {
@@ -112,13 +145,21 @@ unset($urlparams['url']);
 					echo '</li>';
 					echo '</ul>';
 					echo '</div>';
-					echo '</td>';
+					echo '</div>';
+					echo '</div>';
 
-					echo '</tr>';
+					echo '</div>';
+					//span 2
+
+					echo '</div>';
+					// row-fluid
+					echo '</div>';
+					// end span 12 collectible
+					echo '</div>';
+					// end row-fluid spacer
 				}
 			?>
-				
-				</table>
+				</div>
 				<div class="paging">
 					<p>
 						<?php
@@ -129,8 +170,33 @@ unset($urlparams['url']);
 					<?php echo $this -> Paginator -> numbers(array('separator' => false)); ?>
 					<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled')); ?>
 				</div>
-
+		
+			</div>
 			</div>
 		</div>
+		<div class="span5">
+		<div class="well" data-spy="affix">
+         <ul class="nav nav-list">
+           <li class="nav-header">Sidebar</li>
+           <li class="active"><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li class="nav-header">Sidebar</li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li class="nav-header">Sidebar</li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+           <li><a href="#">Link</a></li>
+         </ul>
+       </div>	
+		</div>
 	</div>
+	
+
 </div>
