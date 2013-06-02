@@ -85,8 +85,62 @@
 			
 			<dd>{#currency}{.}{:else}${/currency}{.}</dd>			
 			
-			{/Collectible.msrp}								
+			{/Collectible.msrp}	
+			
+			{#Collectible.official}
+			<dt>Official</dt>
+			<dd>Yes</dd>			
+			{/Collectible.official}			
 
+			{#Collectible.limited}
+			<dt>Limited Edition</dt>
+			<dd>Yes</dd>			
+			{/Collectible.limited}	
+
+			{#Collectible.retailer}
+			<dt>Venue / Exclusive Retailer</dt>
+			<dd>{.}</dd>			
+			{/Collectible.retailer}	
+
+			{#Collectible.edition_size}
+			<dt>Edition Size</dt>
+			<dd>{.}</dd>			
+			{/Collectible.edition_size}				
+
+			{#Collectible.numbered}
+			<dt>Numbered</dt>
+			<dd>{Yes}</dd>			
+			{/Collectible.numbered}			
+	
+			{#Collectible.signed}
+			<dt>Signed</dt>
+			<dd>{Yes}</dd>			
+			{/Collectible.signed}			
+	
+			{#Collectible.pieces}
+			<dt>Number of Pieces</dt>
+			<dd>{.}</dd>			
+			{/Collectible.pieces}	
+						
+			{#Collectible.product_weight}
+			<dt>Weight</dt>
+			<dd>{.}</dd>			
+			{/Collectible.product_weight}		
+	
+			{#Collectible.product_length}
+			<dt>Height</dt>
+			<dd>{.}</dd>			
+			{/Collectible.product_length}			
+	
+			{#Collectible.product_width}
+			<dt>Width</dt>
+			<dd>{.}</dd>			
+			{/Collectible.product_width}	
+		
+			{#Collectible.product_depth}
+			<dt>Depth</dt>
+			<dd>{.}</dd>			
+			{/Collectible.product_depth}		
 		</dl>
 	</div>
 </div>
