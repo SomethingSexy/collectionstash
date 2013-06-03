@@ -157,8 +157,14 @@
 								if(isset($isLoggedIn) && $isLoggedIn === true)
 								{  ?>
 			
-								<li>
-									<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
+								<li class="dropdown">
+									<?php echo $this -> Html -> link('<i class="icon-user"></i><b class="caret"></b>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+										<li><?php echo $this -> Html -> link('Profile', '/profiles', array('escape' => false, 'admin' => false)); ?></li>
+										<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
+										<li class="divider"></li>
+										<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
+									</ul>
 								</li>
 								<?php
 								if($isUserAdmin)
@@ -167,9 +173,7 @@
 									<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
 								</li>
 								<?php } ?>
-								<li>
-									<?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?>
-								</li>
+
 								<?php  }
 									else
 									{

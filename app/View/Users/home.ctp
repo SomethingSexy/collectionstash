@@ -1,4 +1,22 @@
 <div class="span8 home">
+		<?php
+	if ($user['User']['collectibles_user_count'] == 0) {
+	?>
+	<div class="row-fluid spacer">
+		<div class="span12">
+			<div class="hero-unit">
+				<h1>Getting started with Collection Stash!</h1>
+				<p>
+					You can now enjoy all of the benefits of being a registered membered.  You can get started by finding collectibles you own and adding them to your stash or helping catalog collectibles by submitting new ones.
+				</p>
+				<p>
+					<a target="_blank" href="/pages/collection_stash_documentation" class="btn btn-primary btn-large"> Learn more </a>
+				</p>
+			</div>
+
+		</div>
+	</div>
+	<?php } ?>
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="well user-stats">

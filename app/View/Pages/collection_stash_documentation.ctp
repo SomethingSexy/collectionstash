@@ -1,7 +1,6 @@
 <?php $this -> set("title_for_layout", __('A Guide to Collection Stash')); ?>
-<div class="row-fluid">
 	<div class="span3">
-		<div class="well affix">
+		<div class="well">
 			<ul class="nav nav-list">
 				<li>
 					<a href="#overview"> <i class="icon-chevron-right"></i> What is a Collectible? </a>
@@ -539,5 +538,4 @@
 		<p>Currently all listings have to be entered in manually.  However, you can earn up to 50 nuts per valid listing you add to a collectible.</p>
 	</div>
 
-</div>
 
