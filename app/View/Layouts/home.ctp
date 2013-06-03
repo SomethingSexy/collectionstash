@@ -148,43 +148,47 @@
 							<a href="/comments/"><?php echo __('Discussion'); ?></a>
 						</li>									
 					</ul>
-					<ul class="nav pull-right">
-						<li>
-								<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
-							</li>
-							<?php
-							if(isset($isLoggedIn) && $isLoggedIn === true)
-							{  ?>
-		
+						<ul class="nav pull-right">
 							<li>
-								<?php echo $this -> Html -> link('<i class="icon-user"></i>', '/profiles', array('escape' => false, 'admin' => false)); ?>
-							</li>
-							<?php
-							if($isUserAdmin)
-							{ ?>
-							<li>
-								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
-							</li>
-							<?php } ?>
-							<li>
-								<?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?>
-							</li>
-							<?php  }
-								else
-								{
-							?>
-							<li>
-								<a href="/users/login"><?php echo __('Login'); ?></a>
-							</li>
-							<?php
-							if (Configure::read('Settings.registration.open')) {
-								echo '<li>';
-								echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
-								echo '</li>';
-							}
-							}
-							?>					
-					</ul>
+									<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
+								</li>
+								<?php
+								if(isset($isLoggedIn) && $isLoggedIn === true)
+								{  ?>
+			
+								<li class="dropdown">
+									<?php echo $this -> Html -> link('<i class="icon-user"></i><b class="caret"></b>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+										<li><?php echo $this -> Html -> link('Profile', '/profiles', array('escape' => false, 'admin' => false)); ?></li>
+										<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
+										<li class="divider"></li>
+										<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
+									</ul>
+								</li>
+								<?php
+								if($isUserAdmin)
+								{ ?>
+								<li>
+									<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+								</li>
+								<?php } ?>
+
+								<?php  }
+									else
+									{
+								?>
+								<li>
+									<a href="/users/login"><?php echo __('Login'); ?></a>
+								</li>
+								<?php
+								if (Configure::read('Settings.registration.open')) {
+									echo '<li>';
+									echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
+									echo '</li>';
+								}
+								}
+								?>					
+						</ul>
 					<form method="get" class="navbar-search pull-right" action="/collectibles/search">
 						<input id="q" type="text" name="q" class="search-query" placeholder="Search">
 					</form>

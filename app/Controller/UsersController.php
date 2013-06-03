@@ -13,6 +13,8 @@ class UsersController extends AppController {
 	 * User home dashboard
 	 */
 	public function home() {
+		$this -> checkLogIn();
+		
 		// user
 		$user = $this -> getUser();
 		debug($user);
