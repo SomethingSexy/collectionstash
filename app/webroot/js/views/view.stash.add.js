@@ -24,7 +24,9 @@ var StashAddView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
-		$("#CollectiblesUserPurchaseDate", this.el).datepicker();
+		$("#CollectiblesUserPurchaseDate", this.el).datepicker().on('changeDate', function(e) {
+			self.fieldChanged(e);
+		});
 
 		$('#CollectiblesUserMerchantId', this.el).typeahead({
 			source : function(query, process) {

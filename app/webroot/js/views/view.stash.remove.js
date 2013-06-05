@@ -27,7 +27,9 @@ var StashRemoveView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
-		//$("#CollectiblesUserPurchaseDate", this.el).datepicker();
+		$("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
+			self.fieldChanged(e);
+		});
 
 		this.errors = [];
 

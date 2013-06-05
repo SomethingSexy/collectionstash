@@ -69,6 +69,12 @@ class CollectiblesUsersController extends AppController {
 		} else if ($this -> request -> isDelete()) {
 			// for now this will handle deletes where the user is prompted
 			// about the delete
+			// we need to pull the query parameters
+			$value = $this -> request -> query('collectible_user_remove_reason_id');
+			$value = $this -> request -> query('sold_cost');
+			$value = $this -> request -> query('remove_date');
+			
+			
 
 		} else if ($this -> request -> isGet()) {
 
