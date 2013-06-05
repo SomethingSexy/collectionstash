@@ -120,8 +120,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -257,7 +256,8 @@
 		});
 
 		$('#stash-remove-dialog').on('click', '.save', function() {
-			self.collectibleUser.destroy({}, {
+			self.collectibleUser.destroy({
+				url : self.collectibleUser.url('delete'),
 				success : function(model, response, options) {
 					if (response.response.isSuccess) {
 						$('#stash-remove-dialog').modal('hide');
