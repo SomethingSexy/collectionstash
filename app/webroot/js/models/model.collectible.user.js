@@ -1,10 +1,14 @@
 var CollectibleUserModel = Backbone.Model.extend({
-	url : function() {
+	url : function(method) {
 
-		var url = '/collectibles_users/collectible/' + this.id + '/';
+		var url = '/collectibles_users/collectible/' + this.id;
 
 		if (this.stashType) {
-			url = url + this.stashType;
+			url = url + '/' + this.stashType;
+		}
+
+		if (method && method === 'delete') {
+			url = url + '?' + $.param(this.toJSON());
 		}
 
 		return url;
