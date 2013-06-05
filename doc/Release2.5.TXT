@@ -33,3 +33,29 @@ cake -app D:\Development\wamp\www\app process_transactions
 
 
 /var/www/collectionstash/vendors/cakeshell.sh process_transactions -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+
+
+
+Version 2.5.2
+- Remove dialog
+- History
+
+
+Collectibles_User table updates
+
+- collectible_user_remove_reason_id  - putt his here for quick access, if there is a listing we will also return that 
+- listing_id - we can use this past sales and the marketplace, listing_type_id will = 2 for generic external - Store/BIN or trade  when we have marketplace we will have a listing_type_id = 3 which will be internal trade or store/bin
+- active,inactive -> is this table necessary? Maybe just a boolean to determine if active 
+- remove_date - fast reference
+
+
+
+New Table
+- CollectibleUserRemoveReasons     - this table will also have some information on whether we force a delete or not
+  - sold
+  - traded
+
+
+If the remove reason is sold then we prompt to ask how much it sold for and we create an appropriate listing/transaction
+If the remove reason is traded then we prompt to ask what it was traded for and we create an appropriate listing/transaction 
