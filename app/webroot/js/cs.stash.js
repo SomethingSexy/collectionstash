@@ -408,7 +408,7 @@
 	$.fn.stashremove = function(options) {
 		return this.each(function() {
 			var $this = $(this);
-			if (options.prompt) {
+			if (options.prompt === 'true') {
 				stashPromptRemove.remove(options);
 			} else {
 
@@ -436,7 +436,12 @@
 
 	$(function() {
 		stashPromptRemove.initialize();
-		var reasonsCollection = new Backbone.Collection(JSON.parse(reasons))
+		var reasonsCollection = null;
+		if (typeof reasons !== 'undefined') {
+			reasonsCollection = new Backbone.Collection(JSON.parse(reasons));
+		} else {
+			reasonsCollection = new Backbone.Collection();
+		}
 
 		var tile = false;
 		if ($('.stashable').hasClass('tiles')) {
