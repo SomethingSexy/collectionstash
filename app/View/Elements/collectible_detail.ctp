@@ -313,7 +313,7 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-							var collectibleStatus = {
+var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:

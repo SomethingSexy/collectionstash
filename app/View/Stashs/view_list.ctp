@@ -145,10 +145,21 @@
 				echo '<div class="btn-group">';
 				echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 				echo '<ul class="dropdown-menu">';
+
 				if ($stashType === 'default') {
 					echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '>Edit</a></li>';
 				}
-				echo '<li><a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#">Remove</a></li>';
+
+				if ($stashType === 'default') {
+					$prompt = 'data-prompt="true"';
+				} else {
+					$prompt = 'data-prompt="false"';
+				}
+
+				$collectibleJSON = json_encode($myCollectible['Collectible']);
+				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+
+				echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#">Remove</a></li>';
 				echo '</ul>';
 				echo '</div>';
 				echo '</td>';
@@ -183,8 +194,15 @@
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 
 <script>
+	<?php 
+		if(isset($reasons)) {
+			echo 'var reasons = \'' . json_encode($reasons) . '\';';
+		}
+	?>
 	$(function() {
 		var $container = $('div.tiles');
 		$container.imagesLoaded(function() {
