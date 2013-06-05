@@ -120,8 +120,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -255,76 +254,98 @@
 	}
 
 	StashRemove.prototype.remove = function() {
-		var self = this;
-		$.ajax({
-			dataType : 'json',
-			type : 'post',
-			data : {
-				'_method' : 'POST'
-			},
-			url : '/collectibles_users/remove/' + this.collectibleUserId,
-			beforeSend : function(formData, jqForm, options) {
+		if (this.options.prompt) {
+			this.collectibleUser = new CollectibleUserModel({
+				id : this.collectibleUserId
+			});
 
-			},
-			// success identifies the function to invoke when the server response
-			// has been received
-			success : function(data, textStatus, jqXHR) {
-				if (data.response.isSuccess) {
-					var message = (self.stashType.toLowerCase() === 'default') ? 'Collectible has been removed from your Stash!' : 'Collectible has been removed from your Wishlist!'
-					$.blockUI({
-						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-						showOverlay : false,
-						css : {
-							top : '100px',
-							'background-color' : '#DDFADE',
-							border : '1px solid #93C49F',
-							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-							'border-radius' : '4px 4px 4px 4px',
-							color : '#333333',
-							'margin-bottom' : '20px',
-							padding : '8px 35px 8px 14px',
-							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-							'z-index' : 999999
-						},
-						timeout : 2000
-					});
-					if (self.$tiles) {
-						self.$tiles.masonry('remove', self.$stashItem);
-						self.$tiles.masonry('reload');
-					} else {
-						self.$stashItem.remove();
-					}
+			if (this.stashRemoveView) {
+				this.stashRemoveView.remove();
+				delete this.stashRemoveView;
+			}
 
-				} else {
-					if (data.response.errors) {
-						$.each(data.response.errors, function(index, value) {
-							if (value.inline) {
-								$(':input[name="data[' + value.model + '][' + value.name + ']"]', '#AttributeRemoveForm').after('<div class="error-message">' + value.message + '</div>');
-							} else {
-								$.blockUI({
-									message : '<button class="close" data-dismiss="alert" type="button">×</button>' + value.message,
-									showOverlay : false,
-									css : {
-										top : '100px',
-										'background-color' : '#DDFADE',
-										border : '1px solid #93C49F',
-										'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-										'border-radius' : '4px 4px 4px 4px',
-										color : '#333333',
-										'margin-bottom' : '20px',
-										padding : '8px 35px 8px 14px',
-										'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-										'z-index' : 999999
-									},
-									timeout : 2000
-								});
-							}
+			this.stashRemoveView = new StashRemoveView({
+				model : this.collectibleUser,
+				collectible : this.options.collectibleModel,
+				reasons : this.options.reasons
+			});
 
+			$('.modal-body', '#stash-remove-dialog').html(this.stashRemoveView.render().el);
+
+			$('#stash-remove-dialog').modal();
+		} else {
+			var self = this;
+			$.ajax({
+				dataType : 'json',
+				type : 'post',
+				data : {
+					'_method' : 'POST'
+				},
+				url : '/collectibles_users/remove/' + this.collectibleUserId,
+				beforeSend : function(formData, jqForm, options) {
+
+				},
+				// success identifies the function to invoke when the server response
+				// has been received
+				success : function(data, textStatus, jqXHR) {
+					if (data.response.isSuccess) {
+						var message = (self.stashType.toLowerCase() === 'default') ? 'Collectible has been removed from your Stash!' : 'Collectible has been removed from your Wishlist!'
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
 						});
+						if (self.$tiles) {
+							self.$tiles.masonry('remove', self.$stashItem);
+							self.$tiles.masonry('reload');
+						} else {
+							self.$stashItem.remove();
+						}
+
+					} else {
+						if (data.response.errors) {
+							$.each(data.response.errors, function(index, value) {
+								if (value.inline) {
+									$(':input[name="data[' + value.model + '][' + value.name + ']"]', '#AttributeRemoveForm').after('<div class="error-message">' + value.message + '</div>');
+								} else {
+									$.blockUI({
+										message : '<button class="close" data-dismiss="alert" type="button">×</button>' + value.message,
+										showOverlay : false,
+										css : {
+											top : '100px',
+											'background-color' : '#DDFADE',
+											border : '1px solid #93C49F',
+											'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+											'border-radius' : '4px 4px 4px 4px',
+											color : '#333333',
+											'margin-bottom' : '20px',
+											padding : '8px 35px 8px 14px',
+											'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+											'z-index' : 999999
+										},
+										timeout : 2000
+									});
+								}
+
+							});
+						}
 					}
 				}
-			}
-		});
+			});
+		}
+
 	};
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
@@ -351,15 +372,23 @@
 	 * =============== */
 
 	$(function() {
+		var reasonsCollection = new Backbone.Collection(JSON.parse(reasons))
+		dust.loadSource(dust.compile($('#template-stash-remove').html(), 'stash.remove'));
+
 		var tile = false;
 		if ($('.stashable').hasClass('tiles')) {
 			tile = true;
 		}
 
 		$('.stashable').on('click', 'a.remove-from-stash', function(e) {
-			var $anchor = $(e.currentTarget)
+			var $anchor = $(e.currentTarget);
+			var prompt = $anchor.attr('data-prompt');
+			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			$anchor.stashremove({
-				tiles : tile
+				tiles : tile,
+				prompt : prompt,
+				collectibleModel : collectibleModel,
+				reasons : reasonsCollection
 			});
 			e.preventDefault();
 		});

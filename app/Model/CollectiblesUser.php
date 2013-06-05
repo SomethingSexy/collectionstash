@@ -7,7 +7,7 @@ class CollectiblesUser extends AppModel {
 	public $name = 'CollectiblesUser';
 	//As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
 	//then we have a complete total of collectibles
-	public $belongsTo = array('Stash' => array('counterCache' => true), 'Collectible' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Condition', 'Merchant' => array('counterCache' => true));
+	public $belongsTo = array('CollectibleUserRemoveReason', 'Listing', 'Stash' => array('counterCache' => true), 'Collectible' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Condition', 'Merchant' => array('counterCache' => true));
 	public $actsAs = array('Revision' => array('model' => 'CollectiblesUserRev', 'ignore' => array('sort_number')), 'Containable');
 	public $validate = array(
 	//cost
@@ -238,5 +238,6 @@ class CollectiblesUser extends AppModel {
 
 		return $retVal;
 	}
+
 }
 ?>

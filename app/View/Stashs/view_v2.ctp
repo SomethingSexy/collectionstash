@@ -98,12 +98,12 @@
 
 			echo '<div class="header">';
 			if ($stashType === 'default') {
-				if($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']){
+				if ($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']) {
 					echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				} else {
 					echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				}
-				
+
 			} else {
 				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			}
@@ -125,10 +125,17 @@
 			echo '<li class="">';
 			echo '<a class="btn" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-search"></i></a>';
 			if (isset($myStash) && $myStash) {
+				$collectibleJSON = json_encode($myCollectible['Collectible']);
+				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 				if ($stashType === 'default') {
 					echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
 				}
-				echo '<a data-stash-type="' . $stashType . '" data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
+				if ($stashType === 'default') {
+					$prompt = 'data-prompt="true"';
+				} else {
+					$prompt = 'data-prompt="false"';
+				}
+				echo '<a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
 			}
 			echo '</li>';
 			echo '</ul>';
@@ -150,8 +157,15 @@
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 
 <script>
+	<?php 
+		if(isset($reasons)) {
+			echo 'var reasons = \'' . json_encode($reasons) . '\';';
+		}
+	?>
 	$(function() {
 		var $container = $('div.tiles');
 		$container.imagesLoaded(function() {
@@ -185,5 +199,5 @@
 
 		$('#comments').comments();
 
-	}); 
+	});
 </script>

@@ -75,9 +75,6 @@
 			s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
-	<script id="template-stash-add" type="text/x-tmpl">
-		<?php echo $this->element('stash_add');?>	
-	</script>
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -242,9 +239,17 @@
 			</div>
 		</div>		
 	</footer>
+	<script id="template-stash-add" type="text/x-tmpl">
+		<?php echo $this->element('stash_add');?>	
+	</script>
+	<script id="template-stash-remove" type="text/x-tmpl">
+		<?php echo $this->element('stash_remove');?>	
+	</script>
+	
 	<?php 
 	// list out any modals here that might be common
 	echo $this->element('stash_add_modal');
+	echo $this->element('stash_remove_modal');
 	?>	
 
 		<?php echo $this -> element('sql_dump'); ?>

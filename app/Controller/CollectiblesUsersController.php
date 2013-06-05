@@ -67,6 +67,8 @@ class CollectiblesUsersController extends AppController {
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {
+			// for now this will handle deletes where the user is prompted
+			// about the delete
 
 		} else if ($this -> request -> isGet()) {
 
