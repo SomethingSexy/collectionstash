@@ -61,6 +61,14 @@ class CollectiblesUser extends AppModel {
 			}
 		}
 
+		if (isset($this -> data['CollectiblesUser']['remove_date'])) {
+			if (empty($this -> data['CollectiblesUser']['remove_date'])) {
+				unset($this -> data['CollectiblesUser']['remove_date']);
+			} else {
+				$this -> data['CollectiblesUser']['remove_date'] = date('Y-m-d', strtotime($this -> data['CollectiblesUser']['remove_date']));
+			}
+		}
+
 		if (isset($this -> data['CollectiblesUser']['merchant']) && !empty($this -> data['CollectiblesUser']['merchant'])) {
 			$existingMerchant = $this -> Merchant -> find('first', array('conditions' => array('Merchant.name' => $this -> data['CollectiblesUser']['merchant'])));
 			/*
@@ -266,6 +274,50 @@ class CollectiblesUser extends AppModel {
 			}
 		} else {
 			// history
+			// otherwise we want to finish validating
+
+			$this -> validate['remove_date']['allowEmpty'] = false;
+			$this -> validate['remove_date']['required'] = true;
+			if ($reason['CollectibleUserRemoveReason']['sold_cost_required']) {
+				$this -> validate['sold_cost']['allowEmpty'] = false;
+				$this -> validate['sold_cost']['required'] = true;
+			}
+
+			if (!$this -> validates()) {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
+				$retVal['response']['errors'] = $errors;
+				return $retVal;
+			}
+
+			$dataSource = $this -> getDataSource();
+			$dataSource -> begin();
+
+			if (isset($data['CollectiblesUser']['sold_cost'])) {
+				$listingData = array();
+				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+				$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+				$listingData['Listing']['listing_type_id'] = 2;
+				$listing = $this -> Listing -> createListing($listingData, $user);
+
+				if (!$listing['response']['isSuccess']) {
+					$dataSource -> rollback();
+					$retVal['response']['code'] = 500;
+					return $retVal;
+				}
+
+				$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
+			}
+
+			$data['CollectiblesUser']['active'] = false;
+			debug($data);
+			if ($this -> save($data)) {
+				$retVal['response']['isSuccess'] = true;
+				$dataSource -> commit();
+			} else {
+				$dataSource -> rollback();
+			}
 		}
 
 		// $this -> validate['remove_date']['allowEmpty'] = false;

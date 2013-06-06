@@ -79,6 +79,8 @@ class CollectiblesUsersController extends AppController {
 			$response = $this -> CollectiblesUser -> remove($collectible, $this -> getUser());
 			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
 				$this -> response -> statusCode(401);
+			} else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
+				$this -> response -> statusCode(500);
 			}
 
 			$this -> set('returnData', $response);

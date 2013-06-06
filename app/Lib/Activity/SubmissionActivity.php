@@ -113,7 +113,7 @@ class SubmissionActivity extends BaseActivity {
 			$objectJSON = $this -> buildObject($this -> object['Listing']['id'], $this -> object['Listing']['url'], 'listing', $this -> object);
 			$retVal = array_merge($retVal, $objectJSON);
 
-			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'] . '/' . $this -> object['Collectible']['slugField'], 'collectible', $this -> object['Collectible']['name']);
+			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['displayTitle']);
 			$retVal = array_merge($retVal, $targetJSON);
 		}
 

@@ -117,7 +117,7 @@ echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
 		function b_animate() {
 			var c2 = r.barchart(0, 0, 960, 400, [bdata], {
 				stacked : true,
-			}).label(months, true).hover(fin, fout);
+			}).hover(fin, fout);
 			
 			c.remove();
 			c = c2;
@@ -132,6 +132,8 @@ echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
 
 
 		$('.years').on('click', '.btn', function(event) {
+			$(event.currentTarget).siblings().removeClass('active');
+			$(event.currentTarget).addClass('active');
 			bdata = JSON.parse(JSON.stringify(data[$(event.currentTarget).attr('data-key')]));
 			b_animate();
 		});
