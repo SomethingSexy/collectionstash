@@ -127,7 +127,32 @@ class Stash extends AppModel {
 				if (!isset($templateData[$date['year']][$date['month']])) {
 					$templateData[$date['year']][$date['month']] = array();
 				}
-				array_push($templateData[$date['year']][$date['month']], $collectible);
+
+				if (!isset($templateData[$date['year']][$date['month']]['purchased'])) {
+					$templateData[$date['year']][$date['month']]['purchased'] = array();
+				}
+
+				array_push($templateData[$date['year']][$date['month']]['purchased'], $collectible);
+			}
+			if ($collectible['CollectiblesUser']['remove_date'] !== null && $collectible['CollectiblesUser']['remove_date'] !== '0000-00-00') {
+
+				$time = strtotime($collectible['CollectiblesUser']['remove_date']);
+				$date = date('m d y', $time);
+				$date = date_parse_from_format('m d y', $date);
+
+				if (!isset($templateData[$date['year']])) {
+					$templateData[$date['year']] = array();
+				}
+
+				if (!isset($templateData[$date['year']][$date['month']])) {
+					$templateData[$date['year']][$date['month']] = array();
+					$templateData[$date['year']][$date['month']]['purchased'] = array();
+				}
+
+				if (!isset($templateData[$date['year']][$date['month']]['sold'])) {
+					$templateData[$date['year']][$date['month']]['sold'] = array();
+				}
+				array_push($templateData[$date['year']][$date['month']]['sold'], $collectible);
 			}
 		}
 
@@ -146,12 +171,20 @@ class Stash extends AppModel {
 				if (!isset($templateData[$i][$m])) {
 					$templateData[$i][$m] = array();
 				}
+
+				if (!isset($templateData[$i][$m]['purchased'])) {
+					$templateData[$i][$m]['purchased'] = array();
+				}
+
+				if (!isset($templateData[$i][$m]['sold'])) {
+					$templateData[$i][$m]['sold'] = array();
+				}
 			}
 
 			ksort($templateData[$i]);
 
 		}
-
+		debug($templateData);
 		// we need to fill out empty years, months now
 
 		// if I wanted to do an overall , I would have to do a tally of when things were per month and then if something was removed that month subtract, but each month would have to carry over the previous months count
