@@ -701,11 +701,6 @@ div.radio label {
 	margin-bottom: 5px;
 	padding-bottom: 5px;
 }
-#my-stashes-component {
-	float: left;
-	width: 100%;
-}
-
 #my-stashes-component .tabs div .actions .link.glimpse-link, #my-stashes-component .tabs div .actions .link.add-stash-link, #my-stashes-component .tabs div .actions .link.detail-link {
 	background: none;
 }

@@ -1,17 +1,16 @@
 <?php echo $this -> Minify -> script('js/thirdparty/raphael', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/thirdparty/g.raphael', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/thirdparty/g.bar', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('thirdparty/g.bar', array('inline' => false)); ?>
 
 
 
+<div id="my-stashes-component" class="span12">
 
-
-<div id="my-stashes-component" class="well">
 		<div class="page-header">
-			<h1><?php echo __('Search Results'); ?></h1>
+			<h1><?php echo __('History'); ?></h1>
 		</div>
 		<?php echo $this -> element('flash'); ?>
-		<div class="row">
+		<div class="row-fluid">
 			<div class="span8">
 				<div class="actions stash">
 					<ul class="nav nav-pills">
@@ -36,7 +35,7 @@
 				
 			</div>
 			<div class="span4">
-				<div class="btn-group pull-right">
+				<div class="btn-group pull-right years">
 				    <button class="btn">All</button>
 				    <button class="btn">Sold</button>
 			    </div>				
@@ -47,29 +46,94 @@
 		
 
 			
-	<div class="row">
-		<div class="span12">
-			<div id="holder">
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="well">
+				<h2>Purchases</h2>
+				<div class="btn-group pull-right years">
+				<?php
+				$default = key($graphData);
+				foreach ($graphData as $keyYear => $year) {
+					echo '<button data-key="' . $keyYear . '" class="btn';
+					if ($keyYear === $default) {
+						echo ' active';
+					}
+					echo '">' . $keyYear . '</button>';
+				}
+				?> 
+			    </div>	
+				<div id="holder">
 		
+				</div>
 			</div>
 		</div>
-		
 	</div>
-	<div class="row">
+	<div class="row-fluid">
 		<div class="span12">
-
+			<div class="well">
+			</div>
 		</div>
-		
 	</div>
-
 </div>
 
-<script>
-	var r = Raphael('holder', 800, 250);
-	var data2 = [[55, 20, 13, 32, 5, 1, 2, 10, 55, 20, 13, 32, 5, 1, 2, 10, 55, 20, 13, 32, 5, 1, 2, 10, 55, 20, 13, 32, 5, 1, 2, 10, 55, 20, 13, 32, 5, 1, 2, 10], [10, 2, 1, 5, 32, 13, 20, 55]];
-	//r.barchart(10, 250, 300, 220, data2,);
-	r.barchart(0, 0, 620, 260, data2, {
-		stacked : true
-	});
+<script><?php
+$counts = '';
 
+foreach ($graphData as $keyYear => $year) {
+
+	$counts .= $keyYear . ':[';
+	foreach ($year as $keyMonth => $month) {
+		$counts .= '[' . count($month) . '],';
+
+	}
+	$counts .= '],';
+}
+echo 'var data = {' . $counts . '};';
+echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
+?>
+	// var b1data = [[319309], [305303], [534917]];
+	// var b2data = [[268210], [263097], [359183]];
+	// var b3data = [[373217], [064199], [201510]];
+	$(function() {
+		var r = Raphael('holder', 980, 500);
+
+		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var fin = function() {
+			this.flag = r.popup(this.bar.x, this.bar.y, this.bar.value || "0", 'right').insertBefore(this);
+		};
+		var fout = function() {
+			this.flag.animate({
+				opacity : 0
+			}, 300, function() {
+				this.remove();
+			});
+		};
+		var c = r.barchart(0, 0, 960, 400, [bdata], {
+			stacked : true,
+			axis : "0 0 1 1",
+			axisxlabels : ["2008", "2009", "2010"]
+		}).label(months, true).hover(fin, fout);
+
+		function b_animate() {
+			var c2 = r.barchart(0, 0, 960, 400, [bdata], {
+				stacked : true,
+			}).label(months, true).hover(fin, fout);
+			
+			c.remove();
+			c = c2;
+			//$.each(c.bars[0], function(k, v) {
+			//	v.animate({
+			//		path : c2.bars[0][k].attr("path")
+			//	}, 500);
+			//	v.value[0] = bdata[k][0];
+			//});
+			//c2.remove();
+		}
+
+
+		$('.years').on('click', '.btn', function(event) {
+			bdata = JSON.parse(JSON.stringify(data[$(event.currentTarget).attr('data-key')]));
+			b_animate();
+		});
+	}); 
 </script>
