@@ -99,6 +99,13 @@ class Stash extends AppModel {
 	public function getStashHistory($user) {
 		$collectibles = $this -> CollectiblesUser -> find('all', array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'CollectiblesUser.active' => true)));
 		
+		// we need to find the beginning and the end
+		//
+		// then we need to figure out our ranges, every month, or a subset of months or years 
+		
+		// then once we have our ranges, we can organize them into those ranges and add counts
+		
+		
 		//0000-00-00
 		
 		debug($collectibles);
