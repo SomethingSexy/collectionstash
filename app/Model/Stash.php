@@ -95,22 +95,36 @@ class Stash extends AppModel {
 
 		return $retVal;
 	}
-
+	
+	/**
+	 * Depending on the graph we will want to switch these out based on the graph options we support
+	 * 
+	 * pick one for the default and then the rest will be loaded via ajax
+	 * 
+	 */
 	public function getStashHistory($user) {
-		$collectibles = $this -> CollectiblesUser -> find('all', array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'CollectiblesUser.active' => true)));
-		
+		$collectibles = $this -> CollectiblesUser -> find('all', array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'CollectiblesUser.active' => true)));
+
 		// we need to find the beginning and the end
 		//
-		// then we need to figure out our ranges, every month, or a subset of months or years 
-		
+		// then we need to figure out our ranges, every month, or a subset of months or years
+
 		// then once we have our ranges, we can organize them into those ranges and add counts
-		
-		
+
 		//0000-00-00
 		
+		// this would be a line graph of purchases
+		
+		// or it could be a bar graph of purchases with how many you sold ontop
+		$templateData = array();
+		foreach ($collectibles as $collectible) {
+			$templateData[$row -> date_year][$row -> date_month][] = $row -> name;
+		}
+		
+		// if I wanted to do an overall , I would have to do a tally of when things were per month and then if something was removed that month subtract, but each month would have to carry over the previous months count
+
 		debug($collectibles);
-		
-		
+
 	}
 
 }
