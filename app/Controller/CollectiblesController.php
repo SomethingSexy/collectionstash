@@ -169,7 +169,7 @@ class CollectiblesController extends AppController {
 
 			$request = $this -> request -> input('json_decode');
 			debug($request);
-			if (!$response['response']['isSuccess'] && $response['response']['code'] = 401) {
+			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
 				$this -> response -> statusCode(401);
 			} else {
 				// request becomes an actual object and not an array
@@ -257,8 +257,6 @@ class CollectiblesController extends AppController {
 		// WE are handling one tag at a time here
 		// if it is a put, then we are adding
 		// if it is a delete then we are removing
-		debug($adminMode);
-
 		if ($adminMode === true || $adminMode === 'true') {
 			if (!$this -> isUserAdmin()) {
 				$this -> response -> statusCode(401);
@@ -471,7 +469,7 @@ class CollectiblesController extends AppController {
 			}
 
 			$this -> set(compact('history'));
-			debug($history);
+
 			//Grab a list of all attributes associated with this collectible, or were associated with this collectible.  We will display a list of all
 			//of these attributes then we can go into further history detail if we need too
 			$attributeHistory = $this -> Collectible -> AttributesCollectible -> find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id)));

@@ -21,8 +21,11 @@
 		});
 
 		$('#stash-add-dialog').on('click', '.save', function() {
+			var $button = $(this);
+			$button.button('loading');
 			self.collectibleUser.save({}, {
 				success : function(model, response, options) {
+					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-add-dialog').modal('hide');
 						var message = 'You have successfully added the collectible to your stash!';
@@ -52,7 +55,7 @@
 					}
 				},
 				error : function(model, xhr, options) {
-
+					$button.button('reset');
 				}
 			});
 
@@ -120,7 +123,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -256,12 +260,22 @@
 		});
 
 		$('#stash-remove-dialog').on('click', '.save', function() {
+			var $button = $(this);
+			$button.button('loading');
 			self.collectibleUser.destroy({
 				url : self.collectibleUser.url('delete'),
 				success : function(model, response, options) {
+					$button.button('reset');
 					if (response.response.isSuccess) {
+						if (self.$tiles) {
+							self.$tiles.masonry('remove', self.$stashItem);
+							self.$tiles.masonry('reload');
+						} else {
+							self.$stashItem.remove();
+						}
+
 						$('#stash-remove-dialog').modal('hide');
-						var message = 'You have successfully added the collectible to your stash!';
+						var message = 'You have successfully removed the collectible from your stash!';
 
 						$.blockUI({
 							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
@@ -280,15 +294,16 @@
 							},
 							timeout : 2000
 						});
+
 					} else {
 						if (response.response.errors) {
-							self.stashAddView.errors = response.response.errors;
-							self.stashAddView.render();
+							self.stashRemoveView.errors = response.response.errors;
+							self.stashRemoveView.render();
 						}
 					}
 				},
 				error : function(model, xhr, options) {
-
+					$button.button('reset');
 				}
 			});
 
@@ -297,6 +312,10 @@
 	};
 
 	StashPromptRemove.prototype.remove = function(options) {
+		if (options.tiles) {
+			this.$tiles = $('.tiles');
+		}
+		this.$stashItem = options.$stashItem;
 		this.collectibleUser = new CollectibleUserModel({
 			id : options.collectibleUserId
 		});
@@ -437,7 +456,7 @@
 	$(function() {
 		stashPromptRemove.initialize();
 		var reasonsCollection = null;
-		if (typeof reasons !== 'undefined') {
+		if ( typeof reasons !== 'undefined') {
 			reasonsCollection = new Backbone.Collection(JSON.parse(reasons));
 		} else {
 			reasonsCollection = new Backbone.Collection();
@@ -453,7 +472,9 @@
 			var prompt = $anchor.attr('data-prompt');
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			var collectibleUserId = $anchor.attr('data-collectible-user-id');
+			var $stashItem = $anchor.closest('.stash-item');
 			$anchor.stashremove({
+				$stashItem : $stashItem,
 				tiles : tile,
 				prompt : prompt,
 				collectibleModel : collectibleModel,

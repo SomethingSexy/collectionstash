@@ -25,7 +25,13 @@ var StashAddView = Backbone.View.extend({
 		});
 
 		$("#CollectiblesUserPurchaseDate", this.el).datepicker().on('changeDate', function(e) {
-			self.fieldChanged(e);
+
+			var data = {
+				purchase_date : (e.date.getMonth() + 1) + '/' + e.date.getDay() + '/' + e.date.getFullYear()
+			};
+			self.model.set(data, {
+				forceUpdate : true
+			});
 		});
 
 		$('#CollectiblesUserMerchantId', this.el).typeahead({

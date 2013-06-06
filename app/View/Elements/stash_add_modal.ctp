@@ -12,7 +12,7 @@
 		<button class="btn" data-dismiss="modal" aria-hidden="true">
 			Close
 		</button>
-		<button class="btn btn-primary save" autocomplete="off">
+		<button class="btn btn-primary save" data-loading-text="Saving..." autocomplete="off">
 			Add
 		</button>
 	</div>
