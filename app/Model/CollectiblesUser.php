@@ -311,7 +311,7 @@ class CollectiblesUser extends AppModel {
 			}
 
 			$data['CollectiblesUser']['active'] = false;
-			debug($data);
+		
 			if ($this -> save($data)) {
 				$retVal['response']['isSuccess'] = true;
 				$dataSource -> commit();
