@@ -11,6 +11,7 @@
 			<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
 			</li>
 			<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
+			<li><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 		</ul>	
 	</div>
 	<div class="title">
@@ -83,5 +84,5 @@
 
 		$('#comments').comments();
 
-	});
+	}); 
 </script>

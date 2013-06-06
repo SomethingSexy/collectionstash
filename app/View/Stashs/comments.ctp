@@ -12,6 +12,7 @@
 			<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' .__('Photos') . '</a>'; ?>	
 			</li>
 			<li class="selected"><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' .__('Comments') . '</a>'; ?></li>
+			<li><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 		</ul>	
 	</div>
 		<div class="btn-group actions">

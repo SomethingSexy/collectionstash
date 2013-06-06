@@ -117,7 +117,7 @@ unset($urlparams['url']);
 						echo '<span class="label">' . $collectible['Manufacture']['title'] . '</span>';
 					}
 					if (!empty($collectible['ArtistsCollectible'])) {
-						echo '<span class="label">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
+						echo '<span class="label">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectible['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
 					}
 
 					echo '</span>';

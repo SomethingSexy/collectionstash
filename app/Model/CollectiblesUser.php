@@ -22,7 +22,13 @@ class CollectiblesUser extends AppModel {
 	//purchase date
 	'purchase_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
 	//artist proof
-	'artist_proof' => array('rule' => array('boolean'), 'message' => 'Incorrect value for Artist Proof'));
+	'artist_proof' => array('rule' => array('boolean'), 'message' => 'Incorrect value for Artist Proof'),
+	// this is only needed when deleting
+	'collectible_user_remove_reason_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid reason.'),
+	// this is only needed when deleting
+	'remove_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
+	// this is only needed when deleting
+	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'), );
 
 	function beforeValidate() {
 		if (isset($this -> data['CollectiblesUser']['merchant']) && !empty($this -> data['CollectiblesUser']['merchant'])) {
@@ -158,7 +164,6 @@ class CollectiblesUser extends AppModel {
 			}
 
 		} else {
-			debug($showUserEditionSize);
 			return true;
 		}
 	}
@@ -181,7 +186,6 @@ class CollectiblesUser extends AppModel {
 			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		}
 
-		debug($data);
 		return $data;
 	}
 
@@ -224,6 +228,52 @@ class CollectiblesUser extends AppModel {
 		return $retVal;
 	}
 
+	public function remove($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+		// grab the collectible we are removing first, needed for the event
+		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('User', 'Collectible', 'Stash')));
+
+		// we need to check permissions first
+		// return 401 if they are not allowed to edit this one
+		if (!$this -> isEditPermission($collectiblesUser, $user)) {
+			$retVal['response']['code'] = 401;
+
+			return $retVal;
+		}
+
+		// set the data to the model so we can validate it
+		$this -> set($data['CollectiblesUser']);
+		// now let's validate, we need a reason first
+		$this -> validate['collectible_user_remove_reason_id']['allowEmpty'] = false;
+		$this -> validate['collectible_user_remove_reason_id']['required'] = true;
+		// we NEED a reason here
+		if (!$this -> validates()) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
+			$retVal['response']['errors'] = $errors;
+			return $retVal;
+		}
+
+		// now that we know it has a valid reason, we need to then check that reason
+		$reason = $this -> CollectibleUserRemoveReason -> find('first', array('conditions' => array('CollectibleUserRemoveReason.id' => $data['CollectiblesUser']['collectible_user_remove_reason_id']), 'contain' => false));
+
+		// if the reason is an auto readon, then automatically remove it
+		if ($reason['CollectibleUserRemoveReason']['remove']) {
+			// just remove it completely
+			if ($this -> delete($data['CollectiblesUser']['id'])) {
+				$retVal['response']['isSuccess'] = true;
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
+			}
+		} else {
+			// history
+		}
+
+		// $this -> validate['remove_date']['allowEmpty'] = false;
+		// $this -> validate['sold_cost']['allowEmpty'] = false;
+
+		return $retVal;
+	}
+
 	/**
 	 * This is used to create a stubbed out, default CollectiblesUser
 	 * object.  Used if an outside model wants to add a CollectiblesUser
@@ -235,6 +285,27 @@ class CollectiblesUser extends AppModel {
 		$retVal['CollectiblesUser']['user_id'] = $userId;
 		$retVal['CollectiblesUser']['stash_id'] = $stashId;
 		$retVal['CollectiblesUser']['collectible_id'] = $collectibleId;
+
+		return $retVal;
+	}
+
+	public function isEditPermission($check, $user) {
+		$retVal = false;
+
+		// setup to work for when we have the collectible object
+		// already or just the id
+		if (is_numeric($check) || is_string($check)) {
+			$collectible = $this -> find('first', array('conditions' => array('CollectiblesUser.id' => $check), 'contain' => false));
+			//lol
+		} else {
+			// assume object
+			$collectible = $check;
+		}
+
+		// they must be the current owner of this collectible to edit it
+		if (!empty($collectible) && $collectible['CollectiblesUser']['user_id'] === $user['User']['id']) {
+			$retVal = true;
+		}
 
 		return $retVal;
 	}

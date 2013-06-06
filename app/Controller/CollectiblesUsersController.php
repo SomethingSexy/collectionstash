@@ -70,62 +70,20 @@ class CollectiblesUsersController extends AppController {
 			// for now this will handle deletes where the user is prompted
 			// about the delete
 			// we need to pull the query parameters
-			$value = $this -> request -> query('collectible_user_remove_reason_id');
-			$value = $this -> request -> query('sold_cost');
-			$value = $this -> request -> query('remove_date');
-			
-			
+			$collectible['CollectiblesUser'] = array();
+			$collectible['CollectiblesUser']['id'] = $id;
+			$collectible['CollectiblesUser']['collectible_user_remove_reason_id'] = Sanitize::clean($this -> request -> query('collectible_user_remove_reason_id'));
+			$collectible['CollectiblesUser']['sold_cost'] = Sanitize::clean($this -> request -> query('sold_cost'));
+			$collectible['CollectiblesUser']['remove_date'] = Sanitize::clean($this -> request -> query('remove_date'));
 
+			$response = $this -> CollectiblesUser -> remove($collectible, $this -> getUser());
+			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+				$this -> response -> statusCode(401);
+			}
+
+			$this -> set('returnData', $response);
 		} else if ($this -> request -> isGet()) {
 
-		}
-	}
-
-	/**
-	 * This method adds a collectible to a user's stash
-	 *
-	 * TODO: Update this at some point to make it ajax
-	 */
-	public function add($id = null) {
-		$this -> checkLogIn();
-		if (!is_null($id) && is_numeric($id)) {
-			$user = $this -> getUser();
-			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency')));
-			if (!empty($this -> request -> data)) {
-				if (isset($collectible) && !empty($collectible)) {
-
-					//This returns all collectibles in this stash if I ever need them
-					$stash = $this -> CollectiblesUser -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.user_id' => $user['User']['id'])));
-					$this -> request -> data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
-					$this -> request -> data['CollectiblesUser']['user_id'] = $this -> getUserId();
-					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectible['Collectible']['id'];
-					if ($this -> CollectiblesUser -> saveAll($this -> request -> data)) {
-						$collectibleUser = $this -> CollectiblesUser -> getUserCollectible($this -> CollectiblesUser -> id);
-						$this -> Session -> setFlash(__('Your collectible was successfully added.', true), null, null, 'success');
-						//This should be in the model I think
-						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
-						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectible, 'stash' => $stash)));
-						$this -> redirect(array('action' => 'view', $collectibleUser['CollectiblesUser']['id']), null, true);
-						return;
-					} else {
-						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
-					}
-
-				} else {
-					$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
-					$this -> redirect($this -> referer(), null, true);
-					return;
-				}
-			}
-			$collectibles = $this -> CollectiblesUser -> find("all", array('contain' => array('Collectible' => array('CollectiblesUpload' => array('Upload'), 'Collectibletype', 'Manufacture')), 'conditions' => array('CollectiblesUser.collectible_id' => $id, 'CollectiblesUser.user_id' => $user['User']['id'])));
-			$this -> set(compact('collectibles'));
-			$this -> set('collectible', $collectible);
-			$this -> set('conditions', $this -> CollectiblesUser -> Condition -> find('list', array('order' => 'name')));
-			$this -> set('merchants', $this -> CollectiblesUser -> Merchant -> find('all', array('contain' => false)));
-
-		} else {
-			$this -> Session -> setFlash(__('Invalid collectible', true));
-			$this -> redirect($this -> referer());
 		}
 	}
 
@@ -172,6 +130,8 @@ class CollectiblesUsersController extends AppController {
 
 	/**
 	 * Removes a user's collectible
+	 *
+	 * This will still be used for now to remove wishlist items
 	 *
 	 */
 	function remove($id = null) {
