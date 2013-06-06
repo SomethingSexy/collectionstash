@@ -57,7 +57,7 @@
 	<div class="control-group {#inlineErrors.sold_cost}error{/inlineErrors.sold_cost}">
 		<label class="control-label" for="CollectiblesUserRemoveCost">How much did you sell it for?</label>
 		<div class="controls">
-			<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" name="cost" value="{model.sold_cost}">
+			<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" name="sold_cost" value="{model.sold_cost}">
 			{#inlineErrors.sold_cost}
 			<span class="help-inline">{.}</span>
 			{/inlineErrors.sold_cost}

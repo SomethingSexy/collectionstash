@@ -107,21 +107,32 @@ class Listing extends AppModel {
 		return $retVal;
 	}
 
+	/**
+	 * listing_Type_id = 1 eBay
+	 * listing_type_id = 2 external
+	 * listing_type_id = 3 internal
+	 */
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
 		$data['Listing']['user_id'] = $user['User']['id'];
 		// right now we only support eBay which will be 1
-		$data['Listing']['listing_type_id'] = 1;
+		if (isset($data['Listing']['listing_type_id']) && !empty($data['Listing']['listing_type_id'])) {
 
-		$this -> set($data['Listing']);
+		} else {
+			$data['Listing']['listing_type_id'] = 1;
+		}
 
-		// Validate first
-		if (!$this -> validates()) {
-			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
-			$retVal['response']['errors'] = $errors;
-			return $retVal;
+		if ($data['Listing']['listing_type_id'] === 1) {
+			$this -> set($data['Listing']);
+
+			// Validate first
+			if (!$this -> validates()) {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
+				$retVal['response']['errors'] = $errors;
+				return $retVal;
+			}
 		}
 
 		$factory = new TransactionFactory();
@@ -144,9 +155,10 @@ class Listing extends AppModel {
 			return $retVal;
 		}
 
-		if ($this -> saveAssociated($data)) {
+		if ($this -> saveAssociated($data, array('validate' => false))) {
 			$transactionId = $this -> id;
 			$transaction = $this -> find('first', array('contain' => array('User', 'Transaction', 'Collectible'), 'conditions' => array('Listing.id' => $transactionId)));
+
 			// As of now, we just need to the id but we
 			// can expand this later to return more if necessary
 			$retVal['response']['data'] = $transaction['Listing'];

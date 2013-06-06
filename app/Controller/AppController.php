@@ -25,7 +25,7 @@ class AppController extends Controller {
 		$this -> Auth -> allow();
 
 		if ($this -> request -> isAjax()) {
-			Configure::write('debug', 0);			$this -> layout = 'ajax';
+			// Configure::write('debug', 0);			$this -> layout = 'ajax';
 		} else {
 			$this -> layout = 'default';
 		}

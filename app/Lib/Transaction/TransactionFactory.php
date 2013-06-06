@@ -1,5 +1,6 @@
 <?php
 App::uses('EbayTransaction', 'Lib/Transaction/Type');
+App::uses('ExternalTransaction', 'Lib/Transaction/Type');
 class TransactionFactory extends Object {
 
 	private $user;
@@ -21,7 +22,7 @@ class TransactionFactory extends Object {
 				$retVal = new EbayTransaction();
 				break;
 			case 2 :
-				echo "i equals 2";
+				$retVal = new ExternalTransaction();
 				break;
 		}
 
