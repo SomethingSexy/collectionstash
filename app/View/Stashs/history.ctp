@@ -80,13 +80,15 @@
 $counts = '';
 
 foreach ($graphData as $keyYear => $year) {
-
-	$counts .= $keyYear . ':[';
+	$counts .= $keyYear . ':[[';
 	foreach ($year as $keyMonth => $month) {
-		$counts .= '[' . count($month) . '],';
-
+		$counts .= '' . count($month['purchased']) . ',';
 	}
-	$counts .= '],';
+	$counts .= '],[';
+	foreach ($year as $keyMonth => $month) {
+		$counts .= '' . count($month['sold']) . ',';
+	}
+	$counts .= ']],';
 }
 echo 'var data = {' . $counts . '};';
 echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
@@ -108,17 +110,17 @@ echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
 				this.remove();
 			});
 		};
-		var c = r.barchart(0, 0, 960, 400, [bdata], {
+		var c = r.barchart(0, 0, 960, 400, bdata, {
 			stacked : true,
 			axis : "0 0 1 1",
 			axisxlabels : ["2008", "2009", "2010"]
 		}).label(months, true).hover(fin, fout);
 
 		function b_animate() {
-			var c2 = r.barchart(0, 0, 960, 400, [bdata], {
+			var c2 = r.barchart(0, 0, 960, 400, bdata, {
 				stacked : true,
 			}).hover(fin, fout);
-			
+
 			c.remove();
 			c = c2;
 			//$.each(c.bars[0], function(k, v) {
@@ -137,5 +139,5 @@ echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
 			bdata = JSON.parse(JSON.stringify(data[$(event.currentTarget).attr('data-key')]));
 			b_animate();
 		});
-	}); 
+	});
 </script>
