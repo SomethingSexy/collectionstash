@@ -228,7 +228,8 @@ class StashsController extends AppController {
 	}
 
 	public function history($userId = null) {
-		$this -> Stash -> getStashHistory($this -> getUser());
+		$this -> layout = 'fluid';
+
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later and comments
@@ -246,6 +247,9 @@ class StashsController extends AppController {
 					//If the privacy is 0 or you are viewing your own stash then always show
 					//or if it is set to 1 and this person is logged in also show.
 					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
+						$graphData = $this -> Stash -> getStashHistory($this -> getUser());
+						$this -> set(compact('graphData'));
+
 						$this -> set('stash', $user['Stash'][0]);
 					} else {
 						$this -> render('view_private');
