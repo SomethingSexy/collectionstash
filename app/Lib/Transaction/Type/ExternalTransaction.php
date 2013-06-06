@@ -25,6 +25,8 @@ class ExternalTransaction extends Object implements Transactionable {
 
 		array_push($transactions['Transaction'], $transaction);
 
+		$data['Transaction'] = $transactions['Transaction'];
+
 		return $data;
 	}
 

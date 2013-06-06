@@ -315,6 +315,7 @@ class CollectiblesUser extends AppModel {
 			if ($this -> save($data)) {
 				$retVal['response']['isSuccess'] = true;
 				$dataSource -> commit();
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
 			} else {
 				$dataSource -> rollback();
 			}
