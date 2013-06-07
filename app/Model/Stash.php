@@ -98,7 +98,7 @@ class Stash extends AppModel {
 	 * Performance update: create a stats table that calculates every user's stash to add add, remove counts by month and year
 	 *
 	 */
-	public function getStashHistory($user) {
+	public function getStashGraphHistory($user) {
 		$collectibles = $this -> CollectiblesUser -> find('all', array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
 
 		// we need to find the beginning and the end
