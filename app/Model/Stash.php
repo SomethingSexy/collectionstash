@@ -101,8 +101,6 @@ class Stash extends AppModel {
 	public function getStashHistory($user) {
 		$collectibles = $this -> CollectiblesUser -> find('all', array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
 
-		debug($collectibles);
-
 		// we need to find the beginning and the end
 		//
 		// then we need to figure out our ranges, every month, or a subset of months or years
@@ -159,15 +157,10 @@ class Stash extends AppModel {
 		}
 
 		ksort($templateData);
-
 		$oldestYear = key($templateData);
 		end($templateData);
 		$newestYear = key($templateData);
-
 		reset($templateData);
-
-		debug($newestYear);
-		debug($oldestYear);
 
 		for ($i = $oldestYear; $i <= $newestYear; $i++) {
 			// if it isn't set, set the year
@@ -192,7 +185,7 @@ class Stash extends AppModel {
 			ksort($templateData[$i]);
 
 		}
-		debug($templateData);
+
 		// we need to fill out empty years, months now
 
 		// if I wanted to do an overall , I would have to do a tally of when things were per month and then if something was removed that month subtract, but each month would have to carry over the previous months count

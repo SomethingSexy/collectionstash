@@ -75,6 +75,8 @@
 			</div>
 	<?php
 	if (isset($collectibles) && !empty($collectibles)) {
+		echo '<div class="row">';
+		echo '<div class="span12">';
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
@@ -143,6 +145,8 @@
 
 			echo '</div>';
 		}
+		echo '</div>';
+		echo '</div>';
 		echo '</div>';
 	} else {
 		if ($stashType === 'default') {
