@@ -49,7 +49,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="well">
-				<h2>Purchases</h2>
+				<h2>Bought and Sold</h2>
 				<div class="btn-group pull-right years">
 				<?php
 				$default = key($graphData);

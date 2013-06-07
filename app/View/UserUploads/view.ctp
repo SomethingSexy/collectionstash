@@ -37,6 +37,8 @@
 	</div>
 	<?php
 	if (isset($userUploads) && !empty($userUploads)) {
+		echo '<div class="row">';
+		echo '<div class="span12">';		
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
@@ -61,6 +63,8 @@
 			}
 
 		}
+		echo '</div>';
+		echo '</div>';
 		echo '</div>';
 	} else {
 		echo '<div class="empty">' . $stashUsername . __(' has no photos in their stash!', true) . '</div>';
