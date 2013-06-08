@@ -1,7 +1,11 @@
 <?php // this is actually going to be a dust template but I am loading it via PHP and placing it on the page for quickness ?>
 <div class="well">
 	<p>
-		You are removing {name|s} from your stash.
+		{@ne key="{model.active}" value="true" type="boolean"}
+			{name|s} is already inactive.  Removing it will permanately remove it from your history.
+		{:else}
+			You are removing {name|s} from your stash.
+		{/ne}
 	</p>
 </div>
 {@if cond=" ('{errors}'.length === 0) "}
@@ -30,16 +34,23 @@
 	<div class="control-group {#inlineErrors.collectible_user_remove_reason_id}error{/inlineErrors.collectible_user_remove_reason_id}">
 		<label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
 		<div class="controls">
-			<select required id="CollectiblesUserRemoveReason" name="collectible_user_remove_reason_id">
-				<option value=""></option>
+			
+			{@ne key="{model.active}" value="true" type="boolean"}
 				{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
-				<option {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}selected{/eq} value="{CollectibleUserRemoveReason.id}">{CollectibleUserRemoveReason.reason}</option>
+					 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input">{CollectibleUserRemoveReason.reason}</span>{/eq}
 				{/reasons}
-			</select>
-			<span class="help-inline">This is the reason why you are removing this collectible.</span>
-			{#inlineErrors.collectible_user_remove_reason_id}
-			<span class="help-inline">{.}</span>
-			{/inlineErrors.collectible_user_remove_reason_id}
+			{:else}
+				<select required id="CollectiblesUserRemoveReason" name="collectible_user_remove_reason_id" >
+					<option value=""></option>
+					{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
+					<option {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}selected{/eq} value="{CollectibleUserRemoveReason.id}">{CollectibleUserRemoveReason.reason}</option>
+					{/reasons}
+				</select>
+				<span class="help-inline">This is the reason why you are removing this collectible.</span>
+				{#inlineErrors.collectible_user_remove_reason_id}
+				<span class="help-inline">{.}</span>
+				{/inlineErrors.collectible_user_remove_reason_id}			
+			{/ne}
 		</div>
 	</div>
 	{@if cond=" ( '{model.collectible_user_remove_reason_id}' == 1 ||  '{model.collectible_user_remove_reason_id}' == 2 )" }
@@ -57,10 +68,16 @@
 	<div class="control-group {#inlineErrors.sold_cost}error{/inlineErrors.sold_cost}">
 		<label class="control-label" for="CollectiblesUserRemoveCost">How much did you sell it for?</label>
 		<div class="controls">
-			<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" name="sold_cost" value="{model.sold_cost}">
-			{#inlineErrors.sold_cost}
-			<span class="help-inline">{.}</span>
-			{/inlineErrors.sold_cost}
+			{@ne key="{model.active}" value="true" type="boolean"}
+				<span class="input-xlarge uneditable-input">{model.sold_cost}</span>			
+			{:else}
+				<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" name="sold_cost" value="{model.sold_cost}" >
+				{#inlineErrors.sold_cost}
+				<span class="help-inline">{.}</span>
+				{/inlineErrors.sold_cost}			
+			{/ne}
+			
+
 		</div>
 	</div>
 	{/eq}
@@ -72,10 +89,17 @@
 			When did you trade this collectible?
 			{/eq} </label>
 		<div class="controls">
-			<input required type="text" id="CollectiblesUserRemoveDate" maxlength="8" name="remove_date" value="{model.remove_date}">
-			{#inlineErrors.remove_date}
-			<span class="help-inline">{.}</span>
-			{/inlineErrors.remove_date}
+			
+			{@ne key="{model.active}" value="true" type="boolean"}
+				<span class="input-xlarge uneditable-input">{model.remove_date}</span>	
+			{:else}
+				<input required type="text" id="CollectiblesUserRemoveDate" maxlength="8" name="remove_date" value="{model.remove_date}" >
+				{#inlineErrors.remove_date}
+				<span class="help-inline">{.}</span>
+				{/inlineErrors.remove_date}				
+			{/ne}
+			
+
 		</div>
 	</div>
 	{/if}
