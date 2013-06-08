@@ -1,75 +1,80 @@
 <?php echo $this -> Html -> script('collection-edit', array('inline' => false)); ?>
-<div class="component" id="collectible-add-component">
-  <div class="inside">
-    <div class="component-title">
-      <h2><?php echo __('Edit Your Collectible'); ?></h2>
-    </div>
-    <?php echo $this -> element('flash'); ?>
-    <div class="component-info">
-      <div><?php __('Edit the information about the collectible in your personal collection.  This update will not change the base collectible but just he one linked in your collection.'); ?></div> 
-    </div>
-    <div class="component-view">
-      <?php echo $this -> Form -> create('CollectiblesUser', array('action' => 'edit')); ?>
-        <fieldset>
-          <ul class="form-fields unstyled">
-          	<?php 
-          		$editionSize = $collectible['Collectible']['edition_size'];
-				if($collectible['Collectible']['numbered'])
-				{ ?>
-            <li>
-              <div class="label-wrapper">
-                <label for="collectibleType"><?php echo __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
-              </div>
-              <?php  echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false)); ?>
-            </li>
-            <?php } ?>
-	          <li>
-	            <div class="label-wrapper">
-	              <label for="dialogCost"><?php echo __('Artist\'s Proof') ?></label>
-	            </div> 
-	            <?php echo $this -> Form -> input('artist_proof', array('div' => false, 'label' => false)); ?>
-	          </li>
-			<li>
-                <div class="label-wrapper">
-                    <label for="dialogCost"><?php echo __('How much did you pay?') ?><?php
-					if ($collectible['Collectible']['msrp']) {
-						$currencySign = '$';
-						if (isset($collectible['Currency'])) {
-							$currencySign = $collectible['Currency']['sign'];
-						}
+<div class="well">
+	<div class="page-header">
+		<h1><?php echo __('Edit Your Collectible'); ?></h1>
+	</div>
+	<?php echo $this -> element('flash'); ?>
+	<p><?php echo __('Edit the information about the collectible in your personal collection.  This update will not change the base collectible but just the one linked in your collection.'); ?></p> 
+	<p>
+	<?php
+	if ($collectible['CollectiblesUser']['active']) {
+		echo __('This collectible is active.');
+	} else {
+		echo __('This collectible is inactive.');
+	}
+	?>
+	</p>
+	<?php echo $this -> Form -> create('CollectiblesUser', array('action' => 'edit', 'class' => 'form-horizontal')); ?>
+	<fieldset>
 
-						echo '(Retail:' . $currencySign;
-						echo $collectible['Collectible']['msrp'] . ')';
-					}
-				?> </label>
-                </div> 
-                <?php echo $this -> Form -> input('cost', array('id' => 'dialogCost', 'div' => false, 'label' => false)); ?>
-              </li> 
-              <li>
-                <div class="label-wrapper">
-                  <label for="CollectiblesUserConditionId"><?php echo __('Condition') ?></label>
-                </div> 
-               	<?php echo $this -> Form -> input('condition_id', array('div' => false, 'label' => false, 'empty' => true)); ?>
-              </li> 
-              <li>
-                <div class="label-wrapper">
-                  <label for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?') ?></label>
-                </div> 
-                <?php echo $this -> Form -> input('merchant', array('type' => 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
-              </li> 
-	          <li>
-	            <div class="label-wrapper">
-	              <label for=""><?php echo __('When did you purchase this collectible?') ?></label>
-	            </div> 
-	            <?php echo $this -> Form -> text('purchase_date', array('div' => false, 'label' => false, 'maxLength' => 8)); ?>
-	          </li>               
-          </ul>
-          <input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
-        </fieldset>
-        <input type="submit" value="Submit" class="btn btn-primary">
-      <?php echo $this -> Form -> end(); ?>
-          </div>    
-  </div>
+	  	<?php 
+	  		$editionSize = $collectible['Collectible']['edition_size'];
+			if($collectible['Collectible']['numbered'])
+			{ ?>
+				<div class="control-group">
+	        		<label class="control-label" for="collectibleType"><?php echo __('Edition Number')?> (Total: <?php echo $collectible['Collectible']['edition_size'] ?> )</label>
+	    			<div class="controls">
+	      				<?php  echo $this -> Form -> input('edition_size', array('div' => false, 'label' => false)); ?>
+	      			</div>
+				</div>
+	    <?php } ?>
+		<div class="control-group">
+			<label class="control-label" for="dialogCost"><?php echo __('Artist\'s Proof') ?></label>
+			<div class="controls">
+			<?php echo $this -> Form -> input('artist_proof', array('div' => false, 'label' => false)); ?>
+			</div>
+		</div>
+		<div class="control-group">
+	    	<label class="control-label" for="dialogCost"><?php echo __('How much did you pay?') ?><?php
+			if ($collectible['Collectible']['msrp']) {
+				$currencySign = '$';
+				if (isset($collectible['Currency'])) {
+					$currencySign = $collectible['Currency']['sign'];
+				}
+
+				echo '(Retail:' . $currencySign;
+				echo $collectible['Collectible']['msrp'] . ')';
+			}
+			?> </label>
+	        <div class="controls">
+	        <?php echo $this -> Form -> input('cost', array('id' => 'dialogCost', 'div' => false, 'label' => false)); ?>
+			</div>
+		</div>
+<div class="control-group">
+	          <label class="control-label" for="CollectiblesUserConditionId"><?php echo __('Condition') ?></label>
+	       <div class="controls">
+	       	<?php echo $this -> Form -> input('condition_id', array('div' => false, 'label' => false, 'empty' => true)); ?>
+			</div>
+		</div>
+<div class="control-group">
+	          <label class="control-label" for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?') ?></label>
+	        <div class="controls">
+	        <?php echo $this -> Form -> input('merchant', array('type' => 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
+			</div>
+		</div> 
+<div class="control-group">
+	          <label class="control-label" for=""><?php echo __('When did you purchase this collectible?') ?></label>
+	      <div class="controls">
+	        <?php echo $this -> Form -> text('purchase_date', array('div' => false, 'label' => false, 'maxLength' => 8)); ?>
+	  			</div>
+		</div>             
+
+	  <input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
+	</fieldset>
+	<div class="form-actions">
+	<input type="submit" value="Save" class="btn btn-primary">
+	</div>
+	<?php echo $this -> Form -> end(); ?>
 </div>
 <script><?php
 echo 'var merchants=[';
