@@ -95,22 +95,20 @@ class CollectiblesUsersController extends AppController {
 	function edit($id = null) {
 		$this -> checkLogIn();
 
-		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Merchant', 'Collectible' => array('Currency'))));
+		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Listing' => array('Transaction'), 'Merchant', 'Collectible' => array('Currency'))));
 		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 			$loggedInUserId = $this -> getUserId();
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 
 				if (!empty($this -> request -> data)) {
-					$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof');
-					$this -> request -> data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
-					if ($this -> CollectiblesUser -> save($this -> request -> data, true, $fieldList)) {
+					$response = $this -> CollectiblesUser -> update($this -> request -> data, $this -> getUser());
+
+					if ($response['response']['isSuccess']) {
 						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');
 						$this -> redirect(array('controller' => 'collectibles_users', 'action' => 'view', $id), null, true);
-						return;
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					}
-
 				} else {
 					$this -> request -> data = $collectiblesUser;
 				}
