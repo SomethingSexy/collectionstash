@@ -252,7 +252,7 @@ class CollectiblesUser extends AppModel {
 		$retVal = $this -> buildDefaultResponse();
 
 		//grab the collectible, we need it to determine what we can update
-		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('CollectibleUserRemoveReason', 'User', 'Collectible', 'Stash')));
+		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('Listing' => array('Transaction'), 'CollectibleUserRemoveReason', 'User', 'Collectible', 'Stash')));
 
 		// make sure we can update it
 		if (!$this -> isEditPermission($collectiblesUser, $user)) {
@@ -270,12 +270,28 @@ class CollectiblesUser extends AppModel {
 			}
 		}
 
-		$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date');
+		// adding sold_cost here for validation but it will not be added to the collectibles_users table
+		$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date', 'sold_cost');
 		$data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
-		if ($this -> save($data, true, $fieldList)) {
-			$retVal['response']['isSuccess'] = true;
+		$dataSource = $this -> getDataSource();
+		$dataSource -> begin();
 
+		if ($this -> save($data, true, $fieldList)) {
+			// if a cost is required and the one passed in is different than the one in the databases let's update it
+			if ($collectiblesUser['CollectibleUserRemoveReason']['sold_cost_required'] && $data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {
+				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
+				$transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
+
+				if (!$this -> Listing -> Transaction -> save($transaction)) {
+					$dataSource -> rollback();
+					return $retVal;
+				}
+			}
+
+			$retVal['response']['isSuccess'] = true;
+			$dataSource -> commit();
 		} else {
+			$dataSource -> rollback();
 			$retVal['response']['isSuccess'] = false;
 			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
 			$retVal['response']['errors'] = $errors;
