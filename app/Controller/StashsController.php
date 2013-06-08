@@ -113,7 +113,6 @@ class StashsController extends AppController {
 						$this -> set('stash', $user['Stash'][0]);
 
 						$reasons = $this -> Stash -> CollectiblesUser -> CollectibleUserRemoveReason -> find('all', array('contain' => false));
-
 						$this -> set(compact('reasons'));
 
 						// This will us the standard view
@@ -252,8 +251,9 @@ class StashsController extends AppController {
 						$this -> set('stash', $user['Stash'][0]);
 						$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
 						$collectibles = $this -> paginate('CollectiblesUser');
-
 						$this -> set(compact('collectibles'));
+						$reasons = $this -> Stash -> CollectiblesUser -> CollectibleUserRemoveReason -> find('all', array('contain' => false));
+						$this -> set(compact('reasons'));
 
 					} else {
 						$this -> render('view_private');
