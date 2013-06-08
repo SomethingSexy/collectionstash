@@ -1,7 +1,9 @@
 <?php echo $this -> Minify -> script('js/thirdparty/raphael', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/thirdparty/g.raphael', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('thirdparty/g.bar', array('inline' => false)); ?>
-
+<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 
 
 <div id="my-stashes-component" class="span12">
@@ -72,22 +74,28 @@
 		<div class="span6">
 			<div class="well">
 					<?php
-	if (isset($collectibles) && !empty($collectibles)) {
-		echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default'));
-	} else {
-		if ($stashType === 'default') {
-			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
-		} else {
-			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</div>';
-		}
-	}
+					if (isset($collectibles) && !empty($collectibles)) {
+						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default'));
+					} else {
+						if ($stashType === 'default') {
+							echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
+						} else {
+							echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</div>';
+						}
+					}
 	?>
 			</div>
 		</div>
 	</div>
 </div>
 
-<script><?php
+<script>
+<?php
+	if (isset($reasons)) {
+		echo 'var reasons = \'' . json_encode($reasons) . '\';';
+	}
+	?>	
+<?php
 $counts = '';
 
 foreach ($graphData as $keyYear => $year) {
@@ -150,5 +158,5 @@ echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
 			bdata = JSON.parse(JSON.stringify(data[$(event.currentTarget).attr('data-key')]));
 			b_animate();
 		});
-	});
+	}); 
 </script>

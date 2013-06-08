@@ -26,12 +26,12 @@ echo '</tr>';
 echo '</thead>';
 foreach ($collectibles as $key => $myCollectible) {
 	echo '<tr class="stash-item">';
-	if($myCollectible['CollectiblesUser']['active']) {
+	if ($myCollectible['CollectiblesUser']['active']) {
 		echo '<td><i class="icon-plus"></i></td>';
 	} else {
 		echo '<td><i class="icon-minus"></i></td>';
 	}
-	
+
 	if ($showThumbnail) {
 		echo '<td><ul class="thumbnails"><li class="span1">';
 
@@ -98,7 +98,10 @@ foreach ($collectibles as $key => $myCollectible) {
 		$collectibleJSON = json_encode($myCollectible['Collectible']);
 		$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 
-		echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#">Remove</a></li>';
+		$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
+		$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
+
+		echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#">Remove</a></li>';
 		echo '</ul>';
 		echo '</div>';
 		echo '</td>';

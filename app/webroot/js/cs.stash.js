@@ -123,8 +123,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -316,9 +315,7 @@
 			this.$tiles = $('.tiles');
 		}
 		this.$stashItem = options.$stashItem;
-		this.collectibleUser = new CollectibleUserModel({
-			id : options.collectibleUserId
-		});
+		this.collectibleUser = options.collectibleUserModel;
 
 		if (this.stashRemoveView) {
 			this.stashRemoveView.remove();
@@ -471,6 +468,7 @@
 			var $anchor = $(e.currentTarget);
 			var prompt = $anchor.attr('data-prompt');
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
 			var collectibleUserId = $anchor.attr('data-collectible-user-id');
 			var $stashItem = $anchor.closest('.stash-item');
 			$anchor.stashremove({
@@ -478,6 +476,7 @@
 				tiles : tile,
 				prompt : prompt,
 				collectibleModel : collectibleModel,
+				collectibleUserModel : collectibleUserModel,
 				reasons : reasonsCollection,
 				collectibleUserId : collectibleUserId
 			});
