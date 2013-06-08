@@ -315,6 +315,17 @@ class CollectiblesUser extends AppModel {
 			return $retVal;
 		}
 
+		// first check to see if the collectible_user is already inactive
+		// if so then just delete it
+		if (!$collectiblesUser['CollectiblesUser']['active']) {
+			if ($this -> delete($data['CollectiblesUser']['id'])) {
+				$retVal['response']['isSuccess'] = true;
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
+			}
+
+			return $retVal;
+		}
+
 		// set the data to the model so we can validate it
 		$this -> set($data['CollectiblesUser']);
 		// now let's validate, we need a reason first
