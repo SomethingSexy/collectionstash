@@ -98,6 +98,7 @@ class CollectiblesUser extends AppModel {
 		if ($results && $primary) {
 			// Create a dateOnly pseudofield using date field.
 			foreach ($results as $key => $val) {
+
 				// make sure we check if the collectibleuser is set...this is for
 				// cases when count is being called
 				if (isset($val['CollectiblesUser'])) {
@@ -106,6 +107,13 @@ class CollectiblesUser extends AppModel {
 							$results[$key]['CollectiblesUser']['purchase_date'] = date('m/d/Y', strtotime($val['CollectiblesUser']['purchase_date']));
 						} else {
 							$results[$key]['CollectiblesUser']['purchase_date'] = '';
+						}
+					}
+					if (isset($val['CollectiblesUser']['remove_date'])) {
+						if ($val['CollectiblesUser']['remove_date'] !== null && $val['CollectiblesUser']['remove_date'] !== '0000-00-00') {
+							$results[$key]['CollectiblesUser']['remove_date'] = date('m/d/Y', strtotime($val['CollectiblesUser']['remove_date']));
+						} else {
+							$results[$key]['CollectiblesUser']['remove_date'] = '';
 						}
 					}
 					// If it has a merchant, add the merchant name to the merchant field for display purposes
@@ -125,6 +133,10 @@ class CollectiblesUser extends AppModel {
 								unset($results[$key]);
 							}
 						}
+					}
+					// make sure we have a listing, these listings will only have one transaction
+					if (isset($val['Listing']) && !empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
+						$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
 					}
 				}
 			}
@@ -236,6 +248,44 @@ class CollectiblesUser extends AppModel {
 		return $retVal;
 	}
 
+	public function update($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+
+		//grab the collectible, we need it to determine what we can update
+		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('CollectibleUserRemoveReason', 'User', 'Collectible', 'Stash')));
+
+		// make sure we can update it
+		if (!$this -> isEditPermission($collectiblesUser, $user)) {
+			$retVal['response']['code'] = 401;
+			return $retVal;
+		}
+
+		if (!$collectiblesUser['CollectiblesUser']['active']) {
+			$this -> validate['remove_date']['allowEmpty'] = false;
+			$this -> validate['remove_date']['required'] = true;
+			// if sold cost is required, then
+			if ($collectiblesUser['CollectibleUserRemoveReason']['sold_cost_required']) {
+				$this -> validate['sold_cost']['allowEmpty'] = false;
+				$this -> validate['sold_cost']['required'] = true;
+			}
+		}
+
+		$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date');
+		$data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
+		if ($this -> save($data, true, $fieldList)) {
+			$retVal['response']['isSuccess'] = true;
+
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
+			$retVal['response']['errors'] = $errors;
+			return $retVal;
+		}
+
+		return $retVal;
+
+	}
+
 	public function remove($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 		// grab the collectible we are removing first, needed for the event
@@ -311,7 +361,7 @@ class CollectiblesUser extends AppModel {
 			}
 
 			$data['CollectiblesUser']['active'] = false;
-		
+
 			if ($this -> save($data)) {
 				$retVal['response']['isSuccess'] = true;
 				$dataSource -> commit();
