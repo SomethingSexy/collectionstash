@@ -20,6 +20,8 @@ class CollectiblesUsersController extends AppController {
 					//If they are logged in, check to see if the user ids match up
 					if ($this -> getUserId() === $collectiblesUser['User']['id']) {
 						$viewMyCollectible = true;
+						$reasons = $this -> CollectiblesUser -> CollectibleUserRemoveReason -> find('all', array('contain' => false));
+						$this -> set(compact('reasons'));
 					}
 				}
 				$this -> set(compact('viewMyCollectible'));
