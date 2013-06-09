@@ -140,6 +140,7 @@ unset($urlparams['url']);
 					}
 
 					echo '<li>';
+					//<i class="icon-search"></i>
 					echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 					echo '</li>';
 					echo '</ul>';
