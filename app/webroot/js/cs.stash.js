@@ -123,7 +123,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -266,13 +267,6 @@
 				success : function(model, response, options) {
 					$button.button('reset');
 					if (response.response.isSuccess) {
-						if (self.$tiles) {
-							self.$tiles.masonry('remove', self.$stashItem);
-							self.$tiles.masonry('reload');
-						} else {
-							self.$stashItem.remove();
-						}
-
 						$('#stash-remove-dialog').modal('hide');
 						var message = 'You have successfully removed the collectible from your stash!';
 
@@ -293,6 +287,14 @@
 							},
 							timeout : 2000
 						});
+						if (self.redirect) {
+							window.location.href = self.redirect;
+						} else if (self.$tiles) {
+							self.$tiles.masonry('remove', self.$stashItem);
+							self.$tiles.masonry('reload');
+						} else {
+							self.$stashItem.remove();
+						}
 
 					} else {
 						if (response.response.errors) {
@@ -314,6 +316,11 @@
 		if (options.tiles) {
 			this.$tiles = $('.tiles');
 		}
+
+		if (options.redirect) {
+			this.redirect = options.redirect;
+		}
+
 		this.$stashItem = options.$stashItem;
 		this.collectibleUser = options.collectibleUserModel;
 
@@ -471,6 +478,7 @@
 			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
 			var collectibleUserId = $anchor.attr('data-collectible-user-id');
 			var $stashItem = $anchor.closest('.stash-item');
+			var redirect = $anchor.attr('data-remove-redirect');
 			$anchor.stashremove({
 				$stashItem : $stashItem,
 				tiles : tile,
@@ -478,7 +486,8 @@
 				collectibleModel : collectibleModel,
 				collectibleUserModel : collectibleUserModel,
 				reasons : reasonsCollection,
-				collectibleUserId : collectibleUserId
+				collectibleUserId : collectibleUserId,
+				redirect : redirect
 			});
 			e.preventDefault();
 		});

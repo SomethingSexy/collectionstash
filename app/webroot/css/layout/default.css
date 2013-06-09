@@ -926,62 +926,6 @@ div.radio label {
 	/*font-size: 0.8em;*/
 	margin-top: 10px;
 }
-#collectible-detail {
-	width: 100%;
-	margin-right: 0;
-	background: none;
-}
-#collectible-detail .inside .component-title h2 {
-	clear: none;
-	width: 50%;
-	float: left;
-	/*font-size: 1.2em;*/
-}
-#collectible-detail .inside .component-title .actions {
-	float: right;
-}
-#collectible-detail .component-view {
-	/* overflow: hidden; contain floats */
-	padding-top: 0;
-}
-#collectible-detail .component-view .helpful-hint-message {
-	width: 300px;
-	position: absolute;
-	right: 40px;
-	top: 70px;
-}
-#collectible-detail .component-view .collectible.item {
-	border: none;
-}
-#collectible-detail .component-view .links {
-	width: 100%;
-	text-align: left;
-	margin-bottom: 0.5em;
-}
-#collectible-detail .component-view .links a {
-	/*font-size: 0.75em;*/
-	margin-left: 1em;
-}
-#collectible-detail .component-view .collectible.item {
-	width: 100%;
-	padding: 0;
-	margin-top: 10px;
-}
-#collectible-detail .component-view .collectible.item .collectible.detail {
-	width: 600px; /* This might overlap the variant list */
-	margin-bottom: 10px;
-	background: none;
-}
-#collectible-detail .component-view .collectible.item .collectible.detail.attributes {
-	width: 100%;
-	clear: both;
-}
-#collectible-detail .component-view .collectible.item  .collectible.detail .title .btn-group {
-	top: 20px;
-}
-#collectible-detail .component-view .collectible.item .collectible.image {
-	width: auto;
-}
 .approval-fields {
 	float: left;
 	width: 100%;
