@@ -163,6 +163,7 @@ class UserUploadsController extends AppController {
 	public function add() {
 		$data = array();
 		$this -> layout = 'ajax';
+
 		//must be logged in to post comment
 		if (!$this -> isLoggedIn()) {
 			$data['response'] = array();
