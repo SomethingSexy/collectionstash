@@ -287,8 +287,8 @@
 							timeout : 2000
 						});
 
-						if (response.response.data && this.historyView) {
-
+						if (response.response.data && self.historyView) {
+							self.$stashItem.find('.bought-sold-icon').html('<i class="icon-minus"></i>');
 						} else {
 							if (self.redirect) {
 								window.location.href = self.redirect;
