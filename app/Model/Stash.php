@@ -156,34 +156,36 @@ class Stash extends AppModel {
 			}
 		}
 
-		ksort($templateData);
-		$oldestYear = key($templateData);
-		end($templateData);
-		$newestYear = key($templateData);
-		reset($templateData);
+		if (!empty($templateData)) {
+			ksort($templateData);
+			$oldestYear = key($templateData);
+			end($templateData);
+			$newestYear = key($templateData);
+			reset($templateData);
 
-		for ($i = $oldestYear; $i <= $newestYear; $i++) {
-			// if it isn't set, set the year
-			if (!isset($templateData[$i])) {
-				$templateData[$i] = array();
+			for ($i = $oldestYear; $i <= $newestYear; $i++) {
+				// if it isn't set, set the year
+				if (!isset($templateData[$i])) {
+					$templateData[$i] = array();
+				}
+
+				for ($m = 1; $m < 13; $m++) {
+					if (!isset($templateData[$i][$m])) {
+						$templateData[$i][$m] = array();
+					}
+
+					if (!isset($templateData[$i][$m]['purchased'])) {
+						$templateData[$i][$m]['purchased'] = array();
+					}
+
+					if (!isset($templateData[$i][$m]['sold'])) {
+						$templateData[$i][$m]['sold'] = array();
+					}
+				}
+
+				ksort($templateData[$i]);
+
 			}
-
-			for ($m = 1; $m < 13; $m++) {
-				if (!isset($templateData[$i][$m])) {
-					$templateData[$i][$m] = array();
-				}
-
-				if (!isset($templateData[$i][$m]['purchased'])) {
-					$templateData[$i][$m]['purchased'] = array();
-				}
-
-				if (!isset($templateData[$i][$m]['sold'])) {
-					$templateData[$i][$m]['sold'] = array();
-				}
-			}
-
-			ksort($templateData[$i]);
-
 		}
 
 		// we need to fill out empty years, months now
