@@ -93,10 +93,22 @@
 			</thead>
 			<tbody>
 				{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
-					{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd}
+					{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd listing_type_id=listing_type_id}
 					<tr>
-						<td>{type}</td>
-						<td><a target="_blank" href="{url}">{listing_name}</a></td>
+						<td>
+							{@eq key="{listing_type_id}" value="2" type="string"}
+								External Listing
+							{:else}
+								{type}
+							{/eq}
+						</td>
+						<td>
+							{@eq key="{listing_type_id}" value="2"}
+								{listing_name}
+							{:else}
+								<a target="_blank" href="{url}">{listing_name}</a>
+							{/eq}							
+						</td>
 						<td>{sale_price}</td>
 						<td>{sale_date}</td>
 						<td>
