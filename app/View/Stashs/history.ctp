@@ -78,7 +78,7 @@
 			<div class="">
 					<?php
 					if (isset($collectibles) && !empty($collectibles)) {
-						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default'));
+						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default' , 'history' => true));
 					} else {
 							echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 					}

@@ -2,8 +2,17 @@
 if (!isset($showThumbnail)) {
 	$showThumbnail = true;
 }
+if (!isset($history)) {
+	$history = false;
+}
 
-echo '<table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
+echo '<table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery"';
+
+if ($history) {
+	echo 'data-history="true"';
+}
+
+echo '>';
 echo '<thead>';
 echo '<tr>';
 echo '<th>' . $this -> Paginator -> sort('active', 'Bought/Sold') . '</th>';

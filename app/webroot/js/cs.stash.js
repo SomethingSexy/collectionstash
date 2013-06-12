@@ -123,8 +123,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -287,13 +286,18 @@
 							},
 							timeout : 2000
 						});
-						if (self.redirect) {
-							window.location.href = self.redirect;
-						} else if (self.$tiles) {
-							self.$tiles.masonry('remove', self.$stashItem);
-							self.$tiles.masonry('reload');
+
+						if (response.response.data && this.historyView) {
+
 						} else {
-							self.$stashItem.remove();
+							if (self.redirect) {
+								window.location.href = self.redirect;
+							} else if (self.$tiles) {
+								self.$tiles.masonry('remove', self.$stashItem);
+								self.$tiles.masonry('reload');
+							} else {
+								self.$stashItem.remove();
+							}
 						}
 
 					} else {
@@ -319,6 +323,10 @@
 
 		if (options.redirect) {
 			this.redirect = options.redirect;
+		}
+
+		if (options.historyView) {
+			this.historyView = options.historyView;
 		}
 
 		this.$stashItem = options.$stashItem;
@@ -473,6 +481,9 @@
 
 		$('.stashable').on('click', 'a.remove-from-stash', function(e) {
 			var $anchor = $(e.currentTarget);
+
+			var historyView = $anchor.closest('.stashable').attr('data-history');
+
 			var prompt = $anchor.attr('data-prompt');
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
@@ -487,7 +498,8 @@
 				collectibleUserModel : collectibleUserModel,
 				reasons : reasonsCollection,
 				collectibleUserId : collectibleUserId,
-				redirect : redirect
+				redirect : redirect,
+				historyView : historyView
 			});
 			e.preventDefault();
 		});
