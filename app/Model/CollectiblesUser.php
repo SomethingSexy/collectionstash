@@ -192,7 +192,7 @@ class CollectiblesUser extends AppModel {
 	 * Use this to get the CollectiblesUser, this will guarunetee that the correct data gets returned.
 	 */
 	public function getUserCollectible($id) {
-		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
+		return $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Listing' => array('Transaction'), 'Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
 	}
 
 	/**
@@ -276,17 +276,43 @@ class CollectiblesUser extends AppModel {
 		$dataSource = $this -> getDataSource();
 		$dataSource -> begin();
 
-		if ($this -> save($data, true, $fieldList)) {
-			// if a cost is required and the one passed in is different than the one in the databases let's update it
-			if ($collectiblesUser['CollectibleUserRemoveReason']['sold_cost_required'] && $data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {
-				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
-				$transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
+		// if a cost is required and the one passed in is different than the one in the databases let's update it
+		if ($collectiblesUser['CollectibleUserRemoveReason']['sold_cost_required']) {
 
-				if (!$this -> Listing -> Transaction -> save($transaction)) {
-					$dataSource -> rollback();
-					return $retVal;
+			// first check if there is a cost and it is new
+			if (isset($data['CollectiblesUser']['sold_cost']) && !empty($data['CollectiblesUser']['sold_cost'])) {
+				// if the listing is empty then we don't haave one
+				if (empty($collectiblesUser['Listing'])) {
+					$listingData = array();
+					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+					$listingData['Listing']['listing_type_id'] = 2;
+					$listing = $this -> Listing -> createListing($listingData, $user);
+
+					if (!$listing['response']['isSuccess']) {
+						$dataSource -> rollback();
+						$retVal['response']['code'] = 500;
+						return $retVal;
+					}
+
+					$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
+				} else if ($data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {// then check if there is not a cost but there was a cost
+					$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
+					$transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
+
+					if (!$this -> Listing -> Transaction -> save($transaction)) {
+						$dataSource -> rollback();
+						return $retVal;
+					}
 				}
+			} else {
+				// can't remove on an update actually
 			}
+
+		}
+
+		if ($this -> save($data, true, $fieldList)) {
 
 			$retVal['response']['isSuccess'] = true;
 			$dataSource -> commit();
