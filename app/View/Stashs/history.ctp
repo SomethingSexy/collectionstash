@@ -37,10 +37,11 @@
 				
 			</div>
 			<div class="span4">
+				<!--
 				<div class="btn-group pull-right years">
 				    <button class="btn">All</button>
 				    <button class="btn">Sold</button>
-			    </div>				
+			    </div>			-->	
 			</div>
 			
 		</div>
@@ -65,23 +66,21 @@
 				?> 
 			    </div>	
 				<div id="holder">
-		
+					<?php if(empty($graphData)) {
+						echo '<p>'  . __(' Not enough information to draw Bought and Sold graph.', true) . '</p>';
+					}?>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span6">
-			<div class="well">
+		<div class="span6 well">
+			<div class="">
 					<?php
 					if (isset($collectibles) && !empty($collectibles)) {
 						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default'));
 					} else {
-						if ($stashType === 'default') {
-							echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
-						} else {
-							echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</div>';
-						}
+							echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 					}
 	?>
 			</div>
