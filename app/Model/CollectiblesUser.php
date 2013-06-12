@@ -416,7 +416,12 @@ class CollectiblesUser extends AppModel {
 			$data['CollectiblesUser']['active'] = false;
 
 			if ($this -> save($data)) {
+				// TODO: when we bootstrap this guy we might have to return more information here
+				$updateCollectibleUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => $this -> id), 'contain' => array('Listing' => array('Transaction'), 'CollectibleUserRemoveReason', 'User', 'Collectible', 'Stash')));
+
 				$retVal['response']['isSuccess'] = true;
+				$retVal['response']['data'] = $updateCollectibleUser['CollectiblesUser'];
+
 				$dataSource -> commit();
 				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
 			} else {
