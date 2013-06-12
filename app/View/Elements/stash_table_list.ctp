@@ -36,7 +36,7 @@ echo '</thead>';
 foreach ($collectibles as $key => $myCollectible) {
 	echo '<tr class="stash-item">';
 	if ($myCollectible['CollectiblesUser']['active']) {
-		echo '<td><i class="icon-plus"></i></td>';
+		echo '<td class="bought-sold-icon"><i class="icon-plus"></i></td>';
 	} else {
 		echo '<td><i class="icon-minus"></i></td>';
 	}
