@@ -6,7 +6,7 @@ class EbayTransaction extends Object implements Transactionable {
 		parent::__construct();
 	}
 
-	public function processTransaction($data) {
+	public function processTransaction($data, $user) {
 		// Create headers to send with CURL request.
 
 		$token = Configure::read('Settings.TransactionManager.eBay.auth_token');

@@ -6,7 +6,7 @@ class ExternalTransaction extends Object implements Transactionable {
 		parent::__construct();
 	}
 
-	public function processTransaction($data) {
+	public function processTransaction($data, $user) {
 		// Create headers to send with CURL request.
 
 		$data['Listing']['type'] = 'BIN';
@@ -14,6 +14,7 @@ class ExternalTransaction extends Object implements Transactionable {
 		$data['Listing']['status'] = 'completed';
 		$data['Listing']['quantity'] = 1;
 		$data['Listing']['quantity_sold'] = 1;
+		$data['Listing']['listing_name'] = __('Sold by ') . $user['User']['username'];
 
 		$transactions = array();
 		$transactions['Transaction'] = array();

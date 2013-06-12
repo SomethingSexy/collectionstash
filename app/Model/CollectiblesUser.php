@@ -303,6 +303,7 @@ class CollectiblesUser extends AppModel {
 
 					if (!$this -> Listing -> Transaction -> save($transaction)) {
 						$dataSource -> rollback();
+						$retVal['response']['code'] = 500;
 						return $retVal;
 					}
 				}
@@ -313,7 +314,6 @@ class CollectiblesUser extends AppModel {
 		}
 
 		if ($this -> save($data, true, $fieldList)) {
-
 			$retVal['response']['isSuccess'] = true;
 			$dataSource -> commit();
 		} else {

@@ -140,7 +140,7 @@ class Listing extends AppModel {
 		$transactionable = $factory -> getTransaction($data['Listing']['listing_type_id']);
 
 		// TODO: If it comes back with an error, do not save and send error message to user
-		$data = $transactionable -> processTransaction($data);
+		$data = $transactionable -> processTransaction($data, $user);
 
 		if (!$data) {
 			$retVal['response']['isSuccess'] = false;
