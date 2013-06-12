@@ -140,7 +140,12 @@
 	
 </div>
     
-
+<script><?php
+	if (isset($reasons)) {
+		echo 'var reasons = \'' . json_encode($reasons) . '\';';
+	}
+	?>
+</script>
 
 
 
