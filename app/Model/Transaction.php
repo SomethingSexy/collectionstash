@@ -46,5 +46,16 @@ class Transaction extends AppModel {
 		return $results;
 	}
 
+	public function beforeSave($options = array()) {
+		if (!empty($this -> data['Transaction']['sale_date'])) {
+			$this -> data['Transaction']['sale_date'] = $this -> dateFormatBeforeSave($this -> data['Transaction']['sale_date']);
+		}
+		return true;
+	}
+
+	public function dateFormatBeforeSave($dateString) {
+		return date('y-m-d', strtotime($dateString));
+	}
+
 }
 ?>
