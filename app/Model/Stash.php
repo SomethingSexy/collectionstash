@@ -114,7 +114,7 @@ class Stash extends AppModel {
 		// or it could be a bar graph of purchases with how many you sold ontop
 		$templateData = array();
 		foreach ($collectibles as $collectible) {
-			if ($collectible['CollectiblesUser']['purchase_date'] !== null && $collectible['CollectiblesUser']['purchase_date'] !== '0000-00-00') {
+			if ($collectible['CollectiblesUser']['purchase_date'] !== null && $collectible['CollectiblesUser']['purchase_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['purchase_date'])) {
 
 				$time = strtotime($collectible['CollectiblesUser']['purchase_date']);
 				$date = date('m d y', $time);
@@ -134,7 +134,7 @@ class Stash extends AppModel {
 
 				array_push($templateData[$date['year']][$date['month']]['purchased'], $collectible);
 			}
-			if ($collectible['CollectiblesUser']['remove_date'] !== null && $collectible['CollectiblesUser']['remove_date'] !== '0000-00-00') {
+			if ($collectible['CollectiblesUser']['remove_date'] !== null && $collectible['CollectiblesUser']['remove_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['remove_date'])) {
 
 				$time = strtotime($collectible['CollectiblesUser']['remove_date']);
 				$date = date('m d y', $time);
