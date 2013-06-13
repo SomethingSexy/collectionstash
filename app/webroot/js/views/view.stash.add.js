@@ -40,7 +40,7 @@ var StashAddView = Backbone.View.extend({
 					query : query,
 				}, function(data) {
 					process(data.suggestions);
-				});
+				}, 'json');
 			},
 			items : 100
 		});
