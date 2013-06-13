@@ -192,8 +192,12 @@ var totalSubmission = <?php echo $total; ?>;
 var totalSubmissionPages = Math.ceil(totalSubmission / 10);
 var totalEdit = <?php echo $totalEdits; ?>;
 var totalEditPages = Math.ceil(totalEdit / 10);
+
 var totalPending = <?php echo $totalPending; ?>;
-var totalPendingPages = Math.ceil(totalPending / 10); 
+var totalPendingPages = Math.ceil(totalPending / 5); 
+
+var totalNew = <?php echo $totalNew; ?>;
+var totalNewPages = Math.ceil(totalPending / 5); 
 
 var totalWorks = <?php echo $totalWorks; ?>;
 var totalWorkPages = Math.ceil(totalWorks / 10); 
