@@ -246,7 +246,7 @@ class StashsController extends AppController {
 					//If the privacy is 0 or you are viewing your own stash then always show
 					//or if it is set to 1 and this person is logged in also show.
 					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
-						$graphData = $this -> Stash -> getStashGraphHistory($this -> getUser());
+						$graphData = $this -> Stash -> getStashGraphHistory($user);
 						debug($graphData);
 						$this -> set(compact('graphData'));
 						$this -> set('stash', $user['Stash'][0]);
