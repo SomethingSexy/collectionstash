@@ -312,14 +312,14 @@ var PaginatedNew = Backbone.Paginator.requestPager.extend({
 		currentPage : 1,
 
 		// how many items per page should be shown
-		perPage : 10,
+		perPage : 5,
 
 		// a default number of total pages to query in case the API or
 		// service you are using does not support providing the total
 		// number of pages for us.
 		// 10 as a default in case your service doesn't return the total
-		totalPages : totalPendingPages,
-		total : totalPending
+		totalPages : totalNewPages,
+		total : totalNew
 	},
 	server_api : {
 

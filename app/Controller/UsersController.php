@@ -14,7 +14,7 @@ class UsersController extends AppController {
 	 */
 	public function home() {
 		$this -> checkLogIn();
-		
+
 		// user
 		$user = $this -> getUser();
 		debug($user);
@@ -74,9 +74,11 @@ class UsersController extends AppController {
 		$this -> set(compact('pending'));
 		$this -> set(compact('totalPending'));
 
+		$totalNew = $this -> User -> Collectible -> find('count', array('conditions' => array('Collectible.status_id' => 4), 'limit' => 5));
 		$newCollectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 5));
 		$newCollectibles = json_encode($newCollectibles);
 		$this -> set(compact('newCollectibles'));
+		$this -> set(compact('totalNew'));
 
 		// Load initial activity
 
