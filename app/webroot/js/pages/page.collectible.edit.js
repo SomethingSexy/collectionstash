@@ -14,7 +14,6 @@ var Errors = Backbone.Collection.extend({
 	model : ErrorModel
 })
 
-
 var PaginatedPart = Backbone.Paginator.requestPager.extend({
 	filters : {},
 	paginator_core : {
@@ -2225,7 +2224,7 @@ var AddTagView = Backbone.View.extend({
 					query : query,
 				}, function(data) {
 					process(data.suggestions);
-				});
+				}, 'json');
 			},
 			items : 100
 		});
@@ -2406,7 +2405,7 @@ var AddArtistView = Backbone.View.extend({
 					query : query,
 				}, function(data) {
 					process(data.suggestions);
-				});
+				}, 'json');
 			},
 			items : 100
 		});
