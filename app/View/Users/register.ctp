@@ -50,12 +50,10 @@
 		<?php echo $this -> Form -> input('email', array('div' => false, 'label' => false)); ?>
 	</div>
 </div>
-<div class="control-group">
-	<div class="controls">
+<div class="form-actions">
 		<button type="submit" class="btn">
 			Submit
 		</button>
-	</div>
 </div>
 <?php echo $this -> Form -> end(); ?>
  
