@@ -51,7 +51,7 @@
 			
 	<div class="row-fluid">
 		<div class="span6">
-			<div class="well">
+			<div class="">
 				<h2>Bought and Sold</h2>
 				<div class="btn-group pull-right years">
 				<?php
