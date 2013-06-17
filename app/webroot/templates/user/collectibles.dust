@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover">
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th>Collectible Id</th>
@@ -12,24 +12,26 @@
 
 	</tbody>
 </table>
-<div class="paging">
 	<p>
-		Page {paginator.currentPage} of {paginator.totalPages}, showing {paginator.perPage} collectibles out of {paginator.total} total.
+		Total: {paginator.total}
 	</p>
+<div class="pagination">
+	<ul>
 	{@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
-	<span> <a class="previous" rel="prev"><< previous</a> </span>
+	<li> <a class="previous" rel="prev">previous</a> </li>
 	{/gt}
 	{#pages currentPage=paginator.currentPage}
 	{@eq key="{.}" value="{currentPage}"}
-	<span class="current">{.}</span>
+	<li class="active"><a>{.}</a></li>
 	{:else}
-	<span> <a class="page">{.}</a> </span>
+	<li> <a class="page">{.}</a> </li>
 	{/eq}
 
 	{/pages}
 	{@ne key="{paginator.total}" value="0"}
 		{@ne key="{paginator.totalPages}" value="{paginator.currentPage}" type="number"}
-		<span> <a class="next" rel="next">next >></a> </span>
+		<li> <a class="next" rel="next">next >></a> </li>
 		{/ne}
 	{/ne}
+	</ul>
 </div>

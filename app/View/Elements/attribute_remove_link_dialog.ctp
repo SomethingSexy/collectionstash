@@ -1,4 +1,4 @@
-<div id="attribute-remove-link-dialog" class="dialog attribute" title="Remove Part From Collectible">
+<div id="attribute-remove-link-dialog" class="dialog attribute hide" title="Remove Part From Collectible">
 	<div class="component component-dialog">
 		<div class="inside" >
 			<?php echo $this -> element('flash'); ?>

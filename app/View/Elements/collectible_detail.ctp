@@ -96,7 +96,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				} else if ($collectibleDetail['Collectible']['original']) {
 					echo 'Original | ';
 				} else {
-					if ($collectibleDetail['Collectible']['official']) {
+					if ($collectibleDetail['Collectible']['official'] && !empty($collectibleDetail['Collectible']['manufacture_id'])) {
 						echo 'Mass-Produced | ';
 					} else {
 						echo 'Custom | ';
@@ -313,7 +313,7 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-var collectibleStatus = {
+	var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:

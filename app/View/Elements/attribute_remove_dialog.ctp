@@ -1,4 +1,4 @@
-<div id="attribute-remove-dialog" class="dialog attribute" title="Delete Part">
+<div id="attribute-remove-dialog" class="dialog hide attribute" title="Delete Part">
 	<div class="component component-dialog">
 		<div class="inside" >
 			<?php echo $this -> element('flash'); ?>
