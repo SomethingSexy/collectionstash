@@ -1,4 +1,4 @@
-<div id="update-attribute-collectible-dialog" class="dialog attribute" title="Update Collectible Part">
+<div id="update-attribute-collectible-dialog" class="dialog attribute hide" title="Update Collectible Part">
 	<div class="component component-dialog">
 		<div class="inside" >
 			<?php echo $this -> element('flash'); ?>

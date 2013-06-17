@@ -1,7 +1,7 @@
 // at some point we should probably break this out into transaction views
 var TransactionsView = Backbone.View.extend({
 	template : 'transactions',
-	className : 'well',
+	className : '',
 	events : {
 		'click .add-transaction' : 'submit',
 		'click .flag' : 'flag',

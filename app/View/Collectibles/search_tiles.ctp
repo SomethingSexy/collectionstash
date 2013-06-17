@@ -7,13 +7,14 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 ?>
-<div class="component" id="collectibles-list-component">
-	<div class="inside" >
+<div class="widget" id="collectibles-list-component">
+	<div class="widget-header">
+		<h3><?php echo __('Search Results'); ?></h3>
+	</div>
+	<div class="widget-content">
+
 	<?php echo $this -> element('flash'); ?>
-	<div class="component-view">
-		<div class="page-header">
-			<h2><?php echo __('Search Results'); ?></h2>
-		</div>
+
 		<div class="btn-group pull-right">
 			<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
 			<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
@@ -65,7 +66,6 @@ unset($urlparams['url']);
 				echo '</div>';
 			     ?>
 			</div>
-		</div>
 	</div>
 </div>
 

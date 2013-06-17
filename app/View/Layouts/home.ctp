@@ -25,24 +25,25 @@
 	echo $this -> Minify -> css('css/jquery.ui.tabs');
 	echo $this -> Minify -> css('css/jquery.treeview');
 	echo $this -> Minify -> css('css/thirdparty/bootstrap-image-gallery');
+	echo $this -> Minify -> css('css/layout/theme');
 	echo $this -> Minify -> css('css/layout/default');
 
 	echo $this -> Minify -> script('js/thirdparty/json2');
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
-	echo $this -> Minify -> script('js/jquery-1.9.1');
+	echo $this -> Minify -> script('js/thirdparty/jquery-1.10.1');
+	echo $this -> Minify -> script('js/jquery-ui-1.10.2');
+	echo $this -> Minify -> script('js/thirdparty/bootstrap');
+	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('js/thirdparty/backbone');
 	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
-	echo $this -> Minify -> script('js/jquery-ui-1.10.2');
 	echo $this -> Minify -> script('js/jquery-plugins');
 	echo $this -> Minify -> script('js/jquery.autocomplete');
 	// Replace this with dust eventually
 	echo $this -> Minify -> script('js/thirdparty/tmpl');
 	echo $this -> Minify -> script('js/thirdparty/load-image');
 	echo $this -> Minify -> script('js/thirdparty/canvas-to-blob');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('js/thirdparty/dust-full-1.1.1');
 	echo $this -> Minify -> script('js/thirdparty/dust-helpers-1.1.0');
 	echo $this -> Minify -> script('js/cs.dust-helpers');
@@ -128,7 +129,7 @@
 						</li>
 						<?php } ?>
 						<li class="dropdown">
-							<?php echo $this -> Html -> link('Catalog<b class="caret"></b>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+							<?php echo $this -> Html -> link('Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
@@ -154,7 +155,7 @@
 								{  ?>
 			
 								<li class="dropdown">
-									<?php echo $this -> Html -> link('<i class="icon-user"></i><b class="caret"></b>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+									<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 									<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 										<li><?php echo $this -> Html -> link('Profile', '/profiles', array('escape' => false, 'admin' => false)); ?></li>
 										<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
@@ -171,8 +172,8 @@
 								<?php } ?>
 
 								<?php  }
-									else
-									{
+	else
+	{
 								?>
 								<li>
 									<a href="/users/login"><?php echo __('Login'); ?></a>
@@ -240,16 +241,16 @@
 		</div>		
 	</footer>
 	<script id="template-stash-add" type="text/x-tmpl">
-		<?php echo $this->element('stash_add');?>	
+		<?php echo $this -> element('stash_add'); ?>	
 	</script>
 	<script id="template-stash-remove" type="text/x-tmpl">
-		<?php echo $this->element('stash_remove');?>	
+		<?php echo $this -> element('stash_remove'); ?>	
 	</script>
 	
-	<?php 
+	<?php
 	// list out any modals here that might be common
-	echo $this->element('stash_add_modal');
-	echo $this->element('stash_remove_modal');
+	echo $this -> element('stash_add_modal');
+	echo $this -> element('stash_remove_modal');
 	?>	
 
 		<?php echo $this -> element('sql_dump'); ?>
@@ -269,6 +270,7 @@
 		</div>
 		<?php
 		echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
+		echo $this -> Minify -> script('js/thirdparty/placeholder');
 			?>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>

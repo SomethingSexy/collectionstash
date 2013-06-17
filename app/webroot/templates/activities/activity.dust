@@ -1,11 +1,15 @@
-<div class="row-fluid action">
+
 		<!--For the title, we need to construct: User verb object target-->
-	<div class="span12">	
-		
+	<span class="pull-right">
+	{Activity.data.fancyDate}
+	</span>
+	<i class="icon-ok" style="color: #9bb921"></i>
+	<img alt="" src="/img/icon/avatar.png">
+	<div>
 		{@if cond="( '{Activity.data.actor.objectType}' === 'user' )"}	
-			<span class="actor"><a href="/stash/{Activity.data.actor.displayName}">{Activity.data.actor.displayName} </a></span>
+			<span class="actor"><a href="/stash/{Activity.data.actor.displayName}">{Activity.data.actor.displayName|s} </a></span>
 		{:else}
-			<span class="actor">{Activity.data.actor.displayName} </span>
+			<span class="actor">{Activity.data.actor.displayName|s} </span>
 		{/if}
 	
 		{@if cond="( '{Activity.activity_type_id}' === '12' )"}
@@ -13,7 +17,7 @@
 			{@if cond="( '{Activity.data.target.displayName}' === null )"}
 				Collectible
 			{:else}
-				<a href="{Activity.data.target.url}">{Activity.data.target.displayName}</a>
+				<a href="{Activity.data.target.url}">{Activity.data.target.displayName|s}</a>
 			{/if}
 		{:else}
 			{@if cond="( '{Activity.activity_type_id}' === '7' )"}
@@ -44,9 +48,9 @@
 					{@if cond="( '{Activity.activity_type_id}' === '12' )"}
 						<!-- need to handle old format, that does not contain the name -->
 						{@if cond="( '{Activity.data.object.url}'.indexOf('.') !== -1)"}
-							<a href="{Activity.data.object.url}">{Activity.data.object.objectType}</a>
+							<a href="{Activity.data.object.url}">{Activity.data.object.objectType|s}</a>
 						{:else}
-							<a href="{Activity.data.object.url}{Activity.data.object.data.name}">{Activity.data.object.objectType}</a>
+							<a href="{Activity.data.object.url}{Activity.data.object.data.name}">{Activity.data.object.objectType|s}</a>
 						{/if}
 					{:else}
 						{Activity.data.object.objectType} 
@@ -55,19 +59,19 @@
 				{/if}
 				
 				{@if cond="( '{Activity.data.object.objectType}' === 'collectible' )"}
-					<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle}</a>
+					<a href="{Activity.data.object.url}">{Activity.data.object.data.Collectible.displayTitle|s}</a>
 				{/if}
 		
 				{@if cond="( '{Activity.data.object.objectType}' === 'attribute' )"}
-					<a href="{Activity.data.object.url}"> part {Activity.data.object.data.Attribute.name}</a>
+					<a href="{Activity.data.object.url}"> part {Activity.data.object.data.Attribute.name|s}</a>
 				{/if}
 				
 				{@if cond="( '{Activity.data.object.objectType}' === 'tag' )"}
-					<a href="/collectibles/search/?t={Activity.data.object.data.Tag.id}"> tag {Activity.data.object.data.Tag.tag}</a>
+					<a href="/collectibles/search/?t={Activity.data.object.data.Tag.id}"> tag {Activity.data.object.data.Tag.tag|s}</a>
 				{/if}
 				
 				{@if cond="( '{Activity.data.object.objectType}' === 'artist' )"}
-					<a href="/artist/{Activity.data.object.data.Artist.id}/{Activity.data.object.data.Artist.slug}"> artist {Activity.data.object.data.Artist.name}</a>
+					<a href="/artist/{Activity.data.object.data.Artist.id}/{Activity.data.object.data.Artist.slug}"> artist {Activity.data.object.data.Artist.name|s}</a>
 				{/if}
 
 				{@if cond="( '{Activity.data.object.objectType}' === 'edit' )"}
@@ -103,16 +107,10 @@
 						<a href="{Activity.data.target.url}">Part</a>
 					{/if}					
 				{:else}
-					<a href="{Activity.data.target.url}">{Activity.data.target.displayName}</a>
+					<a href="{Activity.data.target.url}">{Activity.data.target.displayName|s}</a>
 				{/empty}
 			
 			{/eq} 
 		{/if}
-	</div>	
-</div>
-		
-<div class="row-fluid time">
-	<div class="span12">
-	{Activity.data.fancyDate}
 	</div>
-</div>
+
