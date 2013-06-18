@@ -227,8 +227,6 @@ class StashsController extends AppController {
 	}
 
 	public function history($userId = null) {
-		$this -> layout = 'fluid';
-
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later and comments

@@ -1,20 +1,21 @@
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
-<div id="my-stashes-component" class="well">
-			<h2><?php
-			echo $stashUsername . '\'s';
-			if ($stashType === 'default') {
-				echo __(' stash', true);
-			} else {
-				echo __(' wishlist', true);
-			}
-			?></h2>
+<h2><?php
+	echo $stashUsername . '\'s';
+	if ($stashType === 'default') {
+		echo __(' stash', true);
+	} else {
+		echo __(' wishlist', true);
+	}
+?></h2>
+
+<div id="my-stashes-component" class="widget widget-tabs">
+
 		<?php echo $this -> element('flash'); ?>
 		
-			<div class="actions stash">
-				<ul class="nav nav-pills">
+				<ul class="nav nav-tabs widget-wide">
 					<?php
 					if ($stashType === 'default') {
-						echo '<li class="selected">';
+						echo '<li class="active">';
 					} else {
 						echo '<li>';
 					}
@@ -37,9 +38,9 @@
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
 					<li><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 				</ul>	
-			</div>
-			<div class="title clearfix">
-				<h3><?php echo __('Collectibles'); ?></h3>
+			
+	<div class="widget-content">
+			<div class=" clearfix">
 				<div class="btn-group actions pull-left">
 						<?php
 						if (isset($myStash) && $myStash && $stashType === 'default') {
@@ -72,7 +73,9 @@
 					echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
  					?>
 			    </div>
-			</div>
+			</div>		
+		
+				
 	<?php
 	if (isset($collectibles) && !empty($collectibles)) {
 		echo '<div class="row">';
@@ -159,9 +162,8 @@
 		}
 	}
 	?>
-	
+	</div>
 </div>
-<?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
@@ -169,9 +171,9 @@
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
-	if (isset($reasons)) {
-		echo 'var reasons = \'' . json_encode($reasons) . '\';';
-	}
+if (isset($reasons)) {
+	echo 'var reasons = \'' . json_encode($reasons) . '\';';
+}
 	?>
 		$(function() {
 			var $container = $('div.tiles');
@@ -204,7 +206,5 @@
 				});
 			});
 
-			$('#comments').comments();
-
-		}); 
+		});
 </script>
