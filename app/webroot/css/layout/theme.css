@@ -673,3 +673,12 @@ a.forgot-password {
 	opacity: 0.5;
 }
 
+.graph-container {
+	background: linear-gradient(#F6F6F6 0px, #FFFFFF 50px) repeat scroll 0 0 transparent;
+	border: 1px solid #DDDDDD;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+	height: 450px;
+	margin: 15px auto 30px;
+	padding: 20px 15px 15px;
+	width: 850px;
+}
