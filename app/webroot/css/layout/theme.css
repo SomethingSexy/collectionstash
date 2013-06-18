@@ -312,6 +312,11 @@ div.subnav-fixed {
 	color: #444;
 }
 
+.widget.widget-tabs .nav-tabs > li > a:hover {
+	background: 0;
+	color: #444;
+}
+
 .widget.widget-tabs .widget-content {
 	border: none;padding-left 0;
 	padding-right: 0;
