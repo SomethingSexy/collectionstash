@@ -1,6 +1,6 @@
-<?php echo $this -> Minify -> script('js/thirdparty/raphael', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/thirdparty/g.raphael', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('thirdparty/g.bar', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot.categories', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot.stack', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
@@ -49,38 +49,40 @@
 		
 
 			
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6">
 			<div class="">
 				<h2>Bought and Sold</h2>
-				<div class="btn-group pull-right years">
+				<div class="btn-group years">
 				<?php
 				$default = key($graphData);
 				foreach ($graphData as $keyYear => $year) {
-					echo '<button data-key="' . $keyYear . '" class="btn';
+					echo '<a data-key="' . $keyYear . '" class="btn';
 					if ($keyYear === $default) {
 						echo ' active';
 					}
-					echo '">' . $keyYear . '</button>';
+					echo '">' . $keyYear . '</a>';
 				}
 				?> 
 			    </div>	
-				<div id="holder">
-					<?php if(empty($graphData)) {
-						echo '<p>'  . __(' Not enough information to draw Bought and Sold graph.', true) . '</p>';
-					}?>
+				<div id="holder" style="width:600px;height:300px">
+					<?php
+					if (empty($graphData)) {
+						echo '<p>' . __(' Not enough information to draw Bought and Sold graph.', true) . '</p>';
+					}
+				?>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6 well">
 			<div class="">
 					<?php
 					if (isset($collectibles) && !empty($collectibles)) {
-						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default' , 'history' => true));
+						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default', 'history' => true));
 					} else {
-							echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+						echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 					}
 	?>
 			</div>
@@ -88,74 +90,67 @@
 	</div>
 </div>
 
-<script>
-<?php
-	if (isset($reasons)) {
-		echo 'var reasons = \'' . json_encode($reasons) . '\';';
-	}
-	?>	
-<?php
-$counts = '';
-
-foreach ($graphData as $keyYear => $year) {
-	$counts .= $keyYear . ':[[';
-	foreach ($year as $keyMonth => $month) {
-		$counts .= '' . count($month['purchased']) . ',';
-	}
-	$counts .= '],[';
-	foreach ($year as $keyMonth => $month) {
-		$counts .= '' . count($month['sold']) . ',';
-	}
-	$counts .= ']],';
+<script><?php
+if (isset($reasons)) {
+	echo 'var reasons = \'' . json_encode($reasons) . '\';';
 }
-echo 'var data = {' . $counts . '};';
-echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]))';
-?>
-	// var b1data = [[319309], [305303], [534917]];
-	// var b2data = [[268210], [263097], [359183]];
-	// var b3data = [[373217], [064199], [201510]];
-	$(function() {
-		var r = Raphael('holder', 980, 500);
+	?><?php
+	$counts = '';
 
-		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var fin = function() {
-			this.flag = r.popup(this.bar.x, this.bar.y, this.bar.value || "0", 'right').insertBefore(this);
-		};
-		var fout = function() {
-			this.flag.animate({
-				opacity : 0
-			}, 300, function() {
-				this.remove();
-			});
-		};
-		var c = r.barchart(0, 0, 960, 400, bdata, {
-			stacked : true,
-			axis : "0 0 1 1",
-			axisxlabels : ["2008", "2009", "2010"]
-		}).label(months, true).hover(fin, fout);
-
-		function b_animate() {
-			var c2 = r.barchart(0, 0, 960, 400, bdata, {
-				stacked : true,
-			}).hover(fin, fout);
-
-			c.remove();
-			c = c2;
-			//$.each(c.bars[0], function(k, v) {
-			//	v.animate({
-			//		path : c2.bars[0][k].attr("path")
-			//	}, 500);
-			//	v.value[0] = bdata[k][0];
-			//});
-			//c2.remove();
+	foreach ($graphData as $keyYear => $year) {
+		$counts .= $keyYear . ':[[';
+		foreach ($year as $keyMonth => $month) {
+			$counts .= '[' . $keyMonth . ' ,' . count($month['purchased']) . '],';
 		}
-
+		$counts .= '],[';
+		foreach ($year as $keyMonth => $month) {
+			$counts .= '[' . $keyMonth . ' ,' . count($month['sold']) . '],';
+		}
+		$counts .= ']],';
+	}
+	echo 'var data = {' . $counts . '};';
+	echo 'var bdata = JSON.parse(JSON.stringify(data["' . $default . '"]));';
+?>
+	$(function() {
+		$.plot("#holder", bdata, {
+			series : {
+				stack : false,
+				bars : {
+					show : true,
+					barWidth : 0.6,
+					align : "center"
+				}
+			},
+			xaxis : {
+				mode : "categories",
+				tickLength : 0
+			},
+			yaxis : {
+				minTickSize : 1
+			}
+		});
 
 		$('.years').on('click', '.btn', function(event) {
 			$(event.currentTarget).siblings().removeClass('active');
 			$(event.currentTarget).addClass('active');
 			bdata = JSON.parse(JSON.stringify(data[$(event.currentTarget).attr('data-key')]));
-			b_animate();
+			$.plot("#holder", bdata, {
+				series : {
+					stack : false,
+					bars : {
+						show : true,
+						barWidth : 0.6,
+						align : "center"
+					}
+				},
+				xaxis : {
+					mode : "categories",
+					tickLength : 0
+				},
+				yaxis : {
+					minTickSize : 1
+				}
+			});
 		});
-	}); 
+	});
 </script>
