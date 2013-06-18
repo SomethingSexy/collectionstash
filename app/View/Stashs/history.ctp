@@ -65,13 +65,16 @@
 				}
 				?> 
 			    </div>	
-				<div id="holder" style="width:600px;height:300px">
-					<?php
-					if (empty($graphData)) {
-						echo '<p>' . __(' Not enough information to draw Bought and Sold graph.', true) . '</p>';
-					}
-				?>
-				</div>
+			    <div class="graph-container">
+					<div id="holder" style="width:850px;height:450px">
+						<?php
+						if (empty($graphData)) {
+							echo '<p>' . __(' Not enough information to draw Bought and Sold graph.', true) . '</p>';
+						}
+					?>
+					</div>			    	
+			    </div>
+
 			</div>
 		</div>
 	</div>
