@@ -72,7 +72,7 @@
 					<div class="control-group ">
 						<label for="CollectiblesUserSoldCost" class="control-label">How much did you sell it for?</label>
 						<div class="controls">
-							 <?php echo $this -> Form -> input('sold_cost', array('type' => 'number', 'div' => false, 'label' => false, 'maxLength' => 23, 'required')); ?>
+							 <?php echo $this -> Form -> input('sold_cost', array('type' => 'number', 'div' => false, 'label' => false, 'maxLength' => 23)); ?>
 						</div>
 					</div>
 				
