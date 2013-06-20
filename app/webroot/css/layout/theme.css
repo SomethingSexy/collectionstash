@@ -715,11 +715,12 @@ a.forgot-password {
 .comments-container .comments .comment:first-child {
 	padding-top: 0;
 }
+/**
 .comments-container .comments  .comment {
 	padding-left: 20px;
 	padding-right: 20px;
 	margin: 0 -20px;
-}
+}*/
 
 .comments-container .comments .comment > img {
 	display: block;
@@ -757,4 +758,10 @@ a.forgot-password {
 
 .comments-container .comments .comment .actions a:hover {
 	color: #444;
+}
+
+.comments-container .comments .comment  .actions i {
+	display: inline-block;
+	margin-right: 5px;
+	text-decoration: none;
 }

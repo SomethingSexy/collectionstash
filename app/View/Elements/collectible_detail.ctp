@@ -253,14 +253,18 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 	
 	<?php if(isset($showComments) && $showComments) {?>
 		<div class="row-fluid spacer">
-			<div class="span12">
-			<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
-			<script>
-				//lazy do doing here
-				$(function() {
-					$('#comments').comments();
-				});
-			</script>
+			<div class="span8 offset4">
+			<div class="widget">
+				<div class="widget-content">
+					<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
+					<script>
+						//lazy do doing here
+						$(function() {
+							$('#comments').comments();
+						});
+					</script>
+					</div>
+				</div>
 			</div>
 		</div>
 	<?php } ?>
@@ -313,7 +317,7 @@ if ($adminMode) {
 </div>
 	<?php } ?>
 <script>
-	var collectibleStatus = {
+		var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:

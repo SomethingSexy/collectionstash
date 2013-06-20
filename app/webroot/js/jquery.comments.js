@@ -202,7 +202,7 @@
 			},
 			_removeComment : function(element) {
 				var self = this;
-				var $comment = $(element).closest('li.comment');
+				var $comment = $(element).closest('.comment');
 				var commentId = $comment.attr('data-id');
 				$.ajax({
 					type : "post",
@@ -212,7 +212,6 @@
 					dataType : 'json',
 					url : '/comments/remove.json',
 					beforeSend : function(jqXHR, settings) {
-						$.cs.comments.prototype._removeProcessingBar();
 						$.cs.comments.prototype._removeError($comment.children('.actions'));
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
@@ -230,7 +229,6 @@
 						}
 					},
 					complete : function() {
-						$.cs.comments.prototype._removeProcessingBar();
 					}
 				});
 			},
