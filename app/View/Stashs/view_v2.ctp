@@ -25,7 +25,7 @@
 					</li>
 					<?php
 					if ($stashType === 'wishlist') {
-						echo '<li class="selected">';
+						echo '<li class="active">';
 					} else {
 						echo '<li>';
 					}

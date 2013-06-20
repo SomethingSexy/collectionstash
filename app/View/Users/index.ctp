@@ -1,9 +1,8 @@
-<div class="component" id="user-list-component">
-	<div class="inside">
-		<div class="page-header">
-			<h2><?php echo __('Users'); ?></h2>
+<div class="widget" id="user-list-component">
+		<div class="widget-header">
+			<h3><?php echo __('Users'); ?></h3>
 		</div>
-		<div class="component-view">
+		<div class="widget-content">
 		<div class="standard-list user-list">
 			<table class="table">
 				<thead>
@@ -42,24 +41,22 @@
  				</tbody>
 			</table>
 		</div>	
-				<div class="paging">
-			<p>
-				<?php
-				echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} users out of  {:count} total.', true)));
-				?>
-			</p>
+		<p>
 			<?php
-
-			$urlparams = $this -> request -> query;
-			unset($urlparams['url']);
-			$this -> Paginator -> options(array('url' => array('?' => http_build_query($urlparams))));
-
-			echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));
+			echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} users out of  {:count} total.', true)));
 			?>
-			<?php echo $this -> Paginator -> numbers(array('separator' => false)); ?>
-			<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled')); ?>
-		</div>		
-
-		</div>
+		</p>
+		<div class="pagination">
+			<ul>
+				<?php
+				$urlparams = $this -> request -> query;
+				unset($urlparams['url']);
+				$this -> Paginator -> options(array('url' => array('?' => http_build_query($urlparams))));
+				?>
+			<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+			<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
+			<?php echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+			</ul>
+		</div>	
 	</div>
 </div>
