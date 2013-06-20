@@ -77,7 +77,7 @@
 		})();
 	</script>
 </head>
-<body <?php debug($bodyClass);if(isset($bodyClass)) echo 'class="' . $bodyClass .  '"';?>  >
+<body <?php if(isset($bodyClass)) echo 'class="' . $bodyClass .  '"';?>  >
 	<div id="fb-root"></div>
 	<script>
 		( function(d, s, id) {
