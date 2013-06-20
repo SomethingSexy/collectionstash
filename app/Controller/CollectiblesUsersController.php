@@ -107,7 +107,7 @@ class CollectiblesUsersController extends AppController {
 
 					if ($response['response']['isSuccess']) {
 						$this -> Session -> setFlash(__('Your collectible was successfully updated.', true), null, null, 'success');
-						//$this -> redirect(array('controller' => 'collectibles_users', 'action' => 'view', $id), null, true);
+						$this -> redirect(array('controller' => 'collectibles_users', 'action' => 'view', $id), null, true);
 					} else {
 						$this -> Session -> setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
 					}
