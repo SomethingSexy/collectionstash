@@ -678,6 +678,11 @@ a.forgot-password {
 	opacity: 0.5;
 }
 
+.signin-container .component-message.error {
+	color: #FFF;
+	opacity: 0.5;
+}
+
 .graph-container {
 	background: #fff;
 	background: linear-gradient(#f6f6f6 0, #fff 50px);
@@ -695,4 +700,61 @@ a.forgot-password {
 	margin: 15px auto 30px;
 	padding: 20px 15px 15px;
 	width: 850px;
+}
+
+/**
+ * 	comments
+ */
+.comments-container .comments {
+	margin-bottom: 10px;
+}
+.comments-container .comments .comment {
+	border-bottom: 1px solid rgba(0,0,0,0.08);
+	padding: 8px 0;
+}
+.comments-container .comments .comment:first-child {
+	padding-top: 0;
+}
+.comments-container .comments  .comment {
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 0 -20px;
+}
+
+.comments-container .comments .comment > img {
+	display: block;
+	float: left;
+	height: 30px;
+	margin-top: 5px;
+	width: 30px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.comments-container .comments .comment .content {
+	margin-left: 45px;
+}
+
+.comments-container .comments .comment  .commented-by, .comments-container .comments .comment  .actions {
+	color: #888;
+	display: block;
+}
+
+.comments-container .comments .comment  .commented-by {
+	font-style: italic;
+}
+
+.comments-container .comments .comment .actions, .comments-container .comments .comment .actions a {
+	color: #bbb;
+	font-size: 12px;
+}
+
+.comments-container .comments .comment .actions a {
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.comments-container .comments .comment .actions a:hover {
+	color: #444;
 }

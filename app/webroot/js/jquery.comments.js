@@ -22,7 +22,7 @@
 				this.element.addClass('comments-container');
 				this.element.prepend($('<div class="title"><h3>Discussion</h3></div>'));
 				//This is the comment list which will hold all comments
-				this.commentsList = $('<ol></ol>').addClass('comments').addClass('unstyled');
+				this.commentsList = $('<div></divv>').addClass('comments');
 				//Add our comment list to our main element
 				this.element.append(this.commentsList);
 
@@ -33,16 +33,19 @@
 				this.changer = $("<button>", {
 					text : "Post",
 					"id" : "post-comment",
-					'class' : 'btn btn-primary'
-				}).appendTo(this.element).button().click(function(event) {
+					'class' : 'btn btn-primary',
+					'data-loading-text' : 'Posting...'
+				}).appendTo($('.form-actions', '#CommentViewForm')).button().click(function(event) {
+					event.preventDefault();
 					//Using apply here because we want to pass in the widget context
 					$.cs.comments.prototype._postComment.apply(self, event);
 				});
+
 				//bind events
-				$(document).on('click', '#comments ol.comments li.comment div.actions span a.edit', function() {
+				$(document).on('click', '#comments .comments .comment span.actions a.edit', function() {
 					$.cs.comments.prototype._initUpdate.call(self, this);
 				});
-				$(document).on('click', '#comments ol.comments li.comment div.actions span a.remove', function() {
+				$(document).on('click', '#comments .comments .comment span.actions a.remove', function() {
 					$.cs.comments.prototype._removeComment.call(self, this);
 				});
 				//get the initial list of comments
@@ -70,7 +73,7 @@
 			},
 			_initUpdate : function(element) {
 				var self = this;
-				var $comment = $(element).closest('li.comment').children('div.comment-text');
+				var $comment = $(element).closest('.comment').find('span.comment-text');
 				//Grab the html, to keep the line breaks, save this one incase they cancel
 				var commentText = $comment.html();
 				//Convert the <br> to new lines for tehe update
@@ -87,7 +90,7 @@
 				var $cancelAction = $('<button class="btn">Cancel</button>').click(function() {
 					$comment.children().remove();
 					$comment.html(commentText);
-					$comment.next('div.actions').show();
+					$comment.next('span.actions').show();
 				});
 
 				$updateActions.append($saveAction).append($cancelAction);
@@ -95,7 +98,7 @@
 				var $updateWrapper = $('<div></div>').addClass('update-comment').append($textarea).append($updateActions);
 
 				$comment.append($updateWrapper);
-				$(element).closest('div.actions').hide();
+				$(element).closest('span.actions').hide();
 			},
 			_addError : function($element, errorMessage) {
 				$element.after('<div class="error-message">' + errorMessage + '</div>');
@@ -122,9 +125,9 @@
 					dataType : 'json',
 					url : '/comments/add.json',
 					beforeSend : function(jqXHR, settings) {
-						$.cs.comments.prototype._removeProcessingBar();
-						$.cs.comments.prototype._removeError($('#CommentComment'));
-						$.cs.comments.prototype._addProcessingBar($('#CommentComment'));
+						$.cs.comments.prototype._removeProcessingBar.call(self, self.changer);
+						$.cs.comments.prototype._removeError.call(self, $('#CommentComment'));
+						$.cs.comments.prototype._addProcessingBar.call(self, self.changer);
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
 						if (data.success.isSuccess) {
@@ -149,16 +152,16 @@
 
 					},
 					complete : function() {
-						$.cs.comments.prototype._removeProcessingBar();
+						$.cs.comments.prototype._removeProcessingBar.call(self, self.changer);
 					}
 				});
 			},
 			_updateComment : function(element) {
 				var self = this;
-				var $comment = $(element).closest('li.comment').children('div.comment-text');
+				var $comment = $(element).closest('.comment').find('span.comment-text');
 				var $textarea = $(element).closest('div.update-comment').children('textarea');
 				var comment = $(element).closest('div.update-comment').children('textarea').val();
-				var commentId = $(element).closest('li.comment').attr('data-id');
+				var commentId = $(element).closest('.comment').attr('data-id');
 				$.ajax({
 					type : "post",
 					data : {
@@ -170,16 +173,16 @@
 					dataType : 'json',
 					url : '/comments/update.json',
 					beforeSend : function(jqXHR, settings) {
-						$.cs.comments.prototype._removeProcessingBar();
+						$.cs.comments.prototype._removeProcessingBar($(element));
 						$.cs.comments.prototype._removeError($textarea);
-						$.cs.comments.prototype._addProcessingBar($(element).closest('div.update-comment').children('textarea'));
+						$.cs.comments.prototype._addProcessingBar($(element));
 					},
 					success : function(data, textStatus, XMLHttpRequest) {
 						if (data.response.isSuccess) {
 							$comment.children().remove();
 							var updateText = $.cs.comments.prototype._nl2br(comment);
 							$comment.html(updateText);
-							$comment.next('div.actions').show();
+							$comment.next('span.actions').show();
 
 						} else {
 							$.each(data.response.errors, function() {
@@ -193,7 +196,7 @@
 
 					},
 					complete : function() {
-						$.cs.comments.prototype._removeProcessingBar();
+						$.cs.comments.prototype._removeProcessingBar($(element));
 					}
 				});
 			},
@@ -232,10 +235,10 @@
 				});
 			},
 			_addProcessingBar : function(element) {
-				element.after("<img class='ajax-loader' src='/img/ajax-loader.gif'/>");
+				element.button('loading');
 			},
-			_removeProcessingBar : function() {
-				$('img.ajax-loader').remove();
+			_removeProcessingBar : function(element) {
+				element.button('reset');
 			},
 			_buildComnentPost : function() {
 				// <div class="post-comment-container">
@@ -251,13 +254,14 @@
 				// </div>
 				// </form>
 				// </div>
-				var commentPost = '<div class="post-comment-container">';
-				commentPost += '<form id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
+				var commentPost = '';
+				commentPost += '<form class="form-horizontal" id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
 				commentPost += '<div style="display:none;"><input type="hidden" value="POST" name="_method"></div>';
-				commentPost += '<fieldset><ul class="form-fields unstyled">';
-				commentPost += '<li><div class="input textarea"><div class="label-wrapper"><label for="CommentComment">Discuss</label></div><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></li>';
-				commentPost += '</ul></fieldset>'
-				commentPost += '</form></div>';
+				commentPost += '<fieldset>';
+				commentPost += '<div class="control-group"><label class="control-label" for="CommentComment">Comment</label><div class="controls"><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></div>';
+				commentPost += '</fieldset>'
+				commentPost += '<div class="form-actions"></div>'
+				commentPost += '</form>';
 
 				return commentPost;
 			},
@@ -273,30 +277,33 @@
 				 */
 				//IF permissions are there then these are the top level and override
 				//anything at the comment level
-				var commentMarkup = '<li class="comment" data-id="' + comment.Comment.id + '">';
-				commentMarkup += '<div class="comment-info"><span class="user">';
+				var commentMarkup = '<div class="comment" data-id="' + comment.Comment.id + '">';
+				commentMarkup += '<img alt="" src="/img/icon/avatar.png">';
+				commentMarkup += '<div class="content">';
+				commentMarkup += '<span class="commented-by">';
 				commentMarkup += '<a href="/stashs/view/' + comment.User.username + '">';
 				commentMarkup += comment.User.username;
-				commentMarkup += '</a></span>';
-				commentMarkup += '<span class="datetime">';
-				commentMarkup += comment.Comment.formatted_created;
-				commentMarkup += '</span>';
-				commentMarkup += '</div>';
-				commentMarkup += '<div class="comment-text">';
+				commentMarkup += '</a></span><span class="comment-text">';
 				var text = $.cs.comments.prototype._nl2br(comment.Comment.comment);
 				commentMarkup += text;
-				commentMarkup += '</div>';
-				commentMarkup += '<div class="actions">'
+				commentMarkup += '</span><span class="actions">';
 				if (comment.hasOwnProperty('permissions')) {
 					if (comment.permissions.edit) {
-						commentMarkup += '<span><a class="link edit">Edit</a></span>';
+						commentMarkup += '<a class="link edit"><i class="icon-pencil"></i>Edit</a>';
 					}
 					if (comment.permissions.remove) {
-						commentMarkup += '<span><a class="link remove">Delete</a></span>';
+						commentMarkup += '<a class="link remove"><i class="icon-trash"></i>Remove</a>';
 					}
 				}
+
+				commentMarkup += '	<span class="pull-right">' + comment.Comment.formatted_created + '</span>';
+				commentMarkup += '</span>';
+				//class=actions
+
 				commentMarkup += '</div>';
-				commentMarkup += '</li>';
+				// class=content
+				commentMarkup += '</div>';
+				// class=comment
 
 				return commentMarkup;
 			},
