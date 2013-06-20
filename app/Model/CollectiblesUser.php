@@ -134,7 +134,7 @@ class CollectiblesUser extends AppModel {
 							}
 						}
 					}
-					debug($val);
+
 					// make sure we have a listing, these listings will only have one transaction
 					if (isset($val['Listing']) && !empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
 						$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
