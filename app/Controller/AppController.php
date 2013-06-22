@@ -266,7 +266,7 @@ class AppController extends Controller {
 		if (isset($search)) {
 			//Is the search an empty string?
 			if ($search == '') {
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			} else {
 				//Using like for now because switch to InnoDB
 				$test = array();
@@ -287,11 +287,11 @@ class AppController extends Controller {
 				array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
 
 				array_push($conditions, $test);
-				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+				$this -> paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
 			}
 		} else {
 			//This a search based on filters, not a search string
-			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $tableFilters), 'limit' => $listSize);
+			$this -> paginate = array("joins" => $joins, 'order' => $order, "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $tableFilters), 'limit' => $listSize);
 		}
 
 		$data = $this -> paginate('Collectible');
@@ -407,6 +407,25 @@ class AppController extends Controller {
 			array_push($searchFilterGroups, $licenseSearchGroup);
 
 		}
+
+		// always add all scales
+		$this -> loadModel('Scale');
+		$scales = $this -> Scale -> find("all", array('contain' => false));
+
+		$scaleSearchGroup = array();
+		$scaleSearchGroup['filters'] = array();
+		$scaleSearchGroup['selected'] = array();
+		$scaleSearchGroup['label'] = __('Scale');
+		$scaleSearchGroup['type'] = 's';
+		$scaleSearchGroup['allowMultiple'] = 'true';
+
+		foreach ($scales as $key => $value) {
+			$serachFilter = array();
+			$serachFilter['id'] = $value['Scale']['id'];
+			$serachFilter['label'] = $value['Scale']['scale'];
+			array_push($scaleSearchGroup['filters'], $serachFilter);
+		}
+		array_push($searchFilterGroups, $scaleSearchGroup);
 
 		$orderSearchGroup = array();
 		$orderSearchGroup['filters'] = array();

@@ -716,11 +716,11 @@ a.forgot-password {
 	padding-top: 0;
 }
 /**
-.comments-container .comments  .comment {
-	padding-left: 20px;
-	padding-right: 20px;
-	margin: 0 -20px;
-}*/
+ .comments-container .comments  .comment {
+ padding-left: 20px;
+ padding-right: 20px;
+ margin: 0 -20px;
+ }*/
 
 .comments-container .comments .comment > img {
 	display: block;
@@ -765,3 +765,39 @@ a.forgot-password {
 	margin-right: 5px;
 	text-decoration: none;
 }
+
+.checkbox-select ul li label {
+	padding: 2px 5px;
+	line-height: 19px;
+	color: #808080;
+	display: block;
+	float: none;
+	width: auto;
+	padding: 0;
+	margin-left: 20px;
+	line-height: 18px;
+	text-align: left;
+	white-space: normal;
+}
+
+.checkbox-select ul li:hover {
+	background-color: #27A0E5;
+	background-image: linear-gradient(to bottom, #2FA4E7, #1A99E2);
+	background-repeat: repeat-x;
+	text-decoration: none;
+}
+
+.checkbox-select ul li:hover label {
+	color: #FFF;
+}
+
+.checkbox-select ul li label input[type=radio], .checkbox-select ul li label input[type=checkbox] {
+	margin-bottom: 0;
+	margin-left: -20px;
+	float: left;
+}
+
+.checkbox-select ul li label span {
+	white-space: nowrap;
+}
+
