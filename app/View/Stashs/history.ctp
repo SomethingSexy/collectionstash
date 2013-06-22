@@ -4,51 +4,30 @@
 <?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
+<h2><?php
+	echo $stashUsername . '\'s History';
+?></h2>
 
-
-<div id="my-stashes-component" class="span12">
-
-		<div class="page-header">
-			<h1><?php echo __('History'); ?></h1>
-		</div>
+<div id="my-stashes-component" class="widget widget-tabs">
 		<?php echo $this -> element('flash'); ?>
-		<div class="row">
-			<div class="span8">
-				<div class="actions stash">
-					<ul class="nav nav-pills">
-						<?php
-						echo '<li>';
-						?>
-						
-						<?php echo '<a href="/stash/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
-						</li>
-						<?php
-						echo '<li>';
-						?>
-						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?>
-						</li>
-						<li>
-						<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
-						</li>
-						<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
-						<li class="selected"><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
-					</ul>	
-				</div>
-				
-			</div>
-			<div class="span4">
-				<!--
-				<div class="btn-group pull-right years">
-				    <button class="btn">All</button>
-				    <button class="btn">Sold</button>
-			    </div>			-->	
-			</div>
+		<ul class="nav nav-tabs widget-wide">
+			<?php
+			echo '<li>';
+			?>
 			
-		</div>
-			
-		
-
-			
+			<?php echo '<a href="/stash/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
+			</li>
+			<?php
+			echo '<li>';
+			?>
+			<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?>
+			</li>
+			<li>
+			<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
+			</li>
+			<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
+			<li class="active"><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
+		</ul>			
 	<div class="row">
 		<div class="span12">
 			<div class="">

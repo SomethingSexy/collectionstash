@@ -21,7 +21,7 @@ echo 'var searchUrl = "' . $searchUrl . '";';
 			$count = count($saveSearchFilters[$filterGroup['type']]);
 		}
 
-		echo '<div class="btn-group filter" data-type="' . $filterGroup['type'] . '" data-allow-multiple="' .$filterGroup['allowMultiple'] . '">';
+		echo '<div class="btn-group filter checkbox-select" data-type="' . $filterGroup['type'] . '" data-allow-multiple="' .$filterGroup['allowMultiple'] . '">';
 		echo '<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">';
 
 		if ($count > 0) {
@@ -34,13 +34,15 @@ echo 'var searchUrl = "' . $searchUrl . '";';
 		echo '<ul class="dropdown-menu">';
 		foreach ($filterGroup['filters'] as $key => $filter) {
 			echo '<li>';
+			echo '<label>';
 			echo '<input  data-filter="' . $filter['id'] . '" class="filter-links" type="checkbox" value="' . $filter['id'] . '"';
 			if (isset($saveSearchFilters[$filterGroup['type']]) && in_array($filter['id'], $saveSearchFilters[$filterGroup['type']])) {
 				echo ' checked ';
 			}
 
-			echo '/>';
-			echo '<label for="">' . $filter['label'] . '</label>';
+			echo '/>';			
+			echo '<span>' . $filter['label'] . '</span>';
+			echo '</label>';
 			echo '</li>';
 		}
 		echo '</ul>';

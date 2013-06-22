@@ -25,7 +25,7 @@
 						self.selectedFilters[type] = [];
 					}
 
-					$(this).children('ul').children('li').children('.filter-links').each(function() {
+					$(this).children('ul').children('li').children('label').children('.filter-links').each(function() {
 						if ($(this).is(':checked')) {
 							self.selectedFilters[type].push($(this).attr('data-filter'));
 						}
@@ -33,16 +33,16 @@
 				});
 
 				//This is for clicking a specific filter
-				this.element.children('.filter').children('ul').children('li').children('.filter-links').click(function() {
+				this.element.children('.filter').children('ul').children('li').children('label').click(function() {
 					var selectedType = $(this).closest('.filter').attr('data-type');
 					var allowMulitple = $(this).closest('.filter').attr('data-allow-multiple');
-					var selectedFilter = $(this).attr('data-filter');
+					var selectedFilter = $(this).find('.filter-links').attr('data-filter');
 
 					if (!self.selectedFilters.hasOwnProperty(selectedType)) {
 						self.selectedFilters[selectedType] = [];
 					}
 
-					if ($(this).is(':checked')) {
+					if ($(this).find('.filter-links').is(':checked')) {
 						if(allowMulitple === 'false'){
 							self.selectedFilters[selectedType] = [];
 						}

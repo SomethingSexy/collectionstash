@@ -9,7 +9,7 @@ class CollectiblesController extends AppController {
 
 	var $actsAs = array('Searchable.Searchable');
 
-	public $filters = array('m' => array('model' => 'Collectible', 'id' => 'manufacture_id'), 'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id'), 'l' => array('model' => 'Collectible', 'id' => 'license_id'), 't' => array('model' => 'Tag', 'id' => 'id'), 'o' => array('custom' => true, 'id' => 'order'));
+	public $filters = array('m' => array('model' => 'Collectible', 'id' => 'manufacture_id'), 'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id'), 'l' => array('model' => 'Collectible', 'id' => 'license_id'),'s' => array('model' => 'Collectible', 'id' => 'scale_id'), 't' => array('model' => 'Tag', 'id' => 'id'), 'o' => array('custom' => true, 'id' => 'order'));
 
 	/**
 	 * This method will allow us to quick add a collectible from a selected collectible.
