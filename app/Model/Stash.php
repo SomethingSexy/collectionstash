@@ -196,5 +196,14 @@ class Stash extends AppModel {
 
 	}
 
+	public function getProfileSettings($user) {
+		$stash = $this -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
+		$profileSettings = array();
+		$profileSettings['privacy'] = $stash['Stash']['privacy'];
+
+		return $profileSettings;
+
+	}
+
 }
 ?>

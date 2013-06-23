@@ -49,20 +49,6 @@ class StashsController extends AppController {
 
 	}
 
-	public function profileSettings() {
-		if ($this -> isLoggedIn()) {
-			$user = $this -> getUser();
-
-			$stash = $this -> Stash -> find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
-			$profileSettings = array();
-			$profileSettings['privacy'] = $stash['Stash']['privacy'];
-
-			$this -> set('aProfileSettings', array('success' => array('isSuccess' => true), 'isTimeOut' => false, 'responseData' => $profileSettings));
-		} else {
-			$this -> set('aProfileSettings', array('success' => array('isSuccess' => false), 'isTimeOut' => true));
-		}
-	}
-
 	public function updateProfileSettings() {
 		$this -> request -> data = Sanitize::clean($this -> request -> data, array('encode' => false));
 		if ($this -> isLoggedIn()) {
