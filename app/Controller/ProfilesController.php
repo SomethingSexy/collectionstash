@@ -6,12 +6,12 @@ class ProfilesController extends AppController {
 	public $helpers = array('Html', 'Js', 'FileUpload.FileUpload', 'Minify');
 
 	public function index() {
-		if ($this -> isUserAdmin()) {
-			$this -> set('allowInvites', true);
-		} else {
-			$this -> set('allowInvites', Configure::read('Settings.Profile.allow-invites'));
-		}
+		$this -> checkLogIn();
+		$this -> loadModel('Stash');
 
+		$stashProfileSettings = $this -> Stash -> getProfileSettings($this -> getUser());
+
+		$this -> set(compact('stashProfileSettings'));
 	}
 
 }

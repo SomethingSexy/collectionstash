@@ -33,17 +33,17 @@
 				});
 
 				//This is for clicking a specific filter
-				this.element.children('.filter').children('ul').children('li').children('label').click(function() {
+				this.element.children('.filter').children('ul').children('li').children('label').children('.filter-links').click(function(event) {
 					var selectedType = $(this).closest('.filter').attr('data-type');
 					var allowMulitple = $(this).closest('.filter').attr('data-allow-multiple');
-					var selectedFilter = $(this).find('.filter-links').attr('data-filter');
+					var selectedFilter = $(this).attr('data-filter');
 
 					if (!self.selectedFilters.hasOwnProperty(selectedType)) {
 						self.selectedFilters[selectedType] = [];
 					}
 
-					if ($(this).find('.filter-links').is(':checked')) {
-						if(allowMulitple === 'false'){
+					if ($(this).is(':checked')) {
+						if (allowMulitple === 'false') {
 							self.selectedFilters[selectedType] = [];
 						}
 						self.selectedFilters[selectedType].push(selectedFilter);
@@ -54,7 +54,6 @@
 
 					// This will allow for multiples
 					var queryString = self._buildQueryString();
-
 					window.location.href = searchUrl + "?" + queryString;
 
 				});
