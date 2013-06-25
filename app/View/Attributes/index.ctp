@@ -1,9 +1,9 @@
-<div class="component" id="attribute-component">
-	<div class="inside">
-		<div class="page-header">
-			<h2><?php echo __('Collectible Parts'); ?></h2>
-		</div>
-		<div class="component-view">
+<div class="widget" id="attribute-component">
+	<div class="widget-header">
+		<h3><?php echo __('Collectible Parts'); ?></h3>
+	</div>
+	
+	<div class="widget-content">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
 			<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
@@ -121,24 +121,14 @@
  ?>
 			</tbody></table>
 		</div>	
-		<div class="paging">
-			<p>
-				<?php
-				echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} parts out of  {:count} total.', true)));
-				?>
-			</p>
-			<?php
-
-			$urlparams = $this -> request -> query;
-			unset($urlparams['url']);
-			$this -> Paginator -> options(array('url' => array('?' => http_build_query($urlparams))));
-
-			echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));
-			?>
-			<?php echo $this -> Paginator -> numbers(array('separator' => false)); ?>
-			<?php echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled')); ?>
+			<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} parts out of  {:count} total.', true)));?></p>
+		<div class="pagination">
+			<ul>
+			<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+			<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
+			<?php echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+			</ul>
 		</div>		
-		</div>
 	</div>
 </div>
 <script>
