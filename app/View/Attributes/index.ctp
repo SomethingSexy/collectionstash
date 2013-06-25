@@ -1,31 +1,8 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false)); ?>
-<!-- This is eventuall going to have to be used as a component and a dialog when adding from the adding collectible process -->
-<?php
-echo $this -> Minify -> script('js/jquery.treeview', array('inline' => false));
-echo $this -> Minify -> script('js/cs.core.tree', array('inline' => false));
-echo $this -> Html -> script('cs.attribute', array('inline' => false));
-?>
-
-<!-- Eventually show the image of the part 
-	Add filters to this page as well -->
 <div class="component" id="attribute-component">
 	<div class="inside">
 		<div class="page-header">
 			<h2><?php echo __('Collectible Parts'); ?></h2>
 		</div>
-		<?php
-			// Remove this for now because I would rather encourage people
-			// adding parts directly to collectibles instead
-			// <div class="btn-group pull-right">
-			// <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-			// Action
-			// <span class="caret"></span>
-			// </a>
-			// <ul class="dropdown-menu">
-			// <li><a id="add-new-item-link" class="link">Add New Item</a></li>
-			// </ul>
-			// </div>
-	 ?>
 		<div class="component-view">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
@@ -139,21 +116,6 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 					echo '<td data-id="' . $attribute['Scale']['id'] . '"  class="scale">';
 					echo $attribute['Scale']['scale'];
 					echo '</td>';
-					// echo '<td class="actions">';
-// 
-					// if (isset($isLoggedIn) && $isLoggedIn === true) {
-						// echo '<div class="btn-group">';
-						// echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a>';
-						// echo '<ul class="dropdown-menu">';
-						// echo '<li><a class="link edit-attribute-link" title=' . __('Edit Part') . '>Edit Part</a>';
-						// echo '</li>';
-						// echo '<li><a class="link remove-attribute" title=' . __('Remove Part') . '>Delete Part</a>';
-						// echo '</li>';
-						// echo '</ul>';
-						// echo '</div>';
-					// }
-// 
-					// echo '</td>';
 					echo '</tr>';
 				}
  ?>
@@ -185,22 +147,6 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 			$(this).parent().parent().children('.collectibles').toggle();
 		});
 
-		var removeAttributes = new RemoveAttributes({
-			$element : $('.standard-list.attributes')
-		});
-		removeAttributes.init();
-
-		var updateAttributes = new UpdateAttributes({
-			$element : $('.standard-list.attributes')
-		});
-		updateAttributes.init();
-
-		var addAttributes = new AddAttributes({
-
-		});
-
-		addAttributes.init();
-
 		$('.standard-list.attributes.index > table > tbody> tr > td > span.popup').popover({
 			placement : 'bottom',
 			html : 'true',
@@ -209,7 +155,3 @@ echo $this -> Html -> script('cs.attribute', array('inline' => false));
 
 	}); 
 </script>
-
-<?php echo $this -> element('attribute_remove_dialog'); ?>
-<?php echo $this -> element('attribute_update_dialog'); ?>
-<?php echo $this -> element('attribute_add_dialog'); ?>

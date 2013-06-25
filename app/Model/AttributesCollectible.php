@@ -144,7 +144,7 @@ class AttributesCollectible extends AppModel {
 
 		} else {
 			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Attribute');
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'AttributesCollectible');
 			$retVal['response']['errors'] = $errors;
 		}
 
