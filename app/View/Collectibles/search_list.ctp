@@ -216,7 +216,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory =      "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory ="<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {

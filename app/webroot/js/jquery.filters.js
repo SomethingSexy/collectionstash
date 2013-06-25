@@ -65,6 +65,10 @@
 			_buildQueryString : function() {
 				var queryString = '';
 
+				if (searchFilter && searchFilter !== '') {
+					queryString += 'q=' + searchFilter + '&';
+				}
+
 				$.each(this.selectedFilters, function(index, filterGroup) {
 					if (filterGroup.length > 0) {
 						var length = filterGroup.length;
