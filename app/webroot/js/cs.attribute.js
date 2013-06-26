@@ -533,13 +533,18 @@ RemoveAttributeLinks.prototype = Object.create(AttributesBase.prototype);
  */
 RemoveAttributeLinks.prototype.init = function() {
 	var self = this;
-	this.$dialog = $('#attribute-remove-link-dialog').dialog({
-		height : 'auto',
-		width : 'auto',
-		modal : true,
-		autoOpen : false,
-		resizable : false,
+	this.$dialog = $('#attribute-remove-link-dialog').modal({
+		show : false
 	});
+
+	$('.btn.btn-primary', '#attribute-remove-link-dialog').click(function() {
+		if ($.trim($('#AttributesCollectibleReason').val()) !== '') {
+			self.submit(attribute);
+		} else {
+			$('#AttributesCollectibleReason').after('<div class="error-message">Reason is required.</div>');
+		}
+	});
+
 	this.options.$element.children('.attributes-list').on('click', 'div.attribute .actions a.remove-link', function() {
 		var $element = $(this);
 		self.open(self.getAttribute($element));
@@ -561,26 +566,8 @@ RemoveAttributeLinks.prototype.open = function(attribute) {
 	// reset the remove
 	self.reset();
 
-	this.$dialog.dialog("option", "buttons", [{
-		text : 'Submit',
-		'class' : 'btn btn-primary',
-		"click" : function() {
-			if ($.trim($('#AttributesCollectibleReason').val()) !== '') {
-				self.submit(attribute);
-			} else {
-				$('#AttributesCollectibleReason').after('<div class="error-message">Reason is required.</div>');
-			}
-		}
-	}, {
-		text : 'Cancel',
-		'class' : 'btn',
-		'click' : function() {
-			$(this).dialog('close');
-		}
-	}]);
-
 	// open the remove dialog
-	self.$dialog.dialog('open');
+	self.$dialog.modal('show');
 };
 
 RemoveAttributeLinks.prototype.submit = function(attribute) {
