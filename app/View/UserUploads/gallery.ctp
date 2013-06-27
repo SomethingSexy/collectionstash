@@ -1,10 +1,7 @@
-<div id="gallery-component" class="component">
-	<div class="inside">
-		<div class="page-header">
-			<h2><?php echo __('Gallery', true)?></h2>
-		</div>
+<h2><?php echo __('Gallery', true)?></h2>
+<div class="widget">
+	<div class="widget-content">
 		<?php echo $this -> element('flash'); ?>
-		<div class="component-view">
 		<p><?php echo __('Check out some of our member\'s awesome collections below!  Click on their username to see more of their collection.');?></p>
 	<?php
 	if (isset($userUploads) && !empty($userUploads)) {
@@ -34,7 +31,6 @@
 		echo '</div>';
 	}
 	?>
-		</div>
 	</div>
 </div>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
