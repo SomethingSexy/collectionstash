@@ -1,16 +1,13 @@
-<div class="component" id="registry-component">
-	<div class="inside">
-		<div class="component-title">
-			<h2><h2><?php  echo __('Registry'); ?></h2></h2>
+<div class="widget">
+		<div class="widget-header">	
+			<h3><?php  echo __('Registry'); ?></h3>
 		</div>
+		<div class="widget-content">
 		<?php echo $this -> element('flash'); ?>
-		<div class="component-info">
-			<div>
+			<p>
 				<?php echo __('The registry is a list of members who own this collectible.')
 				?>
-			</div>
-		</div>		
-		<div class="component-view">
+			</p>	
 			<?php
 			if (isset($registry) && !empty($registry)) {
 				echo '<h4>Owned:</h4>';
@@ -71,5 +68,4 @@
 			}
 			?>
 		</div>
-	</div>
 </div>
