@@ -7,10 +7,11 @@ $lastKey = 0;
 $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 ?>
 
-<div class="well">
-
-	<h3><?php echo __('Parts and Accessories'); ?></h3>
-
+<div class="widget">
+	<div class="widget-header">	
+		<h3><?php echo __('Parts and Accessories'); ?></h3>
+	</div>
+	<div class="widget-content">
 	<?php
 	// TO be able to handle editing both the attribute and the attributecollectible easier
 	// I am going to put the JSON object as a data attribute on each row
@@ -153,4 +154,5 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 		}
 	}
 	?>
+	</div>
 </div>
