@@ -1,6 +1,8 @@
-<div class="well">
- <h2><?php echo __('Variants'); ?></h2>
-
+<div class="widget">
+	<div class="widget-header">	
+ 		<h3><?php echo __('Variants'); ?></h3>
+	</div>
+	<div class="widget-content">
 <?php if (!empty($variants)) { ?>
 	<ul class="thumbnails">
 	<?php  
@@ -30,4 +32,5 @@
 	<p><?php echo __('This collectible has no variants.'); ?></p>	
 	
 <?php	  }?>
+	</div>
 </div>

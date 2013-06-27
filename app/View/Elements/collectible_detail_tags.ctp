@@ -1,9 +1,10 @@
-<div class="well">
+<div class="widget">
+	<div class="widget-header">	
 		<h3><?php echo __('Tags');?></h3>
-	
+	</div>
+	<div class="widget-content">
 	<?php
-    echo '<div class="collectible tags">';
-    echo '<ul class="tag-list unstyled">';
+    echo '<ul class="">';
     if (isset($collectibleCore['CollectiblesTag']) && !empty($collectibleCore['CollectiblesTag'])) {
         foreach ($collectibleCore['CollectiblesTag'] as $tag) {
             echo '<li class="tag"><span class="tag-name">';
@@ -15,6 +16,6 @@
         echo '<li class="empty">No tags have been added.</li>';
     }
     echo '</ul>';
-    echo '</div>';
 	?>
+	</div>
 </div>
