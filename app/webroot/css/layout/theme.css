@@ -414,6 +414,10 @@ div.subnav-fixed {
 	width: 200px;
 }
 
+.tiles.sort-mode .tile {
+	height: 200px;
+}
+
 .tiles .tile div.image {
 	display: block;
 	margin: auto;
@@ -801,3 +805,6 @@ a.forgot-password {
 	white-space: nowrap;
 }
 
+.stash-item .user-detail li {
+	text-align : center;
+}
