@@ -329,12 +329,8 @@ RemoveAttributes.prototype = Object.create(AttributesBase.prototype);
  */
 RemoveAttributes.prototype.init = function() {
 	var self = this;
-	this.$dialog = $('#attribute-remove-dialog').dialog({
-		height : 'auto',
-		width : 'auto',
-		modal : true,
-		autoOpen : false,
-		resizable : false,
+	this.$dialog = $('#attribute-remove-dialog').modal({
+		show : false
 	});
 
 	// Setup a bunch of events we don't want to tear down and rebuild each time
@@ -419,26 +415,26 @@ RemoveAttributes.prototype.open = function(attribute) {
 		$formFields.children('.directional-text').hide();
 	}
 
-	this.$dialog.dialog("option", "buttons", [{
-		text : 'Submit',
-		'class' : 'btn btn-primary',
-		"click" : function() {
-			if ($.trim($('#AttributeReason').val()) !== '') {
-				self.submit(attribute);
-			} else {
-				$('#AttributeReason').after('<div class="error-message">Reason is required.</div>');
-			}
-		}
-	}, {
-		text : 'Cancel',
-		'class' : 'btn',
-		'click' : function() {
-			$(this).dialog('close');
-		}
-	}]);
+	// this.$dialog.dialog("option", "buttons", [{
+		// text : 'Submit',
+		// 'class' : 'btn btn-primary',
+		// "click" : function() {
+			// if ($.trim($('#AttributeReason').val()) !== '') {
+				// self.submit(attribute);
+			// } else {
+				// $('#AttributeReason').after('<div class="error-message">Reason is required.</div>');
+			// }
+		// }
+	// }, {
+		// text : 'Cancel',
+		// 'class' : 'btn',
+		// 'click' : function() {
+			// $(this).dialog('close');
+		// }
+	// }]);
 
 	// open the remove dialog
-	self.$dialog.dialog('open');
+	self.$dialog.modal('show');
 };
 
 RemoveAttributes.prototype.submit = function(attribute) {
@@ -539,7 +535,7 @@ RemoveAttributeLinks.prototype.init = function() {
 
 	$('.btn.btn-primary', '#attribute-remove-link-dialog').click(function() {
 		if ($.trim($('#AttributesCollectibleReason').val()) !== '') {
-			self.submit(attribute);
+			self.submit();
 		} else {
 			$('#AttributesCollectibleReason').after('<div class="error-message">Reason is required.</div>');
 		}
@@ -547,7 +543,8 @@ RemoveAttributeLinks.prototype.init = function() {
 
 	this.options.$element.children('.attributes-list').on('click', 'div.attribute .actions a.remove-link', function() {
 		var $element = $(this);
-		self.open(self.getAttribute($element));
+		self.attribute = self.getAttribute($element);
+		self.open();
 	});
 };
 
@@ -561,7 +558,7 @@ RemoveAttributeLinks.prototype.reset = function() {
 /**
  * This gets called everytime we open the remove dialog, we need to do some reset stuff
  */
-RemoveAttributeLinks.prototype.open = function(attribute) {
+RemoveAttributeLinks.prototype.open = function() {
 	var self = this;
 	// reset the remove
 	self.reset();
@@ -570,9 +567,9 @@ RemoveAttributeLinks.prototype.open = function(attribute) {
 	self.$dialog.modal('show');
 };
 
-RemoveAttributeLinks.prototype.submit = function(attribute) {
+RemoveAttributeLinks.prototype.submit = function() {
 	var self = this;
-	var id = attribute.getAttributeCollectible().id;
+	var id = this.attribute.getAttributeCollectible().id;
 	if ($('#AttributesCollectibleRemove').is(":checked")) {
 		var url = '/attributes_collectibles/remove.json';
 		// If we are passing in an override admin or the options are set to admin mode
@@ -601,7 +598,7 @@ RemoveAttributeLinks.prototype.submit = function(attribute) {
 			success : function(responseText, statusText, xhr, $form) {
 				if (responseText.response.isSuccess) {
 					responseText.response.data.id = id;
-					self.$dialog.dialog('close');
+					self.$dialog.modal('hide');
 					var message = 'Removal has been submitted!';
 					if (!responseText.response.data.isEdit) {
 						message = 'Part has been removed!';

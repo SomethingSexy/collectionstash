@@ -9,16 +9,13 @@ echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => fals
 
 echo $this -> Minify -> script('js/locale', array('inline' => false));
 ?>
-<div id="user-uploads-component" class="component">
-	<div class="inside">
-		<div class="component-title">
-			<h2><?php echo $username . '\'s' .__(' uploads', true)?></h2>
-			<div class="actions">
-				<ul></ul>
-			</div>
+<h2><?php echo $username . '\'s' .__(' Photos', true)?></h2>
+<div id="user-uploads-component" class="widget">
+		<div class="widget-header">
+			<i class="icon-camera"></i><h3>Photos</h3>
 		</div>
 		<?php echo $this -> element('flash'); ?>
-		<div class="component-view">
+		<div class="widget-content">
 			<div class="stats">
 				<span class="count"><?php echo __('Images') . ': <span id="user-count">' . $uploadCount . '</span>/' . Configure::read('Settings.User.uploads.total-allowed'); ?></span>
 			</div>
@@ -69,7 +66,6 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 				</table>
 			</form>
 		</div>
-	</div>
 </div>
 <script>
 		$(function() {
