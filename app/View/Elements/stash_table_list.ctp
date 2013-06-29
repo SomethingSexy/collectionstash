@@ -119,17 +119,19 @@ foreach ($collectibles as $key => $myCollectible) {
 	echo '</tr>';
 }
 echo '</table>';
-echo '<div class="paging">';
 echo '<p>';
 echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 echo '</p>';
+echo '<div class="pagination">';
 
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 $this -> Paginator -> options(array('url' => $this -> passedArgs));
 
-echo $this -> Paginator -> prev('<< ' . __('previous', true), array(), null, array('class' => 'disabled'));
-echo $this -> Paginator -> numbers(array('separator' => false));
-echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
+echo '<ul>';
+echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled'));
+echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a'));
+echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled'));
+echo '</ul>';
 echo '</div>';
 ?>
