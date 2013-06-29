@@ -15,7 +15,10 @@ if ($history) {
 echo '>';
 echo '<thead>';
 echo '<tr>';
-echo '<th>' . $this -> Paginator -> sort('active', 'Bought/Sold') . '</th>';
+if ($history) {
+	echo '<th>' . $this -> Paginator -> sort('active', 'Bought/Sold') . '</th>';
+}
+
 if ($showThumbnail) {
 	echo '<th></th>';
 }
@@ -35,10 +38,12 @@ echo '</tr>';
 echo '</thead>';
 foreach ($collectibles as $key => $myCollectible) {
 	echo '<tr class="stash-item">';
-	if ($myCollectible['CollectiblesUser']['active']) {
-		echo '<td class="bought-sold-icon"><i class="icon-plus"></i></td>';
-	} else {
-		echo '<td><i class="icon-minus"></i></td>';
+	if ($history) {
+		if ($myCollectible['CollectiblesUser']['active']) {
+			echo '<td class="bought-sold-icon"><i class="icon-plus"></i></td>';
+		} else {
+			echo '<td><i class="icon-minus"></i></td>';
+		}
 	}
 
 	if ($showThumbnail) {

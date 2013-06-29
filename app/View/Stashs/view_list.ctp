@@ -1,19 +1,20 @@
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
-<div id="my-stashes-component" class="well">
-		<h2><?php
-		echo $stashUsername . '\'s';
-		if ($stashType === 'default') {
-			echo __(' stash', true);
-		} else {
-			echo __(' wishlist', true);
-		}
-		?></h2>
+<h2><?php
+echo $stashUsername . '\'s';
+if ($stashType === 'default') {
+	echo __(' stash', true);
+} else {
+	echo __(' wishlist', true);
+}
+?></h2>
+<div id="my-stashes-component" class="widget widget-tabs">
+
 		<?php echo $this -> element('flash'); ?>
-			<div class="actions stash">
-				<ul class="nav nav-pills">
+
+				<ul class="nav nav-tabs widget-wide">
 					<?php
 					if ($stashType === 'default') {
-						echo '<li class="selected">';
+						echo '<li class="active">';
 					} else {
 						echo '<li>';
 					}
@@ -23,7 +24,7 @@
 					</li>
 					<?php
 					if ($stashType === 'wishlist') {
-						echo '<li class="selected">';
+						echo '<li class="active">';
 					} else {
 						echo '<li>';
 					}
@@ -36,9 +37,8 @@
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
 					<li><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 				</ul>	
-			</div>
-			<div class="title clearfix">
-				<h3><?php echo __('Collectibles'); ?></h3>
+	<div class="widget-content">
+			<div class="clearfix">
 				<div class="btn-group actions pull-left">
 						<?php
 						if (isset($myStash) && $myStash) {
@@ -72,14 +72,15 @@
  					?>
 			    </div>
 			</div>
+	</div>
 	<?php
 	if (isset($collectibles) && !empty($collectibles)) {
 		echo $this -> element('stash_table_list', array('collectibles' => $collectibles));
 	} else {
 		if ($stashType === 'default') {
-			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</div>';
+			echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 		} else {
-			echo '<div class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</div>';
+			echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</p>';
 		}
 	}
 	?>
