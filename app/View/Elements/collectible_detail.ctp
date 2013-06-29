@@ -267,55 +267,61 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				</div>
 			</div>
 		</div>
-	<?php } ?>
-</div>
-
-
-			<?php
-if ($adminMode) {
-			?>
-<div class="component" id="collectible-detail">
-	<div class="inside">
-		<div class="component-view">
-
-
-
-
-			<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form')); ?>
-			<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
-			<fieldset class="approval-fields">
-				<ul class="form-fields unstyled">
-					<li>
-						<div class="label-wrapper">
-							<label for=""> <?php echo __('Notes')
-								?></label>
+			<?php } ?>
+					<?php
+		if ($adminMode) {
+					?>
+		<div class="row-fluid spacer">
+			<div class="span12">
+				<div class="component" id="collectible-detail">
+					<div class="inside">
+						<div class="component-view">
+				
+				
+				
+				
+							<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form')); ?>
+							<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
+							<fieldset class="approval-fields">
+								<ul class="form-fields unstyled">
+									<li>
+										<div class="label-wrapper">
+											<label for=""> <?php echo __('Notes')
+												?></label>
+										</div>
+										<textarea rows="6" cols="30" name="data[Approval][notes]"></textarea>
+									</li>
+								</ul>
+							</fieldset>
+							</form>
+							<div class="links">
+								<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
+								<button id="deny-button" class="btn"><?php echo __('Deny'); ?></button>
+							</div>
+							<script>
+								//Eh move this out of here
+								$('#approval-button').click(function() {
+									$('#approve-input').val('true');
+									$('#approval-form').submit();
+								});
+								$('#deny-button').click(function() {
+									$('#approve-input').val('false');
+									$('#approval-form').submit();
+								});
+				
+							</script>
+						
 						</div>
-						<textarea rows="6" cols="30" name="data[Approval][notes]"></textarea>
-					</li>
-				</ul>
-			</fieldset>
-			</form>
-			<div class="links">
-				<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
-				<button id="deny-button" class="btn"><?php echo __('Deny'); ?></button>
+					</div>
+				</div>
 			</div>
-			<script>
-				//Eh move this out of here
-				$('#approval-button').click(function() {
-					$('#approve-input').val('true');
-					$('#approval-form').submit();
-				});
-				$('#deny-button').click(function() {
-					$('#approve-input').val('false');
-					$('#approval-form').submit();
-				});
-
-			</script>
-		
 		</div>
-	</div>
+			<?php } ?>	
+	
 </div>
-	<?php } ?>
+
+
+
 <script>
 		var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
