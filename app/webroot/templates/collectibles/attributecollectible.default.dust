@@ -111,7 +111,10 @@
 						<a class="link remove-link" title='Remove Collectible Part'>Remove Part From Collectible</a>
 					</li>
 					{#allowRemoveAttribute}
-					<li>
+					<!--
+ 						turned off for now, remove part from collectible will also delete and this is going
+ 						to get converted to the remove-duplicate/replace						
+						<li>
 						<a class="link remove-attribute" title='Delete Part'>Delete Part</a>
 					</li>
 					<!--<li>

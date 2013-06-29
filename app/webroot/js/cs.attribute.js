@@ -357,7 +357,7 @@ RemoveAttributes.prototype.init = function() {
 
 	// Setup the search submit stuff as well, we will want to hijack the submit button so it is all ajax
 	// it will go out and so another search and then we will display the results in the dialgo
-	var $formFields = $('#attribute-remove-dialog').children('.component').children('.inside').children('.component-view').find('.form-fields');
+	var $formFields = $('#attribute-remove-dialog').find('.form-fields');
 	$formFields.children('.how-link-item').children('.collectible-search').on('click', function() {
 		// Load the initial list
 		self._loadCollectiblesList();

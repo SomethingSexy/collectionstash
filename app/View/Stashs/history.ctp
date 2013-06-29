@@ -5,7 +5,7 @@
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <h2><?php
-	echo $stashUsername . '\'s History';
+echo $stashUsername . '\'s History';
 ?></h2>
 
 <div id="my-stashes-component" class="widget widget-tabs">
@@ -57,9 +57,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="span12 well">
-			<div class="">
+
 					<?php
 					if (isset($collectibles) && !empty($collectibles)) {
 						echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default', 'history' => true));
@@ -67,9 +65,7 @@
 						echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 					}
 	?>
-			</div>
-		</div>
-	</div>
+	
 </div>
 
 <script><?php
@@ -82,11 +78,92 @@ if (isset($reasons)) {
 	foreach ($graphData as $keyYear => $year) {
 		$counts .= $keyYear . ':[[';
 		foreach ($year as $keyMonth => $month) {
-			$counts .= '[' . $keyMonth . ' ,' . count($month['purchased']) . '],';
+			$monthLabel = $keyMonth;
+			// this is caca but will work for now
+			switch ($keyMonth) {
+				case 1 :
+					$monthLabel = '"January"';
+					break;
+				case 2 :
+					$monthLabel = '"February"';
+					break;
+				case 3 :
+					$monthLabel = '"March"';
+					break;
+				case 4 :
+					$monthLabel = '"April"';
+					break;
+				case 5 :
+					$monthLabel = '"May"';
+					break;
+				case 6 :
+					$monthLabel = '"June"';
+					break;
+				case 7 :
+					$monthLabel = '"July"';
+					break;
+				case 8 :
+					$monthLabel = '"August"';
+					break;
+				case 9 :
+					$monthLabel = '"September"';
+					break;
+				case 10 :
+					$monthLabel = '"October"';
+					break;
+				case 11 :
+					$monthLabel = '"November"';
+					break;
+				case 12 :
+					$monthLabel = '"December"';
+					break;
+			}
+
+			$counts .= '[' . $monthLabel . ' ,' . count($month['purchased']) . '],';
 		}
 		$counts .= '],[';
 		foreach ($year as $keyMonth => $month) {
-			$counts .= '[' . $keyMonth . ' ,' . count($month['sold']) . '],';
+			$monthLabel = $keyMonth;
+			// this is caca but will work for now
+			switch ($keyMonth) {
+				case 1 :
+					$monthLabel = '"January"';
+					break;
+				case 2 :
+					$monthLabel = '"February"';
+					break;
+				case 3 :
+					$monthLabel = '"March"';
+					break;
+				case 4 :
+					$monthLabel = '"April"';
+					break;
+				case 5 :
+					$monthLabel = '"May"';
+					break;
+				case 6 :
+					$monthLabel = '"June"';
+					break;
+				case 7 :
+					$monthLabel = '"July"';
+					break;
+				case 8 :
+					$monthLabel = '"August"';
+					break;
+				case 9 :
+					$monthLabel = '"September"';
+					break;
+				case 10 :
+					$monthLabel = '"October"';
+					break;
+				case 11 :
+					$monthLabel = '"November"';
+					break;
+				case 12 :
+					$monthLabel = '"December"';
+					break;
+			}
+			$counts .= '[' . $monthLabel . ' ,' . count($month['sold']) . '],';
 		}
 		$counts .= ']],';
 	}
