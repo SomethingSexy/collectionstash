@@ -4,55 +4,65 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
 	<div class="page-header">
-		<h2><?php echo $manufacture['Manufacture']['title']?></h2>
+		<h2><?php echo $manufacture['Manufacture']['title']?> <small><?php echo $manufacture['Manufacture']['url']
+				?></small></h2>
 	</div>	
-		<span class="url"><?php echo $manufacture['Manufacture']['url']
-				?></span>
 	<div class="row">
 		<div class="span4">
-			<div class="well">			
-				<dl class="dl-horizontal">
-		
-					<dt><?php echo __('Total Collectibles'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectible_count']
-						?></dd>
-		
-					<dt><?php echo __('Percentage'); ?></dt><dd><?php echo $manufacture['Manufacture']['percentage_of_total']
-						?></dd>
+			<div class="widget">
+				<div class="widget-header">
+					<h3>Stats</h3>
+				</div>			
+				<div class="widget-content">
+					<dl class="dl-horizontal">
 			
-					<dt><?php echo __('Total Collectible Platforms'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
-						?></dd>
+						<dt><?php echo __('Total Collectibles'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectible_count']
+							?></dd>
 			
-					<dt><?php echo __('Total Brands'); ?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
-						?></dd>
-					<dt><?php echo __('Highest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['highest_price']
-						?></dd>
-					<dt><?php echo __('Lowest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['lowest_price']
-						?></dd>	
-					<?php
-					if (isset($manufacture['Manufacture']['highest_edition_size'])) {
-						echo '<dt>';
-						echo __('Highest Edition Size');
-						echo '</dt>';
-						echo '<dd>';
-						echo $manufacture['Manufacture']['highest_edition_size'];
-						echo '</dd>';
-					}
-					?>							
-					<?php
-					if (isset($manufacture['Manufacture']['lowest_edition_size'])) {
-						echo '<dt>';
-						echo __('Lowest Edition Size');
-						echo '</dt>';
-						echo '<dd>';
-						echo $manufacture['Manufacture']['lowest_edition_size'];
-						echo '</dd>';
-					}
-					?>							
-				</dl>	
+						<dt><?php echo __('Percentage'); ?></dt><dd><?php echo $manufacture['Manufacture']['percentage_of_total']
+							?></dd>
+				
+						<dt><?php echo __('Total Collectible Platforms'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
+							?></dd>
+				
+						<dt><?php echo __('Total Brands'); ?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
+							?></dd>
+						<dt><?php echo __('Highest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['highest_price']
+							?></dd>
+						<dt><?php echo __('Lowest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['lowest_price']
+							?></dd>	
+						<?php
+						if (isset($manufacture['Manufacture']['highest_edition_size'])) {
+							echo '<dt>';
+							echo __('Highest Edition Size');
+							echo '</dt>';
+							echo '<dd>';
+							echo $manufacture['Manufacture']['highest_edition_size'];
+							echo '</dd>';
+						}
+						?>							
+						<?php
+						if (isset($manufacture['Manufacture']['lowest_edition_size'])) {
+							echo '<dt>';
+							echo __('Lowest Edition Size');
+							echo '</dt>';
+							echo '<dd>';
+							echo $manufacture['Manufacture']['lowest_edition_size'];
+							echo '</dd>';
+						}
+						?>							
+					</dl>					
+				</div>
+	
 			</div>
 		</div>
 		<div class="span8">
-			<div class="well manufacturer-collectibles">
+			<div class="widget manufacturer-collectibles">
+				<div class="widget-header">
+					<h3>Collectibles</h3>
+				</div>
+				
+				<div class="widget-content">
 				<div data-toggle="modal-gallery" data-target="#modal-gallery">
 			<?php
 			echo '<div id="titles-nav" class="hidden">';
@@ -92,7 +102,12 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 			}
 			echo '</div>';
 			     ?>
-			</div>
+			</div>					
+					
+				</div>
+				
+				
+
 			</div>
 		</div>
 		
@@ -132,7 +147,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 				$container.masonry('appended', $newElems, true);
 			});
 		});
-	});
+	}); 
 </script>
 
 

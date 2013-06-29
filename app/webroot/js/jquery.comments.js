@@ -292,6 +292,8 @@
 					if (comment.permissions.remove) {
 						commentMarkup += '<a class="link remove"><i class="icon-trash"></i>Remove</a>';
 					}
+				} else {
+					commentMarkup += '<a> </a>';
 				}
 
 				commentMarkup += '	<span class="pull-right">' + comment.Comment.formatted_created + '</span>';
