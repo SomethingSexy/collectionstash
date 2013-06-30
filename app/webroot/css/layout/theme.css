@@ -808,3 +808,8 @@ a.forgot-password {
 .stash-item .user-detail li {
 	text-align : center;
 }
+
+.changed {
+	color: red;
+	font-weight: bold;
+}
