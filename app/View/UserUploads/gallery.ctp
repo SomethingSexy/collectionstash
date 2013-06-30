@@ -49,8 +49,8 @@
 			navSelector : "#titles-nav",
 			itemSelector : ".tile",
 			loading : {
-				finishedMsg : "All collectibles have been loaded!",
-				msgText : "<em>Loading the next set of collectibles.</em>",
+				finishedMsg : "All photos have been loaded!",
+				msgText : "<em>Loading the next set of photos.</em>",
 			}
 		}, function(newElements) {
 			// hide new items while they are loading

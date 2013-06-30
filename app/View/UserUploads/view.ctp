@@ -70,9 +70,17 @@
 </div>
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
 <script>
 	$(function() {
-		$('.tiles').infinitescroll({
+		var $container = $('div.tiles');
+		$container.imagesLoaded(function() {
+			$container.masonry({
+				itemSelector : '.tile'
+			});
+		});
+
+		$container.infinitescroll({
 			nextSelector : "#titles-nav a",
 			navSelector : "#titles-nav",
 			itemSelector : ".tile",
@@ -80,6 +88,19 @@
 				finishedMsg : "All photos have been loaded!",
 				msgText : "<em>Loading the next set of photos.</em>",
 			}
+		}, function(newElements) {
+			// hide new items while they are loading
+			var $newElems = $(newElements).css({
+				opacity : 0
+			});
+			// ensure that images load before adding to masonry layout
+			$newElems.imagesLoaded(function() {
+				// show elems now they're ready
+				$newElems.animate({
+					opacity : 1
+				});
+				$container.masonry('appended', $newElems, true);
+			});
 		});
-	}); 
+	});
 </script>
