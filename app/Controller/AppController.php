@@ -371,7 +371,7 @@ class AppController extends Controller {
 
 		} else {
 			$this -> loadModel('Collectibletype');
-			$collectibleTypes = $this -> Collectibletype -> find("all", array('contain' => false));
+			$collectibleTypes = $this -> Collectibletype -> find("all", array('contain' => false, 'order' => array('Collectibletype.name' => 'ASC')));
 
 			$collectibleTypesSearchGroup = array();
 			$collectibleTypesSearchGroup['filters'] = array();
@@ -389,7 +389,7 @@ class AppController extends Controller {
 			array_push($searchFilterGroups, $collectibleTypesSearchGroup);
 
 			$this -> loadModel('License');
-			$licenses = $this -> License -> find("all", array('contain' => false));
+			$licenses = $this -> License -> find("all", array('contain' => false, 'order' => array('License.name' => 'ASC')));
 
 			$licenseSearchGroup = array();
 			$licenseSearchGroup['filters'] = array();
