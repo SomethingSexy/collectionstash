@@ -5,7 +5,7 @@
 			<h2><?php echo __('Pending Collectibles'); ?></h2>
 		</div>
 		<?php echo $this -> element('flash'); ?>
-		<div class="collectibles view">
+		<div class="collectibles view old-school">
 			<?php
 			foreach ($collectibles as $collectible):
 			?>

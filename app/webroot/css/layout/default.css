@@ -1,4 +1,3 @@
-
 /*
  * For Upload drop zone effects
  */
@@ -204,8 +203,7 @@
 	color: #555555;
 	font-weight: bold
 }
-#collectibles-list-component .collectibles .collectible .count .label,
-#collectibles-list-component .collectibles .collectible .labels .label {
+#collectibles-list-component .collectibles .collectible .count .label, #collectibles-list-component .collectibles .collectible .labels .label {
 	margin-right: 10px;
 }
 #collectibles-list-component .collectibles .collectible .label a {
@@ -224,13 +222,13 @@
 	height: 700px;
 }
 a.btn.sort.asc {
-    background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
-    padding-right: 20px;
+	background: url("/img/icon/triangle_up.png") no-repeat scroll right center transparent;
+	padding-right: 20px;
 }
 
 a.btn.sort.desc {
-    background: url("/img/icon/triangle_down.png") no-repeat scroll right center transparent;
-    padding-right: 20px;
+	background: url("/img/icon/triangle_down.png") no-repeat scroll right center transparent;
+	padding-right: 20px;
 }
 
 @media only screen and (max-width: 800px) {
@@ -285,4 +283,33 @@ a.btn.sort.desc {
  */
 .cake-sql-log {
 	float: left;
+}
+
+/**
+ * 	This is old admin collectibles list...update to bootstrap
+ *
+ */
+.old-school.collectibles.view {
+	float: left;
+}
+.old-school .collectible.item {
+	border-bottom: 1px solid #FDB924;
+	clear: both;
+	float: left;
+	padding: 20px;
+	width: 700px;
+}
+.old-school .collectible.image {
+	float: left;
+	width: 150px;
+}
+.old-school .collectible.detail {
+	float: left;
+	margin-left: 10px;
+	width: 400px;
+}
+.old-school.collectibles.view .collectible.actions {
+	clear: both;
+	float: left;
+	margin-top: 5px;
 }
