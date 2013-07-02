@@ -32,6 +32,19 @@
 					});
 				});
 
+				this.element.children('.filter').children('ul').children('li.action').children('a.deselect').click(function(event) {
+					var selectedType = $(this).closest('.filter').attr('data-type');
+
+					if (!self.selectedFilters.hasOwnProperty(selectedType)) {
+						self.selectedFilters[selectedType] = [];
+					}
+
+					self.selectedFilters[selectedType] = [];
+
+					var queryString = self._buildQueryString();
+					window.location.href = searchUrl + "?" + queryString;
+				});
+
 				//This is for clicking a specific filter
 				this.element.children('.filter').children('ul').children('li').children('label').children('.filter-links').click(function(event) {
 					var selectedType = $(this).closest('.filter').attr('data-type');
@@ -65,7 +78,7 @@
 			_buildQueryString : function() {
 				var queryString = '';
 
-				if (searchFilter && searchFilter !== '') {
+				if (typeof searchFilter !== 'undefined' && searchFilter !== '') {
 					queryString += 'q=' + searchFilter + '&';
 				}
 

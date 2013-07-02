@@ -83,7 +83,7 @@ a.header img {
 	position: relative;
 }
 .navbar-search {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 .navbar-inner {
 	background: #418ce4;
@@ -785,12 +785,27 @@ a.forgot-password {
 	text-align: left;
 	white-space: normal;
 }
-
+.checkbox-select ul li a {
+	color: #808080;
+}
 .checkbox-select ul li:hover {
 	background-color: #27A0E5;
 	background-image: linear-gradient(to bottom, #2FA4E7, #1A99E2);
 	background-repeat: repeat-x;
 	text-decoration: none;
+}
+
+.checkbox-select ul li.action:hover a {
+	background-color: #27A0E5;
+	background-image: linear-gradient(to bottom, #2FA4E7, #1A99E2);
+	background-repeat: repeat-x;
+	text-decoration: none;
+	cursor: pointer;
+	color: #FFF;
+}
+.checkbox-select ul li.divider:hover {
+	background-color: #E5E5E5;
+	background-image: none;
 }
 
 .checkbox-select ul li:hover label {
@@ -808,7 +823,7 @@ a.forgot-password {
 }
 
 .stash-item .user-detail li {
-	text-align : center;
+	text-align: center;
 }
 
 .changed {
