@@ -110,7 +110,6 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 <div id="attributes-container" class="row"></div>
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
-<?php echo $this -> element('attribute_remove_dialog'); ?>
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
 <?php echo $this -> element('attribute_collectible_update_dialog'); ?>
 <!-- TODO Update this so we only have one modal -->
