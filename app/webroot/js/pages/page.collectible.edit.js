@@ -248,7 +248,8 @@ var ManufacturerList = Backbone.Collection.extend({
 		return man.get("title").toLowerCase();
 	}
 });
-
+// TODO: this won't work for deleting an attribute :(
+// need to update this be more robust and fit the backbone style
 var AttributeModel = Backbone.Model.extend({
 	urlRoot : '/attributes_collectibles/attribute',
 	parse : function(resp, xhr) {
@@ -590,25 +591,6 @@ var AttributesView = Backbone.View.extend({
 			}
 		});
 
-		this.removeAttributes = new RemoveAttributes({
-			'adminPage' : adminMode,
-			$element : $('.attributes.collectible', self.el),
-			$context : self.el,
-			success : function(data) {
-				if (data.isEdit === false) {
-					// This will contain the id of the Attribute we
-					// removed.  We will use that to find
-					self.collection.each(function(attribute) {
-						if (attribute.toJSON().Attribute.id === data.id) {
-							self.collection.remove(attribute);
-						}
-					});
-				} else {
-					// do nothing
-				}
-			}
-		});
-
 		this.removeCollectibleAttributes = new RemoveAttributeLinks({
 			'adminPage' : adminMode,
 			$element : $('.attributes.collectible', self.el),
@@ -640,11 +622,7 @@ var AttributesView = Backbone.View.extend({
 			}).render().el);
 		});
 
-		//this.updateAttributes.init();
-
 		this.updateCollectibleAttributes.init();
-
-		this.removeAttributes.init();
 
 		this.removeCollectibleAttributes.init();
 
@@ -969,8 +947,15 @@ var AttributeView = Backbone.View.extend({
 		this.duplicateView = new AttributeDuplicateView({
 			artists : this.artists,
 			manufacturers : this.manufacturers,
-			categories : this.categories
+			categories : this.categories,
+			// this will be the attribute that is being replaced
+			model : this.model
 		});
+		
+		// I already have a change event that will rerender this
+		// guy when the attribute changes so I don't need anything else
+		// I just need to trigger a hidden event on the modal
+		// which will then delete the view, I think that is all I need to do
 
 		$('body').append(this.duplicateView.render().el);
 		$('#attributeDuplicateModal', 'body').modal({
@@ -979,6 +964,7 @@ var AttributeView = Backbone.View.extend({
 
 		$('#attributeDuplicateModal', 'body').on('hidden', function() {
 			self.duplicateView.remove();
+			
 		});
 	}
 });
@@ -3082,27 +3068,33 @@ var AttributeDuplicateView = Backbone.View.extend({
 	renderBody : function() {
 		var self = this;
 		var data = {
-
+			attribute : this.model.toJSON(),
+			uploadDirectory : uploadDirectory
 		};
+
+		if (this.replacementAttribute) {
+			data.replacementAttribute = {
+				Attribute : this.replacementAttribute.toJSON()
+			};
+			
+			$(self.el).find('.btn-primary.save').show();
+		}
 
 		dust.render(this.template, data, function(error, output) {
 			$('.modal-body', self.el).html(output);
 		});
-
-		//$('.modal-body', self.el).append(this.model.toJSON().response.data);
-
 	},
 	render : function() {
 		var self = this;
 
 		dust.render(this.modal, {
 			modalId : 'attributeDuplicateModal',
-			modalTitle : 'Remove Duplicate Part'
+			modalTitle : 'Replace Duplicate Part'
 		}, function(error, output) {
 			$(self.el).html(output);
 		});
 
-		$(self.el).find('.btn-primary.save').remove();
+		$(self.el).find('.btn-primary.save').text('Replace').hide();
 
 		this.renderBody();
 
@@ -3112,28 +3104,45 @@ var AttributeDuplicateView = Backbone.View.extend({
 		$('.message-container', this.el).hide();
 	},
 	searchCollectible : function() {
-		var attribute = new Backbone.Model();
+		var self = this;
+
+		if (this.replacementAttribute) {
+			this.replacementAttribute.off();
+			delete this.replacementAttribute;
+		}
+
+		this.replacementAttribute = new Backbone.Model();
+
 		if (this.currentView) {
 			this.currentView.remove();
 		}
 
+		this.replacementAttribute.on('change', function() {
+			self.renderBody();
+		}, this);
+
 		this.currentView = new AddExistingAttributeCollectibleSearchView({
 			collection : new PaginatedCollection(),
-			model : attribute
+			model : this.replacementAttribute
 		});
 
 		$('.modal-body', self.el).html(this.currentView.render().el);
 		$('.modal-footer .save', self.el).hide();
 	},
 	searchPart : function() {
-		var attribute = new Backbone.Model();
+		if (this.replacementAttribute) {
+			this.replacementAttribute.off();
+			delete this.replacementAttribute;
+		}
+
+		this.replacementAttribute = new Backbone.Model();
 		if (this.currentView) {
 			this.currentView.remove();
 		}
 
 		this.currentView = new AddExistingAttributePartSearchView({
 			collection : new PaginatedPart(),
-			model : attribute,
+			model : this.replacementAttribute,
 			artists : this.artists,
 			manufacturers : this.manufacturers,
 			categories : this.categories

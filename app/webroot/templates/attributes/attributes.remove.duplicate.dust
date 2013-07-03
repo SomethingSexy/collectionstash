@@ -1,7 +1,68 @@
+<p>Is this part duplicated by another part?  Use either method below to find the part that it is duplicated by.  This part will be will be replaced by the one you select.</p>
+
+
+<p><strong>This part</strong></p>
+<table class="table table-borderless">
+	<tr>
+		<td>
+		<ul class="thumbnails">
+			{#attribute.Attribute.AttributesUpload uploadDirectory=uploadDirectory}
+			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+			<li class="span1">
+				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+			</li>
+			{/primary}
+			{:else}
+			<li class="span1">
+				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
+			</li>
+			{/attribute.Attribute.AttributesUpload}
+
+		</ul></td>
+		<td>{attribute.Attribute.path_name}</td>
+		<td>{attribute.Attribute.name}</td>
+		<td>{attribute.Attribute.description}</td>
+		<td>{attribute.Attribute.Manufacture.title}</td>
+		<td>{attribute.Attribute.Scale.scale}</td>
+	</tr>
+
+</table>
+
+<p><strong> is duplicate by </strong></p>
+{#replacementAttribute uploadDirectory=uploadDirectory}
+	<table class="table table-borderless">
+		<tr>
+			<td>
+			<ul class="thumbnails">
+				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
+				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+				<li class="span1">
+					<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+				</li>
+				{/primary}
+				{:else}
+				<li class="span1">
+					<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
+				</li>
+				{/Attribute.AttributesUpload}
+	
+			</ul></td>
+			<td>{Attribute.path_name}</td>
+			<td>{Attribute.name}</td>
+			<td>{Attribute.description}</td>
+			<td>{Attribute.Manufacture.title}</td>
+			<td>{Attribute.Scale.scale}</td>
+		</tr>
+	
+	</table>
+{:else}
+<p>No replacement selected.</p>
+{/replacementAttribute}
+
 <div class='component-message error'>
 	<span></span>
 </div>
-<p>Is this part duplicated by another part?  Use either method below to find the part that it is duplicated by.  This part will be will be replaced by the one you select.</p>
+
 <form accept-charset="utf-8" method="post" id="AttributeRemoveForm" data-form-model="Attribute" action="/attributes?url=attributes">
 	<fieldset>
 		<div class="control-group">
