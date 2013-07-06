@@ -139,6 +139,8 @@ class AttributesController extends AppController {
 
 	/**
 	 * This will submit a removal.
+	 * 
+	 * This can only be used with JSON for now :)
 	 *
 	 * TODO: Update this so that if they are removing a pending one that they
 	 * added, it automatically gets deleted
@@ -155,6 +157,7 @@ class AttributesController extends AppController {
 			return;
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
+			$this -> request -> data = $this -> request -> input('json_decode', true);
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			debug($this -> request -> data);
 

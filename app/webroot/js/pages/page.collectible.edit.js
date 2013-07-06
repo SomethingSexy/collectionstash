@@ -250,7 +250,7 @@ var ManufacturerList = Backbone.Collection.extend({
 });
 // TODO: this won't work for deleting an attribute :(
 // need to update this be more robust and fit the backbone style
-var AttributeModel = Backbone.Model.extend({
+var AttributesCollectibleModel = Backbone.Model.extend({
 	urlRoot : '/attributes_collectibles/attribute',
 	parse : function(resp, xhr) {
 		var retVal = {};
@@ -262,8 +262,14 @@ var AttributeModel = Backbone.Model.extend({
 	}
 });
 
+var AttributeModel = Backbone.Model.extend({
+	parse : function(resp, xhr) {
+		return resp.response.data;
+	}
+});
+
 var Attributes = Backbone.Collection.extend({
-	model : AttributeModel
+	model : AttributesCollectibleModel
 });
 
 var TagModel = Backbone.Model.extend({
@@ -375,7 +381,7 @@ var AttributesView = Backbone.View.extend({
 
 						var data = responseText.response.data;
 						if (data.isEdit === false) {
-							var attribute = new AttributeModel(data);
+							var attribute = new AttributesCollectibleModel(data);
 
 							self.collection.add(attribute);
 							$('.attributes-list', self.el).append(new AttributeView({
@@ -462,7 +468,7 @@ var AttributesView = Backbone.View.extend({
 						});
 						var data = responseText.response.data;
 						if (data.isEdit === false) {
-							var attribute = new AttributeModel(data);
+							var attribute = new AttributesCollectibleModel(data);
 
 							self.collection.add(attribute);
 							$('.attributes-list', self.el).append(new AttributeView({
@@ -646,7 +652,7 @@ var AttributesView = Backbone.View.extend({
 	addNew : function() {
 		var self = this;
 
-		var attribute = new AttributeModel();
+		var attribute = new AttributesCollectibleModel();
 		this.renderAddNewView(attribute);
 
 		$('#attribute-collectible-add-new-dialog').modal();
@@ -692,7 +698,7 @@ var AttributesView = Backbone.View.extend({
 	addExisting : function() {
 		var self = this;
 
-		var attribute = new AttributeModel();
+		var attribute = new AttributesCollectibleModel();
 
 		// when the attribute gets selected
 		// remove the view and then show the add
@@ -951,21 +957,27 @@ var AttributeView = Backbone.View.extend({
 			// this will be the attribute that is being replaced
 			model : this.model
 		});
-		
+
 		// I already have a change event that will rerender this
 		// guy when the attribute changes so I don't need anything else
 		// I just need to trigger a hidden event on the modal
 		// which will then delete the view, I think that is all I need to do
 
 		$('body').append(this.duplicateView.render().el);
+
+		// the view that is being rendered, shouldn't know it is a
+		// modal
 		$('#attributeDuplicateModal', 'body').modal({
 			backdrop : 'static'
 		});
 
 		$('#attributeDuplicateModal', 'body').on('hidden', function() {
 			self.duplicateView.remove();
-			
 		});
+
+		this.duplicateView.on('modal:close', function() {
+			$('#attributeDuplicateModal', 'body').modal('hide');
+		}, this);
 	}
 });
 var AttributePhotoView = Backbone.View.extend({
@@ -3051,7 +3063,8 @@ var AttributeDuplicateView = Backbone.View.extend({
 	modal : 'modal',
 	events : {
 		'click #select-attribute-link' : 'searchCollectible',
-		'click #select-attribute-link-by-part' : 'searchPart'
+		'click #select-attribute-link-by-part' : 'searchPart',
+		'click .save' : 'save'
 	},
 	initialize : function(options) {
 		var self = this;
@@ -3076,7 +3089,7 @@ var AttributeDuplicateView = Backbone.View.extend({
 			data.replacementAttribute = {
 				Attribute : this.replacementAttribute.toJSON()
 			};
-			
+
 			$(self.el).find('.btn-primary.save').show();
 		}
 
@@ -3150,6 +3163,64 @@ var AttributeDuplicateView = Backbone.View.extend({
 
 		$('.modal-body', self.el).html(this.currentView.render().el);
 		$('.modal-footer .save', self.el).hide();
+	},
+	save : function() {
+		var self = this;
+		// need to pass Attribute.id (which is the model one), Attribute.link = true, Attribute.replace_attribute_id (which is the new one)
+		// upon success, we will then update the attribute passed in with the new information and trigger an update
+
+		// create a temp model to act on here because the this.model is
+		// an attributes collectible model and we need a subset of that
+		// to update the attribute
+		$('.save', this.el).button('loading');
+		var saveModel = new AttributeModel({
+			Attribute : {
+				id : this.model.get('Attribute').id,
+				link : true,
+				'replace_attribute_id' : this.replacementAttribute.get('id'),
+				// not sure a reason is necessary for this one
+				reason : 'Duplicate'
+			}
+		});
+
+		// since this is not a 100% delete we will do a post here
+		// instead of a destroy
+		saveModel.save({}, {
+			url : '/attributes/remove',
+			success : function(model, response) {
+				$('.save', this.el).button('reset');
+				if (response.response.isSuccess) {
+
+					// upon success of us switching out the model,
+					// we need to first check to see if is an edit
+					// or not.
+					if (model.get('isEdit')) {
+
+						self.trigger('modal:close');
+					} else {
+						var data = {};
+						data.Attribute = model.get('Attribute');
+						data.Attribute.Scale = model.get('Scale');
+						data.Attribute.Manufacture = model.get('Manufacture');
+						data.Attribute.Artist = model.get('Artist');
+						data.Attribute.AttributeCategory = model.get('AttributeCategory');
+						data.Attribute.AttributesUpload = model.get('AttributesUpload');
+
+						self.model.set(data);
+
+						self.trigger('modal:close');
+					}
+
+					// if it is an edit we flash the message and close
+					// without updating the this.model.
+
+					// if we did update it, when we modify this.model
+					// and we be done
+				}
+
+			}
+		});
+
 	}
 });
 

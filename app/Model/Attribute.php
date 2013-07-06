@@ -192,7 +192,6 @@ class Attribute extends AppModel {
 		if ($this -> isEditPermission($attribute['Attribute']['id'], $user)) {
 			if ($autoUpdate === true || $autoUpdate === 'true') {
 				$proceed = true;
-				debug($attribute['Attribute']['replace_attribute_id']);
 				// If we have a replacement, then lets update all of those first
 				if (isset($attribute['Attribute']['replace_attribute_id']) && !empty($attribute['Attribute']['replace_attribute_id'])) {
 					$replacementAttribute = $attribute['Attribute']['replace_attribute_id'];
@@ -202,11 +201,14 @@ class Attribute extends AppModel {
 					// Need to manually specify the modified field because updateAll is very dumb, only does what you tell it to do
 					// Now update all attributes collectibles with the replacement id
 					if ($this -> AttributesCollectible -> updateAll(array('AttributesCollectible.attribute_id' => $replacementAttribute, 'AttributesCollectible.modified' => 'NOW()'), array('AttributesCollectible.attribute_id' => $attribute['Attribute']['id']))) {
+						// we need to get the attribute and all of its information that we are replacing so we can pass it down on the response
+						$replacedVersion = $this -> find('first', array('conditions' => array('Attribute.id' => $replacementAttribute), 'contain' => array('Status', 'User', 'Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Revision', 'AttributesUpload' => array('Upload'))));
 
+						$retVal['response']['data'] = $replacedVersion;
+				
 						// Seems like a lot of redundancy
 						// Since updateAll does not trigger afterSave we need to manually create revisions
 						foreach ($updateAttributesCollectible as $key => $value) {
-							debug($value['AttributesCollectible']['id']);
 							// TODO: This is not working
 							$this -> AttributesCollectible -> id = $value['AttributesCollectible']['id'];
 							$this -> AttributesCollectible -> createRevision();
@@ -244,7 +246,6 @@ class Attribute extends AppModel {
 			array_push($retVal['response']['errors'], $error);
 		}
 
-		debug($retVal);
 		return $retVal;
 	}
 
