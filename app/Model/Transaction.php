@@ -70,9 +70,13 @@ class Transaction extends AppModel {
 		$transactions = $this -> find('all', array('conditions' => array('Transaction.collectible_id' => $collectibleId), 'contain' => false));
 
 		foreach ($transactions as $key => $value) {
-			array_push($retVal, array(strtotime($value['Transaction']['sale_date']) * 1000 , $value['Transaction']['sale_price']));
+			// if I have fucked up dates, don't add to graphing data.
+			if ($value['Transaction']['sale_date'] !== '0000-00-00 00:00:00' && !empty($value['Transaction']['sale_date'])) {
+				array_push($retVal, array(strtotime($value['Transaction']['sale_date']) * 1000, $value['Transaction']['sale_price']));
+			}
+
 		}
-		
+
 		array_multisort($retVal);
 
 		return $retVal;
