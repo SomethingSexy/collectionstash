@@ -135,8 +135,7 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-
-#attribute-collectible-add-existing-dialog .modal-body {
+#attributeDuplicateModal .modal-body, #attribute-collectible-add-existing-dialog .modal-body {
 
 	min-height: 400px;
 }
