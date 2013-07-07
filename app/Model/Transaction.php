@@ -12,30 +12,37 @@ class Transaction extends AppModel {
 			if ($primary) {
 				foreach ($results as $key => $val) {
 					if (isset($val['Transaction'])) {
-						if (isset($val['Transaction']['sale_date'])) {
+						if (isset($val['Transaction']['sale_date']) && $val['Transaction']['sale_date'] !== '0000-00-00 00:00:00') {
 							$datetime = strtotime($val['Transaction']['sale_date']);
 							$datetime = date("m/d/Y", $datetime);
 							$results[$key]['Transaction']['sale_date'] = $datetime;
+						} else {
+							$results[$key]['Transaction']['sale_date'] = '';
 						}
 					}
 				}
 			} else {
 				if (isset($results[$this -> primaryKey])) {
-
 					if (isset($results['sale_date'])) {
-						$datetime = strtotime($results['sale_date']);
-						$datetime = date("m/d/Y", $datetime);
-						$results['sale_date'] = $datetime;
+						if ($results['sale_date'] !== '0000-00-00 00:00:00') {
+							$datetime = strtotime($results['sale_date']);
+							$datetime = date("m/d/Y", $datetime);
+							$results['sale_date'] = $datetime;
+						} else {
+							$results['sale_date'] = '';
+						}
 					}
 				} else {
-
 					foreach ($results as $key => $val) {
-
 						if (isset($val['Transaction'])) {
 							if (isset($val['Transaction']['sale_date'])) {
-								$datetime = strtotime($val['Transaction']['sale_date']);
-								$datetime = date("m/d/Y", $datetime);
-								$results[$key]['Transaction']['sale_date'] = $datetime;
+								if ($val['Transaction']['sale_date'] !== '0000-00-00 00:00:00') {
+									$datetime = strtotime($val['Transaction']['sale_date']);
+									$datetime = date("m/d/Y", $datetime);
+									$results[$key]['Transaction']['sale_date'] = $datetime;
+								} else {
+									$results[$key]['Transaction']['sale_date'] = '';
+								}
 							}
 						}
 					}
@@ -70,8 +77,9 @@ class Transaction extends AppModel {
 		$transactions = $this -> find('all', array('conditions' => array('Transaction.collectible_id' => $collectibleId), 'contain' => false));
 
 		foreach ($transactions as $key => $value) {
+			debug($value['Transaction']['sale_date']);
 			// if I have fucked up dates, don't add to graphing data.
-			if ($value['Transaction']['sale_date'] !== '0000-00-00 00:00:00' && !empty($value['Transaction']['sale_date'])) {
+			if ($value['Transaction']['sale_date'] !== '0000-00-00 00:00:00' && !empty($value['Transaction']['sale_date']) && $value['Transaction']['sale_date'] !== '01/01/1970' && $value['Transaction']['sale_date'] !== '12/31/1969') {
 				array_push($retVal, array(strtotime($value['Transaction']['sale_date']) * 1000, $value['Transaction']['sale_price']));
 			}
 

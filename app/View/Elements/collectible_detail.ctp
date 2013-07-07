@@ -53,17 +53,17 @@ if (!isset($allowStatusEdit)) {
 
 echo $this -> Minify -> script('js/jquery.comments', array('inline' => false));
 echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
-echo $this -> Html -> script('cs.stash', array('inline' => false));
+echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.status', array('inline' => false));
 echo $this -> Minify -> script('js/views/view.status', array('inline' => false));
 
 echo $this -> Minify -> script('js/models/model.listing', array('inline' => false));
 echo $this -> Minify -> script('js/collections/collection.listings', array('inline' => false));
 echo $this -> Minify -> script('js/views/view.transactions', array('inline' => false));
-echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
-echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
-echo $this -> Html -> script('models/model.collectible', array('inline' => false));
-echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
+echo $this -> Minify -> script('js/views/view.stash.add', array('inline' => false));
+echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
+echo $this -> Minify -> script('js/models/model.collectible', array('inline' => false));
+echo $this -> Minify -> script('js/pages/page.collectible.view', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
 ?>
