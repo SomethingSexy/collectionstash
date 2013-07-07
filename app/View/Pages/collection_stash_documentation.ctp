@@ -47,6 +47,9 @@
 									<a href="#parts-photos"> <i class="icon-chevron-right"></i> Adding Photos </a>
 								</li>
 								<li>
+									<a href="#parts-duplicate"> <i class="icon-chevron-right"></i> Removing Duplicate Parts </a>
+								</li>								
+								<li>
 									<a href="#parts-when"> <i class="icon-chevron-right"></i> When should I add a new part vs adding an existing part? </a>
 								</li>
 								<li>
@@ -431,10 +434,26 @@
 		<p>
 			Coming soon!
 		</p>
-		<h4>Removing Dupilicate Parts</h4>
+		<h4 id="parts-duplicate">Removing Dupilicate Parts</h4>
 		<p>
-			Coming soon!
+			There might be cases when the same part is duplicated by another part on a different collectible.  If you find that this is the case you can replace the duplicated part with the base one.  To accomplish this, find the collectible that has the duplicate part and click the Edit icon.
 		</p>
+		<img src="/img/documentation/part_duplicate.png" class="img-polaroid">
+		<p></p>	
+		<p>Selecting the "Dupilicate" link will bring up the replacement modal.</p>
+		<img src="/img/documentation/part_duplicate_modal.png" class="img-polaroid">
+		<p></p>			
+		<p>The modal will display the part you are replacing.  You will be able to select the new part by either searching directly for a part or via a collectible.</p>
+		<p>For this example, we will find the part that duplicates are selected one by searching for a collectible first.</p>
+		<img src="/img/documentation/part_duplicate_modal_search.png" class="img-polaroid">
+		<p></p>			
+		<img src="/img/documentation/part_duplicate_modal_search_found.png" class="img-polaroid">
+		<p></p>	
+		<p>Click on the part that duplicates the selected part.</p>
+		<img src="/img/documentation/part_duplicate_modal_selected.png" class="img-polaroid">
+		<p></p>			
+		<p>Click the "Replace" button to submit the replacement.  If you are able to live edit this replacement, it will automatically change, otherwise a edit will be submitted for approval.</p>
+		
 		<h4>Removing Parts</h4>
 		<p>
 			Coming soon!
