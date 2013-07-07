@@ -64,6 +64,8 @@ echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
+echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
+echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
 ?>
 
 
@@ -186,8 +188,12 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 			</div>
 			<div class="row-fluid">
 				<div class="span12">
-					<div class="row-fluid">
-						<div class="span6">
+					<ul class="nav nav-tabs" id="myTab">
+						<li class="active"><a href="#detail">Detail</a></li>
+						<li><a href="#price">Price Guide</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="detail">
 							<?php
 							if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 								echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
@@ -212,16 +218,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 								echo $this -> element('collectible_variant_list', array());
 							}
 							?>							
-						</div>
-						<div class="span6" <?php
-						if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
-						}
- ?>>
-
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span12">
+		
 							<?php
 							if ($showAttributes) {
 								echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
@@ -229,7 +226,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 									$(function() {
 										// If we are in admin mode, we need to pass that in to these methods so that they can
 										// do specific things based on that
-
+		
 										$('span.popup', '.attributes-list').popover({
 											placement : 'bottom',
 											html : 'true',
@@ -239,21 +236,32 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 										}).mouseenter(function(e) {
 											$(this).popover('show');
 										});
-
+		
 									});
 								</script>
 						
-							<?php } ?>							
-						</div>						
+							<?php } ?>								
+							
+						</div>	
+						<div class="tab-pane" id="price">
+							<div <?php
+							if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
+							}
+	 						?>>						
+							</div>	
+							<div class="graph-container">
+								<div id="holder" style="width:850px;height:450px">
+	
+								</div>			    	
+						    </div>						 	
 					</div>
-				</div>
 			</div>
 		</div>
 	</div>	
 	
 	<?php if(isset($showComments) && $showComments) {?>
 		<div class="row-fluid spacer">
-			<div class="span8 offset4">
+			<div class="span12">
 			<div class="widget">
 				<div class="widget-content">
 					<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
@@ -334,6 +342,10 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 	;
 	var listings =
  <?php echo json_encode($collectibleDetail['Listing']); ?>
+	;
+
+	var transactionsGraphData =
+ <?php echo json_encode($transactionGraphData); ?>
 	;
 
  <?php

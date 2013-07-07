@@ -14,7 +14,7 @@ class Transaction extends AppModel {
 					if (isset($val['Transaction'])) {
 						if (isset($val['Transaction']['sale_date'])) {
 							$datetime = strtotime($val['Transaction']['sale_date']);
-							$datetime = date("m/d/y g:i A", $datetime);
+							$datetime = date("m/d/Y", $datetime);
 							$results[$key]['Transaction']['sale_date'] = $datetime;
 						}
 					}
@@ -24,7 +24,7 @@ class Transaction extends AppModel {
 
 					if (isset($results['sale_date'])) {
 						$datetime = strtotime($results['sale_date']);
-						$datetime = date("m/d/y g:i A", $datetime);
+						$datetime = date("m/d/Y", $datetime);
 						$results['sale_date'] = $datetime;
 					}
 				} else {
@@ -34,7 +34,7 @@ class Transaction extends AppModel {
 						if (isset($val['Transaction'])) {
 							if (isset($val['Transaction']['sale_date'])) {
 								$datetime = strtotime($val['Transaction']['sale_date']);
-								$datetime = date("m/d/y g:i A", $datetime);
+								$datetime = date("m/d/Y", $datetime);
 								$results[$key]['Transaction']['sale_date'] = $datetime;
 							}
 						}
@@ -55,6 +55,27 @@ class Transaction extends AppModel {
 
 	public function dateFormatBeforeSave($dateString) {
 		return date('y-m-d', strtotime($dateString));
+	}
+
+	/**
+	 * This will get the transaction graph data for a collectible.
+	 *
+	 * Right now it is going to return all of the data as an area of sale date and price.
+	 *
+	 * We won't get fancy to start
+	 */
+	public function getTransactionGraphData($collectibleId) {
+		$retVal = array();
+
+		$transactions = $this -> find('all', array('conditions' => array('Transaction.collectible_id' => $collectibleId), 'contain' => false));
+
+		foreach ($transactions as $key => $value) {
+			array_push($retVal, array(strtotime($value['Transaction']['sale_date']) * 1000 , $value['Transaction']['sale_price']));
+		}
+		
+		array_multisort($retVal);
+
+		return $retVal;
 	}
 
 }
