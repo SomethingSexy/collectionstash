@@ -117,7 +117,7 @@
 							{/eq}							
 						</td>
 						<td>{sale_price}</td>
-						<td>{sale_date}</td>
+						<td>{#sale_date} {.} {:else} Missing {/sale_date}</td>
 						<td>
 							<div class="btn-group actions">
 								{@eq key="{allowAdd}" value="true" type="boolean"}
