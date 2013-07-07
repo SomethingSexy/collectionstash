@@ -1,4 +1,21 @@
 <h2>Change Log</h2>
+
+<h3>Release Notes for v2.5.3.2</h3>
+<h4>Duplicate Part Replacement</h4>
+<p>We added the ability to replace duplicate parts.  Instead of having to remove and add the duplicates you can now directly replace it with an existing one.  Read more about this brand new features in our <a href="/pages/collection_stash_documentation#parts-duplicate">A Guide to Collection Stash</a></p>
+
+<h3>Release Notes for v2.5.3</h3>
+<ul>
+	<li>Scales Filter</li>
+	<li>Cost is no longer required when removing a stash because you sold it.</li>
+	<li>More details around your stash, including worth and statistics.</li>
+	<li>UI updates and bug fixes.</li>
+</ul>
+
+<h3>Release Notes for v2.5.2</h3>
+<h4>History</h4>
+<p>You can now maintain a history of your Stash.</p>
+
 <h3>Release Notes for v2.5.0.1</h3>
 <p>When you add listings to a collectible, the listings will now show up on the Activity view on your Home page.  You will also be able to earn 50 nuts for each listing you add.</p>
 
