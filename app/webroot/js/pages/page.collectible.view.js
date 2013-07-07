@@ -53,6 +53,21 @@ $(function() {
 			allowAddListing : allowAddListing
 		}).render().el);
 
+		function showTooltip(x, y, contents) {
+
+			$("<div id='tooltip'>" + contents + "</div>").css({
+				position : "absolute",
+				display : "none",
+				top : y + 5,
+				left : x + 5,
+				border : "1px solid #fdd",
+				padding : "2px",
+				"background-color" : "#fee",
+				opacity : 0.80
+			}).appendTo("body").fadeIn(200);
+		}
+
+
 		$.plot("#holder", [transactionsGraphData], {
 			xaxis : {
 				mode : "time",
@@ -60,11 +75,35 @@ $(function() {
 			},
 			yaxes : [{
 				min : 0
-			}, {
-				// align if we are to the right
-				alignTicksWithAxis : "right",
-				position : "right",
 			}],
+			series : {
+				points : {
+					show : true
+				},
+				lines : {
+					show : true
+				}
+			},
+			grid : {
+				hoverable : true,
+			},
+		});
+		var previousPoint = null;
+		$("#holder").bind("plothover", function(event, pos, item) {
+
+			if (item) {
+				if (previousPoint != item.dataIndex) {
+					previousPoint = item.dataIndex;
+					$("#tooltip").remove();
+					var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
+					var date = new Date(parseFloat(x));
+					showTooltip(item.pageX, item.pageY, 'Sold on ' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " for $" + y);
+				}
+			} else {
+				$("#tooltip").remove();
+				previousPoint = null;
+			}
+
 		});
 
 	});
