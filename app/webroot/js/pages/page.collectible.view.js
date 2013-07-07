@@ -67,44 +67,45 @@ $(function() {
 			}).appendTo("body").fadeIn(200);
 		}
 
-
-		$.plot("#holder", [transactionsGraphData], {
-			xaxis : {
-				mode : "time",
-				timeformat : "%m/%d/%y",
-			},
-			yaxes : [{
-				min : 0
-			}],
-			series : {
-				points : {
-					show : true
+		if (!_.isEmpty(transactionsGraphData)) {
+			$.plot("#holder", [transactionsGraphData], {
+				xaxis : {
+					mode : "time",
+					timeformat : "%m/%d/%y",
 				},
-				lines : {
-					show : true
-				}
-			},
-			grid : {
-				hoverable : true,
-			},
-		});
-		var previousPoint = null;
-		$("#holder").bind("plothover", function(event, pos, item) {
+				yaxes : [{
+					min : 0
+				}],
+				series : {
+					points : {
+						show : true
+					},
+					lines : {
+						show : true
+					}
+				},
+				grid : {
+					hoverable : true,
+				},
+			});
+			var previousPoint = null;
+			$("#holder").bind("plothover", function(event, pos, item) {
 
-			if (item) {
-				if (previousPoint != item.dataIndex) {
-					previousPoint = item.dataIndex;
+				if (item) {
+					if (previousPoint != item.dataIndex) {
+						previousPoint = item.dataIndex;
+						$("#tooltip").remove();
+						var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
+						var date = new Date(parseFloat(x));
+						showTooltip(item.pageX, item.pageY, 'Sold on ' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " for $" + y);
+					}
+				} else {
 					$("#tooltip").remove();
-					var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
-					var date = new Date(parseFloat(x));
-					showTooltip(item.pageX, item.pageY, 'Sold on ' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " for $" + y);
+					previousPoint = null;
 				}
-			} else {
-				$("#tooltip").remove();
-				previousPoint = null;
-			}
 
-		});
+			});
+		}
 
 	});
 

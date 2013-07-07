@@ -190,7 +190,9 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 				<div class="span12">
 					<ul class="nav nav-tabs" id="myTab">
 						<li class="active"><a href="#detail">Detail</a></li>
+						<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
 						<li><a href="#price">Price Guide</a></li>
+						<?php } ?>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="detail">
@@ -243,18 +245,21 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 							<?php } ?>								
 							
 						</div>	
-						<div class="tab-pane" id="price">
-							<div <?php
-							if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')) {  echo 'id="transactions"';
-							}
-	 						?>>						
-							</div>	
-							<div class="graph-container">
-								<div id="holder" style="width:850px;height:450px">
-	
-								</div>			    	
-						    </div>						 	
-					</div>
+						<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
+							<div class="tab-pane" id="price">
+								<div id="transactions">						
+								
+								</div>	
+								<?php if(!empty($transactionGraphData)) { ?>
+								<div class="graph-container">
+									<div id="holder" style="width:850px;height:450px">
+		
+									</div>			    	
+							    </div>	
+							    <?php } ?>					 	
+							</div>							
+						<?php } ?>
+
 			</div>
 		</div>
 	</div>	
