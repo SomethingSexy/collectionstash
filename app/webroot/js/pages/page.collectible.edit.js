@@ -3124,6 +3124,8 @@ var AttributeDuplicateView = Backbone.View.extend({
 			delete this.replacementAttribute;
 		}
 
+		// since I don't offer a cancel button :), just
+		// create a new one
 		this.replacementAttribute = new Backbone.Model();
 
 		if (this.currentView) {
@@ -3143,15 +3145,22 @@ var AttributeDuplicateView = Backbone.View.extend({
 		$('.modal-footer .save', self.el).hide();
 	},
 	searchPart : function() {
+		var self = this;
 		if (this.replacementAttribute) {
 			this.replacementAttribute.off();
 			delete this.replacementAttribute;
 		}
 
 		this.replacementAttribute = new Backbone.Model();
+
+		this.replacementAttribute = new Backbone.Model();
 		if (this.currentView) {
 			this.currentView.remove();
 		}
+
+		this.replacementAttribute.on('change', function() {
+			self.renderBody();
+		}, this);
 
 		this.currentView = new AddExistingAttributePartSearchView({
 			collection : new PaginatedPart(),
@@ -3190,14 +3199,15 @@ var AttributeDuplicateView = Backbone.View.extend({
 			success : function(model, response) {
 				$('.save', this.el).button('reset');
 				if (response.response.isSuccess) {
-
+					var message = "";
 					// upon success of us switching out the model,
 					// we need to first check to see if is an edit
 					// or not.
 					if (model.get('isEdit')) {
-
+						message = 'Replacement has been submitted for approval.';
 						self.trigger('modal:close');
 					} else {
+						message = 'Part has been replaced.';
 						var data = {};
 						data.Attribute = model.get('Attribute');
 						data.Attribute.Scale = model.get('Scale');
@@ -3210,6 +3220,24 @@ var AttributeDuplicateView = Backbone.View.extend({
 
 						self.trigger('modal:close');
 					}
+
+					$.blockUI({
+						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+						showOverlay : false,
+						css : {
+							top : '100px',
+							'background-color' : '#DDFADE',
+							border : '1px solid #93C49F',
+							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+							'border-radius' : '4px 4px 4px 4px',
+							color : '#333333',
+							'margin-bottom' : '20px',
+							padding : '8px 35px 8px 14px',
+							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+							'z-index' : 999999
+						},
+						timeout : 2000
+					});
 
 					// if it is an edit we flash the message and close
 					// without updating the this.model.
