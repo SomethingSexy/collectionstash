@@ -85,6 +85,51 @@
  	{:else}
  		<p>There are no active listings.</p>
  	{/eq}
+ 	
+ 	<h4>Unsold Listings</h4>
+ 	{@eq key="{unsoldListings}" value="true" type="boolean"}
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Listing name</th>
+					<th>Listing Price</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody>
+				{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
+					{@if cond=" ('{processed}' && '{status}' === 'completed' && '{quantity_sold}' === '0') "}
+						<tr>
+							<td>{type}</td>
+							<td><a target="_blank" href="{url}">{listing_name}</a></td>
+							<td>{listing_price}</td>
+							<td>{start_date}</td>
+							<td>{end_date}</td>
+							<td>
+								<div class="btn-group actions">
+									{@eq key="{allowAdd}" value="true" type="boolean"}
+									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
+										<i class=" icon-exclamation-sign"></i>
+									</a>
+									{/eq}
+									{@eq key="{allowMaintenance}" value="true" type="boolean"}
+										<a data-id="{id}" class="btn delete" href="#" title="Delete">
+											<i class="icon-remove"></i>
+										</a>
+									{/eq}
+								</div>
+							</td>
+						</tr>
+					{/if}
+				{/listings}
+			</tbody>
+		</table> 	
+ 	{:else}
+ 		<p>There are no unsold listings.</p>
+ 	{/eq}
 	
 	<h4>Completed Transactions</h4>
 	{@eq key="{completedTransactions}" value="true" type="boolean"}
