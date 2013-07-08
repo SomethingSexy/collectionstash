@@ -23,10 +23,13 @@ var TransactionsView = Backbone.View.extend({
 
 		var activeListings = false;
 		var completedTransactions = false;
+		var unsoldListings = false;
 
 		this.collection.each(function(listing) {
 			if (!listing.get('processed')) {
 				activeListings = true;
+			} else if (listing.get('status') === 'completed' && listing.get('quantity_sold') === '0'){
+				unsoldListings = true;
 			}
 
 			if (listing.get('Transaction').length > 0) {
@@ -39,6 +42,7 @@ var TransactionsView = Backbone.View.extend({
 			errors : this.errors,
 			activeListings : activeListings,
 			completedTransactions : completedTransactions,
+			unsoldListings : unsoldListings,
 			allowMaintenance : this.allowMaintenance,
 			allowAdd : this.allowAdd
 		};
