@@ -1,5 +1,13 @@
 <h2>Change Log</h2>
 
+<h3>Release Notes for v2.5.4.1</h3>
+<p>Added unsold listings to the Collectible Detail Price Guide.</p>
+
+<h3>Release Notes for v2.5.4</h3>
+<ul>
+	<li>Listings have been tabbed out on the Collectible Detail page under "Price Guide"</li>
+	<li>Added a graph to show change in price over time.</li>
+</ul>
 <h3>Release Notes for v2.5.3.2</h3>
 <h4>Duplicate Part Replacement</h4>
 <p>We added the ability to replace duplicate parts.  Instead of having to remove and add the duplicates you can now directly replace it with an existing one.  Read more about this brand new features in our <a href="/pages/collection_stash_documentation#parts-duplicate">A Guide to Collection Stash</a></p>
