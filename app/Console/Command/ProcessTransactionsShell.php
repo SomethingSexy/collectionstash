@@ -8,6 +8,9 @@
  * It will looking for any listings that have not finished processing and process them if it can.
  *
  * It will have to sync up any transactions as well.
+ * 
+ * TODO: This should also handle updating end date times, for cases when it is buy it now that just keeps getting extended
+ * 
  */
 App::uses('TransactionFactory', 'Lib/Transaction');
 class ProcessTransactionsShell extends AppShell {
