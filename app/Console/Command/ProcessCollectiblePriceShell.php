@@ -12,6 +12,9 @@ class ProcessCollectiblePriceShell extends AppShell {
 		
 		$transactions = $this -> Transaction -> find('all', array('contain' => false, 'fields' => array('DISTINCT Transaction.collectible_id')));
 		debug($transactions);
+		
+		// then loop through all of the transactions, grab the collectible,
+		// 
 
 	}
 

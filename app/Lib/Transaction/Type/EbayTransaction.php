@@ -186,7 +186,11 @@ class EbayTransaction extends Object implements Transactionable {
 		$retVal['collectible_id'] = $collectibleId;
 		$retVal['sale_price'] = $ebayTransaction -> ConvertedTransactionPrice -> _;
 		$retVal['sale_date'] = $ebayTransaction -> CreatedDate;
-		$retVal['bestOffer'] = $ebayTransaction -> BestOfferSale;
+		if (!is_null($ebayTransaction -> BestOfferSale)) {
+			$retVal['bestOffer'] = $ebayTransaction -> BestOfferSale;
+		} else {
+			$retVal['bestOffer'] = false;
+		}
 
 		return $retVal;
 
