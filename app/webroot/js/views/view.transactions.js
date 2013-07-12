@@ -1,4 +1,6 @@
 // at some point we should probably break this out into transaction views
+// I also put the price data in this view so I didn't have to create more files
+// performance vs standards
 var TransactionsView = Backbone.View.extend({
 	template : 'transactions',
 	className : '',
@@ -13,6 +15,7 @@ var TransactionsView = Backbone.View.extend({
 		this.allowMaintenance = options.allowDeleteListing;
 		this.allowAdd = options.allowAddListing;
 		this.collectible = options.collectible;
+		this.priceData = options.priceData;
 		this.collection.on('add', this.render, this);
 		this.collection.on('remove', this.render, this);
 		this.collection.on('change:flagged', this.render, this);
@@ -28,7 +31,7 @@ var TransactionsView = Backbone.View.extend({
 		this.collection.each(function(listing) {
 			if (!listing.get('processed')) {
 				activeListings = true;
-			} else if (listing.get('status') === 'completed' && listing.get('quantity_sold') === '0'){
+			} else if (listing.get('status') === 'completed' && listing.get('quantity_sold') === '0') {
 				unsoldListings = true;
 			}
 
@@ -46,6 +49,11 @@ var TransactionsView = Backbone.View.extend({
 			allowMaintenance : this.allowMaintenance,
 			allowAdd : this.allowAdd
 		};
+
+		if (this.priceData !== null) {
+			data.showPriceBreakdown = true;
+			data.priceBreakdown = this.priceData.toJSON();
+		}
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);

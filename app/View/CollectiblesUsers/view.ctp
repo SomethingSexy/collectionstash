@@ -10,7 +10,7 @@
 		<div class="row">
 			<div class="span12">
 				<div class="actions btn-group pull-right">
-					<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="icon-search"></i></a>
+					<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="icon-info"></i></a>
 					<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
 					
 						$collectibleJSON = json_encode($collectible['Collectible']);

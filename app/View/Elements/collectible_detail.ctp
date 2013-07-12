@@ -189,9 +189,9 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 			<div class="row-fluid">
 				<div class="span12">
 					<ul class="nav nav-tabs" id="myTab">
-						<li class="active"><a href="#detail">Detail</a></li>
+						<li class="active"><a href="#detail"><i class="icon-info"></i> Detail</a></li>
 						<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
-						<li><a href="#price">Price Guide</a></li>
+						<li><a href="#price"><i class="icon-dollar"></i>  Price Guide</a></li>
 						<?php } ?>
 					</ul>
 					<div class="tab-content">
@@ -336,7 +336,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 
 
 <script>
-		var collectibleStatus = {
+	var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>
 		,
 		status:
@@ -352,6 +352,13 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 	var transactionsGraphData =
  <?php echo json_encode($transactionGraphData); ?>
 	;
+	var collectiblePriceData =
+ <?php 
+ if(isset($collectibleDetail['CollectiblePriceFact'])) {
+ 	echo json_encode($collectibleDetail['CollectiblePriceFact']);
+ } else {
+ 	echo 'null';
+ }?>;
 
  <?php
 if ($isUserAdmin) {
