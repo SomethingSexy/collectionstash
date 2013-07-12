@@ -102,7 +102,7 @@ class ProcessCollectiblePriceShell extends AppShell {
 				$collectible['CollectiblePriceFact']['total_transactions_ebay'] = $totalEbay;
 				$collectible['CollectiblePriceFact']['total_transactions_external'] = $totalExternal;
 
-				$this -> Collectible -> saveAssociated($collectible, array('fieldList' => array('Collectible' => array('collectible_price_fact_id'), 'CollectiblePriceFact' => array('average_price', 'average_price_ebay', 'average_price_external'))));
+				$this -> Collectible -> saveAssociated($collectible, array('fieldList' => array('Collectible' => array('collectible_price_fact_id'), 'CollectiblePriceFact' => array('average_price', 'average_price_ebay', 'average_price_external', 'total_transactions', 'total_transactions_ebay', 'total_transactions_external'))));
 			}
 
 		}
