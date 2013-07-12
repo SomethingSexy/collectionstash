@@ -1,3 +1,35 @@
+{@eq key="{showPriceBreakdown}" value="true" type="boolean"}
+
+<div class="widget stacked">
+	<div class="widget-header">
+		<i class="icon-dollar"></i>
+		<h3>Price Guide</h3>
+	</div>
+	<div class="widget-content">
+		<div class="price-guide">
+			<div class="average">
+				<span class="average-value">${priceBreakdown.average_price}</span>
+				Average Price from {priceBreakdown.total_transactions} {@eq key="{priceBreakdown.total_transactions}" value="1"} transaction {:else} transactions {/eq}
+			</div>
+			<div class="average">
+				<span class="average-value">${priceBreakdown.average_price_ebay}</span>
+				Average eBay Price {priceBreakdown.total_transactions_ebay} {@eq key="{priceBreakdown.total_transactions_ebay}" value="1"} transaction {:else} transactions {/eq}
+				
+			</div>
+			<div class="average">
+				<span class="average-value">${priceBreakdown.average_price_external}</span>
+				Average External Listing Price {priceBreakdown.total_transactions_external} {@eq key="{priceBreakdown.total_transactions_external}" value="1"} transaction {:else} transactions {/eq}
+				
+			</div>			
+		</div>	
+		
+	</div>
+	
+</div>
+
+{/eq}
+
+
 <div class="widget stacked action-table">
 	
 	

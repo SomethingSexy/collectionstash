@@ -10,6 +10,11 @@ $(function() {
 		// grab the template-stash-add
 		var collectibleModel = new Backbone.Model(collectible);
 		var listingsList = new Listings(listings);
+		// null means we don't have anything
+		var priceData = null;
+		if (collectiblePriceData !== null) {
+			var priceData = new Backbone.Model(collectiblePriceData);
+		}
 
 		// global variable that comes from the page, status is only for new collectibles
 		if (showStatus) {
@@ -50,9 +55,11 @@ $(function() {
 			collectible : collectibleModel,
 			collection : listingsList,
 			allowDeleteListing : allowDeleteListing,
-			allowAddListing : allowAddListing
+			allowAddListing : allowAddListing,
+			priceData : priceData
 		}).render().el);
-
+	
+		// lol this should probably get moved to the view file
 		function showTooltip(x, y, contents) {
 
 			$("<div id='tooltip'>" + contents + "</div>").css({

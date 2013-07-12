@@ -830,3 +830,30 @@ a.forgot-password {
 	color: red;
 	font-weight: bold;
 }
+
+.price-guide {
+	width: 100%;
+	display: table;
+	padding: 0 0 0 10px;
+	margin-top: .5em;
+	margin-bottom: 1.9em;
+}
+
+.price-guide .average {
+	display: table-cell;
+	width: 40%;
+	vertical-align: top;
+	font-size: 11px;
+	font-weight: bold;
+	color: #999;
+}
+
+.price-guide .average .average-value {
+	display: block;
+	margin-bottom: .55em;
+	font-size: 30px;
+	font-weight: bold;
+	letter-spacing: -2px;
+	color: #444;
+}
+

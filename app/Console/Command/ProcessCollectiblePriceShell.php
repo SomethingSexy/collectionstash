@@ -45,14 +45,66 @@ class ProcessCollectiblePriceShell extends AppShell {
 					$totalExternal = $totalExternal + 1;
 				}
 			}
+			if ($total !== 0) {
+				$average = $average / $total;
+			}
 
-			$average = $average / $total;
-			$averageEbay = $averageEbay / $totalEbay;
-			$averageExternal = $averageExternal / $totalExternal;
+			if ($totalEbay !== 0) {
+				$averageEbay = $averageEbay / $totalEbay;
+			}
 
-			debug($average);
-			debug($averageEbay);
-			debug($averageExternal);
+			if ($totalExternal !== 0) {
+				$averageExternal = $averageExternal / $totalExternal;
+			}
+
+			// debug($average);
+			// debug($averageEbay);
+			// debug($averageExternal);
+
+			// now that we are calculated, let's grab the collectible and see if it has a fact table
+
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('CollectiblePriceFact')));
+
+			// dis means we already have calculated information for this collectible
+			if (isset($collectible['CollectiblePriceFact'])) {
+				// check to see if we need to update it
+				$change = false;
+				if ($collectible['CollectiblePriceFact']['average_price'] !== $average || $collectible['CollectiblePriceFact']['total_transactions'] !== $total) {
+					$change = true;
+					$collectible['CollectiblePriceFact']['average_price'] = $average;
+					$collectible['CollectiblePriceFact']['total_transactions'] = $total;
+				}
+
+				if ($collectible['CollectiblePriceFact']['average_price_ebay'] !== $averageEbay || $collectible['CollectiblePriceFact']['total_transactions_ebay'] !== $totalEbay) {
+					$change = true;
+					$collectible['CollectiblePriceFact']['average_price_ebay'] = $averageEbay;
+					$collectible['CollectiblePriceFact']['total_transactions_ebay'] = $totalEbay;
+				}
+
+				if ($collectible['CollectiblePriceFact']['average_price_external'] !== $averageExternal || $collectible['CollectiblePriceFact']['total_transactions_external'] !== $totalExternal) {
+					$change = true;
+					$collectible['CollectiblePriceFact']['average_price_external'] = $averageExternal;
+					$collectible['CollectiblePriceFact']['total_transactions_external'] = $totalExternal;
+				}
+
+				// only update on a change, save powers
+				if ($change) {
+					unset($collectible['Collectible']);
+					$this -> CollectiblePriceFact -> save($collectible);
+				}
+			} else {
+				// if it isn't set then we need to create a new one and update the collectible to store da reference
+				$collectible['CollectiblePriceFact'] = array();
+				$collectible['CollectiblePriceFact']['average_price'] = $average;
+				$collectible['CollectiblePriceFact']['average_price_ebay'] = $averageEbay;
+				$collectible['CollectiblePriceFact']['average_price_external'] = $averageExternal;
+				$collectible['CollectiblePriceFact']['total_transactions'] = $total;
+				$collectible['CollectiblePriceFact']['total_transactions_ebay'] = $totalEbay;
+				$collectible['CollectiblePriceFact']['total_transactions_external'] = $totalExternal;
+
+				$this -> Collectible -> saveAssociated($collectible, array('fieldList' => array('Collectible' => array('collectible_price_fact_id'), 'CollectiblePriceFact' => array('average_price', 'average_price_ebay', 'average_price_external'))));
+			}
+
 		}
 	}
 

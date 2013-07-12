@@ -129,7 +129,7 @@
 
 			echo '<ul class="user-detail unstyled">';
 			echo '<li class="">';
-			echo '<a class="btn" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-search"></i></a>';
+			echo '<a class="btn" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a>';
 			if (isset($myStash) && $myStash) {
 				$collectibleJSON = json_encode($myCollectible['Collectible']);
 				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
