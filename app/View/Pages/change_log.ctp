@@ -1,7 +1,9 @@
 <h2>Change Log</h2>
-
-<h3>Release Notes for v2.5.4.1</h3>
-<p>Added unsold listings to the Collectible Detail Price Guide.</p>
+<h3>Release Notes for v2.5.5</h3>
+<p>We are now calculating average prices for collectibles with transactions.  We also made some changes to the look of the Price Guide.</p>
+<img src="/img/documentation/listing_page.png" class="img-polaroid">
+<p></p>
+<p>Read more about this brand new feature in our <a href="/pages/collection_stash_documentation#listings-price-guide">A Guide to Collection Stash</a></p>
 
 <h3>Release Notes for v2.5.4</h3>
 <ul>
