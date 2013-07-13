@@ -9,19 +9,20 @@
 		<div class="price-guide">
 			<div class="average">
 				<span class="average-value">${priceBreakdown.average_price}</span>
-				Average Price from {priceBreakdown.total_transactions} {@eq key="{priceBreakdown.total_transactions}" value="1"} transaction {:else} transactions {/eq}
+				Average price from {priceBreakdown.total_transactions} {@eq key="{priceBreakdown.total_transactions}" value="1"} transaction {:else} transactions {/eq}
 			</div>
 			<div class="average">
 				<span class="average-value">${priceBreakdown.average_price_ebay}</span>
-				Average eBay Price {priceBreakdown.total_transactions_ebay} {@eq key="{priceBreakdown.total_transactions_ebay}" value="1"} transaction {:else} transactions {/eq}
+				Average eBay price {priceBreakdown.total_transactions_ebay} {@eq key="{priceBreakdown.total_transactions_ebay}" value="1"} transaction {:else} transactions {/eq}
 				
 			</div>
 			<div class="average">
 				<span class="average-value">${priceBreakdown.average_price_external}</span>
-				Average External Listing Price {priceBreakdown.total_transactions_external} {@eq key="{priceBreakdown.total_transactions_external}" value="1"} transaction {:else} transactions {/eq}
+				Average external listing price {priceBreakdown.total_transactions_external} {@eq key="{priceBreakdown.total_transactions_external}" value="1"} transaction {:else} transactions {/eq}
 				
 			</div>			
 		</div>	
+		<p class="pull-right">Average prices update once a day.</p>
 		
 	</div>
 	
