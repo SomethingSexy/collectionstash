@@ -74,6 +74,9 @@
 						<li>
 							<a href="#listings-add"> <i class="icon-chevron-right"></i> Adding a Listing </a>
 						</li>
+						<li>
+							<a href="#listings-price-guide"> <i class="icon-chevron-right"></i> Price Guide </a>
+						</li>
 					</ul>
 				</li>
 			</ul>			
@@ -537,13 +540,13 @@
 		</p>
 		
 		<h2 id="listings">Sale Listings and Transactions</h2>
-		<p>Every collectible here at Collection Stash can contain sale and auction listings.  These listings can be used for reference to see what collectibles might be currently for sale and what a collectible might have recently sold for.  You can find these listings on the Collectible Information page.</p>
+		<p>Every collectible here at Collection Stash can contain sale and auction listings.  These listings can be used for reference to see what collectibles might be currently for sale and what a collectible might have recently sold for.  You can find these listings on the Collectible Information page under the Price Guide tab.</p>
 		<img src="/img/documentation/listing.png" class="img-polaroid">
 		<p></p>
 		<p>Here is an example of a collectible with some completed transactions.</p>
 		<img src="/img/documentation/listing_completed.png" class="img-polaroid">
 		<p></p>
-		<h3 id="listing-add"> Adding a Listing </h3>
+		<h3 id="listings-add"> Adding a Listing </h3>
 		<p>As of now, Collection Stash only supports eBay listings.  While logged in, you can add an eBay listing to a collectible by entering the item number from an eBay listing into the "Item Number" input field.</p>
 		<img src="/img/documentation/listing_add.png" class="img-polaroid">
 		<p></p>
@@ -555,6 +558,24 @@
 		<img src="/img/documentation/listing_add_flagged.png" class="img-polaroid">
 		<p></p>
 		<p>Currently all listings have to be entered in manually.  However, you can earn up to 50 nuts per valid listing you add to a collectible.</p>
+		
+		<h3 id="listings-price-guide"> Price Guide </h3>
+		<p> The Price Guide feature of a collectible breakdowns the average price a collectible is selling for given all of the completeled transactions.  If there are no completed transactions then all of the values will be zero.</p>
+		<img src="/img/documentation/listing_price_guide.png" class="img-polaroid">
+		<p></p>
+		<p>The following average prices are available.</p>
+		<ul>
+			<li>
+				Average of all transactions.
+			</li>
+			<li>
+				Average of all eBay transactions.
+			</li>
+			<li>
+				Average of all external transactions (when a user removes a collectible and indicates they sold it).
+			</li>
+		</ul>
+		<p>Prices are updated once a day.</p>
 	</div>
 
 
