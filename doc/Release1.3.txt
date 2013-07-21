@@ -72,6 +72,8 @@ linux: ./cake
 
 
    ./cake -app /var/www/collectionstash/app process_transactions
+   
+   ./cake -app /var/www/collectionstash/app process_collectible_price
 
 
 
@@ -107,3 +109,6 @@ cron
 /var/www/collectionstash/vendors/cakeshell.sh process_activities -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
 
 /var/www/collectionstash/vendors/cakeshell.sh process_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+
+/var/www/collectionstash/vendors/cakeshell.sh process_collectible_price -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
