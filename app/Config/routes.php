@@ -35,6 +35,12 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 /**
  * Renamed a url so keep it alive here.
  */
+Router::connect('/user/home', array('controller' => 'users', 'action' => 'home')); 
+ 
+Router::connect('/user/home/activity', array('controller' => 'users', 'action' => 'activity'));  
+
+Router::connect('/user/home/history', array('controller' => 'users', 'action' => 'history'));  
+ 
 Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
 
 Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' => 'comments'));

@@ -17,13 +17,13 @@ class UsersController extends AppController {
 
 		// user
 		$user = $this -> getUser();
-		debug($user);
+
 		$this -> set(compact('user'));
 
 		//stashes
 		$stashes = $this -> User -> Stash -> find('all', array('conditions' => array('Stash.user_id' => $this -> getUserId()), 'contain' => false));
 		$this -> set(compact('stashes'));
-		debug($stashes);
+
 		// user_point_facts
 		$pointsYear = $this -> User -> UserPointFact -> getUserTotalPointsCurrentYear($this -> getUserId());
 		$pointsMonth = $this -> User -> UserPointFact -> getUserTotalPointsCurrentMonth($this -> getUserId());
@@ -91,7 +91,15 @@ class UsersController extends AppController {
 		$this -> set(compact('activity'));
 		$this -> set(compact('totalActivity'));
 
-		$this -> layout = 'fluid';
+		$this -> layout = 'home_dashboard';
+	}
+
+	function activity() {
+
+	}
+
+	function history() {
+
 	}
 
 	/**
