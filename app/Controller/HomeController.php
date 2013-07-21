@@ -13,7 +13,7 @@ class HomeController extends AppController {
 	 */
 	public function index() {
 		if ($this -> isLoggedIn()) {
-			$this -> redirect(array('controller' => 'users', 'action' => 'home'));
+			$this -> redirect(array('controller' => 'user', 'action' => 'home'));
 		} else {
 			$this -> layout = 'home';
 		}
