@@ -43,13 +43,6 @@ class UsersController extends AppController {
 
 		// $this -> User -> UserPointFact -> getYearlyLeaders();
 
-		// This is all the collectibles approved and submitted
-		$total = $this -> User -> Collectible -> find('count', array('conditions' => array('Collectible.status_id' => array(4, 2), 'Collectible.user_id' => $this -> getUserId())));
-		$collectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.user_id' => $this -> getUserId(), 'Collectible.status_id' => array(4, 2)), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User'), 'limit' => 10));
-
-		$collectibles = json_encode($collectibles);
-		$this -> set(compact('collectibles'));
-		$this -> set(compact('total'));
 
 		// this is all collectible in draft space
 		$totalWorks = $this -> User -> Collectible -> find('count', array('conditions' => array('OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3')), 'Collectible.user_id' => $this -> getUserId())));
@@ -59,13 +52,6 @@ class UsersController extends AppController {
 
 		$this -> set(compact('works'));
 		$this -> set(compact('totalWorks'));
-
-		$totalEdits = $this -> User -> Edit -> find('count', array('conditions' => array('Edit.user_id' => $this -> getUserId())));
-		$edits = $this -> User -> Edit -> find('all', array('conditions' => array('Edit.user_id' => $this -> getUserId()), 'limit' => 10));
-
-		$edits = json_encode($edits);
-		$this -> set(compact('edits'));
-		$this -> set(compact('totalEdits'));
 
 		// Now grab the pending collectible
 		$pending = $this -> User -> Collectible -> getPendingCollectibles(array('limit' => 5, 'order' => array('Collectible.created' => 'desc')));
@@ -95,6 +81,29 @@ class UsersController extends AppController {
 	}
 
 	function activity() {
+		$this -> checkLogIn();
+
+		// user
+		$user = $this -> getUser();
+
+		$this -> set(compact('user'));
+
+		// This is all the collectibles approved and submitted
+		$total = $this -> User -> Collectible -> find('count', array('conditions' => array('Collectible.status_id' => array(4, 2), 'Collectible.user_id' => $this -> getUserId())));
+		$collectibles = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.user_id' => $this -> getUserId(), 'Collectible.status_id' => array(4, 2)), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User'), 'limit' => 10));
+
+		$collectibles = json_encode($collectibles);
+		$this -> set(compact('collectibles'));
+		$this -> set(compact('total'));
+
+		$totalEdits = $this -> User -> Edit -> find('count', array('conditions' => array('Edit.user_id' => $this -> getUserId())));
+		$edits = $this -> User -> Edit -> find('all', array('conditions' => array('Edit.user_id' => $this -> getUserId()), 'limit' => 10));
+
+		$edits = json_encode($edits);
+		$this -> set(compact('edits'));
+		$this -> set(compact('totalEdits'));
+
+		$this -> layout = 'home_dashboard';
 
 	}
 

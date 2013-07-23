@@ -153,29 +153,6 @@
 	</div>
 	
 	<div class="row-fluid spacer">
-		<div class="span6">
-			<div class="widget widget-table">
-				<div class="widget-header">
-					<h3>Your Submissions</h3>
-				</div>
-				<div class="widget-content submissions">
-				
-				</div>
-			</div>
-		</div>
-		<div class="span6">
-			<div class="widget widget-table">
-				<div class="widget-header">
-					<h3>Your Edits</h3>
-				</div>
-				<div class="widget-content edits">
-				
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row-fluid spacer">
 		<div class="span12">
 			<div class="widget">
 				<div class="widget-header">
@@ -222,10 +199,7 @@
 
 <script>
 var userId =<?php echo $user['User']['id']; ?>;
-var totalSubmission = <?php echo $total; ?>;
-var totalSubmissionPages = Math.ceil(totalSubmission / 10);
-var totalEdit = <?php echo $totalEdits; ?>;
-var totalEditPages = Math.ceil(totalEdit / 10);
+
 
 var totalPending = <?php echo $totalPending; ?>;
 var totalPendingPages = Math.ceil(totalPending / 5); 
@@ -242,12 +216,6 @@ var totalActivityPages = Math.ceil(totalActivity / 10);
 <?php echo $this -> Html -> script('views/view.activity', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home', array('inline' => true)); ?>
 <script>
-
-var submissions = new PaginatedCollection();
-submissions.reset(<?php echo $collectibles; ?>);
-
-var edits = new PaginatedEdits();
-edits.reset(<?php echo $edits; ?>);
 
 var pending = new PaginatedPending();
 pending.reset(<?php echo $pending; ?>);
