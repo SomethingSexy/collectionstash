@@ -203,20 +203,21 @@
 			<div id="left-panel-content" >
 				<ul style="-webkit-transition: -webkit-transform 0ms; transition: -webkit-transform 0ms; -webkit-transform-origin: 0px 0px; -webkit-transform: translate3d(0px, 0px, 0);">
 					<li class="active">
-						<a href="dashboard.html"><span class="icon-dashboard"></span>Home</a>
+						<?php echo $this -> Html -> link('<span class="icon-home"></span>Home', '/user/home', array('escape' => false, 'admin' => false)); ?>
+
 					</li>
 					<li>
-						<a href="layout.html"><span class="icon-th-large"></span>Activity</a>
+						<?php echo $this -> Html -> link('<span class="icon-time"></span>Activity', '/user/home/activity', array('escape' => false, 'admin' => false)); ?>
 					</li>
 					<li>
-						<a href="typography.html"><span class="icon-font"></span>History</a>
+						<?php echo $this -> Html -> link('<span class="icon-bar-chart"></span>History', '/user/home/history', array('escape' => false, 'admin' => false)); ?>
 					</li>
 				</ul>
 			</div>
 			<div class="icon-caret-down"></div>
 			<div class="icon-caret-up"></div>
 		</nav>
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row-fluid">
 				<?php echo $content_for_layout; ?>
 			</div>	

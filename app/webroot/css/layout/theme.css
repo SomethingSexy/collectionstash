@@ -199,6 +199,11 @@ div.subnav-fixed {
 	padding: 0;
 }
 
+#left-panel .icon-caret-down,
+#left-panel .icon-caret-up {
+	display: none;
+}
+
 #left-panel-content > ul {
 	display: block;
 	padding-top: 91px;
