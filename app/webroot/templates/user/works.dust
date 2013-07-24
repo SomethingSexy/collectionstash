@@ -13,10 +13,11 @@
 
 	</tbody>
 </table>
-<p>
-	Total:{paginator.total}
-</p>
+
 <div class="pagination">
+	<p>
+		Total:{paginator.total}
+	</p>	
 	<ul>
 	{@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
 	<li> <a class="previous" rel="prev"> previous</a> </li>
