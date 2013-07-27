@@ -1,4 +1,9 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.5.6</h3>
+<ul>
+	<li>Updated the home dashboard to break the data into multiple sections.  These sections are access via the new menu on the left when you are logged in on the home page.</li>
+	<li>Updated the user history list to display sold cost and date if it was added.</li>
+</ul>
 <h3>Release Notes for v2.5.5</h3>
 <p>We are now calculating average prices for collectibles with transactions.  We also made some changes to the look of the Price Guide.</p>
 <img src="/img/documentation/listing_page.png" class="img-polaroid">

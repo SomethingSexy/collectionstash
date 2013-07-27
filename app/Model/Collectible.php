@@ -313,7 +313,7 @@ class Collectible extends AppModel {
 					}
 
 					if (!isset($results['collectible_price_fact_id']) || is_null($results['collectible_price_fact_id'])) {
-						unset($results[$key]['CollectiblePriceFact']);
+						unset($results['CollectiblePriceFact']);
 					}
 				} else {
 

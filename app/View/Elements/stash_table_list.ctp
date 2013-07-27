@@ -28,6 +28,10 @@ if ($stashType === 'default') {
 	echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
 	echo '<th>' . $this -> Paginator -> sort('cost', 'Price Paid') . '</th>';
 	echo '<th>' . $this -> Paginator -> sort('purchased', 'Date Purchased') . '</th>';
+	if ($history) {
+		echo '<th>' . __('Sold For') . '</th>';
+		echo '<th>' . __('Date Sold') . '</th>';
+	}
 }
 echo '<th>' . $this -> Paginator -> sort('created', 'Date Added') . '</th>';
 if (isset($myStash) && $myStash) {
@@ -90,7 +94,22 @@ foreach ($collectibles as $key => $myCollectible) {
 		} else {
 			echo '<td>' . __('Not Recorded') . '</td>';
 		}
+
+		if ($history) {
+			if ($myCollectible['CollectiblesUser']['active']) {
+				echo '<td> - </td>';
+				echo '<td> - </td>';
+			} else if (isset($myCollectible['Listing'])) {
+				echo '<td>' . $myCollectible['Listing']['Transaction'][0]['sale_price'] . '</td>';
+				echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['Listing']['Transaction'][0]['sale_date'], null) . '</td>';
+			} else {
+				echo '<td> - </td>';
+				echo '<td> - </td>';
+			}
+		}
+
 	}
+
 	echo '<td>' . $this -> Time -> format('F jS, Y h:i A', $myCollectible['CollectiblesUser']['created'], null) . '</td>';
 
 	if (isset($myStash) && $myStash) {
