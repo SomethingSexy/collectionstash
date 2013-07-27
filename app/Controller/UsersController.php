@@ -43,7 +43,6 @@ class UsersController extends AppController {
 
 		// $this -> User -> UserPointFact -> getYearlyLeaders();
 
-
 		// this is all collectible in draft space
 		$totalWorks = $this -> User -> Collectible -> find('count', array('conditions' => array('OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3')), 'Collectible.user_id' => $this -> getUserId())));
 		$works = $this -> User -> Collectible -> find('all', array('conditions' => array('Collectible.user_id' => $this -> getUserId(), 'OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'))), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User'), 'limit' => 10));
@@ -108,7 +107,16 @@ class UsersController extends AppController {
 	}
 
 	function history() {
+		$this -> checkLogIn();
 
+		// user
+		$user = $this -> getUser();
+
+		$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+		$collectibles = $this -> paginate('CollectiblesUser');
+		$this -> set(compact('collectibles'));
+		
+		$this -> layout = 'home_dashboard';
 	}
 
 	/**
