@@ -48,7 +48,7 @@
 	echo $this -> Minify -> script('js/thirdparty/dust-helpers-1.1.0');
 	echo $this -> Minify -> script('js/cs.dust-helpers');
 	echo $this -> Minify -> script('js/thirdparty/iscroll-lite-4.2.0');
-	echo $this -> Html -> script('thirdparty/theme/theme.left-panel');
+	echo $this -> Minify -> script('js/thirdparty/theme/theme.left-panel');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	
