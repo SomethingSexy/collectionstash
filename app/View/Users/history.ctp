@@ -1,7 +1,7 @@
 <div class="span12 home">
 	<div class="row-fluid spacer">
 		
-		<div class="widget widget-table">
+		<div class="widget <?php if (isset($collectibles) && !empty($collectibles)) echo 'widget-table'; ?>">
 			<div class="widget-header">
 				<h3><?php echo __('History');?></h3>
 			</div>
@@ -10,7 +10,7 @@
 				if (isset($collectibles) && !empty($collectibles)) {
 					echo $this -> element('stash_table_list', array('collectibles' => $collectibles, 'showThumbnail' => false, 'stashType' => 'default', 'history' => true));
 				} else {
-					echo '<p>' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+					echo '<p>' . $stashUsername . __('You have no collectibles in your stash!', true) . '</p>';
 				}?>				
 				
 			</div>
