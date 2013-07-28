@@ -202,14 +202,14 @@
 		<nav id="left-panel" >
 			<div id="left-panel-content" >
 				<ul style="-webkit-transition: -webkit-transform 0ms; transition: -webkit-transform 0ms; -webkit-transform-origin: 0px 0px; -webkit-transform: translate3d(0px, 0px, 0);">
-					<li class="active">
+					<li <?php if(isset($dashboard) && $dashboard ==='home') echo 'class="active"'; ?>>
 						<?php echo $this -> Html -> link('<span class="icon-home"></span>Home', '/user/home', array('escape' => false, 'admin' => false)); ?>
 
 					</li>
-					<li>
+					<li <?php if(isset($dashboard) && $dashboard ==='activity') echo 'class="active"'; ?>>
 						<?php echo $this -> Html -> link('<span class="icon-time"></span>Activity', '/user/home/activity', array('escape' => false, 'admin' => false)); ?>
 					</li>
-					<li>
+					<li <?php if(isset($dashboard) && $dashboard ==='history') echo 'class="active"'; ?>>
 						<?php echo $this -> Html -> link('<span class="icon-bar-chart"></span>History', '/user/home/history', array('escape' => false, 'admin' => false)); ?>
 					</li>
 				</ul>
