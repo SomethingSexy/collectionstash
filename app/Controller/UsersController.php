@@ -77,6 +77,7 @@ class UsersController extends AppController {
 		$this -> set(compact('totalActivity'));
 
 		$this -> layout = 'home_dashboard';
+		$this -> set('dashboard', 'home');
 	}
 
 	function activity() {
@@ -103,6 +104,7 @@ class UsersController extends AppController {
 		$this -> set(compact('totalEdits'));
 
 		$this -> layout = 'home_dashboard';
+		$this -> set('dashboard', 'activity');
 
 	}
 
@@ -117,6 +119,7 @@ class UsersController extends AppController {
 		$this -> set(compact('collectibles'));
 		
 		$this -> layout = 'home_dashboard';
+		$this -> set('dashboard', 'history');
 	}
 
 	/**
