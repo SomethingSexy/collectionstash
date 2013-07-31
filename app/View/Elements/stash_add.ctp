@@ -88,7 +88,7 @@
 	<div class="control-group {#inlineErrors.purchase_date}error{/inlineErrors.purchase_date}">
 		<label class="control-label" for="CollectiblesUserPurchaseDate">When did you purchase this collectible?</label>
 		<div class="controls">
-			<input type="text" id="CollectiblesUserPurchaseDate" maxlength="8" name="purchase_date" value="{model.purchase_date}">
+			<input type="text" id="CollectiblesUserPurchaseDate" maxlength="10" name="purchase_date" value="{model.purchase_date}">
 			{#inlineErrors.purchase_date}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.purchase_date}

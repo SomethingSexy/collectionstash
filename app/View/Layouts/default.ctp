@@ -77,7 +77,10 @@
 		})();
 	</script>
 </head>
-<body <?php if(isset($bodyClass)) echo 'class="' . $bodyClass .  '"';?>  >
+<body <?php
+if (isset($bodyClass))
+	echo 'class="' . $bodyClass . '"';
+?>  >
 	<div id="fb-root"></div>
 	<script>
 		( function(d, s, id) {
@@ -148,8 +151,16 @@
 							</li>									
 						</ul>
 						<ul class="nav pull-right">
-							<li>
-									<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
+								<li>
+								<?php
+									$homeLinkLabel = '<i class="icon-home"></i>';
+									$homeLinkClass = '';
+									if ($notificationsCount !== 0) {
+										$homeLinkLabel .= ' ' . $notificationsCount;
+										$homeLinkClass = 'warning';
+									} 
+									echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+								?>
 								</li>
 								<?php
 								if(isset($isLoggedIn) && $isLoggedIn === true)

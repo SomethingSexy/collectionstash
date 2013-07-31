@@ -17,6 +17,8 @@
 		</div>
 	</div>
 	<?php } ?>
+
+	
 	<div class="row-fluid spacer">
 		<div class="span6">
 			<div class="widget user-stats">
@@ -182,7 +184,7 @@
 		<div class="span12">
 			<div class="widget">
 				<div class="widget-header">
-					<h3>Recently Added Collectibles</h3>
+					<h3>Recently Approved Collectibles</h3>
 				</div>
 				<div class="widget-content new">
 				

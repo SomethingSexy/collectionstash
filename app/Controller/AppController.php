@@ -42,7 +42,8 @@ class AppController extends Controller {
 			$this -> set('isUserAdmin', false);
 		}
 
-		$this -> set('subscriptions', $this -> getSubscriptions());
+		$this -> set('subscriptions', $this -> getSubscriptions());
+		$this -> set('notificationsCount', $this -> getNotificationsCount());
 		//Since this gets set for every request, setting this here for the default
 		$this -> set('title_for_layout', 'Collection Stash');
 		$this -> set('description_for_layout', 'Your collectible database and storage system.');
@@ -102,6 +103,17 @@ class AppController extends Controller {
 		} else {
 			return $subscriptions;
 		}
+	}
+
+	public function getNotificationsCount() {
+		$count = $this -> Session -> read('notificationsCount');
+
+		if ($count === null) {
+			return 0;
+		} else {
+			return $count;
+		}
+
 	}
 
 	public function handleNotLoggedIn() {
