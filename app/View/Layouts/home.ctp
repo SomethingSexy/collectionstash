@@ -100,11 +100,13 @@
 				    <span class="icon-bar"></span>
 			    </a>
 			     
-				<?php
-				if (isset($isLoggedIn) && $isLoggedIn === true) {
-					echo '<a class="brand" href="#">' . __('Welcome, ') . $username . '</a>';
-				}
-				?>
+					<?php
+					if (isset($isLoggedIn) && $isLoggedIn === true) {
+						echo '<a class="brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"> ' . __('Welcome, ') . $username . '</a>';
+					} else {
+						echo '<a class="brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>'; 
+					}
+					?>
 			    <!-- Be sure to leave the brand out there if you want it shown 
 			    	
 			    	-->
