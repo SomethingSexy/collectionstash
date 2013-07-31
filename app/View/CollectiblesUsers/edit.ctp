@@ -64,7 +64,7 @@
 		<div class="control-group">
 	          <label class="control-label" for=""><?php echo __('When did you purchase this collectible?') ?></label>
 	      <div class="controls">
-	        <?php echo $this -> Form -> text('purchase_date', array('div' => false, 'label' => false, 'maxLength' => 8)); ?>
+	        <?php echo $this -> Form -> text('purchase_date', array('div' => false, 'label' => false, 'maxLength' => 10)); ?>
 	  			</div>
 		</div>  
 		<?php if (!$collectible['CollectiblesUser']['active']) { 
@@ -81,7 +81,7 @@
 				<div class="control-group ">
 					<label for="CollectiblesUserRemoveDate" class="control-label"> When did you sell this collectible? </label>
 					<div class="controls">
-						<?php echo $this -> Form -> text('remove_date', array('div' => false, 'label' => false, 'maxLength' => 8, 'required')); ?>
+						<?php echo $this -> Form -> text('remove_date', array('div' => false, 'label' => false, 'maxLength' => 10, 'required')); ?>
 					</div>
 				</div>
 		<?php } ?>           

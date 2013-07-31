@@ -151,8 +151,16 @@
 							</li>									
 						</ul>
 						<ul class="nav pull-right">
-							<li>
-									<?php echo $this -> Html -> link('<i class="icon-home"></i>', '/', array('escape' => false, 'admin' => false)); ?>
+								<li>
+								<?php
+									$homeLinkLabel = '<i class="icon-home"></i>';
+									$homeLinkClass = '';
+									if ($notificationsCount !== 0) {
+										$homeLinkLabel .= ' ' . $notificationsCount;
+										$homeLinkClass = 'warning';
+									} 
+									echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+								?>
 								</li>
 								<?php
 								if(isset($isLoggedIn) && $isLoggedIn === true)
@@ -205,6 +213,17 @@
 					<li <?php if(isset($dashboard) && $dashboard ==='home') echo 'class="active"'; ?>>
 						<?php echo $this -> Html -> link('<span class="icon-home"></span>Home', '/user/home', array('escape' => false, 'admin' => false)); ?>
 
+					</li>
+					<li <?php if(isset($dashboard) && $dashboard ==='notifications') echo 'class="active"'; ?>>
+						<?php 
+							$notificationLinkLabel = '<span class="icon-warning-sign"></span>Notifications';
+							$notificationLinkClass = '';
+							if ($notificationsCount !== 0) {
+								$notificationLinkLabel .= ' ' . $notificationsCount;
+								$notificationLinkClass = 'warning';
+							} 
+						
+							echo $this -> Html -> link($notificationLinkLabel, '/user/home/notifications', array('escape' => false, 'admin' => false, 'class' => $notificationLinkClass)); ?>
 					</li>
 					<li <?php if(isset($dashboard) && $dashboard ==='activity') echo 'class="active"'; ?>>
 						<?php echo $this -> Html -> link('<span class="icon-time"></span>Activity', '/user/home/activity', array('escape' => false, 'admin' => false)); ?>

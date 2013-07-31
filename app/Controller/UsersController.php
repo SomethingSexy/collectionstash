@@ -117,9 +117,14 @@ class UsersController extends AppController {
 		$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
 		$collectibles = $this -> paginate('CollectiblesUser');
 		$this -> set(compact('collectibles'));
-		
+
 		$this -> layout = 'home_dashboard';
 		$this -> set('dashboard', 'history');
+	}
+
+	function notifications() {
+		$this -> layout = 'home_dashboard';
+		$this -> set('dashboard', 'notifications');
 	}
 
 	/**
@@ -174,6 +179,10 @@ class UsersController extends AppController {
 							$this -> Session -> write('subscriptions', $subscriptions);
 
 							CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
+
+							// grab the total number of unread notifications
+							$totalNotifications = $this -> User -> Notification -> getCountUnreadNotifications($user['id']);
+							$this -> Session -> write('notificationsCount', $totalNotifications);
 
 							$this -> redirect($this -> Auth -> redirect());
 

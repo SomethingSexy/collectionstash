@@ -93,7 +93,7 @@
 			{@ne key="{model.active}" value="true" type="boolean"}
 				<span class="input-xlarge uneditable-input">{model.remove_date}</span>	
 			{:else}
-				<input required type="text" id="CollectiblesUserRemoveDate" maxlength="8" name="remove_date" value="{model.remove_date}" >
+				<input required type="text" id="CollectiblesUserRemoveDate" maxlength="10" name="remove_date" value="{model.remove_date}" >
 				{#inlineErrors.remove_date}
 				<span class="help-inline">{.}</span>
 				{/inlineErrors.remove_date}				

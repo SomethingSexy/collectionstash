@@ -40,6 +40,8 @@ Router::connect('/user/home', array('controller' => 'users', 'action' => 'home')
 Router::connect('/user/home/activity', array('controller' => 'users', 'action' => 'activity'));  
 
 Router::connect('/user/home/history', array('controller' => 'users', 'action' => 'history'));  
+
+Router::connect('/user/home/notifications', array('controller' => 'users', 'action' => 'notifications'));  
  
 Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
 

@@ -141,6 +141,10 @@ a.header img {
 	font-weight: normal;
 	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
+.navbar .nav-collapse .nav li > a.warning {
+	color: #F89406;
+}
+
 .navbar .nav-collapse .nav li > a:hover {
 	background-color: #2B7CAC;
 }
@@ -205,7 +209,7 @@ div.subnav-fixed {
 }
 
 #left-panel {
-	background: #2b2b2b url(../../../images/left-menu-bg.png);
+	background: #2b2b2b;
 	border-right: 1px solid #1d1d1d;
 	height: 100%;
 	left: 0;
@@ -259,7 +263,9 @@ div.subnav-fixed {
 	text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
 	text-transform: uppercase;
 }
-
+#left-panel-content a.warning {
+	color: #F89406;
+}
 #left-panel-content a, .lp-dropdown-menu a, #left-panel-content a span, .lp-dropdown-menu a span {
 	text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
 	-webkit-transition: color .2s;
