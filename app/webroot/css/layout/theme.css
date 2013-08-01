@@ -594,6 +594,11 @@ div.subnav-fixed {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+.widget-messages .message a.title span {
+	color: #bbb;
+	font-weight: 400;
+	text-decoration: none;
+}
 .counter, .counter-separated {
 	display: block;
 	float: left;

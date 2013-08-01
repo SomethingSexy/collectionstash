@@ -2,8 +2,8 @@
 <div class="action-checkbox">
 	<input type="checkbox" value="" name="">
 </div>
-<a class="from" title="" href="#">Third User</a>
+<a class="from" title="" href="#">Collection Stash</a>
 <div class="date">
 	18 jan
 </div>
-<a class="title" title="" href="#">Message Title 3<span> - Lorem ipsum dolor sit amet...</span></a>
+<a class="title" title="" href="#">Notification<span> - {Notification.message}</span></a>
