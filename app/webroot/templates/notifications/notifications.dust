@@ -1,0 +1,42 @@
+<div class="message-actions">
+	<div class="btn-group">
+		<a class="btn btn-small" href="javascript:selectAll()">Select All</a>
+		<button data-toggle="dropdown" class="btn btn-small dropdown-toggle">
+			<i class="icon-caret-down"></i>
+		</button>
+		<ul class="dropdown-menu">
+			<li>
+				<a href="javascript:toggleSelection()">Toggle Selection</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:unselectAll()">Unselect All</a>
+			</li>
+		</ul>
+	</div>
+	<div class="btn-group">
+		<a href="#" data-toggle="dropdown" class="btn btn-small dropdown-toggle"> Actions&nbsp;&nbsp; <i class="icon-caret-down"></i> </a>
+		<ul class="dropdown-menu">
+			<li>
+				<a href="javascript:markAsRead()">Mark as read</a>
+			</li>
+			<li>
+				<a href="javascript:markAsUnread()">Mark as unread</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="#">Move to folder</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:deleteMessages()">Delete</a>
+			</li>
+		</ul>
+	</div>
+	<button class="btn btn-primary btn-small pull-right">
+		<i class="icon-refresh"></i>
+	</button>
+</div>
+<div class="messages">
+
+</div>
