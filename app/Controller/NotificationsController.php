@@ -14,6 +14,11 @@ class NotificationsController extends AppController {
 
 	/**
 	 * restful method to retrieve, update, and delete notifications
+	 * 
+	 * We will need to reset the number of notifications in the session 
+	 * 
+	 * unless we have something on the client side come reset it automatically
+	 * 
 	 */
 	public function notification($id) {
 

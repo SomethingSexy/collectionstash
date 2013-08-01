@@ -27,6 +27,10 @@ class Notification extends AppModel {
 		return $this -> find('count', array('conditions' => array('Notification.user_id' => $userId, 'Notification.read' => false)));
 	}
 
+	public function getCountNotifications($user) {
+		return $this -> find('count', array('conditions' => array('Notification.user_id' => $user['User']['id'])));
+	}
+
 	/**
 	 *
 	 */
@@ -39,6 +43,25 @@ class Notification extends AppModel {
 	 */
 	public function remove() {
 
+	}
+
+	/**
+	 * Returns all notifications for a given user
+	 */
+	public function getNotifications($user, $options = array()) {
+		if (isset($options['conditions'])) {
+			$options = array_merge($options['conditions'], array('Notification.user_id' => $user['User']['id']));
+		} else {
+			$options['conditions'] = array('Notification.user_id' => $user['User']['id']);
+		}
+
+		if (!isset($options['contain'])) {
+			$options['contain'] = false;
+		}
+
+		$notifications = $this -> find("all", $options);
+
+		return $notifications;
 	}
 
 }
