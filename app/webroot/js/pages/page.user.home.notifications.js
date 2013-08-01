@@ -56,3 +56,57 @@ var PaginatedNotifications = Backbone.Paginator.requestPager.extend({
 		return tags;
 	}
 });
+
+var NotificationsView = Backbone.View.extend({
+	template : 'notifications',
+	render : function() {
+		var self = this;
+		var data = {};
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		this.renderNotifications();
+
+		return this;
+	},
+	renderNotifications : function() {
+		var self = this;
+		if (this.collection.size() > 0) {
+			this.collection.each(function(model) {
+				$('.messages', self.el).append(new NotificationView({
+					model : model
+				}).render().el);
+			});
+		} else {
+			$('.messages', this.el).html('<p>There are no new notifications.</p>');
+		}
+	}
+});
+
+var NotificationView = Backbone.View.extend({
+	className : 'message',
+	template : 'notification',
+	render : function() {
+		var self = this;
+		var data = this.model.toJSON();
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		return this;
+	}
+});
+
+$(function() {
+
+	$.when($.get('/templates/notifications/notifications.dust'), $.get('/templates/notifications/notification.dust')).done(function(notificationsTemplate, notificationTemplate) {
+		dust.loadSource(dust.compile(notificationsTemplate[0], 'notifications'));
+		dust.loadSource(dust.compile(notificationTemplate[0], 'notification'));
+
+		$('.widget-content').append(new NotificationsView({
+			collection : notifications
+		}).render().el);
+	});
+
+});
