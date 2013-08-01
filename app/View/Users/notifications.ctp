@@ -10,3 +10,17 @@
 		</div>
 	</div>
 </div>
+
+<script>
+var totalNotifications = <?php echo $totalNotifications; ?>;
+var totalNotificationPages = Math.ceil(totalNotifications / 25);
+</script>
+<?php echo $this -> Html -> script('pages/page.user.home.notifications', array('inline' => true)); ?>
+
+<script>
+
+var notifications = new PaginatedNotifications();
+notifications.reset(<?php echo json_encode($notifications); ?>);
+
+var serverTime = '<?php echo date('Y-m-d H:i:s');?>';
+</script>

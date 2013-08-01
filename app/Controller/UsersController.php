@@ -11,6 +11,8 @@ class UsersController extends AppController {
 
 	/**
 	 * User home dashboard
+	 * 
+	 * TODO: Update this method so the JSON stuff is done in the view file
 	 */
 	public function home() {
 		$this -> checkLogIn();
@@ -123,6 +125,10 @@ class UsersController extends AppController {
 	}
 
 	function notifications() {
+		$notifications = $this -> User -> Notification -> getNotifications($this -> getUser(), array('limit' => 25, 'order' => array('Notification.created' => 'desc')));
+		$totalNotifications = $this -> User -> Notification -> getCountNotifications($this -> getUser());
+		$this -> set(compact('notifications'));
+		$this -> set(compact('totalNotifications'));
 		$this -> layout = 'home_dashboard';
 		$this -> set('dashboard', 'notifications');
 	}
