@@ -534,6 +534,66 @@ div.subnav-fixed {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
+
+.widget-messages .message:before, .widget-messages .message:after {
+	display: table;
+	content: "";
+	line-height: 0;
+}
+
+.widget-messages .message:after {
+	clear: both;
+}
+
+.widget-messages .message:before, .widget-messages .message:after {
+	display: table;
+	content: "";
+	line-height: 0;
+}
+.widget-messages .message {
+	border-bottom: 1px solid rgba(0,0,0,0.08);
+	padding: 5px 0;
+	min-height: 20px;
+	margin: 0 -20px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.widget-messages .message div, .widget-messages .message a {
+	display: block;
+	height: 20px;
+	float: left;
+	position: relative;
+	z-index: 2;
+}
+.widget-messages .message .action-checkbox {
+	width: 20px;
+	line-height: 0;
+	font-size: 0;
+}
+.widget-messages .message .from {
+	width: 115px;
+	padding-left: 5px;
+	overflow: hidden;
+	color: #444;
+}
+.widget-messages .message .date {
+	color: #888;
+	float: right;
+	width: 50px;
+}
+.widget-messages .message .title {
+	display: block !important;
+	height: auto;
+	min-height: 20px;
+	white-space: normal;
+	z-index: 1;
+	width: 100%;
+	margin-top: -20px;
+	padding: 0 55px 0 145px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 .counter, .counter-separated {
 	display: block;
 	float: left;
