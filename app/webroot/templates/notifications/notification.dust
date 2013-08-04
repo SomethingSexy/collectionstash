@@ -4,14 +4,14 @@
 </div> -->
 <div>
 	{#Notification.read}
-		<i class="icon-envelope-alt"></i>
+		<i title="You already read this." class="icon-envelope-alt"></i>
 	{:else}
-		<i class="icon-envelope"></i> 
+		<i title="Unread. Mark as read." class="icon-envelope unread-message"></i> 
 	{/Notification.read}
 	
 </div>
 <a class="from" title="" href="#">Collection Stash</a>
 <div class="date">
-	18 jan
+	{Notification.created}
 </div>
 <a class="title" title="" href="#">Notification<span> - {Notification.message}</span></a>
