@@ -25,6 +25,45 @@ class NotificationsController extends AppController {
 	 *
 	 */
 	public function notification($id) {
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			return;
+		}
+
+		//update
+		if ($this -> request -> isPut()) {
+			$collectible['Collectible'] = $this -> request -> input('json_decode', true);
+			$collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
+
+			$response = $this -> Collectible -> saveCollectible($collectible, $this -> getUser(), $adminMode);
+
+			$request = $this -> request -> input('json_decode');
+			debug($request);
+			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+				$this -> response -> statusCode(401);
+			} else {
+				// request becomes an actual object and not an array
+				$request -> isEdit = $response['response']['data']['isEdit'];
+			}
+
+			$this -> set('returnData', $request);
+		} else if ($this -> request -> isDelete()) {
+
+			$notification = array();
+			$notification['Notification']['id'] = $id;
+
+			$response = $this -> Notification -> remove($notification, $this -> getUser());
+
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
+			$this -> set('returnData', $response);
+
+		} else if ($this -> request -> isGet()) {
+			$returnData = $this -> Collectible -> getCollectible($id);
+			$this -> set('returnData', $returnData['response']['data']['collectible']['Collectible']);
+		}
 
 	}
 

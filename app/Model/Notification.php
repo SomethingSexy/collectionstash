@@ -81,7 +81,26 @@ class Notification extends AppModel {
 	/**
 	 *
 	 */
-	public function remove() {
+	public function remove($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+
+		if (!$this -> isEditPermission($data['Notification']['id'], $user)) {
+			$retVal['response']['isSuccess'] = false;
+			$error = array('message' => __('You do not have acceses to update this part.'));
+			$error['inline'] = false;
+			$retVal['response']['errors'] = array();
+			array_push($retVal['response']['errors'], $error);
+
+			return $retVal;
+		}
+
+		// if we have permission, then delete
+		if ($this -> delete($data['Notification']['id'])) {
+			$retVal['response']['isSuccess'] = true;
+			$retVal['response']['data']['isEdit'] = false;
+		}
+		
+		return $retVal;
 
 	}
 
@@ -102,6 +121,28 @@ class Notification extends AppModel {
 		$notifications = $this -> find("all", $options);
 
 		return $notifications;
+	}
+
+	public function isEditPermission($check, $user) {
+		$retVal = false;
+
+		// setup to work for when we have the collectible object
+		// already or just the id
+		if (is_numeric($check) || is_string($check)) {
+			$notification = $this -> find('first', array('conditions' => array('Notification.id' => $check), 'contain' => array('User')));
+			//lol
+		} else {
+			// assume object
+			$notification = $check;
+		}
+
+		if ($notification && !empty($notification)) {
+			if ($notification['Notification']['user_id'] === $user['User']['id']) {
+				$retVal = true;
+			}
+		}
+
+		return $retVal;
 	}
 
 }
