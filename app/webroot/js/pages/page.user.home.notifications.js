@@ -158,6 +158,10 @@ var NotificationView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
+		if(!data.Notification.read) {
+			$(self.el).addClass('unread');
+		}
+
 		return this;
 	}
 });

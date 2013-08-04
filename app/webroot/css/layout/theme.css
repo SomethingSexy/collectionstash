@@ -594,6 +594,10 @@ div.subnav-fixed {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
+.widget-messages .message.unread .title {
+	font-weight: 600;
+}
 .widget-messages .message a.title span {
 	color: #bbb;
 	font-weight: 400;
