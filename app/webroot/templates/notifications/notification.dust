@@ -3,16 +3,16 @@
 	<input type="checkbox" value="" name="">
 </div> -->
 <div class="actions">
-	{#Notification.read}
+	{#read}
 		<i title="You already read this." class="icon-envelope-alt"></i>
 	{:else}
 		<i title="Unread. Mark as read." class="icon-envelope unread-message"></i> 
-	{/Notification.read}
+	{/read}
 	<i title="Delete notification." class="icon-trash remove"></i> 
 	
 </div>
 <a class="from" title="" href="#">Collection Stash</a>
 <div class="date">
-	{Notification.created}
+	{created}
 </div>
-<a class="title" title="" href="#">Notification<span> - {Notification.message}</span></a>
+<a class="title" title="" href="#">Notification<span> - {message}</span></a>

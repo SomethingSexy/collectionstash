@@ -1,5 +1,10 @@
 var NotificationModel = Backbone.Model.extend({
-	urlRoot : '/notifications/notification'
+	urlRoot : '/notifications/notification',
+	parse : function(attrs) {
+		if (attrs && attrs.Notification) {
+			return attrs.Notification;
+		}
+	}
 });
 
 var PaginatedNotifications = Backbone.Paginator.requestPager.extend({
@@ -50,14 +55,18 @@ var PaginatedNotifications = Backbone.Paginator.requestPager.extend({
 		}
 	},
 	parse : function(response) {
-		// Be sure to change this based on how your results
-		// are structured (e.g d.results is Netflix specific)
-		var tags = response.results;
-		//Normally this.totalPages would equal response.d.__count
-		//but as this particular NetFlix request only returns a
-		//total count of items for the search, we divide.
-		this.totalPages = response.metadata.paging.pageCount;
-		return tags;
+		if (response.results && response.metadata) {
+			// Be sure to change this based on how your results
+			// are structured (e.g d.results is Netflix specific)
+			var tags = response.results;
+			//Normally this.totalPages would equal response.d.__count
+			//but as this particular NetFlix request only returns a
+			//total count of items for the search, we divide.
+			this.totalPages = response.metadata.paging.pageCount;
+			return tags;
+		}
+
+		return response;
 	}
 });
 
@@ -156,7 +165,8 @@ var NotificationView = Backbone.View.extend({
 	className : 'message',
 	template : 'notification',
 	events : {
-		'click .unread-message' : 'markAsRead'
+		'click .unread-message' : 'markAsRead',
+		'click .remove' : 'remove'
 	},
 	initialize : function() {
 		this.listenTo(this.model, 'change', this.render);
@@ -168,20 +178,18 @@ var NotificationView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
-		if (!data.Notification.read) {
+		if (!data.read) {
 			$(self.el).addClass('unread');
 		}
 
 		return this;
 	},
 	markAsRead : function() {
-		var notificationData = this.model.get('Notification');
-		notificationData.read = true;
-		this.model.set('Notification', notificationData);
-		// because I am using a deep model, it won't detect the change,
-		// so trigger myself
-		this.model.trigger('change');
+		this.model.set('read', true);
 		this.model.save();
+	},
+	remove : function() {
+		this.model.destroy();
 	}
 });
 
