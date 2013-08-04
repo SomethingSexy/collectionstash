@@ -20,7 +20,7 @@ var totalNotificationPages = Math.ceil(totalNotifications / 25);
 <script>
 
 var notifications = new PaginatedNotifications();
-notifications.reset(<?php echo json_encode($notifications); ?>);
+notifications.reset(<?php echo json_encode($notifications); ?>, {parse: true});
 
 var serverTime = '<?php echo date('Y-m-d H:i:s');?>';
 </script>

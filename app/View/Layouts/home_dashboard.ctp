@@ -35,7 +35,7 @@
 	echo $this -> Minify -> script('js/jquery-ui-1.10.2');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
-	echo $this -> Minify -> script('js/thirdparty/backbone');
+	echo $this -> Html -> script('thirdparty/backbone');
 	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
 	echo $this -> Minify -> script('js/jquery-plugins');
