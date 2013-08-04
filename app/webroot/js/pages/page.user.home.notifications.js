@@ -80,6 +80,7 @@ var NotificationsView = Backbone.View.extend({
 	},
 	initialize : function() {
 		this.collection.on('change', this.render, this);
+		this.collection.on('remove', this.render, this);
 		this.collection.on('reset', this.render, this);
 		this.pagesArray = [];
 		// ya fuck you dust
