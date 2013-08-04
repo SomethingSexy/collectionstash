@@ -33,9 +33,9 @@
 			</li>
 		</ul>
 	</div>
-	<button class="btn btn-primary btn-small pull-right">
+	<!--<button class="btn btn-primary btn-small pull-right">
 		<i class="icon-refresh"></i>
-	</button>
+	</button> -->
 </div>
 <div class="messages">
 

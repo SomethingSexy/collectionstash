@@ -1,6 +1,14 @@
 
-<div class="action-checkbox">
+<!--<div class="action-checkbox">
 	<input type="checkbox" value="" name="">
+</div> -->
+<div>
+	{#Notification.read}
+		<i class="icon-envelope-alt"></i>
+	{:else}
+		<i class="icon-envelope"></i> 
+	{/Notification.read}
+	
 </div>
 <a class="from" title="" href="#">Collection Stash</a>
 <div class="date">
