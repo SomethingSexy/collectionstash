@@ -11,7 +11,7 @@ class UsersController extends AppController {
 
 	/**
 	 * User home dashboard
-	 * 
+	 *
 	 * TODO: Update this method so the JSON stuff is done in the view file
 	 */
 	public function home() {
@@ -218,6 +218,15 @@ class UsersController extends AppController {
 			}
 
 		}
+	}
+
+	function _autoLogin() {
+		$user = $this -> getUser();
+		$subscriptions = $this -> User -> Subscription -> getSubscriptions($user['User']['id']);
+		$this -> Session -> write('subscriptions', $subscriptions);
+
+		$totalNotifications = $this -> User -> Notification -> getCountUnreadNotifications($user['User']['id']);
+		$this -> Session -> write('notificationsCount', $totalNotifications);
 	}
 
 	function logout() {

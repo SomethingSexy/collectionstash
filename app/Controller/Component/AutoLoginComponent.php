@@ -166,6 +166,7 @@ class AutoLoginComponent extends Component {
 		// Detect cookie or login
 		$cookie = $this -> read();
 		$user = $this -> Auth -> user();
+
 		if (!$this -> active || !empty($user) || !$controller -> request -> is('get')) {
 			return;
 
