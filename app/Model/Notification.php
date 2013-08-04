@@ -20,6 +20,46 @@ class Notification extends AppModel {
 	public $belongsTo = array('User' => array('fields' => array('id', 'username', 'email')));
 	public $actsAs = array('Containable');
 
+	function afterFind($results, $primary = false) {
+		if ($results) {
+			// If it is primary handle all of these things
+			if ($primary) {
+				foreach ($results as $key => $val) {
+					if (isset($val['Notification'])) {
+						if (isset($val['Notification']['created'])) {
+							$datetime = strtotime($val['Notification']['created']);
+							$datetime = date("m/d/y", $datetime);
+							$results[$key]['Notification']['created'] = $datetime;
+						}
+					}
+				}
+			} else {
+				if (isset($results[$this -> primaryKey])) {
+
+					if (isset($results['created'])) {
+						$datetime = strtotime($results['created']);
+						$datetime = date("m/d/y", $datetime);
+						$results['created'] = $datetime;
+					}
+				} else {
+
+					foreach ($results as $key => $val) {
+
+						if (isset($val['Notification'])) {
+							if (isset($val['Notification']['created'])) {
+								$datetime = strtotime($val['Notification']['created']);
+								$datetime = date("m/d/y", $datetime);
+								$results[$key]['Notification']['created'] = $datetime;
+							}
+						}
+					}
+				}
+			}
+
+		}
+		return $results;
+	}
+
 	/**
 	 * This method will return the count of unread notifications per user
 	 */

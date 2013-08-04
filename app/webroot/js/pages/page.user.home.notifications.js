@@ -1,5 +1,9 @@
+var NotificationModel = Backbone.Model.extend({
+	urlRoot : '/notifications/notification'
+});
+
 var PaginatedNotifications = Backbone.Paginator.requestPager.extend({
-	//model : CollectibleModel,
+	model : NotificationModel,
 	paginator_core : {
 		// the type of the request (GET by default)
 		type : 'GET',
@@ -151,6 +155,12 @@ var NotificationsView = Backbone.View.extend({
 var NotificationView = Backbone.View.extend({
 	className : 'message',
 	template : 'notification',
+	events : {
+		'click .unread-message' : 'markAsRead'
+	},
+	initialize : function() {
+		this.listenTo(this.model, 'change', this.render);
+	},
 	render : function() {
 		var self = this;
 		var data = this.model.toJSON();
@@ -158,11 +168,20 @@ var NotificationView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
-		if(!data.Notification.read) {
+		if (!data.Notification.read) {
 			$(self.el).addClass('unread');
 		}
 
 		return this;
+	},
+	markAsRead : function() {
+		var notificationData = this.model.get('Notification');
+		notificationData.read = true;
+		this.model.set('Notification', notificationData);
+		// because I am using a deep model, it won't detect the change,
+		// so trigger myself
+		this.model.trigger('change');
+		this.model.save();
 	}
 });
 
