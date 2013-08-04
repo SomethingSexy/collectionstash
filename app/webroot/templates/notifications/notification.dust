@@ -2,12 +2,13 @@
 <!--<div class="action-checkbox">
 	<input type="checkbox" value="" name="">
 </div> -->
-<div>
+<div class="actions">
 	{#Notification.read}
 		<i title="You already read this." class="icon-envelope-alt"></i>
 	{:else}
 		<i title="Unread. Mark as read." class="icon-envelope unread-message"></i> 
 	{/Notification.read}
+	<i title="Delete notification." class="icon-trash remove"></i> 
 	
 </div>
 <a class="from" title="" href="#">Collection Stash</a>
