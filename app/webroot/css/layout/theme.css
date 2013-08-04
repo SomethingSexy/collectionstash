@@ -595,6 +595,11 @@ div.subnav-fixed {
 	box-sizing: border-box;
 }
 
+.widget-messages .message .actions i {
+	cursor: pointer;
+	margin-right: 5px;
+}
+
 .widget-messages .message.unread .title {
 	font-weight: 600;
 }
