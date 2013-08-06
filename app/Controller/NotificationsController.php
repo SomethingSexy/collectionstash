@@ -38,12 +38,15 @@ class NotificationsController extends AppController {
 			$response = $this -> Notification -> update($notification, $this -> getUser());
 
 			$request = $this -> request -> input('json_decode');
-		
+
 			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
 				$this -> response -> statusCode(401);
-			} 
-			
+			}
+
 			$this -> set('returnData', $request);
+
+			$totalNotifications = $this -> Notification -> getCountUnreadNotifications($this -> getUserId());
+			$this -> Session -> write('notificationsCount', $totalNotifications);
 		} else if ($this -> request -> isDelete()) {
 
 			$notification = array();
