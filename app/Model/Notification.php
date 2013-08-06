@@ -74,8 +74,24 @@ class Notification extends AppModel {
 	/**
 	 *
 	 */
-	public function update() {
+	public function update($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
 
+		if (!$this -> isEditPermission($data['Notification']['id'], $user)) {
+			$retVal['response']['isSuccess'] = false;
+			$error = array('message' => __('You do not have permission to update that notification.'));
+			$error['inline'] = false;
+			$retVal['response']['errors'] = array();
+			array_push($retVal['response']['errors'], $error);
+
+			return $retVal;
+		}
+	
+		if ($this -> save($data['Notification'], false, array('read'))) {
+			$retVal['response']['isSuccess'] = true;
+		}
+		
+		return $retVal;
 	}
 
 	/**
@@ -86,7 +102,7 @@ class Notification extends AppModel {
 
 		if (!$this -> isEditPermission($data['Notification']['id'], $user)) {
 			$retVal['response']['isSuccess'] = false;
-			$error = array('message' => __('You do not have acceses to update this part.'));
+			$error = array('message' => __('You do not have permission to delete that notification.'));
 			$error['inline'] = false;
 			$retVal['response']['errors'] = array();
 			array_push($retVal['response']['errors'], $error);
@@ -99,7 +115,7 @@ class Notification extends AppModel {
 			$retVal['response']['isSuccess'] = true;
 			$retVal['response']['data']['isEdit'] = false;
 		}
-		
+
 		return $retVal;
 
 	}
