@@ -25,7 +25,7 @@ class ProcessTransactionsShell extends AppShell {
 
 			// we will handle 100 for now and this will run once an hour.
 			// processed is 0 and end date is less than current date
-			$transactions = $this -> Listing -> find('all', array('contain' => array('Transaction'), 'limit' => 1, 'conditions' => array('Listing.processed' => 0, 'Listing.end_date <' => date('Y-m-d H:i:s'))));
+			$transactions = $this -> Listing -> find('all', array('contain' => array('Transaction'), 'limit' => 100, 'conditions' => array('Listing.processed' => 0, 'Listing.end_date <' => date('Y-m-d H:i:s'))));
 
 			foreach ($transactions as $key => $value) {
 
