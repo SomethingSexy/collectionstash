@@ -79,8 +79,12 @@ var NotificationsView = Backbone.View.extend({
 		'click a.previous' : 'previous'
 	},
 	initialize : function() {
-		this.collection.on('change', this.render, this);
+		//this.collection.on('change', this.render, this);
+		this.collection.on('remove', function() {
+			this.collection.paginator_ui.total = this.collection.paginator_ui.total - 1;
+		}, this);
 		this.collection.on('remove', this.render, this);
+
 		this.collection.on('reset', this.render, this);
 		this.pagesArray = [];
 		// ya fuck you dust
@@ -101,7 +105,7 @@ var NotificationsView = Backbone.View.extend({
 				perPage : this.collection.perPage,
 				totalPages : this.collection.totalPages,
 				total : this.collection.paginator_ui.total
-			}
+			};
 		} else {
 			data['paginator'] = this.collection.paginator_ui;
 		}
@@ -137,7 +141,7 @@ var NotificationsView = Backbone.View.extend({
 		if ($(e.target).attr('data-direction')) {
 			if ($(e.target).attr('data-direction') === 'asc') {
 				$(e.target).attr('data-direction', 'desc');
-				direction = 'desc'
+				direction = 'desc';
 			} else {
 				$(e.target).attr('data-direction', 'asc');
 			}
@@ -167,7 +171,8 @@ var NotificationView = Backbone.View.extend({
 	template : 'notification',
 	events : {
 		'click .unread-message' : 'markAsRead',
-		'click .remove' : 'remove'
+		'click .remove' : 'remove',
+		'click .title' : 'toggleMessage'
 	},
 	initialize : function() {
 		this.listenTo(this.model, 'change', this.render);
@@ -175,9 +180,15 @@ var NotificationView = Backbone.View.extend({
 	render : function() {
 		var self = this;
 		var data = this.model.toJSON();
+		var open = $('.body', this.el).is(':visible');
+
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
+
+		if (open) {
+			$('.body', this.el).show();
+		}
 
 		if (!data.read) {
 			$(self.el).addClass('unread');
@@ -191,6 +202,13 @@ var NotificationView = Backbone.View.extend({
 	},
 	remove : function() {
 		this.model.destroy();
+	},
+	toggleMessage : function() {
+		var self = this;
+		$('.body', this.el).toggle();
+		if (!self.model.get('read')) {
+			self.markAsRead();
+		}
 	}
 });
 

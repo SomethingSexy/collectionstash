@@ -571,7 +571,7 @@ div.subnav-fixed {
 	font-size: 0;
 }
 .widget-messages .message .from {
-	width: 115px;
+	width: 200px;
 	padding-left: 5px;
 	overflow: hidden;
 	color: #444;
@@ -589,12 +589,19 @@ div.subnav-fixed {
 	z-index: 1;
 	width: 100%;
 	margin-top: -20px;
-	padding: 0 55px 0 145px;
+	padding: 0 55px 0 225px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-
+.widget-messages .message .body {
+	display: none;
+	padding-left: 225px;
+} 
+.widget-messages .message .body a {
+	float: none;
+	display: inline;
+}
 .widget-messages .message .actions i {
 	cursor: pointer;
 	margin-right: 5px;

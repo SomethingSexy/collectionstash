@@ -16,3 +16,4 @@
 	{created}
 </div>
 <a class="title" title="" href="#">Notification<span> - {message}</span></a>
+<div class="body">{message|s}</div>
