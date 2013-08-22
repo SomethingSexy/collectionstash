@@ -21,7 +21,25 @@
 </ul>
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
+<h4>July</h4>
+<p>July's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+   <li>tacosunday with 36244 nuts</li>
+   <li>jlaavenger with 8363 nuts</li>
+   <li>highwayman57 with 3858 nuts</li>
+   <li>Spiderwebb13 with 2202 nuts</li>
+   <li>DarthSnoopy with 1800 nuts</li>
+</ol>
 
+<h4>June</h4>
+<p>June's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+    <li>highwayman57 with 63074 nuts</li>
+    <li>tacosunday with 25934 nuts</li>
+    <li>Crushader with 13008 nuts</li>
+    <li>DarthMadden with 3677 nuts</li>
+    <li>Ikecon with 2225 nuts</li>
+</ol>
 <h4>May</h4>
 <p>Mays's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
 <ol>
@@ -38,8 +56,8 @@
     <li>tacosunday with 77416 nuts</li>
     <li>Firebird with 1405 nuts</li>
 	<li>SomethingSexy with 825 nuts</li>
-   	<li> BloodyFreak with 808 nuts</li>
-   	<li> bc1969 with 657 nuts</li>
+   	<li>BloodyFreak with 808 nuts</li>
+   	<li>bc1969 with 657 nuts</li>
 </ol>
 
 <h4>March</h4>
