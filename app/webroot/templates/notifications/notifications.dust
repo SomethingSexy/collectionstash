@@ -1,5 +1,5 @@
 <div class="message-actions">
-	<div class="btn-group">
+	<!--<div class="btn-group">
 		<a class="btn btn-small" href="javascript:selectAll()">Select All</a>
 		<button data-toggle="dropdown" class="btn btn-small dropdown-toggle">
 			<i class="icon-caret-down"></i>
@@ -32,7 +32,7 @@
 				<a href="javascript:deleteMessages()">Delete</a>
 			</li>
 		</ul>
-	</div>
+	</div>-->
 	<!--<button class="btn btn-primary btn-small pull-right">
 		<i class="icon-refresh"></i>
 	</button> -->
