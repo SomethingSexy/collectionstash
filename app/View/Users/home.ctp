@@ -147,7 +147,15 @@
 							echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointFact']['points'] . ' nuts</li>';
 						}
 						?>
-					</ol>					
+					</ol>	
+					<h4><?php echo date('Y')?> Leaders</h4>				
+					<ol>
+						<?php
+						foreach ($yearlyLeaders as $key => $value) {
+							echo '<li>' . $value['User']['username'] . ' with ' . $value['UserPointYearFact']['points'] . ' nuts</li>';
+						}
+						?>
+					</ol>	
 				</div>
 			</div>
 		</div>
