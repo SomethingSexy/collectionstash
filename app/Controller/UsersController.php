@@ -43,7 +43,8 @@ class UsersController extends AppController {
 
 		$this -> set(compact('previousMonthlyLeaders'));
 
-		// $this -> User -> UserPointFact -> getYearlyLeaders();
+		$yearlyLeaders = $this -> User -> UserPointYearFact -> getYearlyLeaders();
+		$this -> set(compact('yearlyLeaders'));
 
 		// this is all collectible in draft space
 		$totalWorks = $this -> User -> Collectible -> find('count', array('conditions' => array('OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3')), 'Collectible.user_id' => $this -> getUserId())));
