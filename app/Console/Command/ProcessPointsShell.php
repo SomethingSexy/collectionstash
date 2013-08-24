@@ -2,10 +2,12 @@
 /**
  * This process will total up all of the user points and set that to the user table
  *
+ * This will also process the year totals.
+ *
  * This will run once a day
  */
 class ProcessPointsShell extends AppShell {
-	public $uses = array('User', 'UserPointFact');
+	public $uses = array('User', 'UserPointFact', 'UserPointYearFact');
 
 	public function main() {
 		// Grab all of the users
@@ -32,7 +34,44 @@ class ProcessPointsShell extends AppShell {
 
 			}
 
+			// Now let's get the total points for each user for that year and populate our table
+			$userYearPoints = $this -> UserPointFact -> getUserTotalPointsCurrentYear($user['User']['id']);
+			$userYearFact = $this -> getYearFact($user['User']['id'], date("Y"));
+			$this -> updateYearFact($userYearFact, $userYearPoints);
+
 		}
+	}
+
+	private function getYearFact($userId, $year) {
+		$userFact = $this -> UserPointYearFact -> find('first', array('contain' => false, 'conditions' => array('UserPointYearFact.user_id' => $userId, 'UserPointYearFact.year' => $year)));
+		if (!$userFact) {
+			$saveData = array();
+			$saveData['UserPointYearFact'] = array();
+			$saveData['UserPointYearFact']['year'] = $year;
+			$saveData['UserPointYearFact']['user_id'] = $userId;
+			$saveData['UserPointYearFact']['points'] = 0;
+			$this -> UserPointYearFact -> create();
+			if ($this -> UserPointYearFact -> save($saveData)) {
+				$id = $this -> UserPointYearFact -> id;
+				$userFact = $this -> UserPointYearFact -> find('first', array('conditions' => array('UserPointYearFact.id' => $id)));
+			}
+		}
+
+		// We want this to update
+		if (isset($userFact['UserPointYearFact']['modified'])) {
+			unset($userFact['UserPointYearFact']['modified']);
+		}
+
+		return $userFact;
+	}
+
+	private function updateYearFact($userFact, $score) {
+		// just overwrite this one
+		$userFact['UserPointYearFact']['points'] = $score;
+
+		debug($userFact);
+
+		$this -> UserPointYearFact -> save($userFact);
 	}
 
 }
