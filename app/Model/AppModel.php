@@ -115,11 +115,12 @@ class AppModel extends Model {
 		return $retVal;
 	}
 
-	public function notifyUser($userEmail = null, $message) {
+	public function notifyUser($userEmail = null, $message, $subject = null) {
 		$subscriptions = array();
 		$subscription = array();
 		$subscription['Subscription']['user_id'] = $userEmail;
 		$subscription['Subscription']['message'] = $message;
+		$subscription['Subscription']['subject'] = $subject;
 		array_push($subscriptions, $subscription);
 
 		CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $this, array('subscriptions' => $subscriptions)));

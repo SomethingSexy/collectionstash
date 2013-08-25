@@ -431,7 +431,8 @@ class AttributesCollectible extends AppModel {
 		if ($retVal) {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $attributeEditVersion['AttributesCollectibleEdit']['collectible_id'])));
 			$message = 'We have approved the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $attributeEditVersion['AttributesCollectibleEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($attributeEditVersion['AttributesCollectibleEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been approved.');
+			$this -> notifyUser($attributeEditVersion['AttributesCollectibleEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;
@@ -477,7 +478,8 @@ class AttributesCollectible extends AppModel {
 		if ($retVal) {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $attributesCollectibleEdit['AttributesCollectibleEdit']['collectible_id'])));
 			$message = 'We have denied the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $attributesCollectibleEdit['AttributesCollectibleEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($attributesCollectibleEdit['AttributesCollectibleEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been denied.');
+			$this -> notifyUser($attributesCollectibleEdit['AttributesCollectibleEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;

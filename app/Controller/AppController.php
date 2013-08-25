@@ -1,5 +1,6 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
+App::uses('CakeEventListener', 'Event');
 class AppController extends Controller {
 	// Since we are specifying the auto login and auth here, we need to pull in session as well
 	public $components = array('Session', 'AutoLogin', 'Auth' => array('authenticate' => array('Form')));
@@ -491,6 +492,17 @@ class AppController extends Controller {
 			unset($array[$key]);
 
 		return $keep_key_assoc ? $array : array_values($array);
+	}
+
+	public function notifyUser($userEmail = null, $message, $subject = null) {
+		$subscriptions = array();
+		$subscription = array();
+		$subscription['Subscription']['user_id'] = $userEmail;
+		$subscription['Subscription']['message'] = $message;
+		$subscription['Subscription']['subject'] = $subject;
+		array_push($subscriptions, $subscription);
+
+		CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
 	}
 
 }

@@ -597,7 +597,8 @@ div.subnav-fixed {
 .widget-messages .message .body {
 	display: none;
 	padding-left: 225px;
-} 
+	height: inherit;
+}
 .widget-messages .message .body a {
 	float: none;
 	display: inline;

@@ -32,7 +32,8 @@ class CollectiblesTag extends AppModel {
 		if ($retVal) {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $tagEditVersion['CollectiblesTagEdit']['collectible_id'])));
 			$message = 'We have approved the following tag you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $tagEditVersion['CollectiblesTagEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been approved.');
+			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return true;
@@ -70,7 +71,8 @@ class CollectiblesTag extends AppModel {
 		if ($retVal) {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $tagEditVersion['CollectiblesTagEdit']['collectible_id'])));
 			$message = 'We have denied the following tag you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $tagEditVersion['CollectiblesTagEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been denied.');
+			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;

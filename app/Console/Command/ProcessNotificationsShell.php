@@ -16,14 +16,23 @@ class ProcessNotificationsShell extends AppShell {
 
 		foreach ($notifications as $key => $notification) {
 			$email = array();
-			$email['Email']['receiver'] = $notification['User']['email'];
-			$email['Email']['subject'] = __('You have a notification from Collection Stash!');
-			$email['Email']['body'] = $notification['Notification']['message'];
-			$this -> Email -> create();
-			if ($this -> Email -> saveAll($email)) {
-				$this -> Notification -> id = $notification['Notification']['id'];
-				$this -> Notification -> saveField('processed', 1, false);
+			// if we don't have an email well we cannot send it
+			if (!is_null($notification['User']['email'])) {
+				$email['Email']['receiver'] = $notification['User']['email'];
+				if ($notification['Notification']['subject']) {
+					$email['Email']['subject'] = __('Collection Stash - ') . $notification['Notification']['subject'];
+				} else {
+					$email['Email']['subject'] = __('You have a notification from Collection Stash!');
+				}
+
+				$email['Email']['body'] = $notification['Notification']['message'];
+				$this -> Email -> create();
+				if ($this -> Email -> saveAll($email)) {
+					$this -> Notification -> id = $notification['Notification']['id'];
+					$this -> Notification -> saveField('processed', 1, false);
+				}
 			}
+
 		}
 	}
 
