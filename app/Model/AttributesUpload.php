@@ -276,7 +276,8 @@ class AttributesUpload extends AppModel {
 		if ($retVal) {
 			$collectible = $this -> Attribute -> find('first', array('contain' => false, 'conditions' => array('Attribute.id' => $collectiblesUploadEditVersion['AttributesUploadEdit']['attribute_id'])));
 			$message = 'We have approved the following part upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEditVersion['AttributesUploadEdit']['attribute_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
-			$this -> notifyUser($collectiblesUploadEditVersion['AttributesUploadEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been approved.');
+			$this -> notifyUser($collectiblesUploadEditVersion['AttributesUploadEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;
@@ -313,7 +314,8 @@ class AttributesUpload extends AppModel {
 		if ($retVal && $email) {
 			$collectible = $this -> Attribute -> find('first', array('contain' => false, 'conditions' => array('Attribute.id' => $AttributesUploadEdit['AttributesUploadEdit']['attribute_id'])));
 			$message = 'We have denied the following part upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $AttributesUploadEdit['AttributesUploadEdit']['attribute_id'] . '">' . $collectible['Attribute']['name'] . '</a>';
-			$this -> notifyUser($AttributesUploadEdit['AttributesUploadEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been denied.');
+			$this -> notifyUser($AttributesUploadEdit['AttributesUploadEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;

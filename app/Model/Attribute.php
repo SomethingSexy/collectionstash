@@ -205,7 +205,7 @@ class Attribute extends AppModel {
 						$replacedVersion = $this -> find('first', array('conditions' => array('Attribute.id' => $replacementAttribute), 'contain' => array('Status', 'User', 'Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Revision', 'AttributesUpload' => array('Upload'))));
 
 						$retVal['response']['data'] = $replacedVersion;
-				
+
 						// Seems like a lot of redundancy
 						// Since updateAll does not trigger afterSave we need to manually create revisions
 						foreach ($updateAttributesCollectible as $key => $value) {
@@ -335,7 +335,8 @@ class Attribute extends AppModel {
 						$submitter = $this -> User -> find('first', array('conditions' => array('User.id' => $attribute['Attribute']['user_id'])));
 						$message = 'We have approved the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $approver, 'object' => $attribute, 'target' => $submitter, 'type' => 'Attribute')));
-						$this -> notifyUser($attribute['Attribute']['user_id'], $message);
+						$subject = __('Your submission has been approved.');
+						$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject);
 					}
 				} else {
 					$retVal['response']['code'] = 4;
@@ -349,7 +350,8 @@ class Attribute extends AppModel {
 				$retVal['response']['code'] = 2;
 				if ($retVal) {
 					$message = 'We have denied the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
-					$this -> notifyUser($attribute['Attribute']['user_id'], $message);
+					$subject = __('Your submission has been denied.');
+					$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject);
 				}
 			} else {
 				$retVal['response']['code'] = 4;
@@ -391,7 +393,8 @@ class Attribute extends AppModel {
 			}
 
 			$message = 'We have denied the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attributeEditVersion['AttributeEdit']['base_id'] . '">' . $name . '</a>';
-			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message);
+			$subject = __('Your submission has been denied.');
+			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;
@@ -469,7 +472,8 @@ class Attribute extends AppModel {
 			}
 
 			$message = 'We have approved the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attributeEditVersion['AttributeEdit']['base_id'] . '">' . $name . '</a>';
-			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been approved.');
+			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;

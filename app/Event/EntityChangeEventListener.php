@@ -43,6 +43,7 @@ class EntityChangeEventListener implements CakeEventListener {
 				}
 
 				$subscriptions[$key]['Subscription']['message'] = $message;
+				$subscriptions[$key]['Subscription']['subject'] = __('A new coment has been posted.');
 			}
 		}
 
@@ -61,15 +62,13 @@ class EntityChangeEventListener implements CakeEventListener {
 		// in this example $event->subject = BlogController
 
 		//This is the id of the collectibleuser that was added
-		$id = $event -> subject -> CollectiblesUser -> id;
+		$id = $event -> subject -> id;
 
 		$stashId = $event -> data['stashId'];
-		//Eh, this works
-		$event -> subject -> loadModel('Subscription');
 		// Grab the stash
-		$stash = $event -> subject -> Subscription -> EntityType -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => $stashId)));
+		$stash = $event -> subject -> User -> Subscription -> EntityType -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => $stashId)));
 		//now grab all of the Subscriptions
-		$subscriptions = $event -> subject -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $stash['Stash']['entity_type_id'])));
+		$subscriptions = $event -> subject -> User -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $stash['Stash']['entity_type_id'])));
 
 		//Build the message
 		$message = $stash['User']['username'];
@@ -81,12 +80,13 @@ class EntityChangeEventListener implements CakeEventListener {
 				unset($subscriptions[$key]);
 			} else {
 				$subscriptions[$key]['Subscription']['message'] = $message;
+				$subscriptions[$key]['Subscription']['subject'] = __($stash['User']['username'] . ' updated their stash.');
 			}
 
 		}
-
+		CakeLog::write('info', count($subscriptions));
 		if (!empty($subscriptions)) {
-			CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
+			CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
 		} else {
 			CakeLog::write('info', 'No subscriptions');
 		}

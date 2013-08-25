@@ -66,6 +66,7 @@ class CollectiblesUsersController extends AppController {
 			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
 
 			$response = $this -> CollectiblesUser -> add($collectible, $this -> getUser(), $type);
+			
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {
@@ -251,7 +252,7 @@ class CollectiblesUsersController extends AppController {
 			$collectiblesUser = array();
 			$collectiblesUser['CollectiblesUser']['collectible_id'] = $id;
 			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUser(), $type);
-
+			
 			if ($response) {
 				$this -> set('returnData', $response);
 			} else {

@@ -126,6 +126,8 @@ class UsersController extends AppController {
 	}
 
 	function notifications() {
+		$this -> checkLogIn();
+
 		$notifications = $this -> User -> Notification -> getNotifications($this -> getUser(), array('limit' => 25, 'order' => array('Notification.created' => 'desc')));
 		$totalNotifications = $this -> User -> Notification -> getCountNotifications($this -> getUser());
 		$this -> set(compact('notifications'));

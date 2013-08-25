@@ -720,7 +720,8 @@ class Collectible extends AppModel {
 			}
 			if ($retVal) {
 				$message = 'We have approved your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
-				$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message);
+				$subject = __('Your edit has been approved.');
+				$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject);
 			}
 
 		} else {
@@ -756,7 +757,8 @@ class Collectible extends AppModel {
 
 		if ($retVal) {
 			$message = 'We have denied your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
-			$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message);
+			$subject = __('Your edit has been denied.');
+			$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject);
 		}
 
 		return $retVal;
