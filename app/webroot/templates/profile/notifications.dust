@@ -1,0 +1,27 @@
+<div class="alert alert-success hide"></div>
+<div class="alert alert-error hide"></div>
+<p>Set your notification settings.
+</p>
+<form id="stash-form" method="post" class="form-horizontal">
+	<fieldset>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#	email_notification}checked{/email_notification} type="checkbox" value="true" name="email_notification">
+					Email notifications</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+					<input {#email_newsletter}checked{/email_newsletter} type="checkbox" value="true" name="email_newsletter">
+					Subscribe to newsletter</label>
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" data-loading-text="Saving..." id="notifications-submit">
+				Save
+			</button>
+		</div>
+	</fieldset>
+</form>

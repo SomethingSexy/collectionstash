@@ -1,5 +1,5 @@
 <?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false));?>
-<?php echo $this -> Html -> script('profiles', array('inline' => false));?>
+<?php echo $this -> Html -> script('pages/page.profile', array('inline' => false));?>
 
 <div class="widget">
 	<div class="widget-header">
@@ -8,9 +8,12 @@
 	</div>	
 	<div class="widget-content">
 		<div class="tabbable">
-			<ul class="nav nav-tabs">
+			<ul id="profile-tabs" class="nav nav-tabs">
 			  <li class="active">
 			    <a data-toggle="tab" href="#privacy">Privacy</a>
+			  </li>
+			  <li class="">
+			    <a data-toggle="tab" href="#notifications">Notifications</a>
 			  </li>
 			</ul>			
 			<br>
@@ -33,7 +36,7 @@
 								</div>
 							</div>
 							<div class="form-actions">
-								<button class="btn btn-primary" data-loading-text="Saving..." id="stash-submit"><?php echo __('Submit'); ?></button>	
+								<button class="btn btn-primary" data-loading-text="Saving..." id="stash-submit"><?php echo __('Save'); ?></button>	
 							</div>
 						</fieldset>
 					</form>
@@ -44,5 +47,7 @@
 </div>
 
 
-
+<script>
+	<?php echo 'var profileData = ' .  json_encode($profile['Profile']);?>
+</script>
 		
