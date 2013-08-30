@@ -241,6 +241,7 @@ if (isset($bodyClass))
 						<div class="row spacer">
 							<div class="span12">
 								<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
+								<p>Original logo created by Bamboota.  Artwork created by Devil_666.</p>
 							</div>
 						</div>
 					</div>
