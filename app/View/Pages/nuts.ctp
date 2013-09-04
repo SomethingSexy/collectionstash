@@ -21,6 +21,18 @@
 </ul>
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
+
+<h4>August</h4>
+<p>August's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+    <li>highwayman57 with 25376 nuts</li>
+    <li>nathannever with 3603 nuts</li>
+    <li>ricoanthony16 with 1864 nuts</li>
+    <li>Spiderwebb13 with 1506 nuts</li>
+    <li>DarthMadden with 1402 nuts</li>
+</ol>
+
+
 <h4>July</h4>
 <p>July's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
 <ol>
