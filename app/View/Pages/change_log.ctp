@@ -1,4 +1,14 @@
 <h2>Change Log</h2>
+
+<h3>Release Notes for v2.6.2</h3>
+<p>Updated the Account Settings to allow you to adjust how you receive notifications from Collection Stash.</p>
+
+<h3>Release Notes for v2.6.1</h3>
+<p>Added a subject field for all notifications so that emails can be more specific now.</p>
+
+<h3>Release Notes for v2.6</h3>
+<p>Added a notifications tab to the user dashboard.  This will allow you to see all notifications you received from Collection Stash.</p>
+
 <h3>Release Notes for v2.5.6</h3>
 <ul>
 	<li>Updated the home dashboard to break the data into multiple sections.  These sections are access via the new menu on the left when you are logged in on the home page.</li>
