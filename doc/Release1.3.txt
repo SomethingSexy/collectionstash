@@ -52,6 +52,8 @@ cake -app D:\Development\wamp\www\app process_points
 
 cake -app D:\Development\wamp\www\app one_time_update_collectible_status
 
+cake -app D:\Development\wamp\www\app process_stash_fact
+
 linux: ./cake 
 
 ./cake -app /var/www/collectionstash/app send_email
