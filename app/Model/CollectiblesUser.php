@@ -98,7 +98,6 @@ class CollectiblesUser extends AppModel {
 		if ($results && $primary) {
 			// Create a dateOnly pseudofield using date field.
 			foreach ($results as $key => $val) {
-
 				// make sure we check if the collectibleuser is set...this is for
 				// cases when count is being called
 				if (isset($val['CollectiblesUser'])) {
