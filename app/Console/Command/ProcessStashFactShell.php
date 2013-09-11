@@ -40,10 +40,6 @@ class ProcessStashFactShell extends AppShell {
 			$countCollectibleCurrentValue = 0;
 
 			foreach ($collectibleUsers as $key => $collectibleUser) {
-				if ($stashFact['StashFact']['stash_id'] == 1) {
-					// debug($collectibleUser);
-				}
-
 				// calculate the msrp value of the stash
 				$msrp = $msrp + $collectibleUser['Collectible']['msrp'];
 				// then calculate the current value
@@ -72,7 +68,7 @@ class ProcessStashFactShell extends AppShell {
 			$stashFact['StashFact']['count_collectibles_sold'] = $countCollectiblesSold;
 			$stashFact['StashFact']['current_value'] = $currentValue;
 			$stashFact['StashFact']['count_collectibles_current_value'] = $countCollectibleCurrentValue;
-			//debug($stashFact);
+
 			$this -> StashFact -> save($stashFact);
 
 		}
