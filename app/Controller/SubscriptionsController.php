@@ -1,4 +1,10 @@
 <?php
+/**
+ * Subscriptions will turn into friends...or I just remove subscriptions from the UI because I really don't want to support that for now
+ * 
+ * 
+ * Then we will add Favorites...another Stash type maybe? or a new table.  Now that stash has history, I am not sure I want to make favorites a stash type, might get too messy
+ */
 class SubscriptionsController extends AppController {
 	public $helpers = array('Html', 'Minify', 'Js');
 
