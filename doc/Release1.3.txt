@@ -78,6 +78,8 @@ linux: ./cake
    ./cake -app /var/www/collectionstash/app process_collectible_price
 
     ./cake -app /var/www/collectionstash/app process_transactions
+    
+     ./cake -app /var/www/collectionstash/app process_stash_fact
 
  ./vendors/cakeshell process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
  
@@ -93,6 +95,8 @@ linux: ./cake
    ./vendors/cakeshell process_points -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
   ./vendors/cakeshell process_transactions -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
+  
+  ./vendors/cakeshell process_stash_fact -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console
 
 //test
  bash cakeshell.sh process_notifications -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
@@ -114,3 +118,5 @@ cron
 
 
 /var/www/collectionstash/vendors/cakeshell.sh process_collectible_price -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
+
+/var/www/collectionstash/vendors/cakeshell.sh process_stash_fact -cli /usr/bin -console /var/www/collectionstash/lib/Cake/Console -app /var/www/collectionstash/app
