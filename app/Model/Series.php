@@ -38,10 +38,12 @@ class Series extends AppModel {
 		$paths = $this -> getPath($seriesId);
 		$seriesPathName = '';
 		$totalPaths = count($paths);
-		foreach ($paths as $key => $value) {
-			$seriesPathName .= $value['Series']['name'];
-			if (++$key != $totalPaths) {
-				$seriesPathName .= '/';
+		if (!is_null($paths)) {
+			foreach ($paths as $key => $value) {
+				$seriesPathName .= $value['Series']['name'];
+				if (++$key != $totalPaths) {
+					$seriesPathName .= '/';
+				}
 			}
 		}
 
