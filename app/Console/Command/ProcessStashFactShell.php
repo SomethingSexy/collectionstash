@@ -68,6 +68,7 @@ class ProcessStashFactShell extends AppShell {
 			$stashFact['StashFact']['count_collectibles_sold'] = $countCollectiblesSold;
 			$stashFact['StashFact']['current_value'] = $currentValue;
 			$stashFact['StashFact']['count_collectibles_current_value'] = $countCollectibleCurrentValue;
+			unset($stashFact['StashFact']['modified']);
 
 			$this -> StashFact -> save($stashFact);
 
