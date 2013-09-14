@@ -10,6 +10,23 @@ class Stash extends AppModel {
 		return true;
 	}
 
+	function afterFind($results, $primary = false) {
+		if ($results && $primary) {
+			foreach ($results as $key => $val) {
+				if (isset($val['Stash'])) {
+					if (isset($val['StashFact']) && !empty($val['StashFact'])) {
+						// currently we only have one
+						$results[$key]['StashFact'] = $val['StashFact'][0];
+					} else {
+						unset($results[$key]['StashFact']);
+					}
+				}
+			}
+		}
+
+		return $results;
+	}
+
 	public function getStashDetails($userId) {
 		$this -> Behaviors -> attach('Containable');
 		$stashes = $this -> find("all", array('contain' => array('CollectiblesUser'), 'conditions' => array('user_id' => $userId)));

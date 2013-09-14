@@ -38,6 +38,8 @@ class ProcessStashFactShell extends AppShell {
 			$countCollectiblesSold = 0;
 			$currentValue = 0;
 			$countCollectibleCurrentValue = 0;
+			// this is the count of how many collectibles have been removed and indicated they were sold
+			$countCollectiblesRemoveSold = 0;
 
 			foreach ($collectibleUsers as $key => $collectibleUser) {
 				// calculate the msrp value of the stash
@@ -59,6 +61,11 @@ class ProcessStashFactShell extends AppShell {
 					$countCollectiblesSold = $countCollectiblesSold + 1;
 					$totalSold = $totalSold + $collectibleUser['Listing']['current_price'];
 				}
+
+				if (!$collectibleUser['CollectiblesUser']['active'] && $collectibleUser['CollectiblesUser']['collectible_user_remove_reason_id'] == 1) {
+					$countCollectiblesRemoveSold = $countCollectiblesRemoveSold + 1;
+				}
+
 			}
 
 			$stashFact['StashFact']['msrp_value'] = $msrp;
@@ -68,6 +75,8 @@ class ProcessStashFactShell extends AppShell {
 			$stashFact['StashFact']['count_collectibles_sold'] = $countCollectiblesSold;
 			$stashFact['StashFact']['current_value'] = $currentValue;
 			$stashFact['StashFact']['count_collectibles_current_value'] = $countCollectibleCurrentValue;
+			$stashFact['StashFact']['count_collectibles_remove_sold'] = $countCollectiblesRemoveSold;
+
 			unset($stashFact['StashFact']['modified']);
 
 			$this -> StashFact -> save($stashFact);

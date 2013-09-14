@@ -352,6 +352,12 @@ div.subnav-fixed {
 .widget .widget-header .pull-right [class^="icon-"], .widget .widget-header .pull-right [class*=" icon-"] {
 	margin-right: 10px;
 }
+
+.widget .widget-header .widget-text {
+	margin-right: 5px;
+	font-size: 12px;
+
+}
 .widget .widget-content {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #D5D5D5;
@@ -1121,16 +1127,14 @@ a.forgot-password {
 	color: red;
 	font-weight: bold;
 }
-
-.price-guide {
+.stash-value-guide, .price-guide {
 	width: 100%;
 	display: table;
 	padding: 0 0 0 10px;
 	margin-top: .5em;
 	margin-bottom: 1.9em;
 }
-
-.price-guide .average {
+.stash-value-guide .average, .price-guide .average {
 	display: table-cell;
 	width: 40%;
 	vertical-align: top;
@@ -1139,7 +1143,10 @@ a.forgot-password {
 	color: #999;
 }
 
-.price-guide .average .average-value {
+.stash-value-guide .average {
+	width: 25%;
+}
+.stash-value-guide .average .average-value, .price-guide .average .average-value {
 	display: block;
 	margin-bottom: .55em;
 	font-size: 30px;
@@ -1238,4 +1245,17 @@ a.forgot-password {
 	#left-panel.open .icon-caret-up, #left-panel .active.lp-dropdown, #left-panel .lp-dropdown-menu {
 		display: block;
 	}
+}
+
+@media (max-width: 480px) {
+	.stash-value-guide .average, .price-guide .average {
+		width: 100%;
+		float: left;
+		margin-bottom: 10px;
+	}
+
+	.stash-value-guide .average .average-value, .price-guide .average .average-value {
+		margin-bottom: 0;
+	}
+
 }

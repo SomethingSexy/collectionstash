@@ -17,7 +17,42 @@
 		</div>
 	</div>
 	<?php } ?>
-
+	<div class="row-fluid spacer">
+		<div class="span12">
+			<div class="widget stacked">
+				<div class="widget-header">
+					<i class="icon-dollar"></i><h3>Stash Value Breakdown</h3>
+					
+				</div>
+				<div class="widget-content">
+					<div class="stash-value-guide">
+					<?php
+					foreach ($stashes as $key => $value) {
+						if ($value['Stash']['name'] === 'Default') {
+							echo '<div class="average">';
+							echo '<span class="average-value">$' . $value['StashFact']['msrp_value'] . '</span>MSRP value';
+							echo '</div>';
+							echo '<div class="average">';
+							echo '<span class="average-value">$' . $value['StashFact']['total_paid'] . '</span>Total paid (' . $value['StashFact']['count_collectibles_paid'] . ' of ' . $value['Stash']['collectibles_user_count'] .' collectibles recorded)';
+							echo '</div>';
+							echo '<div class="average">';
+							echo '<span class="average-value">$' . $value['StashFact']['total_sold'] . '</span>Total sold (' . $value['StashFact']['count_collectibles_sold'] . ' of ' . $value['StashFact']['count_collectibles_remove_sold'] .' removed collectibles recorded)';
+							echo '</div>';
+							echo '<div class="average">';
+							echo '<span class="average-value">$' . $value['StashFact']['current_value'] . '</span>Collection Stash value (' . $value['StashFact']['count_collectibles_current_value'] . ' of ' . $value['Stash']['collectibles_user_count'] .' collectibles have a Collection Stash value)';
+							echo '</div>';
+						}
+					}
+					?>
+					</div>
+					<p class="pull-left"><a href="#" data-toggle="popover" data-placement="bottom" data-content="<h6>Total Paid</h6><p>The total paid value is an accumlation of the amount you entered in the price paid field when you added collectibles to your stash.  The number of collectibles in your stash that have a purchase amount is indicated above.</p><h6>Total Sold</h6><p>The total sold value is an accumlation of all collectibles you have removed from your stash where you indicated you sold it and added a cost.  The number of collectibles in your stash that you have sold and have a sale amount is indicated above.</p><h6>Collection Stash Value</h6><p>The Collection Stash value is an accumlation of the average price for each collectible in your Stash.  The average price is based off of completed eBay listings and user submitted sale prices.  The number of collectibles in your Stash that have an average Collection Stash price is indicated abouve.  You can add eBay listings to collectibles that do not have a Collection Stash average value to make this number more accurate.</p>" data-html="true" title="Why do my values look weird?" id="stash-values-weird">Why do my values look weird?</a></p>
+					<p class="pull-right">
+						Values update once a day.
+					</p>
+				</div>
+			</div>
+		</div>	
+	</div>
 	
 	<div class="row-fluid spacer">
 		<div class="span6">
@@ -222,17 +257,13 @@
 <script>
 var userId =<?php echo $user['User']['id']; ?>;
 
-
-var totalPending = <?php echo $totalPending; ?>;
-var totalPendingPages = Math.ceil(totalPending / 5); 
-
-var totalNew = <?php echo $totalNew; ?>;
-var totalNewPages = Math.ceil(totalPending / 5); 
-
-var totalWorks = <?php echo $totalWorks; ?>;
-var totalWorkPages = Math.ceil(totalWorks / 10); 
-
-var totalActivity = <?php echo $totalActivity; ?>;
+var totalPending =<?php echo $totalPending; ?>;
+var totalPendingPages = Math.ceil(totalPending / 5);
+var totalNew =<?php echo $totalNew; ?>;
+var totalNewPages = Math.ceil(totalPending / 5);
+var totalWorks =<?php echo $totalWorks; ?>;
+var totalWorkPages = Math.ceil(totalWorks / 10);
+var totalActivity =<?php echo $totalActivity; ?>;
 var totalActivityPages = Math.ceil(totalActivity / 10); 
 </script>
 <?php echo $this -> Html -> script('views/view.activity', array('inline' => false)); ?>
@@ -241,7 +272,7 @@ var totalActivityPages = Math.ceil(totalActivity / 10);
 
 var pending = new PaginatedPending();
 pending.reset(<?php echo $pending; ?>);
-var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
+var uploadDirectory =   "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
 
 var newCollectibles = new PaginatedNew();
 newCollectibles.reset(<?php echo $newCollectibles; ?>);
@@ -250,7 +281,9 @@ var works = new PaginatedWorkCollection();
 works.reset(<?php echo $works; ?>);
 
 var activity = new PaginatedActivityCollection();
-activity.reset(<?php echo $activity;?>);
+activity.reset(<?php echo $activity; ?>);
 
-var serverTime = '<?php echo date('Y-m-d H:i:s');?>';
+var serverTime = '<?php echo date('Y-m-d H:i:s'); ?>';
+
+$('#stash-values-weird').popover({trigger: 'hover'});
 </script>
