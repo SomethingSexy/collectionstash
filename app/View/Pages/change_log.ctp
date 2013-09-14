@@ -1,4 +1,15 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.7.1</h3>
+<p>Added a new widget to the user home page that shows the following values for your stash:</p>
+<ul>
+	<li>MSPR value</li>
+	<li>Total amount paid for the collectibles in your stash.</li>
+	<li>Total amount of the collectibles you sold.</li>
+	<li>Current Collection Stashv value based on the average price each collectible.</li>
+</ul>
+
+<h3>Release Notes for v2.7</h3>
+<p>Processing price data about user stashes behind the scenes.</p>
 
 <h3>Release Notes for v2.6.2</h3>
 <p>Updated the Account Settings to allow you to adjust how you receive notifications from Collection Stash.</p>

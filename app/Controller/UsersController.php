@@ -22,8 +22,9 @@ class UsersController extends AppController {
 
 		$this -> set(compact('user'));
 
-		//stashes
-		$stashes = $this -> User -> Stash -> find('all', array('conditions' => array('Stash.user_id' => $this -> getUserId()), 'contain' => false));
+		//stashes, grab StashFact if it has one
+		$stashes = $this -> User -> Stash -> find('all', array('conditions' => array('Stash.user_id' => $this -> getUserId()), 'contain' => array('StashFact')));
+		debug($stashes);
 		$this -> set(compact('stashes'));
 
 		// user_point_facts
@@ -78,7 +79,7 @@ class UsersController extends AppController {
 		$activity = json_encode($activity);
 		$this -> set(compact('activity'));
 		$this -> set(compact('totalActivity'));
-
+		
 		$this -> layout = 'home_dashboard';
 		$this -> set('dashboard', 'home');
 	}
