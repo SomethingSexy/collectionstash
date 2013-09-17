@@ -107,7 +107,7 @@
 			</div>
 		</div>
 
-		<div class="control-group">
+		<!--<div class="control-group">
 			<label class="control-label" for="inputMsrp">Currency</label>
 			<div class="controls controls-row">
 				<select id="CollectibleCurrencyId" name="currency_id">
@@ -116,7 +116,7 @@
 					{/currencies}
 				</select>
 			</div>
-		</div>
+		</div>-->
 
 		<div class="control-group">
 			<label class="control-label" for="inputMsrp">Year Made</label>

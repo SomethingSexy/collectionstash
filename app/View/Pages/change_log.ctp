@@ -1,4 +1,7 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.7.1.1</h3>
+<p>Removed the curreny field for now because it was interfering with the MSRP Stash value.  We will add support for multiple currencies later.</p>
+
 <h3>Release Notes for v2.7.1</h3>
 <p>Added a new widget to the user home page that shows the following values for your stash:</p>
 <ul>
