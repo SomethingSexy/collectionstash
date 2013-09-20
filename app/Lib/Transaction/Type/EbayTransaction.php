@@ -45,7 +45,7 @@ class EbayTransaction extends Object implements Transactionable {
 
 		// make the API call
 		$responseObj = $client -> __soapCall($apiCall, array($params), null, $header);
-		//debug($responseObj);
+		debug($responseObj);
 		// only process if Ack is success
 
 		if ($responseObj -> Ack !== 'Success') {
@@ -93,6 +93,13 @@ class EbayTransaction extends Object implements Transactionable {
 		$data['Listing']['quantity_sold'] = $responseObj -> Item -> SellingStatus -> QuantitySold;
 		$data['Listing']['url'] = $responseObj -> Item -> ListingDetails -> ViewItemURLForNaturalSearch;
 
+		if (isset($responseObj -> Item -> ConditionID)) {
+			$data['Listing']['condition_ext_id'] = $responseObj -> Item -> ConditionID;
+		}
+		if (isset($responseObj -> Item -> ConditionDisplayName)) {
+			$data['Listing']['condition_name'] = $responseObj -> Item -> ConditionDisplayName;
+		}
+
 		// If active, gather some information but do not change processing flag
 		if ($listingStatus === 'Active') {
 			$data['Listing']['status'] = 'active';
@@ -103,6 +110,14 @@ class EbayTransaction extends Object implements Transactionable {
 			// It is completed by quantity sold = 0
 			$data['Listing']['status'] = 'completed';
 			$data['Listing']['processed'] = true;
+
+			// here we need to check to see if it was relisted
+			// if it is completed but unsold and there is a
+			// RelistedItemID, we will specify on the return to also
+			if ($responseObj -> Item -> SellingStatus -> QuantitySold === 0 && isset($responseObj -> Item -> ListingDetails -> RelistedItemID) && !empty($responseObj -> Item -> ListingDetails -> RelistedItemID)) {
+				$data['Listing']['relisted'] = true;
+				$data['Listing']['relisted_ext_id'] = $responseObj -> Item -> ListingDetails -> RelistedItemID;
+			}
 		}
 
 		// now we need to see if there is a transaction
@@ -172,7 +187,7 @@ class EbayTransaction extends Object implements Transactionable {
 			$data['Transaction'] = $transactions['Transaction'];
 
 		}
-		
+
 		return $data;
 	}
 
