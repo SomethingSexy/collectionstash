@@ -37,11 +37,11 @@ class ProcessTransactionsShell extends AppShell {
 					// the processedListing will contain
 					$processedListing = $transactionable -> processTransaction($value, array());
 					//make sure it isn't false.  We need to do something that if we cannot update, indicate that on the listing - TODO
-					if ($processedListing) {
+					if ($processedListing) {						
 						// now since this should have all of the ids already saved, I should be able
 						// to do a saveAssociated and whamo
 						if ($this -> Listing -> saveAssociated($processedListing, array('validate' => false))) {
-
+					
 						}
 					}
 				}

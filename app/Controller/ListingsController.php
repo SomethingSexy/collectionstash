@@ -17,7 +17,7 @@ class ListingsController extends AppController {
 
 		$transaction['Listing'] = array();
 		$transaction['Listing']['listing_type_id'] = 1;
-		$transaction['Listing']['ext_item_id'] = '330970546863';
+		$transaction['Listing']['ext_item_id'] = '141035174978';
 		$transaction['Listing']['collectible_id'] = '234';
 
 		// $response = $this -> Listing -> createListing($transaction, $this -> getUser());
@@ -28,7 +28,7 @@ class ListingsController extends AppController {
 
 		$transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
 
-		$transactionable -> processTransaction($transaction);
+		debug($transactionable -> processTransaction($transaction));
 	}
 
 	/**
