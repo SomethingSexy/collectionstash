@@ -65,7 +65,6 @@ class Listing extends AppModel {
 	}
 
 	function checkDuplicateItems($check) {
-		debug($this -> data);
 		// we need these to proceed
 		if (empty($check['ext_item_id']) || empty($this -> data['Listing']['listing_type_id']) || empty($this -> data['Listing']['collectible_id'])) {
 			return false;
@@ -169,9 +168,6 @@ class Listing extends AppModel {
 			// since we can only add attributes through collectibles right
 			// now, do not do any event stuff here
 			$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_LISTING, 'user' => $user, 'object' => $transaction, 'type' => 'Listing')));
-			debug($data['Listing']['relisted']);
-			debug($data['Listing']['relisted_ext_id']);
-			debug($this -> checkDuplicateItems(array('ext_item_id' => $data['Listing']['relisted_ext_id'])));
 			// if this is a relisting, take the relist id, if it hasn't been added
 			// already then we want
 			if (isset($data['Listing']['relisted']) && $data['Listing']['relisted'] && $data['Listing']['relisted_ext_id']) {

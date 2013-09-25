@@ -37,11 +37,31 @@ class ProcessTransactionsShell extends AppShell {
 					// the processedListing will contain
 					$processedListing = $transactionable -> processTransaction($value, array());
 					//make sure it isn't false.  We need to do something that if we cannot update, indicate that on the listing - TODO
-					if ($processedListing) {						
+					if ($processedListing) {
 						// now since this should have all of the ids already saved, I should be able
 						// to do a saveAssociated and whamo
 						if ($this -> Listing -> saveAssociated($processedListing, array('validate' => false))) {
-					
+							// if this is a relisting, take the relist id, if it hasn't been added
+							// already then we want
+							if (isset($processedListing['Listing']['relisted']) && $processedListing['Listing']['relisted'] && $processedListing['Listing']['relisted_ext_id']) {
+
+								$relisting = array();
+								$relisting['Listing']['listing_type_id'] = $processedListing['Listing']['listing_type_id'];
+								$relisting['Listing']['collectible_id'] = $processedListing['Listing']['collectible_id'];
+								$relisting['Listing']['user_id'] = $processedListing['Listing']['user_id'];
+								$relisting['Listing']['ext_item_id'] = $processedListing['Listing']['relisted_ext_id'];
+
+								$this -> Listing -> set($relisting['Listing']);
+
+								if ($this -> Listing -> validates()) {
+									$relisting = $transactionable -> processTransaction($relisting, array());
+									// set this guy to false so it will be processed later, this is for the rare
+									// cases of a relisting of a relisting
+									$relisting['Listing']['processed'] = false;
+									// save but don't worry about it failing for now
+									$this -> Listing -> saveAssociated($relisting);
+								}
+							}
 						}
 					}
 				}
