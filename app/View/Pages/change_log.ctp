@@ -1,4 +1,8 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.7.2</h3>
+<p>We are now automatically adding eBay items that have been relisted.</p>
+<p>Added two new fields to eBay listings, the eBay condition id (future use) and the eBay condition name.  We will display this in a future update.</p>
+
 <h3>Release Notes for v2.7.1.1</h3>
 <p>Removed the curreny field for now because it was interfering with the MSRP Stash value.  We will add support for multiple currencies later.</p>
 
