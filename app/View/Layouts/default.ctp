@@ -135,7 +135,7 @@ if (isset($bodyClass))
 							</li>
 							<?php } ?>
 							<li class="dropdown">
-								<?php echo $this -> Html -> link('Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+								<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 								
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 									<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
@@ -146,7 +146,7 @@ if (isset($bodyClass))
 								<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
 							</li>
 							<li>
-								<?php echo $this -> Html -> link('Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
+								<?php echo $this -> Html -> link('User Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
 							</li>
 							<li>
 								<a href="/comments/"><?php echo __('Discussion'); ?></a>
