@@ -76,6 +76,7 @@ class StashsController extends AppController {
 	}
 
 	public function view($userId = null, $type = 'tile') {
+		$this -> layout = 'fluid';
 		$this -> set('stashType', 'default');
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));
@@ -127,6 +128,7 @@ class StashsController extends AppController {
 	// TODO: Since this is a special stash type, it will need its own view because
 	// we will not want to show the collectible_user information
 	public function wishlist($userId = null, $type = 'tile') {
+		$this -> layout = 'fluid';
 		$this -> set('stashType', 'wishlist');
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));

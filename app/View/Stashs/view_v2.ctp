@@ -1,17 +1,13 @@
-<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/cs.stash', array('inline' => false)); ?>
 <h2><?php
-	echo $stashUsername . '\'s';
-	if ($stashType === 'default') {
-		echo __(' stash', true);
-	} else {
-		echo __(' wishlist', true);
-	}
+echo $stashUsername . '\'s';
+if ($stashType === 'default') {
+	echo __(' stash', true);
+} else {
+	echo __(' wishlist', true);
+}
 ?></h2>
-
 <div id="my-stashes-component" class="widget widget-tabs">
-
-		<?php echo $this -> element('flash'); ?>
-		
 				<ul class="nav nav-tabs widget-wide">
 					<?php
 					if ($stashType === 'default') {
@@ -38,12 +34,11 @@
 					<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
 					<li><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 				</ul>	
-			
 	<div class="widget-content">
-			<div class=" clearfix">
+			<div class="clearfix">
 				<div class="btn-group actions pull-left">
 						<?php
-						if (isset($myStash) && $myStash && $stashType === 'default') {
+						if (isset($myStash) && $myStash) {
 							echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i></a>';
 						}
 						if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
@@ -73,25 +68,22 @@
 					echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
  					?>
 			    </div>
-			</div>		
-		
-				
+			</div>			
 	<?php
 	if (isset($collectibles) && !empty($collectibles)) {
-		echo '<div class="row">';
-		echo '<div class="span12">';
+
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
-		echo '<div class="tiles stashable" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
+		echo '<div class="tiles stashable row-fluid" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 		foreach ($collectibles as $key => $myCollectible) {
-			echo '<div class="tile stash-item">';
+			echo '<div class="tile stash-item ">';
 			if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
 						echo '<div class="image">';
-						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 200, 'height' => 200)) . '</a>';
+						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400)) . '</a>';
 						echo '</div>';
 						break;
 					}
@@ -105,13 +97,13 @@
 			echo '<div class="header">';
 			if ($stashType === 'default') {
 				if ($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']) {
-					echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+					echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				} else {
-					echo '<a  href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+					echo '<a class="title" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				}
 
 			} else {
-				echo '<a  href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+				echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			}
 			echo '</div>';
 
@@ -148,12 +140,10 @@
 			}
 			echo '</li>';
 			echo '</ul>';
-
 			echo '</div>';
 		}
 		echo '</div>';
-		echo '</div>';
-		echo '</div>';
+
 	} else {
 		if ($stashType === 'default') {
 			echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
@@ -167,8 +157,8 @@
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
 if (isset($reasons)) {
@@ -176,10 +166,13 @@ if (isset($reasons)) {
 }
 	?>
 		$(function() {
+
 			var $container = $('div.tiles');
 			$container.imagesLoaded(function() {
 				$container.masonry({
-					itemSelector : '.tile'
+					itemSelector : '.tile',
+					columnWidth : 420,
+					isAnimated : true
 				});
 			});
 

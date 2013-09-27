@@ -444,6 +444,7 @@ class CollectiblesController extends AppController {
 		 */
 		$this -> searchCollectible(array('Collectible.original' => false, 'Collectible.custom' => false));
 		$this -> set('viewType', 'tiles');
+		$this -> layout = 'fluid';
 		$this -> render('searchTiles');
 
 	}

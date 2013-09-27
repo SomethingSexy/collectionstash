@@ -9,6 +9,7 @@ class UserUploadsController extends AppController {
 	public $components = array('Image');
 
 	public function view($userId = null) {
+		$this -> layout = 'fluid';
 		if (!is_null($userId)) {
 			$userId = Sanitize::clean($userId, array('encode' => false));
 			//Also retrieve the UserUploads at this point, so we do not have to do it later and comments
@@ -287,6 +288,7 @@ class UserUploadsController extends AppController {
 		$this -> paginate = array('limit' => 25, 'order' => array('created' => 'desc'), 'contain' => array('User'));
 		$userUploads = $this -> paginate('UserUpload');
 		$this -> set(compact('userUploads'));
+		$this -> layout = 'fluid';
 	}
 
 }
