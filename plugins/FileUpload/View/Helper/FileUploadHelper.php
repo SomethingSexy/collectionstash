@@ -59,8 +59,8 @@ class FileUploadHelper extends AppHelper {
 	'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
 	'imagePathOnly' => false, //if true, will only return the requested image_path
 	'autoResize' => true, //if true, will resize the file automatically if given a valid width.
-	'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
-	);
+	'resizeThumbOnly' => true, //if true, will only resize the image down -- not up past the original's size
+	'resizeType' => 'strict');
 
 	/**
 	 * FileUpload Settings set in config/file_upload_settings.php
@@ -248,11 +248,26 @@ class FileUploadHelper extends AppHelper {
 	 * @return null
 	 */
 	function _resizeImage() {
-		$this -> newImage = new RResizeImage($this -> _getFullPath());
-		if ($this -> newImage -> imgWidth > $this -> options['width']) {
-			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
-			$this -> newImage -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
+		$thumbMaker = PhpThumbFactory::create($this -> _getFullPath());
+		//$this -> newImage = new RResizeImage($this -> _getFullPath());
+		$currentDimensions = $thumbMaker -> getCurrentDimensions();
+		// we need to set this here in case we dont actually have to resize
+		$this -> newImage = array('width' => $currentDimensions['width']);
 
+		if ($currentDimensions['width'] > $this -> options['width']) {
+			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
+			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
+			if ($this -> options['resizeType'] === 'adaptive') {
+				$thumbMaker -> adaptiveResize($this -> options['width'], $this -> options['height']);
+			} else {
+				$thumbMaker -> adaptiveResize($this -> options['width'], $this -> options['height']);
+			}
+
+			$thumbMaker -> save($this -> _getResizeNameOrPath($this -> _getFullPath()));
+
+			$currentDimensions = $thumbMaker -> getCurrentDimensions();
+			
+			$this -> newImage = array('width' => $currentDimensions['width']);
 		} else {
 			//$this->autoResize = false;
 		}
@@ -265,7 +280,8 @@ class FileUploadHelper extends AppHelper {
 	 */
 	function _htmlImage() {
 		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && $this -> options['width'] > 0) {
-			if (isset($this -> newImage) && $this -> newImage -> imgWidth && $this -> newImage -> imgWidth <= $this -> options['width']) {
+				
+			if (isset($this -> newImage) && $this -> newImage['width'] && $this -> newImage['width'] <= $this -> options['width']) {
 				$image = $this -> _getImagePath();
 			} else {
 				$image = $this -> _getResizeNameOrPath($this -> _getImagePath());
@@ -274,6 +290,7 @@ class FileUploadHelper extends AppHelper {
 			$image = $this -> _getImagePath();
 		}
 
+	
 		$options = $this -> options;
 		//copy
 		//unset the default options
