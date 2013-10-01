@@ -34,18 +34,20 @@
 		<?php
 		if (isset($userUploads) && !empty($userUploads)) {
 			echo '<div class="row">';
-			echo '<div class="span12">';		
+			echo '<div class="span12">';
 			echo '<div id="titles-nav" class="hidden">';
 			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 			echo '</div>';
 			echo '<div class="tiles" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
-	
+
 			foreach ($userUploads as $key => $upload) {
-	
+
 				if (!empty($upload['UserUpload'])) {
 					echo '<div class="tile photo">';
 					echo '<div class="image">';
-					echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400,  'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
+					echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
+					$this -> FileUpload -> reset();
+					echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 					echo '</div>';
 					echo '<div class="description">';
 					echo '<span>' . $upload['UserUpload']['title'] . '</span><span>' . $upload['UserUpload']['description'] . '</span>';
@@ -57,7 +59,7 @@
 					echo '</div>';
 					echo '</div>';
 				}
-	
+
 			}
 			echo '</div>';
 			echo '</div>';
@@ -102,5 +104,5 @@
 				$container.masonry('appended', $newElems, true);
 			});
 		});
-	});
+	}); 
 </script>
