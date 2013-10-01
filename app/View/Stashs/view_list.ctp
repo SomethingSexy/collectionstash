@@ -92,44 +92,45 @@ if ($stashType === 'default') {
 <?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 
-<script>
-	<?php 
-		if(isset($reasons)) {
-			echo 'var reasons = \'' . json_encode($reasons) . '\';';
-		}
+<script><?php
+	if (isset($reasons)) {
+		echo 'var reasons = \'' . json_encode($reasons) . '\';';
+	}
 	?>
-	$(function() {
-		var $container = $('div.tiles');
-		$container.imagesLoaded(function() {
-			$container.masonry({
-				itemSelector : '.tile'
-			});
-		});
-
-		$container.infinitescroll({
-			nextSelector : "#titles-nav a",
-			navSelector : "#titles-nav",
-			itemSelector : ".tile",
-			loading : {
-				finishedMsg : "All collectibles have been loaded!",
-				msgText : "<em>Loading the next set of collectibles.</em>",
-			}
-		}, function(newElements) {
-			// hide new items while they are loading
-			var $newElems = $(newElements).css({
-				opacity : 0
-			});
-			// ensure that images load before adding to masonry layout
-			$newElems.imagesLoaded(function() {
-				// show elems now they're ready
-				$newElems.animate({
-					opacity : 1
+		$(function() {
+			var $container = $('div.tiles');
+			$container.imagesLoaded(function() {
+				$container.masonry({
+					itemSelector : '.tile',
+					columnWidth : 422,
+					isAnimated : true
 				});
-				$container.masonry('appended', $newElems, true);
 			});
-		});
 
-		$('#comments').comments();
+			$container.infinitescroll({
+				nextSelector : "#titles-nav a",
+				navSelector : "#titles-nav",
+				itemSelector : ".tile",
+				loading : {
+					finishedMsg : "All collectibles have been loaded!",
+					msgText : "<em>Loading the next set of collectibles.</em>",
+				}
+			}, function(newElements) {
+				// hide new items while they are loading
+				var $newElems = $(newElements).css({
+					opacity : 0
+				});
+				// ensure that images load before adding to masonry layout
+				$newElems.imagesLoaded(function() {
+					// show elems now they're ready
+					$newElems.animate({
+						opacity : 1
+					});
+					$container.masonry('appended', $newElems, true);
+				});
+			});
 
-	});
+			$('#comments').comments();
+
+		}); 
 </script>

@@ -63,7 +63,7 @@ echo $this -> Minify -> script('js/views/view.transactions', array('inline' => f
 echo $this -> Minify -> script('js/views/view.stash.add', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible', array('inline' => false));
-echo $this -> Minify -> script('js/pages/page.collectible.view', array('inline' => false));
+echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
 ?>
@@ -189,9 +189,9 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 			<div class="row-fluid">
 				<div class="span12">
 					<ul class="nav nav-tabs" id="myTab">
-						<li class="active"><a href="#detail"><i class="icon-info"></i> Detail</a></li>
+						<li class="active"><a href="#detail" data-id="detail" class="detail"><i class="icon-info"></i> Detail</a></li>
 						<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
-						<li><a href="#price"><i class="icon-dollar"></i>  Price Guide</a></li>
+						<li><a href="#price" data-id="price" class="price"><i class="icon-dollar"></i>  Price Guide</a></li>
 						<?php } ?>
 					</ul>
 					<div class="tab-content">
