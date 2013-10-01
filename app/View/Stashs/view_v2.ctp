@@ -83,7 +83,7 @@ if ($stashType === 'default') {
 				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
 						echo '<div class="image">';
-						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400)) . '</a>';
+						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400)) . '</a>';
 						echo '</div>';
 						break;
 					}
@@ -91,10 +91,10 @@ if ($stashType === 'default') {
 
 				//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 			} else {
-				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img src="/img/silhouette_thumb.png"/></a></div>';
+				echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img alt="" src="/img/no-photo.png"></a></div>';
 			}
 
-			echo '<div class="header">';
+			echo '<div class="header"><h2>';
 			if ($stashType === 'default') {
 				if ($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']) {
 					echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
@@ -105,28 +105,20 @@ if ($stashType === 'default') {
 			} else {
 				echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 			}
+			echo '</h2></div>';
+
+			echo '<div class="content">';
+			echo '<p></p>';
 			echo '</div>';
-
-			$detail = '';
-
-			$editionSize = $myCollectible['Collectible']['edition_size'];
-			if ($myCollectible['Collectible']['showUserEditionSize'] && isset($myCollectible['CollectiblesUser']['edition_size']) && !empty($myCollectible['CollectiblesUser']['edition_size'])) {
-				$detail .= '<li>' . $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'] . '</li>';
-
-			} else if (isset($myCollectible['CollectiblesUser']['artist_proof'])) {
-				if ($myCollectible['CollectiblesUser']['artist_proof']) {
-					$detail .= '<li>' . __('Artist\'s Proof') . '</li>';
-				}
-			}
-
-			echo '<ul class="user-detail unstyled">';
+			echo '<div class="menu tile-links clearfix">';
+			echo '<ul class="unstyled">';
 			echo '<li class="">';
-			echo '<a class="btn" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a>';
+			echo '<a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a>';
 			if (isset($myStash) && $myStash) {
 				$collectibleJSON = json_encode($myCollectible['Collectible']);
 				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 				if ($stashType === 'default') {
-					echo '<a class="btn" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
+					echo '<a class="" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a>';
 				}
 				if ($stashType === 'default') {
 					$prompt = 'data-prompt="true"';
@@ -136,10 +128,11 @@ if ($stashType === 'default') {
 
 				$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 				$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-				echo '<a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash btn" title="Remove" href="#"><i class="icon-trash"></i></a>';
+				echo '<a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a>';
 			}
 			echo '</li>';
 			echo '</ul>';
+			echo '</div>';
 			echo '</div>';
 		}
 		echo '</div>';
@@ -171,7 +164,7 @@ if (isset($reasons)) {
 			$container.imagesLoaded(function() {
 				$container.masonry({
 					itemSelector : '.tile',
-					columnWidth : 420,
+					columnWidth : 422,
 					isAnimated : true
 				});
 			});
@@ -199,5 +192,5 @@ if (isset($reasons)) {
 				});
 			});
 
-		});
+		}); 
 </script>

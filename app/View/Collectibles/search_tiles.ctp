@@ -38,7 +38,7 @@ unset($urlparams['url']);
 					foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 						if ($upload['primary']) {
 							echo '<div class="image">';
-							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">';
+							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
 							$this -> FileUpload -> reset();
 							echo $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
 							echo '</div>';
@@ -48,7 +48,7 @@ unset($urlparams['url']);
 
 					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 				} else {
-					echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
+					echo '<div class="image"><img alt="" src="/img/no-photo.png"></div>';
 				}
 				
 				
@@ -85,7 +85,7 @@ unset($urlparams['url']);
 		$container.imagesLoaded(function() {
 			$container.masonry({
 				itemSelector : '.tile',
-				columnWidth : 420,
+				columnWidth : 422,
 				isAnimated : true
 			});
 		});

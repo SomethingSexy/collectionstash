@@ -1,9 +1,5 @@
 $(function() {
 
-	$('#myTab a').click(function(e) {
-		e.preventDefault();
-		$(this).tab('show');
-	});
 	// Get all of the data here
 	$.when($.get('/templates/collectibles/status.dust'), $.get('/templates/transactions/transactions.dust')).done(function(statusTemplate, transactionsTemplate) {
 		dust.loadSource(dust.compile(transactionsTemplate[0], 'transactions'));
@@ -47,6 +43,30 @@ $(function() {
 			$('#status-container').remove();
 		}
 
+		var Router = Backbone.Router.extend({
+			routes : {
+				"detail" : "detail", // #help
+				"price" : "price", // #search/kiwis
+			},
+			detail : function() {
+				$('#myTab a.detail').tab('show');
+			},
+			price : function() {
+				$('#myTab a.price').tab('show');
+			}
+		});
+
+		var router = new Router();
+
+		Backbone.history.start();
+
+		$('#myTab a').click(function(e) {
+			e.preventDefault();
+			router.navigate($(e.currentTarget).attr('data-id'), {
+				trigger : true
+			});
+		});
+
 		// currently the other sections on the detail page are
 		// not backbone (not sure they ever will be), so we are going to have
 		// to do some hiding/showing
@@ -58,7 +78,7 @@ $(function() {
 			allowAddListing : allowAddListing,
 			priceData : priceData
 		}).render().el);
-	
+
 		// lol this should probably get moved to the view file
 		function showTooltip(x, y, contents) {
 

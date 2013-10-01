@@ -82,6 +82,7 @@
 					<th>Type</th>
 					<th>Listing name</th>
 					<th>Current Price</th>
+					<th>Condition</th>
 					<th>Start Date</th>
 					<th>End Date</th>
 					<th> </th>
@@ -94,6 +95,7 @@
 							<td>{type}</td>
 							<td><a target="_blank" href="{url}">{listing_name}</a></td>
 							<td>{current_price}</td>
+							<td>{condition_name}</td>
 							<td>{start_date}</td>
 							<td>{end_date}</td>
 							<td>
@@ -127,6 +129,7 @@
 					<th>Type</th>
 					<th>Listing name</th>
 					<th>Listing Price</th>
+					<th>Condition</th>
 					<th>Start Date</th>
 					<th>End Date</th>
 					<th> </th>
@@ -139,6 +142,7 @@
 							<td>{type}</td>
 							<td><a target="_blank" href="{url}">{listing_name}</a></td>
 							<td>{listing_price}</td>
+							<td>{condition_name}</td>
 							<td>{start_date}</td>
 							<td>{end_date}</td>
 							<td>
@@ -172,6 +176,7 @@
 					<th>Type</th>
 					<th>Listing name</th>
 					<th>Sale Price</th>
+					<th>Condition</th>
 					<th>Date</th>
 					<th> </th>
 				</tr>
@@ -195,6 +200,7 @@
 							{/eq}							
 						</td>
 						<td>{sale_price}</td>
+						<td>{condition_name}</td>
 						<td>{#sale_date} {.} {:else} Missing {/sale_date}</td>
 						<td>
 							<div class="btn-group actions">
