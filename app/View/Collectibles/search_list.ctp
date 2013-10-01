@@ -68,7 +68,7 @@ unset($urlparams['url']);
 						if (!empty($collectible['CollectiblesUpload'])) {
 							foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 								if ($upload['primary']) {
-									echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
+									echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
 									break;
 								}
 							}
@@ -119,7 +119,7 @@ unset($urlparams['url']);
 						if (!empty($collectible['ArtistsCollectible'])) {
 							echo '<span class="label">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectible['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
 						}
-						if(!empty($collectible['Scale']['scale'])) {
+						if (!empty($collectible['Scale']['scale'])) {
 							echo '<span class="label">' . $collectible['Scale']['scale'] . '</span>';
 						}
 
@@ -216,7 +216,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory ="<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {
