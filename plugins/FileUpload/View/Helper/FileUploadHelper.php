@@ -257,8 +257,8 @@ class FileUploadHelper extends AppHelper {
 		if ($currentDimensions['width'] > $this -> options['width']) {
 			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
 			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
-			
-			if ($this -> settings['resizeType'] === 'adaptive') {
+
+			if (isset($this -> settings['resizeType']) && $this -> settings['resizeType'] === 'adaptive') {
 				$thumbMaker -> adaptiveResize($this -> options['width'], $this -> options['height']);
 			} else {
 				$thumbMaker -> resize($this -> options['width'], $this -> options['height']);
@@ -267,7 +267,7 @@ class FileUploadHelper extends AppHelper {
 			$thumbMaker -> save($this -> _getResizeNameOrPath($this -> _getFullPath()));
 
 			$currentDimensions = $thumbMaker -> getCurrentDimensions();
-			
+
 			$this -> newImage = array('width' => $currentDimensions['width']);
 		} else {
 			//$this->autoResize = false;
@@ -281,7 +281,7 @@ class FileUploadHelper extends AppHelper {
 	 */
 	function _htmlImage() {
 		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && $this -> options['width'] > 0) {
-				
+
 			if (isset($this -> newImage) && $this -> newImage['width'] && $this -> newImage['width'] <= $this -> options['width']) {
 				$image = $this -> _getImagePath();
 			} else {
@@ -291,7 +291,6 @@ class FileUploadHelper extends AppHelper {
 			$image = $this -> _getImagePath();
 		}
 
-	
 		$options = $this -> options;
 		//copy
 		//unset the default options
