@@ -13,7 +13,7 @@ if (isset($setPageTitle) && $setPageTitle) {
 
 	$this -> set("title_for_layout", $pageTitle);
 }
-$this -> set('description_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name']);
+$this -> set('description_for_layout', 'Information and detail for ' .  $collectibleDetail['Collectible']['descriptionTitle']);
 $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
 
 if (!isset($showEdit)) {
@@ -63,7 +63,7 @@ echo $this -> Minify -> script('js/views/view.transactions', array('inline' => f
 echo $this -> Minify -> script('js/views/view.stash.add', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible', array('inline' => false));
-echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
+echo $this -> Minify -> script('js/pages/page.collectible.view', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
 ?>

@@ -197,27 +197,40 @@ class Collectible extends AppModel {
 							$results[$key]['Collectible']['retailer'] = $existingRetailer['Retailer']['name'];
 						}
 
+						$descriptionTitle = $val['Collectible']['name'];
+
+						if (isset($val['Collectibletype']) && !empty($val['Collectibletype'])) {
+							$descriptionTitle = $descriptionTitle . ' ' . $val['Collectibletype']['name'];
+						}
+
 						if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
 							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
+							$descriptionTitle = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
 						} else if ((isset($val['Manufacture']) && !empty($val['Manufacture'])) || (isset($val['ArtistsCollectible']) && !empty($val['ArtistsCollectible']))) {
 							$itemTitle = $val['Collectible']['name'] . ' By ';
+
+							$descriptionTitle = $descriptionTitle . ' By ';
 
 							if ($val['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 								if (!empty($val['ArtistsCollectible'])) {
 									// assume the first on is primary for now :)
 									$artist = $val['ArtistsCollectible'][0];
 									$itemTitle .= $artist['Artist']['name'];
+									$descriptionTitle .= $artist['Artist']['name'];
 								} else if (!empty($val['Manufacture'])) {
 									// otherwise if there is a manufacturer, use that
 									$itemTitle .= $val['Manufacture']['title'];
+									$descriptionTitle .= $val['Manufacture']['title'];
 								}
 							} else if (!empty($val['Manufacture']['title'])) {
 								$itemTitle .= $val['Manufacture']['title'];
+								$descriptionTitle .= $val['Manufacture']['title'];
 							} else if (!empty($val['ArtistsCollectible'])) {
 								// assume the first on is primary for now :)
 								$artist = $val['ArtistsCollectible'][0];
 
 								$itemTitle .= $artist['Artist']['name'];
+								$descriptionTitle .= $artist['Artist']['name'];
 							}
 
 							$results[$key]['Collectible']['displayTitle'] = $itemTitle;
@@ -232,6 +245,8 @@ class Collectible extends AppModel {
 
 						}
 
+						$results[$key]['Collectible']['descriptionTitle'] = $descriptionTitle;
+
 						if (isset($val['Collectible']['custom']) && !$val['Collectible']['custom']) {
 							unset($results[$key]['CustomStatus']);
 						}
@@ -244,6 +259,7 @@ class Collectible extends AppModel {
 			} else {
 				if (isset($results[$this -> primaryKey])) {
 					$showEditionSize = false;
+
 					//TODO not sure this is really needed anymore
 					if (isset($results['edition_size'])) {
 						if (is_numeric($results['edition_size'])) {
@@ -268,32 +284,45 @@ class Collectible extends AppModel {
 						$results['retailer'] = $existingRetailer['Retailer']['name'];
 					}
 
+					$descriptionTitle = $results['name'];
+
+					if (isset($results['Collectibletype']) && !empty($results['Collectibletype'])) {
+						$descriptionTitle = $descriptionTitle . ' ' . $results['Collectibletype']['name'];
+					}
+
 					if (isset($results['custom']) && $results['custom']) {
 						if (isset($results['User'])) {
 							$results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
+							$descriptionTitle = $results['name'] . __(' a custom by ') . $results['User']['username'];
 						} else {
 							$results['displayTitle'] = $results['name'] . __(' a custom');
+							$descriptionTitle = $results['name'] . __(' a custom');
 						}
 
 					} else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
 						$itemTitle = $results['name'] . ' By ';
+						$descriptionTitle = $descriptionTitle . ' By ';
 
 						if ($results['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
 							if (!empty($results['ArtistsCollectible'])) {
 								// assume the first on is primary for now :)
 								$artist = $results['ArtistsCollectible'][0];
 								$itemTitle .= $artist['Artist']['name'];
+								$descriptionTitle .= $artist['Artist']['name'];
 							} else if (!empty($results['Manufacture'])) {
 								// otherwise if there is a manufacturer, use that
 								$itemTitle .= $results['Manufacture']['title'];
+								$descriptionTitle .= $results['Manufacture']['title'];
 							}
 						} else if (!empty($results['Manufacture']['title'])) {
 							// otherwise if there is a manufacturer, use that
 							$itemTitle .= $results['Manufacture']['title'];
+							$descriptionTitle .= $results['Manufacture']['title'];
 						} else if (!empty($results['ArtistsCollectible'])) {
 							// assume the first on is primary for now :)
 							$artist = $results['ArtistsCollectible'][0];
 							$itemTitle .= $artist['Artist']['name'];
+							$descriptionTitle .= $artist['Artist']['name'];
 						}
 
 						$results['displayTitle'] = $itemTitle;
@@ -307,6 +336,8 @@ class Collectible extends AppModel {
 						}
 
 					}
+
+					$results['descriptionTitle'] = $descriptionTitle;
 
 					if (isset($results['custom']) && !$results['custom']) {
 						unset($results['CustomStatus']);
@@ -343,8 +374,17 @@ class Collectible extends AppModel {
 							$results[$key]['Collectible']['retailer'] = $existingRetailer['Retailer']['name'];
 						}
 
+						if (isset($val['Collectible']['name'])) {
+							$descriptionTitle = $val['Collectible']['name'];
+						}
+
+						if (isset($val['Collectibletype']) && !empty($val['Collectibletype'])) {
+							$descriptionTitle = $descriptionTitle . ' ' . $val['Collectibletype']['name'];
+						}
+
 						if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
 							$results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom');
+							$descriptionTitle = $val['Collectible']['name'] . __(' a custom');
 						} else {
 							// fall back
 							if (isset($val['Collectible']['name'])) {
@@ -352,8 +392,10 @@ class Collectible extends AppModel {
 							} else {
 								$results[$key]['Collectible']['displayTitle'] = '';
 							}
-
 						}
+
+						$results[$key]['Collectible']['descriptionTitle'] = $descriptionTitle;
+
 						if (isset($val['Collectible']['custom']) && !$val['Collectible']['custom']) {
 							unset($results[$key]['CustomStatus']);
 						}
