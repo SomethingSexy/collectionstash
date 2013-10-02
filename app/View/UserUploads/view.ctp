@@ -46,17 +46,9 @@
 					echo '<div class="tile photo">';
 					echo '<div class="image">';
 					$this -> FileUpload -> reset();
-					echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
+					echo '<a title="' . $upload['UserUpload']['title'].' - ' . $upload['UserUpload']['description'] . '" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
 					$this -> FileUpload -> reset();
 					echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
-					echo '</div>';
-					echo '<div class="description">';
-					echo '<span>' . $upload['UserUpload']['title'] . '</span><span>' . $upload['UserUpload']['description'] . '</span>';
-					echo '</div>';
-					echo '<div class="user-detail">';
-					echo '<div class="date">';
-					echo $this -> Time -> format('F jS, Y', $upload['UserUpload']['created'], null);
-					echo '</div>';
 					echo '</div>';
 					echo '</div>';
 				}
