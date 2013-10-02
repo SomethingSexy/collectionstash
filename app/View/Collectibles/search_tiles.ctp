@@ -40,7 +40,7 @@ unset($urlparams['url']);
 							echo '<div class="image">';
 							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
 							$this -> FileUpload -> reset();
-							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt'=> $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
 							echo '</div>';
 							break;
 						}
@@ -50,15 +50,18 @@ unset($urlparams['url']);
 				} else {
 					echo '<div class="image"><img alt="" src="/img/no-photo.png"></div>';
 				}
-				
-				
+
 				echo '<div class="header"><h2>';
 				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 				echo '</h2></div>';
 				echo '<div class="content">';
-				echo '<p>' . $collectible['Collectible']['description'] . '</p>';
+
+				$description = str_replace('\n', "\n", $collectible['Collectible']['description']);
+				$description = str_replace('\r', "\r", $description);
+
+				echo '<p>' . $description . '</p>';
 				echo '</div>';
-			 	echo '<div class="menu tile-links clearfix">';
+				echo '<div class="menu tile-links clearfix">';
 				echo '<ul class="unstyled">';
 				if ($isLoggedIn) {
 					echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></li>';
@@ -112,5 +115,5 @@ unset($urlparams['url']);
 				$container.masonry('appended', $newElems, true);
 			});
 		});
-	});
+	}); 
 </script>
