@@ -1,4 +1,12 @@
 <h2>Change Log</h2>
+<h3>Release Notes for v2.7.3</h3>
+<ul>
+	<li>Updates to SEO</li>
+	<li>Larger thumbnails</li>
+	<li>UI updates</li>
+	<li>Added condition to listing</li>
+</ul>
+
 <h3>Release Notes for v2.7.2</h3>
 <p>We are now automatically adding eBay items that have been relisted.</p>
 <p>Added two new fields to eBay listings, the eBay condition id (future use) and the eBay condition name.  We will display this in a future update.</p>
