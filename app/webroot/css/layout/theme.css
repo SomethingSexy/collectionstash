@@ -314,7 +314,7 @@ div.subnav-fixed {
 .widget {
 	clear: both;
 	margin-bottom: 2em;
-	position: relative;
+	/*position: relative; removed because popovers were being cut off*/
 	width: auto;
 }
 .widget .widget-header {
