@@ -83,7 +83,10 @@ if ($stashType === 'default') {
 				foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
 						echo '<div class="image">';
-						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $myCollectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400)) . '</a>';
+						$this -> FileUpload -> reset();
+						echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
+						$this -> FileUpload -> reset();
+						echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $myCollectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400)) . '</a>';
 						echo '</div>';
 						break;
 					}
@@ -192,5 +195,5 @@ if (isset($reasons)) {
 				});
 			});
 
-		});
+		}); 
 </script>
