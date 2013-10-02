@@ -19,20 +19,11 @@
 				$this -> FileUpload -> reset();
 				echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 				echo '</div>';
-				echo '<div class="meta">';
-				echo '<div class="title">';
+				echo '<div class="header">';
+				echo '<h2>';
 				echo '<a class="title" href="/user_uploads/view/' . $upload['User']['username'] . '">' . $upload['User']['username'] . '</a>';
-				echo '</div>';				
-				
+				echo '</h2>';				
 				echo '</div>';
-				// echo '<div class="header">';
-				// echo '<a  href="/user_uploads/view/' . $upload['User']['username'] . '">' . $upload['User']['username'] . '</a>';
-				// echo '</div>';
-				// echo '<div class="user-detail">';
-				// echo '<div class="date">';
-				// echo $this -> Time -> format('F jS, Y', $upload['UserUpload']['created'], null);
-				// echo '</div>';
-				// echo '</div>';
 				echo '</div>';
 			}
 
