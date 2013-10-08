@@ -10,6 +10,18 @@ unset($urlparams['url']);
 ?>
 
 <div id="collectibles-list-component" class="span12">
+	<?php
+	if (!isset($isLoggedIn) || !$isLoggedIn) {
+	?>
+	<div class="row-fluid">
+		<div class="span7">
+			<div class="alert alert-info">
+  				<strong>Hey! Listen!</strong>
+  				Not finding what you are looking for? Are we missing a collectible?  <a href="/users/login">Log in</a> or <a href="/users/register">register</a> to help us maintain an accurate and up-to-date collectible database.
+    		</div>			
+		</div>
+	</div>
+	<?php } ?>
 	<div class="row-fluid">
 		<div class="span7">
 			<div class="widget">

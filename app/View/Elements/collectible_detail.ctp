@@ -70,6 +70,19 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 
 
 <div id="collectible-container" class="span12 stashable">
+	<?php
+	if (!isset($isLoggedIn) || !$isLoggedIn && $collectibleDetail['Status']['id'] === '4' ) {
+	?>
+	<div class="row-fluid">
+		<div class="span7">
+			<div class="alert alert-info">
+  				<strong>Hey! Listen!</strong>
+  				Do you own this collectible?  <a href="/users/login">Log in</a> or <a href="/users/register">register</a> to add this collectible to your Stash! You can catalog your entire collection with Collection Stash.
+    		</div>			
+		</div>
+	</div>
+	<?php } ?>
+	
 	<div class="row-fluid">
 		<div class="span8">
 			<div class="page-header">
