@@ -3,9 +3,9 @@
 <div class="row-fluid">
 	<div class="span3">
 		<img src="/img/logo/cslogo_build.png">
-		<h2>Build</h2>
+		<h2>Archive</h2>
 		<p>
-			Help build the largest collectible database and community by submitting new collectibles you own or enjoy.
+			Help archive the largest collectible reference database by submitting new collectibles you own or enjoy.
 		</p>
 	</div>
 	<div class="span3">
