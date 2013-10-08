@@ -46,9 +46,9 @@ class AppController extends Controller {
 		$this -> set('subscriptions', $this -> getSubscriptions());
 		$this -> set('notificationsCount', $this -> getNotificationsCount());
 		//Since this gets set for every request, setting this here for the default
-		$this -> set('title_for_layout', 'Collection Stash');
-		$this -> set('description_for_layout', 'Your collectible database and storage system.');
-		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible databse, action figure, toy, stash, storage');
+		$this -> set('title_for_layout', 'Collection Stash - A collector and artist platform for building and sharing your collection.');
+		$this -> set('description_for_layout', 'A collectible reference database and online collection cataloging platform.');
+		$this -> set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible database, action figure, toy, stash, storage');
 		//This stores off any request parameters per request, can be used to recreate urls later
 		$requestParams = '?';
 		if (isset($this -> request -> query)) {
