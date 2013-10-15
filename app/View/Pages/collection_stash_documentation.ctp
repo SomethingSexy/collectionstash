@@ -1,5 +1,5 @@
 <?php $this -> set("title_for_layout", __('A Guide to Collection Stash')); ?>
-	<div class="span3">
+	<div class="col-md-3">
 		<div class="well">
 			<ul class="nav nav-list">
 				<li>
@@ -84,7 +84,7 @@
 		</div>
 
 	</div>
-	<div class="span9">
+	<div class="col-md-9">
 		<h1>Collection Stash Documentation</h1>
 		<p>
 			The following guide will help you with any questions you may have when submitting and adding collectibles to Collection Stash.

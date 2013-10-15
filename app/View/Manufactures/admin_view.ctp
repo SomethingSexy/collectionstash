@@ -1,6 +1,6 @@
 <div class="row">
 	<?php echo $this -> element('admin_actions'); ?>
-	<div class="span8">
+	<div class="col-md-8">
 		<div class="page">
 			<div class="title">
 				<h2><?php echo __('Manufacturer Detail'); ?></h2>
@@ -107,23 +107,27 @@
 	</div>
 </div>
 
-<div id="manufacturerDeleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			×
-		</button>
-		<h3 id="myModalLabel">Delete Manufacturer</h3>
-	</div>
-	<div class="modal-body">
-		<p>Are you sure you want to delete this manufacturer?</p>
-	</div>
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			Close
-		</button>
-		<button class="btn btn-primary delete" autocomplete="off">
-			Delete
-		</button>
+<div id="manufacturerDeleteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+    	<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h3 id="myModalLabel">Delete Manufacturer</h3>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete this manufacturer?</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">
+					Close
+				</button>
+				<button class="btn btn-primary delete" autocomplete="off">
+					Delete
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 

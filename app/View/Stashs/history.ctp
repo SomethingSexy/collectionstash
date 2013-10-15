@@ -29,7 +29,7 @@ echo $stashUsername . '\'s History';
 			<li class="active"><?php echo '<a href="/stashs/history/' . $stashUsername . '">' . __('History') . '</a>'; ?></li>
 		</ul>			
 	<div class="row">
-		<div class="span12">
+		<div class="col-md-12">
 			<div class="">
 				<h2>Bought and Sold</h2>
 				<div class="btn-group years">

@@ -1,6 +1,6 @@
 var StatusView = Backbone.View.extend({
 	template : 'status.edit',
-	className : "span12",
+	className : "scol-md-12",
 	events : {
 		'click .submit' : 'changeStatus',
 		'click .delete' : 'remove'

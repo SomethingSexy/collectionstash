@@ -14,11 +14,11 @@
 			<tr>
 				{#CollectiblesUpload uploadDirectory=uploadDirectory}
 					{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-						<td><div class="span1"><a data-gallery="gallery" class="thumbnail" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></div></td>
+						<td><div class="col-md-1"><a data-gallery="gallery" class="thumbnail" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></div></td>
 					{/primary}
 				{:else}
 					{:else}
-					<td><div class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></div></td>
+					<td><div class="col-md-1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></div></td>
 				{/CollectiblesUpload}
 
 				<td>{Collectible.name}{@eq key="{Collectible.exclusive}" value="true" type="boolean"} - Exclusive{/eq}</td>

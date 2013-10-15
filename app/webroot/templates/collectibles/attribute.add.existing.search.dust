@@ -4,7 +4,7 @@
 	</div>
 	<form class="form-search">
 		<div class="input-append">
-			<input type="text" name="q" class="span2 search-query">
+			<input type="text" name="q" class="col-md-2 search-query">
 			<button type="submit" class="btn search">
 				Search
 			</button>

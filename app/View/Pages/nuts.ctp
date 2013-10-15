@@ -13,7 +13,7 @@
 <h3>2013 Grand Prize</h3>
 <p>We are having a Grand Prize for the person who earns the most nuts for 2013.  The person who earns the most nuts for 2013 will win a <a href="/collectibles/view/2/sideshow-collectibles-friday-the-13th-jason-voorhees-statue">Sideshow Collectibles Friday the 13th Part 3 Jason Premium Format Figure.</a></p>
 <ul class="thumbnails">
-	<li class="span4">
+	<li class="col-md-4">
 		<a class="thumbnail" href="http://www.collectionstash.com//files/300079_press01-001.jpg" data-gallery="gallery">
 			<img alt="" src="http://www.collectionstash.com//files/300079_press01-001.jpg">
 		</a>

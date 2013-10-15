@@ -1,5 +1,5 @@
-<div class="span12 home">
-	<div class="row-fluid spacer">
+<div class="col-md-12 home">
+	<div class="row spacer">
 		
 		<div class="widget <?php
 			if (isset($collectibles) && !empty($collectibles))

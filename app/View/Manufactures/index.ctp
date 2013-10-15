@@ -8,7 +8,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 				?></small></h2>
 	</div>	
 	<div class="row">
-		<div class="span4">
+		<div class="col-md-4">
 			<div class="widget">
 				<div class="widget-header">
 					<h3>Stats</h3>
@@ -56,7 +56,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 	
 			</div>
 		</div>
-		<div class="span8">
+		<div class="col-md-8">
 			<div class="widget manufacturer-collectibles">
 				<div class="widget-header">
 					<h3>Collectibles</h3>

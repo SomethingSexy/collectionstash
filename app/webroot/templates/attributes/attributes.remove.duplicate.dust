@@ -8,12 +8,12 @@
 		<ul class="thumbnails">
 			{#attribute.Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<li class="span1">
+			<li class="col-md-1">
 				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 			</li>
 			{/primary}
 			{:else}
-			<li class="span1">
+			<li class="col-md-1">
 				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 			</li>
 			{/attribute.Attribute.AttributesUpload}
@@ -36,12 +36,12 @@
 			<ul class="thumbnails">
 				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="span1">
+				<li class="col-md-1">
 					<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 				</li>
 				{/primary}
 				{:else}
-				<li class="span1">
+				<li class="col-md-1">
 					<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 				</li>
 				{/Attribute.AttributesUpload}

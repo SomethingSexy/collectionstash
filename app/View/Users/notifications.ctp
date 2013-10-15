@@ -1,5 +1,5 @@
-<div class="span8">
-	<div class="row-fluid spacer">
+<div class="col-md-8">
+	<div class="row spacer">
 		<div class="widget widget-messages">
 			<div class="widget-header">
 				<i class="icon-warning-sign"></i><h3>Notifications</h3>

@@ -2,10 +2,10 @@
 	<ul class="thumbnails">
 		{#AttributesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="span1"><a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+				<li class="col-md-1"><a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
 			{/primary}
 			{:else}
-			<li class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
+			<li class="col-md-1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
 		{/AttributesUpload}
 		
 	</ul>

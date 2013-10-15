@@ -1,7 +1,7 @@
 <div class="well attributes collectible" data-collectible-id="{collectibleId}">
 	<h3>Parts and Accessories</h3>
-	<div class="row-fluid">
-		<div class="span12">
+	<div class="row">
+		<div class="col-md-12">
 			<div class="btn-group pull-right">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
@@ -23,7 +23,7 @@
 	{@eq key="{collectible.original}" value="true" type="boolean"}
 		<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
 	{/eq}
-	<div class="row-fluid attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">
+	<div class="row attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">
 
 	</div>
 </div>

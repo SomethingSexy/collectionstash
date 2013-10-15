@@ -22,7 +22,7 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 			<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
 				<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 				<div class="row fileupload-buttonbar">
-					<div class="span7">
+					<div class="col-md-7">
 						<!-- The fileinput-button span is used to style the file input field as button -->
 						<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
 							<input type="file" name="data[UserUpload][file]" multiple>
@@ -42,7 +42,7 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 						<input type="checkbox" class="toggle">-->
 					</div>
 					<!-- The global progress information -->
-					<div class="span5 fileupload-progress fade">
+					<div class="col-md-5 fileupload-progress fade">
 						<!-- The global progress bar -->
 						<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
 							<div class="bar" style="width:0%;"></div>

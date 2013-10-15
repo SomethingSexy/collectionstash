@@ -2,13 +2,13 @@
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div class="row stashable">
-	<div class="span12 well">
+	<div class="col-md-12 well">
 		<div class="page-header">
 			<h1><?php echo $stashUsername . '\'s' .__(' collectible', true)?></h1>
 		</div>
 	    <?php echo $this -> element('flash'); ?>	
 		<div class="row">
-			<div class="span12">
+			<div class="col-md-12">
 				<div class="actions btn-group pull-right">
 					<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="icon-info"></i></a>
 					<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
@@ -29,10 +29,10 @@
 
 
     <div class="row">
-    	<div class="span4"  data-toggle="modal-gallery" data-target="#modal-gallery">
+    	<div class="col-md-4"  data-toggle="modal-gallery" data-target="#modal-gallery">
    
 	<ul class="thumbnails">
-		<li class="span4">
+		<li class="col-md-4">
 			<?php
 			if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($collectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
@@ -52,7 +52,7 @@
  
     	</div>
     	
-    	<div class="span8">
+    	<div class="col-md-8">
 			<dl>
 				<dt>
 					<?php echo __('Date Added'); ?>

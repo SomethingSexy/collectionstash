@@ -8,7 +8,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 		<h2><?php echo $artist['Artist']['name']; ?></h2>
 	</div>	
 	<div class="row">
-		<div class="span12">
+		<div class="col-md-12">
 			<div class="widget manufacturer-collectibles">
 				<div class="widget-header">
 					<h3>Collectibles</h3>

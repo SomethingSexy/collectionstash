@@ -73,7 +73,7 @@
 
 					echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
 					echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
-					echo '<td><ul class="thumbnails"><li class="span1">';
+					echo '<td><ul class="thumbnails"><li class="col-md-1">';
 
 					if (!empty($attribute['AttributesUpload'])) {
 						foreach ($attribute['AttributesUpload'] as $key => $upload) {
