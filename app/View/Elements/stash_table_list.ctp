@@ -51,7 +51,7 @@ foreach ($collectibles as $key => $myCollectible) {
 	}
 
 	if ($showThumbnail) {
-		echo '<td><ul class="thumbnails"><li class="span1">';
+		echo '<td><ul class="thumbnails"><li class="col-md-1">';
 
 		if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 			foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {

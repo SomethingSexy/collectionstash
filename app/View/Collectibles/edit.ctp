@@ -99,10 +99,10 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 
 </div>
 <div id="edit-container" class="row">
-	<div id="photo-container" span="span4">
+	<div id="photo-container" span="col-md-4">
 
 	</div>
-	<div id="collectible-container" span="span8">
+	<div id="collectible-container" span="col-md-8">
 
 	</div>
 </div>
@@ -113,65 +113,77 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
 <?php echo $this -> element('attribute_collectible_update_dialog'); ?>
 <!-- TODO Update this so we only have one modal -->
-<div id="attribute-collectible-add-existing-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			×
-		</button>
-		<h3 id="myModalLabel">Add Existing Collectible Part</h3>
-	</div>
-	<div class="modal-body">
-
-	</div>
-
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			Close
-		</button>
-		<button class="btn btn-primary save" autocomplete="off">
-			Add
-		</button>
-	</div>
-</div>
-<div id="attribute-collectible-add-new-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			×
-		</button>
-		<h3 id="myModalLabel">Add New Collectible Part</h3>
-	</div>
-	<div class="modal-body">
-
-	</div>
-
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			Close
-		</button>
-		<button class="btn btn-primary save" autocomplete="off">
-			Add
-		</button>
+<div id="attribute-collectible-add-existing-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h3 id="myModalLabel">Add Existing Collectible Part</h3>
+			</div>
+			<div class="modal-body">
+		
+			</div>
+		
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">
+					Close
+				</button>
+				<button class="btn btn-primary save" autocomplete="off">
+					Add
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
-
-<div id="attribute-update-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			×
-		</button>
-		<h3 id="myModalLabel">Edit Part</h3>
+<div id="attribute-collectible-add-new-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h3 id="myModalLabel">Add New Collectible Part</h3>
+			</div>
+			<div class="modal-body">
+		
+			</div>
+		
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">
+					Close
+				</button>
+				<button class="btn btn-primary save" autocomplete="off">
+					Add
+				</button>
+			</div>
+		</div>
 	</div>
-	<div class="modal-body">
+</div>
 
-	</div>
-
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			Close
-		</button>
-		<button class="btn btn-primary save" autocomplete="off">
-			Submit
-		</button>
+<div id="attribute-update-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h3 id="myModalLabel">Edit Part</h3>
+			</div>
+			<div class="modal-body">
+		
+			</div>
+		
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">
+					Close
+				</button>
+				<button class="btn btn-primary save" autocomplete="off">
+					Submit
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 

@@ -69,12 +69,12 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 ?>
 
 
-<div id="collectible-container" class="span12 stashable">
+<div id="collectible-container" class="col-md-12 stashable">
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn && $collectibleDetail['Status']['id'] === '4' ) {
 	?>
-	<div class="row-fluid">
-		<div class="span7">
+	<div class="row">
+		<div class="col-md-7">
 			<div class="alert alert-info">
   				<strong>Hey! Listen!</strong>
   				Do you own this collectible?  <a href="/users/login">Log in</a> or <a href="/users/register">register</a> to add this collectible to your Stash! You can catalog your entire collection with Collection Stash.
@@ -83,8 +83,8 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 	</div>
 	<?php } ?>
 	
-	<div class="row-fluid">
-		<div class="span8">
+	<div class="row">
+		<div class="col-md-8">
 			<div class="page-header">
 				<h1 class="title"><?php echo $title; ?></h1>
 				<span>
@@ -139,7 +139,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 				</span>
 			</div>
 		</div>
-		<div class="span4">
+		<div class="col-md-4">
 			<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
 			<div class="btn-group actions pull-right">
 				<?php
@@ -187,20 +187,20 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 		<?php } ?>
 		</div>
 	</div>
-	<div class="row-fluid spacer">
-		<div class="span4">
+	<div class="row spacer">
+		<div class="col-md-4">
 			<?php
 			if ($showImage) {
 				echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
 			}
 			?>
 		</div>
-		<div class="span8">
-			<div id="status-container" class="row-fluid">
+		<div class="col-md-8">
+			<div id="status-container" class="row">
 	
 			</div>
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-md-12">
 					<ul class="nav nav-tabs" id="myTab">
 						<li class="active"><a href="#detail" data-id="detail" class="detail"><i class="icon-info"></i> Detail</a></li>
 						<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
@@ -278,8 +278,8 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 	</div>	
 	
 	<?php if(isset($showComments) && $showComments) {?>
-		<div class="row-fluid spacer">
-			<div class="span12">
+		<div class="row spacer">
+			<div class="col-md-12">
 			<div class="widget">
 				<div class="widget-content">
 					<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
@@ -297,8 +297,8 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 					<?php
 		if ($adminMode) {
 					?>
-		<div class="row-fluid spacer">
-			<div class="span12">
+		<div class="row spacer">
+			<div class="col-md-12">
 				<div class="component" id="collectible-detail">
 					<div class="inside">
 						<div class="component-view">

@@ -1,25 +1,25 @@
 <div class="page-header">
 	<h1>{Collectible.name|s}</h1>
 </div>
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-md-12">
 		<ul class="thumbnails">
 			{#CollectiblesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<li class="span12">
+			<li class="col-md-12">
 				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 			</li>
 			{/primary}
 			{:else}
-			<li class="span12">
+			<li class="col-md-12">
 				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 			</li>
 			{/CollectiblesUpload}		
 		</ul>
 	</div>
 </div>
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-md-12">
 		<h2>Collectible Details</h2>
 		<dl class="">
 			<dt>Name</dt>

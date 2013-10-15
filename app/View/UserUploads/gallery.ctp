@@ -1,4 +1,4 @@
-<div class="span12">
+<div class="col-md-12">
 	
 
 <h2><?php echo __('User Gallery', true)?></h2>
@@ -15,7 +15,7 @@
 				echo '<div class="tile">';
 				echo '<div class="image">';
 				$this -> FileUpload -> reset();
-				echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
+				echo '<a data-gallery href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
 				$this -> FileUpload -> reset();
 				echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 				echo '</div>';

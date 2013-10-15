@@ -1,6 +1,6 @@
-<div class="span12">
-	<div class="row-fluid">
-		<div class="span10">
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-10">
 			{@if cond="( {Attribute.status_id} == 2 )"}
 			<span><i class="icon-plus"></i></span>
 			{:else}
@@ -22,7 +22,7 @@
 			{/if}
 			<span class="path">{Attribute.AttributeCategory.path_name}</span>
 		</div>
-		<div class="span2 count">
+		<div class="col-md-2 count">
 			{@if cond="{collectible.custom}"}
 			{@if cond="( '{attribute_collectible_type}' == 'added' )"}
 			<span class="label label-success">Owned</span>
@@ -38,41 +38,41 @@
 		</div>
 	</div>
 
-	<div class="row-fluid">
-		<div class="span1">
+	<div class="row">
+		<div class="col-md-1">
 			<ul class="thumbnails">
 				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="span12">
+				<li class="col-md-12">
 					<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 				</li>
 				{/primary}
 				{:else}
-				<li class="span12">
+				<li class="col-md-12">
 					<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 				</li>
 				{/Attribute.AttributesUpload}
 
 			</ul>
 		</div>
-		<div class="span9">
-			<div class="row-fluid">
-				<div class="span12">
+		<div class="col-md-9">
+			<div class="row">
+				<div class="col-md-12">
 					<span class="name">{Attribute.name}</span>
 				</div>
 			</div>
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-md-12">
 					{Attribute.Scale.scale}
 				</div>
 			</div>
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-md-12">
 					{Attribute.description}
 				</div>
 			</div>
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-md-12">
 					{@if cond="('{Attribute.type}' == 'mass' || '{Attribute.type}' == 'original' )"}
 					{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
 					{@if cond=" '{Attribute.manufacture_id}'"}
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="span2">
+		<div class="col-md-2">
 			<div class="btn-group actions pull-right">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
@@ -122,8 +122,8 @@
 
 	</div>
 
-	<div class="row-fluid">
-		<div class="span12">
+	<div class="row">
+		<div class="col-md-12">
 			<div class="pull-right">
 				{Revision.User.username} - {Attribute.modified}
 			</div>

@@ -1,6 +1,6 @@
 <div id="admin-edit" class="row">
 	<?php echo $this -> element('admin_actions'); ?>
-	<div class="span8">
+	<div class="col-md-8">
 		<div class="page">
 			<div class="title">
 				<h2><?php echo __('Edit View'); ?></h2>

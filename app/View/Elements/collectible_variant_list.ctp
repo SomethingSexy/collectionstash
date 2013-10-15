@@ -9,7 +9,7 @@
 	foreach ($variants as $variant):
 	?>
 		
-			<li class="span3">
+			<li class="col-md-3">
 				<?php
 				if (!empty($variant['CollectiblesUpload'])) {
 					foreach ($variant['CollectiblesUpload'] as $key => $upload) {

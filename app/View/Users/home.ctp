@@ -1,9 +1,9 @@
-<div class="span8 home">
+<div class="col-md-8 home">
 		<?php
 	if ($user['User']['collectibles_user_count'] == 0) {
 	?>
-	<div class="row-fluid spacer">
-		<div class="span12">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="hero-unit">
 				<h1>Getting started with Collection Stash!</h1>
 				<p>
@@ -17,8 +17,8 @@
 		</div>
 	</div>
 	<?php } ?>
-	<div class="row-fluid spacer">
-		<div class="span12">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="widget stacked">
 				<div class="widget-header">
 					<i class="icon-dollar"></i><h3>Stash Value Breakdown</h3>
@@ -54,8 +54,8 @@
 		</div>	
 	</div>
 	
-	<div class="row-fluid spacer">
-		<div class="span6">
+	<div class="row spacer">
+		<div class="col-md-6">
 			<div class="widget user-stats">
 				<div class="widget-header">
 					<i class="icon-signal"></i><h3>Your Stats</h3>
@@ -160,7 +160,7 @@
 				</div>					
 			</div>
 		</div>
-		<div class="span6">
+		<div class="col-md-6">
 			<div class="widget">
 				<div class="widget-header">
 					<i class="icon-trophy"></i><h3>Nut Leaders</h3>
@@ -196,8 +196,8 @@
 		</div>
 	</div>
 	
-	<div class="row-fluid spacer">
-		<div class="span12">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="widget widget-table">
 				<div class="widget-header">
 					<h3>What you are working on</h3>
@@ -209,8 +209,8 @@
 		</div>
 	</div>
 	
-	<div class="row-fluid spacer">
-		<div class="span12">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="widget">
 				<div class="widget-header">
 					<h3>Pending Collectibles</h3>
@@ -223,8 +223,8 @@
 	
 	</div>
 	
-	<div class="row-fluid spacer">
-		<div class="span12">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="widget">
 				<div class="widget-header">
 					<h3>Recently Approved Collectibles</h3>
@@ -238,9 +238,9 @@
 	</div>
 </div>
 
-<div class="span4 home">
-	<div class="row-fluid spacer">
-		<div class="span12">
+<div class="col-md-4 home">
+	<div class="row spacer">
+		<div class="col-md-12">
 			<div class="widget">
 				<div class="widget-header">
 					<i class="icon-time"></i>

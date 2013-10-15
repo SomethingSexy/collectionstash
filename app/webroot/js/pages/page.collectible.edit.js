@@ -301,7 +301,7 @@ var Artists = Backbone.Collection.extend({
  */
 var AttributesView = Backbone.View.extend({
 	template : 'attributes.default.edit',
-	className : "span12",
+	className : "col-md-12",
 	events : {
 		'click #add-existing-item-link' : 'addExisting',
 		'click #add-new-item-link' : 'addNew'
@@ -761,7 +761,7 @@ var AttributesView = Backbone.View.extend({
 var AttributeView = Backbone.View.extend({
 	template : 'attributecollectible.default.edit',
 	tagName : "div",
-	className : 'row-fluid spacer attribute',
+	className : 'row spacer attribute',
 	events : {
 		'click .edit-attribute-photo-link' : 'addPhoto',
 		'click .edit-attribute-link' : 'edit',
@@ -982,7 +982,7 @@ var AttributeView = Backbone.View.extend({
 });
 var AttributePhotoView = Backbone.View.extend({
 	template : 'attribute.photo.edit',
-	className : "span4",
+	className : "col-md-4",
 	events : {
 
 	},
@@ -1081,7 +1081,7 @@ var AttributePhotoView = Backbone.View.extend({
 });
 var PhotoView = Backbone.View.extend({
 	template : 'photo.default.edit',
-	className : "span4",
+	className : "col-md-4",
 	events : {
 
 	},
@@ -1545,7 +1545,7 @@ var ManufacturerView = Backbone.View.extend({
 });
 
 var CollectibleView = Backbone.View.extend({
-	className : "span8",
+	className : "col-md-8",
 	events : {
 		'change #inputManufacturer' : 'changeManufacturer',
 		'click #buttonSeries' : 'changeSeries',
@@ -2053,7 +2053,7 @@ var CollectibleView = Backbone.View.extend({
 
 var MessageView = Backbone.View.extend({
 	template : 'message.edit',
-	className : "span12",
+	className : "col-md-12",
 	events : {
 
 	},
@@ -2086,7 +2086,7 @@ var MessageView = Backbone.View.extend({
 
 var DupListMessageView = Backbone.View.extend({
 	template : 'message.duplist',
-	className : "span12",
+	className : "col-md-12",
 	events : {
 
 	},
@@ -2110,7 +2110,7 @@ var DupListMessageView = Backbone.View.extend({
 
 var TagsView = Backbone.View.extend({
 	template : 'tags.edit',
-	className : "span8 pull-right",
+	className : "col-md-8 pull-right",
 	events : {
 		'click .save' : 'save',
 	},
@@ -2290,7 +2290,7 @@ var AddTagView = Backbone.View.extend({
 
 var ArtistsView = Backbone.View.extend({
 	template : 'artists.edit',
-	className : "span8 pull-right",
+	className : "col-md-8 pull-right",
 	events : {
 		'click .save' : 'save',
 	},
@@ -3035,11 +3035,11 @@ var AttributeSearchCollectibleView = Backbone.View.extend({
 		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
 			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
 				if (collectibleUpload.primary) {
-					row += '<li class="span1"><a class="thumbnail" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a></li>';
+					row += '<li class="col-md-1"><a class="thumbnail" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a></li>';
 				}
 			});
 		} else {
-			row += '<li class="span1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>';
+			row += '<li class="col-md-1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>';
 		}
 		row += '</ul></td>';
 

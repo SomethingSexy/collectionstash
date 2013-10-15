@@ -43,11 +43,11 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				$popup .= '</ul>';
 			}
 
-			$outputAttribtes .= '<div class="row-fluid spacer"><div class="span12 attribute">';
+			$outputAttribtes .= '<div class="row spacer"><div class="col-md-12 attribute">';
 
-			$outputAttribtes .= '<div class="row-fluid">';
+			$outputAttribtes .= '<div class="row">';
 
-			$outputAttribtes .= '<div class="span10">';
+			$outputAttribtes .= '<div class="col-md-10">';
 
 			// That means this is a new one, so we don't need the info icon
 			if ($attribute['Attribute']['status_id'] === '2') {
@@ -58,7 +58,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			}
 
 			$outputAttribtes .= '</div>';
-			$outputAttribtes .= '<div class="span2 count">';
+			$outputAttribtes .= '<div class="col-md-2 count">';
 			if ($collectibleCore['Collectible']['custom']) {
 				if ($attribute['attribute_collectible_type'] === 'added') {
 					$outputAttribtes .= '<span class="label label-success">' . __('Owned') . '</span>';
@@ -73,8 +73,8 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '</div>';
 			$outputAttribtes .= '</div>';
 
-			$outputAttribtes .= '<div class="row-fluid">';
-			$outputAttribtes .= '<div class="span1"><ul class="thumbnails"><li class="span12">';
+			$outputAttribtes .= '<div class="row">';
+			$outputAttribtes .= '<div class="col-md-1"><ul class="thumbnails"><li class="col-md-12">';
 
 			if (!empty($attribute['Attribute']['AttributesUpload'])) {
 				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
@@ -89,16 +89,16 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 
 			$outputAttribtes .= '</li></ul></div>';
 
-			$outputAttribtes .= '<div class="span11">';
+			$outputAttribtes .= '<div class="col-md-11">';
 
-			$outputAttribtes .= '<div class="row-fluid"><div class="span12"><span class="name">' . $attribute['Attribute']['name'] . '</span></div></div>';
+			$outputAttribtes .= '<div class="row"><div class="col-md-12"><span class="name">' . $attribute['Attribute']['name'] . '</span></div></div>';
 			if (isset($attribute['Attribute']['Scale']['scale'])) {
-				$outputAttribtes .= '<div class="row-fluid"><div class="span12">' . $attribute['Attribute']['Scale']['scale'] . '</div></div>';
+				$outputAttribtes .= '<div class="row"><div class="col-md-12">' . $attribute['Attribute']['Scale']['scale'] . '</div></div>';
 			}
 
-			$outputAttribtes .= '<div class="row-fluid"><div class="span12">' . $attribute['Attribute']['description'] . '</div></div>';
+			$outputAttribtes .= '<div class="row"><div class="col-md-12">' . $attribute['Attribute']['description'] . '</div></div>';
 
-			$outputAttribtes .= '<div class="row-fluid"><div class="span12">';
+			$outputAttribtes .= '<div class="row"><div class="col-md-12">';
 
 			if ($attribute['Attribute']['type'] === 'mass') {
 				if (isset($attribute['Attribute']['artist_id']) || isset($attribute['Attribute']['manufacture_id'])) {
@@ -128,9 +128,9 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '</div>';
 			// div class="span11"
 			$outputAttribtes .= '</div>';
-			// div class="row-fluid"
-			$outputAttribtes .= '<div class="row-fluid">';
-			$outputAttribtes .= '<div class="span12">';
+			// div class="row"
+			$outputAttribtes .= '<div class="row">';
+			$outputAttribtes .= '<div class="col-md-12">';
 			$outputAttribtes .= '<div class="pull-right">' . $attribute['Revision']['User']['username'] . ' - ' . $this -> Time -> format('F jS, Y h:i A', $attribute['Attribute']['modified'], null) . '</div>';
 			$outputAttribtes .= '</div>';
 			$outputAttribtes .= '</div>';
@@ -140,8 +140,8 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 		}
 
 		if ($added) {
-			echo '<div class="row-fluid attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">';
-			echo '<div class="span12">';
+			echo '<div class="row attributes-list" data-toggle="modal-gallery" data-target="#modal-gallery">';
+			echo '<div class="col-md-12">';
 			echo $outputAttribtes;
 			echo '</div>';
 			echo '</div>';

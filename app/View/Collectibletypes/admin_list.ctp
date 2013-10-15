@@ -7,7 +7,7 @@ echo $this -> Minify -> script('js/cs.type.admin', array('inline' => false));
 
 <div class="row">
 	<?php echo $this -> element('admin_actions');?>
-	<div class="span8">
+	<div class="col-md-8">
 	
 		<div class="page">
 			<div class="title">

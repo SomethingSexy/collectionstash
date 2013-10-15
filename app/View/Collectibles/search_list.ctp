@@ -9,12 +9,12 @@ $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 ?>
 
-<div id="collectibles-list-component" class="span12">
+<div id="collectibles-list-component" class="col-md-12">
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn) {
 	?>
-	<div class="row-fluid">
-		<div class="span7">
+	<div class="row">
+		<div class="col-md-7">
 			<div class="alert alert-info">
   				<strong>Hey! Listen!</strong>
   				Not finding what you are looking for? Are we missing a collectible?  <a href="/users/login">Log in</a> or <a href="/users/register">register</a> to help us maintain an accurate and up-to-date collectible database.
@@ -22,8 +22,8 @@ unset($urlparams['url']);
 		</div>
 	</div>
 	<?php } ?>
-	<div class="row-fluid">
-		<div class="span7">
+	<div class="row">
+		<div class="col-md-7">
 			<div class="widget">
 			<div class="widget-header">
 				<h3><?php echo __('Search Results'); ?></h3>
@@ -41,8 +41,8 @@ unset($urlparams['url']);
 				}
 				echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
 				?>
-				<div class="row-fluid spacer">
-					<div class="span12">
+				<div class="row spacer">
+					<div class="col-md-12">
 						<div class="btn-group">
 						<?php echo $this -> Paginator -> sort('name', 'Name', array('class' => 'btn sort')); ?>
 						</div>
@@ -62,8 +62,8 @@ unset($urlparams['url']);
 					
 				</div>
 				
-				<div class="row-fluid stashable collectibles" data-toggle="modal-gallery" data-target="#modal-gallery">
-					<div span="span12">			
+				<div class="row stashable collectibles" data-toggle="modal-gallery" data-target="#modal-gallery">
+					<div span="col-md-12">			
 					<?php
 					foreach ($collectibles as $collectible) {
 						$fullCollectibleJSON = json_encode($collectible);
@@ -71,11 +71,11 @@ unset($urlparams['url']);
 
 						$collectibleJSON = json_encode($collectible['Collectible']);
 						$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-						echo '<div class="row-fluid spacer">';
-						echo '<div class="span12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
-						echo '<div class="row-fluid">';
+						echo '<div class="row spacer">';
+						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
+						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
-						echo '<div class="span2"><ul class="thumbnails"><li class="span12">';
+						echo '<div class="col-md-2"><ul class="thumbnails"><li class="col-md-12">';
 
 						if (!empty($collectible['CollectiblesUpload'])) {
 							foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
@@ -91,10 +91,10 @@ unset($urlparams['url']);
 
 						echo '</li></ul></div>';
 
-						echo '<div class="span7">';
+						echo '<div class="col-md-7">';
 						// name
-						echo '<div class="row-fluid">';
-						echo '<div class="span12">';
+						echo '<div class="row">';
+						echo '<div class="col-md-12">';
 						echo '<span class="name">';
 						echo $collectible['Collectible']['name'];
 						if ($collectible['Collectible']['exclusive']) {
@@ -109,8 +109,8 @@ unset($urlparams['url']);
 						// span10
 						echo '</div>';
 
-						echo '<div class="row-fluid">';
-						echo '<div class="span12">';
+						echo '<div class="row">';
+						echo '<div class="col-md-12">';
 						echo '<span class="description">';
 
 						echo $collectible['Collectible']['description'];
@@ -118,8 +118,8 @@ unset($urlparams['url']);
 						echo '</div>';
 						echo '</div>';
 
-						echo '<div class="row-fluid">';
-						echo '<div class="span12">';
+						echo '<div class="row">';
+						echo '<div class="col-md-12">';
 						echo '<span class="labels">';
 						echo '<span class="label">' . $collectible['Collectibletype']['name'] . '</span>';
 						if (!empty($collectible['License']['name'])) {
@@ -142,9 +142,9 @@ unset($urlparams['url']);
 						echo '</div>';
 						// end span 7
 
-						echo '<div class="span3">';
-						echo '<div class="row-fluid">';
-						echo '<div class="span12">';
+						echo '<div class="col-md-3">';
+						echo '<div class="row">';
+						echo '<div class="col-md-12">';
 						echo '<div class="btn-group pull-right">';
 						echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 						echo '<ul class="dropdown-menu">';
@@ -168,8 +168,8 @@ unset($urlparams['url']);
 
 						echo '</div>';
 
-						echo '<div class="row-fluid">';
-						echo '<div class="span12 count">';
+						echo '<div class="row">';
+						echo '<div class="col-md-12 count">';
 						echo '<span class="label">';
 
 						if ($collectible['Collectible']['collectibles_user_count'] === '0') {
@@ -192,11 +192,11 @@ unset($urlparams['url']);
 						echo '</div>';
 						echo '</div>';
 
-						// row-fluid
+						// row
 						echo '</div>';
 						// end span 12 collectible
 						echo '</div>';
-						// end row-fluid spacer
+						// end row spacer
 					}
 				?>
 					</div>
@@ -218,7 +218,7 @@ unset($urlparams['url']);
 
 			</div>
 		</div>
-		<div class="span5 collectible-detail">
+		<div class="col-md-5 collectible-detail">
 			<div class="well" data-spy="affix" data-offset-top="200">
 				<p class="text-center lead">Select a collectible to see more detail here!</p>
 				

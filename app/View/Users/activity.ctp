@@ -1,6 +1,6 @@
-<div class="span12 home">
-	<div class="row-fluid spacer">
-		<div class="span6">
+<div class="col-md-12 home">
+	<div class="row spacer">
+		<div class="col-md-6">
 			<div class="widget widget-table">
 				<div class="widget-header">
 					<h3>Your Submissions</h3>
@@ -10,7 +10,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="span6">
+		<div class="col-md-6">
 			<div class="widget widget-table">
 				<div class="widget-header">
 					<h3>Your Edits</h3>
