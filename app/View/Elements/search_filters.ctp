@@ -23,7 +23,7 @@ echo 'var searchFilter= "' . $saveSearchFilters['search'] . '"';
 		}
 
 		echo '<div class="btn-group filter checkbox-select" data-type="' . $filterGroup['type'] . '" data-allow-multiple="' . $filterGroup['allowMultiple'] . '">';
-		echo '<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">';
+		echo '<button href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">';
 
 		if ($count > 0) {
 			echo $count . __(' selected');
@@ -31,7 +31,7 @@ echo 'var searchFilter= "' . $saveSearchFilters['search'] . '"';
 			echo $filterGroup['label'];
 		}
 		echo ' <span class="caret"></span>';
-		echo '</a>';
+		echo '</button>';
 		echo '<ul class="dropdown-menu">';
 		if ($filterGroup['allowMultiple'] == 'true') {
 			echo '<li class="action"><a class="deselect">Deselect All</a></li>';

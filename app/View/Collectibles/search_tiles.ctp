@@ -7,6 +7,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 ?>
+<div class="col-md-12">
 <h3><?php echo __('Collectibles Catalog'); ?></h3>
 
 
@@ -62,14 +63,14 @@ unset($urlparams['url']);
 				echo '<p>' . $description . '</p>';
 				echo '</div>';
 				echo '<div class="menu tile-links clearfix">';
-				echo '<ul class="unstyled">';
+				
 				if ($isLoggedIn) {
-					echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></li>';
-					echo '<li><a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+					echo '<span><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></span>';
+					echo '<span><a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo '</a></li>';
+					echo '</a></span>';
 				}
-				echo '</ul>';
+				
 				echo '</div>';
 				echo '</div>';
 
@@ -77,7 +78,7 @@ unset($urlparams['url']);
 			echo '</div>';
 			     ?>
 			</div>
-
+</div>
 
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
