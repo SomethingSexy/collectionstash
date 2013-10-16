@@ -38,7 +38,7 @@
 				}).appendTo($('.form-actions', '#CommentViewForm')).button().click(function(event) {
 					event.preventDefault();
 					//Using apply here because we want to pass in the widget context
-					$.cs.comments.prototype._postComment.apply(self, event);
+					$.cs.comments.prototype._postComment.call(self, event);
 				});
 
 				//bind events
