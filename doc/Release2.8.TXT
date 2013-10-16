@@ -1,0 +1,3 @@
+- Update the photo title and description editing, UI
+- Adding collectible tagging in photos, basically just text links to collectibles for each photo (collectible and collectible user)
+- Sharing of collection photos, BB code, list out collectibles and links
