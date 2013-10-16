@@ -6,6 +6,7 @@ body {
 	/*background: none repeat scroll 0 0 #F1F1F1;
 	 padding: 80px;*/
 	background-color: #F1F1F1;
+	padding-top: 80px;
 	/*background: url("/img/pattern.png") repeat scroll left top #F0F0F0;*/
 }
 
@@ -60,5 +61,20 @@ body {
 @media (min-width: 979px) {
 	#wrap.home-dashboard {
 		padding-left: 112px;
+	}
+}
+@media screen and (max-width: 1280px) {
+	body {
+		padding-top: 120px;
+	}
+}
+@media screen and (max-width: 980px) {
+	body {
+		padding-top: 140px;
+	}
+}
+@media screen and (max-width: 768px) {
+	body {
+		padding-top: 60px;
 	}
 }

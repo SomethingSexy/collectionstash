@@ -44,19 +44,19 @@ unset($urlparams['url']);
 				<div class="row spacer">
 					<div class="col-md-12">
 						<div class="btn-group">
-						<?php echo $this -> Paginator -> sort('name', 'Name', array('class' => 'btn sort')); ?>
+						<?php echo $this -> Paginator -> sort('name', 'Name', array('class' => 'btn sort btn-default')); ?>
 						</div>
 						<div class="btn-group">
-						<?php echo $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false, 'class' => 'btn sort')); ?>
+						<?php echo $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer', array('escape' => false, 'class' => 'btn sort btn-default')); ?>
 						</div>
 						<div class="btn-group">
-						<?php echo $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false, 'class' => 'btn sort')); ?>
+						<?php echo $this -> Paginator -> sort('Collectible.license_id', 'Brand', array('escape' => false, 'class' => 'btn sort btn-default')); ?>
 						</div>
 						<div class="btn-group">
-						<?php echo $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false, 'class' => 'btn sort')); ?>
+						<?php echo $this -> Paginator -> sort('Collectible.collectibletype_id', 'Platform', array('escape' => false, 'class' => 'btn sort btn-default')); ?>
 						</div>
 						<div class="btn-group">
-						<?php echo $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false, 'class' => 'btn sort')); ?>
+						<?php echo $this -> Paginator -> sort('collectibles_user_count', 'Stash Count', array('escape' => false, 'class' => 'btn sort btn-default')); ?>
 						</div>					
 					</div>
 					
