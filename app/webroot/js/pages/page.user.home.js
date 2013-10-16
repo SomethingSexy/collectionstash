@@ -289,7 +289,7 @@ var NewView = Backbone.View.extend({
 
 var NewCollectibleView = Backbone.View.extend({
 	tagName : 'li',
-	className : 'span2',
+	className : 'col-md-2',
 	template : 'new.collectible',
 	render : function() {
 		var self = this;
@@ -372,7 +372,7 @@ var PendingView = Backbone.View.extend({
 
 var PendingCollectibleView = Backbone.View.extend({
 	tagName : 'li',
-	className : 'span2',
+	className : 'col-md-2',
 	template : 'pending.collectible',
 	render : function() {
 		var self = this;

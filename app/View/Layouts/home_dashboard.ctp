@@ -237,7 +237,7 @@ else
 			<div class="icon-caret-down"></div>
 			<div class="icon-caret-up"></div>
 		</nav>
-		<div class="container">
+		<div class="col-lg-12">
 			<div class="row">
 				<?php echo $content_for_layout; ?>
 			</div>	

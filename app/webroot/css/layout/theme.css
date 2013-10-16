@@ -1,3 +1,10 @@
+ul, ol, dl {
+	margin: 0 auto;
+	padding: 0
+}
+ul {
+	list-style-type: none;
+}
 body {
 	background: url("/img/grid.png") repeat scroll 0 0 #E9E9E9;
 	color: #444444;
@@ -230,7 +237,12 @@ div.subnav-fixed {
 	width: auto;
 }
 .widget .widget-header {
+	background: -webkit-gradient(linear, center top, center bottom, from(#FAFAFA), to(#E9E9E9));
+	background: -webkit-linear-gradient(#FAFAFA, #E9E9E9);
 	background: -moz-linear-gradient(center top , #FAFAFA 0%, #E9E9E9 100%) repeat scroll 0 0 transparent;
+	background: -o-linear-gradient(#FAFAFA, #E9E9E9);
+	background: -ms-linear-gradient(#FAFAFA, #E9E9E9);
+	background: linear-gradient(#FAFAFA, #E9E9E9);
 	border: 1px solid #D5D5D5;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
@@ -249,6 +261,8 @@ div.subnav-fixed {
 	position: relative;
 	text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 	top: 2px;
+	margin-bottom: 5px;
+	margin-top: 5px;
 }
 .widget .widget-header [class^="icon-"], .widget .widget-header [class*=" icon-"] {
 	color: #555555;
@@ -272,10 +286,10 @@ div.subnav-fixed {
 .widget .widget-content {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #D5D5D5;
-	border-radius: 5px 5px 5px 5px;
+	/*border-radius: 5px 5px 5px 5px;*/
 	padding: 20px 15px 15px;
 }
-.widget .widget-header + .widget-content {
+.widget .widget-header .widget-content {
 	border-top: medium none;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
