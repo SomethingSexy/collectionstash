@@ -1,0 +1,6 @@
+Each collectible will have topics, if there is only one topic, then it will be auto expanded,
+Otherwise each discussion topic will be collapsed with maybe a title, summary and the last thing posted in it
+
+I will not allow adding topics to start so that the system works the only way
+
+Need to figure out the best way to link Collectibles and Stashes to topics, I am think topic groups, maybe add a type field so that can look up in that table where it belongs
