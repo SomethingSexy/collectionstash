@@ -8,7 +8,7 @@ class ArtistsController extends AppController {
 		$tags = $this -> Artist -> find('list', array('fields' => array('Artist.id', 'Artist.name'), 'conditions' => array('LOWER(Artist.name) LIKE' => strtolower($query) . '%')));
 		$keys = array_keys($tags);
 		$values = array_values($tags);
-		$this -> set('returnData', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
+		$this -> set('returnData', $values);
 	}
 
 	public function index($id = null) {
