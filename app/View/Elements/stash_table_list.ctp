@@ -144,7 +144,7 @@ foreach ($collectibles as $key => $myCollectible) {
 }
 echo '</table>';
 
-echo '<div class="pagination">';
+echo '<div class="pagination-container">';
 echo '<p>';
 echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
 echo '</p>';
@@ -152,7 +152,7 @@ $urlparams = $this -> request -> query;
 unset($urlparams['url']);
 $this -> Paginator -> options(array('url' => $this -> passedArgs));
 
-echo '<ul>';
+echo '<ul class="pagination">';
 echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled'));
 echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a'));
 echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled'));

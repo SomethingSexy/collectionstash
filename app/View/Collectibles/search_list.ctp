@@ -26,7 +26,7 @@ unset($urlparams['url']);
 		<div class="col-md-7">
 			<div class="widget">
 			<div class="widget-header">
-				<h3><?php echo __('Search Results'); ?></h3>
+				<h3><?php echo __('Collectibles Catalog'); ?></h3>
 			</div>
 			<div class="widget-content">
 				<?php echo $this -> element('flash'); ?>
@@ -63,7 +63,7 @@ unset($urlparams['url']);
 				</div>
 				
 				<div class="row stashable collectibles" data-toggle="modal-gallery" data-target="#modal-gallery">
-					<div span="col-md-12">			
+					<div class="col-md-12">			
 					<?php
 					foreach ($collectibles as $collectible) {
 						$fullCollectibleJSON = json_encode($collectible);
@@ -200,22 +200,22 @@ unset($urlparams['url']);
 					}
 				?>
 					</div>
-						<p>
-							<?php
-							echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));
-							?>
-						</p>
-					<div class="pagination">
-						<ul>
-						<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
-						<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
-						<?php echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
-						</ul>
-					</div>
-			
-				</div>				
-			</div>
+	
+				
 
+				</div>	
+				<div class="row">
+					<div class="col-md-12">	
+						<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));?></p>
+						<ul class="pagination">
+							<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+							<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
+							<?php echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
+						</ul>						
+					</div>
+					
+				</div>			
+			</div>
 			</div>
 		</div>
 		<div class="col-md-5 collectible-detail">

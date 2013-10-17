@@ -451,10 +451,10 @@ div.subnav-fixed {
 	padding-right: 15px;
 }
 
-.widget.widget-table .widget-content .pagination {
+.widget.widget-table .widget-content .pagination-container {
 	padding: 20px;
 }
-.widget.widget-table .widget-content .pagination p {
+.widget.widget-table .widget-content .pagination-container p {
 	float: right;
 }
 

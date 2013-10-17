@@ -122,13 +122,11 @@
 			</tbody></table>
 		</div>	
 			<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} parts out of  {:count} total.', true)));?></p>
-		<div class="pagination">
-			<ul>
+			<ul class="pagination">
 			<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
 			<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
 			<?php echo $this -> Paginator -> next(__('next', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
-			</ul>
-		</div>		
+			</ul>	
 	</div>
 </div>
 <script>

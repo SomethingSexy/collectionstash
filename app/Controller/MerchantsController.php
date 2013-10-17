@@ -8,7 +8,7 @@ class MerchantsController extends AppController {
 		$merchants = $this -> Merchant -> find('list', array('fields' => array('Merchant.id', 'Merchant.name'), 'conditions' => array('Merchant.name LIKE' => $query . '%')));
 		$keys = array_keys($merchants);
 		$values = array_values($merchants);
-		$this -> set('returnData', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
+		$this -> set('returnData', $values);
 	}
 
 }
