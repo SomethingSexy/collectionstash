@@ -91,7 +91,7 @@
 .url-upload input {
 	margin-bottom: 0;
 }
-#attribute-upload-dialog, #upload-dialog {
+#attribute-upload-dialog .modal-dialog, #upload-dialog .modal-dialog {
 	width: 720px;
 }
 /* On resolution 1280 x 720 this stopped the buttons from showing up
