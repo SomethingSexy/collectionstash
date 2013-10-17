@@ -35,6 +35,8 @@ class ArtistsController extends AppController {
 		$collectibles = $this -> paginate('Collectible');
 
 		$this -> set(compact('collectibles'));
+
+		$this -> layout = 'fluid';
 	}
 
 }

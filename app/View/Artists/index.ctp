@@ -29,10 +29,12 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 					if (!empty($collectible['CollectiblesUpload'])) {
 						foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 							if ($upload['primary']) {
-								echo '<div class="image">';
-								echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 200, 'height' => 200)) . '</a>';
-								echo '</div>';
-								break;
+							echo '<div class="image">';
+							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
+							$this -> FileUpload -> reset();
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
+							echo '</div>';
+							break;
 							}
 						}
 	
@@ -41,15 +43,17 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 						echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
 					}
 					echo '<div class="header">';
-					echo '<a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/' . $collectible['Collectible']['slugField'] . '">' . $collectible['Collectible']['displayTitle'] . '</a>';
+					echo '<h2><a href="/collectibles/view/' . $collectible['Collectible']['id'] . '/' . $collectible['Collectible']['slugField'] . '">' . $collectible['Collectible']['displayTitle'] . '</a></h2>';
 					echo '</div>';
-	
+					echo '<div class="menu tile-links clearfix">';
 					if ($isLoggedIn) {
-						echo '<a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+						echo '<span><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></span>';
+						echo '<span><a class="add-full-to-stash btn" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 						echo '<img src="/img/icon/add_stash_link_25x25.png">';
-						echo '</a>';
-						echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
+						echo '</a></span>';
+						
 					}
+					echo '</div>';
 					echo '</div>';
 				}
 				echo '</div>';
