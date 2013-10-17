@@ -8,7 +8,7 @@ class TagsController extends AppController {
 		$tags = $this -> Tag -> find('list', array('fields' => array('Tag.id', 'Tag.tag'), 'conditions' => array('Tag.tag LIKE' => $query . '%', 'Tag.active' => 1)));
 		$keys = array_keys($tags);
 		$values = array_values($tags);
-		$this -> set('aTags', array('suggestions' => $values, 'data' => $keys, 'query' => $query));
+		$this -> set('aTags', $values);
 	}
 
 	public function index() {

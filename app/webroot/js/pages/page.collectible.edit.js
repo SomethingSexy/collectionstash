@@ -1435,8 +1435,8 @@ var ManufacturerView = Backbone.View.extend({
 		});
 
 		$('#inputManBrand', self.el).typeahead({
-			source : this.brandArray,
-			items : 100
+			name : 'brands',
+			local : this.brandArray
 		});
 	},
 	render : function() {
@@ -1765,8 +1765,8 @@ var CollectibleView = Backbone.View.extend({
 		});
 
 		$('#inputRetailer', self.el).typeahead({
-			source : this.retailers,
-			items : 100
+			name : 'retailers',
+			local : this.retailers
 		});
 
 		return this;
@@ -2217,14 +2217,8 @@ var AddTagView = Backbone.View.extend({
 		});
 
 		$('#inputTag', self.el).typeahead({
-			source : function(query, process) {
-				$.get('/tags/getTagList', {
-					query : query,
-				}, function(data) {
-					process(data.suggestions);
-				}, 'json');
-			},
-			items : 100
+			name : 'tags',
+			remote : '/tags/getTagList?query=%QUERY',
 		});
 		return this;
 	},
@@ -2398,14 +2392,8 @@ var AddArtistView = Backbone.View.extend({
 		});
 
 		$('#inputArtist', self.el).typeahead({
-			source : function(query, process) {
-				$.get('/artists/getArtistList', {
-					query : query,
-				}, function(data) {
-					process(data.suggestions);
-				}, 'json');
-			},
-			items : 100
+			name : 'artists',
+			remote : '/artists/getArtistList?query=%QUERY',
 		});
 		return this;
 	},
