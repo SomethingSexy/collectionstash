@@ -39,6 +39,7 @@
 	echo $this -> Html -> script('thirdparty/backbone');
 	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
+	echo $this -> Minify -> script('js/thirdparty/typeahead');
 	echo $this -> Minify -> script('js/jquery-plugins');
 	echo $this -> Minify -> script('js/jquery.autocomplete');
 	// Replace this with dust eventually

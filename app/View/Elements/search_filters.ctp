@@ -1,6 +1,11 @@
 <script type="text/javascript"><?php
 echo 'var searchUrl = "' . $searchUrl . '";';
-echo 'var searchFilter= "' . $saveSearchFilters['search'] . '"';
+if(isset($saveSearchFilters['search'])){
+	echo 'var searchFilter= "' . $saveSearchFilters['search'] . '"';
+} else {
+	echo 'var searchFilter= ""';
+}
+
 ?></script>
 <?php echo $this -> Html -> script('jquery.filters', array('inline' => false)); ?>
 

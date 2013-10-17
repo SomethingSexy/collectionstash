@@ -35,14 +35,9 @@ var StashAddView = Backbone.View.extend({
 		});
 
 		$('#CollectiblesUserMerchantId', this.el).typeahead({
-			source : function(query, process) {
-				$.get('/merchants/getMerchantList', {
-					query : query,
-				}, function(data) {
-					process(data.suggestions);
-				}, 'json');
-			},
-			items : 100
+			name : 'trends',
+			remote: '/merchants/getMerchantList?query=%QUERY',
+			valueKey  : 'suggestions'
 		});
 
 		this.errors = [];
