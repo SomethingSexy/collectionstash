@@ -89,6 +89,8 @@ class ManufacturesController extends AppController {
 				$this -> set(compact('collectibles'));
 
 				$this -> set(compact('manufacture'));
+				
+				$this -> layout = 'fluid';
 			} else {
 				$this -> redirect("/");
 			}

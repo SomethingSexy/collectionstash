@@ -71,7 +71,7 @@ unset($urlparams['url']);
 
 						$collectibleJSON = json_encode($collectible['Collectible']);
 						$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-						echo '<div class="row spacer">';
+						echo '<div class="spacer">';
 						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
 						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
@@ -121,18 +121,18 @@ unset($urlparams['url']);
 						echo '<div class="row">';
 						echo '<div class="col-md-12">';
 						echo '<span class="labels">';
-						echo '<span class="label">' . $collectible['Collectibletype']['name'] . '</span>';
+						echo '<span class="label label-default">' . $collectible['Collectibletype']['name'] . '</span>';
 						if (!empty($collectible['License']['name'])) {
-							echo '<span class="label">' . $collectible['License']['name'] . '</span>';
+							echo '<span class="label label-default">' . $collectible['License']['name'] . '</span>';
 						}
 						if (!empty($collectible['Manufacture']['title'])) {
-							echo '<span class="label">' . $collectible['Manufacture']['title'] . '</span>';
+							echo '<span class="label label-default">' . $collectible['Manufacture']['title'] . '</span>';
 						}
 						if (!empty($collectible['ArtistsCollectible'])) {
-							echo '<span class="label">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectible['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
+							echo '<span class="label label-default">' . $this -> Html -> link($collectible['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectible['ArtistsCollectible'][0]['Artist']['id'], $collectible['ArtistsCollectible'][0]['Artist']['slug'])) . '</span>';
 						}
 						if (!empty($collectible['Scale']['scale'])) {
-							echo '<span class="label">' . $collectible['Scale']['scale'] . '</span>';
+							echo '<span class="label label-default">' . $collectible['Scale']['scale'] . '</span>';
 						}
 
 						echo '</span>';
@@ -146,7 +146,7 @@ unset($urlparams['url']);
 						echo '<div class="row">';
 						echo '<div class="col-md-12">';
 						echo '<div class="btn-group pull-right">';
-						echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
+						echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 						echo '<ul class="dropdown-menu">';
 						if ($isLoggedIn) {
 							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';

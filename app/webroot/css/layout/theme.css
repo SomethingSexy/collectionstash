@@ -703,15 +703,26 @@ div.subnav-fixed {
 	margin: 0 0.2em 0 0;
 	display: inline-block;
 	float: right;
-	padding: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 2px;
+	padding-left: 2px;
 }
-
+.tiles .tile .tile-links span a {
+	padding: 0;
+}
 .tiles .tile .tile-links span a i {
-	left: -1px;
-	position: relative;
-	top: 4px;
+	font-size: 150%;
 }
-
+/*
+ .tiles .tile .tile-links.adjust span a i {
+ left: -1px;
+ position: relative;
+ top: 4px;
+ }*/
+.tiles .tile .tile-links span a:hover {
+	text-decoration: none;
+}
 .table.table-bordered tbody tr td {
 	padding-bottom: 9px;
 	padding-top: 9px;

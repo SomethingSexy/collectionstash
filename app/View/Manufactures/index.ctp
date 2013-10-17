@@ -3,10 +3,9 @@ echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
-	<div class="page-header">
-		<h2><?php echo $manufacture['Manufacture']['title']?> <small><?php echo $manufacture['Manufacture']['url']
-				?></small></h2>
-	</div>	
+<div class="col-md-12">
+	<h2><?php echo $manufacture['Manufacture']['title']?> <small><?php echo $manufacture['Manufacture']['url']?></small></h2>
+	
 	<div class="row">
 		<div class="col-md-4">
 			<div class="widget">
@@ -78,7 +77,9 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 					foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 						if ($upload['primary']) {
 							echo '<div class="image">';
-							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 200, 'height' => 200)) . '</a>';
+							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
+							$this -> FileUpload -> reset();
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
 							echo '</div>';
 							break;
 						}
@@ -88,31 +89,28 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 				} else {
 					echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
 				}
-				echo '<div class="header">';
+				echo '<div class="header"><h2>';
 				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
-				echo '</div>';
-
+				echo '</h2></div>';
+				echo '<div class="menu tile-links clearfix">';
 				if ($isLoggedIn) {
-					echo '<a class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+					echo '<span><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></span>';
+					echo '<span><a class="add-full-to-stash btn" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo '</a>';
-					echo '<a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a>';
+					echo '</a></span>';
+					
 				}
+				echo '</div>';
 				echo '</div>';
 			}
 			echo '</div>';
 			     ?>
 			</div>					
-					
 				</div>
-				
-				
-
 			</div>
 		</div>
-		
 	</div>
-	
+</div>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
 
