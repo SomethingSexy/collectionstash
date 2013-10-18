@@ -257,11 +257,13 @@ class FileUploadHelper extends AppHelper {
 		if ($currentDimensions['width'] > $this -> options['width']) {
 			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
 			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
+			
+			$height = (isset($this -> options['height']) && is_numeric($this -> options['height'])) ? $this -> options['height'] : 0;
 
 			if (isset($this -> settings['resizeType']) && $this -> settings['resizeType'] === 'adaptive') {
-				$thumbMaker -> adaptiveResize($this -> options['width'], $this -> options['height']);
+				$thumbMaker -> adaptiveResize($this -> options['width'], $height);
 			} else {
-				$thumbMaker -> resize($this -> options['width'], $this -> options['height']);
+				$thumbMaker -> resize($this -> options['width'], $height);
 			}
 
 			$thumbMaker -> save($this -> _getResizeNameOrPath($this -> _getFullPath()));
