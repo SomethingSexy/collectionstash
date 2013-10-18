@@ -99,10 +99,11 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 
 </div>
 <div id="edit-container" class="row">
-	<div id="photo-container" span="col-md-4">
+	<div id="photo-container" class="col-md-4">
 
 	</div>
-	<div id="collectible-container" span="col-md-8">
+	<div id="collectible-container" class="col-md-8">
+		
 
 	</div>
 </div>

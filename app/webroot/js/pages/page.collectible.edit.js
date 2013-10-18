@@ -1545,7 +1545,7 @@ var ManufacturerView = Backbone.View.extend({
 });
 
 var CollectibleView = Backbone.View.extend({
-	className : "col-md-8",
+	className : "col-md-12",
 	events : {
 		'change #inputManufacturer' : 'changeManufacturer',
 		'click #buttonSeries' : 'changeSeries',
@@ -2110,7 +2110,7 @@ var DupListMessageView = Backbone.View.extend({
 
 var TagsView = Backbone.View.extend({
 	template : 'tags.edit',
-	className : "col-md-8 pull-right",
+	className : "col-md-12",
 	events : {
 		'click .save' : 'save',
 	},
@@ -2284,7 +2284,7 @@ var AddTagView = Backbone.View.extend({
 
 var ArtistsView = Backbone.View.extend({
 	template : 'artists.edit',
-	className : "col-md-8 pull-right",
+	className : "col-md-12",
 	events : {
 		'click .save' : 'save',
 	},

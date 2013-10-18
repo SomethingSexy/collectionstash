@@ -1,9 +1,13 @@
-<div class="control-group">
-	<div class="input-append">
-		<input autocomplete="off" type="text" id="inputArtist" name="name" value="">
-		<button class="btn add-artist" type="button">
-			Add
-		</button>
-	</div>
-	<span class="help-block inline-error"></span>
-</div>
+<form role="form">
+	<fieldset>
+		<div class="input-group col-sm-3">
+			<input autocomplete="off" type="text" class="form-control" id="inputArtist" name="name" value="">
+			<span class="input-group-btn">
+				<button class="btn btn-default add-artist" type="button">
+					Add
+				</button>
+			</span>
+		</div>
+		<span class="help-block inline-error"></span>
+	</fieldset>
+</form>
