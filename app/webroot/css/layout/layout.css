@@ -58,6 +58,10 @@ body {
 	margin-top: 80px;
 }
 
+.jumbotron .container {
+	margin-top: 0;
+}
+
 @media (min-width: 979px) {
 	#wrap.home-dashboard {
 		padding-left: 112px;
