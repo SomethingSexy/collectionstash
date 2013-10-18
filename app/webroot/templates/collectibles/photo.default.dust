@@ -1,16 +1,21 @@
-<ul class="thumbnails" id="upload-link">
+<div class="row" id="upload-link">
+	<div class="col-md-12">
 	{#uploads uploadDirectory=uploadDirectory}
 		{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<li><a class="thumbnail" href="#"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+			<a class="thumbnail" href="#"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 		{/primary}
 		{:else}
-		<li><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>
+		<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 	{/uploads}
-	
-	{#uploads uploadDirectory=uploadDirectory}
-		{@ne key="{primary}" value="true" type="boolean"}
-			<li><a class="thumbnail" href="#"><img src="/{uploadDirectory}/{Upload.name}" alt=""></a></li>
-		{/ne}
-	{/uploads}
+	</div>
+</div>
 
-</ul>
+<div class="row">
+{#uploads uploadDirectory=uploadDirectory}
+	{@ne key="{primary}" value="true" type="boolean"}
+	<div class="col-lg-4">
+		<a class="thumbnail" href="#"><img src="/{uploadDirectory}/{Upload.name}" alt=""></a>
+	</div>
+	{/ne}
+{/uploads}
+</div>
