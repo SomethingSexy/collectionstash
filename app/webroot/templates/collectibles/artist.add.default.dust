@@ -1,6 +1,6 @@
 <form role="form">
 	<fieldset>
-		<div class="input-group col-sm-3">
+		<div class="input-group col-lg-6">
 			<input autocomplete="off" type="text" class="form-control" id="inputArtist" name="name" value="">
 			<span class="input-group-btn">
 				<button class="btn btn-default add-artist" type="button">

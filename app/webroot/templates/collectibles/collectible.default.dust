@@ -100,13 +100,12 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label" for="inputMsrp">Original Retail Price</label>
-			<div class="controls controls-row">
-				<div class="input-prepend">
-					<span class="add-on">$</span>
-					<input type="text" id="inputMsrp" name="msrp" value="{collectible.msrp}">
+			<label class="col-lg-3 control-label" for="inputMsrp">Original Retail Price</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input type="text" id="inputMsrp" class="form-control" name="msrp" value="{collectible.msrp}">
 				</div>
-
 			</div>
 		</div>
 
@@ -122,9 +121,9 @@
 		</div>-->
 
 		<div class="form-group">
-			<label class="control-label" for="inputMsrp">Release Year</label>
-			<div class="controls controls-row">
-				<select name="release">
+			<label class="col-lg-3 control-label" for="inputMsrp">Release Year</label>
+			<div class="col-lg-6">
+				<select name="release"  class="form-control">
 					<option value=""></option>
 					{#years year=collectible.release}
 					<option {@eq key="{.}" value="{year}"}selected{/eq} value="{.}">{.}</option>
@@ -134,17 +133,17 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label" for="inputCode">Product Code</label>
-			<div class="controls">
-				<input type="text" id="inputCode" name="code" value="{collectible.code}">
+			<label class="col-lg-3 control-label" for="inputCode">Product Code</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputCode" class="form-control" name="code" value="{collectible.code}">
 				<span class="help-inline">This is the item code or product code given by the manufacture.</span>
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label" for="inputUpc">Product UPC</label>
-			<div class="controls">
-				<input type="text" id="inputUpc" name="upc" value="{collectible.upc}">
+			<label class="col-lg-3 control-label" for="inputUpc">Product UPC</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputUpc" class="form-control" name="upc" value="{collectible.upc}">
 			</div>
 		</div>
 	</fieldset>
@@ -153,59 +152,70 @@
 			Collectible Details
 		</legend>
 		<div class="form-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#collectible.official}checked{/collectible.official} type="checkbox" value="true" name="official" id="inputOfficial">
-					Official</label>
-					<span class="help-inline"><strong>This indicates whether or not this collectible is officially licensed or a custom.</strong></span>
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label class="checkbox">
+							<input {#collectible.official}checked{/collectible.official} type="checkbox" value="true" name="official" id="inputOfficial">
+							Official</label>
+							<span class="help-block"><strong>This indicates whether or not this collectible is officially licensed or a custom.</strong></span>
+				
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#collectible.limited}checked{/collectible.limited} type="checkbox" value="true" name="limited" id="inputLimited">
-					Limited Edition</label>
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label class="checkbox">
+							<input {#collectible.limited}checked{/collectible.limited} type="checkbox" value="true" name="limited" id="inputLimited">
+							Limited Edition</label>
+				</div>
 			</div>
 		</div>
 		{#collectible.limited editionSize=collectible.edition_size numbered=collectible.numbered}
 		<div class="form-group editions-size">
-			<label class="control-label" for="inputEditionSize">Edition Size</label>
-			<div class="controls">
-				<input type="text" id="inputEditionSize" name="edition_size" value="{editionSize}">
-				<span class="help-inline">This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.</span>
+			<label class="col-lg-3 control-label" for="inputEditionSize">Edition Size</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputEditionSize" class="form-control" name="edition_size" value="{editionSize}">
+				<span class="help-block">This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.</span>
 			</div>
 		</div>
 		{#editionSize}
 		<div class="form-group numbered">
-			<div class="controls">
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
 				<label class="checkbox">
 					<input {#numbered}checked{/numbered} type="checkbox" value="true" name="numbered" id="inputNumbered">
 					Numbered</label>
-				<span class="help-inline">A collectible is considered numbered if it has an edition size and is indivudually numbered.</span>
+				<span class="help-block">A collectible is considered numbered if it has an edition size and is indivudually numbered.</span>
+				</div>
 			</div>
 		</div>
 		{/editionSize}
 		{/collectible.limited}
 		<div class="form-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#collectible.signed}checked{/collectible.signed} type="checkbox" value="true" name="signed" id="inputSigned">
-					Signed</label>
-				<span class="help-inline">Indicates if this collectible is signed by someone as part of the sold piece.</span>
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label class="checkbox">
+						<input {#collectible.signed}checked{/collectible.signed} type="checkbox" value="true" name="signed" id="inputSigned">
+						Signed</label>
+					<span class="help-block">Indicates if this collectible is signed by someone as part of the sold piece.</span>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#collectible.exclusive}checked{/collectible.exclusive} type="checkbox" value="true" name="exclusive">
-					Exclusive</label>
-				<span class="help-inline">Indicates if this collectible is exclusive to any one place.</span>
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label class="checkbox">
+						<input {#collectible.exclusive}checked{/collectible.exclusive} type="checkbox" value="true" name="exclusive">
+						Exclusive</label>
+					<span class="help-block">Indicates if this collectible is exclusive to any one place.</span>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputRetailer">Venue / Exclusive Retailer</label>
-			<div class="controls">
-				<input autocomplete="off" type="text" id="inputRetailer" name="retailer" value="{collectible.retailer}">
+			<label class="col-lg-3 control-label" for="inputRetailer">Venue / Exclusive Retailer</label>
+			<div class="col-lg-6">
+				<input autocomplete="off" type="text" id="inputRetailer" class="form-control" name="retailer" value="{collectible.retailer}">
 				<span class="help-inline">If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.</span>
 			</div>
 		</div>
@@ -215,9 +225,9 @@
 			Collectible Specs
 		</legend>
 		<div class="form-group">
-			<label class="control-label" for="inputMsrp">Scale</label>
-			<div class="controls controls-row">
-				<select name="scale_id">
+			<label class="col-lg-3 control-label" for="inputMsrp">Scale</label>
+			<div class="col-lg-6">
+				<select name="scale_id" class="form-control">
 					<option value=""></option>
 					{#scales scale=collectible.scale_id}
 					<option {@eq key="{Scale.id}" value="{scale}"}selected{/eq} value="{Scale.id}">{Scale.scale}</option>
@@ -226,46 +236,46 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputUpc">Number of Pieces</label>
-			<div class="controls">
-				<input type="number" id="inputPieces" name="pieces" value="{collectible.pieces}">
+			<label class="col-lg-3 control-label" for="inputUpc">Number of Pieces</label>
+			<div class="col-lg-6">
+				<input type="number" id="inputPieces" class="form-control" name="pieces" value="{collectible.pieces}">
 				<span class="help-inline">This is the number of parts and pieces this collectible has.</span>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputWeight">Weight</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputWeight" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
-					<span class="add-on">lbs</span>
+			<label class="col-lg-3 control-label" for="inputWeight">Weight</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputWeight" class="form-control" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
+					<span class="input-group-addon">lbs</span>
 				</div>
 
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputWeight">Length</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputLength" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
-					<span class="add-on">inches</span>
+			<label class="col-lg-3 control-label" for="inputWeight">Length</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputLength" class="form-control" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputWeight">Width</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputWidth" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
-					<span class="add-on">inches</span>
+			<label class="col-lg-3 control-label" for="inputWeight">Width</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputWidth" class="form-control" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label" for="inputWeight">Depth</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputDepth" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
-					<span class="add-on">inches</span>
+			<label class="col-lg-3 control-label" for="inputWeight">Depth</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputDepth" class="form-control" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
@@ -275,16 +285,18 @@
 			Reference
 		</legend>
 		<div class="form-group">
-			<label class="control-label" for="inputUpc">URL</label>
-			<div class="controls">
-				<input type="text" id="inputURL" name="url" value="{collectible.url|s}">			
+			<label class="col-lg-3 control-label" for="inputUpc">URL</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputURL" class="form-control" name="url" value="{collectible.url|s}">			
 			</div>
 		</div>
 	</fieldset>
-	<div class="form-actions">
-		<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
-			Save changes
-		</button>
+	<div class="form-group">
+		<div class="col-lg-offset-3 col-lg-9">
+			<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
+				Save changes
+			</button>
+		</div>
 	</div>
 </form>
 </div>

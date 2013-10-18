@@ -657,7 +657,7 @@ var AttributesView = Backbone.View.extend({
 
 		$('#attribute-collectible-add-new-dialog').modal();
 
-		$('#attribute-collectible-add-new-dialog', 'body').on('hidden', function() {
+		$('#attribute-collectible-add-new-dialog', 'body').on('hidden.bs.modal', function() {
 			self.addNewView.remove();
 		});
 	},
@@ -710,7 +710,7 @@ var AttributesView = Backbone.View.extend({
 
 		$('#attribute-collectible-add-existing-dialog').modal();
 
-		$('#attribute-collectible-add-existing-dialog', 'body').on('hidden', function() {
+		$('#attribute-collectible-add-existing-dialog', 'body').on('hidden.bs.modal', function() {
 			self.addExistingView.remove();
 		});
 	},
@@ -892,7 +892,7 @@ var AttributeView = Backbone.View.extend({
 					backdrop : 'static'
 				});
 
-				$('#attribute-upload-dialog', 'body').on('hidden', function() {
+				$('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
 					self.photoEditView.remove();
 					self.model.fetch();
 				});
@@ -906,7 +906,7 @@ var AttributeView = Backbone.View.extend({
 
 		$('#attribute-update-dialog').modal();
 
-		$('#attribute-update-dialog', 'body').on('hidden', function() {
+		$('#attribute-update-dialog', 'body').on('hidden.bs.modal', function() {
 			self.addEditView.remove();
 		});
 	},
@@ -971,7 +971,7 @@ var AttributeView = Backbone.View.extend({
 			backdrop : 'static'
 		});
 
-		$('#attributeDuplicateModal', 'body').on('hidden', function() {
+		$('#attributeDuplicateModal', 'body').on('hidden.bs.modal', function() {
 			self.duplicateView.remove();
 		});
 
@@ -1031,7 +1031,7 @@ var AttributePhotoView = Backbone.View.extend({
 			}]
 		});
 
-		$('.fileupload', self.el).on('hidden', function() {
+		$('.fileupload', self.el).on('hidden.bs.modal', function() {
 			$('#fileupload table tbody tr.template-download').remove();
 			pageEvents.trigger('upload:close');
 		});
@@ -1081,7 +1081,7 @@ var AttributePhotoView = Backbone.View.extend({
 });
 var PhotoView = Backbone.View.extend({
 	template : 'photo.default.edit',
-	className : "col-md-4",
+	className : "",
 	events : {
 
 	},
@@ -1130,7 +1130,7 @@ var PhotoView = Backbone.View.extend({
 			}]
 		});
 
-		$('#upload-dialog').on('hidden', function() {
+		$('#upload-dialog').on('hidden.bs.modal', function() {
 			$('#fileupload table tbody tr.template-download').remove();
 			pageEvents.trigger('upload:close');
 		});
@@ -1652,7 +1652,7 @@ var CollectibleView = Backbone.View.extend({
 				backdrop : 'static'
 			});
 
-			$('#manufacturerSeriesModal', 'body').on('hidden', function() {
+			$('#manufacturerSeriesModal', 'body').on('hidden.bs.modal', function() {
 				self.manufacturerSeriesView.remove();
 			});
 		}, this);
@@ -1940,7 +1940,7 @@ var CollectibleView = Backbone.View.extend({
 			backdrop : 'static'
 		});
 
-		$('#manufacturerModal', 'body').on('hidden', function() {
+		$('#manufacturerModal', 'body').on('hidden.bs.modal', function() {
 			self.manufacturerView.remove();
 
 		});
@@ -1991,7 +1991,7 @@ var CollectibleView = Backbone.View.extend({
 			backdrop : 'static'
 		});
 
-		$('#manufacturerModal', 'body').on('hidden', function() {
+		$('#manufacturerModal', 'body').on('hidden.bs.modal', function() {
 			self.manufacturerView.remove();
 			// on close I need to make sure we do not have
 			// any brands attached to this manufacturer that are
