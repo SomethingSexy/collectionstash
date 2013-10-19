@@ -1,9 +1,13 @@
-<div class="control-group">
-	<div class="input-append">
-		<input autocomplete="off" type="text" id="inputTag" name="tag" value="">
-		<button class="btn add-tag" type="button">
-			Add
-		</button>
-	</div>
-	<span class="help-block inline-error"></span>
-</div>
+<form role="form">
+	<fieldset>
+		<div class="input-group col-lg-6">
+			<input autocomplete="off" type="text" class="form-control" id="inputTag" name="tag" value="">
+			<span class="input-group-btn">
+				<button class="btn btn-primary add-tag" type="button">
+					Add
+				</button>
+			</span>
+		</div>
+		<span class="help-block inline-error"></span>
+	</fieldset>
+</form>

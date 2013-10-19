@@ -5,7 +5,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Upload Photo</h3>
+				<h4 id="myModalLabel">Upload Photo</h4>
 			</div>
 			<div class="modal-body">
 				<?php echo $this -> element('flash'); ?>
@@ -71,7 +71,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 			</div>

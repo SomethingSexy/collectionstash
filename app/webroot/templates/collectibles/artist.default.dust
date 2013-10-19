@@ -1,1 +1,1 @@
-<span data-id="{modelId}">{Artist.name}</span> <a class="link remove-artist">Remove</a>
+<span data-id="{modelId}">{Artist.name}</span> <a class="link remove-artist pull-right">Remove</a>

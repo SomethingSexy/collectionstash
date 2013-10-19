@@ -2150,7 +2150,7 @@ var TagsView = Backbone.View.extend({
 
 var TagView = Backbone.View.extend({
 	template : 'tag.edit',
-	className : "li",
+	className : "list-group-item",
 	tagName : 'li',
 	events : {
 		'click .remove-tag' : 'removeTag'
@@ -2325,7 +2325,7 @@ var ArtistsView = Backbone.View.extend({
 
 var ArtistView = Backbone.View.extend({
 	template : 'artist.edit',
-	className : "li",
+	className : "list-group-item",
 	tagName : 'li',
 	events : {
 		'click .remove-artist' : 'removeArtist'
@@ -2731,7 +2731,7 @@ var AddExistingAttributePartSearchView = Backbone.View.extend({
 					perPage : this.collection.perPage,
 					totalPages : this.collection.totalPages,
 					total : this.collection.paginator_ui.total
-				}
+				};
 			} else {
 				data['paginator'] = this.collection.paginator_ui;
 			}
@@ -2743,7 +2743,7 @@ var AddExistingAttributePartSearchView = Backbone.View.extend({
 			$(self.el).animate({
 				scrollTop : 0
 			});
-		}, this)
+		}, this);
 	},
 	render : function() {
 		var self = this;
@@ -2842,7 +2842,7 @@ var AddExistingAttributeCollectibleSearchView = Backbone.View.extend({
 					perPage : this.collection.perPage,
 					totalPages : this.collection.totalPages,
 					total : this.collection.paginator_ui.total
-				}
+				};
 			} else {
 				data['paginator'] = this.collection.paginator_ui;
 			}
@@ -2854,7 +2854,7 @@ var AddExistingAttributeCollectibleSearchView = Backbone.View.extend({
 			$(self.el).animate({
 				scrollTop : 0
 			});
-		}, this)
+		}, this);
 	},
 	render : function() {
 		var self = this;

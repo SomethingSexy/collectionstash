@@ -6,5 +6,5 @@
 	{/eq}
 	<p>The artist field is a typeahead field, please try and use any existing entries.</p>
 	<div class="add-container"> </div>
-	<ul class="artists"> </ul>
+	<ul class="artists list-group spacer"> </ul>
 </div>

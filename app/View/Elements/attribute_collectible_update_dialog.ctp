@@ -5,7 +5,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Edit the Collectible's Part</h3>
+				<h4 id="myModalLabel">Edit the Collectible's Part</h4>
 			</div>
 			<div class="modal-body">
 				<div class='component-message error'>
@@ -39,7 +39,7 @@
 			</div>
 		
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 				<button class="btn btn-primary save" autocomplete="off">

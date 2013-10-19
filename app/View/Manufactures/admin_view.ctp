@@ -114,13 +114,13 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Delete Manufacturer</h3>
+				<h4 id="myModalLabel">Delete Manufacturer</h4>
 			</div>
 			<div class="modal-body">
 				<p>Are you sure you want to delete this manufacturer?</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 				<button class="btn btn-primary delete" autocomplete="off">
