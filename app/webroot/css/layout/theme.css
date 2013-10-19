@@ -1,10 +1,7 @@
-ul, ol, dl {
+/*ul, ol, dl {
 	margin: 0 auto;
 	padding: 0
-}
-ul {
-	list-style-type: none;
-}
+}*/
 body {
 	background: url("/img/grid.png") repeat scroll 0 0 #E9E9E9;
 	color: #444444;
@@ -144,6 +141,7 @@ div.subnav-fixed {
 	display: block;
 	padding-top: 91px;
 	margin: 0;
+	padding-left: 0;
 }
 
 #left-panel-content li, .lp-dropdown-menu li, #left-panel-content a, .lp-dropdown-menu a {
@@ -1160,7 +1158,7 @@ a.forgot-password {
 .twitter-typeahead .tt-hint {
     color:#a1a1a1;
     z-index: 1;
-    padding: 6px 12px;
+    padding: 9px 12px;
     border:1px solid transparent;
 }
 .twitter-typeahead .tt-query {

@@ -5,7 +5,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Upload Photo</h3>
+				<h4 id="myModalLabel">Upload Photo</h4>
 			</div>
 			<div class="modal-body">	
 				<p>This will allow you to sumbit photos for the collectible you are viewing.  Each photo you submit will require approval from an admin.  All pending photos are indicated below.  If you submitted an incorrect photo and it is still pending you can delete it, otherwise you can also submit for approval the removal of a photo.  Note, you can only delete pending photos that you added.  Currently, you cannot delete the primary photo.
@@ -69,7 +69,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 			</div>

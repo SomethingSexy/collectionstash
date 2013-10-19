@@ -121,14 +121,14 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Add Existing Collectible Part</h3>
+				<h4 id="myModalLabel">Add Existing Collectible Part</h4>
 			</div>
 			<div class="modal-body">
 		
 			</div>
 		
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 				<button class="btn btn-primary save" autocomplete="off">
@@ -145,14 +145,14 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Add New Collectible Part</h3>
+				<h4 id="myModalLabel">Add New Collectible Part</h4>
 			</div>
 			<div class="modal-body">
 		
 			</div>
 		
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 				<button class="btn btn-primary save" autocomplete="off">
@@ -170,14 +170,14 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
-				<h3 id="myModalLabel">Edit Part</h3>
+				<h4 id="myModalLabel">Edit Part</h4>
 			</div>
 			<div class="modal-body">
 		
 			</div>
 		
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
 					Close
 				</button>
 				<button class="btn btn-primary save" autocomplete="off">

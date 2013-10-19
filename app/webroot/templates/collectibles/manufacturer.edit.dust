@@ -12,26 +12,26 @@
 		{manufacturer.url}
 	</dd>
 </dl>
-<form class="form-horizontal">
+<form class="form-horizontal spacer">
 	<fieldset>
 		<legend>
 			Brands
 		</legend>
-		<div class="control-group">
-			<label class="control-label" for="inputManBrand">Brand</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input id="inputManBrand" type="text" value="" name="brand" maxlength="200" autocomplete="off">
-					<button class="btn manufacturer-brand-add" type="button">
+		<div class="form-group">
+			<label class="control-label col-lg-2 " for="inputManBrand">Brand</label>
+			<div class="input-group col-lg-10">
+				<input id="inputManBrand" class="form-control" type="text" value="" name="brand" maxlength="200" autocomplete="off">
+				<span class="input-group-btn">
+					<button class="btn btn-primary manufacturer-brand-add" type="button">
 						Add
 					</button>
-				</div>
+				</span>
 				<span class="help-block input-man-brand-error"></span>
 			</div>
 		</div>
-		<ul class="manufacturer-brands">
+		<ul class="manufacturer-brands list-group spacer">
 			{#manufacturer.LicensesManufacture}
-			<li>
+			<li class="list-group-item">
 				{License.name}
 			</li>
 			{/manufacturer.LicensesManufacture}

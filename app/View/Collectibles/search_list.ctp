@@ -75,7 +75,7 @@ unset($urlparams['url']);
 						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
 						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
-						echo '<div class="col-md-2"><ul class="thumbnails"><li class="col-md-12">';
+						echo '<div class="col-md-2"><ul class="thumbnails list-unstyled"><li class="col-md-12">';
 
 						if (!empty($collectible['CollectiblesUpload'])) {
 							foreach ($collectible['CollectiblesUpload'] as $key => $upload) {

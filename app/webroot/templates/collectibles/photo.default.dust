@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="row spacer">
 {#uploads uploadDirectory=uploadDirectory}
 	{@ne key="{primary}" value="true" type="boolean"}
 	<div class="col-lg-4">
