@@ -311,7 +311,6 @@ AttributesBase.prototype = {
 	}
 };
 
-
 /**
  *Object for remove attirubte links
  */
@@ -374,74 +373,70 @@ RemoveAttributeLinks.prototype.open = function() {
 RemoveAttributeLinks.prototype.submit = function() {
 	var self = this;
 	var id = this.attribute.getAttributeCollectible().id;
-	if ($('#AttributesCollectibleRemove').is(":checked")) {
-		var url = '/attributes_collectibles/remove.json';
-		// If we are passing in an override admin or the options are set to admin mode
-		if (self.options.adminPage) {
-			url = '/admin/attributes_collectibles/remove.json'
-		}
+	var url = '/attributes_collectibles/remove.json';
+	// If we are passing in an override admin or the options are set to admin mode
+	if (self.options.adminPage) {
+		url = '/admin/attributes_collectibles/remove.json'
+	}
 
-		$('#AttributeCollectibleRemoveForm').ajaxSubmit({
-			// dataType identifies the expected content type of the server response
-			dataType : 'json',
-			url : url,
-			beforeSubmit : function(formData, jqForm, options) {
-				self._clearFormErrors();
-				formData.push({
-					'name' : 'data[AttributesCollectible][id]',
-					'value' : id
+	$('#AttributeCollectibleRemoveForm').ajaxSubmit({
+		// dataType identifies the expected content type of the server response
+		dataType : 'json',
+		url : url,
+		beforeSubmit : function(formData, jqForm, options) {
+			self._clearFormErrors();
+			formData.push({
+				'name' : 'data[AttributesCollectible][id]',
+				'value' : id
+			});
+			formData.push({
+				name : '_method',
+				type : 'text',
+				value : 'POST'
+			});
+		},
+		// success identifies the function to invoke when the server response
+		// has been received
+		success : function(responseText, statusText, xhr, $form) {
+			if (responseText.response.isSuccess) {
+				responseText.response.data.id = id;
+				self.$dialog.modal('hide');
+				var message = 'Removal has been submitted!';
+				if (!responseText.response.data.isEdit) {
+					message = 'Part has been removed!';
+				}
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
 				});
-				formData.push({
-					name : '_method',
-					type : 'text',
-					value : 'POST'
-				});
-			},
-			// success identifies the function to invoke when the server response
-			// has been received
-			success : function(responseText, statusText, xhr, $form) {
-				if (responseText.response.isSuccess) {
-					responseText.response.data.id = id;
-					self.$dialog.modal('hide');
-					var message = 'Removal has been submitted!';
-					if (!responseText.response.data.isEdit) {
-						message = 'Part has been removed!';
-					}
-					$.blockUI({
-						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-						showOverlay : false,
-						css : {
-							top : '100px',
-							'background-color' : '#DDFADE',
-							border : '1px solid #93C49F',
-							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-							'border-radius' : '4px 4px 4px 4px',
-							color : '#333333',
-							'margin-bottom' : '20px',
-							padding : '8px 35px 8px 14px',
-							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-							'z-index' : 999999
-						},
-						timeout : 2000
+				self.options.success(responseText.response.data);
+			} else {
+				if (responseText.response.errors) {
+					$.each(responseText.response.errors, function(index, value) {
+						if (value.inline) {
+							$(':input[name="data[' + value.model + '][' + value.name + ']"]', '#AttributeCollectibleRemoveForm').after('<div class="error-message">' + value.message + '</div>');
+						} else {
+							self.$dialog.find('.component-message.error').children('span').text(value.message);
+						}
+
 					});
-					self.options.success(responseText.response.data);
-				} else {
-					if (responseText.response.errors) {
-						$.each(responseText.response.errors, function(index, value) {
-							if (value.inline) {
-								$(':input[name="data[' + value.model + '][' + value.name + ']"]', '#AttributeCollectibleRemoveForm').after('<div class="error-message">' + value.message + '</div>');
-							} else {
-								self.$dialog.find('.component-message.error').children('span').text(value.message);
-							}
-
-						});
-					}
 				}
 			}
-		});
-	} else {
-		$('#AttributesCollectibleRemove').after('<div class="error-message">Must select remove to submit.</div>');
-	}
+		}
+	});
 };
 
 var UpdateCollectibleAttributes = function(options) {
