@@ -20,40 +20,37 @@
 	</div>
 {/if}	
 
-<form class="form-horizontal">
+<form>
 	{@eq key="{numbered}" value="true" type="boolean"}
-		<div class="control-group {#inlineErrors.edition_size}error{/inlineErrors.edition_size}">
+		<div class="form-group {#inlineErrors.edition_size}has-error{/inlineErrors.edition_size}">
 			<label class="control-label" for="CollectiblesUserEditionSize">Edition Number (Total: {edition_size})</label>
-			<div class="controls">
-				<input type="number" id="CollectiblesUserEditionSize" name="edition_size" value="{model.edition_size}">
+				<input type="number" id="CollectiblesUserEditionSize" class="form-control" name="edition_size" value="{model.edition_size}">
 					{#inlineErrors.edition_size}
 						<span class="help-inline">{.}</span>
 					{/inlineErrors.edition_size}
-			</div>
 		</div>		
 	{/eq}
-	<div class="control-group {#inlineErrors.artist_proof}error{/inlineErrors.artist_proof}">
-		<label class="control-label" for="CollectiblesUserArtistProof">Artist's Proof</label>
-		<div class="controls">
-			<input type="checkbox" id="CollectiblesUserArtistProof" value="1" name="artist_proof" {#model.artist_proof}checked{/model.artist_proof}>
+	<div class="form-group {#inlineErrors.artist_proof}has-error{/inlineErrors.artist_proof}">
+		<div class="checkbox">
+			<label for="CollectiblesUserArtistProof">
+				<input type="checkbox" id="CollectiblesUserArtistProof" value="1" name="artist_proof" {#model.artist_proof}checked{/model.artist_proof}>
+				Artist's Proof</label>
+			
+		</div>
 			{#inlineErrors.artist_proof}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.artist_proof}
-		</div>
 	</div>				
-	<div class="control-group {#inlineErrors.cost}error{/inlineErrors.cost}">
+	<div class="form-group {#inlineErrors.cost}has-error{/inlineErrors.cost}">
 		<label class="control-label" for="dialogCost">How much did you pay? (Retail:${msrp})</label>
-		<div class="controls">
-			<input type="number" maxlength="23" step="any" id="dialogCost" name="cost" value="{model.cost}">
+			<input type="number" maxlength="23" step="any" id="dialogCost" class="form-control" name="cost" value="{model.cost}">
 				{#inlineErrors.cost}
 					<span class="help-inline">{.}</span>
 				{/inlineErrors.cost}
-		</div>
 	</div>					
-	<div class="control-group {#inlineErrors.condition_id}error{/inlineErrors.condition_id}">
+	<div class="form-group {#inlineErrors.condition_id}has-error{/inlineErrors.condition_id}">
 		<label class="control-label" for="CollectiblesUserConditionId">Condition</label>
-		<div class="controls">
-			<select id="CollectiblesUserConditionId" name="condition_id">
+			<select id="CollectiblesUserConditionId" class="form-control" name="condition_id">
 				<option value=""></option>
 				<option value="14">Fair</option>
 				<option value="11">Fine</option>
@@ -74,25 +71,20 @@
 			{#inlineErrors.condition_id}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.condition_id}
-		</div>
 	</div>	
-	<div class="control-group {#inlineErrors.merchant}error{/inlineErrors.merchant}">
+	<div class="form-group {#inlineErrors.merchant}has-error{/inlineErrors.merchant}">
 		<label class="control-label" for="CollectiblesUserMerchantId">Where did you purchase the collectible?</label>
-		<div class="controls">
-			<input type="text" id="CollectiblesUserMerchantId" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
+			<input type="text" id="CollectiblesUserMerchantId" class="form-control" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
 			{#inlineErrors.merchant}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.merchant}
-		</div>
 	</div>			
-	<div class="control-group {#inlineErrors.purchase_date}error{/inlineErrors.purchase_date}">
+	<div class="form-group {#inlineErrors.purchase_date}has-error{/inlineErrors.purchase_date}">
 		<label class="control-label" for="CollectiblesUserPurchaseDate">When did you purchase this collectible?</label>
-		<div class="controls">
-			<input type="text" id="CollectiblesUserPurchaseDate" maxlength="10" name="purchase_date" value="{model.purchase_date}">
+			<input type="text" id="CollectiblesUserPurchaseDate" class="form-control" maxlength="10" name="purchase_date" value="{model.purchase_date}">
 			{#inlineErrors.purchase_date}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.purchase_date}
-		</div>
 	</div>			
 </form>
 </div>
