@@ -1244,12 +1244,12 @@ var ManufacturerSeriesView = Backbone.View.extend({
 			valid : function(view, attr, selector) {
 				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
 				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').removeClass('has-error');
 				// do something
 			},
 			invalid : function(view, attr, error, selector) {
 				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').addClass('has-error');
 				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
 				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
 				// do something
@@ -1399,12 +1399,12 @@ var ManufacturerView = Backbone.View.extend({
 				valid : function(view, attr, selector) {
 					view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
 					view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-					view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+					view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').removeClass('has-error');
 					// do something
 				},
 				invalid : function(view, attr, error, selector) {
 					view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-					view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+					view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').addClass('has-error');
 					view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
 					view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
 					// do something
@@ -1502,7 +1502,7 @@ var ManufacturerView = Backbone.View.extend({
 		var brand = $('#inputManBrand', self.el).val();
 		brand = $.trim(brand);
 		$('.inline-error', self.el).text('');
-		$('.control-group ', self.el).removeClass('error');
+		$('.form-group ', self.el).removeClass('has-error');
 		if (brand !== '') {
 			if (!this.model.get('LicensesManufacture')) {
 				this.model.set({
@@ -1537,7 +1537,6 @@ var ManufacturerView = Backbone.View.extend({
 				this.model.trigger("change:LicensesManufacture");
 			} else {
 				$('.input-man-brand-error', self.el).text('That brand has already been added.');
-				//$('.input-man-brand-error', self.el).closest('control-group').addClass('error');
 			}
 
 		}
@@ -1673,12 +1672,12 @@ var CollectibleView = Backbone.View.extend({
 			valid : function(view, attr, selector) {
 				view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
 				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').removeClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').removeClass('has-error');
 				// do something
 			},
 			invalid : function(view, attr, error, selector) {
 				view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-				view.$('[' + selector + '~="' + attr + '"]').closest('.control-group').addClass('error');
+				view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').addClass('has-error');
 				view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
 				view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
 				// do something
@@ -2224,14 +2223,14 @@ var AddTagView = Backbone.View.extend({
 	},
 	inputChange : function() {
 		$('.inline-error', this.el).text('');
-		$('.control-group ', this.el).removeClass('error');
+		$('.input-group', this.el).removeClass('has-error');
 	},
 	addTag : function() {
 		var self = this;
 		var tag = $('#inputTag', self.el).val();
 		tag = $.trim(tag);
 		$('.inline-error', self.el).text('');
-		$('.control-group ', self.el).removeClass('error');
+		$('.input-group', self.el).removeClass('has-error');
 		if (tag !== '') {
 			this.collection.create({
 				'collectible_id' : collectibleId,
@@ -2269,9 +2268,9 @@ var AddTagView = Backbone.View.extend({
 					});
 				},
 				error : function(model, response) {
-					var responseObj = $.parseJSON(response.responseText)
+					var responseObj = $.parseJSON(response.responseText);
 					if (responseObj.response && responseObj.response.errors) {
-						$('.control-group ', self.el).addClass('error');
+						$('.input-group', self.el).addClass('has-error');
 						$('.inline-error', self.el).text(responseObj.response.errors[0].message[0]);
 					}
 				}
@@ -2399,14 +2398,14 @@ var AddArtistView = Backbone.View.extend({
 	},
 	inputChange : function() {
 		$('.inline-error', this.el).text('');
-		$('.control-group ', this.el).removeClass('error');
+		$('.input-group', this.el).removeClass('has-error');
 	},
 	addArtist : function() {
 		var self = this;
 		var name = $('#inputArtist', self.el).val();
 		name = $.trim(name);
 		$('.inline-error', self.el).text('');
-		$('.control-group ', self.el).removeClass('error');
+		$('.input-group', self.el).removeClass('has-error');
 		if (name !== '') {
 			this.collection.create({
 				'collectible_id' : collectibleId,
@@ -2444,9 +2443,9 @@ var AddArtistView = Backbone.View.extend({
 					});
 				},
 				error : function(model, response) {
-					var responseObj = $.parseJSON(response.responseText)
+					var responseObj = $.parseJSON(response.responseText);
 					if (responseObj.response && responseObj.response.errors) {
-						$('.control-group ', self.el).addClass('error');
+						$('.input-grou', self.el).addClass('has-error');
 						$('.inline-error', self.el).text(responseObj.response.errors[0].message[0]);
 					}
 				}

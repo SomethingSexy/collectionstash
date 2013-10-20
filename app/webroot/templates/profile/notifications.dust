@@ -1,5 +1,5 @@
 <div class="alert alert-success hide"></div>
-<div class="alert alert-error hide"></div>
+<div class="alert alert-danger hide"></div>
 <p>Set your notification settings.
 </p>
 <form id="stash-form" method="post" class="form-horizontal">
