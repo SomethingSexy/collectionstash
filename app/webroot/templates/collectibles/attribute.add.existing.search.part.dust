@@ -3,37 +3,40 @@
 		Search for a collectible that has the part you want to add. Use the search box to narrow your results. Select the collectible to see the list of parts for that collectible to select from.
 	</div>
 	<div id="filters">
-		<div class="btn-group filter" data-type="a">
+		<div class="btn-group filter checkbox-select" data-type="a">
 			<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">Artist<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				{#artists}
 				<li>
+					<label for="">
 					<input  data-filter="{Artist.id}" class="filter-links" type="checkbox" value="{Artist.id}"/>
-					<label for="">{Artist.name}</label>
+					<span>{Artist.name}</span></label>
 				</li>
 				{/artists}
 			</ul>
 		</div>
-		<div class="btn-group filter" data-type="m">
+		<div class="btn-group filter checkbox-select" data-type="m">
 			<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">Manufacturer<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				{#manufacturers}
 				<li>
+					<label for="">
 					<input  data-filter="{id}" class="filter-links" type="checkbox" value="{id}"/>
-					<label for="">{title}</label>
+					<span>{title}</span></label>
 				</li>
 
 				{/manufacturers}
 
 			</ul>
 		</div>
-		<div class="btn-group filter" data-type="c">
+		<div class="btn-group filter checkbox-select" data-type="c">
 			<a href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">Categories<span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				{#categories}
 				<li>
+					<label for="">
 					<input  data-filter="{AttributeCategory.id}" class="filter-links" type="checkbox" value="{AttributeCategory.id}"/>
-					<label for="">{AttributeCategory.path_name}</label>
+					<span>{AttributeCategory.path_name}</span></label>
 				</li>
 
 				{/categories}

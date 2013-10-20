@@ -3,20 +3,14 @@
 <table class="table table-borderless">
 	<tr>
 		<td>
-		<ul class="thumbnails">
 			{#AttributesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<li class="col-md-1">
-				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-			</li>
+			<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 			{/primary}
 			{:else}
-			<li class="col-md-1">
-				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
-			</li>
+			<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
 			{/AttributesUpload}
-
-		</ul></td>
+		</td>
 		<td>{path_name}</td>
 		<td>{name}</td>
 		<td>{description}</td>
@@ -33,36 +27,30 @@
 <div class="attribute-form">
 	<form id="AttributesCollectibleAddForm" accept-charset="utf-8" method="post" data-form-model="AttributesCollectible" action="/collectibles/edit/676?url=collectibles%2Fedit%2F676">
 		<fieldset>
-			<div class="control-group">
-				<div class="controls">
-					<div class="btn-group">
-						<button id="select-attribute-link" class="btn submit" type="button">
-							Find By Collectible
-						</button>
-						<button id="select-attribute-link-by-part" class="btn delete" type="button">
-							Find By Part
-						</button>
-					</div>
-					<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
+			<div class="form-group">
+				<div class="btn-group">
+					<button id="select-attribute-link" class="btn btn-default submit" type="button">
+						Find By Collectible
+					</button>
+					<button id="select-attribute-link-by-part" class="btn btn-default delete" type="button">
+						Find By Part
+					</button>
 				</div>
+				<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
 			</div>
 			{@if cond=" '{collectible.custom}'"}
-				<div class="control-group">
+				<div class="form-group">
 					<label class="control-label" for="AttributesCollectibleAttributeCollectibleTypeId">Status</label>
-					<div class="controls">
-						<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
-							<option value="1">Owned</option>
-							<option value="2">Wanted</option>
-							<option value="3">Preordered</option>
-						</select>
-					</div>
-				</div>				
+					<select id="AttributesCollectibleAttributeCollectibleTypeId" class="form-control" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
+						<option value="1">Owned</option>
+						<option value="2">Wanted</option>
+						<option value="3">Preordered</option>
+					</select>
+				</div>		
 			{/if}
-			<div class="control-group">
+			<div class="form-group">
 				<label class="control-label" for="inputManUrl">Count</label>
-				<div class="controls">
-					<input id="AttributesCollectibleCount" type="number" required="required" name="data[AttributesCollectible][count]">
-				</div>
+				<input id="AttributesCollectibleCount" class="form-control" type="number" required="required" name="data[AttributesCollectible][count]">
 			</div>
 		</fieldset>
 	</form>

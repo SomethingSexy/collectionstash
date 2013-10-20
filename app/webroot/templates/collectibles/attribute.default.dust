@@ -1,7 +1,7 @@
 <td>
 {#AttributesUpload uploadDirectory=uploadDirectory}
 	{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-		<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
+		<a class="thumbnail col-md-6" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a></li>
 	{/primary}
 	{:else}
 	<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
