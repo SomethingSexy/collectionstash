@@ -48,10 +48,6 @@
 .tab-content {
 	overflow: hidden;
 }
-
-.radio, .checkbox {
-	padding-left: 0;
-}
 .spacer {
 	margin-top: 20px;
 }
