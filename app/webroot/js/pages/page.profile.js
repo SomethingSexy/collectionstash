@@ -25,7 +25,7 @@ var stashAccount = function() {
 			if (data.isTimeOut) {
 				window.location = "/users/login";
 			} else {
-				$('.alert-error', '#privacy').show().html('<p>There was a problem updating your privacy settings.</p>');
+				$('.alert-danger', '#privacy').show().html('<p>There was a problem updating your privacy settings.</p>');
 			}
 		}
 	}

@@ -20,7 +20,7 @@
 			<div class="tab-content">
 				<div id="privacy" class="tab-pane active">
 					<div class="alert alert-success hide"></div>	
-					<div class="alert alert-error hide"></div>		
+					<div class="alert alert-danger hide"></div>		
 					<p><?php echo __('Select your privacy settings below.') ?></p>
 					<form id="stash-form" method="post" class="form-horizontal">
 						<fieldset>

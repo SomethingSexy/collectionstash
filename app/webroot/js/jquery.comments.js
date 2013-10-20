@@ -256,7 +256,7 @@
 				commentPost += '<form class="form-horizontal" id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
 				commentPost += '<div style="display:none;"><input type="hidden" value="POST" name="_method"></div>';
 				commentPost += '<fieldset>';
-				commentPost += '<div class="control-group"><label class="control-label" for="CommentComment">Comment</label><div class="controls"><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></div>';
+				commentPost += '<div class="form-group"><label class="control-label" for="CommentComment">Comment</label><div class="controls"><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></div>';
 				commentPost += '</fieldset>'
 				commentPost += '<div class="form-actions"></div>'
 				commentPost += '</form>';

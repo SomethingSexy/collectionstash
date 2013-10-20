@@ -1,4 +1,4 @@
-<div class="alert {@eq key="{hasErrors}" value="true" type="boolean"}alert-error{/eq}">
+<div class="alert {@eq key="{hasErrors}" value="true" type="boolean"}alert-danger{/eq}">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<h4>Oops! Something wasn't filled out correctly.</h4>
 	{@eq key="{hasErrors}" value="true" type="boolean"}
