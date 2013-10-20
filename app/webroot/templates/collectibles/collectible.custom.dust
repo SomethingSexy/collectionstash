@@ -6,10 +6,10 @@
 		<legend>
 			Custom Details
 		</legend>
-		<div class="control-group">
-			<label class="control-label" for="inputMsrp">Status</label>
-			<div class="controls controls-row">
-				<select id="CollectibleCurrencyId" name="custom_status_id">
+		<div class="form-group">
+			<label class="control-label col-lg-3" for="inputMsrp">Status</label>
+			<div class="col-lg-6">
+				<select id="CollectibleCurrencyId" name="custom_status_id" class="form-control">
 					{#customStatuses customStatusId=collectible.custom_status_id}
 					<option {@eq key="{CustomStatus.id}" value="{customStatusId}"}selected{/eq}  value="{CustomStatus.id}">{CustomStatus.status}</option>
 					{/customStatuses}
@@ -46,33 +46,35 @@
 		</div>
 		{/eq}
 		{#manufacturer seriesId=collectible.series_id seriesName=collectible.series_name licenseId=collectible.license_id seriesPath=collectible.seriesPath brands=brands renderBrandList=renderBrandList}
-		<div class="control-group">
-			<label class="control-label" for="inputBrand">Brand</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<select id="inputBrand" name="license_id">
+		<div class="form-group">
+			<label class="control-label col-lg-3" for="inputBrand">Brand</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<select id="inputBrand" name="license_id" class="form-control">
 						<option value=""></option>
 						{#LicensesManufacture}
 						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
 						{/LicensesManufacture}
 					</select>
-					<button class="btn manufacturer-add-brand" type="button">Add</button>
+					<span class="input-group-btn">
+						<button class="btn btn-default manufacturer-add-brand" type="button">Add</button>
+					</span>
 				</div>
 			</div>
 		</div>
 		{#series_id seriesId=seriesId seriesPath=seriesPath}
-		<div class="control-group">
-			<label class="control-label" for="inputName">Category</label>
-			<div class="controls">
+		<div class="form-group">
+			<label class="control-label col-lg-3" for="inputName">Category</label>
+			<div class="col-lg-6">
 				<div class="btn-group">
-					<button id="buttonSeries" type="button" class="btn">
+					<button id="buttonSeries" type="button" class="btn btn-default">
 						{@if cond="('{seriesPath}' !== '')"}
 							{seriesPath}
 							{:else}
 							Select
 						{/if}
 					</button>
-					<button type="button" class="btn manufacturer-add-category">Edit Categories</button>
+					<button type="button" class="btn btn-default manufacturer-add-category">Edit Categories</button>
 				</div>
 				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
 			</div>
@@ -80,10 +82,10 @@
 		{/series_id}
 		{:else}
 			{@eq key="{renderBrandList}" value="true" type="boolean"}
-			<div class="control-group">
-				<label class="control-label" for="inputBrand">Brand</label>
-				<div class="controls">
-					<select id="inputBrand" name="license_id">
+			<div class="form-group">
+				<label class="control-label col-lg-3" for="inputBrand">Brand</label>
+				<div class="col-lg-6">
+					<select id="inputBrand" name="license_id" class="form-control">
 						<option value=""></option>
 						{#brands}
 						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
@@ -95,27 +97,26 @@
 			{/eq}
 		{/manufacturer}
 
-		<div class="control-group">
-			<label class="control-label" for="inputName">Name</label>
-			<div class="controls">
-				<input type="text" id="inputName" name="name" value="{collectible.name|s}">
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputName">Name</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputName" class="form-control" name="name" value="{collectible.name|s}">
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputDescription">Description</label>
-			<div class="controls">
-				<textarea id="inputDescription" rows="6" name="description">{collectible.description|s}</textarea>
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputDescription">Description</label>
+			<div class="col-lg-6">
+				<textarea id="inputDescription" rows="6" class="form-control" name="description">{collectible.description|s}</textarea>
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label" for="inputMsrp">Cost</label>
-			<div class="controls controls-row">
-				<div class="input-prepend">
-					<span class="add-on">$</span>
-					<input type="text" id="inputMsrp" name="msrp" value="{collectible.msrp}">
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputMsrp">Cost</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<span class="input-group-addon">$</span>
+					<input type="text" id="inputMsrp" class="form-control" name="msrp" value="{collectible.msrp}">
 				</div>
-
 			</div>
 		</div>
 
@@ -130,10 +131,10 @@
 			</div>
 		</div>-->
 
-		<div class="control-group">
-			<label class="control-label" for="inputMsrp">Year Made</label>
-			<div class="controls controls-row">
-				<select name="release">
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputMsrp">Year Made</label>
+			<div class="col-lg-6">
+				<select name="release"  class="form-control">
 					<option value=""></option>
 					{#years year=collectible.release}
 					<option {@eq key="{.}" value="{year}"}selected{/eq} value="{.}">{.}</option>
@@ -146,10 +147,10 @@
 		<legend>
 			Collectible Specs
 		</legend>
-		<div class="control-group">
-			<label class="control-label" for="inputMsrp">Scale</label>
-			<div class="controls controls-row">
-				<select name="scale_id">
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputMsrp">Scale</label>
+			<div class="col-lg-6">
+				<select name="scale_id" class="form-control">
 					<option value=""></option>
 					{#scales scale=collectible.scale_id}
 					<option {@eq key="{Scale.id}" value="{scale}"}selected{/eq} value="{Scale.id}">{Scale.scale}</option>
@@ -157,47 +158,47 @@
 				</select>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputUpc">Number of Pieces</label>
-			<div class="controls">
-				<input type="number" id="inputPieces" name="pieces" value="{collectible.pieces}">
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputUpc">Number of Pieces</label>
+			<div class="col-lg-6">
+				<input type="number" id="inputPieces" class="form-control" name="pieces" value="{collectible.pieces}">
 				<span class="help-inline">This is the number of parts and pieces this collectible has.</span>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputWeight">Weight</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputWeight" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
-					<span class="add-on">lbs</span>
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputWeight">Weight</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputWeight" class="form-control" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
+					<span class="input-group-addon">lbs</span>
 				</div>
 
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputWeight">Length</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputLength" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
-					<span class="add-on">inches</span>
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputWeight">Length</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputLength" class="form-control" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputWeight">Width</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputWidth" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
-					<span class="add-on">inches</span>
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputWeight">Width</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputWidth" class="form-control" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="inputWeight">Depth</label>
-			<div class="controls controls-row">
-				<div class="input-append">
-					<input type="number" id="inputDepth" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
-					<span class="add-on">inches</span>
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputWeight">Depth</label>
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="number" id="inputDepth" class="form-control" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
+					<span class="input-group-addon">inches</span>
 				</div>
 			</div>
 		</div>
@@ -206,17 +207,19 @@
 		<legend>
 			Reference
 		</legend>
-		<div class="control-group">
-			<label class="control-label" for="inputUpc">URL</label>
-			<div class="controls">
-				<input type="text" id="inputURL" name="url" value="{collectible.url|s}">			
+		<div class="form-group">
+			<label class="col-lg-3 control-label" for="inputUpc">URL</label>
+			<div class="col-lg-6">
+				<input type="text" id="inputURL" class="form-control" name="url" value="{collectible.url|s}">			
 			</div>
 		</div>
 	</fieldset>
-	<div class="form-actions">
-		<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
-			Save changes
-		</button>
+	<div class="form-group">
+		<div class="col-lg-offset-3 col-lg-9">
+			<button type="submit" class="btn btn-primary save" data-loading-text="Loading...">
+				Save changes
+			</button>
+		</div>
 	</div>
 </form>
 </div>
