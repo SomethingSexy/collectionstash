@@ -2917,7 +2917,7 @@ var AttributeSearchCollectibleAttrView = Backbone.View.extend({
 		var row = '<td colspan="4">';
 
 		if ($.isArray(collectible.AttributesCollectible) && collectible.AttributesCollectible.length > 0) {
-			row += '<ul class="unstyled">';
+			row += '<ul class="list-unstyled">';
 
 			$.each(collectible.AttributesCollectible, function(index, attribute) {
 				// If there is no category then don't show it, I think this is a problem
@@ -3019,17 +3019,17 @@ var AttributeSearchCollectibleView = Backbone.View.extend({
 
 		row += '</td>';
 
-		row += '<td><ul class="thumbnails">';
+		row += '<td>';
 		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
 			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
 				if (collectibleUpload.primary) {
-					row += '<li class="col-md-1"><a class="thumbnail" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a></li>';
+					row += '<a class="thumbnail col-md-6" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
 				}
 			});
 		} else {
-			row += '<li class="col-md-1"><a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a></li>';
+			row += '<a class="thumbnail col-md-6" href="#"><img src="/img/no-photo.png" alt=""></a>';
 		}
-		row += '</ul></td>';
+		row += '</td>';
 
 		row += '<td>' + collectible.Collectibletype.name + '</td>';
 		row += '<td>' + collectible.Manufacture.title + '</td>';

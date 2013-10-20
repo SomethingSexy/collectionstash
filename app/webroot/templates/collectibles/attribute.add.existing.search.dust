@@ -2,12 +2,14 @@
 	<div class="directional-text">
 		Search for a collectible that has the part you want to select. Use the search box to narrow your results.  If a collectible has parts, they will be listed below the collectible detail.
 	</div>
-	<form class="form-search">
-		<div class="input-append">
-			<input type="text" name="q" class="col-md-2 search-query">
-			<button type="submit" class="btn search">
-				Search
-			</button>
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" name="q" class="search-query form-control">
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-primary search">
+					Search
+				</button>
+			</span>
 		</div>
 	</form>
 	<div class="items">

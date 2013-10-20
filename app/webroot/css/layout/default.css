@@ -119,6 +119,9 @@
 #create-container .thumbnail {
 	height: 550px;
 }
+#filters .filter {
+	margin-right: 5px;
+}
 
 #filters .filter ul li {
 	padding: 5px;
