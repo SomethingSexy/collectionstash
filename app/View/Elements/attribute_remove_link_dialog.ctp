@@ -18,24 +18,10 @@
 		
 				<?php echo $this -> Form -> create('AttributesCollectible', array('data-form-model' => 'Attribute', 'id' => 'AttributeCollectibleRemoveForm')); ?>
 				<fieldset>
-					<ul class="form-fields unstyled">
-						<li>
-							<div class="input text required">
-								<div class="label-wrapper">
-									<label for="AttributeReason"><?php echo __('Reason'); ?></label>
-								</div>
-								<?php echo $this -> Form -> textarea('reason', array()); ?>
-							</div>
-						</li>
-						<li>
-							<div class="input">
-								<div class="label-wrapper">
-									<label for="CollectibleLimited"><?php echo __('Remove?'); ?></label>
-								</div>
-								<?php echo $this -> Form -> checkbox('remove', array('label' => false, 'div' => false)); ?>
-							</div>
-						</li>
-					</ul>
+					<div class="form-group">
+						<label for="AttributeReason"><?php echo __('Reason'); ?></label>
+						<textarea name="data[AttributesCollectible][reason]" id="AttributesCollectibleReason" class="form-control"></textarea>
+					</div>
 				</fieldset>
 				<?php echo $this -> Form -> end(); ?>
 			</div>
