@@ -27,68 +27,56 @@
 			<input type="hidden" data-type="Attribute" data-name="type" name="data[Attribute][type]" value="{Attribute.type}">
 		{/if}
 		
-		<div class="control-group">
-			<div class="controls">
-				<div class="btn-group">
-					<button  class="btn submit select-category" type="button">
-						{#Attribute.attribute_category_id path=Attribute.AttributeCategory.path_name}
-						{path}
-						{:else}
-						Category
-						{/Attribute.attribute_category_id}
-					</button>
-				</div>
-				<input type="hidden" id="AttributeAttributeCategoryId" data-type="Attribute" data-name="attribute_category_id" name="data[Attribute][attribute_category_id]" value="{Attribute.attribute_category_id}">
+		<div class="form-group">
+			<div class="btn-group">
+				<button  class="btn btn-default submit select-category" type="button">
+					{#Attribute.attribute_category_id path=Attribute.AttributeCategory.path_name}
+					{path}
+					{:else}
+					Category
+					{/Attribute.attribute_category_id}
+				</button>
 			</div>
+			<input type="hidden" id="AttributeAttributeCategoryId" data-type="Attribute" data-name="attribute_category_id" name="data[Attribute][attribute_category_id]" value="{Attribute.attribute_category_id}">
 		</div>
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributeName">Name</label>
-			<div class="controls">
-				<input type="text" required="required" id="AttributeName" maxlength="200" data-type="Attribute" data-name="name" name="data[Attribute][name]" value="{Attribute.name}">
-			</div>
+			<input type="text" required="required" id="AttributeName" class="form-control" maxlength="200" data-type="Attribute" data-name="name" name="data[Attribute][name]" value="{Attribute.name}">
 		</div>
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributeDescription">Description</label>
-			<div class="controls">
-				<textarea required="required" id="AttributeDescription" rows="6" cols="30" data-type="Attribute" data-name="description" name="data[Attribute][description]">{Attribute.description}</textarea>
-			</div>
+			<textarea required="required" id="AttributeDescription" class="form-control" rows="6" cols="30" data-type="Attribute" data-name="description" name="data[Attribute][description]">{Attribute.description}</textarea>
 		</div>
 		{@if cond=" '{Attribute.type}' === 'mass' ||  '{Attribute.type}' === 'original' "}
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributeManufactureId">Manufacturer</label>
-			<div class="controls">
-				<select id="AttributeManufactureId" data-type="Attribute" data-name="manufacture_id" name="data[Attribute][manufacture_id]">
-					<option value=""></option>
-					{#manufacturers manufactureId=Attribute.manufacture_id}
-					<option value="{id}" {@eq key="{id}" value="{manufactureId}"}selected{/eq}>{title}</option>
-					{/manufacturers}
-				</select>
-			</div>
+			<select id="AttributeManufactureId" class="form-control" data-type="Attribute" data-name="manufacture_id" name="data[Attribute][manufacture_id]">
+				<option value=""></option>
+				{#manufacturers manufactureId=Attribute.manufacture_id}
+				<option value="{id}" {@eq key="{id}" value="{manufactureId}"}selected{/eq}>{title}</option>
+				{/manufacturers}
+			</select>
 		</div>
 
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributeArtistId">Artist</label>
-			<div class="controls">
-				<select id="AttributeArtistId" data-type="Attribute" data-name="artist_id" name="data[Attribute][artist_id]">
-					<option value=""></option>
-					{#artists artistId=Attribute.artist_id}
-					<option value="{Artist.id}" {@eq key="{Artist.id}" value="{artistId}"}selected{/eq}>{Artist.name}</option>
-					{/artists}
-				</select>
-			</div>
+			<select id="AttributeArtistId" class="form-control" data-type="Attribute" data-name="artist_id" name="data[Attribute][artist_id]">
+				<option value=""></option>
+				{#artists artistId=Attribute.artist_id}
+				<option value="{Artist.id}" {@eq key="{Artist.id}" value="{artistId}"}selected{/eq}>{Artist.name}</option>
+				{/artists}
+			</select>
 		</div>
 		{/if}
 
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributeArtistId">Scale</label>
-			<div class="controls">
-				<select id="AttributeScaleId" data-type="Attribute" data-name="scale_id" name="data[Attribute][scale_id]">
-					<option value=""></option>
-					{#scales scaleId=Attribute.scale_id}
-					<option value="{Scale.id}" {@eq key="{Scale.id}" value="{scaleId}"}selected{/eq}>{Scale.scale}</option>
-					{/scales}
-				</select>
-			</div>
+			<select id="AttributeScaleId" class="form-control" data-type="Attribute" data-name="scale_id" name="data[Attribute][scale_id]">
+				<option value=""></option>
+				{#scales scaleId=Attribute.scale_id}
+				<option value="{Scale.id}" {@eq key="{Scale.id}" value="{scaleId}"}selected{/eq}>{Scale.scale}</option>
+				{/scales}
+			</select>
 		</div>
 
 	</fieldset>
@@ -97,11 +85,9 @@
 		<legend>
 			Collectible Part Details
 		</legend>
-		<div class="control-group">
+		<div class="form-group">
 			<label class="control-label" for="AttributesCollectibleCount">Count</label>
-			<div class="controls">
-				<input type="number" name="data[AttributesCollectible][count]" data-name="count" id="AttributesCollectibleCount" value="{count}">
-			</div>
+			<input type="number" name="data[AttributesCollectible][count]" data-name="count" id="AttributesCollectibleCount" class="form-control" value="{count}"/>
 		</div>
 	</fieldset>	
 	{/showCount}

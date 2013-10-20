@@ -983,7 +983,7 @@ a.forgot-password {
 	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-	height: 450px;
+	/*height: 450px;*/
 	margin: 15px auto 30px;
 	padding: 20px 15px 15px;
 	width: 850px;
@@ -1138,6 +1138,10 @@ a.forgot-password {
 	letter-spacing: -2px;
 	color: #444;
 }
+
+.attributes.collectible .row.details {
+	margin-top: 10px;
+}
 /**
  * 	Fix twitter typeahead and bootstrap
  */
@@ -1216,7 +1220,7 @@ a.forgot-password {
 
 .tt-suggestion p {
     margin: 0;
-
+}
 
 /**
  * 	responsive

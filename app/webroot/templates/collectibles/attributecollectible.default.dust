@@ -38,22 +38,15 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row details">
 		<div class="col-md-1">
-			<ul class="thumbnails">
-				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
-				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="col-md-12">
-					<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-				</li>
-				{/primary}
-				{:else}
-				<li class="col-md-12">
-					<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
-				</li>
-				{/Attribute.AttributesUpload}
-
-			</ul>
+			{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
+			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
+				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+			{/primary}
+			{:else}
+				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
+			{/Attribute.AttributesUpload}
 		</div>
 		<div class="col-md-9">
 			<div class="row">
@@ -76,27 +69,27 @@
 					{@if cond="('{Attribute.type}' == 'mass' || '{Attribute.type}' == 'original' )"}
 					{@if cond=" '{Attribute.manufacture_id}' || '{Attribute.artist_id}' "}
 					{@if cond=" '{Attribute.manufacture_id}'"}
-					<span class="label">{Attribute.Manufacture.title}</span>
+					<span class="label label-default">{Attribute.Manufacture.title}</span>
 					{/if}
 					{@if cond=" '{Attribute.artist_id}'"}
-					<span class="label">{Attribute.Artist.name}</span>
+					<span class="label label-default">{Attribute.Artist.name}</span>
 					{/if}
 					{:else}
-					<span class="label">Unknown</span>
+					<span class="label label-default">Unknown</span>
 					{/if}
 					{/if}
 					{@if cond="('{Attribute.type}' == 'custom')" }
-					<span class="label">{Attribute.User.username}</span>
+					<span class="label label-default">{Attribute.User.username}</span>
 					{/if}
 					{@if cond="('{Attribute.type}' == 'generic')" }
-					<span class="label">Generic</span>
+					<span class="label label-default">Generic</span>
 					{/if}
 				</div>
 			</div>
 		</div>
 		<div class="col-md-2">
 			<div class="btn-group actions pull-right">
-				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
+				<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
 					<li>
 						<a class="link edit-attribute-collectible-link" title='Edit Collectible Part'>Edit Collectible Part</a>

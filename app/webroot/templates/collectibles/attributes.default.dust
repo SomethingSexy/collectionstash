@@ -1,8 +1,8 @@
-<div class="well attributes collectible" data-collectible-id="{collectibleId}">
+<div class="attributes collectible" data-collectible-id="{collectibleId}">
 	<h3>Parts and Accessories</h3>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="btn-group pull-right">
+			<div class="btn-group">
 				<a class="btn btn-default  dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
 					<li>

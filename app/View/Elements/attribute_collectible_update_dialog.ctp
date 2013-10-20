@@ -13,27 +13,24 @@
 				</div>
 				<?php echo $this -> Form -> create('AttributesCollectible', array('data-form-model' => 'AttributesCollectible', 'id' => 'AttributesCollectibleUpdateForm')); ?>
 				<fieldset>
-					<ul class="form-fields unstyled">
-						<?php 
-							if($collectible['Collectible']['custom']) {
-						?>
-						<li>
-							<div class="select">
-								<div class="label-wrapper ">
-									<label for="AttributesCollectibleCount">Status</label>
-								</div>
-								<select id="AttributesCollectibleAttributeCollectibleTypeId" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
-									<option value="1">Owned</option>
-									<option value="2">Wanted</option>
-									<option value="3">Preordered</option>
-								</select>
+					<?php 
+						if($collectible['Collectible']['custom']) {
+					?>
+						<div class="select">
+							<div class="label-wrapper ">
+								<label for="AttributesCollectibleCount">Status</label>
 							</div>
-						</li>
-						<?php } ?>
-						<li>
-							<?php echo $this -> Form -> input('count', array('label' => __('Count'), 'before' => '<div class="label-wrapper required">', 'between' => '</div>')); ?>
-						</li>
-					</ul>
+							<select id="AttributesCollectibleAttributeCollectibleTypeId" class="form-control" data-type="AttributesCollectible" data-name="attribute_collectible_type_id" name="data[AttributesCollectible][attribute_collectible_type_id]">
+								<option value="1">Owned</option>
+								<option value="2">Wanted</option>
+								<option value="3">Preordered</option>
+							</select>
+						</div>
+					<?php } ?>
+					<div class="form-group">
+						<label class="control-label" for="AttributesCollectibleCount">Description</label>
+						<input name="data[AttributesCollectible][count]" type="number" id="AttributesCollectibleCount" class="form-control" required="required">
+					</div>
 				</fieldset>
 				<?php echo $this -> Form -> end(); ?>
 			</div>
