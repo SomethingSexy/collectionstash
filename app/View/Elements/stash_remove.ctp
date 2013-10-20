@@ -30,28 +30,25 @@
 </div>
 {/if}
 
-<form class="form-horizontal">
-	<div class="control-group {#inlineErrors.collectible_user_remove_reason_id}error{/inlineErrors.collectible_user_remove_reason_id}">
+<form>
+	<div class="form-group {#inlineErrors.collectible_user_remove_reason_id}has-error{/inlineErrors.collectible_user_remove_reason_id}">
 		<label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
-		<div class="controls">
-			
-			{@ne key="{model.active}" value="true" type="boolean"}
+		{@ne key="{model.active}" value="true" type="boolean"}
+			{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
+				 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input">{CollectibleUserRemoveReason.reason}</span>{/eq}
+			{/reasons}
+		{:else}
+			<select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
+				<option value=""></option>
 				{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
-					 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input">{CollectibleUserRemoveReason.reason}</span>{/eq}
+				<option {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}selected{/eq} value="{CollectibleUserRemoveReason.id}">{CollectibleUserRemoveReason.reason}</option>
 				{/reasons}
-			{:else}
-				<select required id="CollectiblesUserRemoveReason" name="collectible_user_remove_reason_id" >
-					<option value=""></option>
-					{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
-					<option {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}selected{/eq} value="{CollectibleUserRemoveReason.id}">{CollectibleUserRemoveReason.reason}</option>
-					{/reasons}
-				</select>
-				<span class="help-inline">This is the reason why you are removing this collectible.</span>
-				{#inlineErrors.collectible_user_remove_reason_id}
-				<span class="help-inline">{.}</span>
-				{/inlineErrors.collectible_user_remove_reason_id}			
-			{/ne}
-		</div>
+			</select>
+			<span class="help-inline">This is the reason why you are removing this collectible.</span>
+			{#inlineErrors.collectible_user_remove_reason_id}
+			<span class="help-inline">{.}</span>
+			{/inlineErrors.collectible_user_remove_reason_id}			
+		{/ne}
 	</div>
 	{@if cond=" ( '{model.collectible_user_remove_reason_id}' == 1 ||  '{model.collectible_user_remove_reason_id}' == 2 )" }
 		{@eq key="{model.collectible_user_remove_reason_id}" value="1"}
@@ -65,41 +62,33 @@
 		{/eq}
 
 	{@eq key="{model.collectible_user_remove_reason_id}" value="1"}
-	<div class="control-group {#inlineErrors.sold_cost}error{/inlineErrors.sold_cost}">
+	<div class="form-group {#inlineErrors.sold_cost}has-error{/inlineErrors.sold_cost}">
 		<label class="control-label" for="CollectiblesUserRemoveCost">How much did you sell it for?</label>
-		<div class="controls">
-			{@ne key="{model.active}" value="true" type="boolean"}
-				<span class="input-xlarge uneditable-input">{model.sold_cost}</span>			
-			{:else}
-				<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" name="sold_cost" value="{model.sold_cost}" >
-				{#inlineErrors.sold_cost}
-				<span class="help-inline">{.}</span>
-				{/inlineErrors.sold_cost}			
-			{/ne}
-			
-
-		</div>
+		{@ne key="{model.active}" value="true" type="boolean"}
+			<span class="input-xlarge uneditable-input">{model.sold_cost}</span>			
+		{:else}
+			<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{model.sold_cost}" >
+			{#inlineErrors.sold_cost}
+			<span class="help-inline">{.}</span>
+			{/inlineErrors.sold_cost}			
+		{/ne}
 	</div>
 	{/eq}
 
-	<div class="control-group {#inlineErrors.remove_date}error{/inlineErrors.remove_date}">
+	<div class="form-group {#inlineErrors.remove_date}has-error{/inlineErrors.remove_date}">
 		<label class="control-label" for="CollectiblesUserRemoveDate"> {@eq key="{model.collectible_user_remove_reason_id}" value="1"}
-			When did you sell this collectible?
-			{:else}
-			When did you trade this collectible?
-			{/eq} </label>
-		<div class="controls">
-			
-			{@ne key="{model.active}" value="true" type="boolean"}
-				<span class="input-xlarge uneditable-input">{model.remove_date}</span>	
-			{:else}
-				<input required type="text" id="CollectiblesUserRemoveDate" maxlength="10" name="remove_date" value="{model.remove_date}" >
-				{#inlineErrors.remove_date}
-				<span class="help-inline">{.}</span>
-				{/inlineErrors.remove_date}				
-			{/ne}
-			
-
+		When did you sell this collectible?
+		{:else}
+		When did you trade this collectible?
+		{/eq} </label>
+		{@ne key="{model.active}" value="true" type="boolean"}
+			<span class="input-xlarge uneditable-input">{model.remove_date}</span>	
+		{:else}
+			<input required type="text" id="CollectiblesUserRemoveDate" class="form-control" maxlength="10" name="remove_date" value="{model.remove_date}" >
+			{#inlineErrors.remove_date}
+			<span class="help-inline">{.}</span>
+			{/inlineErrors.remove_date}				
+		{/ne}
 		</div>
 	</div>
 	{/if}
