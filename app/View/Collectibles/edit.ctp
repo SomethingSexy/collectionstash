@@ -108,7 +108,7 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	</div>
 </div>
 
-<div id="attributes-container" class="row"></div>
+<div id="attributes-container" class="row well"></div>
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
