@@ -2928,7 +2928,7 @@ var AttributeSearchCollectibleAttrView = Backbone.View.extend({
 						name = attribute.Attribute.description;
 					}
 					row += '<li class="attribute" data-id="attribute.Attribute.id" data-attribute=\'' + JSON.stringify(attribute.Attribute) + '\'>';
-					row += '<table>';
+					row += '<table style="table-layout:fixed">';
 					var attribute = attribute;
 					attribute.AttributesUpload = attribute.Attribute.AttributesUpload;
 					attribute.uploadDirectory = uploadDirectory;
@@ -3022,11 +3022,11 @@ var AttributeSearchCollectibleView = Backbone.View.extend({
 		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
 			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
 				if (collectibleUpload.primary) {
-					row += '<a class="thumbnail col-md-6" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
+					row += '<a class="thumbnail col-md-12"" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
 				}
 			});
 		} else {
-			row += '<a class="thumbnail col-md-6" href="#"><img src="/img/no-photo.png" alt=""></a>';
+			row += '<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>';
 		}
 		row += '</td>';
 

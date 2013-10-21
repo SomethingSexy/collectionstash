@@ -6,7 +6,7 @@ if (!isset($history)) {
 	$history = false;
 }
 
-echo '<table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery"';
+echo '<div class="table-responsive"><table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery" style="table-layout:fixed"';
 
 if ($history) {
 	echo 'data-history="true"';
@@ -51,12 +51,12 @@ foreach ($collectibles as $key => $myCollectible) {
 	}
 
 	if ($showThumbnail) {
-		echo '<td><ul class="thumbnails"><li class="col-md-1">';
+		echo '<td>';
 
 		if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 			foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 				if ($upload['primary']) {
-					echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $myCollectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
+					echo '<a class="thumbnail col-md-6" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $myCollectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
 					break;
 				}
 			}
@@ -65,7 +65,7 @@ foreach ($collectibles as $key => $myCollectible) {
 			echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
 		}
 
-		echo '</li></ul></td>';
+		echo '</td>';
 	}
 	echo '<td>' . $myCollectible['Collectible']['name'] . '</td>';
 	if (!empty($myCollectible['Collectible']['Manufacture']['title'])) {
@@ -142,7 +142,7 @@ foreach ($collectibles as $key => $myCollectible) {
 
 	echo '</tr>';
 }
-echo '</table>';
+echo '</table></div>';
 
 echo '<div class="pagination-container">';
 echo '<p>';

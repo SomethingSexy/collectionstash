@@ -73,8 +73,7 @@
 	 					?>
 				    </div>
 				</div>
-		</div>
-		<?php
+						<?php
 		if (isset($collectibles) && !empty($collectibles)) {
 			echo $this -> element('stash_table_list', array('collectibles' => $collectibles));
 		} else {
@@ -85,6 +84,8 @@
 			}
 		}
 		?>
+		</div>
+
 	</div>
 </div>
 <?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
