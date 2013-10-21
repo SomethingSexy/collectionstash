@@ -272,6 +272,8 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 							    <?php } ?>					 	
 							</div>							
 						<?php } ?>
+				</div>
+				</div>
 
 			</div>
 		</div>

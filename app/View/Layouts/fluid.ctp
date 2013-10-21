@@ -108,7 +108,7 @@
 					if (isset($isLoggedIn) && $isLoggedIn === true) {
 						echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"> ' . __('Welcome, ') . $username . '</a>';
 					} else {
-						echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>'; 
+						echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>';
 					}
 					?>
 				</div>
@@ -158,13 +158,13 @@
 					<ul class="nav navbar-nav navbar-right">
 							<li>
 							<?php
-								$homeLinkLabel = '<i class="icon-home"></i>';
-								$homeLinkClass = '';
-								if ($notificationsCount !== 0) {
-									$homeLinkLabel .= ' ' . $notificationsCount;
-									$homeLinkClass = 'warning';
-								} 
-								echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+							$homeLinkLabel = '<i class="icon-home"></i>';
+							$homeLinkClass = '';
+							if ($notificationsCount !== 0) {
+								$homeLinkLabel .= ' ' . $notificationsCount;
+								$homeLinkClass = 'warning';
+							}
+							echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
 							?>
 							</li>
 							<?php
@@ -189,8 +189,8 @@
 							<?php } ?>
 	
 							<?php  }
-	else
-	{
+		else
+		{
 								?>
 							<li>
 								<a href="/users/login"><?php echo __('Login'); ?></a>
@@ -206,11 +206,9 @@
 					</ul>
 			    </nav>
 		</header>
-		<div class="col-lg-12">
-			<div class="row">
-				<?php echo $content_for_layout; ?>
-			</div>	
-		</div>
+		<div class="row">
+			<?php echo $content_for_layout; ?>
+		</div>	
 	</div>
 	<footer>
 		<div id="footer">
@@ -245,6 +243,7 @@
 			</div>
 		</div>		
 	</footer>
+
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
 	</script>
@@ -293,10 +292,10 @@
 	    </div>
 	</div>
 		<?php
-	echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');
-	echo $this -> Minify -> script('js/thirdparty/jquery.blueimp-gallery');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
-	echo $this -> Minify -> script('js/thirdparty/placeholder');
+		echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');
+		echo $this -> Minify -> script('js/thirdparty/jquery.blueimp-gallery');
+		echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
+		echo $this -> Minify -> script('js/thirdparty/placeholder');
 			?>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
