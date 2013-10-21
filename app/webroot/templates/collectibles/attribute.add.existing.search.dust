@@ -13,7 +13,7 @@
 		</div>
 	</form>
 	<div class="items">
-		<table class="table collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></table>
+		<table class="table collectibles" style="table-layout:fixed" data-toggle="modal-gallery" data-target="#modal-gallery"></table>
 	</div>
 	<div class="paging"></div>
 </div>

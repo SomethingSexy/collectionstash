@@ -61,6 +61,9 @@ body {
 .jumbotron .container {
 	margin-top: 0;
 }
+.img-responsive {
+	width: 100%;
+}
 
 @media (min-width: 979px) {
 	#wrap.home-dashboard {
