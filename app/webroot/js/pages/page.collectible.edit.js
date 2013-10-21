@@ -2928,7 +2928,7 @@ var AttributeSearchCollectibleAttrView = Backbone.View.extend({
 						name = attribute.Attribute.description;
 					}
 					row += '<li class="attribute" data-id="attribute.Attribute.id" data-attribute=\'' + JSON.stringify(attribute.Attribute) + '\'>';
-					row += '<table style="table-layout:fixed">';
+					row += '<table>';
 					var attribute = attribute;
 					attribute.AttributesUpload = attribute.Attribute.AttributesUpload;
 					attribute.uploadDirectory = uploadDirectory;
@@ -3018,7 +3018,7 @@ var AttributeSearchCollectibleView = Backbone.View.extend({
 
 		row += '</td>';
 
-		row += '<td>';
+		row += '<td style="min-width: 100px; max-width: 100px;">';
 		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
 			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
 				if (collectibleUpload.primary) {

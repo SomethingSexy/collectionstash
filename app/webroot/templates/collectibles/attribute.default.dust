@@ -1,10 +1,10 @@
-<td>
+<td style="min-width: 100px; max-width: 100px;">
 {#AttributesUpload uploadDirectory=uploadDirectory}
 	{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-		<a class="thumbnail col-md-6" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
+		<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 	{/primary}
 	{:else}
-	<a class="thumbnail col-md-6" href="#"><img src="/img/no-photo.png" alt=""></a>
+	<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
 {/AttributesUpload}
 </td>
 <td class="category">{AttributeCategory.path_name}</td>

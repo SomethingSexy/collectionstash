@@ -6,7 +6,7 @@ if (!isset($history)) {
 	$history = false;
 }
 
-echo '<div class="table-responsive"><table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery" style="table-layout:fixed"';
+echo '<div class="table-responsive"><table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery"';
 
 if ($history) {
 	echo 'data-history="true"';
@@ -51,7 +51,7 @@ foreach ($collectibles as $key => $myCollectible) {
 	}
 
 	if ($showThumbnail) {
-		echo '<td>';
+		echo '<td style="min-width: 100px; max-width: 100px;">';
 
 		if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
 			foreach ($myCollectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
