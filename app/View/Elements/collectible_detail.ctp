@@ -85,11 +85,15 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 	
 	<div class="row spacer">
 		<div class="col-md-4">
-			<?php
-			if ($showImage) {
-				echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
-			}
-			?>
+			<div class="row">
+				<div class="col-md-12">	
+					<?php
+					if ($showImage) {
+						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
+					}
+					?>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-8">
 			<div class="row">
@@ -243,20 +247,21 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 							if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
 								echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
 							}
-							?>
-							<?php
-							if (isset($showTags) && $showTags === true) {
-								echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
-							}
-							?>
-				
-							
+							?>					
 							<?php
 							if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
 								echo $this -> element('collectible_variant_list', array());
 							}
 							?>							
-		
+					<div class="row spacer">
+				<div class="col-md-12">	
+					<?php
+					if (isset($showTags) && $showTags === true) {
+						echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+					}
+					?>
+				</div>
+			</div>
 							<?php
 							if ($showAttributes) {
 								echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
