@@ -8,7 +8,7 @@
 	 ** ============================== */
 
 	var StashFullAdd = function() {
-	}
+	};
 
 	StashFullAdd.prototype.initialize = function() {
 		dust.loadSource(dust.compile($('#template-stash-add').html(), 'stash.add'));
@@ -98,11 +98,11 @@
 				stashFullAdd.add(model, stashType);
 			}
 		});
-	}
+	};
 
 	$.fn.stashfulladd.defaults = {
 
-	}
+	};
 
 	// only want one created really
 	var stashFullAdd = new StashFullAdd();
@@ -114,8 +114,8 @@
 
 	$(function() {
 		stashFullAdd.initialize();
-		$('.stashable').on('click', 'a.add-full-to-stash', function(e) {
-			var $anchor = $(e.currentTarget)
+		$('.stashable').on('click', '.add-full-to-stash', function(e) {
+			var $anchor = $(e.currentTarget);
 
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 
@@ -135,7 +135,7 @@
 		this.options = $.extend({}, $.fn.stashadd.defaults, options);
 		this.collectibleId = this.$element.attr('data-collectible-id');
 		this.stashType = this.$element.attr('data-stash-type');
-	}
+	};
 
 	StashAdd.prototype.add = function() {
 		var self = this;
@@ -153,7 +153,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = (self.stashType === 'Default') ? 'Collectible has been added to your Stash!' : 'Collectible has been added to your Wishlist!'
+					var message = (self.stashType === 'Default') ? 'Collectible has been added to your Stash!' : 'Collectible has been added to your Wishlist!';
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,
@@ -208,7 +208,7 @@
 
 	$.fn.stashadd = function(option) {
 		return this.each(function() {
-			var $this = $(this), data = $this.data('stashadd'), options = typeof option == 'object' && option
+			var $this = $(this), data = $this.data('stashadd'), options = typeof option == 'object' && option;
 			if (!data) {
 				$this.data('stashadd', ( data = new StashAdd(this, options)));
 			}
@@ -217,20 +217,20 @@
 				data.add();
 			}
 		});
-	}
+	};
 
 	$.fn.stashadd.defaults = {
 
-	}
+	};
 
-	$.fn.stashadd.Constructor = StashAdd
+	$.fn.stashadd.Constructor = StashAdd;
 
 	/* DATA-API
 	 * =============== */
 
 	$(function() {
-		$('.stashable').on('click', 'a.add-to-stash', function(e) {
-			var $anchor = $(e.currentTarget)
+		$('.stashable').on('click', '.add-to-stash', function(e) {
+			var $anchor = $(e.currentTarget);
 			$anchor.stashadd('add');
 			e.preventDefault();
 		});
@@ -357,7 +357,7 @@
 		if (options.tiles) {
 			this.$tiles = $('.tiles');
 		}
-	}
+	};
 
 	StashRemove.prototype.remove = function() {
 
@@ -376,7 +376,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = (self.stashType.toLowerCase() === 'default') ? 'Collectible has been removed from your Stash!' : 'Collectible has been removed from your Wishlist!'
+					var message = (self.stashType.toLowerCase() === 'default') ? 'Collectible has been removed from your Stash!' : 'Collectible has been removed from your Wishlist!';
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,
@@ -452,11 +452,11 @@
 			}
 
 		});
-	}
+	};
 
 	$.fn.stashremove.defaults = {
 
-	}
+	};
 
 	$.fn.stashremove.Constructor = StashRemove;
 
@@ -479,7 +479,7 @@
 			tile = true;
 		}
 
-		$('.stashable').on('click', 'a.remove-from-stash', function(e) {
+		$('.stashable').on('click', '.remove-from-stash', function(e) {
 			var $anchor = $(e.currentTarget);
 
 			var historyView = $anchor.closest('.stashable').attr('data-history');

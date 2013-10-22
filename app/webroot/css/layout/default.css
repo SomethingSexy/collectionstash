@@ -177,11 +177,6 @@
 	margin-top: 5px;
 }
 
-#collectible-container .page-header {
-	margin-bottom: 5px;
-	padding-bottom: 0;
-}
-
 #collectible-container .page-header span {
 	font-size: 18px;
 	color: #999999;
@@ -189,7 +184,7 @@
 	line-height: 1;
 }
 #collectible-container .page-header .label {
-	color: #FFF;
+	padding: 0;
 }
 .datepicker {
 	z-index: 1151;
