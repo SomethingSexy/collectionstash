@@ -176,7 +176,12 @@
 .activities .activity .action {
 	margin-top: 5px;
 }
-
+#collectible-container .page-header {
+	margin-top: 0;
+}
+#collectible-container .page-header h1 {
+	margin-top: 0;
+}
 #collectible-container .page-header span {
 	font-size: 18px;
 	color: #999999;

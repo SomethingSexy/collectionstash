@@ -94,69 +94,8 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 		<div class="col-md-8">
 			<div class="row">
 				<div class="col-md-12">
-					<div class="page-header">
-						<h1 class="title"><?php echo $title; ?></h1>
-						<span>
-						<?php
-						// maybe collectible type here?
-						echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
-		
-						// if it has a manufacturer display that first
-						if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
-							echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
-						}
-						// just grab the first artist for now
-						if (!empty($collectibleDetail['ArtistsCollectible']) && !$collectibleDetail['Collectible']['custom']) {
-							echo 'Artist: ' . $this -> Html -> link($collectibleDetail['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectibleDetail['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . ' | ';
-						} else if ($collectibleDetail['Collectible']['custom']) {
-							if (!$collectibleDetail['User']['admin']) {
-								echo 'Created By: ' . $this -> Html -> link($collectibleDetail['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $collectibleDetail['User']['username'])) . ' | ';
-							} else {
-								echo 'Created By: ' . $collectibleDetail['User']['username'] . ' | ';
-							}
-						}
-						if ($collectibleDetail['Collectible']['custom']) {
-							echo 'Custom | ';
-						} else if ($collectibleDetail['Collectible']['original']) {
-							echo 'Original | ';
-						} else {
-							if ($collectibleDetail['Collectible']['official'] && !empty($collectibleDetail['Collectible']['manufacture_id'])) {
-								echo 'Mass-Produced | ';
-							} else {
-								echo 'Custom | ';
-							}
-		
-						}
-		
-						if ($collectibleDetail['Collectible']['official']) {
-							echo 'Official';
-						} else {
-							echo 'Unofficial';
-						}
-						if ($isLoggedIn && $userCounts) {
-							foreach ($userCounts as $key => $value) {
-								if ($value['type'] === 'Default') {
-									echo ' | <span class="label">' . $value['count'] . ' in your Stash' . '</span>';
-								} else {
-									echo ' | <span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
-								}
-		
-							}
-		
-						}
-						?>
-						</span>
-					</div>
-				</div>
-			</div>
-
-			<div id="status-container" class="row">
-	
-			</div>
-			<div class="row">
-				<div class="col-md-12">
 					<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
-						<div class="btn-group actions">
+						<div class="btn-group actions pull-right">
 							<?php
 							// check to make sure we can show stash, depending on where this is being
 							// rendered, make sure they are logged in and then make sure thay have permission
@@ -201,6 +140,81 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						</div>
 					<?php } ?>	
 				</div>
+			</div>
+			
+			<div class="row">
+				
+				
+				<div class="col-md-12">
+					<div class="page-header">
+						<h1 class="title"><?php echo $title; 
+							if (isset($collectibleDetail['Collectible']['exclusive']) && $collectibleDetail['Collectible']['exclusive']) {
+								echo __(' - Exclusive');
+							}		
+							?>
+							
+						</h1>
+						<span>
+						<?php
+						// maybe collectible type here?
+						echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
+		
+						// if it has a manufacturer display that first
+						if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
+							echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
+						}
+						// just grab the first artist for now
+						if (!empty($collectibleDetail['ArtistsCollectible']) && !$collectibleDetail['Collectible']['custom']) {
+							echo 'Artist: ' . $this -> Html -> link($collectibleDetail['ArtistsCollectible'][0]['Artist']['name'], array('admin' => false, 'controller' => 'artists', 'action' => 'index', $collectibleDetail['ArtistsCollectible'][0]['Artist']['id'], $collectibleDetail['ArtistsCollectible'][0]['Artist']['slug'])) . ' | ';
+						} else if ($collectibleDetail['Collectible']['custom']) {
+							if (!$collectibleDetail['User']['admin']) {
+								echo 'Created By: ' . $this -> Html -> link($collectibleDetail['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $collectibleDetail['User']['username'])) . ' | ';
+							} else {
+								echo 'Created By: ' . $collectibleDetail['User']['username'] . ' | ';
+							}
+						}
+						if ($collectibleDetail['Collectible']['custom']) {
+							echo 'Custom | ';
+						} else if ($collectibleDetail['Collectible']['original']) {
+							echo 'Original | ';
+						} else {
+							if ($collectibleDetail['Collectible']['official'] && !empty($collectibleDetail['Collectible']['manufacture_id'])) {
+								echo 'Mass-Produced | ';
+							} else {
+								echo 'Custom | ';
+							}
+		
+						}
+		
+						if ($collectibleDetail['Collectible']['official']) {
+							echo 'Official';
+						} else {
+							echo 'Unofficial';
+						}
+						
+						if (isset($collectibleDetail['Collectible']['variant']) && $collectibleDetail['Collectible']['variant']) {
+							echo ' | <a href="/collectibles/view/' . $collectibleDetail['Collectible']['variant_collectible_id'] . '">Variant</a>';
+						}
+						
+						if ($isLoggedIn && $userCounts) {
+							foreach ($userCounts as $key => $value) {
+								if ($value['type'] === 'Default') {
+									echo ' | <span class="label">' . $value['count'] . ' in your Stash' . '</span>';
+								} else {
+									echo ' | <span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
+								}
+		
+							}
+		
+						}
+						?>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="status-container" class="row">
+	
 			</div>
 			<div class="row">
 				<div class="col-md-12">

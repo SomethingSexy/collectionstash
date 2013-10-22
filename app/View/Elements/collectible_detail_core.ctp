@@ -12,6 +12,9 @@ if (!isset($adminMode)) {
 	$adminMode = false;
 }
 ?>
+<?php 
+	echo '<p class="lead">' . $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), null, array('compare' => $showCompareFields)) .'</p>';
+?>
 <dl class="">
 	<?php
 	if (isset($showAddedBy) && $showAddedBy) {
@@ -45,30 +48,16 @@ if (!isset($adminMode)) {
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Status', 'Field' => 'status'), __('Status', true), array('compare' => $showCompareFields));
 	}
 
-	if (isset($collectibleCore['Collectible']['exclusive']) && $collectibleCore['Collectible']['exclusive']) {
-		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields, 'postValue' => __(' - Exclusive', true)));
-	} else {
-		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'name'), __('Name', true), array('compare' => $showCompareFields));
-	}
+
 	?>
 	
 	
 	 <?php
-	if (!empty($collectibleCore['Collectible']['manufacture_id'])) {
-		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer ', true), array('compare' => $showCompareFields, 'value' => '<a href="/manufacturer/' . $collectibleCore['Manufacture']['id'] . '/' . $collectibleCore['Manufacture']['slug'] . '">' . $collectibleCore['Manufacture']['title'] . '</a>'));
-	}
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'License', 'Field' => 'name'), __('Brand', true), array('compare' => $showCompareFields));
-
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Platform', true), array('compare' => $showCompareFields));
-
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'SpecializedType', 'Field' => 'name'), __('Manufacturer Platform', true), array('compare' => $showCompareFields));
 
-	if (isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) {
-		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => '<a href="/collectibles/view/' . $collectibleCore['Collectible']['variant_collectible_id'] . '">Yes</a>'));
-	}
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Scale', 'Field' => 'scale'), __('Scale', true), array('compare' => $showCompareFields));
 
 	if (isset($collectibleCore['Collectible']['release']) && $collectibleCore['Collectible']['release'] !== '0000') {
@@ -80,7 +69,7 @@ if (!isset($adminMode)) {
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), $yearLabel, array('compare' => $showCompareFields));
 	}
 
-	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), __('Description', true), array('compare' => $showCompareFields));
+
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 
