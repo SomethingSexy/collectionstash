@@ -15,7 +15,8 @@ if (!isset($adminMode)) {
 <?php 
 	echo '<p class="lead">' . $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), null, array('compare' => $showCompareFields)) .'</p>';
 ?>
-<dl class="">
+<h4>Collectible Details</h4>
+<dl class="dl-horizontal">
 	<?php
 	if (isset($showAddedBy) && $showAddedBy) {
 		echo '<dt>';
