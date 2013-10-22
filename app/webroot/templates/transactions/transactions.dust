@@ -76,6 +76,7 @@
 {:else}
  	<h4>Active Listings</h4>
  	{@eq key="{activeListings}" value="true" type="boolean"}
+ 	<div class="table-responsive">
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
@@ -117,12 +118,14 @@
 				{/listings}
 			</tbody>
 		</table> 	
+	</div>
  	{:else}
  		<p>There are no active listings.</p>
  	{/eq}
  	
  	<h4>Unsold Listings</h4>
  	{@eq key="{unsoldListings}" value="true" type="boolean"}
+ 	<div class="table-responsive">
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
@@ -163,13 +166,15 @@
 					{/if}
 				{/listings}
 			</tbody>
-		</table> 	
+		</table> 
+	</div>	
  	{:else}
  		<p>There are no unsold listings.</p>
  	{/eq}
 	
 	<h4>Completed Transactions</h4>
 	{@eq key="{completedTransactions}" value="true" type="boolean"}
+	<div class="table-responsive">
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
@@ -221,6 +226,7 @@
 				{/listings}
 			</tbody>
 		</table>	
+	</div>
 	{:else}
  		<p>There are no completed transactions.</p>
  	{/eq}
