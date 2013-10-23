@@ -99,15 +99,17 @@ var TransactionsView = Backbone.View.extend({
 
 				self.render();
 			}
-		})
+		});
 
 	},
 	deleteListing : function(event) {
+		event.preventDefault();
 		var modelId = $(event.currentTarget, this.el).attr('data-id');
 		var model = this.collection.get(modelId);
 		model.destroy();
 	},
 	flag : function(event) {
+		event.preventDefault();
 		var modelId = $(event.currentTarget, this.el).attr('data-id');
 
 		if (!$(event.currentTarget, this.el).hasClass('disabled')) {

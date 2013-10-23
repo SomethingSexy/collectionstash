@@ -222,68 +222,68 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<?php
-					if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
-						echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
-					}
-					?>
-					
-					<?php 
-					if($adminMode) {
-						echo $this -> element('admin_collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
-					} else {
-						echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
-					}
-					 ?>
-					<?php
-					if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
-						echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
-					}
-					?>					
-					<?php
-					if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
-						echo $this -> element('collectible_variant_list', array());
-					}
-					?>							
-
-					<?php
-					if ($showAttributes) {
-						echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
-						<script>
-							$(function() {
-								// If we are in admin mode, we need to pass that in to these methods so that they can
-								// do specific things based on that
-
-								$('span.popup', '.attributes-list').popover({
-									placement : 'bottom',
-									html : 'true',
-									template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
-								}).click(function(e) {
-									e.preventDefault();
-								}).mouseenter(function(e) {
-									$(this).popover('show');
-								});
-
-							});
-						</script>
-				
-					<?php } ?>								
-					
-			
-				<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
-					<div class="tab-pane" id="price">
-						<div id="transactions">						
+						<?php
+						if ($collectibleDetail['Collectible']['collectibletype_id'] === Configure::read('Settings.CollectibleTypes.Print')) {
+							echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+						}
+						?>
 						
-						</div>	
-						<?php if(!empty($transactionGraphData)) { ?>
-						<div class="graph-container">
-							<div id="holder" style="width:850px;height:450px">
+						<?php 
+						if($adminMode) {
+							echo $this -> element('admin_collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
+						} else {
+							echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
+						}
+						 ?>
+						<?php
+						if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
+							echo $this -> element('collectible_detail_artists', array('collectibleCore' => $collectibleDetail));
+						}
+						?>					
+						<?php
+						if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
+							echo $this -> element('collectible_variant_list', array());
+						}
+						?>							
 
-							</div>			    	
-					    </div>	
-					    <?php } ?>					 	
-					</div>							
-				<?php } ?>
+						<?php
+						if ($showAttributes) {
+							echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
+							<script>
+								$(function() {
+									// If we are in admin mode, we need to pass that in to these methods so that they can
+									// do specific things based on that
+	
+									$('span.popup', '.attributes-list').popover({
+										placement : 'bottom',
+										html : 'true',
+										template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+									}).click(function(e) {
+										e.preventDefault();
+									}).mouseenter(function(e) {
+										$(this).popover('show');
+									});
+	
+								});
+							</script>
+					
+						<?php } ?>								
+						
+				
+					<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
+						<div class="tab-pane" id="price">
+							<div id="transactions">						
+							
+							</div>	
+							<?php if(!empty($transactionGraphData)) { ?>
+							<div class="graph-container">
+								<div id="holder" style="width:850px;height:450px">
+	
+								</div>			    	
+						    </div>	
+						    <?php } ?>					 	
+						</div>							
+					<?php } ?>
 					
 				</div>
 			</div>

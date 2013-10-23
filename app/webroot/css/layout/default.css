@@ -181,6 +181,10 @@
 	margin-bottom: 0;
 
 }
+
+#collectible-container .dl-horizontal dt {
+	text-align: left;
+}
 #collectible-container .page-header h1 {
 	margin-top: 0;
 }

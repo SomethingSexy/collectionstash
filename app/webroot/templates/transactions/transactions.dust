@@ -57,17 +57,18 @@
 	</div>
 {/if}
 {@eq key="{allowAdd}" value="true" type="boolean"}
-<div class="control-group">
-	<div class="input-append">
-		<input type="text" value="" name="item" placeholder="Item Number" id="inputListingItem" autocomplete="off">
-		<div class="btn-group open">
+<div class="form-group">
+	<div class="input-group col-lg-6">
+		<input type="text" value="" name="item" placeholder="Item Number" id="inputListingItem"  class="form-control" autocomplete="off">
+		<span class="input-group-btn">
 			<button class="btn disabled" disabled="disabled">
 				eBay
 			</button>
+			<button type="button" class="btn add-transaction">
+				Add Listing
+			</button>
 		</div>
-		<button type="button" class="btn add-transaction">
-			Add Listing
-		</button>
+
 	</div><span class="help-block inline-error"></span>
 </div>
 {/eq}
@@ -102,12 +103,12 @@
 							<td>
 								<div class="btn-group actions">
 									{@eq key="{allowAdd}" value="true" type="boolean"}
-									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
+									<a data-id="{id}" class="btn btn-default flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 										<i class=" icon-exclamation-sign"></i>
 									</a>
 									{/eq}
 									{@eq key="{allowMaintenance}" value="true" type="boolean"}
-										<a data-id="{id}" class="btn delete" href="#" title="Delete">
+										<a data-id="{id}" class="btn btn-default delete" href="#" title="Delete">
 											<i class="icon-remove"></i>
 										</a>
 									{/eq}
@@ -151,12 +152,12 @@
 							<td>
 								<div class="btn-group actions">
 									{@eq key="{allowAdd}" value="true" type="boolean"}
-									<a data-id="{id}" class="btn flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
+									<a data-id="{id}" class="btn btn-default flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 										<i class=" icon-exclamation-sign"></i>
 									</a>
 									{/eq}
 									{@eq key="{allowMaintenance}" value="true" type="boolean"}
-										<a data-id="{id}" class="btn delete" href="#" title="Delete">
+										<a data-id="{id}" class="btn btn-default delete" href="#" title="Delete">
 											<i class="icon-remove"></i>
 										</a>
 									{/eq}
@@ -210,12 +211,12 @@
 						<td>
 							<div class="btn-group actions">
 								{@eq key="{allowAdd}" value="true" type="boolean"}
-									<a data-id="{listing_id}" class="btn flag {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
+									<a data-id="{listing_id}" class="btn btn-default flag {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
 										<i class=" icon-exclamation-sign"></i>
 									</a>
 								{/eq}
 								{@eq key="{allowMaintenance}" value="true" type="boolean"}
-									<a data-id="{listing_id}" class="btn delete" href="#" title="Delete">
+									<a data-id="{listing_id}" class="btn btn-default delete" href="#" title="Delete">
 										<i class="icon-remove"></i>
 									</a>
 								{/eq}
