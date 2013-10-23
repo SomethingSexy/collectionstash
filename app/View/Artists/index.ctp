@@ -3,7 +3,7 @@ echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
-
+<div class="col-md-12">
 	<div class="page-header">
 		<h2><?php echo $artist['Artist']['name']; ?></h2>
 	</div>	
@@ -66,7 +66,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 		</div>
 		
 	</div>
-	
+</div>	
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
 
