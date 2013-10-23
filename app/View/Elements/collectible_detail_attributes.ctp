@@ -38,7 +38,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 				}
 				$popup .= '</ul>';
 			} else {
-				$popup = "<ul class='unstyled'>";
+				$popup = "<ul class='list-unstyled'>";
 				$popup .= '<li>' . __('Not attached to any collectibles') . '</li>';
 				$popup .= '</ul>';
 			}
@@ -74,22 +74,22 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '</div>';
 
 			$outputAttribtes .= '<div class="row">';
-			$outputAttribtes .= '<div class="col-md-1"><ul class="thumbnails"><li class="col-md-12">';
+			$outputAttribtes .= '<div class="col-md-3">';
 
 			if (!empty($attribute['Attribute']['AttributesUpload'])) {
 				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
-						$outputAttribtes .= '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
+						$outputAttribtes .= '<a class="thumbnail col-md-12" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
 						break;
 					}
 				}
 			} else {
-				$outputAttribtes .= '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+				$outputAttribtes .= '<a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>';
 			}
 
-			$outputAttribtes .= '</li></ul></div>';
+			$outputAttribtes .= '</div>';
 
-			$outputAttribtes .= '<div class="col-md-11">';
+			$outputAttribtes .= '<div class="col-md-9">';
 
 			$outputAttribtes .= '<div class="row"><div class="col-md-12"><span class="name">' . $attribute['Attribute']['name'] . '</span></div></div>';
 			if (isset($attribute['Attribute']['Scale']['scale'])) {

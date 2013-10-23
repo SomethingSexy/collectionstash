@@ -12,8 +12,13 @@ if (!isset($adminMode)) {
 	$adminMode = false;
 }
 ?>
-<?php 
-	echo '<p class="lead">' . $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'description'), null, array('compare' => $showCompareFields)) .'</p>';
+<?php
+	$description = $collectibleCore['Collectible']['description'];
+	$description = str_replace('\n', "\n", $description);
+	$description = str_replace('\r', "\r", $description);
+	$description = nl2br($description);
+	$description = html_entity_decode($description);
+	echo '<p class="lead">' . $description .'</p>';
 ?>
 <h4>Collectible Details</h4>
 <dl class="dl-horizontal">
@@ -48,12 +53,9 @@ if (!isset($adminMode)) {
 	} else {
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Status', 'Field' => 'status'), __('Status', true), array('compare' => $showCompareFields));
 	}
-
-
 	?>
-	
-	
-	 <?php
+
+	<?php
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'seriesPath'), __('Category', true), array('compare' => $showCompareFields));
 
@@ -69,8 +71,6 @@ if (!isset($adminMode)) {
 
 		echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'release'), $yearLabel, array('compare' => $showCompareFields));
 	}
-
-
 
 	echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 
