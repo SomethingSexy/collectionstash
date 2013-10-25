@@ -10,7 +10,9 @@ body {
 	overflow-x: hidden; /* bootstrap 3.0 fluid layout broken, showing horizontal scrollbar
 	/*background: url("/img/pattern.png") repeat scroll left top #F0F0F0;*/
 }
-
+body.home {
+	padding-top: 40px;
+}
 #wrap {
 	height: auto !important;
 	margin: 0 auto -60px;

@@ -1,5 +1,5 @@
 <?php if (!empty($errors)) { ?>
-<div class='component-message error'>
+<div class='alert alert-danger'>
 	<span>There are <?php echo count($errors); ?> error(s) in your submission:</span>
     <ul>
         <?php foreach ($errors as $field => $error) { ?>

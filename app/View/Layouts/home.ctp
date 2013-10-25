@@ -78,7 +78,7 @@
 		})();
 	</script>
 </head>
-<body>
+<body class="home">
 	<div id="fb-root"></div>
 	<script>
 		( function(d, s, id) {
