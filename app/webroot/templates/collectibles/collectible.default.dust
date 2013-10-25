@@ -154,7 +154,7 @@
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
 				<div class="checkbox">
-					<label class="checkbox">
+					<label>
 							<input {#collectible.official}checked{/collectible.official} type="checkbox" value="true" name="official" id="inputOfficial">
 							Official</label>
 							<span class="help-block"><strong>This indicates whether or not this collectible is officially licensed or a custom.</strong></span>
@@ -165,7 +165,7 @@
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
 				<div class="checkbox">
-					<label class="checkbox">
+					<label>
 							<input {#collectible.limited}checked{/collectible.limited} type="checkbox" value="true" name="limited" id="inputLimited">
 							Limited Edition</label>
 				</div>
@@ -183,7 +183,7 @@
 		<div class="form-group numbered">
 			<div class="col-lg-offset-3 col-lg-6">
 				<div class="checkbox">
-				<label class="checkbox">
+				<label>
 					<input {#numbered}checked{/numbered} type="checkbox" value="true" name="numbered" id="inputNumbered">
 					Numbered</label>
 				<span class="help-block">A collectible is considered numbered if it has an edition size and is indivudually numbered.</span>
@@ -195,7 +195,7 @@
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
 				<div class="checkbox">
-					<label class="checkbox">
+					<label>
 						<input {#collectible.signed}checked{/collectible.signed} type="checkbox" value="true" name="signed" id="inputSigned">
 						Signed</label>
 					<span class="help-block">Indicates if this collectible is signed by someone as part of the sold piece.</span>
@@ -205,7 +205,7 @@
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
 				<div class="checkbox">
-					<label class="checkbox">
+					<label>
 						<input {#collectible.exclusive}checked{/collectible.exclusive} type="checkbox" value="true" name="exclusive">
 						Exclusive</label>
 					<span class="help-block">Indicates if this collectible is exclusive to any one place.</span>
