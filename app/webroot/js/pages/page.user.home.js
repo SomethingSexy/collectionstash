@@ -248,7 +248,7 @@ var NewView = Backbone.View.extend({
 				perPage : this.collection.perPage,
 				totalPages : this.collection.totalPages,
 				total : this.collection.paginator_ui.total
-			}
+			};
 		} else {
 			data['paginator'] = this.collection.paginator_ui;
 		}
@@ -256,7 +256,7 @@ var NewView = Backbone.View.extend({
 		data.sort = {
 			sort : this.collection.selectedSort,
 			direction : this.collection.sortDirection
-		}
+		};
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
@@ -331,7 +331,7 @@ var PendingView = Backbone.View.extend({
 				perPage : this.collection.perPage,
 				totalPages : this.collection.totalPages,
 				total : this.collection.paginator_ui.total
-			}
+			};
 		} else {
 			data['paginator'] = this.collection.paginator_ui;
 		}
@@ -339,7 +339,7 @@ var PendingView = Backbone.View.extend({
 		data.sort = {
 			sort : this.collection.selectedSort,
 			direction : this.collection.sortDirection
-		}
+		};
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
@@ -388,12 +388,8 @@ var PendingCollectibleView = Backbone.View.extend({
 
 var WorksView = Backbone.View.extend({
 	template : 'works',
-	events : {
-		'click a.page' : 'gotoPage',
-		'click a.sort' : 'sort',
-		'click a.next' : 'next',
-		'click a.previous' : 'previous'
-	},
+	tagName : 'div',
+	className : 'table-responsive',
 	initialize : function() {
 		this.collection.on('change', this.render, this);
 		this.collection.on('reset', this.render, this);
@@ -405,27 +401,7 @@ var WorksView = Backbone.View.extend({
 	},
 	render : function() {
 		var self = this;
-		var data = {
-			pages : this.pagesArray
-		};
-
-		if (this.collection.currentPage) {
-			data['paginator'] = {
-				currentPage : this.collection.currentPage,
-				firstPage : this.collection.firstPage,
-				perPage : this.collection.perPage,
-				totalPages : this.collection.totalPages,
-				total : this.collection.paginator_ui.total
-			}
-		} else {
-			data['paginator'] = this.collection.paginator_ui;
-		}
-
-		data.sort = {
-			sort : this.collection.selectedSort,
-			direction : this.collection.sortDirection
-		}
-
+		var data = {};
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
@@ -444,40 +420,6 @@ var WorksView = Backbone.View.extend({
 		}
 
 		return this;
-	},
-	gotoPage : function(e) {
-		e.preventDefault();
-		var page = $(e.target).text();
-		this.collection.goTo(page);
-	},
-	sort : function(e) {
-		e.preventDefault();
-		var direction = 'asc';
-		if ($(e.target).attr('data-direction')) {
-			if ($(e.target).attr('data-direction') === 'asc') {
-				$(e.target).attr('data-direction', 'desc');
-				direction = 'desc'
-			} else {
-				$(e.target).attr('data-direction', 'asc');
-			}
-		} else {
-			$(e.target).attr('data-direction', 'asc');
-		}
-
-		this.collection.selectedSort = $(e.target).attr('data-sort');
-		this.collection.sortDirection = direction;
-		this.collection.fetch();
-	},
-	next : function(e) {
-		e.preventDefault();
-		if ( typeof this.collection.currentPage === 'undefined') {
-			this.collection.currentPage = 1;
-		}
-		this.collection.requestNextPage();
-	},
-	previous : function(e) {
-		e.preventDefault();
-		this.collection.requestPreviousPage();
 	}
 });
 
@@ -585,7 +527,7 @@ var ActivitiesView = Backbone.View.extend({
 
 $(function() {
 
-	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/works.dust'), $.get('/templates/user/work.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, worksTemplate, workTemplate, acitivitesTemplate, activityTemplate) {
+	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/works.dust'), $.get('/templates/user/work.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust'), $.get('/templates/common/paging.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, worksTemplate, workTemplate, acitivitesTemplate, activityTemplate, pagingTemplate) {
 		dust.loadSource(dust.compile(pendingTemplate[0], 'pending'));
 		dust.loadSource(dust.compile(pendingCollectibleTemplate[0], 'pending.collectible'));
 		dust.loadSource(dust.compile(newTemplate[0], 'new'));
@@ -594,6 +536,7 @@ $(function() {
 		dust.loadSource(dust.compile(workTemplate[0], 'work'));
 		dust.loadSource(dust.compile(acitivitesTemplate[0], 'activities'));
 		dust.loadSource(dust.compile(activityTemplate[0], 'activity'));
+		dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
 
 		$('.pending').append(new PendingView({
 			collection : pending
@@ -603,7 +546,11 @@ $(function() {
 			collection : newCollectibles
 		}).render().el);
 
-		$('.work').append(new WorksView({
+		$('.work .panel-heading').after(new WorksView({
+			collection : works
+		}).render().el);
+
+		$('.work .panel-footer').append(new PagingView({
 			collection : works
 		}).render().el);
 

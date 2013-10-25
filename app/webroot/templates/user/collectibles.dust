@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-hover">
 	<thead>
 		<tr>
 			<th>Collectible Id</th>
@@ -12,27 +12,3 @@
 
 	</tbody>
 </table>
-
-<div class="pagination">
-	<p class="pull-right">
-		Total: {paginator.total}
-	</p>
-	<ul>
-	{@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
-	<li> <a class="previous" rel="prev">previous</a> </li>
-	{/gt}
-	{#pages currentPage=paginator.currentPage}
-	{@eq key="{.}" value="{currentPage}"}
-	<li class="active"><a>{.}</a></li>
-	{:else}
-	<li> <a class="page">{.}</a> </li>
-	{/eq}
-
-	{/pages}
-	{@ne key="{paginator.total}" value="0"}
-		{@ne key="{paginator.totalPages}" value="{paginator.currentPage}" type="number"}
-		<li> <a class="next" rel="next">next >></a> </li>
-		{/ne}
-	{/ne}
-	</ul>
-</div>
