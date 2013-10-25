@@ -117,8 +117,6 @@ class CollectiblesUsersController extends AppController {
 				}
 				$this -> set('collectible', $collectiblesUser);
 				$this -> set('conditions', $this -> CollectiblesUser -> Condition -> find('list', array('order' => 'name')));
-				$this -> set('merchants', $this -> CollectiblesUser -> Merchant -> find('all', array('contain' => false)));
-
 			} else {
 				$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
 				$this -> redirect('/', null, true);

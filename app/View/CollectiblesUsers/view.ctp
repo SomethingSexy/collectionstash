@@ -2,10 +2,12 @@
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div class="row stashable">
-	<div class="col-md-12 well">
-		<div class="page-header">
-			<h1><?php echo $stashUsername . '\'s' .__(' collectible', true)?></h1>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+		<div class="panel-heading">
+			<h1 class="panel-title"><?php echo $stashUsername . '\'s' .__(' collectible', true)?></h1>
 		</div>
+		<div class="panel-body">
 	    <?php echo $this -> element('flash'); ?>	
 		<div class="row">
 			<div class="col-md-12">
@@ -31,25 +33,17 @@
     <div class="row">
     	<div class="col-md-4"  data-toggle="modal-gallery" data-target="#modal-gallery">
    
-	<ul class="thumbnails">
-		<li class="col-md-4">
 			<?php
 			if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($collectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
-						echo '<a class="thumbnail" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
+						echo '<a class="thumbnail col-md-12" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
 					}
 				}
 			} else {
 				echo '<img src="/img/silhouette_thumb.png"/>';
 			}
-			?>
-		</li>
-	</ul>
-    	
-
-				
- 
+			?>	
     	</div>
     	
     	<div class="col-md-8">
@@ -130,22 +124,22 @@
 					echo $collectible['CollectiblesUser']['purchase_date'];
 					echo '</dd>';
 				}
-				?>
-			</dl>
+				?>					</dl>
    		
     	</div>	
     	
     </div>	
+    </div>
+    		</div>
 	</div>
 	
 </div>
     
 <script><?php
-	if (isset($reasons)) {
-		echo 'var reasons = \'' . json_encode($reasons) . '\';';
-	}
-	?>
-</script>
+if (isset($reasons)) {
+	echo 'var reasons = \'' . json_encode($reasons) . '\';';
+}
+	?></script>
 
 
 
