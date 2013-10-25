@@ -27,6 +27,7 @@
 							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
 							$this -> FileUpload -> reset();
 							echo  $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 150, 'height' => 150)) . '</a>';
+							$this -> FileUpload -> reset();
 							echo '</div>';
 							break;
 						}

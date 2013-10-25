@@ -56,9 +56,9 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 				<!-- The loading indicator is shown during file processing -->
 				<div class="fileupload-loading"></div>
 				<br>
-				<div id="dropzone" class="fade well">
+				<!--<div id="dropzone" class="fade well">
 					Drop files here
-				</div>
+				</div>-->
 				<br>
 				<!-- The table listing the files available for upload/download -->
 				<table role="presentation" class="table table-striped">
@@ -166,7 +166,7 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
 	<td colspan="2"><span>{% if(file.pending) { %} {%=file.pendingText %} {% } %}</span></td>
 	<td class="edit">
-	<a class="btn" href="{%=file.edit_url%}">
+	<a class="btn btn-default" href="{%=file.edit_url%}">
 	<i class="icon-pencil icon-white"></i>
 	<span>Edit</span>
 	</a>
