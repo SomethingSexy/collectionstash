@@ -19,12 +19,12 @@
 	<?php } ?>
 	<div class="row spacer">
 		<div class="col-md-12">
-			<div class="widget stacked">
-				<div class="widget-header">
-					<i class="icon-dollar"></i><h3>Stash Value Breakdown</h3>
+			<div class="panel panel-default stacked">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="icon-dollar"></i> Stash Value Breakdown</h3>
 					
 				</div>
-				<div class="widget-content">
+				<div class="panel-body">
 					<div class="stash-value-guide">
 					<?php
 					foreach ($stashes as $key => $value) {
@@ -56,11 +56,11 @@
 	
 	<div class="row spacer">
 		<div class="col-md-6">
-			<div class="widget user-stats">
-				<div class="widget-header">
-					<i class="icon-signal"></i><h3>Your Stats</h3>
+			<div class="panel panel-default user-stats">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="icon-signal"></i> Your Stats</h3>
 				</div>
-				<div class="widget-content">
+				<div class="panel-body">
 					<div class="widget-statistics">
 						<div>
 							<div class="counter small">
@@ -161,12 +161,11 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="widget">
-				<div class="widget-header">
-					<i class="icon-trophy"></i><h3>Nut Leaders</h3>
-					<a href="/pages/nuts" class="pull-right"><i class="icon-question-sign"></i></a>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="icon-trophy"></i> Nut Leaders <a href="/pages/nuts" class="pull-right"><i class="icon-question-sign"></i></a></h3>
 				</div>
-				<div class="widget-content">
+				<div class="panel-body">
 					<h4>Current Month Leaders</h4>
 					<ol>
 						<?php
@@ -198,13 +197,12 @@
 	
 	<div class="row spacer">
 		<div class="col-md-12">
-			<div class="widget widget-table">
-				<div class="widget-header">
-					<h3>What you are working on</h3>
+			<div class="panel panel-default work">
+				<div class="panel-heading">
+					<h3 class="panel-title">What you are working on</h3>
 				</div>
-				<div class="widget-content work">
-					
-				</div>
+				
+				<div class="panel-footer"></div>
 			</div>
 		</div>
 	</div>
@@ -267,7 +265,9 @@ var totalActivity =<?php echo $totalActivity; ?>;
 var totalActivityPages = Math.ceil(totalActivity / 10); 
 </script>
 <?php echo $this -> Html -> script('views/view.activity', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('views/view.paging', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home', array('inline' => true)); ?>
+
 <script>
 
 var pending = new PaginatedPending();

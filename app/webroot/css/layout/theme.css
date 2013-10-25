@@ -1142,6 +1142,12 @@ a.forgot-password {
 .attributes.collectible .row.details {
 	margin-top: 10px;
 }
+
+.panel-footer .paging .pagination {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
 /**
  * 	Fix twitter typeahead and bootstrap
  */

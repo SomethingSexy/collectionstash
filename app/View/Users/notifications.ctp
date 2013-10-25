@@ -1,11 +1,14 @@
 <div class="col-md-8">
 	<div class="row spacer">
-		<div class="widget widget-messages">
-			<div class="widget-header">
-				<i class="icon-warning-sign"></i><h3>Notifications</h3>
+		<div class="panel panel-default widget-messages">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="icon-warning-sign"></i> Notifications</h3>
 			</div>
-			<div class="widget-content">
+			<div class="panel-body">
 
+			</div>
+			<div class="panel-footer">
+				
 			</div>
 		</div>
 	</div>
@@ -15,6 +18,7 @@
 var totalNotifications = <?php echo $totalNotifications; ?>;
 var totalNotificationPages = Math.ceil(totalNotifications / 25);
 </script>
+<?php echo $this -> Html -> script('views/view.paging', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home.notifications', array('inline' => true)); ?>
 
 <script>

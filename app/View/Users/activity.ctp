@@ -1,22 +1,24 @@
 <div class="col-md-12 home">
 	<div class="row spacer">
 		<div class="col-md-6">
-			<div class="widget widget-table">
-				<div class="widget-header">
-					<h3>Your Submissions</h3>
+			<div class="panel panel-default submissions">
+				<div class="panel-heading">
+					<h3 class="panel-title">Your Submissions</h3>
 				</div>
-				<div class="widget-content submissions">
-				
+
+				<div class="panel-footer">
+					
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="widget widget-table">
-				<div class="widget-header">
-					<h3>Your Edits</h3>
+			<div class="panel panel-default edits">
+				<div class="panel-heading">
+					<h3 class="panel-title">Your Edits</h3>
 				</div>
-				<div class="widget-content edits">
-				
+
+				<div class="panel-footer">
+					
 				</div>
 			</div>
 		</div>
@@ -32,6 +34,7 @@ var totalEdit = <?php echo $totalEdits; ?>;
 var totalEditPages = Math.ceil(totalEdit / 10);
 
 </script>
+<?php echo $this -> Html -> script('views/view.paging', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home.activity', array('inline' => true)); ?>
 <script>
 
