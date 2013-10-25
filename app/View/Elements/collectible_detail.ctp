@@ -244,7 +244,17 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						if (isset($showVariants) && $showVariants && !$collectibleDetail['Collectible']['custom'] && !$collectibleDetail['Collectible']['original']) {
 							echo $this -> element('collectible_variant_list', array());
 						}
-						?>							
+						?>		
+						
+											<div class="row spacer">
+				<div class="col-md-12">	
+					<?php
+					if (isset($showTags) && $showTags === true) {
+						echo $this -> element('collectible_detail_tags', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));
+					}
+					?>
+				</div>
+			</div>					
 
 						<?php
 						if ($showAttributes) {

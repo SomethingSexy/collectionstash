@@ -23,6 +23,16 @@
 	z-index: 2;
 }
 
+.home {
+	text-align: center;
+}
+
+
+.home p {
+	font-size: 16px;
+	line-height: 1.5;
+}
+
 .masthead {
 	color: #FFFFFF;
 	margin-bottom: 0;
@@ -43,18 +53,4 @@
 	line-height: 1.25;
 }
 
-.home {
-	text-align: center;
-}
 
-.home h1 {
-	font-size: 60px;
-	font-weight: 200;
-	letter-spacing: -1px;
-	line-height: 1;
-	margin: 30px 0 30px;
-}
-.home p {
-	font-size: 16px;
-	line-height: 1.5;
-}
