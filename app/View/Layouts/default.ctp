@@ -232,7 +232,7 @@ else
 								</div>					
 							</div>
 							<div class="col-md-6">
-								<ul class="links unstyled pull-right">
+								<ul class="links list-unstyled pull-right">
 									<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
 								</ul>
 							</div>	

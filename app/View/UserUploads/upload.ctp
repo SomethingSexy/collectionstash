@@ -7,7 +7,7 @@
 				<ul></ul>
 			</div>
 		</div>
-		<?php echo $this -> element('flash');?>
+		<?php echo $this -> element('flash'); ?>
 		<div class="component-view">
 			<?php
 			echo '<div class="image" data-name="' . $userUpload['UserUpload']['name'] . '" data-id="' . $userUpload['UserUpload']['id'] . '">';
@@ -43,24 +43,29 @@
 		var biggestHeight = 0;
 		$('#user-upload-component .inside .component-view .image .metadata a').on('click', function(event) {
 			$(this).hide();
-			var $inputWrapper = $('<div></div>').addClass('metadata-update');
+			var $inputWrapper = $('<div></div>').addClass('metadata-update').addClass('spacer').addClass('clearfix');
 			var type = $(this).parent('.metadata').attr('data-type');
 			var length = '50';
-			if(type === 'description'){
+			if (type === 'description') {
 				length = '150';
 			}
-			var $input = $('<input></input>').addClass('metadata-input').attr('type', 'input').attr('maxlength', length);
-			if(!$(this).parent('div.metadata').hasClass('empty')){
+			var $input = $('<input></input>').addClass('form-control').attr('type', 'input').attr('maxlength', length);
+			if (!$(this).parent('div.metadata').hasClass('empty')) {
 				$input.val($(this).text());
 			}
 			var $addButton = $('<button></button>').addClass('btn').addClass('btn-primary').addClass('add-button').text('Submit');
-			var $cancelButton = $('<button></button>').addClass('btn').addClass('cancel-button').text('Cancel');
-			$inputWrapper.append($input).append($addButton).append($cancelButton);
+			var $cancelButton = $('<button></button>').addClass('btn').addClass('cancel-button').addClass('btn-default').text('Cancel');
+
+			var $buttonGroup = $('<span class="input-group-btn"></span>').append($addButton).append($cancelButton);
+
+			var $inputGroup = $('<div class="input-group col-lg-6"></div>').append($input).append($buttonGroup);
+
+			$inputWrapper.append($inputGroup);
 			$(this).parent().append($inputWrapper);
 		});
 		$(document).on('click', '#user-upload-component .inside .component-view .image .metadata .metadata-update .cancel-button', function(event) {
-			var $title = $(this).parent().parent();
-			$(this).parent().remove();
+			var $title = $(this).parent().parent().parent().parent();
+			$(this).parent().parent().parent().remove();
 			$title.children('a.link').show();
 		});
 		$(document).on('click', '#user-upload-component .inside .component-view .image .metadata .metadata-update .add-button', function(event) {
@@ -70,13 +75,13 @@
 			 * error message
 			 */
 			var $eventTag = $(this);
-			var $eventInput = $(this).parent('.metadata-update').children('.metadata-input');
-			var $eventLink = $(this).parent('.metadata-update').parent('.metadata').children('a.link');
-			var type = $(this).parent('.metadata-update').parent('.metadata').attr('data-type');
+			var $eventInput = $(this).closest('.metadata-update').find('input');
+			var $eventLink = $(this).closest('.metadata-update').closest('.metadata').find('a.link');
+			var type = $(this).closest('.metadata-update').closest('.metadata').attr('data-type');
 			var requestData = 'data[UserUpload][name]=' + $('.image', '#user-upload-component .inside .component-view').attr('data-name');
 			requestData += '&data[UserUpload][data]=' + $eventInput.val();
 			requestData += '&data[UserUpload][type]=' + type;
-			
+
 			$.ajax({
 				url : '/user_uploads/update.json',
 				data : requestData,
@@ -86,14 +91,14 @@
 
 				},
 				success : function(data) {
-					if(data.success.isSuccess) {
+					if (data.success.isSuccess) {
 						$eventLink.text($eventInput.val());
-						$eventTag.parent('.metadata-update').remove();
+						$eventTag.closest('.metadata-update').remove();
 						$eventLink.show();
-						$eventTag.parent('.metadata-update').parent('.metadata').removeClass('empty');
+						$eventTag.closest('.metadata-update').closest('.metadata').removeClass('empty');
 					} else {
-						if(data.isTimeout) {
-							window.location = '/users/login';
+						if (data.isTimeOut) {
+						//	window.location = '/users/login';
 						} else {
 							var errorMessage = data.errors[0][type];
 							$eventInput.after($('<span>' + errorMessage + '</span>').addClass('error-message'));
