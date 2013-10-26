@@ -75,21 +75,21 @@ unset($urlparams['url']);
 						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
 						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
-						echo '<div class="col-md-2"><ul class="thumbnails list-unstyled"><li class="col-md-12">';
+						echo '<div class="col-md-2">';
 
 						if (!empty($collectible['CollectiblesUpload'])) {
 							foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 								if ($upload['primary']) {
-									echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
+									echo '<a class="thumbnail col-md-12" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files', 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
 									break;
 								}
 							}
 
 						} else {
-							echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+							echo '<a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>';
 						}
 
-						echo '</li></ul></div>';
+						echo '</div>';
 
 						echo '<div class="col-md-7">';
 						// name

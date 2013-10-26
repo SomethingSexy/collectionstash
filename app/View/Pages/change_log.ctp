@@ -1,3 +1,4 @@
+<div class="col-md-12">
 <h2>Change Log</h2>
 <h3>Release Notes for v2.7.3</h3>
 <ul>
@@ -243,3 +244,4 @@ Lot's of these!
 
 <h4>Remember Me!</h4>
 <p>When logging in, you can know check whether or not you want us to remember who you are for the next time you visit. </p>
+</div>

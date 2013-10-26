@@ -6,6 +6,7 @@
 	<div class="widget-content">
 		<?php echo $this -> element('attributes_search_filters', array('searchUrl' => '/attributes/index')); ?>
 		<div class="standard-list attributes index">
+			<div class="table-responsive">
 			<table class="table table-striped" data-toggle="modal-gallery" data-target="#modal-gallery">
 				<?php
 				echo '<thead><tr>';
@@ -66,27 +67,27 @@
 						}
 						$popup .= '</ul>';
 					} else {
-						$popup = "<ul class='unstyled'>";
+						$popup = "<ul class='list-unstyled'>";
 						$popup .= '<li>' . __('Not attached to any collectibles') . '</li>';
 						$popup .= '</ul>';
 					}
 
 					echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
 					echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
-					echo '<td><ul class="thumbnails"><li class="col-md-1">';
+					echo '<td style="min-width: 100px; max-width: 100px;">';
 
 					if (!empty($attribute['AttributesUpload'])) {
 						foreach ($attribute['AttributesUpload'] as $key => $upload) {
 							if ($upload['primary']) {
-								echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
+								echo '<a class="thumbnail col-md-12" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
 								break;
 							}
 						}
 					} else {
-						echo '<a class="thumbnail"><img alt="" src="/img/no-photo.png"></a>';
+						echo '<a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>';
 					}
 
-					echo '</li></ul></td>';
+					echo '</td>';
 
 					echo '<td data-id="' . $attribute['AttributeCategory']['id'] . '" class="category">';
 					echo $attribute['AttributeCategory']['path_name'];
@@ -120,6 +121,7 @@
 				}
  ?>
 			</tbody></table>
+			</div>
 		</div>	
 			<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} parts out of  {:count} total.', true)));?></p>
 			<ul class="pagination">
