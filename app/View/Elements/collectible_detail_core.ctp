@@ -12,11 +12,11 @@ if (!isset($adminMode)) {
 	$adminMode = false;
 }
 ?>
-<div class="widget">
-	<div class="widget-header">		
-		<h3><?php echo __('Collectible Details'); ?></h3>
+<div class="panel panel-default">
+	<div class="panel-heading">		
+		<h3 class="panel-title"><?php echo __('Collectible Details'); ?></h3>
 	</div>
-	<div class="widget-content">
+	<div class="panel-body">
 		<dl class="">
 			<?php
 			if (isset($showAddedBy) && $showAddedBy) {

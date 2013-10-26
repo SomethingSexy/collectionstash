@@ -21,12 +21,12 @@ if (!empty($collectibleCore['CollectiblesUpload']) && count($collectibleCore['Co
 	<div class="row spacer">
 		<div class="col-md-12">
 			<div id="carousel-example-generic" class="carousel slide">
-				<!-- Indicators -->
+				<!-- Indicators
 				<ol class="carousel-indicators">
 					<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
 					<li data-target="#carousel-example-generic" data-slide-to="1"></li>
 					<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-				</ol>
+				</ol> -->
 
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner">

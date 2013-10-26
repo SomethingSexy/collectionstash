@@ -36,7 +36,7 @@ echo $stashUsername . '\'s History';
 				<?php
 				$default = key($graphData);
 				foreach ($graphData as $keyYear => $year) {
-					echo '<a data-key="' . $keyYear . '" class="btn';
+					echo '<a data-key="' . $keyYear . '" class="btn btn-default';
 					if ($keyYear === $default) {
 						echo ' active';
 					}
