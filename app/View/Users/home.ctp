@@ -209,11 +209,11 @@
 	
 	<div class="row spacer">
 		<div class="col-md-12">
-			<div class="widget">
-				<div class="widget-header">
-					<h3>Pending Collectibles</h3>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Pending Collectibles</h3>
 				</div>
-				<div class="widget-content pending">
+				<div class="panel-body pending">
 				
 				</div>
 			</div>
@@ -223,11 +223,11 @@
 	
 	<div class="row spacer">
 		<div class="col-md-12">
-			<div class="widget">
-				<div class="widget-header">
-					<h3>Recently Approved Collectibles</h3>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Recently Approved Collectibles</h3>
 				</div>
-				<div class="widget-content new">
+				<div class="panel-body new">
 				
 				</div>
 			</div>
