@@ -35,7 +35,12 @@ if (!empty($collectibleCore['CollectiblesUpload']) && count($collectibleCore['Co
 					foreach ($collectibleCore['CollectiblesUpload'] as $key => $upload) {
 						if (!$upload['primary']) {
 							if ($i % 3 == 1) {
-								echo '<div class="item active"><div class="row">';
+								echo '<div class="item ';
+								if ($i === 1) {
+									echo 'active';
+								}
+
+								echo '"><div class="row">';
 							}
 
 							echo '<div class="col-sm-4"><a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectibleCore['Collectible']['descriptionTitle'], 'imagePathOnly' => false)) . '</a></div>';
