@@ -79,6 +79,8 @@ class AttributesController extends AppController {
 
 		if ($this -> request -> isAjax()) {
 			$this -> render('searchJson');
+		} else {
+			$this -> layout = 'fluid';
 		}
 	}
 

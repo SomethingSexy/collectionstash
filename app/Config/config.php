@@ -56,7 +56,8 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 	),
 	'Layout' => array(
 		'Static' => array(
-			'collection_stash_documentation' => 'fluid'
+			'collection_stash_documentation' => 'fluid',
+			'change_log' => 'fluid'
 		)
 	
 	)
