@@ -1,8 +1,8 @@
-<div class="widget">
-	<div class="widget-header">	
-		<h3><?php echo __('Artists'); ?></h3>
+<div class="panel panel-default">
+	<div class="panel-heading">	
+		<h3 class="panel-title"><?php echo __('Artists'); ?></h3>
 	</div>
-	<div class="widget-content">
+	<div class="panel-body">
 	<?php
 
 	if (isset($collectibleCore['ArtistsCollectible']) && !empty($collectibleCore['ArtistsCollectible'])) {

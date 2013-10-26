@@ -1,10 +1,10 @@
-<div class="widget">
-	<div class="widget-header">	
- 		<h3><?php echo __('Variants'); ?></h3>
+<div class="panel panel-default">
+	<div class="panel-heading">	
+ 		<h3 class="panel-title"><?php echo __('Variants'); ?></h3>
 	</div>
-	<div class="widget-content">
+	<div class="panel-body">
 <?php if (!empty($variants)) { ?>
-	<ul class="thumbnails">
+	<ul class="list-unstyled">
 	<?php  
 	foreach ($variants as $variant):
 	?>
@@ -14,7 +14,7 @@
 				if (!empty($variant['CollectiblesUpload'])) {
 					foreach ($variant['CollectiblesUpload'] as $key => $upload) {
 						if ($upload['primary']) {
-							echo '<a  class="thumbnail" href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
+							echo '<a  class="thumbnail col-md-12" href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
 							echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false, 'width' => 150, 'height' => 150));
 							echo '</a>';
 							break;

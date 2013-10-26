@@ -35,7 +35,7 @@
 					"id" : "post-comment",
 					'class' : 'btn btn-primary',
 					'data-loading-text' : 'Posting...'
-				}).appendTo($('.form-actions', '#CommentViewForm')).button().click(function(event) {
+				}).appendTo($('.form-actions div', '#CommentViewForm')).button().click(function(event) {
 					event.preventDefault();
 					//Using apply here because we want to pass in the widget context
 					$.cs.comments.prototype._postComment.call(self, event);
@@ -60,7 +60,7 @@
 							//Initialize an array to build the content
 							$.each(data.commentsData.comments, function(index, element) {
 								var commentMarkup = $.cs.comments.prototype._buildComment(element);
-								cont.push(commentMarkup)
+								cont.push(commentMarkup);
 							});
 							self.commentsList.append(cont.join(''));
 							//save the last comment to be used later when posting
@@ -137,7 +137,7 @@
 								//Initialize an array to build the content
 								$.each(data.comments, function(index, element) {
 									var commentMarkup = $.cs.comments.prototype._buildComment(element);
-									cont.push(commentMarkup)
+									cont.push(commentMarkup);
 								});
 								self.commentsList.append(cont.join(''));
 								//save the last comment to be used later when posting
@@ -256,9 +256,9 @@
 				commentPost += '<form class="form-horizontal" id="CommentViewForm" accept-charset="utf-8" method="post" action="/comments/add">';
 				commentPost += '<div style="display:none;"><input type="hidden" value="POST" name="_method"></div>';
 				commentPost += '<fieldset>';
-				commentPost += '<div class="form-group"><label class="control-label" for="CommentComment">Comment</label><div class="controls"><textarea id="CommentComment" rows="6" cols="30" name="data[Comment][comment]"></textarea></div></div>';
-				commentPost += '</fieldset>'
-				commentPost += '<div class="form-actions"></div>'
+				commentPost += '<div class="form-group"><label class="control-label col-lg-3" for="CommentComment">Comment</label><div class="col-lg-6"><textarea id="CommentComment" class="form-control" name="data[Comment][comment]"></textarea></div></div>';
+				commentPost += '</fieldset>';
+				commentPost += '<div class="form-group form-actions"><div class="col-lg-offset-3 col-lg-9"></div></div>';
 				commentPost += '</form>';
 
 				return commentPost;
