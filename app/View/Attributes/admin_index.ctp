@@ -1,14 +1,14 @@
-<div class="two-column-page">
-	<div class="inside">
-		<?php echo $this -> element('admin_actions');?>
-		<div class="page">
-			<div class="title">
-				<h2>
-					<?php echo __('Pending Items');?>
-				</h2>				
-			</div>
-			<?php echo $this -> element('flash');?>
-		<div class="standard-list attributes index">
+
+<?php echo $this -> element('admin_actions'); ?>
+<div class="col-md-10">
+	<div class="title">
+		<h2>
+			<?php echo __('Pending Items'); ?>
+		</h2>				
+	</div>
+	<?php echo $this -> element('flash'); ?>
+	<div class="standard-list attributes index">
+		<div class="table-responsive">
 			<table class="table">
 				<thead>
 					<tr>
@@ -34,7 +34,7 @@
 					} else {
 						echo $attribute['Attribute']['name'];
 					}
-
+		
 					echo '</td>';
 					echo '<td class="description">';
 					echo $attribute['Attribute']['description'];
@@ -46,15 +46,14 @@
 					echo $attribute['Scale']['scale'];
 					echo '</td>';
 					echo '<td class="actions">';
-					echo $this -> Html -> link('Approve', array('admin' => true, 'action'=> 'view', $attribute['Attribute']['id']), array('class' => 'link'));
+					echo $this -> Html -> link('Approve', array('admin' => true, 'action' => 'view', $attribute['Attribute']['id']), array('class' => 'link'));
 					echo '</td>';
 					echo '</tr>';
-
-				}?>
+		
+				}
+			?>
 				</tbody>
 			</table>
-		</div>		
 		</div>
-		
-	</div>
-</div>
+	</div>		
+</div>	

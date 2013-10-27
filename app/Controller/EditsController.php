@@ -45,6 +45,7 @@ class EditsController extends AppController {
 		$this -> paginate = array('conditions' => array('Edit.status' => 0), "limit" => 25);
 		$edits = $this -> paginate('Edit');
 		$this -> set('edits', $edits);
+		$this -> layout = 'fluid';
 	}
 
 	/**

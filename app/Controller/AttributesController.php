@@ -300,6 +300,8 @@ class AttributesController extends AppController {
 		$attributes = $this -> paginate('Attribute');
 
 		$this -> set('attributes', $attributes);
+		
+		$this -> layout = 'fluid';
 	}
 
 	function admin_view($id = null) {
