@@ -264,12 +264,12 @@ var NewView = Backbone.View.extend({
 
 		if (this.collection.size() > 0) {
 			this.collection.each(function(model) {
-				$('ul', self.el).append(new NewCollectibleView({
+				$('.thumbnails', self.el).append(new NewCollectibleView({
 					model : model
 				}).render().el);
 			});
 		} else {
-			$('ul', this.el).html('<li>There are no new collectibles.</li>');
+			$('.thumbnails', this.el).html('<p>There are no new collectibles.</p>');
 		}
 
 		return this;
@@ -288,8 +288,7 @@ var NewView = Backbone.View.extend({
 });
 
 var NewCollectibleView = Backbone.View.extend({
-	tagName : 'li',
-	className : 'col-md-2',
+	className : 'col-sm-3',
 	template : 'new.collectible',
 	render : function() {
 		var self = this;
@@ -347,12 +346,12 @@ var PendingView = Backbone.View.extend({
 
 		if (this.collection.size() > 0) {
 			this.collection.each(function(model) {
-				$('ul', self.el).append(new PendingCollectibleView({
+				$('.thumbnails', self.el).append(new PendingCollectibleView({
 					model : model
 				}).render().el);
 			});
 		} else {
-			$('ul', this.el).html('<li>There are no pending collectibles.</li>');
+			$('.thumbnails', this.el).html('<p>There are no pending collectibles.</p>');
 		}
 
 		return this;
@@ -371,8 +370,7 @@ var PendingView = Backbone.View.extend({
 });
 
 var PendingCollectibleView = Backbone.View.extend({
-	tagName : 'li',
-	className : 'col-md-2',
+	className : 'col-sm-3',
 	template : 'pending.collectible',
 	render : function() {
 		var self = this;
