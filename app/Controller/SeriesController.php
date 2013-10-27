@@ -28,6 +28,7 @@ class SeriesController extends AppController {
 	public function admin_list() {
 		$stuff = $this -> Series -> find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id'), 'order' => 'lft ASC'));
 		$this -> set('stuff', $stuff);
+		$this -> layout = 'fluid';
 	}
 
 	/**
@@ -111,6 +112,7 @@ class SeriesController extends AppController {
 			}
 		}
 
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_remove() {
