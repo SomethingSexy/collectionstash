@@ -110,6 +110,8 @@ class ManufacturesController extends AppController {
 		$manufacturers = $this -> Manufacture -> getManufactures();
 
 		$this -> set(compact('manufacturers'));
+		
+		$this -> layout = 'fluid';
 	}
 
 	/**
@@ -135,6 +137,8 @@ class ManufacturesController extends AppController {
 		} else {
 			$this -> redirect("/");
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_add() {
@@ -153,6 +157,8 @@ class ManufacturesController extends AppController {
 		} else {
 
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_delete($id) {
@@ -171,6 +177,8 @@ class ManufacturesController extends AppController {
 		} else {
 			$this -> redirect(array('action' => 'admin_list'));
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_edit($manufacturer_id = null) {
@@ -198,6 +206,8 @@ class ManufacturesController extends AppController {
 			}
 			$this -> request -> data = $manufacture;
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_add_license($manufacturer_id = null) {
@@ -223,6 +233,8 @@ class ManufacturesController extends AppController {
 			$licenses = $this -> Manufacture -> LicensesManufacture -> getLicensesNotAssMan($manufacturer_id);
 			$this -> set(compact('licenses'));
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 	public function admin_add_collectibletype($manufacturer_id = null) {
@@ -249,6 +261,8 @@ class ManufacturesController extends AppController {
 			debug($collectibletypes);
 			$this -> set(compact('collectibletypes'));
 		}
+		
+		$this -> layout = 'fluid';
 	}
 
 }

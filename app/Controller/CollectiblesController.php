@@ -574,6 +574,8 @@ class CollectiblesController extends AppController {
 
 		$this -> set('collectibles', $collectilbes);
 
+		$this -> layout = 'fluid';
+
 	}
 
 	function admin_view($id = null) {
@@ -790,7 +792,7 @@ class CollectiblesController extends AppController {
 				}
 				$subject = __('Oh no! Your submission has been denied.');
 			}
-			
+
 			// Instead of emailing, send through the notification process
 			$this -> notifyUser($userId, $message, $subject);
 

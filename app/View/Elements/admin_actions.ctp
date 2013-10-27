@@ -1,4 +1,4 @@
-<div class="col-md-4">
+<div class="col-md-2">
 	<ul class="unstyled">
 		<li>
 			<h3><?php echo __('Collectibles');?></h3>
