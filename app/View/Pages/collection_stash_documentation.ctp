@@ -105,20 +105,20 @@
 		<p>There are many places throughout Collection Stash where you can add a collectible to your stash.  The <img src="/img/icon/add_stash_link_25x25.png"> icon indicates that you can add that collectible to your stash.</p>
 		<p>Here are some examples of where you will find the add to stash icon.</p>
 		
-		<img src="/img/documentation/stash_add_icon_example_1.png" class="img-polaroid">
+		<img src="/img/documentation/stash_add_icon_example_1.png" class="img-thumbnail">
 		<p>The collectible detail page.</p>
 		<p></p>
-		<img src="/img/documentation/stash_add_icon_example_2.png" class="img-polaroid">
+		<img src="/img/documentation/stash_add_icon_example_2.png" class="img-thumbnail">
 		<p>The collectible search page (tile view).</p>
 		<p></p>		
-		<img src="/img/documentation/stash_add_icon_example_3.png" class="img-polaroid">
+		<img src="/img/documentation/stash_add_icon_example_3.png" class="img-thumbnail">
 		<p>The collectible search page (list view).</p>
 		<p></p>		
 		<p>When you click the <img src="/img/icon/add_stash_link_25x25.png"> icon you will be prompted to fill out some information about the collectible you want to stash.  All of the fields are optional.</p>
-		<img src="/img/documentation/stash_add.png" class="img-polaroid">
+		<img src="/img/documentation/stash_add.png" class="img-thumbnail">
 		<p></p>			
 		<p>Once you are done filling out the information you would like to add to your collectible, click the "Add" button to save the collectible to your Stash.  If there are no errors the collectible will be added to your stash and you will recieve a success message.</p>
-		<img src="/img/documentation/stash_add_success.png" class="img-polaroid">
+		<img src="/img/documentation/stash_add_success.png" class="img-thumbnail">
 		<p></p>			
 		
 		<h2 id="submit-new">Submitting a New Collectible</h2>
@@ -127,7 +127,7 @@
 			When submitting a new collectible, various types of collectibles are presented.  It is important to pick the right type based on what you are trying to add.
 		</p>
 
-		<img src="/img/documentation/submit_new_collectible_options.png" class="img-polaroid">
+		<img src="/img/documentation/submit_new_collectible_options.png" class="img-thumbnail">
 
 		<h3 id="types">Types</h3>
 		<p>
@@ -216,7 +216,7 @@
 		<p>
 			Regardless of type, all collectibles begin in the Draft status.  When you are on the collectible edit page, after selecting a platform you will see the Draft status indicated at the top.  The status bar is visible on all collectibles that are in Draft and Submitted status.
 		</p>
-		<img src="/img/documentation/add_new_draft_status.png" class="img-polaroid">
+		<img src="/img/documentation/add_new_draft_status.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			A collectible can be in one of the following statuses:
@@ -297,17 +297,17 @@
 		<p>
 			The artist section can be found near the top of the collectible form. <strong>The first one you add will be the primary artist.</strong>
 		</p>
-		<img src="/img/documentation/artist_form.png" class="img-polaroid">
+		<img src="/img/documentation/artist_form.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			This is a typeahead input field.  Please use the full name or most common handle for that artist.  If the artist exsists already it will show up in a drop-down box for you to select.
 		</p>
-		<img src="/img/documentation/artist_form_search.png" class="img-polaroid">
+		<img src="/img/documentation/artist_form_search.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			Here is an example of what it should look like when an artist has been added.
 		</p>
-		<img src="/img/documentation/artist_form_add.png" class="img-polaroid">
+		<img src="/img/documentation/artist_form_add.png" class="img-thumbnail">
 		<h4>Manufacturers that are also considered Artists</h4>
 		<p>
 			In some cases, a manufacturer might be an artist on a collectible.  In the future we plan to directly link that manufacturer to the collectible but until that is supported please add the manufacturer as an artist.
@@ -335,12 +335,12 @@
 		<p>
 			New parts are displayed and added near the bottom of the collectible form.
 		</p>
-		<img src="/img/documentation/part_add_new_dropdown.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_new_dropdown.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			When selected you will be presented with a modal dialog where you can fill out information about the part including: category, name, description, manufacturer, artist, scale and count.
 		</p>
-		<img src="/img/documentation/part_add_new_modal.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_new_modal.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			Below is a more in-depth description of the fields that can be populated for each part.
@@ -398,7 +398,7 @@
 		<p>
 			Here is an example of a part that was successfully added to a new collectible.
 		</p>
-		<img src="/img/documentation/part_add_new_added.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_new_added.png" class="img-thumbnail">
 
 		<h4 id="parts-add-existing">Adding Existing Parts to a Collectible</h4>
 		<p>
@@ -407,22 +407,22 @@
 		<p>
 			To add an existing part to a collectible use the following option under Action:
 		</p>
-		<img src="/img/documentation/part_add_existing_dropdown.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_existing_dropdown.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			When selected you will be presented with a modal dialog where you can search for parts either by collectible or by part.
 		</p>
-		<img src="/img/documentation/part_add_existing_modal.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_existing_modal.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			If you know the collectible that the part you want to add is attached to, then click "Find By Collectible".  You will be presented with a screen that will allow you to search for a collectible.  When you find the part you wish to add, click it.
 		</p>
-		<img src="/img/documentation/part_add_existing_modal_search.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_existing_modal_search.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			Once you select the part you want, you will be allowed to add the count.  Click "Add" to add it to your collectible.
 		</p>
-		<img src="/img/documentation/part_add_existing_modal_selected.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_existing_modal_selected.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			The same process can be applied when searching for a part directly.
@@ -431,7 +431,7 @@
 		<p>
 			After you add the part to the collectible, you can upload photos for that part by clicking the "Edit Part Photos" link as shown below.
 		</p>
-		<img src="/img/documentation/part_edit_photos.png" class="img-polaroid">
+		<img src="/img/documentation/part_edit_photos.png" class="img-thumbnail">
 		<p></p>
 		<h4>Editing</h4>
 		<p>
@@ -441,19 +441,19 @@
 		<p>
 			There might be cases when the same part is duplicated by another part on a different collectible.  If you find that this is the case you can replace the duplicated part with the base one.  To accomplish this, find the collectible that has the duplicate part and click the Edit icon.
 		</p>
-		<img src="/img/documentation/part_duplicate.png" class="img-polaroid">
+		<img src="/img/documentation/part_duplicate.png" class="img-thumbnail">
 		<p></p>	
 		<p>Selecting the "Dupilicate" link will bring up the replacement modal.</p>
-		<img src="/img/documentation/part_duplicate_modal.png" class="img-polaroid">
+		<img src="/img/documentation/part_duplicate_modal.png" class="img-thumbnail">
 		<p></p>			
 		<p>The modal will display the part you are replacing.  You will be able to select the new part by either searching directly for a part or via a collectible.</p>
 		<p>For this example, we will find the part that duplicates are selected one by searching for a collectible first.</p>
-		<img src="/img/documentation/part_duplicate_modal_search.png" class="img-polaroid">
+		<img src="/img/documentation/part_duplicate_modal_search.png" class="img-thumbnail">
 		<p></p>			
-		<img src="/img/documentation/part_duplicate_modal_search_found.png" class="img-polaroid">
+		<img src="/img/documentation/part_duplicate_modal_search_found.png" class="img-thumbnail">
 		<p></p>	
 		<p>Click on the part that duplicates the selected part.</p>
-		<img src="/img/documentation/part_duplicate_modal_selected.png" class="img-polaroid">
+		<img src="/img/documentation/part_duplicate_modal_selected.png" class="img-thumbnail">
 		<p></p>			
 		<p>Click the "Replace" button to submit the replacement.  If you are able to live edit this replacement, it will automatically change, otherwise a edit will be submitted for approval.</p>
 		
@@ -477,7 +477,7 @@
 			If the part you are adding was made by you, is a 1 for 1 commission from an artist, or is generic (not sure where it came from) then you can add it new, directly to the custom collectible.
 		</p>
 		<p>
-			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these three options. <img src="/img/documentation/part_add_custom_modal.png" class="img-polaroid">
+			You will be prompted to choose between three options when adding a new part to a collectible.  Any new part added to a custom will <strong>not</strong> be allowed to be shared/linked to other collectibles.  It is very important you only add new parts to customs that fall within these three options. <img src="/img/documentation/part_add_custom_modal.png" class="img-thumbnail">
 		</p>
 		<p></p>
 		<p>
@@ -498,12 +498,12 @@
 		<p>
 			Status is indicated in the upper-right of the part card.
 		</p>
-		<img src="/img/documentation/part_card.png" class="img-polaroid">
+		<img src="/img/documentation/part_card.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			The status field can be selected when you add an existing part to a custom collectible using the Add Existing Part menu option.
 		</p>
-		<img src="/img/documentation/part_add_existing_custom_modal.png" class="img-polaroid">
+		<img src="/img/documentation/part_add_existing_custom_modal.png" class="img-thumbnail">
 		<p></p>
 		<p></p>
 		<h4 id="parts-original">Adding Parts to Original Collectibles</h4>
@@ -524,12 +524,12 @@
 		<p>
 			To submit a mass-produced collectible for approval click the "Submit for approval" button near the top of the page.
 		</p>
-		<img src="/img/documentation/submit_approval.png" class="img-polaroid">
+		<img src="/img/documentation/submit_approval.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			When you click the button, the collectible will go through the validation process.  If any errors are found they will be indicated at the top of the page below the status section.  We also do smart checking for duplicates.  If potential duplicates are found they will be indicated.
 		</p>
-		<img src="/img/documentation/dup_check.png" class="img-polaroid">
+		<img src="/img/documentation/dup_check.png" class="img-thumbnail">
 		<p></p>
 		<p>
 			This is an example of a duplication check when trying to submit a collectible called "Stormtroooper" for Sideshow Collectibles.
@@ -541,27 +541,27 @@
 		
 		<h2 id="listings">Sale Listings and Transactions</h2>
 		<p>Every collectible here at Collection Stash can contain sale and auction listings.  These listings can be used for reference to see what collectibles might be currently for sale and what a collectible might have recently sold for.  You can find these listings on the Collectible Information page under the Price Guide tab.</p>
-		<img src="/img/documentation/listing.png" class="img-polaroid">
+		<img src="/img/documentation/listing.png" class="img-thumbnail">
 		<p></p>
 		<p>Here is an example of a collectible with some completed transactions.</p>
-		<img src="/img/documentation/listing_completed.png" class="img-polaroid">
+		<img src="/img/documentation/listing_completed.png" class="img-thumbnail">
 		<p></p>
 		<h3 id="listings-add"> Adding a Listing </h3>
 		<p>As of now, Collection Stash only supports eBay listings.  While logged in, you can add an eBay listing to a collectible by entering the item number from an eBay listing into the "Item Number" input field.</p>
-		<img src="/img/documentation/listing_add.png" class="img-polaroid">
+		<img src="/img/documentation/listing_add.png" class="img-thumbnail">
 		<p></p>
 		<p>Once you have entered a valid eBay Item Number you will click the "Add Listing" button to submit the new listing.  This will validate the Item Number, load the listing information, and display it appropriately.  If the Item Number you entered is valid, the listing information will automatically display below.</p>
 		<p>This is an example of a listing that was added that is active.  This means the collectible is still available for purchase.</p>
-		<img src="/img/documentation/listing_add_listing.png" class="img-polaroid">
+		<img src="/img/documentation/listing_add_listing.png" class="img-thumbnail">
 		<p></p>
 		<p>Next to each active listing or completed transaction is an "!" icon.  You can click this icon to flag that there is a problem with this listing, either it is not valid or an incorrect listing for this collectible.  When you click this icon, it will notify an administrator to look into this listing.  Only an administrator and unflag a listing.</p>
-		<img src="/img/documentation/listing_add_flagged.png" class="img-polaroid">
+		<img src="/img/documentation/listing_add_flagged.png" class="img-thumbnail">
 		<p></p>
 		<p>Currently all listings have to be entered in manually.  However, you can earn up to 50 nuts per valid listing you add to a collectible.</p>
 		
 		<h3 id="listings-price-guide"> Price Guide </h3>
 		<p> The Price Guide feature of a collectible breakdowns the average price a collectible is selling for given all of the completeled transactions.  If there are no completed transactions then all of the values will be zero.</p>
-		<img src="/img/documentation/listing_price_guide.png" class="img-polaroid">
+		<img src="/img/documentation/listing_price_guide.png" class="img-thumbnail">
 		<p></p>
 		<p>The following average prices are available.</p>
 		<ul>
