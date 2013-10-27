@@ -71,6 +71,10 @@ body.home {
 	width: 100%;
 }
 
+.nav.account {
+	font-size: 16px;
+}
+
 @media (min-width: 979px) {
 	#wrap.home-dashboard {
 		padding-left: 112px;

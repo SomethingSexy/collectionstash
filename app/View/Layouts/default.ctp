@@ -158,7 +158,7 @@ if (isset($bodyClass))
 				<form method="get" class="navbar-form navbar-left" role="search" action="/collectibles/search">
 					<input id="q" type="text" name="q" class="search-query form-control col-lg-8" placeholder="Search">
 				</form>
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav navbar-right account">
 						<li>
 						<?php
 							$homeLinkLabel = '<i class="icon-home"></i>';
