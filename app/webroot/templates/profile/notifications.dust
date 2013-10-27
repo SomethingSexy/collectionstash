@@ -4,24 +4,30 @@
 </p>
 <form id="stash-form" method="post" class="form-horizontal">
 	<fieldset>
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#	email_notification}checked{/email_notification} type="checkbox" value="true" name="email_notification">
-					Email notifications</label>
+		<div class="form-group">
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label>
+						<input {#	email_notification}checked{/email_notification} type="checkbox" value="true" name="email_notification">
+						Email notifications</label>
+				</div>
 			</div>
 		</div>
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input {#email_newsletter}checked{/email_newsletter} type="checkbox" value="true" name="email_newsletter">
-					Subscribe to newsletter</label>
+		<div class="form-group">
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label>
+						<input {#email_newsletter}checked{/email_newsletter} type="checkbox" value="true" name="email_newsletter">
+						Subscribe to newsletter</label>
+				</div>
 			</div>
 		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary" data-loading-text="Saving..." id="notifications-submit">
-				Save
-			</button>
+		<div class="form-group">
+			<div class="col-lg-offset-3 col-lg-9">
+				<button class="btn btn-primary" data-loading-text="Saving..." id="notifications-submit">
+					Save
+				</button>
+			</div>
 		</div>
 	</fieldset>
 </form>
