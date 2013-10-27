@@ -145,7 +145,9 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 					<?php } ?>	
 				</div>
 			</div>
-			
+			<div id="status-container" class="row spacer">
+	
+			</div>			
 			<div class="row">
 				
 				
@@ -215,10 +217,6 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						</span>
 					</div>
 				</div>
-			</div>
-
-			<div id="status-container" class="row">
-	
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -315,52 +313,40 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 		if ($adminMode) {
 					?>
 		<div class="row spacer">
-			<div class="col-md-12">
-				<div class="component" id="collectible-detail">
-					<div class="inside">
-						<div class="component-view">
-				
-				
-				
-				
-							<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form')); ?>
-							<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
-							<fieldset class="approval-fields">
-								<ul class="form-fields unstyled">
-									<li>
-										<div class="label-wrapper">
-											<label for=""> <?php echo __('Notes')
-												?></label>
-										</div>
-										<textarea rows="6" cols="30" name="data[Approval][notes]"></textarea>
-									</li>
-								</ul>
-							</fieldset>
-							</form>
-							<div class="links">
-								<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
-								<button id="deny-button" class="btn"><?php echo __('Deny'); ?></button>
-							</div>
-							<script>
-								//Eh move this out of here
-								$('#approval-button').click(function() {
-									$('#approve-input').val('true');
-									$('#approval-form').submit();
-								});
-								$('#deny-button').click(function() {
-									$('#approve-input').val('false');
-									$('#approval-form').submit();
-								});
-				
-							</script>
-						
+			<div class="col-md-12">		
+				<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form', 'class' => 'form-horizontal')); ?>
+				<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
+				<fieldset class="approval-fields">
+					<div class="form-group">
+						<label class="col-lg-3 control-label" for="ApprovalNotes"><?php echo __('Notes')
+									?></label>
+						<div class="col-lg-6">
+								<textarea id="ApprovalNotes" class="form-control" name="data[Approval][notes]"></textarea>
 						</div>
+					</div>				
+				</fieldset>
+				</form>
+				<div class="form-group">
+					<div class="col-lg-offset-3 col-lg-9">
+						<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
+						<button id="deny-button" class="btn btn-default"><?php echo __('Deny'); ?></button>
 					</div>
-				</div>
+				</div>	
+				<script>
+					//Eh move this out of here
+					$('#approval-button').click(function() {
+						$('#approve-input').val('true');
+						$('#approval-form').submit();
+					});
+					$('#deny-button').click(function() {
+						$('#approve-input').val('false');
+						$('#approval-form').submit();
+					});
+	
+				</script>
 			</div>
 		</div>
 			<?php } ?>	
-	
 </div>
 
 

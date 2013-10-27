@@ -8,7 +8,7 @@ body {
 	background-color: #F1F1F1;
 	padding-top: 80px;
 	overflow-x: hidden; /* bootstrap 3.0 fluid layout broken, showing horizontal scrollbar
-	/*background: url("/img/pattern.png") repeat scroll left top #F0F0F0;*/
+	 /*background: url("/img/pattern.png") repeat scroll left top #F0F0F0;*/
 }
 body.home {
 	padding-top: 40px;
@@ -19,6 +19,7 @@ body.home {
 	min-height: 100%;
 	padding-left: 20px;
 	padding-right: 20px;
+	margin-bottom: 10px;
 }
 
 #footer {
@@ -80,7 +81,7 @@ body.home {
 		padding-top: 120px;
 	}
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 1024px) {
 	body {
 		padding-top: 140px;
 	}
