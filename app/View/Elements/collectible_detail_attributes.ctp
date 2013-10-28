@@ -16,11 +16,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 	// TO be able to handle editing both the attribute and the attributecollectible easier
 	// I am going to put the JSON object as a data attribute on each row
 	if ($attributeEmpty) {
-
-		echo '<ul class="unstyled">';
-		echo '<li>No Parts or Accessories have been added</li>';
-		echo '</ul>';
-
+		echo '<p>No Parts or Accessories have been added</p>';
 	} else {
 		$outputAttribtes = '';
 		$added = false;
