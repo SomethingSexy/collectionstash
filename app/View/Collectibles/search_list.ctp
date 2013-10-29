@@ -181,9 +181,9 @@ unset($urlparams['url']);
 						if ($isLoggedIn && $collectible['Collectible']['userCounts']) {
 							foreach ($collectible['Collectible']['userCounts'] as $key => $value) {
 								if ($value['type'] === 'Default') {
-									echo '<span class="label">' . $value['count'] . ' in your Stash' . '</span>';
+									echo '<span class="label label-default">' . $value['count'] . ' in your Stash' . '</span>';
 								} else {
-									echo '<span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
+									echo '<span class="label label-default">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
 								}
 
 							}
