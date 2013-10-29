@@ -37,7 +37,7 @@ class CollectibleDetailHelper extends AppHelper {
 				$value = str_replace('\n', "\n", $value);
 				$value = str_replace('\r', "\r", $value);
 				$value = nl2br($value);
-				$vaule = html_entity_decode($vaule); 
+				$vaule = html_entity_decode($value); 
 
 				$valueAttr = 'data-value="' . $value . '"';
 
