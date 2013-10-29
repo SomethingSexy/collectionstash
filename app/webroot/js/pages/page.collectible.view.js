@@ -35,7 +35,7 @@ $(function() {
 			// go to the edit page
 			status.on('sync', function() {
 				if (this.toJSON().status.id === '1') {
-					window.location.href = '/collectibles/edit/' + this.id
+					window.location.href = '/collectibles/edit/' + this.id;
 				}
 			}, status);
 
