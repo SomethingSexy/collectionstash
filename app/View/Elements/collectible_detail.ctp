@@ -278,7 +278,11 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 							
 							</div>	
 							<?php if(!empty($transactionGraphData)) { ?>
-				
+							<div class="graph-container">
+								<div id="holder" style="width:850px;height:450px">
+	
+								</div>			    	
+						    </div>	
 						    <?php } ?>					 	
 						</div>							
 					<?php } ?>

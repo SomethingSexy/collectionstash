@@ -21,12 +21,8 @@
 				
 			</div>			
 		</div>	
-		<p class="pull-right clearfix">Average prices update once a day.</p>
-		<div class="graph-container">
-			<div id="holder" style="width:850px;height:450px">
-
-			</div>			    	
-	    </div>			
+		<p class="pull-right">Average prices update once a day.</p>
+		
 	</div>
 	
 </div>
