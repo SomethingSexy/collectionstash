@@ -12,7 +12,7 @@ var pageEvents = _.extend({}, Backbone.Events);
 var ErrorModel = Backbone.Model.extend({});
 var Errors = Backbone.Collection.extend({
 	model : ErrorModel
-})
+});
 
 var PaginatedPart = Backbone.Paginator.requestPager.extend({
 	filters : {},
@@ -1618,7 +1618,8 @@ var CollectibleView = Backbone.View.extend({
 		}, this);
 		this.model.on("change:limited", this.render, this);
 		this.model.on("change:edition_size", this.render, this);
-		this.model.on("change:series_id", this.render, this);
+		// this.model.on("change:series_id", this.render, this);
+
 		this.manufacturers.on('add', this.render, this);
 		this.seriesView = null;
 		this.series.on('change', function() {
@@ -1633,6 +1634,11 @@ var CollectibleView = Backbone.View.extend({
 			$('.modal-body', '#seriesModal').html(this.seriesView.render().el);
 
 			$('#seriesModal').modal();
+			// After Boostrap 3 upgrade, had to do this to rerender
+			// over a change event on the model
+			$('#seriesModal').on('hidden.bs.modal', function() {
+				self.render();
+			});
 		}, this);
 
 		this.seriesEdit.on('change', function() {
@@ -1657,11 +1663,16 @@ var CollectibleView = Backbone.View.extend({
 		}, this);
 
 		pageEvents.on('series:select', function(id, name) {
-			$('#seriesModal').modal('hide');
+			// After bootstrap 3 upgrade, setting this to silent and
+			// using the hide event call back to rerender
 			this.model.set({
 				seriesPath : name,
 				'series_id' : id
+			}, {
+				silent : true
 			});
+			$('#seriesModal').modal('hide');
+
 		}, this);
 
 		this.model.on('sync', this.onModelSaved, this);
@@ -1923,7 +1934,7 @@ var CollectibleView = Backbone.View.extend({
 
 			this.manufacturers.add(manufacturer);
 
-			$('#manufacturerModal', 'body').modal('hide')
+			$('#manufacturerModal', 'body').modal('hide');
 
 		}, this);
 
@@ -1974,7 +1985,7 @@ var CollectibleView = Backbone.View.extend({
 			// unbind all
 			this.manufacturer.off();
 
-			$('#manufacturerModal', 'body').modal('hide')
+			$('#manufacturerModal', 'body').modal('hide');
 
 		}, this);
 

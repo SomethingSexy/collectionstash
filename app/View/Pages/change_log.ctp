@@ -1,5 +1,8 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.8.1</h3>
+<p>Bug fixes</p>
+
 <h3>Release Notes for v2.8</h3>
 <p>Updated to support Bootstrap v3</p>
 <p>UI fixes</p>
