@@ -168,9 +168,9 @@ unset($urlparams['url']);
 
 						echo '</div>';
 
-						echo '<div class="row">';
+						echo '<div class="row spacer">';
 						echo '<div class="col-md-12 count">';
-						echo '<span class="label">';
+						echo '<span class="label label-default">';
 
 						if ($collectible['Collectible']['collectibles_user_count'] === '0') {
 							echo $collectible['Collectible']['collectibles_user_count'] . ' Stashed';
