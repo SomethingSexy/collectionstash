@@ -239,12 +239,11 @@
 <div class="col-md-4 home">
 	<div class="row spacer">
 		<div class="col-md-12">
-			<div class="widget">
-				<div class="widget-header">
-					<i class="icon-time"></i>
-					<h3>Activity</h3>		
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="icon-time"></i> Activity</h3>		
 				</div>
-				<div class="widget-content activities-container widget-users-activity">
+				<div class="panel-body activities-container widget-users-activity">
 					
 				</div>				
 			</div>
