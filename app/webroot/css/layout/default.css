@@ -215,6 +215,7 @@
 }
 #collectibles-list-component .collectibles .collectible {
 	border-bottom: 1px solid #DDDDDD;
+	padding-bottom: 20px;
 }
 /* I think this is in the newest version of bootstrap so remove when that is added */
 #collectibles-list-component .collectible-detail .well .text-center {
