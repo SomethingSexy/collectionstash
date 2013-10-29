@@ -2,6 +2,7 @@
 <h2>Change Log</h2>
 <h3>Release Notes for v2.8</h3>
 <p>Updated to support Bootstrap v3</p>
+<p>UI fixes</p>
 
 <h3>Release Notes for v2.7.3</h3>
 <ul>
