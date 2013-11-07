@@ -12,15 +12,27 @@
 
 <h3>2013 Grand Prize</h3>
 <p>We are having a Grand Prize for the person who earns the most nuts for 2013.  The person who earns the most nuts for 2013 will win a <a href="/collectibles/view/2/sideshow-collectibles-friday-the-13th-jason-voorhees-statue">Sideshow Collectibles Friday the 13th Part 3 Jason Premium Format Figure.</a></p>
-<ul class="thumbnails">
-	<li class="col-md-4">
-		<a class="thumbnail" href="http://www.collectionstash.com//files/300079_press01-001.jpg" data-gallery="gallery">
+<div class="row">
+	<div class="col-md-12">
+		<a class="thumbnail col-md-4" href="http://www.collectionstash.com//files/300079_press01-001.jpg" data-gallery="gallery">
 			<img alt="" src="http://www.collectionstash.com//files/300079_press01-001.jpg">
 		</a>
-	</li>
-</ul>
+	</div>
+</div>
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
+
+<h4>October</h4>
+<p>October's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+    <li>ComingOfShadows with 152540 nuts</li>
+    <li>ricoanthony16 with 92059 nuts</li>
+    <li>BonezGT with 21692 nuts</li>
+    <li>Spiderwebb13 with 4429 nuts</li>
+    <li>DarthMadden with 2051 nuts</li>
+</ol>
+
+<h4>September</h4>
 
 <h4>August</h4>
 <p>August's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
