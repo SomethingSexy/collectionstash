@@ -62,6 +62,12 @@ var CollectibleModel = Backbone.Model.extend({
 			msg : 'Must be numeric.'
 		}, {
 			required : false
-		}]
+		}],
+		retailer : [{
+			rangeLength : [4, 150],
+			msg : 'Invalid length.  Must be between 4 and 150 characters.'
+		}, {
+			required : false
+		}],
 	}
 });
