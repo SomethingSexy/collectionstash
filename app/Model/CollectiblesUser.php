@@ -4,6 +4,8 @@ App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUser extends AppModel {
 
+	public $findMethods = array('orderAveragePrice' => true);
+
 	public $name = 'CollectiblesUser';
 	//As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
 	//then we have a complete total of collectibles
@@ -477,6 +479,27 @@ class CollectiblesUser extends AppModel {
 		}
 
 		return $retVal;
+	}
+
+	protected function _findOrderAveragePrice($state, $query, $results = array()) {
+		if ($state === 'before') {
+			// check to see what the sort is and then apply it here
+			if (!empty($query['operation']) && $query['operation'] === 'count') {
+				return $query;
+			}
+
+			if (!empty($query['sort']) && $query['sort'] === 'Collectible.average_price') {
+				$query['order'] = array('Collectible.orderAveragePrice' => $query['direction']);
+
+				return $query;
+			}
+
+			// $query['joins'] = array(
+			// //array of required joins
+			// );
+			return $query;
+		}
+		return $results;
 	}
 
 }

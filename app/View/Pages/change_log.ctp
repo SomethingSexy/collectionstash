@@ -1,5 +1,9 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.8.3</h3>
+<p>Added a new sort for the user stash list page.  You can now sort by the average price of the collectible.</p>
+<p>Various UI fixes.</p>
+
 <h3>Release Notes for v2.8.2</h3>
 <p>Fixed an issue with navbar not collapsing when using iPad in portrait mode.</p>
 <p>Fixed an issue where the Exclusive Retailer/Venue field would allow less than 4 characters and save that value to the database.</p>

@@ -27,6 +27,7 @@ echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufact
 if ($stashType === 'default') {
 	echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
 	echo '<th>' . $this -> Paginator -> sort('cost', 'Price Paid') . '</th>';
+	echo '<th>' . $this -> Paginator -> sort('Collectible.average_price', 'Collection Stash Value') . '</th>';
 	echo '<th>' . $this -> Paginator -> sort('purchased', 'Date Purchased') . '</th>';
 	if ($history) {
 		echo '<th>' . __('Sold For') . '</th>';
@@ -89,6 +90,13 @@ foreach ($collectibles as $key => $myCollectible) {
 			echo '<td>' . __('Not Recorded') . '</td>';
 		}
 
+		if (isset($myCollectible['Collectible']['CollectiblePriceFact'])) {
+			echo '<td>' . $myCollectible['Collectible']['CollectiblePriceFact']['average_price'] . '</td>';
+		} else {
+			echo '<td> - </td>';
+		}
+		
+
 		if (!empty($myCollectible['CollectiblesUser']['purchase_date'])) {
 			echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['CollectiblesUser']['purchase_date'], null) . '</td>';
 		} else {
@@ -115,7 +123,7 @@ foreach ($collectibles as $key => $myCollectible) {
 	if (isset($myStash) && $myStash) {
 		echo '<td>';
 		echo '<div class="btn-group">';
-		echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
+		echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 		echo '<ul class="dropdown-menu">';
 
 		if ($stashType === 'default') {
