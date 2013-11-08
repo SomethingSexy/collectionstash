@@ -64,6 +64,12 @@ class Collectible extends AppModel {
 	//pieces
 	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')));
 
+	function __construct($id = false, $table = null, $ds = null) {
+		// This allows us to easily order collectibles by average price from outside
+		$this -> virtualFields['orderAveragePrice'] = 'SELECT MIN(CollectiblePriceFact.average_price) FROM collectible_price_facts AS CollectiblePriceFact WHERE CollectiblePriceFact.id = Collectible.collectible_price_fact_id';
+		parent::__construct($id, $table, $ds);
+	}
+
 	// function validateName($check) {
 	// debug($check['name']);
 	// return preg_match("/^[A-Za-z0-9\s#:.'-]+\z/", $check['name']) === 1;
@@ -373,7 +379,7 @@ class Collectible extends AppModel {
 							$existingRetailer = $this -> Retailer -> find('first', array('contain' => false, 'conditions' => array('Retailer.id' => $val['Collectible']['retailer_id'])));
 							$results[$key]['Collectible']['retailer'] = $existingRetailer['Retailer']['name'];
 						}
-
+						$descriptionTitle = '';
 						if (isset($val['Collectible']['name'])) {
 							$descriptionTitle = $val['Collectible']['name'];
 						}
