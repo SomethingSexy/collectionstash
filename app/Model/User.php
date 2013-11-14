@@ -29,7 +29,7 @@ class User extends AppModel {
 	//last, allow space now
 	'last_name' => array('rule' => '/^[a-z0-9 ]*$/i', 'required' => true, 'allowEmpty' => false, 'message' => 'Alphanumeric only.'));
 
-	function beforeSave() {
+	public function beforeSave($options = array()) {
 		//Make sure there is no space around the email, seems to be an issue with sending when there is
 		if (isset($this -> data['User']['email'])) {
 			$this -> data['User']['email'] = trim($this -> data['User']['email']);
