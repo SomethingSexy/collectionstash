@@ -45,7 +45,7 @@ if (!defined('APP_DIR')) {
 	define('APP_DIR', basename(dirname(dirname(__FILE__))));
 }
 
-define('MAINTENANCE', 1);
+define('MAINTENANCE', 0);
 if (MAINTENANCE > 0 && $_SERVER['REMOTE_ADDR'] != '108.234.128.63') {
 	require ('maintenance.php');
 	die();
