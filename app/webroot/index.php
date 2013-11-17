@@ -18,6 +18,21 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
+function getIP() {
+	$ip;
+	if (getenv("HTTP_CLIENT_IP"))
+		$ip = getenv("HTTP_CLIENT_IP");
+	else if (getenv("HTTP_X_FORWARDED_FOR"))
+		$ip = getenv("HTTP_X_FORWARDED_FOR");
+	else if (getenv("REMOTE_ADDR"))
+		$ip = getenv("REMOTE_ADDR");
+	else
+		$ip = "UNKNOWN";
+	return $ip;
+
+}
+
 /**
  * Use the DS to separate the directories in other defines
  */
@@ -46,7 +61,7 @@ if (!defined('APP_DIR')) {
 }
 
 define('MAINTENANCE', 0);
-if (MAINTENANCE > 0 && $_SERVER['REMOTE_ADDR'] != '108.234.128.63') {
+if (MAINTENANCE > 0 && getIP() != '108.234.128.63') {
 	require ('maintenance.php');
 	die();
 }
