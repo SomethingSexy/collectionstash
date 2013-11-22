@@ -124,7 +124,24 @@
 					echo $collectible['CollectiblesUser']['purchase_date'];
 					echo '</dd>';
 				}
-				?>					</dl>
+				?>
+				<?php
+				if (isset($collectible['CollectiblesUser']['notes']) && !empty($collectible['CollectiblesUser']['notes']) && (!$collectible['CollectiblesUser']['notes_private'] || $viewMyCollectible)) {
+					echo '<dt>';
+					echo __('Notes');
+					echo '</dt>';
+					echo '<dd>';
+
+					$value = str_replace('\n', "\n", $collectible['CollectiblesUser']['notes']);
+					$value = str_replace('\r', "\r", $value);
+					$value = nl2br($value);
+					$vaule = html_entity_decode($value);
+
+					echo $value;
+					echo '</dd>';
+				}
+				?>				
+				</dl>
    		
     	</div>	
     	

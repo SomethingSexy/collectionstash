@@ -40,13 +40,13 @@ class Collectible extends AppModel {
 	//series field
 	'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
 	//description field
-	'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Invalid length.')),
+	'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Description must be less than 1000 characters.')),
 	//msrp
 	'msrp' => array('rule' => array('money', 'left'), 'required' => false, 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//edition_size
 	'edition_size' => array('rule' => array('validateEditionSize'), 'allowEmpty' => true, 'message' => 'Must be numeric.'),
 	//retailer
-	'retailer' => array('minLength' => array('rule' => array('minLength', 4), 'allowEmpty' => true, 'message' => 'Retailer/Venue must be at least 4 characters.'), 'maxLength' => array('rule' => array('maxLength', 150), 'message' => 'Cannot be more than 150 characters.')),
+	'retailer' => array('minLength' => array('rule' => array('minLength', 4), 'allowEmpty' => true, 'message' => 'Retailer/Venue must be at least 4 characters.'), 'maxLength' => array('rule' => array('maxLength', 150), 'message' => 'Retailer/Venue cannot be more than 150 characters.')),
 	//upc
 	'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
 	//product code

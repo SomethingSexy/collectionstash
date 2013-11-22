@@ -30,7 +30,9 @@ class CollectiblesUser extends AppModel {
 	// this is only needed when deleting
 	'remove_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
 	// this is only needed when deleting
-	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'), );
+	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
+	//notes
+	'notes' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Notes must be less than 1000 characters.')), );
 
 	function beforeValidate() {
 		if (isset($this -> data['CollectiblesUser']['merchant']) && !empty($this -> data['CollectiblesUser']['merchant'])) {
@@ -277,7 +279,7 @@ class CollectiblesUser extends AppModel {
 		}
 
 		// adding sold_cost here for validation but it will not be added to the collectibles_users table
-		$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date', 'sold_cost', 'listing_id');
+		$fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date', 'sold_cost', 'listing_id', 'notes', 'notes_private');
 		$data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
 		$dataSource = $this -> getDataSource();
 		$dataSource -> begin();
