@@ -85,7 +85,14 @@
 			{#inlineErrors.purchase_date}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.purchase_date}
-	</div>			
+	</div>	
+	<div class="form-group {#inlineErrors.notes}has-error{/inlineErrors.notes}">
+		<label class="control-label" for="CollectiblesUserNotes">Notes</label>
+		<textarea id="CollectiblesUserNotes" class="form-control" maxlength="1000" name="notes">{collectible.notes|s}</textarea>
+		{#inlineErrors.notes}
+			<span class="help-inline">{.}</span>
+		{/inlineErrors.notes}
+	</div>				
 </form>
 </div>
 

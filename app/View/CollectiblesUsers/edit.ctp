@@ -71,6 +71,26 @@
 	        <?php echo $this -> Form -> text('purchase_date', array('class' => 'form-control', 'div' => false, 'label' => false, 'maxLength' => 10)); ?>
 	  			</div>
 		</div>  
+		<div class="form-group">
+			<label class="control-label col-lg-3" for="CollectiblesUserNotes">Notes</label>
+			<div class="col-lg-6">
+				<?php
+					$value = str_replace('\n', "\n", $this->data['CollectiblesUser']['notes']);
+					$value = str_replace('\r', "\r", $value);
+					$vaule = html_entity_decode($value);
+				?>
+				<textarea id="CollectiblesUserNotes" class="form-control" maxlength="1000" name="data[CollectiblesUser][notes]"><?php echo $value; ?></textarea>
+			</div>
+		</div>	
+		<div class="form-group">
+			<div class="col-lg-offset-3 col-lg-6">
+				<div class="checkbox">
+					<label>
+						<?php echo $this -> Form -> input('notes_private', array('div' => false, 'label' => false)); ?>
+						<?php echo __('Private Notes') ?></label>
+				</div>
+			</div>
+		</div>
 		<?php if (!$collectible['CollectiblesUser']['active']) { 
 				if($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '1') {	?>
 					<div class="form-group ">
@@ -103,10 +123,10 @@
 	$(function() {
 		$("#CollectiblesUserPurchaseDate").datepicker();
 		$("#CollectiblesUserRemoveDate").datepicker();
-		
+
 		$('#CollectiblesUserMerchant', this.el).typeahead({
 			name : 'merchants',
-			remote: '/merchants/getMerchantList?query=%QUERY',
+			remote : '/merchants/getMerchantList?query=%QUERY',
 		});
 
 	});
