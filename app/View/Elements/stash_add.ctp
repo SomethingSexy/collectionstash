@@ -93,6 +93,17 @@
 			<span class="help-inline">{.}</span>
 		{/inlineErrors.notes}
 	</div>				
+	<div class="form-group {#inlineErrors.notes_private}has-error{/inlineErrors.notes_private}">
+		<div class="checkbox">
+			<label for="CollectiblesUserNotesPrivate">
+				<input type="checkbox" id="CollectiblesUserNotesPrivate" value="1" name="notes_private" {#model.artist_proof}checked{/model.artist_proof}>
+				Private Notes</label>
+			
+		</div>
+			{#inlineErrors.notes_private}
+				<span class="help-inline">{.}</span>
+			{/inlineErrors.notes_private}
+	</div>	
 </form>
 </div>
 
