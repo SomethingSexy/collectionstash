@@ -104,6 +104,7 @@ class CollectiblesUsersController extends AppController {
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
 
 				if (!empty($this -> request -> data)) {
+					$this -> request -> data = Sanitize::clean($this -> request -> data);
 					$response = $this -> CollectiblesUser -> update($this -> request -> data, $this -> getUser());
 
 					if ($response['response']['isSuccess']) {
