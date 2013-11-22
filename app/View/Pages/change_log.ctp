@@ -1,5 +1,7 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.9</h3>
+<p>Added a note field per collectible in a user's stash.  This field can be used to add notes about thier collectible.  There is also a checkbox field that will allow you to make that note private.</p>
 <h3>Release Notes for v2.8.3</h3>
 <p>Added a new sort for the user stash list page.  You can now sort by the average price of the collectible.</p>
 <p>Various UI fixes.</p>
