@@ -4,6 +4,7 @@ $config['Settings'] = Configure::read('Settings');
 $config['Settings'] = Set::merge($config['Settings'], array(
 	'version' => '2.9',
   	'title' => 'My Application',
+  	'domain' => 'http://collectionstash.com',
   	'registration' => array(
   		'open' => true,
   		'invite-only' => false

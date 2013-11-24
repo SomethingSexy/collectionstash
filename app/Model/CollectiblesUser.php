@@ -245,7 +245,7 @@ class CollectiblesUser extends AppModel {
 				$collectible = $this -> Collectible -> find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $data['CollectiblesUser']['collectible_id'])));
 				$this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectible, 'stash' => $stash)));
 				// This is old school event, will be replaced by activity stuff later TODO
-				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('stashId' => $stash['Stash']['id'])));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('collectibleUserId' => $this -> id, 'stashId' => $stash['Stash']['id'])));
 			} else {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');

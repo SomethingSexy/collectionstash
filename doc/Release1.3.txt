@@ -28,9 +28,9 @@ Notes:
 
 cake -app D:\Development\wamp\www\app update_entities
 
-cake -app D:\Development\wamp\www\app process_notifications
+cake -app D:\Development\wamp\www\collectionstash\app process_notifications
 
-cake -app D:\Development\wamp\www\app send_email
+cake -app D:\Development\wamp\www\collectionstash\app send_email
 
 cake -app D:\Development\wamp\www\app update_user_subscriptions
 
