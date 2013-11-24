@@ -44,6 +44,8 @@ class EntityChangeEventListener implements CakeEventListener {
 
 				$subscriptions[$key]['Subscription']['message'] = $message;
 				$subscriptions[$key]['Subscription']['subject'] = __('A new coment has been posted.');
+				//$subscriptions[$key]['Subscription']['notification_type'] = 'comment_add';
+				//$subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
 			}
 		}
 
@@ -65,14 +67,18 @@ class EntityChangeEventListener implements CakeEventListener {
 		$id = $event -> subject -> id;
 
 		$stashId = $event -> data['stashId'];
+		$collectibleUserId = $event -> data['collectibleUserId'];
 		// Grab the stash
 		$stash = $event -> subject -> User -> Subscription -> EntityType -> Stash -> find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => $stashId)));
+
+		$collectibleUser = $event -> subject -> find('first', array('conditions' => array('CollectiblesUser.id' => $collectibleUserId), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'), 'CollectiblesUpload' => array('Upload')))));
+		$templateData = json_encode($collectibleUser);
 		//now grab all of the Subscriptions
 		$subscriptions = $event -> subject -> User -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $stash['Stash']['entity_type_id'])));
 
 		//Build the message
 		$message = $stash['User']['username'];
-		$message .= __(' has added a new collectible to their stash!');
+		$message .= __(' has added the following collectible to their <a href="' . Configure::read('Settings.domain') . '/stash/' . $stash['User']['username'] . '">stash</a>.');
 
 		foreach ($subscriptions as $key => $subscription) {
 			//If the subscription is the same as the owner of the stash, unset it
@@ -81,6 +87,8 @@ class EntityChangeEventListener implements CakeEventListener {
 			} else {
 				$subscriptions[$key]['Subscription']['message'] = $message;
 				$subscriptions[$key]['Subscription']['subject'] = __($stash['User']['username'] . ' updated their stash.');
+				$subscriptions[$key]['Subscription']['notification_type'] = 'stash_add';
+				$subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
 			}
 
 		}

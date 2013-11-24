@@ -28,6 +28,10 @@ class ProcessNotificationsShell extends AppShell {
 					}
 
 					$email['Email']['body'] = $notification['Notification']['message'];
+					
+					$email['Email']['template'] = $notification['Notification']['notification_type'];
+					$email['Email']['template_json_data'] = $notification['Notification']['notification_json_data'];
+					
 					$this -> Email -> create();
 					if ($this -> Email -> saveAll($email)) {
 						$processed = true;

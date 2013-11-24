@@ -18,10 +18,19 @@ class SendEmailShell extends AppShell {
 		foreach ($emails as $key => $email) {
 			$cakeEmail = new CakeEmail('smtp');
 			$cakeEmail -> emailFormat('html');
-			$cakeEmail -> template('notification', 'simple');
+			if (!empty($email['Email']['template'])) {
+				$cakeEmail -> template($email['Email']['template'], 'fancy');
+				$emailData = json_decode($email['Email']['template_json_data'], true);
+				$emailData['message'] = $email['Email']['body'];
+				$cakeEmail -> viewVars($emailData);
+			} else {
+				$cakeEmail -> template('notification', 'simple');
+				$cakeEmail -> viewVars(array('notification' => $email['Email']['body']));
+			}
+
 			$cakeEmail -> to($email['Email']['receiver']);
 			$cakeEmail -> subject($email['Email']['subject']);
-			$cakeEmail -> viewVars(array('notification' => $email['Email']['body']));
+
 			$cakeEmail -> send();
 
 			$this -> Email -> id = $email['Email']['id'];
