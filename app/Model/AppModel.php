@@ -115,12 +115,16 @@ class AppModel extends Model {
 		return $retVal;
 	}
 
-	public function notifyUser($userEmail = null, $message, $subject = null) {
+	/**
+	 * TODO: Passing in the template here, which I don't like but refactor later
+	 */
+	public function notifyUser($userEmail = null, $message, $subject = null, $template = null) {
 		$subscriptions = array();
 		$subscription = array();
 		$subscription['Subscription']['user_id'] = $userEmail;
 		$subscription['Subscription']['message'] = $message;
 		$subscription['Subscription']['subject'] = $subject;
+		$subscription['Subscription']['notification_type'] = $template;
 		array_push($subscriptions, $subscription);
 
 		CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $this, array('subscriptions' => $subscriptions)));

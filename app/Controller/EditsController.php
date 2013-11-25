@@ -101,28 +101,6 @@ class EditsController extends AppController {
 		}
 	}
 
-	function __sendApprovalEmail($approvedChange = true, $userEmail = null, $username = null, $collectibleName = null, $collectileId = null, $notes = '') {
-		$return = true;
-		if ($userEmail) {
-			$email = new CakeEmail('smtp');
-			$email -> emailFormat('both');
-			$email -> to($userEmail);
-			$email -> viewVars(array('collectibleName' => $collectibleName, 'username' => $username, 'notes' => $notes, 'collectible_url' => 'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId));
-			if ($approvedChange) {
-				$email -> template('edit_approval', 'simple');
-				$email -> subject('Your change has been successfully approved!');
-			} else {
-				$email -> template('edit_deny', 'simple');
-				$email -> subject('Oh no! Your change has been denied.');
-			}
-			$email -> send();
-		} else {
-			$return = false;
-		}
-
-		return $return;
-	}
-
 	/**
 	 * This function right now will return the history of the collectibles the user has submitted.
 	 */

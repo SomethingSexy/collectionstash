@@ -1,6 +1,5 @@
 <?php
 App::uses('Sanitize', 'Utility');
-App::uses('CakeEmail', 'Network/Email');
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesController extends AppController {

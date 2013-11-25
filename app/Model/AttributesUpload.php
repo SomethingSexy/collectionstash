@@ -16,10 +16,8 @@ class AttributesUpload extends AppModel {
 	public function beforeSave($options = array()) {
 		// Before we save check to see if there is an existin image that is the primary
 		// if not, set
-		debug($this -> data['AttributesUpload']);
 		if (!isset($this -> data['AttributesUpload']['primary']) || !$this -> data['AttributesUpload']['primary']) {
 			$primary = $this -> find('first', array('contain' => false, 'conditions' => array('AttributesUpload.attribute_id' => $this -> data['AttributesUpload']['attribute_id'], 'AttributesUpload.primary' => 1)));
-			debug($primary);
 			if (empty($primary)) {
 				$this -> data['AttributesUpload']['primary'] = true;
 			}
@@ -153,9 +151,7 @@ class AttributesUpload extends AppModel {
 
 				// Now we need to kick off a save of the upload
 				$uploadAddResponse = $this -> Upload -> add($upload, $user['User']['id']);
-				debug($uploadAddResponse);
 				if ($uploadAddResponse && $uploadAddResponse['response']['isSuccess']) {
-					debug($uploadAddResponse);
 					$retVal['response']['data'] = $uploadAddResponse['response']['data'];
 					$uploadId = $uploadAddResponse['response']['data']['Upload']['id'];
 					$data['AttributesUpload']['upload_id'] = $uploadId;
@@ -222,7 +218,6 @@ class AttributesUpload extends AppModel {
 		$retVal = false;
 		// Grab the fields that will need to updated
 		$collectiblesUploadEditVersion = $this -> findEdit($editId);
-		debug($collectiblesUploadEditVersion);
 
 		if ($collectiblesUploadEditVersion['Action']['action_type_id'] === '1') {// Add
 
@@ -277,7 +272,7 @@ class AttributesUpload extends AppModel {
 			$collectible = $this -> Attribute -> find('first', array('contain' => false, 'conditions' => array('Attribute.id' => $collectiblesUploadEditVersion['AttributesUploadEdit']['attribute_id'])));
 			$message = 'We have approved the following part upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEditVersion['AttributesUploadEdit']['attribute_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
 			$subject = __('Your edit has been approved.');
-			$this -> notifyUser($collectiblesUploadEditVersion['AttributesUploadEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($collectiblesUploadEditVersion['AttributesUploadEdit']['edit_user_id'], $message, $subject, 'edit_approval');
 		}
 
 		return $retVal;
@@ -288,10 +283,9 @@ class AttributesUpload extends AppModel {
 	 */
 	public function denyEdit($editId, $email = true) {
 		$retVal = false;
-		debug($editId);
 		// Grab the fields that will need to updated
 		$AttributesUploadEdit = $this -> findEdit($editId);
-		debug($AttributesUploadEdit);
+
 		// Right now we can really only add or edit
 		if ($AttributesUploadEdit['Action']['action_type_id'] === '1') {//Add
 			// If we were adding an image, then we need to delete the upload and then delete
@@ -315,7 +309,7 @@ class AttributesUpload extends AppModel {
 			$collectible = $this -> Attribute -> find('first', array('contain' => false, 'conditions' => array('Attribute.id' => $AttributesUploadEdit['AttributesUploadEdit']['attribute_id'])));
 			$message = 'We have denied the following part upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $AttributesUploadEdit['AttributesUploadEdit']['attribute_id'] . '">' . $collectible['Attribute']['name'] . '</a>';
 			$subject = __('Your edit has been denied.');
-			$this -> notifyUser($AttributesUploadEdit['AttributesUploadEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($AttributesUploadEdit['AttributesUploadEdit']['edit_user_id'], $message, $subject, 'edit_deny');
 		}
 
 		return $retVal;

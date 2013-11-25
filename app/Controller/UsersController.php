@@ -24,7 +24,7 @@ class UsersController extends AppController {
 
 		//stashes, grab StashFact if it has one
 		$stashes = $this -> User -> Stash -> find('all', array('conditions' => array('Stash.user_id' => $this -> getUserId()), 'contain' => array('StashFact')));
-		debug($stashes);
+
 		$this -> set(compact('stashes'));
 
 		// user_point_facts

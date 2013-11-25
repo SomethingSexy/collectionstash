@@ -336,7 +336,7 @@ class Attribute extends AppModel {
 						$message = 'We have approved the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $approver, 'object' => $attribute, 'target' => $submitter, 'type' => 'Attribute')));
 						$subject = __('Your submission has been approved.');
-						$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject);
+						$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject, 'edit_approval');
 					}
 				} else {
 					$retVal['response']['code'] = 4;
@@ -351,7 +351,7 @@ class Attribute extends AppModel {
 				if ($retVal) {
 					$message = 'We have denied the following collectible part you added <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attribute['Attribute']['id'] . '">' . $attribute['Attribute']['name'] . '</a>';
 					$subject = __('Your submission has been denied.');
-					$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject);
+					$this -> notifyUser($attribute['Attribute']['user_id'], $message, $subject, 'edit_deny');
 				}
 			} else {
 				$retVal['response']['code'] = 4;
@@ -394,7 +394,7 @@ class Attribute extends AppModel {
 
 			$message = 'We have denied the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attributeEditVersion['AttributeEdit']['base_id'] . '">' . $name . '</a>';
 			$subject = __('Your submission has been denied.');
-			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject, 'edit_deny');
 		}
 
 		return $retVal;
@@ -473,7 +473,7 @@ class Attribute extends AppModel {
 
 			$message = 'We have approved the following collectible part you submitted a change to <a href="http://' . env('SERVER_NAME') . '/attributes/view/' . $attributeEditVersion['AttributeEdit']['base_id'] . '">' . $name . '</a>';
 			$subject = __('Your edit has been approved.');
-			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($attributeEditVersion['AttributeEdit']['edit_user_id'], $message, $subject, 'edit_approval');
 		}
 
 		return $retVal;
