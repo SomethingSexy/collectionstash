@@ -32,9 +32,9 @@ class EntityChangeEventListener implements CakeEventListener {
 
 		$message = __('The following new comment has been posted to ');
 		if ($entityType['EntityType']['type'] === 'stash') {
-			$message .= $entityType['Stash']['User']['username'] . '\'s stash.';
+			$message .= $entityType['Stash']['User']['username'] . '\'s <a href="' . Configure::read('Settings.domain') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.';
 		} else if ($entityType['EntityType']['type'] === 'collectible') {
-			$message .= 'the collectible ' . $entityType['Collectible']['name'] . '.';
+			$message .= 'the collectible <a href="' . Configure::read('Settings.domain') . '/collectibles/view/' . $entityType['Collectible']['id'] . '">' . $entityType['Collectible']['name'] . '</a>' . '.';
 		}
 
 		foreach ($subscriptions as $key => $subscription) {
@@ -43,7 +43,7 @@ class EntityChangeEventListener implements CakeEventListener {
 				unset($subscriptions[$key]);
 			} else {
 				if ($entityType['EntityType']['type'] === 'stash' && $entityType['Stash']['User']['id'] === $subscription['Subscription']['user_id']) {
-					$message = __('The following new comment has been posted to your Stash!');
+					$message = __('The following new comment has been posted to your <a href="' . Configure::read('Settings.domain') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.');
 				}
 
 				$subscriptions[$key]['Subscription']['message'] = $message;
@@ -82,7 +82,7 @@ class EntityChangeEventListener implements CakeEventListener {
 
 		//Build the message
 		$message = $stash['User']['username'];
-		$message .= __(' has added the following collectible to their <a href="' . Configure::read('Settings.domain') . '/stash/' . $stash['User']['username'] . '">stash</a>.');
+		$message .= __(' has added the following collectible to their <a href="' . Configure::read('Settings.domain') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
 
 		foreach ($subscriptions as $key => $subscription) {
 			//If the subscription is the same as the owner of the stash, unset it
