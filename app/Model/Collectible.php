@@ -498,7 +498,6 @@ class Collectible extends AppModel {
 	 * Validate license method for print types, also going to be used for customs and originals
 	 */
 	public function validatePrintLicenseId($check) {
-		debug($this -> data['Collectible']['manufacture_id']);
 		// first make sure it is set
 		if (isset($check['license_id']) && !empty($check['license_id'])) {
 			// then check to see if we have a valid manufacturer set
@@ -712,7 +711,6 @@ class Collectible extends AppModel {
 			if (isset($collectible['Collectible']['variant']) && $collectible['Collectible']['variant']) {
 				array_push($conditions, array('AND' => array('Collectible.variant_collectible_id' => $collectible['Collectible']['variant_collectible_id'])));
 			}
-			debug($conditions);
 
 			// Since collectibles are added from the beginning, make sure to exclude this one
 			array_push($conditions, array('NOT' => array('Collectible.id' => array($collectible['Collectible']['id']))));
@@ -769,7 +767,7 @@ class Collectible extends AppModel {
 			if ($retVal) {
 				$message = 'We have approved your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
 				$subject = __('Your edit has been approved.');
-				$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject);
+				$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject, 'edit_approval');
 			}
 
 		} else {
@@ -781,10 +779,8 @@ class Collectible extends AppModel {
 
 	public function denyEdit($editId) {
 		$retVal = false;
-		debug($editId);
 		// Grab the fields that will need to updated
 		$collectibleEditVersion = $this -> findEdit($editId);
-		debug($collectibleEditVersion);
 		// Right now we can really only add or edit
 		if ($collectibleEditVersion['Action']['action_type_id'] === '1') {//Add
 			//TODO: Add does not go through here yet so it should not happen
@@ -806,7 +802,7 @@ class Collectible extends AppModel {
 		if ($retVal) {
 			$message = 'We have denied your change to the following <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleEditVersion['CollectibleEdit']['base_id'] . '">' . $collectibleEditVersion['CollectibleEdit']['name'] . '</a>';
 			$subject = __('Your edit has been denied.');
-			$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject, 'edit_deny');
 		}
 
 		return $retVal;
@@ -855,7 +851,6 @@ class Collectible extends AppModel {
 			unset($collectible['CollectiblesTag'][$key]['id']);
 		}
 
-		debug($collectible);
 		$this -> set($collectible);
 
 		// no need to check if it validates because it is all internal

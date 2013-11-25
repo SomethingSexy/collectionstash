@@ -9,7 +9,6 @@ class CollectiblesTag extends AppModel {
 		//Grab out edit collectible
 		$tagEditVersion = $this -> findEdit($tagEditId);
 		//reformat it for us, unsetting some stuff we do not need
-		debug($tagEditVersion);
 		$tagFields = array();
 		if ($tagEditVersion['Action']['action_type_id'] === '1') {
 			$tag = array();
@@ -33,7 +32,7 @@ class CollectiblesTag extends AppModel {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $tagEditVersion['CollectiblesTagEdit']['collectible_id'])));
 			$message = 'We have approved the following tag you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $tagEditVersion['CollectiblesTagEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
 			$subject = __('Your edit has been approved.');
-			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject, 'edit_approval');
 		}
 
 		return true;
@@ -41,10 +40,8 @@ class CollectiblesTag extends AppModel {
 
 	public function denyEdit($editId) {
 		$retVal = false;
-		debug($editId);
 		// Grab the fields that will need to updated
 		$tagEditVersion = $this -> findEdit($editId);
-		debug($tagEditVersion);
 		// Right now we can really only add or edit
 		if ($tagEditVersion['Action']['action_type_id'] === '1') {//Add
 			// If we are adding, we need to check and see if the attribute is new or
@@ -72,7 +69,7 @@ class CollectiblesTag extends AppModel {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $tagEditVersion['CollectiblesTagEdit']['collectible_id'])));
 			$message = 'We have denied the following tag you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $tagEditVersion['CollectiblesTagEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
 			$subject = __('Your edit has been denied.');
-			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($tagEditVersion['CollectiblesTagEdit']['edit_user_id'], $message, $subject, 'edit_deny');
 		}
 
 		return $retVal;
@@ -102,7 +99,6 @@ class CollectiblesTag extends AppModel {
 
 				$revision = $this -> Revision -> buildRevision($user['User']['id'], $this -> Revision -> ADD, null);
 				$data = array_merge($data, $revision);
-				debug($data);
 				if ($this -> saveAll($data, array('validate' => false))) {
 					$id = $this -> id;
 					$collectiblesTag = $this -> find('first', array('contain' => array('Tag', 'Collectible'), 'conditions' => array('CollectiblesTag.id' => $id)));
@@ -148,10 +144,7 @@ class CollectiblesTag extends AppModel {
 		$action['Action']['action_type_id'] = 4;
 		$action['Action']['reason'] = '';
 
-		debug($data);
-
 		$currentVersion = $this -> findById($data['CollectiblesTag']['id']);
-		debug($currentVersion);
 		// Now let's check to see if we need to update this based
 		// on collectible status
 		// If we are already auto updating, no need to check

@@ -18,10 +18,8 @@ class CollectiblesUpload extends AppModel {
 	public function beforeSave($options = array()) {
 		// Before we save check to see if there is an existin image that is the primary
 		// if not, set
-		debug($this -> data['CollectiblesUpload']);
 		if (!isset($this -> data['CollectiblesUpload']['primary']) || !$this -> data['CollectiblesUpload']['primary']) {
 			$primary = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $this -> data['CollectiblesUpload']['collectible_id'], 'CollectiblesUpload.primary' => 1)));
-			debug($primary);
 			if (empty($primary)) {
 				$this -> data['CollectiblesUpload']['primary'] = true;
 			}
@@ -218,8 +216,6 @@ class CollectiblesUpload extends AppModel {
 		$retVal = false;
 		// Grab the fields that will need to updated
 		$collectiblesUploadEditVersion = $this -> findEdit($editId);
-		debug($collectiblesUploadEditVersion);
-
 		if ($collectiblesUploadEditVersion['Action']['action_type_id'] === '1') {// Add
 
 			$approval = array();
@@ -273,7 +269,7 @@ class CollectiblesUpload extends AppModel {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'])));
 			$message = 'We have approved the following collectible upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
 			$subject = __('Your edit has been approved.');
-			$this -> notifyUser($collectiblesUploadEditVersion['CollectiblesUploadEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($collectiblesUploadEditVersion['CollectiblesUploadEdit']['edit_user_id'], $message, $subject, 'edit_approval');
 		}
 
 		return $retVal;
@@ -284,10 +280,8 @@ class CollectiblesUpload extends AppModel {
 	 */
 	public function denyEdit($editId, $email = true) {
 		$retVal = false;
-		debug($editId);
 		// Grab the fields that will need to updated
 		$collectiblesUploadEdit = $this -> findEdit($editId);
-		debug($collectiblesUploadEdit);
 		// Right now we can really only add or edit
 		if ($collectiblesUploadEdit['Action']['action_type_id'] === '1') {//Add
 			// If we were adding an image, then we need to delete the upload and then delete
@@ -310,7 +304,7 @@ class CollectiblesUpload extends AppModel {
 			$collectible = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectiblesUploadEdit['CollectiblesUploadEdit']['collectible_id'])));
 			$message = 'We have denied the following collectible upload you submitted a change to <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectiblesUploadEdit['CollectiblesUploadEdit']['collectible_id'] . '">' . $collectible['Collectible']['name'] . '</a>';
 			$subject = __('Your edit has been denied.');
-			$this -> notifyUser($collectiblesUploadEdit['CollectiblesUploadEdit']['edit_user_id'], $message, $subject);
+			$this -> notifyUser($collectiblesUploadEdit['CollectiblesUploadEdit']['edit_user_id'], $message, $subject, 'edit_deny');
 		}
 
 		return $retVal;
