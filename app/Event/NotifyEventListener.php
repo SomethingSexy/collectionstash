@@ -26,7 +26,7 @@ class NotifyEventListener implements CakeEventListener {
 		// We might want to do a bulk notify
 		$data = array();
 		foreach ($subscriptions as $key => $subscription) {
-			array_push($data, array('user_id' => $subscription['Subscription']['user_id'], 'message' => $subscription['Subscription']['message'], 'subject' => $subscription['Subscription']['subject']));
+			array_push($data, array('user_id' => $subscription['Subscription']['user_id'], 'message' => $subscription['Subscription']['message'], 'subject' => $subscription['Subscription']['subject'], 'notification_type' => $subscription['Subscription']['notification_type'], 'notification_json_data' => $subscription['Subscription']['notification_json_data']));
 		}
 
 		$event -> subject -> Notification -> saveAll($data);
