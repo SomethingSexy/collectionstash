@@ -10,7 +10,7 @@ App::uses('CakeEventListener', 'Event');
 class EntityChangeEventListener implements CakeEventListener {
 
 	public function implementedEvents() {
-		return array('Controller.Stash.Collectible.add' => 'collectibleAddedToStash', 'Controller.Comment.add' => 'commentAdded', 'Controller.Attribute.approve' => 'attributeApprove');
+		return array('Controller.Stash.Collectible.add' => 'collectibleAddedToStash', 'Controller.Comment.add' => 'commentAdded', 'Controller.Collectible.approve' => 'collectibleApprove', 'Controller.Collectible.deny' => 'collectibleDeny');
 	}
 
 	/**
@@ -32,9 +32,9 @@ class EntityChangeEventListener implements CakeEventListener {
 
 		$message = __('The following new comment has been posted to ');
 		if ($entityType['EntityType']['type'] === 'stash') {
-			$message .= $entityType['Stash']['User']['username'] . '\'s <a href="' . Configure::read('Settings.domain') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.';
+			$message .= $entityType['Stash']['User']['username'] . '\'s <a href="http://' . env('SERVER_NAME') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.';
 		} else if ($entityType['EntityType']['type'] === 'collectible') {
-			$message .= 'the collectible <a href="' . Configure::read('Settings.domain') . '/collectibles/view/' . $entityType['Collectible']['id'] . '">' . $entityType['Collectible']['name'] . '</a>' . '.';
+			$message .= 'the collectible <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $entityType['Collectible']['id'] . '">' . $entityType['Collectible']['name'] . '</a>' . '.';
 		}
 
 		foreach ($subscriptions as $key => $subscription) {
@@ -43,7 +43,7 @@ class EntityChangeEventListener implements CakeEventListener {
 				unset($subscriptions[$key]);
 			} else {
 				if ($entityType['EntityType']['type'] === 'stash' && $entityType['Stash']['User']['id'] === $subscription['Subscription']['user_id']) {
-					$message = __('The following new comment has been posted to your <a href="' . Configure::read('Settings.domain') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.');
+					$message = __('The following new comment has been posted to your <a href="http://' . env('SERVER_NAME') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.');
 				}
 
 				$subscriptions[$key]['Subscription']['message'] = $message;
@@ -82,7 +82,7 @@ class EntityChangeEventListener implements CakeEventListener {
 
 		//Build the message
 		$message = $stash['User']['username'];
-		$message .= __(' has added the following collectible to their <a href="' . Configure::read('Settings.domain') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
+		$message .= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
 
 		foreach ($subscriptions as $key => $subscription) {
 			//If the subscription is the same as the owner of the stash, unset it
@@ -96,7 +96,7 @@ class EntityChangeEventListener implements CakeEventListener {
 			}
 
 		}
-		CakeLog::write('info', count($subscriptions));
+
 		if (!empty($subscriptions)) {
 			CakeEventManager::instance() -> dispatch(new CakeEvent('Model.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
 		} else {
@@ -104,7 +104,58 @@ class EntityChangeEventListener implements CakeEventListener {
 		}
 	}
 
-	public function attributeApprove($event) {
+	/**
+	 * This won't be specific to the Entity stuff but I want to keep all of this logic
+	 * in the same place
+	 */
+	public function collectibleApprove($event) {
+		$userId = $event -> data['userId'];
+		$collectileId = $event -> data['collectileId'];
+		$notes = $event -> data['notes'];
+
+		$collectible = $event -> subject -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $collectileId), 'contains' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'))));
+		$templateData = json_encode($collectible);
+
+		$message = 'We have approved <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectible['Collectible']['id'] . '">' . $collectible['Collectible']['displayTitle'] . '</a> you submitted to <a href="http://' . env('SERVER_NAME') . '">Collection Stash</a>.';
+
+		$subject = __('Your submission of ' . $collectible['Collectible']['displayTitle'] . ' has been successfully approved!');
+
+		$subscriptions = array();
+		$subscription = array();
+		$subscription['Subscription']['user_id'] = $userId;
+		$subscription['Subscription']['message'] = $message;
+		$subscription['Subscription']['subject'] = $subject;
+		$subscription['Subscription']['notification_type'] = 'add_approval';
+		$subscription['Subscription']['notification_json_data'] = $templateData;
+		array_push($subscriptions, $subscription);
+
+		CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
+
+	}
+
+	public function collectibleDeny($event) {
+		$userId = $event -> data['userId'];
+		$collectileId = $event -> data['collectileId'];
+		$collectible = $event -> data['collectible'];
+		$notes = $event -> data['notes'];
+
+		$message = 'We have denied ' . $collectible['Collectible']['displayTitle'] . '</a> you submitted to <a href="http://' . env('SERVER_NAME') . '">Collection Stash</a>.';
+
+		if (isset($notes) && !empty($notes)) {
+			$message .= 'The reason the submission was denied:' . $notes;
+		}
+		$subject = __('Oh no! Your submission of ' . $collectible['Collectible']['displayTitle'] . ' has been denied.');
+
+		$subscriptions = array();
+		$subscription = array();
+		$subscription['Subscription']['user_id'] = $userId;
+		$subscription['Subscription']['message'] = $message;
+		$subscription['Subscription']['subject'] = $subject;
+		$subscription['Subscription']['notification_type'] = 'add_deny';
+		$subscription['Subscription']['notification_json_data'] = null;
+		array_push($subscriptions, $subscription);
+
+		CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $event -> subject, array('subscriptions' => $subscriptions)));
 
 	}
 

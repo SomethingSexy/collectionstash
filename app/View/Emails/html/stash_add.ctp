@@ -1,4 +1,4 @@
-<a href="<?php echo Configure::read('Settings.domain') . '/collectibles/view/'. $Collectible['id'] ?>"><?php echo $Collectible['displayTitle'] ?></a>
+<a href="<?php echo 'http://' . env('SERVER_NAME') . '/collectibles/view/'. $Collectible['id'] ?>"><?php echo $Collectible['displayTitle'] ?></a>
 <ul>
 	<?php
 	if (!empty($CollectiblesUser['edition_size'])) {

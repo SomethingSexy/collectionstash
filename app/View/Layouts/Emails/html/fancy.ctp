@@ -15,7 +15,7 @@
                               <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
                                   <tr>
                                       <td align="center" valign="top" style="font-size: 40px; padding: 0;">
-                                          <img src="http://collectionstash.com/img/icon/add_stash_link_25x25.png">Collection Stash
+                                          <img src="http://collectionstash.com/img/icon/add_stash_link_25x25.png"><a style="color: #FFF; text-decoration: none;" href="http://<?php echo env('SERVER_NAME'); ?>">Collection Stash</a>
                                       </td>
                                   </tr>
                               </table>

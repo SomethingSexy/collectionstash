@@ -672,7 +672,7 @@ class CollectiblesController extends AppController {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
 		if ($id && is_numeric($id) && isset($this -> request -> data['Approval']['approve'])) {
-			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible')));
+			$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible', 'Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'))));
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 			$notes = $this -> request -> data['Approval']['notes'];
 			//Approve
@@ -733,7 +733,7 @@ class CollectiblesController extends AppController {
 
 						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $this -> getUser(), 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
 
-						$this -> __sendApprovalEmail(true, $collectible['User']['id'], $collectible['Collectible']['name'], $collectible['Collectible']['id']);
+						$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Collectible.approve', $this, array('approve' => $approvedChange, 'userId' => $collectible['User']['id'], 'collectileId' => $collectible['Collectible']['id'], 'notes' => $notes)));
 
 						$this -> Session -> setFlash(__('The collectible was successfully approved.', true), null, null, 'success');
 						$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
@@ -756,7 +756,7 @@ class CollectiblesController extends AppController {
 					//Have to do the same thing with Entity
 					$this -> Collectible -> EntityType -> delete($collectible['Collectible']['entity_type_id']);
 
-					$this -> __sendApprovalEmail(false, $collectible['User']['id'], $collectible['Collectible']['name'], $collectible['Collectible']['id'], $notes);
+					$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Collectible.deny', $this, array('approve' => $approvedChange, 'userId' => $collectible['User']['id'], 'collectileId' => $collectible['Collectible']['id'], 'collectible' => $collectible, 'notes' => $notes)));
 
 					$this -> Session -> setFlash(__('The collectible was successfully denied.', true), null, null, 'success');
 					$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
@@ -772,35 +772,6 @@ class CollectiblesController extends AppController {
 			$this -> redirect(array('admin' => true, 'action' => 'index'), null, true);
 		}
 
-	}
-
-	function __sendApprovalEmail($approvedChange = true, $userId = null, $collectibleName = null, $collectileId = null, $notes = '') {
-		$return = true;
-		if ($userId) {
-
-			if ($approvedChange) {
-
-				$message = 'We have approved the following collectible you submitted to Collection Stash: ' . $collectibleName . '<br><br>You can use the following link to see the collectible: http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectileId;
-
-				$subject = __('Your submission has been successfully approved!');
-			} else {
-				$message = 'We have denied the following collectible you submitted to Collection Stash: ' . $collectibleName . '<br><br>';
-
-				if (isset($notes) && !empty($notes)) {
-					$message .= 'The reason the submission was denied:<br>';
-					$message .= $notes;
-				}
-				$subject = __('Oh no! Your submission has been denied.');
-			}
-
-			// Instead of emailing, send through the notification process
-			$this -> notifyUser($userId, $message, $subject);
-
-		} else {
-			$return = false;
-		}
-
-		return $return;
 	}
 
 }
