@@ -21,12 +21,16 @@ class EntityChangeEventListener implements CakeEventListener {
 		$entityTypeId = $event -> data['entityTypeId'];
 		//this is the id of the user who posted the comment
 		$userId = $event -> data['userId'];
+		$commentId = $event -> data['commentId'];
 		$event -> subject -> loadModel('Subscription');
 		//This will also return the model that the entity is for
 		$entityType = $event -> subject -> Subscription -> EntityType -> getEntityCore($entityTypeId);
 		$subscriptions = $event -> subject -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => 1, 'Subscription.entity_type_id' => $entityTypeId)));
+		// since we know we are adding a comment, get that information
+		$comment = $event -> subject -> Comment -> find('first', array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User')));
+		$templateData = json_encode($comment);
 
-		$message = __('A new comment has been posted to ');
+		$message = __('The following new comment has been posted to ');
 		if ($entityType['EntityType']['type'] === 'stash') {
 			$message .= $entityType['Stash']['User']['username'] . '\'s stash.';
 		} else if ($entityType['EntityType']['type'] === 'collectible') {
@@ -39,13 +43,13 @@ class EntityChangeEventListener implements CakeEventListener {
 				unset($subscriptions[$key]);
 			} else {
 				if ($entityType['EntityType']['type'] === 'stash' && $entityType['Stash']['User']['id'] === $subscription['Subscription']['user_id']) {
-					$message = __('A new comment has been posted to your Stash!');
+					$message = __('The following new comment has been posted to your Stash!');
 				}
 
 				$subscriptions[$key]['Subscription']['message'] = $message;
 				$subscriptions[$key]['Subscription']['subject'] = __('A new coment has been posted.');
-				//$subscriptions[$key]['Subscription']['notification_type'] = 'comment_add';
-				//$subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
+				$subscriptions[$key]['Subscription']['notification_type'] = 'comment_add';
+				$subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
 			}
 		}
 

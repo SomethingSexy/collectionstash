@@ -112,7 +112,7 @@ class CommentsController extends AppController {
 				if (!empty($lastestComments)) {
 					$data['comments'] = $lastestComments['comments'];
 				}
-				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Comment.add', $this, array('userId' => $this -> request -> data['Comment']['user_id'], 'entityTypeId' => $this -> request -> data['Comment']['entity_type_id'])));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $this -> request -> data['Comment']['user_id'], 'entityTypeId' => $this -> request -> data['Comment']['entity_type_id'])));
 
 				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this -> getUser(), 'comment' => $comment, 'entity' => $entity)));
 				$this -> set('comments', $data);
