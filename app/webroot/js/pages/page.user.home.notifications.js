@@ -122,6 +122,9 @@ var NotificationView = Backbone.View.extend({
 		var self = this;
 		var data = this.model.toJSON();
 		var open = $('.body', this.el).is(':visible');
+		if ( typeof data['notification_json_data'] !== 'undefined' && data['notification_json_data'] != null && data['notification_json_data'] !== '') {
+			data['notification_json_data'] = JSON.parse(data['notification_json_data']);
+		}
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
@@ -144,8 +147,9 @@ var NotificationView = Backbone.View.extend({
 	remove : function() {
 		this.model.destroy();
 	},
-	toggleMessage : function() {
+	toggleMessage : function(event) {
 		var self = this;
+		event.preventDefault();
 		$('.body', this.el).toggle();
 		if (!self.model.get('read')) {
 			self.markAsRead();
@@ -155,10 +159,12 @@ var NotificationView = Backbone.View.extend({
 
 $(function() {
 
-	$.when($.get('/templates/notifications/notifications.dust'), $.get('/templates/notifications/notification.dust'), $.get('/templates/common/paging.dust')).done(function(notificationsTemplate, notificationTemplate, pagingTemplate) {
+	$.when($.get('/templates/notifications/notifications.dust'), $.get('/templates/notifications/notification.dust'), $.get('/templates/common/paging.dust'), $.get('/templates/notifications/types/stash_add.dust'), $.get('/templates/notifications/types/comment_add.dust')).done(function(notificationsTemplate, notificationTemplate, pagingTemplate, stashAddTemplate, commentAddTemplate) {
 		dust.loadSource(dust.compile(notificationsTemplate[0], 'notifications'));
 		dust.loadSource(dust.compile(notificationTemplate[0], 'notification'));
 		dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
+		dust.loadSource(dust.compile(stashAddTemplate[0], 'stash.add'));
+		dust.loadSource(dust.compile(commentAddTemplate[0], 'comment.add'));
 
 		$('.panel-body').append(new NotificationsView({
 			collection : notifications

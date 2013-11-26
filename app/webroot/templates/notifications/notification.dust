@@ -21,4 +21,16 @@
 	<a class="title" title="" href="#">Notification<span> - {message}</span></a>
 {/subject}
 
-<div class="body">{message|s}</div>
+<div class="body">
+	{message|s}
+	{@eq key="{notification_type}" value="comment_add"}
+		<br/>
+		<br/>
+		{>"comment.add"/}
+	{/eq}
+	{@eq key="{notification_type}" value="stash_add"}
+		<br/>
+		<br/>
+		{>"stash.add"/}
+	{/eq}
+</div>
