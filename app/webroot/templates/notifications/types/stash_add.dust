@@ -1,0 +1,32 @@
+<a href="/collectibles/view/{notification_json_data.Collectible.id}">{notification_json_data.Collectible.displayTitle}</a>
+<ul>
+	{?notification_json_data.CollectiblesUser.edition_size}
+	{@if cond="('{notification_json_data.CollectiblesUser.edition_size}' !== null)"}
+		<li>Edition Size of {notification_json_data.CollectiblesUser.edition_size}</li>
+	{/if}
+	{/notification_json_data.CollectiblesUser.edition_size}
+	
+	{?notification_json_data.CollectiblesUser.cost}
+	{@if cond="('{notification_json_data.CollectiblesUser.cost}' !== null)"}
+		<li>Cost of $ {notification_json_data.CollectiblesUser.cost}</li>
+	{/if}
+	{/notification_json_data.CollectiblesUser.cost}
+
+	{?notification_json_data.CollectiblesUser.condition_id}
+	{@if cond="('{notification_json_data.CollectiblesUser.condition_id}' !== null)"}
+		<li>{notification_json_data.Condition.name}</li>
+	{/if}
+	{/notification_json_data.CollectiblesUser.condition_id}
+
+	{?notification_json_data.CollectiblesUser.merchant_id}
+	{@if cond="('{notification_json_data.CollectiblesUser.merchant_id}' !== null)"}
+		<li>Purchased from {notification_json_data.Merchant.name}</li>
+	{/if}
+	{/notification_json_data.CollectiblesUser.merchant_id}
+
+	{?notification_json_data.CollectiblesUser.purchase_date}
+	{@if cond="('{notification_json_data.CollectiblesUser.purchase_date}' !== null)"}
+			<li>Purchased on {notification_json_data.CollectiblesUser.purchase_date}</li>
+	{/if}
+	{/notification_json_data.CollectiblesUser.purchase_date}
+<ul>

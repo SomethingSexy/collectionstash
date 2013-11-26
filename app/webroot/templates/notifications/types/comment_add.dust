@@ -1,0 +1,10 @@
+<div class="comment">
+	<img src="/img/icon/avatar.png" alt="">
+	<div class="content">
+		<span class="commented-by"><a href="/stashs/view/{notification_json_data.User.username}">{notification_json_data.User.username}</a></span>
+		<span class="comment-text">{notification_json_data.Comment.comment}</span>
+		<span class="actions">
+			<span class="pull-right">{notification_json_data.Comment.formatted_created}</span>
+		</span>
+	</div>
+</div>

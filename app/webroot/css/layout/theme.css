@@ -1,7 +1,7 @@
 /*ul, ol, dl {
-	margin: 0 auto;
-	padding: 0
-}*/
+ margin: 0 auto;
+ padding: 0
+ }*/
 body {
 	/*background: url("/img/grid.png") repeat scroll 0 0 #E9E9E9;*/
 	color: #444444;
@@ -487,12 +487,14 @@ div.subnav-fixed {
 	padding-left: 20px;
 	padding-right: 20px;
 }
-.widget-messages .message div, .widget-messages .message a {
+.widget-messages .message a, .widget-messages .message div {
 	display: block;
-	height: 20px;
 	float: left;
 	position: relative;
 	z-index: 2;
+}
+.widget-messages .message a {
+	height: 20px;
 }
 .widget-messages .message .action-checkbox {
 	width: 20px;
@@ -995,11 +997,14 @@ a.forgot-password {
 .comments-container .comments {
 	margin-bottom: 10px;
 }
-.comments-container .comments .comment {
+.messages .message .comment, .comments-container .comments .comment {
 	border-bottom: 1px solid rgba(0,0,0,0.08);
 	padding: 8px 0;
 }
-.comments-container .comments .comment:first-child {
+.messages .message .comment {
+	border: none;
+}
+.messages .message .comment:first-child, .comments-container .comments .comment:first-child {
 	padding-top: 0;
 }
 /**
@@ -1009,7 +1014,7 @@ a.forgot-password {
  margin: 0 -20px;
  }*/
 
-.comments-container .comments .comment > img {
+.messages .message .comment > img, .comments-container .comments .comment > img {
 	display: block;
 	float: left;
 	height: 30px;
@@ -1020,30 +1025,26 @@ a.forgot-password {
 	border-radius: 3px;
 }
 
-.comments-container .comments .comment .content {
+.messages .message .comment .content, .comments-container .comments .comment .content {
 	margin-left: 45px;
 }
 
-.comments-container .comments .comment  .commented-by, .comments-container .comments .comment  .actions {
+.messages .message .comment .commented-by, .messages .message .comment .actions, .comments-container .comments .comment  .commented-by, .comments-container .comments .comment  .actions {
 	color: #888;
 	display: block;
 }
-
-.comments-container .comments .comment  .commented-by {
+.messages .message .comment .commented-by, .comments-container .comments .comment .commented-by {
 	font-style: italic;
 }
-
-.comments-container .comments .comment .actions, .comments-container .comments .comment .actions a {
+.messages .message .comment .actions, .messages .message .comment .actions a, .comments-container .comments .comment .actions, .comments-container .comments .comment .actions a {
 	color: #bbb;
 	font-size: 12px;
 }
-
-.comments-container .comments .comment .actions a {
+.messages .message .comment .actions a, .comments-container .comments .comment .actions a {
 	margin-right: 10px;
 	display: inline-block;
 }
-
-.comments-container .comments .comment .actions a:hover {
+.messages .message .comment .actions a:hover, .comments-container .comments .comment .actions a:hover {
 	color: #444;
 }
 
@@ -1152,80 +1153,78 @@ a.forgot-password {
  * 	Fix twitter typeahead and bootstrap
  */
 
-
 .twitter-typeahead {
-    width: 100%;
-    position: relative;
+	width: 100%;
+	position: relative;
 }
-.twitter-typeahead .tt-query,
-.twitter-typeahead .tt-hint {
-    margin-bottom: 0;
-    width:100%;
-    position: absolute;
-    top:0;
-    left:0;
+.twitter-typeahead .tt-query, .twitter-typeahead .tt-hint {
+	margin-bottom: 0;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 .twitter-typeahead .tt-hint {
-    color:#a1a1a1;
-    z-index: 1;
-    padding: 9px 12px;
-    border:1px solid transparent;
+	color: #a1a1a1;
+	z-index: 1;
+	padding: 9px 12px;
+	border: 1px solid transparent;
 }
 .twitter-typeahead .tt-query {
-    z-index: 2;
-    border-radius: 4px!important;
-    /* add these 2 statements if you have an appended input group */
-    border-top-right-radius: 0!important;
-    border-bottom-right-radius: 0!important;
-    /* add these 2 statements if you have an prepended input group */
-   /*  border-top-left-radius: 0!important;
-    border-bottom-left-radius: 0!important; */
-   background-color: none!important;
+	z-index: 2;
+	border-radius: 4px !important;
+	/* add these 2 statements if you have an appended input group */
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+	/* add these 2 statements if you have an prepended input group */
+	/*  border-top-left-radius: 0!important;
+	 border-bottom-left-radius: 0!important; */
+	background-color: none !important;
 }
 
 .tt-dropdown-menu {
-    min-width: 160px;
-    margin-top: 2px;
-    padding: 5px 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,.2);
-    *border-right-width: 2px;
-    *border-bottom-width: 2px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    -webkit-background-clip: padding-box;
-    -moz-background-clip: padding;
-    background-clip: padding-box;
+	min-width: 160px;
+	margin-top: 2px;
+	padding: 5px 0;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,.2);
+	*border-right-width: 2px;
+	*border-bottom-width: 2px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
 }
 
 .tt-suggestion {
-    display: block;
-    padding: 3px 20px;
+	display: block;
+	padding: 3px 20px;
 }
 
 .tt-suggestion.tt-is-under-cursor {
-    color: #fff;
-    background-color: #0081c2;
-    background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-    background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-    background-image: -o-linear-gradient(top, #0088cc, #0077b3);
-    background-image: linear-gradient(to bottom, #0088cc, #0077b3);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+	color: #fff;
+	background-color: #0081c2;
+	background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+	background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+	background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+	background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
 }
 
 .tt-suggestion.tt-is-under-cursor a {
-    color: #fff;
+	color: #fff;
 }
 
 .tt-suggestion p {
-    margin: 0;
+	margin: 0;
 }
 /**
  * 	responsive

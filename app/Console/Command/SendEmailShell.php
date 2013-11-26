@@ -13,7 +13,6 @@ class SendEmailShell extends AppShell {
 	public function main() {
 		//Grabbing them all for now
 		$emails = $this -> Email -> find("all", array('limit' => 100, 'conditions' => array('sent' => 0)));
-		// $this -> out(print_r($notifications, true));
 
 		foreach ($emails as $key => $email) {
 			$cakeEmail = new CakeEmail('smtp');

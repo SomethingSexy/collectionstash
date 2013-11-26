@@ -1,5 +1,10 @@
 <?php
 App::uses('CakeEventListener', 'Event');
+App::uses('View', 'View');
+/**
+ * Because we want the notification and the email to look exactly the same, or at least have the same content.  We need to generate
+ * the main content in the notification itself.  They can't use the same layout but they can use the same content.  We can pregen
+ */
 class NotifyEventListener implements CakeEventListener {
 
 	public function implementedEvents() {
@@ -15,7 +20,6 @@ class NotifyEventListener implements CakeEventListener {
 	 */
 	public function notifyUserController($event) {
 		$subscriptions = $event -> data['subscriptions'];
-		// $message = $event -> data['message'];
 
 		// We will be loading the Notify model and then updating it
 		// I think the subject will be the controller/model whatever the subscription was
@@ -34,7 +38,6 @@ class NotifyEventListener implements CakeEventListener {
 
 	public function notifyUserModel($event) {
 		$subscriptions = $event -> data['subscriptions'];
-		// $message = $event -> data['message'];
 
 		// We will be loading the Notify model and then updating it
 		// I think the subject will be the controller/model whatever the subscription was
