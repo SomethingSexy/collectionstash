@@ -1,5 +1,7 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.10.1</h3>
+<p>Updated the user notifications page better show what the user is being notified for.</p>
 <h3>Release Notes for v2.10</h3>
 <p>Updated the notification emails to include more information and to look sexier.</p>
 <h3>Release Notes for v2.9</h3>
