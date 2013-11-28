@@ -1,0 +1,21 @@
+<div class="row links">
+	<div class="col-md-6">
+		<form>
+			<div class="form-group">
+				<label class="control-label" for="AttributeName">Direct Link</label>
+				<input type="text" readonly="readonly" class="form-control" name="" value="{externalImagePath}">
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<label class="control-label" for="AttributeName">BBCode</label>
+			<input type="text" readonly="readonly" class="form-control" name="" value="[IMG]{externalImagePath}[/IMG]">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12 col-md-12 spacer">
+		<a class="thumbnail" title="{title} - {description}" href="{imagePath}"><img src="{imagePath}"/></a>
+	</div>
+</div>

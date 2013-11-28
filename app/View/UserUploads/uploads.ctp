@@ -10,13 +10,18 @@ echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => fals
 echo $this -> Minify -> script('js/locale', array('inline' => false));
 ?>
 <h2><?php echo $username . '\'s' .__(' Photos', true)?></h2>
-<div id="user-uploads-component" class="widget">
-		<div class="widget-header">
-			<i class="icon-camera"></i><h3>Photos</h3>
+<div id="user-uploads-component" class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"><i class="icon-camera"></i> Photos</h3>
 		</div>
 		<?php echo $this -> element('flash'); ?>
-		<div class="widget-content">
-			<div class="stats">
+		<div class="panel-body">
+			<div class="btn-group actions">
+				<?php
+					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit/' . $stashUsername . '"><i class="icon-edit"></i> Share and Edit Photos</a>';
+				?>
+			</div>
+			<div class="stats pull-right">
 				<span class="count"><?php echo __('Images') . ': <span id="user-count">' . $uploadCount . '</span>/' . Configure::read('Settings.User.uploads.total-allowed'); ?></span>
 			</div>
 			<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">

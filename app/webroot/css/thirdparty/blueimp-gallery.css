@@ -79,7 +79,7 @@
           transition: opacity 0.5s linear;
 }
 .blueimp-gallery > .slides > .slide-loading {
-  background: url(../img/loading.gif) center no-repeat;
+  background: url(/img/loading.gif) center no-repeat;
   background-size: 64px 64px;
 }
 .blueimp-gallery > .slides > .slide-loading > .slide-content {

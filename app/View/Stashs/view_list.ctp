@@ -42,8 +42,8 @@
 				<div class="clearfix">
 					<div class="btn-group actions pull-left">
 							<?php
-							if (isset($myStash) && $myStash) {
-								echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i></a>';
+							if (isset($myStash) && $myStash && $stashType === 'default') {
+								echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i> Edit</a>';
 							}
 							if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
 								$userSubscribed = 'false';
@@ -51,13 +51,6 @@
 									$userSubscribed = 'true';
 								}
 								echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
-							}
-							?>
-							<?php
-							if (isset($myStash) && $myStash) {
-								if (Configure::read('Settings.User.uploads.allowed')) {
-									echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i></a>';
-								}
 							}
 							?>
 					</div>

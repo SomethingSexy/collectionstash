@@ -8,6 +8,9 @@ class UserUploadsController extends AppController {
 
 	public $components = array('Image');
 
+	/**
+	 * This is publically visible
+	 */
 	public function view($userId = null) {
 		$this -> layout = 'fluid';
 		if (!is_null($userId)) {
@@ -49,6 +52,31 @@ class UserUploadsController extends AppController {
 	}
 
 	/**
+	 * Ignoring $userId for now, this will go after the userid in the session since you can't
+	 * edit other people's photos, that would be ridiclous.
+	 *
+	 * This will also just retrieve the uploads we will be using other actions to update
+	 */
+	public function edit($userId = null) {
+		$this -> checkLogIn();
+		$userId = $this -> getUserId();
+		$userUploadsFull = $this -> UserUpload -> find('all', array('contain' => false, 'conditions' => array('UserUpload.user_id' => $userId)));
+		$userUploads = array();
+		foreach ($userUploadsFull as $key => $value) {
+			$img = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'imagePathOnly' => true));
+			$resizedImg = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+			$userUploadsFull[$key]['UserUpload']['imagePath'] = $img['path'];
+			$userUploadsFull[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
+			$userUploadsFull[$key]['UserUpload']['externalImagePath'] = 'http://' . env('SERVER_NAME') . $img['path'];
+
+			// clean this up to make it easier for the UI to use
+			array_push($userUploads, $userUploadsFull[$key]['UserUpload']);
+		}
+
+		$this -> set(compact('userUploads'));
+	}
+
+	/**
 	 * This will display all uploads for the user logged in, since this is not a publically visible page
 	 * to share photos, we are just going to use who is logged in at the time. Might want to change this later
 	 * depending on how this page grows.
@@ -60,7 +88,7 @@ class UserUploadsController extends AppController {
 			$returnData = array();
 			$returnData['files'] = array();
 			foreach ($uploads as $key => $value) {
-				$resizedImg = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+				$resizedImg = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 100, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
 				$img = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 				$uploadResponse = array();
 				$uploadResponse['url'] = $img['path'];
@@ -91,7 +119,6 @@ class UserUploadsController extends AppController {
 		$this -> checkLogIn();
 		if (!is_null($id)) {
 			$userUpload = $this -> UserUpload -> findById($id);
-			debug($userUpload);
 			if (!empty($userUpload)) {
 				$this -> set(compact('userUpload'));
 			} else {
@@ -107,7 +134,6 @@ class UserUploadsController extends AppController {
 		$data = array();
 		$this -> checkLogIn();
 		$this -> request -> data = Sanitize::clean($this -> request -> data);
-		debug($this -> request -> data);
 		//Grab the user name from the request
 		$uploadName = $this -> request -> data['UserUpload']['name'];
 		//TODO: update the error, so it doesn't log the user out,
