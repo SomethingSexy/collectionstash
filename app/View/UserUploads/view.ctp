@@ -27,8 +27,10 @@
 				<?php
 				if (isset($myStash) && $myStash) {
 					if (Configure::read('Settings.User.uploads.allowed')) {
-						echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i></a>';
+						echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i> Upload</a>';
 					}
+					
+					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit/' . $stashUsername . '"><i class="icon-edit"></i> Share and Edit Photos</a>';
 				}
 				?>
 			</div>

@@ -1,5 +1,5 @@
 <?php
-App::uses('PhpThumbFactory','Vendor');
+App::uses('PhpThumbFactory', 'Vendor');
 App::uses('RResizeImage', 'Lib');
 /**
  * This is an image component that allows us to resize images from the controller.  This has duplicate code
@@ -8,12 +8,21 @@ App::uses('RResizeImage', 'Lib');
 class ImageComponent extends Component {
 
 	var $options = array('width' => 0, 'height' => 0, //0 means no resizing
-		'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
-		'imagePathOnly' => false, //if true, will only return the requested image_path
-		'autoResize' => true, //if true, will resize the file automatically if given a valid width.
-		'resizeThumbOnly' => true //if true, will only resize the image down -- not up past the original's size
-	);
+	'resizedDir' => 'resized', // make sure webroot/files/resized is chmod 777
+	'imagePathOnly' => false, //if true, will only return the requested image_path
+	'autoResize' => true, //if true, will resize the file automatically if given a valid width.
+	'resizeThumbOnly' => true, //if true, will only resize the image down -- not up past the original's size
+	'resizeType' => 'strict');
 	var $settings = array();
+
+	function reset() {
+		$this -> fileName = null;
+		$this -> options = array('width' => 0, 'height' => 0, 'resizedDir' => 'resized', 'imagePathOnly' => false, 'autoResize' => true, 'resizeThumbOnly' => true, 'resizeType' => 'strict');
+
+		//setup settings
+		$this -> settings = array_merge($this -> options);
+		unset($this -> newImage);
+	}
 
 	/**
 	 * image takes a file_name or Upload.id and returns the HTML image
@@ -43,14 +52,15 @@ class ImageComponent extends Component {
 		}
 		list($width, $height, $type, $attr) = getimagesize(WWW_ROOT . $this -> _htmlImage());
 		if ($img) {
-			
 			$returnArray = array();
 			$returnArray['path'] = $img;
 			$returnArray['height'] = $height;
+			$this -> reset();
 			return $returnArray;
 		}
 
 		$this -> log("Unable to find $img");
+		$this -> reset();
 		return false;
 	}
 
@@ -173,13 +183,31 @@ class ImageComponent extends Component {
 	 * @return null
 	 */
 	function _resizeImage() {
-		$this -> newImage = new RResizeImage($this -> _getFullPath());
-		if ($this -> newImage -> imgWidth > $this -> options['width']) {
-			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
-			$this -> newImage -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
+		$thumbMaker = PhpThumbFactory::create($this -> _getFullPath());
+		//$this -> newImage = new RResizeImage($this -> _getFullPath());
+		$currentDimensions = $thumbMaker -> getCurrentDimensions();
+		// we need to set this here in case we dont actually have to resize
+		$this -> newImage = array('width' => $currentDimensions['width']);
 
+		if ($currentDimensions['width'] > $this -> options['width']) {
+			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
+			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
+
+			$height = (isset($this -> options['height']) && is_numeric($this -> options['height'])) ? $this -> options['height'] : 0;
+
+			if (isset($this -> options['resizeType']) && $this -> options['resizeType'] === 'adaptive') {
+				$thumbMaker -> adaptiveResize($this -> options['width'], $height);
+			} else {
+				$thumbMaker -> resize($this -> options['width'], $height);
+			}
+
+			$thumbMaker -> save($this -> _getResizeNameOrPath($this -> _getFullPath()));
+
+			$currentDimensions = $thumbMaker -> getCurrentDimensions();
+
+			$this -> newImage = array('width' => $currentDimensions['width']);
 		} else {
-			//$this->autoResize = false;
+			$this -> options['autoResize'] = false;
 		}
 	}
 
@@ -189,12 +217,14 @@ class ImageComponent extends Component {
 	 * @return String HTML image asked for
 	 */
 	function _htmlImage() {
-		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && $this -> options['width'] > 0) {
-			if (isset($this -> newImage) && $this -> newImage -> imgWidth && $this -> newImage -> imgWidth <= $this -> options['width']) {
-				$image = $this -> _getImagePath();
-			} else {
-				$image = $this -> _getResizeNameOrPath($this -> _getImagePath());
-			}
+
+		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && ($this -> options['width'] > 0 || $this -> options['height'] > 0)) {
+
+			//if (isset($this -> newImage) && $this -> newImage['width'] && $this -> newImage['width'] <= $this -> options['width']) {
+			//	$image = $this -> _getImagePath();
+			//} else {
+			$image = $this -> _getResizeNameOrPath($this -> _getImagePath());
+			//}
 		} else {
 			$image = $this -> _getImagePath();
 		}
@@ -214,7 +244,7 @@ class ImageComponent extends Component {
 			return $image;
 		} else {
 			unset($this -> newImage);
-			return $image;
+			return $this -> Html -> image($image, $options);
 		}
 	}
 

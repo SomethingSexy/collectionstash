@@ -1,0 +1,3 @@
+<div class="col-sm-6 col-md-3 spacer">
+<a class="thumbnail" title="{title} - {description}" href="{imagePath}"><img src="{resizedImagePath}"/></a>
+</div>

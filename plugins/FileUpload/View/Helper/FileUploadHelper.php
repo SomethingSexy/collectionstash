@@ -83,7 +83,7 @@ class FileUploadHelper extends AppHelper {
 	 */
 	function reset() {
 		$this -> fileName = null;
-		$this -> options = array('width' => 0, 'resizedDir' => 'resized', 'imagePathOnly' => false, 'autoResize' => true, 'resizeThumbOnly' => true);
+		$this -> options = array('width' => 0, 'height' => 0, 'resizedDir' => 'resized', 'imagePathOnly' => false, 'autoResize' => true, 'resizeThumbOnly' => true);
 
 		//setup settings
 		$this -> settings = array_merge($this -> FileUploadSettings -> defaults, $this -> options);
@@ -224,6 +224,7 @@ class FileUploadHelper extends AppHelper {
 		if (!$this -> _isOutsideSource() && !file_exists($this -> _getFullPath()))
 			return false;
 		//resize if we have resize on, a width, and if it doesn't already exist.
+
 		if ($this -> options['autoResize'] && $this -> options['width'] > 0 && !file_exists($this -> _getResizeNameOrPath($this -> _getFullPath()))) {
 			$this -> _resizeImage();
 		}
@@ -257,7 +258,7 @@ class FileUploadHelper extends AppHelper {
 		if ($currentDimensions['width'] > $this -> options['width']) {
 			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
 			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
-			
+
 			$height = (isset($this -> options['height']) && is_numeric($this -> options['height'])) ? $this -> options['height'] : 0;
 
 			if (isset($this -> settings['resizeType']) && $this -> settings['resizeType'] === 'adaptive') {
@@ -272,7 +273,7 @@ class FileUploadHelper extends AppHelper {
 
 			$this -> newImage = array('width' => $currentDimensions['width']);
 		} else {
-			//$this->autoResize = false;
+			$this -> options['autoResize'] = false;
 		}
 	}
 
@@ -282,13 +283,13 @@ class FileUploadHelper extends AppHelper {
 	 * @return String HTML image asked for
 	 */
 	function _htmlImage() {
-		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && $this -> options['width'] > 0) {
+		if (!$this -> _isOutsideSource() && $this -> options['autoResize'] && ($this -> options['width'] > 0 || $this -> options['height'] > 0)) {
 
-			if (isset($this -> newImage) && $this -> newImage['width'] && $this -> newImage['width'] <= $this -> options['width']) {
-				$image = $this -> _getImagePath();
-			} else {
-				$image = $this -> _getResizeNameOrPath($this -> _getImagePath());
-			}
+			//if (isset($this -> newImage) && $this -> newImage['width'] && $this -> newImage['width'] <= $this -> options['width']) {
+			//	$image = $this -> _getImagePath();
+			//} else {
+			$image = $this -> _getResizeNameOrPath($this -> _getImagePath());
+			//}
 		} else {
 			$image = $this -> _getImagePath();
 		}
