@@ -1,0 +1,13 @@
+/app/config
+/app/tmp
+/plugins
+/vendors
+/lib
+/app/webroot/user_uploads
+/app/webroot/files
+/.htaccess
+/.project
+/README
+/app.rar
+/index.php
+/testmysql.php

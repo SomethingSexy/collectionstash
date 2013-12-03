@@ -100,7 +100,7 @@ class CommentsController extends AppController {
 				$commentId = $this -> Comment -> id;
 				$comment = $this -> Comment -> findById($commentId);
 				$entity = $this -> Comment -> EntityType -> getEntityCore($comment['Comment']['entity_type_id']);
-				debug($entity);
+
 				$lastestComments = array();
 
 				if (isset($this -> request -> data['Comment']['last_comment_created']) && !empty($this -> request -> data['Comment']['last_comment_created'])) {
@@ -150,6 +150,7 @@ class CommentsController extends AppController {
 		 *  - If you are an admin then you can all actions for all comments
 		 *  - If you are viewing general comments, you get actions for your own comments
 		 */
+
 		$userId = null;
 
 		if ($this -> isLoggedIn()) {
