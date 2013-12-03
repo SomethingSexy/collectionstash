@@ -19,7 +19,6 @@ class UserUpload extends AppModel {
 	 */
 	public function isValidUpload($uploadData) {
 		$validUpload = false;
-		debug($uploadData);
 		if (isset($uploadData['UserUpload']) && !empty($uploadData['UserUpload']) && isset($uploadData['UserUpload']['file']) && !empty($uploadData['UserUpload']['file'])) {
 			if ($uploadData['UserUpload']['file']['name'] != '' || $uploadData['UserUpload']['url'] != '') {
 				$validUpload = true;

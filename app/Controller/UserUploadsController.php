@@ -116,71 +116,20 @@ class UserUploadsController extends AppController {
 	}
 
 	public function upload($id) {
-		$this -> checkLogIn();
-		if (!is_null($id)) {
-			$userUpload = $this -> UserUpload -> findById($id);
-			if (!empty($userUpload)) {
-				$this -> set(compact('userUpload'));
-			} else {
-				$this -> render('upload_not_found');
-			}
-		} else {
-			$this -> viewPath = 'errors';
-			$this -> render('invalid_request');
+
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> statusCode(401);
+			return;
 		}
-	}
 
-	public function update() {
-		$data = array();
-		$this -> checkLogIn();
-		$this -> request -> data = Sanitize::clean($this -> request -> data);
-		//Grab the user name from the request
-		$uploadName = $this -> request -> data['UserUpload']['name'];
-		//TODO: update the error, so it doesn't log the user out,
-		if (!empty($uploadName)) {
-			$userUpload = $this -> UserUpload -> findByName($uploadName);
-			debug($userUpload);
-			if (!empty($userUpload)) {
-				if ($userUpload['UserUpload']['user_id'] === $this -> getUserId()) {
-					$this -> UserUpload -> id = $userUpload['UserUpload']['id'];
-
-					if (isset($this -> request -> data['UserUpload']['type']) && ($this -> request -> data['UserUpload']['type'] === 'title' || $this -> request -> data['UserUpload']['type'] === 'description')) {
-						if ($this -> UserUpload -> saveField($this -> request -> data['UserUpload']['type'], $this -> request -> data['UserUpload']['data'], true)) {
-							$data['success'] = array('isSuccess' => true);
-							$data['isTimeOut'] = false;
-							$data['data'] = array();
-						} else {
-							$data['success'] = array('isSuccess' => false);
-							$data['isTimeOut'] = false;
-							$data['errors'] = array($this -> UserUpload -> validationErrors);
-						}
-					} else {
-						//bad input, not user fault, log out
-						$data['success'] = array('isSuccess' => false);
-						$data['isTimeOut'] = true;
-						$data['data'] = array();
-					}
-
-				} else {
-					//return success false, trying to update upload user doesn't have access too
-					$data['success'] = array('isSuccess' => false);
-					$data['isTimeOut'] = true;
-					$data['data'] = array();
-				}
-			} else {
-				//return success false, invalid request
-				$data['success'] = array('isSuccess' => false);
-				$data['isTimeOut'] = true;
-				$data['data'] = array();
+		if ($this -> request -> isPut()) {
+			$this -> UserUpload -> id = $id;
+			$data = $this -> request -> input('json_decode', true);
+			if (!$this -> UserUpload -> save($data, true, array('title', 'description'))) {
+				$this -> response -> statusCode(400);
+				$this -> set('returnData', array('errors' => $this -> convertErrorsJSON($this -> UserUpload -> validationErrors)));
 			}
-		} else {
-			//return success false, invalid request
-			$data['success'] = array('isSuccess' => false);
-			$data['isTimeOut'] = true;
-			$data['data'] = array();
 		}
-		debug($data);
-		$this -> set('aMetadata', $data);
 	}
 
 	/**

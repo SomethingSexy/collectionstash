@@ -274,7 +274,7 @@ var Attributes = Backbone.Collection.extend({
 
 var TagModel = Backbone.Model.extend({
 	urlRoot : function() {
-		return '/collectibles/tag/' + adminMode + '/'
+		return '/collectibles/tag/' + adminMode + '/';
 	}
 });
 
@@ -285,7 +285,7 @@ var Tags = Backbone.Collection.extend({
 
 var ArtistModel = Backbone.Model.extend({
 	urlRoot : function() {
-		return '/collectibles/artist/' + adminMode + '/'
+		return '/collectibles/artist/' + adminMode + '/';
 	}
 });
 
@@ -330,7 +330,7 @@ var AttributesView = Backbone.View.extend({
 			var url = '/attributes_collectibles/add.json';
 			// If we are passing in an override admin or the options are set to admin mode
 			if (adminMode) {
-				url = '/admin/attributes_collectibles/add.json'
+				url = '/admin/attributes_collectibles/add.json';
 			}
 
 			$('#attribute-collectible-add-new-dialog').find('form').ajaxSubmit({
@@ -415,7 +415,7 @@ var AttributesView = Backbone.View.extend({
 			var url = '/attributes_collectibles/add.json';
 			// If we are passing in an override admin or the options are set to admin mode
 			if (adminMode) {
-				url = '/admin/attributes_collectibles/add.json'
+				url = '/admin/attributes_collectibles/add.json';
 			}
 
 			$('#attribute-collectible-add-existing-dialog').find('form').ajaxSubmit({
@@ -502,7 +502,7 @@ var AttributesView = Backbone.View.extend({
 			var url = '/attributes/update.json';
 			// If we are passing in an override admin or the options are set to admin mode
 			if (self.options.adminPage) {
-				url = '/admin/attributes/update.json'
+				url = '/admin/attributes/update.json';
 			}
 
 			$('#attribute-update-dialog').find('form').ajaxSubmit({

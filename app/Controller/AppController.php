@@ -505,5 +505,24 @@ class AppController extends Controller {
 		CakeEventManager::instance() -> dispatch(new CakeEvent('Controller.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
 	}
 
+	public function convertErrorsJSON($errors = null, $model = null) {
+		$retVal = array();
+
+		if (!is_null($errors)) {
+			foreach ($errors as $key => $value) {
+				$error = array();
+				if (!is_null($model)) {
+					$error['model'] = $model;
+				}
+				$error['name'] = $key;
+				$error['message'] = $value;
+				$error['inline'] = true;
+				array_push($retVal, $error);
+			}
+		}
+
+		return $retVal;
+	}
+
 }
 ?>

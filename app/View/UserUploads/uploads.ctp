@@ -18,7 +18,7 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 		<div class="panel-body">
 			<div class="btn-group actions">
 				<?php
-					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit/' . $stashUsername . '"><i class="icon-edit"></i> Share and Edit Photos</a>';
+					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit"><i class="icon-edit"></i> Share and Edit Photos</a>';
 				?>
 			</div>
 			<div class="stats pull-right">
@@ -170,12 +170,6 @@ echo $this -> Minify -> script('js/locale', array('inline' => false));
 	</td>
 	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
 	<td colspan="2"><span>{% if(file.pending) { %} {%=file.pendingText %} {% } %}</span></td>
-	<td class="edit">
-	<a class="btn btn-default" href="{%=file.edit_url%}">
-	<i class="icon-pencil icon-white"></i>
-	<span>Edit</span>
-	</a>
-	</td>
 	{% } %}
 	<td class="delete">
          <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>

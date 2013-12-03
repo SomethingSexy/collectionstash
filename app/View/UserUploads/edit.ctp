@@ -1,5 +1,8 @@
 <?php
 echo $this -> Minify -> script('js/thirdparty/backbone.bootstrap-modal', array('inline' => false));
+echo $this -> Minify -> script('js/models/model.userupload', array('inline' => false));
+echo $this -> Minify -> script('js/collections/collection.useruploads', array('inline' => false));
+echo $this -> Minify -> script('js/thirdparty/backbone.bootstrap-modal', array('inline' => false));
 echo $this -> Html -> script('pages/page.useruploads.edit', array('inline' => false));
 ?>
 <div id="user-uploads-component" class="panel panel-default">
@@ -25,5 +28,5 @@ echo $this -> Html -> script('pages/page.useruploads.edit', array('inline' => fa
 		</div>
 </div>
 <script>
-var userUploads = new Backbone.Collection();
+var userUploads = new UserUploadsCollection();
 userUploads.reset(<?php echo json_encode($userUploads); ?>);</script>

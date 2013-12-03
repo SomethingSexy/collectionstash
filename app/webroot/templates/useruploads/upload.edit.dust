@@ -1,0 +1,38 @@
+{@if cond=" ('{errors}'.length === 0) "}
+
+{:else}
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert">
+		&times;
+	</button>
+	<h4>Oops! Something went wrong.</h4>
+	<ul>
+		{#errors}
+		{@eq key="inline" value="false" type="boolean" }
+		{#message}
+		<li>
+			{.}
+		</li>
+		{/message}
+		{/eq}
+		{/errors}
+	</ul>
+</div>
+{/if}
+
+<form>
+	<div class="form-group {#inlineErrors.title}has-error{/inlineErrors.title}">
+		<label class="control-label" for="UploadName">Title</label>
+		<input type="text" id="UploadName" class="form-control" maxlength="200" data-type="" data-name="title" name="title" value="{title}">
+		{#inlineErrors.title}
+			<span class="help-inline">{.}</span>
+		{/inlineErrors.title}	
+	</div>
+	<div class="form-group {#inlineErrors.description}has-error{/inlineErrors.description}">
+		<label class="control-label" for="UploadDescription">Description</label>
+		<textarea id="UploadDescription" class="form-control" rows="6" cols="30" data-type="" data-name="description" name="description">{description}</textarea>
+			{#inlineErrors.description}
+			<span class="help-inline">{.}</span>
+			{/inlineErrors.description}	
+	</div>
+</form>

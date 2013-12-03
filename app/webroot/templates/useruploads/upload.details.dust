@@ -15,6 +15,14 @@
 	</div>
 </div>
 <div class="row">
+	<div class="col-md-6">
+		<a class="link-collectible">Link Collectible</a>
+	</div>
+	<div class="col-md-6">
+		<a class="edit-upload">Edit Title and Description</a>
+	</div>	
+</div>
+<div class="row">
 	<div class="col-sm-12 col-md-12 spacer">
 		<a class="thumbnail" title="{title} - {description}" href="{imagePath}"><img src="{imagePath}"/></a>
 	</div>
