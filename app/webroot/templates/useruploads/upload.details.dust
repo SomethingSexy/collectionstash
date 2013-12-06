@@ -3,21 +3,21 @@
 		<form>
 			<div class="form-group">
 				<label class="control-label" for="AttributeName">Direct Link</label>
-				<input type="text" readonly="readonly" class="form-control" name="" value="{externalImagePath}">
+				<input type="text" readonly="readonly" class="form-control selectable" name="" value="{externalImagePath}">
 			</div>
 		</form>
 	</div>
 	<div class="col-md-6">
 		<div class="form-group">
 			<label class="control-label" for="AttributeName">BBCode</label>
-			<input type="text" readonly="readonly" class="form-control" name="" value="[IMG]{externalImagePath}[/IMG]">
+			<input type="text" readonly="readonly" class="form-control selectable" name="" value="[IMG]{externalImagePath}[/IMG]">
 		</div>
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-6">
+	<!--<div class="col-md-6">
 		<a class="link-collectible">Link Collectible</a>
-	</div>
+	</div> -->
 	<div class="col-md-6">
 		<a class="edit-upload">Edit Title and Description</a>
 	</div>	
