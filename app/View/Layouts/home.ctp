@@ -209,7 +209,7 @@ else
 	</div>
 	<div class="home-sub-heading">
 		<div class="container">
-			<strong>Are you squirreling?</strong> For the latest updates and news make sure to follow and like us.     <a href="http://www.twitter.com/collectionstash" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @collectionstash</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fcollectionstash.com%2F&related=mdo%3ACreator%20of%20Collection%20Stash&text=Checkout Collection%20Stash&tw_p=tweetbutton&url=http%3A%2F%2Fcollectionstash.com%2F&via=collectionstash" class="twitter-share-button" data-related="jasoncosta" data-lang="en" data-size="medium" data-count="none">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> <div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
+			<strong>Are you squirreling?</strong> For the latest updates and news make sure to follow and like us.     <a href="http://www.twitter.com/collectionstash" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @collectionstash</a> <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fcollectionstash.com%2F&related=mdo%3ACreator%20of%20Collection%20Stash&text=Checkout Collection%20Stash&tw_p=tweetbutton&url=http%3A%2F%2Fcollectionstash.com%2F&via=collectionstash" class="twitter-share-button" data-related="jasoncosta" data-lang="en" data-size="medium" data-count="none">Tweet</a> <div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
 		</div>
 	
 	</div>
@@ -306,6 +306,6 @@ else
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> script('js/thirdparty/placeholder');
 			?>
-		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </body>
 </html>
