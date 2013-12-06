@@ -14,7 +14,7 @@ echo $this -> Html -> script('pages/page.useruploads.edit', array('inline' => fa
 			<div class="btn-group actions">
 				<?php
 				if (Configure::read('Settings.User.uploads.allowed')) {
-					echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i> Upload</a>';
+					echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i> Upload and Delete</a>';
 				}
 				?>
 			</div>

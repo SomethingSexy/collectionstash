@@ -5,7 +5,7 @@ html, body {
 body {
 	/*background: none repeat scroll 0 0 #F1F1F1;
 	 padding: 80px;*/
-	background-color: #F1F1F1;
+	background-color: #FFF;
 	padding-top: 80px;
 	overflow-x: hidden; /* bootstrap 3.0 fluid layout broken, showing horizontal scrollbar
 	 /*background: url("/img/pattern.png") repeat scroll left top #F0F0F0;*/
@@ -73,6 +73,14 @@ body.home {
 
 .nav.account {
 	font-size: 16px;
+}
+
+.home-sub-heading {
+	background-color: #FAFAFA;
+	border-bottom: 1px solid #E5E5E5;
+	border-top: 1px solid #FFFFFF;
+	color: #777777;
+	padding: 15px 20px;
 }
 
 @media (min-width: 979px) {
