@@ -1,5 +1,10 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.11</h3>
+<p>Added a page for Sharing and Editing photos.  You can access this page by going to My Stash and clicking the Photos tab.  From this page you can change the title and description.  There are also some helper fields for sharing photos.</p>
+<p>Updated the landing page.</p>
+<p>UI updates.</p>
+<p>Photo resizing fixes.</p>
 <h3>Release Notes for v2.10.1</h3>
 <p>Updated the user notifications page better show what the user is being notified for.</p>
 <h3>Release Notes for v2.10</h3>
