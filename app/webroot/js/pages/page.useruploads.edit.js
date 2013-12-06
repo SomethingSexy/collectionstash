@@ -1,7 +1,8 @@
 var ModalView = Backbone.View.extend({
 	template : 'user.upload.details',
 	events : {
-		'click .edit-upload' : 'showEditUpload'
+		'click .edit-upload' : 'showEditUpload',
+		'click .selectable' : 'selectable'
 	},
 	render : function() {
 		var self = this;
@@ -15,6 +16,9 @@ var ModalView = Backbone.View.extend({
 	},
 	showEditUpload : function() {
 		this.trigger('edit:upload');
+	},
+	selectable : function(event) {
+		$(event.currentTarget).select();
 	}
 });
 
@@ -163,14 +167,23 @@ var UserUploadView = Backbone.View.extend({
 });
 
 $(function() {
-
+	$.blockUI({
+		message : '<img src="/img/ajax-loader-circle.gif" />',
+		showOverlay : false,
+		css : {
+			top : '100px',
+			border : 'none',
+			'background-color' : 'transparent',
+			'z-index' : 999999
+		}
+	});
 	$.when(
 	//
 	$.get('/templates/useruploads/upload.dust'), $.get('/templates/useruploads/upload.details.dust'), $.get('/templates/useruploads/upload.edit.dust')).done(function(uploadTemplate, uploadDetailsTemplate, uploadEditTemplate) {
 		dust.loadSource(dust.compile(uploadTemplate[0], 'user.upload'));
 		dust.loadSource(dust.compile(uploadDetailsTemplate[0], 'user.upload.details'));
 		dust.loadSource(dust.compile(uploadEditTemplate[0], 'user.upload.edit'));
-
+		$.unblockUI();
 		userUploads.each(function(model) {
 			$('.user-uploads').append(new UserUploadView({
 				model : model

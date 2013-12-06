@@ -22,6 +22,16 @@
 <p>Winner will be responsible for shipping.</p>
 <h3>Previous contest winners</h3>
 
+<h4>November</h4>
+<p>November's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
+<ol>
+    <li>ComingOfShadows with 107006 nuts</li>
+    <li>ricoanthony16 with 50032 nuts</li>
+    <li>Generalzodlives with 49239 nuts</li>
+    <li>BonezGT with 23127 nuts</li>
+    <li>tacosunday with 13201 nuts</li>
+</ol>
+
 <h4>October</h4>
 <p>October's grand prize winner won a Collection Stash 'Top Nut' T-Shirt</p>
 <ol>

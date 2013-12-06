@@ -1226,6 +1226,9 @@ a.forgot-password {
 .tt-suggestion p {
 	margin: 0;
 }
+.form-control.selectable {
+	cursor: pointer;
+}
 /**
  * 	responsive
  */
