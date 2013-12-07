@@ -166,6 +166,19 @@ var UserUploadView = Backbone.View.extend({
 	}
 });
 
+function equalHeight(group) {
+	tallest = 0;
+	group.each(function() {
+		thisHeight = $(this).height();
+		if (thisHeight > tallest) {
+			tallest = thisHeight;
+		}
+	});
+	group.each(function() {
+		$(this).height(tallest);
+	});
+}
+
 $(function() {
 	$.blockUI({
 		message : '<img src="/img/ajax-loader-circle.gif" />',
@@ -189,6 +202,7 @@ $(function() {
 				model : model
 			}).render().el);
 		});
+		equalHeight($(".thumbnail"));
 	});
 
 });
