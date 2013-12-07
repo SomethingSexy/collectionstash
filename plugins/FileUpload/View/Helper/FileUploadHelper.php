@@ -225,7 +225,7 @@ class FileUploadHelper extends AppHelper {
 			return false;
 		//resize if we have resize on, a width, and if it doesn't already exist.
 
-		if ($this -> options['autoResize'] && $this -> options['width'] > 0 && !file_exists($this -> _getResizeNameOrPath($this -> _getFullPath()))) {
+		if ($this -> options['autoResize'] && ($this -> options['width'] > 0 || $this -> options['height'] > 0) && !file_exists($this -> _getResizeNameOrPath($this -> _getFullPath()))) {
 			$this -> _resizeImage();
 		}
 		return $this -> _htmlImage();
@@ -254,8 +254,9 @@ class FileUploadHelper extends AppHelper {
 		$currentDimensions = $thumbMaker -> getCurrentDimensions();
 		// we need to set this here in case we dont actually have to resize
 		$this -> newImage = array('width' => $currentDimensions['width']);
+		$this -> newImage = array('height' => $currentDimensions['height']);
 
-		if ($currentDimensions['width'] > $this -> options['width']) {
+		if ($currentDimensions['width'] > $this -> options['width'] || $currentDimensions['height'] > $this -> options['height']) {
 			//$this -> newImage -> resize_limitwh($this -> options['width'], 0, $this -> _getResizeNameOrPath($this -> _getFullPath()));
 			// $this -> newImage = $thumbMaker -> resize($this -> options['width'], $this -> options['height'], $this -> _getResizeNameOrPath($this -> _getFullPath()));
 
@@ -272,6 +273,7 @@ class FileUploadHelper extends AppHelper {
 			$currentDimensions = $thumbMaker -> getCurrentDimensions();
 
 			$this -> newImage = array('width' => $currentDimensions['width']);
+			$this -> newImage = array('height' => $currentDimensions['height']);
 		} else {
 			$this -> options['autoResize'] = false;
 		}
