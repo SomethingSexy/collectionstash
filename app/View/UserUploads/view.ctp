@@ -41,7 +41,7 @@
 				echo '<div id="titles-nav" class="hidden">';
 				echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 				echo '</div>';
-				echo '<div class="tiles" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
+				echo '<div class="tiles boxed-tiles" data-username="' . $stashUsername . '" data-toggle="modal-gallery" data-target="#modal-gallery">';
 	
 				foreach ($userUploads as $key => $upload) {
 	

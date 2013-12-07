@@ -660,6 +660,10 @@ div.subnav-fixed {
 	margin-bottom: 15px;
 }
 
+.tiles.boxed-tiles .tile div.image {
+	height: 400px;
+}
+
 .tiles .tile .header {
 	padding: 0 20px;
 }
