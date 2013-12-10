@@ -69,38 +69,81 @@ var EditModalView = Backbone.View.extend({
 		});
 	}
 });
-
+/**
+ * This view will control all of the photos and multishare.  When the user clicks
+ * the button we will enable multishare within the photos.
+ */
 var UserUploadsView = Backbone.View.extend({
 	template : 'user.uploads',
+	events : {
+		'click .btn-multishare' : 'toggleMultiShare'
+	},
 	initialize : function() {
-
+		this.multiShare = false;
+		this.views = [];
 	},
 	render : function() {
 		var self = this;
-		var data = {};
+		var data = {
+
+		};
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
 
+		this.renderMultiShareTemplate();
+
 		this.collection.each(function(model) {
-			$('.user-uploads', self.el).append(new UserUploadView({
+			var view = new UserUploadView({
 				model : model
-			}).render().el);
+			});
+
+			$('.user-uploads', self.el).append(view.render().el);
+
+			self.views.push(view);
 		});
 
 		return this;
 	},
+	renderMultiShareTemplate : function() {
+		var self = this;
+		// TODO: Should probably make this its own view.
+		var data = {
+			multiShare : this.multiShare
+		};
+		dust.render('user.uploads.multishare', data, function(error, output) {
+			$('.multishare', self.el).html(output);
+		});
+
+	},
+	toggleMultiShare : function(event) {
+		var self = this;
+		event.preventDefault();
+		this.multiShare = this.multiShare ? false : true;
+
+		this.renderMultiShareTemplate();
+
+		_.each(this.views, function(view) {
+			view.multiShare = self.multiShare;
+		});
+
+		// this should probably go in the child view and rerender, however
+		// this should be faster, especially with users with a lot of photos
+		if (!this.multiShare) {
+			$('.ui-selected', this.el).removeClass('ui-selected');
+		}
+	}
 });
 
 var UserUploadView = Backbone.View.extend({
 	template : 'user.upload',
 	events : {
-		'click .thumbnail' : 'viewDetails'
-		//'click' : 'selected'
+		'click .thumbnail' : 'viewDetails',
+		'click' : 'selected'
 	},
 	initialize : function() {
-
+		this.multiShare = false;
 	},
 	render : function() {
 		var self = this;
@@ -113,11 +156,17 @@ var UserUploadView = Backbone.View.extend({
 		return this;
 	},
 	selected : function(event) {
-		event.preventDefault();
-		$(this.el).toggleClass('ui-selected');
+		if (this.multiShare) {
+			event.preventDefault();
+			$(this.el).toggleClass('ui-selected');
+		}
 	},
 	viewDetails : function(event) {
 		var self = this;
+		if (this.multiShare) {
+			return;
+		}
+
 		if (event)
 			event.preventDefault();
 
@@ -220,11 +269,13 @@ $(function() {
 	});
 	$.when(
 	//
-	$.get('/templates/useruploads/upload.dust'), $.get('/templates/useruploads/upload.details.dust'), $.get('/templates/useruploads/upload.edit.dust'), $.get('/templates/useruploads/uploads.dust')).done(function(uploadTemplate, uploadDetailsTemplate, uploadEditTemplate, uplaodsTemplate) {
+	$.get('/templates/useruploads/upload.dust'), $.get('/templates/useruploads/upload.details.dust'), $.get('/templates/useruploads/upload.edit.dust'), $.get('/templates/useruploads/uploads.dust'), $.get('/templates/useruploads/uploads.multishare.dust')).done(function(uploadTemplate, uploadDetailsTemplate, uploadEditTemplate, uplaodsTemplate, uploadsMultiShareTemplate) {
 		dust.loadSource(dust.compile(uploadTemplate[0], 'user.upload'));
 		dust.loadSource(dust.compile(uploadDetailsTemplate[0], 'user.upload.details'));
 		dust.loadSource(dust.compile(uploadEditTemplate[0], 'user.upload.edit'));
 		dust.loadSource(dust.compile(uplaodsTemplate[0], 'user.uploads'));
+		dust.loadSource(dust.compile(uploadsMultiShareTemplate[0], 'user.uploads.multishare'));
+
 		$.unblockUI();
 
 		$('#uploads-container').html(new UserUploadsView({
