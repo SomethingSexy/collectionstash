@@ -19,10 +19,6 @@
 	echo $this -> Minify -> css('css/thirdparty/datepicker');
 	echo $this -> Minify -> css('css/thirdparty/font-awesome');
 	echo $this -> Minify -> css('css/layout/layout');
-	echo $this -> Minify -> css('css/jquery.ui.core');
-	echo $this -> Minify -> css('css/jquery.ui.theme');
-	echo $this -> Minify -> css('css/jquery.ui.dialog');
-	echo $this -> Minify -> css('css/jquery.ui.tabs');
 	echo $this -> Minify -> css('css/jquery.treeview');
 	echo $this -> Minify -> css('css/thirdparty/blueimp-gallery');
 	echo $this -> Minify -> css('css/thirdparty/bootstrap-image-gallery');

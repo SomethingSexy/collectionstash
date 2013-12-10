@@ -21,9 +21,8 @@ echo $this -> Html -> script('pages/page.useruploads.edit', array('inline' => fa
 			<div class="stats pull-right">
 				<span class="count"><?php echo __('Images') . ': <span id="user-count">' . count($userUploads) . '</span>/' . Configure::read('Settings.User.uploads.total-allowed'); ?></span>
 			</div>
-			
-			<div class="row spacer user-uploads">
-
+			<div id="uploads-container">
+				
 			</div>
 		</div>
 </div>

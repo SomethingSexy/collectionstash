@@ -1289,6 +1289,11 @@ a.forgot-password {
 	padding-left: 60px;
 	padding-top: 3px;
 }
+
+.user-uploads .ui-selected .thumbnail {
+	background-color: #1993D9;
+}
+
 @media (min-width: 992px) {
 	.nav-sidebar .nav > .active > ul {
 		display: block;
