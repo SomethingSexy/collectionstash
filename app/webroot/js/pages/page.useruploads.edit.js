@@ -70,10 +70,34 @@ var EditModalView = Backbone.View.extend({
 	}
 });
 
+var UserUploadsView = Backbone.View.extend({
+	template : 'user.uploads',
+	initialize : function() {
+
+	},
+	render : function() {
+		var self = this;
+		var data = {};
+
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		this.collection.each(function(model) {
+			$('.user-uploads', self.el).append(new UserUploadView({
+				model : model
+			}).render().el);
+		});
+
+		return this;
+	},
+});
+
 var UserUploadView = Backbone.View.extend({
 	template : 'user.upload',
 	events : {
 		'click .thumbnail' : 'viewDetails'
+		//'click' : 'selected'
 	},
 	initialize : function() {
 
@@ -87,6 +111,10 @@ var UserUploadView = Backbone.View.extend({
 		});
 
 		return this;
+	},
+	selected : function(event) {
+		event.preventDefault();
+		$(this.el).toggleClass('ui-selected');
 	},
 	viewDetails : function(event) {
 		var self = this;
@@ -192,16 +220,17 @@ $(function() {
 	});
 	$.when(
 	//
-	$.get('/templates/useruploads/upload.dust'), $.get('/templates/useruploads/upload.details.dust'), $.get('/templates/useruploads/upload.edit.dust')).done(function(uploadTemplate, uploadDetailsTemplate, uploadEditTemplate) {
+	$.get('/templates/useruploads/upload.dust'), $.get('/templates/useruploads/upload.details.dust'), $.get('/templates/useruploads/upload.edit.dust'), $.get('/templates/useruploads/uploads.dust')).done(function(uploadTemplate, uploadDetailsTemplate, uploadEditTemplate, uplaodsTemplate) {
 		dust.loadSource(dust.compile(uploadTemplate[0], 'user.upload'));
 		dust.loadSource(dust.compile(uploadDetailsTemplate[0], 'user.upload.details'));
 		dust.loadSource(dust.compile(uploadEditTemplate[0], 'user.upload.edit'));
+		dust.loadSource(dust.compile(uplaodsTemplate[0], 'user.uploads'));
 		$.unblockUI();
-		userUploads.each(function(model) {
-			$('.user-uploads').append(new UserUploadView({
-				model : model
-			}).render().el);
-		});
+
+		$('#uploads-container').html(new UserUploadsView({
+			collection : userUploads
+		}).render().el);
+
 		equalHeight($(".thumbnail"));
 	});
 
