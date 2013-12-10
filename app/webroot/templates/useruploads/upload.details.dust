@@ -24,6 +24,6 @@
 </div>
 <div class="row">
 	<div class="col-sm-12 col-md-12 spacer">
-		<a class="thumbnail" title="{title} - {description}" href="{imagePath}"><img src="{imagePath}"/></a>
+		<a class="thumbnail" title="{title} - {description}" href="javascript:void(0)"><img src="{imagePath}"/></a>
 	</div>
 </div>
