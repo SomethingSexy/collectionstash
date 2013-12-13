@@ -60,7 +60,7 @@ class UserUploadsController extends AppController {
 	public function edit($userId = null) {
 		$this -> checkLogIn();
 		$userId = $this -> getUserId();
-		$userUploadsFull = $this -> UserUpload -> find('all', array('contain' => false, 'conditions' => array('UserUpload.user_id' => $userId)));
+		$userUploadsFull = $this -> UserUpload -> find('all', array('contain' => array('User'), 'conditions' => array('UserUpload.user_id' => $userId)));
 		$userUploads = array();
 		foreach ($userUploadsFull as $key => $value) {
 			$img = $this -> Image -> image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'imagePathOnly' => true));
