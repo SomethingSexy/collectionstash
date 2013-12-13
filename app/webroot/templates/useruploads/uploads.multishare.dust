@@ -1,5 +1,35 @@
 <div class="col-md-12">
-	<div class="btn-group actions pull-right">
-		<a href="javascript:void(0)" class="btn btn-primary btn-multishare" title="MultiShare"><i class="icon-share"></i> {#multiShare}Stop Sharing{:else}MultiShare{/multiShare}</a>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group actions pull-right">
+				<a href="javascript:void(0)" class="btn btn-primary btn-multishare" title="MultiShare"><i class="icon-share"></i> {#multiShare}Stop Sharing{:else}MultiShare{/multiShare}</a>
+			</div>
+		</div>
 	</div>
+	{#multiShare}
+	<div class="row links">
+		<div class="col-md-6">
+			<form>
+				<div class="form-group">
+					<label class="control-label" for="inputDirect">Direct Link</label>
+					<textarea id="inputDirect" readonly="readonly" class="form-control selectable" name="description">
+						{#models}
+							{externalImagePath}&#13;&#10;
+						{/models}
+					</textarea>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label class="control-label" for="inputBBcode">BBCode</label>
+				<textarea id="inputBBcode"  readonly="readonly"  class="form-control selectable" name="description">
+					{#models}
+						[IMG]{externalImagePath}[/IMG]&#13;&#10;
+					{/models}
+				</textarea>
+			</div>
+		</div>
+	</div>
+	{/multiShare}
 </div>

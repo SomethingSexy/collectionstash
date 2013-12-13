@@ -76,11 +76,21 @@ var EditModalView = Backbone.View.extend({
 var UserUploadsView = Backbone.View.extend({
 	template : 'user.uploads',
 	events : {
-		'click .btn-multishare' : 'toggleMultiShare'
+		'click .btn-multishare' : 'toggleMultiShare',
+		'click .selectable' : 'selectable'
 	},
 	initialize : function() {
 		this.multiShare = false;
 		this.views = [];
+		this.selectedModels = new Backbone.Collection();
+		this.listenTo(this.collection, 'ui:selected', function(model) {
+			this.selectedModels.add(model);
+			this.renderMultiShareTemplate();
+		}, this);
+		this.listenTo(this.collection, 'ui:unselected', function(model) {
+			this.selectedModels.remove(model);
+			this.renderMultiShareTemplate();
+		}, this);
 	},
 	render : function() {
 		var self = this;
@@ -109,8 +119,10 @@ var UserUploadsView = Backbone.View.extend({
 	renderMultiShareTemplate : function() {
 		var self = this;
 		// TODO: Should probably make this its own view.
+		// loop through each view and see
 		var data = {
-			multiShare : this.multiShare
+			multiShare : this.multiShare,
+			models : this.selectedModels.toJSON()
 		};
 		dust.render('user.uploads.multishare', data, function(error, output) {
 			$('.multishare', self.el).html(output);
@@ -132,7 +144,11 @@ var UserUploadsView = Backbone.View.extend({
 		// this should be faster, especially with users with a lot of photos
 		if (!this.multiShare) {
 			$('.ui-selected', this.el).removeClass('ui-selected');
+			this.selectedModels.reset();
 		}
+	},
+	selectable : function(event) {
+		$(event.currentTarget).select();
 	}
 });
 
@@ -159,6 +175,12 @@ var UserUploadView = Backbone.View.extend({
 		if (this.multiShare) {
 			event.preventDefault();
 			$(this.el).toggleClass('ui-selected');
+			if ($(this.el).hasClass('ui-selected')) {
+				this.model.trigger('ui:selected', this.model);
+			} else {
+				this.model.trigger('ui:unselected', this.model);
+			}
+
 		}
 	},
 	viewDetails : function(event) {
