@@ -2,7 +2,7 @@
 $config['Settings'] = Configure::read('Settings');
 
 $config['Settings'] = Set::merge($config['Settings'], array(
-	'version' => '2.11',
+	'version' => '2.12',
   	'title' => 'My Application',
   	'domain' => 'http://collectionstash.com',
   	'registration' => array(
@@ -61,6 +61,9 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 			'change_log' => 'fluid'
 		)
 	
+	), 
+	'Twitter' => array(
+		'name' => 'collectionstash'
 	)
 ));
 

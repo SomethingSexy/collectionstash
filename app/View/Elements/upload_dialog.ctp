@@ -65,9 +65,11 @@
 					</div>-->
 					<br>
 					<!-- The table listing the files available for upload/download -->
-					<table role="presentation" class="table table-striped">
-						<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
-					</table>
+					<div class="table-responsive">
+						<table role="presentation" class="table table-striped">
+							<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+						</table>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">

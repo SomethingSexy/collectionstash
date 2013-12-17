@@ -1233,6 +1233,45 @@ a.forgot-password {
 .form-control.selectable {
 	cursor: pointer;
 }
+/*!
+ * Yamm!3
+ * Yet another megamenu for Bootstrap 3
+ *
+ * http://geedmo.github.com/yamm3
+ */
+.yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+	position: static;
+}
+.yamm .container {
+	position: relative;
+}
+.yamm .dropdown-menu {
+	left: auto;
+}
+.yamm .nav.navbar-right .dropdown-menu {
+	left: auto;
+	right: 0;
+}
+.yamm .yamm-content {
+	padding: 20px 30px;
+}
+.yamm .dropdown.yamm-fw .dropdown-menu {
+	left: 0;
+	right: 0;
+}
+
+@media (max-width: 969px) {
+	.yamm .dropdown.yamm-fullwidth .dropdown-menu {
+		width: auto;
+	}
+	.yamm .yamm-content {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.yamm .dropdown-menu > li > ul {
+		display: block;
+	}
+}
 
 .nav-sidebar.affix {
 	position: static;
@@ -1292,6 +1331,15 @@ a.forgot-password {
 
 .user-uploads .ui-selected .thumbnail {
 	background-color: #1993D9;
+}
+
+.name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+	display: block;
 }
 
 @media (min-width: 992px) {

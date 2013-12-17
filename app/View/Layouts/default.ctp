@@ -12,7 +12,22 @@
 	if (isset($keywords_for_layout)) { echo "<meta name='keywords' content='" . $keywords_for_layout . "' />";
 	}
 	?>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="og:title" content="<?php echo $title_for_layout;?>">
+	<meta name="og:site_name" content="Collection Stash">
+	<meta name="og:url" content="<?php echo Router::url( $this->here, true ); ?>">
+	<?php
+	if (isset($description_for_layout)) {
+		 echo "<meta name='og:description' content='" . $description_for_layout . "' />";
+	}
+	?>
+	<?php
+	if (isset($og_image_url)) {
+		 echo "<meta name='og:image' content='" . $og_image_url . "' />";
+	}
+	?>
+	
 	<?php
 	echo $this -> Html -> css('thirdparty/bootstrap');
 	echo $this -> Minify -> css('css/thirdparty/datepicker');
@@ -97,7 +112,7 @@ if (isset($bodyClass))
 	
 	   		<div class="navbar-header"> 
 			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
@@ -117,7 +132,7 @@ if (isset($bodyClass))
 		  
 		     
 		    <!-- Everything you want hidden at 940px or less, place within here -->
-		    <nav class="navbar-collapse collapse">
+		    <nav class="navbar-collapse collapse top-nav">
 				<ul class="nav navbar-nav">
 					<?php
 					if(isset($isLoggedIn) && $isLoggedIn === true)
@@ -299,6 +314,7 @@ else
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> script('js/thirdparty/placeholder');
 		?>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
 </html>
