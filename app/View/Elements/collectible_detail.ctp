@@ -13,7 +13,7 @@ if (isset($setPageTitle) && $setPageTitle) {
 
 	$this -> set("title_for_layout", $pageTitle);
 }
-$this -> set('description_for_layout', 'Information and detail for ' .  $collectibleDetail['Collectible']['descriptionTitle']);
+$this -> set('description_for_layout', 'Information and detail for ' . $collectibleDetail['Collectible']['descriptionTitle']);
 $this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
 
 if (!isset($showEdit)) {
@@ -63,9 +63,10 @@ echo $this -> Minify -> script('js/views/view.transactions', array('inline' => f
 echo $this -> Minify -> script('js/views/view.stash.add', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
 echo $this -> Minify -> script('js/models/model.collectible', array('inline' => false));
-echo $this -> Minify -> script('js/pages/page.collectible.view', array('inline' => false));
+echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
 echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
+echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false));
 ?>
 
 
@@ -99,49 +100,128 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 			<div class="row">
 				<div class="col-md-12">
 					<?php if($collectibleDetail['Status']['id'] === '4' || ($collectibleDetail['Status']['id'] === '2' && $adminMode)) {?>
-						<div class="btn-group actions pull-right">
-							<?php
-							// check to make sure we can show stash, depending on where this is being
-							// rendered, make sure they are logged in and then make sure thay have permission
-							if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-								$collectibleJSON = json_encode($collectibleDetail['Collectible']);
-								$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-								echo '<button title="Add to stash" class="btn btn-default btn-lg add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"/> Add to Stash</button>';
-							}
-							if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-								echo '<button data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash btn btn-default btn-lg" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</button>';
-							}
-							
-							if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
-								$userSubscribed = 'false';
-								if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
-									$userSubscribed = 'true';
+						<nav class="navbar yamm navbar-inverse" role="navigation">
+						  <div class="navbar-header">
+						    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						      <span class="sr-only">Toggle navigation</span>
+						      <span class="icon-bar"></span>
+						      <span class="icon-bar"></span>
+						      <span class="icon-bar"></span>
+						    </button>
+						  </div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					          <ul class="nav navbar-nav">
+								<?php
+								// check to make sure we can show stash, depending on where this is being
+								// rendered, make sure they are logged in and then make sure thay have permission
+								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
+									$collectibleJSON = json_encode($collectibleDetail['Collectible']);
+									$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+									echo '<li><a title="Add to stash" class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
 								}
-								echo '<button id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="btn btn-default btn-lg" href="#"><i class="icon-heart"></i> Watch</button>';
-			
-							}	
-	
-							if ($showWho) {
-								echo '<a class="btn btn-default btn-lg" title="Registry" href="/collectibles_users/registry/' .  $collectibleDetail['Collectible']['id'] . '"><i class="icon-group"></i> Registry</a>';
-							}
-		
-							if (isset($isLoggedIn) && $isLoggedIn === true) {
-								if ($adminMode) {
-									echo '<a class="btn btn-default btn-lg" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a>';
-								} else if ($allowEdit) {
-									echo '<a class="btn btn-default btn-lg" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a>';
+								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
+									echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
 								}
-			
-							}
-	
-							if (isset($showHistory) && $showHistory) {
-								//echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
-							}
-							if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn && $allowVariantAdd) {
-								echo '<a class="btn btn-default btn-lg" title="Add a varaint of this collectible." href="/collectibles/quickCreate/' .  $collectibleDetail['Collectible']['id'] . '/true"><i class="icon-plus"></i> Add Variant</a>';
-							}
-							?>	
-						</div>
+								echo '<li class="dropdown">';
+								echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Share <b class="caret"></b></a>';
+								echo '<ul class="dropdown-menu">';
+								echo '<li>';
+								echo '<div class="yamm-content">';
+								echo '<div class="row">';
+								echo '<div class="col-sm-12">';
+								echo '<h4>Twitter</h4>';
+								echo '<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-lang="en" data-count="none"  data-via="' . Configure::read('Settings.Twitter.name') . '" data-text="' . $collectibleDetail['Collectible']['displayTitle'] . '" data-url="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">Tweet</a>';
+								echo '<hr>';
+								echo '<h4>Facebook</h4>';
+								echo '<div class="fb-share-button" data-href="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" data-type="button_count"></div>';
+								echo '<hr>';
+								echo '<h4>Direct</h4>';
+								echo '<form>';
+								echo '<div class="form-group">';
+								echo '<div class="input-group">';
+								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" data-clipboard-text="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '</div>';
+								echo '</div>';
+								echo '</form>';
+								echo '<hr>';
+								
+								$bbCode = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\']' . $collectibleDetail['Collectible']['displayTitle'] . '[/URL]';
+								
+								echo '<h4>BBCode</h4>';
+								echo '<form>';
+								echo '<div class="form-group">';
+								echo '<div class="input-group">';
+								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCode . '">';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcode" data-clipboard-text="' . $bbCode . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '</div>';
+								echo '</div>';
+								echo '</form>';
+								echo '<hr>';
+								$primaryUploadURL = null;
+								if (!empty($collectibleDetail['CollectiblesUpload'])) {
+									foreach ($collectibleDetail['CollectiblesUpload'] as $key => $upload) {
+										if ($upload['primary']) {
+											$primaryUploadURL = $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true));
+										}
+									}
+								}
+
+								echo '<h4>BBCode with image</h4>';
+								echo '<form>';
+								echo '<div class="form-group">';
+								echo '<div class="input-group">';
+								$bbCodeImage = $bbCode;
+						
+								if (!is_null($primaryUploadURL)) {
+									$bbCodeImage = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\'][IMG]http://' . env('SERVER_NAME') . $primaryUploadURL . '[/IMG][/URL]';
+								}
+
+								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCodeImage . '">';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcodeimage" data-clipboard-text="' . $bbCodeImage . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '</div>';
+								echo '</div>';
+								echo '</form>';
+								echo '<hr>';
+								echo '</div>';
+								echo '</div>';
+								echo '</div>';
+								echo '</li>';
+								echo '</ul>';
+								echo '</li>';
+								if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
+									$userSubscribed = 'false';
+									if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
+										$userSubscribed = 'true';
+									}
+									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="" href="#"><i class="icon-heart"></i> Watch</a></li>';
+
+								}
+
+								if ($showWho) {
+									echo '<li><a class="" title="Registry" href="/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-group"></i> Registry</a></li>';
+								}
+
+								if (isset($isLoggedIn) && $isLoggedIn === true) {
+									if ($adminMode) {
+										echo '<li><a class="" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a></li>';
+									} else if ($allowEdit) {
+										echo '<li><a class="" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a></li>';
+									}
+
+								}
+
+								if (isset($showHistory) && $showHistory) {
+									//echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
+								}
+								if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn && $allowVariantAdd) {
+									echo '<li><a class="" title="Add a varaint of this collectible." href="/collectibles/quickCreate/' . $collectibleDetail['Collectible']['id'] . '/true"><i class="icon-plus"></i> Add Variant</a></li>';
+								}
+								?>	
+					          </ul>
+				          </div>
+				        </nav>
+						
 					<?php } ?>	
 				</div>
 			</div>
@@ -153,10 +233,10 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 				
 				<div class="col-md-12">
 					<div class="page-header">
-						<h1 class="title"><?php echo $title; 
-							if (isset($collectibleDetail['Collectible']['exclusive']) && $collectibleDetail['Collectible']['exclusive']) {
-								echo __(' - Exclusive');
-							}		
+						<h1 class="title"><?php echo $title;
+						if (isset($collectibleDetail['Collectible']['exclusive']) && $collectibleDetail['Collectible']['exclusive']) {
+							echo __(' - Exclusive');
+						}
 							?>
 							
 						</h1>
@@ -164,7 +244,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						<?php
 						// maybe collectible type here?
 						echo 'Platform: ' . $collectibleDetail['Collectibletype']['name'] . ' | ';
-		
+
 						// if it has a manufacturer display that first
 						if (!empty($collectibleDetail['Collectible']['manufacture_id'])) {
 							echo 'Manufacturer: <a href="/manufacturer/' . $collectibleDetail['Manufacture']['id'] . '/' . $collectibleDetail['Manufacture']['slug'] . '">' . $collectibleDetail['Manufacture']['title'] . '</a> | ';
@@ -189,19 +269,19 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 							} else {
 								echo 'Custom | ';
 							}
-		
+
 						}
-		
+
 						if ($collectibleDetail['Collectible']['official']) {
 							echo 'Official';
 						} else {
 							echo 'Unofficial';
 						}
-						
+
 						if (isset($collectibleDetail['Collectible']['variant']) && $collectibleDetail['Collectible']['variant']) {
 							echo ' | <a href="/collectibles/view/' . $collectibleDetail['Collectible']['variant_collectible_id'] . '">Variant</a>';
 						}
-						
+
 						if ($isLoggedIn && $userCounts) {
 							foreach ($userCounts as $key => $value) {
 								if ($value['type'] === 'Default') {
@@ -209,9 +289,9 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 								} else {
 									echo ' | <span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
 								}
-		
+
 							}
-		
+
 						}
 						?>
 						</span>
@@ -226,12 +306,12 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						}
 						?>
 						
-						<?php 
-						if($adminMode) {
-							echo $this -> element('admin_collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
-						} else {
-							echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
-						}
+						<?php
+							if ($adminMode) {
+								echo $this -> element('admin_collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
+							} else {
+								echo $this -> element('collectible_detail_core', array('showEdit' => $showEdit, 'editImageUrl' => $editImageUrl, 'editManufactureUrl' => $editManufactureUrl, 'showStatistics' => $showStatistics, 'collectibleCore' => $collectibleDetail, 'showAddedBy' => $showAddedBy, 'showAddedDate' => $showAddedDate, 'adminMode' => $adminMode, 'showTags' => $showTags));
+							}
 						 ?>
 						<?php
 						if ($collectibleDetail['Collectible']['collectibletype_id'] !== Configure::read('Settings.CollectibleTypes.Print')) {
@@ -255,7 +335,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 								$(function() {
 									// If we are in admin mode, we need to pass that in to these methods so that they can
 									// do specific things based on that
-	
+
 									$('span.popup', '.attributes-list').popover({
 										placement : 'bottom',
 										html : 'true',
@@ -265,7 +345,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 									}).mouseenter(function(e) {
 										$(this).popover('show');
 									});
-	
+
 								});
 							</script>
 					
@@ -342,7 +422,7 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 						$('#approve-input').val('false');
 						$('#approval-form').submit();
 					});
-	
+
 				</script>
 			</div>
 		</div>
@@ -352,21 +432,20 @@ echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' 
 
 
 <script>
-	var collectibleStatus = {
+var collectibleStatus = {
 	id : <?php echo $collectibleDetail['Collectible']['id']; ?>,
 	status:<?php echo json_encode($collectibleDetail['Status']); ?>
-	};
-	var collectible =<?php echo json_encode($collectibleDetail['Collectible']); ?>;
-	var listings = <?php echo json_encode($collectibleDetail['Listing']); ?>;
-
-	var transactionsGraphData =<?php echo json_encode($transactionGraphData); ?>;
-	var collectiblePriceData =<?php 
- if(isset($collectibleDetail['CollectiblePriceFact'])) {
- 	echo json_encode($collectibleDetail['CollectiblePriceFact']);
- } else {
- 	echo 'null';
- }?>;
-
+};
+var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
+var listings =  <?php echo json_encode($collectibleDetail['Listing']); ?>;
+var transactionsGraphData = <?php echo json_encode($transactionGraphData); ?>;
+var collectiblePriceData = <?php
+		if (isset($collectibleDetail['CollectiblePriceFact'])) {
+			echo json_encode($collectibleDetail['CollectiblePriceFact']);
+		} else {
+			echo 'null';
+		}
+	?>;
  <?php
 if ($isUserAdmin) {
 	echo 'var allowDeleteListing = true;';

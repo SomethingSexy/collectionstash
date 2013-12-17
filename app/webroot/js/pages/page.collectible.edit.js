@@ -3033,7 +3033,7 @@ var AttributeSearchCollectibleView = Backbone.View.extend({
 		if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
 			_.each(collectible.CollectiblesUpload, function(collectibleUpload) {
 				if (collectibleUpload.primary) {
-					row += '<a class="thumbnail col-md-12"" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
+					row += '<a class="thumbnail col-md-12" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
 				}
 			});
 		} else {

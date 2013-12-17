@@ -4,21 +4,15 @@
 <p><strong>This part</strong></p>
 <table class="table table-borderless">
 	<tr>
-		<td>
-		<ul class="thumbnails">
+		<td style="min-width: 100px; max-width: 100px;">
 			{#attribute.Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<li class="col-md-1">
-				<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-			</li>
+			<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 			{/primary}
 			{:else}
-			<li class="col-md-1">
-				<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
-			</li>
+			<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
 			{/attribute.Attribute.AttributesUpload}
-
-		</ul></td>
+		</td>
 		<td>{attribute.Attribute.path_name}</td>
 		<td>{attribute.Attribute.name}</td>
 		<td>{attribute.Attribute.description}</td>
@@ -32,21 +26,15 @@
 {#replacementAttribute uploadDirectory=uploadDirectory}
 	<table class="table table-borderless">
 		<tr>
-			<td>
-			<ul class="thumbnails">
+			<td style="min-width: 100px; max-width: 100px;">
 				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
 				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<li class="col-md-1">
-					<a class="thumbnail" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-				</li>
+				<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
 				{/primary}
 				{:else}
-				<li class="col-md-1">
-					<a class="thumbnail" href="#"><img src="/img/no-photo.png" alt=""></a>
-				</li>
+				<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
 				{/Attribute.AttributesUpload}
-	
-			</ul></td>
+			</td>
 			<td>{Attribute.path_name}</td>
 			<td>{Attribute.name}</td>
 			<td>{Attribute.description}</td>
@@ -68,10 +56,10 @@
 		<div class="control-group">
 			<div class="controls">
 				<div class="btn-group">
-					<button id="select-attribute-link" class="btn submit" type="button">
+					<button id="select-attribute-link" class="btn btn-default submit" type="button">
 						Find By Collectible
 					</button>
-					<button id="select-attribute-link-by-part" class="btn delete" type="button">
+					<button id="select-attribute-link-by-part" class="btn btn-default delete" type="button">
 						Find By Part
 					</button>
 				</div>

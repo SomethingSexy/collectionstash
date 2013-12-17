@@ -5,6 +5,7 @@
 			if (!empty($collectibleCore['CollectiblesUpload'])) {
 				foreach ($collectibleCore['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
+						$this -> set('og_image_url', 'http://' . env('SERVER_NAME') . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true)));
 						echo '<a class="thumbnail" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectibleCore['Collectible']['descriptionTitle'], 'imagePathOnly' => false)) . '</a>';
 						break;
 					}
