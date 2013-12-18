@@ -140,7 +140,7 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								echo '<div class="form-group">';
 								echo '<div class="input-group">';
 								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" data-clipboard-text="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" title="Copied!" data-clipboard-text="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
 								echo '</div>';
 								echo '</div>';
 								echo '</form>';
@@ -153,7 +153,7 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								echo '<div class="form-group">';
 								echo '<div class="input-group">';
 								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCode . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcode" data-clipboard-text="' . $bbCode . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcode" title="Copied!" data-clipboard-text="' . $bbCode . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
 								echo '</div>';
 								echo '</div>';
 								echo '</form>';
@@ -178,7 +178,7 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								}
 
 								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCodeImage . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcodeimage" data-clipboard-text="' . $bbCodeImage . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcodeimage" title="Copied!" data-clipboard-text="' . $bbCodeImage . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
 								echo '</div>';
 								echo '</div>';
 								echo '</form>';
