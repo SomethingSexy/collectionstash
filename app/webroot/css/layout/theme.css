@@ -1333,15 +1333,6 @@ a.forgot-password {
 	background-color: #1993D9;
 }
 
-.name {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
-	white-space: nowrap;
-	width: 100%;
-	display: block;
-}
-
 @media (min-width: 992px) {
 	.nav-sidebar .nav > .active > ul {
 		display: block;
