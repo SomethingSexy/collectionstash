@@ -1,5 +1,14 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.12</h3>
+<p>Added the following new sharing features:</p>
+<ul>
+	<li>New menu option on the collectible detail page that allows you to share the collectible multiple ways.</li>
+	<li>New multishare feature on the user Stash "Share and Edit Photo" page.  This allows you to select multiple photos at once to share.</li>
+	<li>Updated the style of the menu bar on the collectible detail page.</li>
+	<li>Started adding support for Open Graph.</li>
+	<li>Minor bug fixes.</li>
+</ul>
 <h3>Release Notes for v2.11</h3>
 <p>Added a page for Sharing and Editing photos.  You can access this page by going to My Stash and clicking the Photos tab.  From this page you can change the title and description.  There are also some helper fields for sharing photos.</p>
 <p>Updated the landing page.</p>
