@@ -130,23 +130,23 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								echo '<div class="row">';
 								echo '<div class="col-sm-12">';
 								echo '<h4>Twitter</h4>';
-								echo '<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-lang="en" data-count="none"  data-via="' . Configure::read('Settings.Twitter.name') . '" data-text="' . $collectibleDetail['Collectible']['displayTitle'] . '" data-url="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">Tweet</a>';
+								echo '<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-lang="en" data-count="none"  data-via="' . Configure::read('Settings.Twitter.name') . '" data-text="' . $collectibleDetail['Collectible']['displayTitle'] . '" data-url="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">Tweet</a>';
 								echo '<hr>';
 								echo '<h4>Facebook</h4>';
-								echo '<div class="fb-share-button" data-href="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" data-type="button_count"></div>';
+								echo '<div class="fb-share-button" data-href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" data-type="button_count"></div>';
 								echo '<hr>';
 								echo '<h4>Direct</h4>';
 								echo '<form>';
 								echo '<div class="form-group">';
 								echo '<div class="input-group">';
-								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" data-clipboard-text="http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
+								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
+								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" data-clipboard-text="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" title="Click to copy." class="btn btn-default" type="button">Copy to clipboard</button></span>';
 								echo '</div>';
 								echo '</div>';
 								echo '</form>';
 								echo '<hr>';
 								
-								$bbCode = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\']' . $collectibleDetail['Collectible']['displayTitle'] . '[/URL]';
+								$bbCode = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/collectibles/view/' . $collectibleDetail['Collectible']['slugField'] . '\']' . $collectibleDetail['Collectible']['displayTitle'] . '[/URL]';
 								
 								echo '<h4>BBCode</h4>';
 								echo '<form>';
@@ -174,7 +174,7 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								$bbCodeImage = $bbCode;
 						
 								if (!is_null($primaryUploadURL)) {
-									$bbCodeImage = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\'][IMG]http://' . env('SERVER_NAME') . $primaryUploadURL . '[/IMG][/URL]';
+									$bbCodeImage = '[URL=\'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\'][IMG]http://' . env('SERVER_NAME') . $primaryUploadURL . '[/IMG][/URL]';
 								}
 
 								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCodeImage . '">';
