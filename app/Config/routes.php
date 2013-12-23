@@ -49,7 +49,7 @@ Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' =>
 
 Router::connect('/stash/*', array('controller' => 'stashs', 'action' => 'view'));
 
-Router::connect('/wishlist/*', array('controller' => 'stashs', 'action' => 'wishlist'));
+Router::connect('/wishlist/*', array('controller' => 'wish_lists', 'action' => 'view'));
 
 Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => 'view'));
 

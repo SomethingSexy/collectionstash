@@ -207,20 +207,23 @@ class CollectiblesUser extends AppModel {
 	 */
 	public function getListOfUsersWho($collectibleId, $editionSize = false) {
 		if ($editionSize) {
-			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		} else {
-			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		}
 
 		return $data;
 	}
 
-	public function getListOfUserWishlist($collectibleId) {
-		$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Wishlist"'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
-		return $data;
+	/**
+	 * Given a $collectibleId and a $user this method will return the stash counts
+	 */
+	public function getCollectibleOwnedCount($collectibleId, $user) {
+		$retVal = $this -> find('count', array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId, 'CollectiblesUser.user_id' => $user['User']['id'], 'CollectiblesUser.active' => true), 'contain' => false));
+		return $retVal;
 	}
 
-	public function add($data, $user, $stashType = 'Default') {
+	public function add($data, $user) {
 		$retVal = array();
 		$retVal['response'] = array();
 		$retVal['response']['isSuccess'] = false;
@@ -235,7 +238,7 @@ class CollectiblesUser extends AppModel {
 
 		// Give the user id and the stash type, we need to figure out what
 		// stash to add this too
-		$stash = $this -> Stash -> getStash($user['User']['id'], $stashType);
+		$stash = $this -> Stash -> getStash($user['User']['id']);
 		if (!empty($stash)) {
 			$data['CollectiblesUser']['stash_id'] = $stash['Stash']['id'];
 			$data['CollectiblesUser']['user_id'] = $user['User']['id'];

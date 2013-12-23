@@ -46,7 +46,7 @@ class CollectiblesUsersController extends AppController {
 	/**
 	 * This will handle add, update, delete asynchronously
 	 */
-	public function collectible($id = null, $type = 'Default') {
+	public function collectible($id = null) {
 
 		if (!$this -> isLoggedIn()) {
 			$data['response'] = array();
@@ -65,8 +65,7 @@ class CollectiblesUsersController extends AppController {
 			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);
 			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
 
-			$response = $this -> CollectiblesUser -> add($collectible, $this -> getUser(), $type);
-			
+			$response = $this -> CollectiblesUser -> add($collectible, $this -> getUser());
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {
@@ -231,7 +230,7 @@ class CollectiblesUsersController extends AppController {
 	// I might maintain 2 add functions because they will do different things
 	// Quick add will be for when you are adding something without entering any
 	// information or you are adding to your wishlist.
-	public function quickAdd($id, $type = 'Default') {
+	public function quickAdd($id) {
 		$data = array();
 		$data['response'] = array();
 		$data['response']['isSuccess'] = false;
@@ -250,8 +249,8 @@ class CollectiblesUsersController extends AppController {
 			$type = Sanitize::clean($type);
 			$collectiblesUser = array();
 			$collectiblesUser['CollectiblesUser']['collectible_id'] = $id;
-			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUser(), $type);
-			
+			$response = $this -> CollectiblesUser -> add($collectiblesUser, $this -> getUser());
+
 			if ($response) {
 				$this -> set('returnData', $response);
 			} else {
@@ -268,13 +267,14 @@ class CollectiblesUsersController extends AppController {
 		}
 	}
 
+	// TODO: This should get moved to the CollectibleController
 	public function registry($id = null) {
 		if (!is_null($id) && is_numeric($id)) {
 			$collectible = $this -> CollectiblesUser -> Collectible -> find("first", array('conditions' => array('Collectible.id' => $id), 'contain' => false));
 			if (!empty($collectible)) {
 				$usersWho = $this -> CollectiblesUser -> getListOfUsersWho($id, $collectible['Collectible']['numbered']);
 
-				$wishlist = $this -> CollectiblesUser -> getListOfUserWishlist($id);
+				$wishlist = $this -> CollectiblesUser -> User -> WishList -> getListOfUserWishlist($id);
 
 				$this -> set('showEditionSize', $collectible['Collectible']['numbered']);
 				$this -> set('registry', $usersWho);

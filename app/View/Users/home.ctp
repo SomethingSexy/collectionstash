@@ -66,9 +66,7 @@
 							<div class="counter small">
 								<span><?php
 								foreach ($stashes as $key => $value) {
-									if ($value['Stash']['name'] === 'Default') {
-										echo $value['Stash']['collectibles_user_count'];
-									}
+									echo $value['Stash']['collectibles_user_count'];
 								}
 								?></span>
 							</div>						
@@ -78,13 +76,7 @@
 						</div>
 						<div>
 							<div class="counter small">
-								<span><?php
-								foreach ($stashes as $key => $value) {
-									if ($value['Stash']['name'] === 'Wishlist') {
-										echo $value['Stash']['collectibles_user_count'];
-									}
-								}
-								?></span>
+								<span><?php echo $wishList['WishList']['collectibles_wish_list_count'];?></span>
 							</div>						
 							<div class="counter-label">
 								Collectibles in Wishlist

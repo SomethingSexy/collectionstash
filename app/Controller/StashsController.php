@@ -126,56 +126,6 @@ class StashsController extends AppController {
 		}
 	}
 
-	// TODO: Since this is a special stash type, it will need its own view because
-	// we will not want to show the collectible_user information
-	public function wishlist($userId = null, $type = 'tile') {
-		$this -> layout = 'fluid';
-		$this -> set('stashType', 'wishlist');
-		if (!is_null($userId)) {
-			$userId = Sanitize::clean($userId, array('encode' => false));
-			$user = $this -> Stash -> User -> find("first", array('conditions' => array('User.username' => $userId), 'contain' => array('Stash')));
-			//Ok we have a user, although this seems kind of inefficent but it works for now
-			if (!empty($user)) {
-				if (!empty($user['Stash'])) {
-					$loggedInUser = $this -> getUser();
-					$viewingMyStash = false;
-					if ($loggedInUser['User']['id'] === $user['User']['id']) {
-						$viewingMyStash = true;
-					}
-					$this -> set('myStash', $viewingMyStash);
-					$this -> set('stashUsername', $userId);
-					//If the privacy is 0 or you are viewing your own stash then always show
-					//or if it is set to 1 and this person is logged in also show.
-					if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
-						$this -> paginate = array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Wishlist"'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype')));
-						$collectibles = $this -> paginate('CollectiblesUser');
-
-						$this -> set(compact('collectibles'));
-						$this -> set('stash', $user['Stash'][0]);
-						// This will us the standard view
-						if ($type === 'list') {
-							$this -> render('view_list');
-						} else {
-							$this -> render('view_v2');
-						}
-
-					} else {
-						$this -> render('view_private');
-						return;
-					}
-				} else {
-					//This is a fucking error
-					$this -> redirect('/', null, true);
-				}
-			} else {
-				$this -> render('view_no_exist');
-				return;
-			}
-		} else {
-			//$this -> redirect('/', null, true);
-		}
-	}
-
 	/**
 	 * WTF is this doing?
 	 */

@@ -80,31 +80,14 @@ class Stash extends AppModel {
 	/**
 	 * Given a user id and a stash type, return the stash
 	 */
-	public function getStash($userId, $stashType = 'Default') {
-		return $this -> find('first', array('conditions' => array('Stash.user_id' => $userId, 'Stash.name' => $stashType)));
+	public function getStash($userId) {
+		return $this -> find('first', array('conditions' => array('Stash.user_id' => $userId)));
 	}
 
-	public function getStashId($userId, $stashType = 'Default') {
-		$stash = $this -> find('first', array('contain' => false, 'conditions' => array('Stash.user_id' => $userId, 'Stash.name' => $stashType)));
+	public function getStashId($userId) {
+		$stash = $this -> find('first', array('contain' => false, 'conditions' => array('Stash.user_id' => $userId)));
 
 		return $stash['Stash']['id'];
-	}
-
-	/**
-	 * Given a $collectibleId and a $user this method will return the stash counts
-	 */
-	public function getCollectibleStashCount($collectibleId, $user) {
-		$retVal = array();
-		// going to make them separate requests for now
-		$stashes = $this -> find('all', array('contain' => false, 'conditions' => array('Stash.user_id' => $user['User']['id'])));
-
-		foreach ($stashes as $key => $value) {
-			$count = $this -> CollectiblesUser -> find('count', array('conditions' => array('CollectiblesUser.collectible_id' => $collectibleId, 'CollectiblesUser.stash_id' => $value['Stash']['id']), 'contain' => false));
-
-			array_push($retVal, array('type' => $value['Stash']['name'], 'count' => $count));
-		}
-
-		return $retVal;
 	}
 
 	/**

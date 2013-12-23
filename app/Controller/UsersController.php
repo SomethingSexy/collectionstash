@@ -27,6 +27,10 @@ class UsersController extends AppController {
 
 		$this -> set(compact('stashes'));
 
+		$wishList = $this -> User -> WishList -> find('first', array('conditions' => array('WishList.user_id' => $this -> getUserId()), 'contain' => false));
+
+		$this -> set(compact('wishList'));
+
 		// user_point_facts
 		$pointsYear = $this -> User -> UserPointFact -> getUserTotalPointsCurrentYear($this -> getUserId());
 		$pointsMonth = $this -> User -> UserPointFact -> getUserTotalPointsCurrentMonth($this -> getUserId());
@@ -79,7 +83,7 @@ class UsersController extends AppController {
 		$activity = json_encode($activity);
 		$this -> set(compact('activity'));
 		$this -> set(compact('totalActivity'));
-		
+
 		$this -> layout = 'home_dashboard';
 		$this -> set('dashboard', 'home');
 	}
@@ -118,7 +122,7 @@ class UsersController extends AppController {
 		// user
 		$user = $this -> getUser();
 
-		$this -> paginate = array('findType' => 'orderAveragePrice','joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+		$this -> paginate = array('findType' => 'orderAveragePrice', 'joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
 		$collectibles = $this -> paginate('CollectiblesUser');
 		$this -> set(compact('collectibles'));
 
