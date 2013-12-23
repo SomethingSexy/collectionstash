@@ -638,7 +638,8 @@
 <script>
 	$(function() {
 		$('body').scrollspy({
-			target : '.nav-sidebar'
+			target : '.nav-sidebar',
+			offset : $(window).height() * 0.2
 		})
 
 	});

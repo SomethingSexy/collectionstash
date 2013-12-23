@@ -122,73 +122,77 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 									echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
 								}
-								echo '<li class="dropdown">';
-								echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Share <b class="caret"></b></a>';
-								echo '<ul class="dropdown-menu">';
-								echo '<li>';
-								echo '<div class="yamm-content">';
-								echo '<div class="row">';
-								echo '<div class="col-sm-12">';
-								echo '<h4>Twitter</h4>';
-								echo '<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-lang="en" data-count="none"  data-via="' . Configure::read('Settings.Twitter.name') . '" data-text="' . $collectibleDetail['Collectible']['displayTitle'] . '" data-url="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">Tweet</a>';
-								echo '<hr>';
-								echo '<h4>Facebook</h4>';
-								echo '<div class="fb-share-button" data-href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" data-type="button_count"></div>';
-								echo '<hr>';
-								echo '<h4>Direct</h4>';
-								echo '<form>';
-								echo '<div class="form-group">';
-								echo '<div class="input-group">';
-								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" title="Copied!" data-clipboard-text="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
-								echo '</div>';
-								echo '</div>';
-								echo '</form>';
-								echo '<hr>';
-								
-								$bbCode = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/collectibles/view/' . $collectibleDetail['Collectible']['slugField'] . '\']' . $collectibleDetail['Collectible']['displayTitle'] . '[/URL]';
-								
-								echo '<h4>BBCode</h4>';
-								echo '<form>';
-								echo '<div class="form-group">';
-								echo '<div class="input-group">';
-								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCode . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcode" title="Copied!" data-clipboard-text="' . $bbCode . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
-								echo '</div>';
-								echo '</div>';
-								echo '</form>';
-								echo '<hr>';
-								$primaryUploadURL = null;
-								if (!empty($collectibleDetail['CollectiblesUpload'])) {
-									foreach ($collectibleDetail['CollectiblesUpload'] as $key => $upload) {
-										if ($upload['primary']) {
-											$primaryUploadURL = $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true));
+								// no need to show this in admin mode
+								if(!$adminMode) {
+									echo '<li class="dropdown">';
+									echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Share <b class="caret"></b></a>';
+									echo '<ul class="dropdown-menu">';
+									echo '<li>';
+									echo '<div class="yamm-content">';
+									echo '<div class="row">';
+									echo '<div class="col-sm-12">';
+									echo '<h4>Twitter</h4>';
+									echo '<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-lang="en" data-count="none"  data-via="' . Configure::read('Settings.Twitter.name') . '" data-text="' . $collectibleDetail['Collectible']['displayTitle'] . '" data-url="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">Tweet</a>';
+									echo '<hr>';
+									echo '<h4>Facebook</h4>';
+									echo '<div class="fb-share-button" data-href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" data-type="button_count"></div>';
+									echo '<hr>';
+									echo '<h4>Direct</h4>';
+									echo '<form>';
+									echo '<div class="form-group">';
+									echo '<div class="input-group">';
+									echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '">';
+									echo '<span class="input-group-btn"><button id="copy-to-clipboard-direct" title="Copied!" data-clipboard-text="http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
+									echo '</div>';
+									echo '</div>';
+									echo '</form>';
+									echo '<hr>';
+									
+									$bbCode = '[URL=\'http://' . env('SERVER_NAME') . '/' . $collectibleDetail['Collectible']['id'] . '/collectibles/view/' . $collectibleDetail['Collectible']['slugField'] . '\']' . $collectibleDetail['Collectible']['displayTitle'] . '[/URL]';
+									
+									echo '<h4>BBCode</h4>';
+									echo '<form>';
+									echo '<div class="form-group">';
+									echo '<div class="input-group">';
+									echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCode . '">';
+									echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcode" title="Copied!" data-clipboard-text="' . $bbCode . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
+									echo '</div>';
+									echo '</div>';
+									echo '</form>';
+									echo '<hr>';
+									$primaryUploadURL = null;
+									if (!empty($collectibleDetail['CollectiblesUpload'])) {
+										foreach ($collectibleDetail['CollectiblesUpload'] as $key => $upload) {
+											if ($upload['primary']) {
+												$primaryUploadURL = $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true));
+											}
 										}
 									}
+	
+									echo '<h4>BBCode with image</h4>';
+									echo '<form>';
+									echo '<div class="form-group">';
+									echo '<div class="input-group">';
+									$bbCodeImage = $bbCode;
+							
+									if (!is_null($primaryUploadURL)) {
+										$bbCodeImage = '[URL=\'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\'][IMG]http://' . env('SERVER_NAME') . $primaryUploadURL . '[/IMG][/URL]';
+									}
+	
+									echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCodeImage . '">';
+									echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcodeimage" title="Copied!" data-clipboard-text="' . $bbCodeImage . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
+									echo '</div>';
+									echo '</div>';
+									echo '</form>';
+									echo '<hr>';
+									echo '</div>';
+									echo '</div>';
+									echo '</div>';
+									echo '</li>';
+									echo '</ul>';
+									echo '</li>';									
 								}
 
-								echo '<h4>BBCode with image</h4>';
-								echo '<form>';
-								echo '<div class="form-group">';
-								echo '<div class="input-group">';
-								$bbCodeImage = $bbCode;
-						
-								if (!is_null($primaryUploadURL)) {
-									$bbCodeImage = '[URL=\'http://' . env('SERVER_NAME') . '/collectibles/view/' . $collectibleDetail['Collectible']['id'] . '/' . $collectibleDetail['Collectible']['slugField'] . '\'][IMG]http://' . env('SERVER_NAME') . $primaryUploadURL . '[/IMG][/URL]';
-								}
-
-								echo '<input type="text" readonly="readonly" class="form-control selectable" name="" value="' . $bbCodeImage . '">';
-								echo '<span class="input-group-btn"><button id="copy-to-clipboard-bbcodeimage" title="Copied!" data-clipboard-text="' . $bbCodeImage . '" class="btn btn-default btn-copy" type="button">Copy to clipboard</button></span>';
-								echo '</div>';
-								echo '</div>';
-								echo '</form>';
-								echo '<hr>';
-								echo '</div>';
-								echo '</div>';
-								echo '</div>';
-								echo '</li>';
-								echo '</ul>';
-								echo '</li>';
 								if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
 									$userSubscribed = 'false';
 									if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
@@ -282,16 +286,9 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 							echo ' | <a href="/collectibles/view/' . $collectibleDetail['Collectible']['variant_collectible_id'] . '">Variant</a>';
 						}
 
-						if ($isLoggedIn && $userCounts) {
-							foreach ($userCounts as $key => $value) {
-								if ($value['type'] === 'Default') {
-									echo ' | <span class="label">' . $value['count'] . ' in your Stash' . '</span>';
-								} else {
-									echo ' | <span class="label">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
-								}
-
-							}
-
+						if ($isLoggedIn) {
+							echo ' | <span class="label">' . $collectibleUserCount . ' in your Stash' . '</span>';
+							echo ' | <span class="label">' . $collectibleWishListCount . ' in your Wish List</span>';
 						}
 						?>
 						</span>

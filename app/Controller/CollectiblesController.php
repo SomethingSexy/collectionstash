@@ -385,9 +385,12 @@ class CollectiblesController extends AppController {
 			$variants = $this -> Collectible -> getCollectibleVariants($id);
 			$this -> set('variants', $variants);
 
+			// This is for the logged in user
 			if ($this -> isLoggedIn()) {
-				$userCounts = $this -> Collectible -> User -> Stash -> getCollectibleStashCount($id, $this -> getUser());
-				$this -> set(compact('userCounts'));
+				$collectibleUserCount = $this -> Collectible -> CollectiblesUser -> getCollectibleOwnedCount($id, $this -> getUser());
+				$this -> set(compact('collectibleUserCount'));
+				$collectibleWishListCount = $this -> Collectible -> CollectiblesWishList -> getCollectibleWishListCount($id, $this -> getUser());
+				$this -> set(compact('collectibleWishListCount'));
 			}
 
 			$transactionGraphData = $this -> Collectible -> Listing -> Transaction -> getTransactionGraphData($id);

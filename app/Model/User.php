@@ -5,7 +5,7 @@ class User extends AppModel {
 	var $actsAs = array('Containable');
 	var $hasMany = array('Notification', 'Activity', 'Edit', 'Collectible', 'UserPointYearFact', 'UserPointFact', 'Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Subscription' => array('dependent' => true));
 	//TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
-	var $hasOne = array('Profile' => array('dependent' => true));
+	var $hasOne = array('Profile' => array('dependent' => true), 'WishList' => array('dependent' => true));
 
 	public $validate = array(
 	//username
@@ -194,8 +194,7 @@ class User extends AppModel {
 		//Need to put this here to create the entity
 		// TODO: Update Stash to use the EntityTypeBehavior to automate this shit
 		$userData['Stash']['0']['EntityType']['type'] = 'stash';
-		$userData['Stash']['1'] = array();
-		$userData['Stash']['1']['name'] = 'Wishlist';
+		$userData['WishList'] = array();
 		//Need to put this here to create the entity
 		// TODO: Update Stash to use the EntityTypeBehavior to automate this shit
 		$userData['Stash']['1']['EntityType']['type'] = 'stash';
