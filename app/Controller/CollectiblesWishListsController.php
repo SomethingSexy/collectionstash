@@ -23,14 +23,16 @@ class CollectiblesWishListsController extends AppController {
 		}
 
 		if ($this -> request -> isPut()) {
-
+			// Update, not much to do here right now
 		} else if ($this -> request -> isPost()) {
-			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);
-			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
+			$collectible['CollectiblesWishList']['collectible_id'] = Sanitize::clean($id);
 
-			$response = $this -> CollectiblesUser -> add($collectible, $this -> getUser());
+			$response = $this -> CollectiblesWishList -> add($collectible, $this -> getUser());
 
-			$this -> set('returnData', $response);
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+				$this -> set('returnData', $response);
+			}
 		} else if ($this -> request -> isDelete()) {
 			// for now this will handle deletes where the user is prompted
 			// about the delete
@@ -53,5 +55,6 @@ class CollectiblesWishListsController extends AppController {
 
 		}
 	}
+
 }
 ?>

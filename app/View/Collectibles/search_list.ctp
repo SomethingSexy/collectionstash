@@ -149,9 +149,9 @@ unset($urlparams['url']);
 						echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 						echo '<ul class="dropdown-menu">';
 						if ($isLoggedIn) {
-							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
-							echo '<li><a data-stash-type="Default" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#"><img src="/img/icon/add_stash_link_25x25.png"> Quick Add to Stash</a></li>';
-							echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
+							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
+							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#"><img src="/img/icon/add_stash_link_25x25.png"> Quick Add to Stash</a></li>';
+							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
 						}
 
 						echo '<li>';
@@ -178,16 +178,9 @@ unset($urlparams['url']);
 							echo $this -> Html -> link($collectible['Collectible']['collectibles_user_count'] . ' Stashed', array('admin' => false, 'action' => 'registry', 'controller' => 'collectibles_users', $collectible['Collectible']['id']));
 						}
 						echo '</span>';
-						if ($isLoggedIn && $collectible['Collectible']['userCounts']) {
-							foreach ($collectible['Collectible']['userCounts'] as $key => $value) {
-								if ($value['type'] === 'Default') {
-									echo '<span class="label label-default">' . $value['count'] . ' in your Stash' . '</span>';
-								} else {
-									echo '<span class="label label-default">' . $value['count'] . ' in your ' . $value['type'] . '</span>';
-								}
-
-							}
-
+						if ($isLoggedIn) {
+							echo '<span class="label label-default">' . $collectible['Collectible']['userCounts']['stashCount'] . ' in your Stash' . '</span>';
+							echo '<span class="label label-default">' . $collectible['Collectible']['userCounts']['wishListCount'] . ' in your Wish List</span>';
 						}
 						echo '</div>';
 						echo '</div>';
@@ -206,7 +199,7 @@ unset($urlparams['url']);
 				</div>	
 				<div class="row">
 					<div class="col-md-12">	
-						<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true)));?></p>
+						<p><?php echo $this -> Paginator -> counter(array('format' => __('Page {:page} of {:pages}, showing {:current} collectibles out of  {:count} total.', true))); ?></p>
 						<ul class="pagination">
 							<?php echo $this -> Paginator -> prev(__('previous', true), array('tag' => 'li'), null, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
 							<?php echo $this -> Paginator -> numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a')); ?>
@@ -228,7 +221,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {

@@ -422,8 +422,10 @@ class CollectiblesController extends AppController {
 			if ($this -> isLoggedIn()) {
 				// modify the return data and then set it again
 				foreach ($collectibles as $key => $value) {
-					$userCounts = $this -> Collectible -> User -> Stash -> getCollectibleStashCount($value['Collectible']['id'], $this -> getUser());
-					$collectibles[$key]['Collectible']['userCounts'] = $userCounts;
+					$collectibleUserCount = $this -> Collectible -> CollectiblesUser -> getCollectibleOwnedCount($value['Collectible']['id'], $this -> getUser());
+					$collectibleWishListCount = $this -> Collectible -> CollectiblesWishList -> getCollectibleWishListCount($value['Collectible']['id'], $this -> getUser());
+
+					$collectibles[$key]['Collectible']['userCounts'] = array('stashCount' => $collectibleUserCount, 'wishListCount' => $collectibleWishListCount);
 				}
 
 				$this -> set(compact('collectibles'));

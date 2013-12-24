@@ -11,5 +11,9 @@ class WishList extends AppModel {
 		return $data;
 	}
 
+	public function getWishList($userId) {
+		return $this -> find('first', array('contain' => false, 'conditions' => array('WishList.user_id' => $userId)));
+	}
+
 }
 ?>
