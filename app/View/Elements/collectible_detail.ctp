@@ -268,14 +268,22 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 						} else if ($collectibleDetail['Collectible']['original']) {
 							echo 'Original | ';
 						} else {
-							if ($collectibleDetail['Collectible']['official'] && !empty($collectibleDetail['Collectible']['manufacture_id'])) {
-								echo 'Mass-Produced | ';
+							// if it not a custom and not original it is mass-produced
+							if ($collectibleDetail['Collectible']['official']) {
+								//if ($collectibleDetail['Collectible']['official'] && !empty($collectibleDetail['Collectible']['manufacture_id'])) {
+								echo 'Mass-Produced |';
+								//} else {
+								// I don't think this should be set here, what about if it is an art print offered
+								// by the artist but there is no manufacturer? and it is official
+								//echo 'Custom | ';
+								//	}
+							
 							} else {
 								echo 'Custom | ';
 							}
-
 						}
 
+						// Then regardless of the logic above, mark official vs unofficial
 						if ($collectibleDetail['Collectible']['official']) {
 							echo 'Official';
 						} else {
