@@ -63,14 +63,10 @@
 
 	};
 
-	StashFullAdd.prototype.add = function(collectibleModel, stashType) {
-		this.stashType = stashType;
-
+	StashFullAdd.prototype.add = function(collectibleModel) {
 		this.collectibleUser = new CollectibleUserModel({
 			'collectible_id' : collectibleModel.get('id')
 		});
-
-		this.collectibleUser.stashType = this.stashType;
 
 		if (this.stashAddView) {
 			this.stashAddView.remove();
@@ -90,12 +86,12 @@
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
-	$.fn.stashfulladd = function(option, model, stashType) {
+	$.fn.stashfulladd = function(option, model) {
 		return this.each(function() {
 			var $this = $(this);
 
 			if (option == 'add') {
-				stashFullAdd.add(model, stashType);
+				stashFullAdd.add(model);
 			}
 		});
 	};
@@ -123,7 +119,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -134,7 +131,6 @@
 		this.$element = $(element);
 		this.options = $.extend({}, $.fn.stashadd.defaults, options);
 		this.collectibleId = this.$element.attr('data-collectible-id');
-		this.stashType = this.$element.attr('data-stash-type');
 	};
 
 	StashAdd.prototype.add = function() {
@@ -145,7 +141,7 @@
 			data : {
 				'_method' : 'POST'
 			},
-			url : '/collectibles_users/quickAdd/' + this.collectibleId + '/' + this.stashType,
+			url : '/collectibles_users/quickAdd/' + this.collectibleId,
 			beforeSend : function(formData, jqForm, options) {
 
 			},
@@ -153,7 +149,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = (self.stashType === 'Default') ? 'Collectible has been added to your Stash!' : 'Collectible has been added to your Wishlist!';
+					var message = 'Collectible has been added to your Stash!';
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,
@@ -232,6 +228,116 @@
 		$('.stashable').on('click', '.add-to-stash', function(e) {
 			var $anchor = $(e.currentTarget);
 			$anchor.stashadd('add');
+			e.preventDefault();
+		});
+	});
+}(window.jQuery);
+
+// Add to Wishlist
+! function($) {"use strict";// jshint ;_;
+	/* PUBLIC CLASS DEFINITION
+	 *
+	 * Add in here later whether or not we quick add or not - TODO
+	 ** ============================== */
+
+	var WishListAdd = function(element, options) {
+		this.$element = $(element);
+		this.options = $.extend({}, $.fn.wishlistadd.defaults, options);
+		this.collectibleId = this.$element.attr('data-collectible-id');
+	};
+
+	WishListAdd.prototype.add = function() {
+		var self = this;
+		$.ajax({
+			dataType : 'json',
+			type : 'post',
+			data : {
+				'_method' : 'POST'
+			},
+			url : '/collectibles_wish_lists/collectible/' + this.collectibleId,
+			beforeSend : function(formData, jqForm, options) {
+
+			},
+			// success identifies the function to invoke when the server response
+			// has been received
+			success : function(data, textStatus, jqXHR) {
+				var message = 'Collectible has been added to your Wishlist!';
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
+				});
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				var errorMessage = 'Oops! Something went terribly wrong!';
+				if (jqXHR.status === 400) {
+					$.each(jqXHR.responseJSON.response.errors, function(index, value) {
+						errorMessage = value.message;
+					});
+				}
+
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
+				});
+
+			}
+		});
+	};
+	/* BUTTON PLUGIN DEFINITION
+	 * ======================== */
+
+	$.fn.wishlistadd = function(option) {
+		return this.each(function() {
+			var $this = $(this), data = $this.data('wishlistadd'), options = typeof option == 'object' && option;
+			if (!data) {
+				$this.data('wishlistadd', ( data = new WishListAdd(this, options)));
+			}
+
+			if (option == 'add') {
+				data.add();
+			}
+		});
+	};
+
+	$.fn.wishlistadd.defaults = {
+
+	};
+
+	$.fn.wishlistadd.Constructor = WishListAdd;
+
+	/* DATA-API
+	 * =============== */
+
+	$(function() {
+		$('.stashable').on('click', '.add-to-wishlist', function(e) {
+			var $anchor = $(e.currentTarget);
+			$anchor.wishlistadd('add');
 			e.preventDefault();
 		});
 	});
@@ -353,7 +459,6 @@
 		this.$stashItem = this.$element.closest('.stash-item');
 		this.options = $.extend({}, $.fn.stashremove.defaults, options);
 		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
-		this.stashType = this.$element.attr('data-stash-type');
 		if (options.tiles) {
 			this.$tiles = $('.tiles');
 		}
@@ -376,7 +481,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = (self.stashType.toLowerCase() === 'default') ? 'Collectible has been removed from your Stash!' : 'Collectible has been removed from your Wishlist!';
+					var message = 'Collectible has been removed from your Stash!';
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,

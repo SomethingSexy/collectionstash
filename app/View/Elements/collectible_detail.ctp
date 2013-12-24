@@ -117,10 +117,10 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 									$collectibleJSON = json_encode($collectibleDetail['Collectible']);
 									$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-									echo '<li><a title="Add to stash" class="add-full-to-stash" data-stash-type="Default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
+									echo '<li><a title="Add to stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
 								}
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-									echo '<li><a data-stash-type="Wishlist" data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-stash" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
+									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
 								}
 								// no need to show this in admin mode
 								if(!$adminMode) {
