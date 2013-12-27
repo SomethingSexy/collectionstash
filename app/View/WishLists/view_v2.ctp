@@ -1,8 +1,8 @@
-<?php echo $this -> Minify -> script('js/cs.stash', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div class="col-md-12">
 	<h2><?php
 	echo $stashUsername . '\'s';
-	echo __(' wishlist', true);
+	echo __(' Wish List', true);
 	?></h2>
 	<div id="my-stashes-component" class="widget widget-tabs">
 					<ul class="nav nav-tabs widget-wide">
@@ -15,7 +15,7 @@
 						<?php
 						echo '<li class="active">';
 						?>
-						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?>
+						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wish List') . '</a>'; ?>
 						</li>
 						<li>
 						<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
@@ -76,7 +76,7 @@
 					$prompt = 'data-prompt="false"';
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-					echo '<span><a ' . $prompt . ' data-stash-type="Wishlist" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>';
+					echo '<span><a ' . $prompt . ' data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="icon-trash"></i></a></span>';
 				}
 
 				echo '</div>';
@@ -85,7 +85,7 @@
 			echo '</div>';
 
 		} else {
-			echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</p>';
+			echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their Wish List!', true) . '</p>';
 		}
 		?>
 		</div>
@@ -94,7 +94,6 @@
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/views/view.stash.remove', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php

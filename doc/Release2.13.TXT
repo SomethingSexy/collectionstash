@@ -3,3 +3,4 @@ Database Updates
 - new table CollectiblesWishLists
 - add field collectibles_wish_list_count to Collectibles
 - add filed collectibles_wish_list_count to Users
+- add types to activity_types

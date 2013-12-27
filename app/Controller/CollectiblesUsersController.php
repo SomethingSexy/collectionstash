@@ -5,7 +5,10 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
-
+	
+	/**
+	 * This is for viewing an collectible in a user's stash
+	 */
 	public function view($id = null) {
 		if (!is_null($id) && is_numeric($id)) {
 			$id = Sanitize::clean($id, array('encode' => false));
