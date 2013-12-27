@@ -47,7 +47,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 					echo '</div>';
 					echo '<div class="menu tile-links clearfix">';
 					if ($isLoggedIn) {
-						echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wishlist" href="#"><i class="icon-star"></i></a></span>';
+						echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="icon-star"></i></a></span>';
 						echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 						echo '<img src="/img/icon/add_stash_link_25x25.png">';
 						echo '</a></span>';

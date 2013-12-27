@@ -2,11 +2,7 @@
 <div class="col-md-12">
 	<h2><?php
 	echo $stashUsername . '\'s';
-	if ($stashType === 'default') {
-		echo __(' stash', true);
-	} else {
-		echo __(' wishlist', true);
-	}
+	echo __(' Stash', true);
 	?></h2>
 	<div id="my-stashes-component" class="widget widget-tabs">
 	
@@ -14,23 +10,15 @@
 	
 					<ul class="nav nav-tabs widget-wide">
 						<?php
-						if ($stashType === 'default') {
-							echo '<li class="active">';
-						} else {
-							echo '<li>';
-						}
+						echo '<li class="active">';
 						?>
 						
 						<?php echo '<a href="/stash/' . $stashUsername . '">' . __('Collectibles') . '</a>'; ?>
 						</li>
 						<?php
-						if ($stashType === 'wishlist') {
-							echo '<li class="active">';
-						} else {
-							echo '<li>';
-						}
+						echo '<li>';
 						?>
-						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wishlist') . '</a>'; ?>
+						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wish List') . '</a>'; ?>
 						</li>
 						<li>
 						<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
@@ -42,7 +30,7 @@
 				<div class="clearfix">
 					<div class="btn-group actions pull-left">
 							<?php
-							if (isset($myStash) && $myStash && $stashType === 'default') {
+							if (isset($myStash) && $myStash) {
 								echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i> Edit</a>';
 							}
 							if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
@@ -57,25 +45,17 @@
 				    <div class="btn-group views pull-right">
 				    	<?php
 						$currentStash = 'stash';
-						if ($stashType === 'wishlist') {
-							$currentStash = 'wishlist';
-						}
-	
 						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>';
 						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
 	 					?>
 				    </div>
 				</div>
 						<?php
-		if (isset($collectibles) && !empty($collectibles)) {
-			echo $this -> element('stash_table_list', array('collectibles' => $collectibles));
-		} else {
-			if ($stashType === 'default') {
-				echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
-			} else {
-				echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their wishlist!', true) . '</p>';
-			}
-		}
+						if (isset($collectibles) && !empty($collectibles)) {
+							echo $this -> element('stash_table_list', array('collectibles' => $collectibles));
+						} else {
+							echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+						}
 		?>
 		</div>
 
@@ -89,9 +69,9 @@
 <?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
-	if (isset($reasons)) {
-		echo 'var reasons = \'' . json_encode($reasons) . '\';';
-	}
+if (isset($reasons)) {
+	echo 'var reasons = \'' . json_encode($reasons) . '\';';
+}
 	?>
 		$(function() {
 			var $container = $('div.tiles');
@@ -128,5 +108,5 @@
 
 			$('#comments').comments();
 
-		}); 
+		});
 </script>

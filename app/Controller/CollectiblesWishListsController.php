@@ -37,13 +37,10 @@ class CollectiblesWishListsController extends AppController {
 			// for now this will handle deletes where the user is prompted
 			// about the delete
 			// we need to pull the query parameters
-			$collectible['CollectiblesUser'] = array();
-			$collectible['CollectiblesUser']['id'] = $id;
-			$collectible['CollectiblesUser']['collectible_user_remove_reason_id'] = Sanitize::clean($this -> request -> query('collectible_user_remove_reason_id'));
-			$collectible['CollectiblesUser']['sold_cost'] = Sanitize::clean($this -> request -> query('sold_cost'));
-			$collectible['CollectiblesUser']['remove_date'] = Sanitize::clean($this -> request -> query('remove_date'));
+			$collectible['CollectiblesWishList'] = array();
+			$collectible['CollectiblesWishList']['id'] = $id;
 
-			$response = $this -> CollectiblesUser -> remove($collectible, $this -> getUser());
+			$response = $this -> CollectiblesWishList -> remove($collectible, $this -> getUser());
 			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
 				$this -> response -> statusCode(401);
 			} else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {

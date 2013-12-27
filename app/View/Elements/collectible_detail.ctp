@@ -120,7 +120,7 @@ echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false
 									echo '<li><a title="Add to stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
 								}
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wishlist" href="#"><i class="icon-star"></i> Add to Wishlist</a></li>';
+									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="icon-star"></i> Add to Wish List</a></li>';
 								}
 								// no need to show this in admin mode
 								if(!$adminMode) {

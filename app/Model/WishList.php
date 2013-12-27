@@ -12,7 +12,7 @@ class WishList extends AppModel {
 	}
 
 	public function getWishList($userId) {
-		return $this -> find('first', array('contain' => false, 'conditions' => array('WishList.user_id' => $userId)));
+		return $this -> find('first', array('contain' => array('User'), 'conditions' => array('WishList.user_id' => $userId)));
 	}
 
 }
