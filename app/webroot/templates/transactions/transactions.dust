@@ -189,20 +189,35 @@
 							{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd listing_type_id=listing_type_id}
 							<tr>
 								<td>
-									{@eq key="{listing_type_id}" value="2" type="string"}
-										External Listing
+									{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
+										{@eq key="{listing_type_id}" value="2" type="string"}
+											External Listing
+										{/eq}
+										{@eq key="{listing_type_id}" value="3" type="string"}
+											External Trade
+										{/eq}
 									{:else}
 										{type}
-									{/eq}
+									{/if}
 								</td>
 								<td>
-									{@eq key="{listing_type_id}" value="2"}
+									{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
 										{listing_name}
 									{:else}
 										<a target="_blank" href="{url}">{listing_name}</a>
-									{/eq}							
+									{/if}							
 								</td>
-								<td>{sale_price}</td>
+								<td>
+										{@eq key="{listing_type_id}" value="1" type="string"}
+											{sale_price}
+										{/eq}
+										{@eq key="{listing_type_id}" value="2" type="string"}
+											{sale_price}
+										{/eq}
+										{@eq key="{listing_type_id}" value="3" type="string"}
+											{traded_for}
+										{/eq}
+								</td>
 								<td>{condition_name}</td>
 								<td>{#sale_date} {.} {:else} Missing {/sale_date}</td>
 								<td>

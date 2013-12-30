@@ -75,10 +75,12 @@ class CollectiblesUsersController extends AppController {
 			// for now this will handle deletes where the user is prompted
 			// about the delete
 			// we need to pull the query parameters
+			//TODO: the controller probably should know about this data
 			$collectible['CollectiblesUser'] = array();
 			$collectible['CollectiblesUser']['id'] = $id;
 			$collectible['CollectiblesUser']['collectible_user_remove_reason_id'] = Sanitize::clean($this -> request -> query('collectible_user_remove_reason_id'));
 			$collectible['CollectiblesUser']['sold_cost'] = Sanitize::clean($this -> request -> query('sold_cost'));
+			$collectible['CollectiblesUser']['traded_for'] = Sanitize::clean($this -> request -> query('traded_for'));
 			$collectible['CollectiblesUser']['remove_date'] = Sanitize::clean($this -> request -> query('remove_date'));
 
 			$response = $this -> CollectiblesUser -> remove($collectible, $this -> getUser());
@@ -95,7 +97,7 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	/**
-	 * This method edits a user's collectible.
+	 * This method edits a user's collectible, via standard post 
 	 */
 	function edit($id = null) {
 		$this -> checkLogIn();

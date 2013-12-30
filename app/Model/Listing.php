@@ -2,7 +2,7 @@
 App::uses('TransactionFactory', 'Lib/Transaction');
 class Listing extends AppModel {
 	public $name = 'Listing';
-	public $belongsTo = array('Collectible', 'User');
+	public $belongsTo = array('Collectible', 'User', 'CollectiblesUser');
 	public $hasMany = array('Transaction' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
@@ -109,8 +109,10 @@ class Listing extends AppModel {
 
 	/**
 	 * listing_Type_id = 1 eBay
-	 * listing_type_id = 2 external
-	 * listing_type_id = 3 internal
+	 * listing_type_id = 2 external sell
+	 * listing_type_id = 3 external trade
+	 * listing_type_id = 4 internal sell
+	 * listing_type_id = 5 internal trade
 	 */
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();

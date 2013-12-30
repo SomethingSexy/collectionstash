@@ -40,11 +40,6 @@ class StashActivity extends BaseActivity {
 		$stashDisplayname = 'Stash';
 		$stashUrl = '/stash/' . $this -> stash['User']['username'];
 
-		if ($this -> stash['Stash']['name'] === 'Wishlist') {
-			$stashDisplayname = 'Wishlist';
-			$stashUrl = '/wishlist/' . $this -> stash['User']['username'];
-		}
-
 		// Now add the target
 		$targetJSON = $this -> buildTarget($this -> stash['Stash']['id'], $stashUrl, 'stash', $stashDisplayname);
 		$retVal = array_merge($retVal, $targetJSON);

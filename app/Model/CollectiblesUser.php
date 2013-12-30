@@ -140,7 +140,11 @@ class CollectiblesUser extends AppModel {
 
 					// make sure we have a listing, these listings will only have one transaction
 					if (isset($val['Listing']) && !empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
-						$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
+						if ($val['Listing']['listing_type_id'] === 2) {
+							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
+						} else if ($val['Listing']['listing_type_id'] === 3) {
+							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
+						}
 					} else {
 						unset($results[$key]['Listing']);
 					}
@@ -287,16 +291,27 @@ class CollectiblesUser extends AppModel {
 		$dataSource = $this -> getDataSource();
 		$dataSource -> begin();
 
-		// first check if there is a cost and it is new
-		if (isset($data['CollectiblesUser']['sold_cost']) && !empty($data['CollectiblesUser']['sold_cost'])) {
+		// first check if there is a cost and it is new or there is a traded for field
+		if ((isset($data['CollectiblesUser']['sold_cost']) && !empty($data['CollectiblesUser']['sold_cost'])) || (isset($data['CollectiblesUser']['traded_for']) && !empty($data['CollectiblesUser']['traded_for']))) {
 			// if the listing is empty then we don't haave one
 
 			if (empty($collectiblesUser['Listing'])) {
 				$listingData = array();
-				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-				$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-				$listingData['Listing']['listing_type_id'] = 2;
+
+				if (isset($data['CollectiblesUser']['sold_cost'])) {
+					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+					$listingData['Listing']['listing_type_id'] = 2;
+				}
+
+				if (isset($data['CollectiblesUser']['traded_for'])) {
+					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+					$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+					$listingData['Listing']['listing_type_id'] = 3;
+				}
+
 				$listing = $this -> Listing -> createListing($listingData, $user);
 
 				if (!$listing['response']['isSuccess']) {
@@ -304,9 +319,9 @@ class CollectiblesUser extends AppModel {
 					$retVal['response']['code'] = 500;
 					return $retVal;
 				}
-				debug($listing['response']['data']['id']);
 				$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
-			} else if ($data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {// then check if there is not a cost but there was a cost
+			} else if ($data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {
+				// TODO: This should not be done here, moved to the Listing model for update
 				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
 				$transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
 
@@ -315,9 +330,19 @@ class CollectiblesUser extends AppModel {
 					$retVal['response']['code'] = 500;
 					return $retVal;
 				}
+			} else if ($data['CollectiblesUser']['traded_for'] !== $collectiblesUser['CollectiblesUser']['traded_for']) {
+				// TODO: This should not be done here, moved to the Listing model for update
+				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
+				$transaction['Transaction']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+
+				if (!$this -> Listing -> Transaction -> save($transaction)) {
+					$dataSource -> rollback();
+					$retVal['response']['code'] = 500;
+					return $retVal;
+				}
 			}
 		} else {
-			// We don't have a sold_cost, see if we had a listing previously
+			// We don't have a sold_cost or a traded_for, see if we had a listing previously
 			if (!empty($collectiblesUser['Listing'])) {
 				$data['CollectiblesUser']['listing_id'] = null;
 				if (!$this -> Listing -> delete($collectiblesUser['Listing']['id'])) {
@@ -411,12 +436,25 @@ class CollectiblesUser extends AppModel {
 			$dataSource = $this -> getDataSource();
 			$dataSource -> begin();
 
-			if (isset($data['CollectiblesUser']['sold_cost'])) {
+			// TODO: When removing, check to see if this already has a listing (from marking as a sale/trade), and update that one
+			// only add a list if they supplied a cost or what they traded it for
+			if (isset($data['CollectiblesUser']['sold_cost']) || isset($data['CollectiblesUser']['traded_for'])) {
 				$listingData = array();
-				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-				$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-				$listingData['Listing']['listing_type_id'] = 2;
+
+				if (isset($data['CollectiblesUser']['sold_cost'])) {
+					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+					$listingData['Listing']['listing_type_id'] = 2;
+				}
+
+				if (isset($data['CollectiblesUser']['traded_for'])) {
+					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+					$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+					$listingData['Listing']['listing_type_id'] = 3;
+				}
+
 				$listing = $this -> Listing -> createListing($listingData, $user);
 
 				if (!$listing['response']['isSuccess']) {

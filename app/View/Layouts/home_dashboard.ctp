@@ -287,6 +287,7 @@ else
 			</div>
 		</div>		
 	</footer>
+	<!-- todo - remove all of this once we add requirejs support -->
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
 	</script>
