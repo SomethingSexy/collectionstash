@@ -103,6 +103,7 @@ class CollectiblesUsersController extends AppController {
 		$this -> checkLogIn();
 
 		$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Listing' => array('Transaction'), 'Merchant', 'Collectible' => array('Currency'))));
+
 		if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 			$loggedInUserId = $this -> getUserId();
 			if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
