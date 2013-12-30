@@ -1,6 +1,7 @@
 <?php
 App::uses('EbayTransaction', 'Lib/Transaction/Type');
 App::uses('ExternalTransaction', 'Lib/Transaction/Type');
+App::uses('ExternalTradeTransaction', 'Lib/Transaction/Type');
 class TransactionFactory extends Object {
 
 	private $user;
@@ -23,6 +24,9 @@ class TransactionFactory extends Object {
 				break;
 			case 2 :
 				$retVal = new ExternalTransaction();
+				break;
+			case 3 :
+				$retVal = new ExternalTradeTransaction();
 				break;
 		}
 

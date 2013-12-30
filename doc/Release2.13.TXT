@@ -4,3 +4,5 @@ Database Updates
 - add field collectibles_wish_list_count to Collectibles
 - add filed collectibles_wish_list_count to Users
 - add types to activity_types
+- add "sale" boolean column to collectible_users and collectible_users_revs
+- add "traded" boolean and "traded_for" text to transactions

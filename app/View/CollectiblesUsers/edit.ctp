@@ -6,15 +6,14 @@
 	 <div class="panel-body">
 	<?php echo $this -> element('flash'); ?>
 	<p><?php echo __('Edit the information about the collectible in your personal collection.  This update will not change the base collectible but just the one linked in your collection.'); ?></p> 
-	<p>
+	
 	<?php
 	if ($collectible['CollectiblesUser']['active']) {
-		echo __('This collectible is active.');
+		echo '<div class="alert alert-info"><p>' . __('This collectible is active.') . '</p></div>';
 	} else {
-		echo __('This collectible is inactive.');
+		echo '<div class="alert alert-warning"><p>' . __('This collectible is inactive.') . '</p></div>';
 	}
 	?>
-	</p>
 	<?php echo $this -> Form -> create('CollectiblesUser', array('action' => 'edit', 'class' => 'form-horizontal')); ?>
 	<fieldset>
 	  	<?php 
@@ -75,9 +74,9 @@
 			<label class="control-label col-lg-3" for="CollectiblesUserNotes">Notes</label>
 			<div class="col-lg-6">
 				<?php
-					$value = str_replace('\n', "\n", $this->data['CollectiblesUser']['notes']);
-					$value = str_replace('\r', "\r", $value);
-					$vaule = html_entity_decode($value);
+				$value = str_replace('\n', "\n", $this -> data['CollectiblesUser']['notes']);
+				$value = str_replace('\r', "\r", $value);
+				$vaule = html_entity_decode($value);
 				?>
 				<textarea id="CollectiblesUserNotes" class="form-control" maxlength="1000" name="data[CollectiblesUser][notes]"><?php echo $value; ?></textarea>
 			</div>
@@ -94,16 +93,28 @@
 		<?php if (!$collectible['CollectiblesUser']['active']) { 
 				if($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '1') {	?>
 					<div class="form-group ">
-						<label for="CollectiblesUserSoldCost col-lg-3" class="control-label">How much did you sell it for?</label>
+						<label for="CollectiblesUserSoldCost" class="col-lg-3 control-label">How much did you sell it for?</label>
 						<div class="col-lg-6">
 							 <?php echo $this -> Form -> input('sold_cost', array('class' => 'form-control', 'type' => 'number', 'div' => false, 'label' => false, 'maxLength' => 23)); ?>
 						</div>
 					</div>
-				
-			
+				<?php } else if ($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '2') { ?>
+					<div class="form-group ">
+						<label for="CollectiblesUserTradedFor" class="col-lg-3 control-label">What did you trade this collectible for?</label>
+						<div class="col-lg-6">
+							<?php
+							$value = '';
+							if (isset($this -> data['CollectiblesUser']['traded_for'])) {
+								$value = str_replace('\n', "\n", $this -> data['CollectiblesUser']['traded_for']);
+								$value = str_replace('\r', "\r", $value);
+								$vaule = html_entity_decode($value);
+							}?>
+							<textarea id="CollectiblesUserTradedFor" class="form-control" maxlength="1000" name="data[CollectiblesUser][traded_for]"><?php echo $value; ?></textarea>
+						</div>
+					</div>				
 				<?php } ?>
 				<div class="form-group ">
-					<label for="CollectiblesUserRemoveDate col-lg-3" class="control-label"> When did you sell this collectible? </label>
+					<label for="CollectiblesUserRemoveDate" class="col-lg-3 control-label"> When did you sell this collectible? </label>
 					<div class="col-lg-6">
 						<?php echo $this -> Form -> text('remove_date', array('class' => 'form-control', 'div' => false, 'label' => false, 'maxLength' => 10, 'required')); ?>
 					</div>

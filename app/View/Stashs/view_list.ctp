@@ -61,12 +61,11 @@
 
 	</div>
 </div>
-<?php echo $this -> Minify -> script('js/jquery.comments', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
 if (isset($reasons)) {
@@ -105,8 +104,5 @@ if (isset($reasons)) {
 					$container.masonry('appended', $newElems, true);
 				});
 			});
-
-			$('#comments').comments();
-
 		});
 </script>

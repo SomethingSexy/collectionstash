@@ -25,7 +25,7 @@ class ProcessCollectiblePriceShell extends AppShell {
 			$collectibleTransactions = $this -> Transaction -> find('all', array('contain' => array('Listing'), 'conditions' => array('Transaction.collectible_id' => $collectibleId)));
 
 			$average = 0;
-			$total = count($collectibleTransactions);
+			$total = 0;
 
 			$averageEbay = 0;
 			$totalEbay = 0;
@@ -34,15 +34,19 @@ class ProcessCollectiblePriceShell extends AppShell {
 			$totalExternal = 0;
 
 			foreach ($collectibleTransactions as $key => $transaction) {
-
-				// count up all of the sale_prices
-				$average = $average + $transaction['Transaction']['sale_price'];
-				if ($transaction['Listing']['listing_type_id'] === '1') {
-					$averageEbay = $averageEbay + $transaction['Transaction']['sale_price'];
-					$totalEbay = $totalEbay + 1;
-				} else if ($transaction['Listing']['listing_type_id'] === '2') {
-					$averageExternal = $averageExternal + $transaction['Transaction']['sale_price'];
-					$totalExternal = $totalExternal + 1;
+				// only process for type 1 and type 2
+				if ($transaction['Listing']['listing_type_id'] === '1' || $transaction['Listing']['listing_type_id'] === '2') {
+					// count up all of the sale_prices
+					$average = $average + $transaction['Transaction']['sale_price'];
+					// adding total here because we don't want to include trades for now
+					$total = $total + 1;
+					if ($transaction['Listing']['listing_type_id'] === '1') {
+						$averageEbay = $averageEbay + $transaction['Transaction']['sale_price'];
+						$totalEbay = $totalEbay + 1;
+					} else if ($transaction['Listing']['listing_type_id'] === '2') {
+						$averageExternal = $averageExternal + $transaction['Transaction']['sale_price'];
+						$totalExternal = $totalExternal + 1;
+					}
 				}
 			}
 			if ($total !== 0) {

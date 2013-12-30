@@ -14,25 +14,27 @@ class ListingsController extends AppController {
 	 * they will see the catalog page.
 	 */
 	public function index() {
-
-		$transaction['Listing'] = array();
-		$transaction['Listing']['listing_type_id'] = 1;
-		$transaction['Listing']['ext_item_id'] = '141035174978';
-		$transaction['Listing']['collectible_id'] = '234';
-
-		// $response = $this -> Listing -> createListing($transaction, $this -> getUser());
 		//
-		// debug($response);
-		// first we are going to process it
-		$factory = new TransactionFactory();
-
-		$transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
-
-		debug($transactionable -> processTransaction($transaction));
+		// $transaction['Listing'] = array();
+		// $transaction['Listing']['listing_type_id'] = 1;
+		// $transaction['Listing']['ext_item_id'] = '141035174978';
+		// $transaction['Listing']['collectible_id'] = '234';
+		//
+		// // $response = $this -> Listing -> createListing($transaction, $this -> getUser());
+		// //
+		// // debug($response);
+		// // first we are going to process it
+		// $factory = new TransactionFactory();
+		//
+		// $transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
+		//
+		// debug($transactionable -> processTransaction($transaction));
 	}
 
 	/**
 	 * This will be used to update and maintain transactions
+	 *
+	 * This should handle all types
 	 */
 	public function listing($id = null) {
 		// need to be logged in

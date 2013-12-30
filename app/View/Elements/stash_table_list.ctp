@@ -95,7 +95,6 @@ foreach ($collectibles as $key => $myCollectible) {
 		} else {
 			echo '<td> - </td>';
 		}
-		
 
 		if (!empty($myCollectible['CollectiblesUser']['purchase_date'])) {
 			echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['CollectiblesUser']['purchase_date'], null) . '</td>';
@@ -127,7 +126,7 @@ foreach ($collectibles as $key => $myCollectible) {
 		echo '<ul class="dropdown-menu">';
 
 		if ($stashType === 'default') {
-			echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '>Edit</a></li>';
+			echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '><i class="icon-edit"></i>  Edit</a></li>';
 		}
 
 		if ($stashType === 'default') {
@@ -142,7 +141,20 @@ foreach ($collectibles as $key => $myCollectible) {
 		$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 		$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 
-		echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#">Remove</a></li>';
+		echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i> Remove</a></li>';
+
+		// these should already be filtered by active
+		if ($myCollectible['CollectiblesUser']['sale']) {
+			// this will bring up the remove from stash modal
+			echo '<li><a href="stash-mark-as-sold" title=' . __('Mark as Sold') . '><i class="icon-dollar"></i>  ' . __('Mark as Sold') . '</a></li>';
+			// this will remove the listing completely and mark it as unsold
+			echo '<li><a href="stash-remove-listing" title=' . __('Remove Listing') . '><i class="icon-dollar"></i>  '. __('Remove Listing') . '</a></li>';
+			//
+			echo '<li><a href="stash-edit-listing" title=' . __('Edit Listing') . '><i class="icon-dollar"></i>  '. __('Edit Listing') . '</a></li>';
+		} else {
+			echo '<li><a href="" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
+		}
+
 		echo '</ul>';
 		echo '</div>';
 		echo '</td>';
