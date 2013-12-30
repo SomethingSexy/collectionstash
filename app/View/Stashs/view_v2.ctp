@@ -71,14 +71,14 @@
 
 					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 				} else {
-					echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img alt="" src="/img/no-photo.png"></a></div>';
+					echo '<div class="image"><a target="_blank" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img alt="" src="/img/no-photo.png"></a></div>';
 				}
 
 				echo '<div class="header"><h2>';
 				if ($myCollectible['Collectible']['custom'] || $myCollectible['Collectible']['original']) {
-					echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+					echo '<a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				} else {
-					echo '<a class="title" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+					echo '<a class="title" target="_blank" href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				}
 				echo '</h2></div>';
 

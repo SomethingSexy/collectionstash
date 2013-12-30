@@ -54,14 +54,6 @@
 							echo '</thead>';
 							foreach ($collectibles as $key => $myCollectible) {
 								echo '<tr class="stash-item">';
-								if ($history) {
-									if ($myCollectible['CollectiblesUser']['active']) {
-										echo '<td class="bought-sold-icon"><i class="icon-plus"></i></td>';
-									} else {
-										echo '<td><i class="icon-minus"></i></td>';
-									}
-								}
-
 								echo '<td style="min-width: 100px; max-width: 100px;">';
 
 								if (!empty($myCollectible['Collectible']['CollectiblesUpload'])) {
@@ -78,14 +70,14 @@
 
 								echo '</td>';
 
-								echo '<td>' . $myCollectible['Collectible']['name'] . '</td>';
+								echo '<td><a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' .  $myCollectible['Collectible']['name'] . '</a></td>';
 								if (!empty($myCollectible['Collectible']['Manufacture']['title'])) {
 									echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
 								} else {
 									echo '<td>N/A</td>';
 								}
 
-								echo '<td>' . $this -> Time -> format('F jS, Y h:i A', $myCollectible['CollectiblesUser']['created'], null) . '</td>';
+								echo '<td>' . $this -> Time -> format('F jS, Y h:i A', $myCollectible['CollectiblesWishList']['created'], null) . '</td>';
 
 								if (isset($myStash) && $myStash) {
 									echo '<td>';
@@ -96,10 +88,10 @@
 									$collectibleJSON = json_encode($myCollectible['Collectible']);
 									$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 
-									$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
+									$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 									$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 
-									echo '<li><a ' . $prompt . ' data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-wishlist" title="Remove" href="#">Remove from Wish List</a></li>';
+									echo '<li><a ' . $prompt . ' data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove" href="#">Remove from Wish List</a></li>';
 									echo '</ul>';
 									echo '</div>';
 									echo '</td>';

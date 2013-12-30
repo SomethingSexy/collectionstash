@@ -68,7 +68,7 @@ foreach ($collectibles as $key => $myCollectible) {
 
 		echo '</td>';
 	}
-	echo '<td>' . $myCollectible['Collectible']['name'] . '</td>';
+	echo '<td><a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' .  $myCollectible['Collectible']['name'] . '</a></td>';
 	if (!empty($myCollectible['Collectible']['Manufacture']['title'])) {
 		echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
 	} else {
