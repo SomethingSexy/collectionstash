@@ -140,9 +140,9 @@ class CollectiblesUser extends AppModel {
 
 					// make sure we have a listing, these listings will only have one transaction
 					if (isset($val['Listing']) && !empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
-						if ($val['Listing']['listing_type_id'] === 2) {
+						if ($val['Listing']['listing_type_id'] === '2') {
 							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
-						} else if ($val['Listing']['listing_type_id'] === 3) {
+						} else if ($val['Listing']['listing_type_id'] === '3') {
 							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
 						}
 					} else {
