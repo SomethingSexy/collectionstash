@@ -58,11 +58,11 @@
 
 					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 				} else {
-					echo '<div class="image"><a href="/collectibles_users/view/' . $myCollectible['CollectiblesUser']['id'] . '"><img alt="" src="/img/no-photo.png"></a></div>';
+					echo '<div class="image"><img alt="" src="/img/no-photo.png"></div>';
 				}
 
 				echo '<div class="header"><h2>';
-				echo '<a class="title" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
+				echo '<a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['displayTitle'] . '</a>';
 				echo '</h2></div>';
 				echo '<div class="content">';
 				echo '<p></p>';
