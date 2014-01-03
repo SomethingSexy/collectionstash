@@ -255,18 +255,11 @@
 			</div>
 		</div>		
 	</footer>
-	<!-- todo - remove all of this once we add requirejs support -->
-	<script id="template-stash-add" type="text/x-tmpl">
-		<?php echo $this -> element('stash_add'); ?>	
-	</script>
-	<script id="template-stash-remove" type="text/x-tmpl">
-		<?php echo $this -> element('stash_remove'); ?>	
-	</script>
-	
 	<?php
 	// list out any modals here that might be common
 	echo $this -> element('stash_add_modal');
 	echo $this -> element('stash_remove_modal');
+	echo $this -> element('stash_sell_modal');
 	?>	
 		<?php echo $this -> element('sql_dump'); ?>
 	<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
@@ -303,6 +296,16 @@
 	        </div>
 	    </div>
 	</div>
+	<!-- todo - remove all of this once we add requirejs support -->
+	<script id="template-stash-add" type="text/x-tmpl">
+		<?php echo $this -> element('stash_add'); ?>	
+	</script>
+	<script id="template-stash-remove" type="text/x-tmpl">
+		<?php echo $this -> element('stash_remove'); ?>	
+	</script>
+	<script id="template-stash-sell" type="text/x-tmpl">
+		<?php echo $this -> element('stash_sell'); ?>	
+	</script>
 		<?php
 		echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');
 		echo $this -> Minify -> script('js/thirdparty/jquery.blueimp-gallery');

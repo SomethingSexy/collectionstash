@@ -65,6 +65,7 @@
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/views/view.stash.sell', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
