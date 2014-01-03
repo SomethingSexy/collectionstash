@@ -743,3 +743,123 @@
 		});
 	});
 }(window.jQuery);
+! function($) {"use strict";// jshint ;_;
+
+	/* PUBLIC CLASS DEFINITION
+	 *
+	 * Add in here later whether or not we quick add or not - TODO
+	 *
+	 * This requires, Backbone, dust, stash model, stash view
+	 ** ============================== */
+
+	var StashSell = function() {
+	};
+
+	StashSell.prototype.initialize = function() {
+		dust.loadSource(dust.compile($('#template-stash-sell').html(), 'stash.sell'));
+		var self = this;
+		this.stashSellView = null;
+		this.collectibleUser = null;
+
+		$('#stash-sell-dialog', 'body').on('hidden', function() {
+			self.stashSellView.remove();
+		});
+
+		$('#stash-sell-dialog').on('click', '.save', function() {
+			var $button = $(this);
+			$button.button('loading');
+			self.collectibleUser.save({}, {
+				success : function(model, response, options) {
+					$button.button('reset');
+					if (response.response.isSuccess) {
+						$('#stash-add-dialog').modal('hide');
+						var message = 'You have successfully added the collectible to your stash!';
+
+						$.blockUI({
+							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+							showOverlay : false,
+							css : {
+								top : '100px',
+								'background-color' : '#DDFADE',
+								border : '1px solid #93C49F',
+								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+								'border-radius' : '4px 4px 4px 4px',
+								color : '#333333',
+								'margin-bottom' : '20px',
+								padding : '8px 35px 8px 14px',
+								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+								'z-index' : 999999
+							},
+							timeout : 2000
+						});
+					} else {
+						if (response.response.errors) {
+							self.stashAddView.errors = response.response.errors;
+							self.stashAddView.render();
+						}
+					}
+				},
+				error : function(model, xhr, options) {
+					$button.button('reset');
+				}
+			});
+
+		});
+
+	};
+
+	StashSell.prototype.sell = function(collectibleModel) {
+		this.collectibleUser = new CollectibleUserModel({
+			'collectible_id' : collectibleModel.get('id')
+		});
+
+		if (this.stashSellView) {
+			this.stashSellView.remove();
+			delete this.stashSellView;
+		}
+
+		this.stashSellView = new StashSellView({
+			collectible : collectibleModel,
+			model : this.collectibleUser
+		});
+
+		$('.modal-body', '#stash-sell-dialog').html(this.stashSellView.render().el);
+
+		$('#stash-sell-dialog').modal();
+	};
+
+	/* BUTTON PLUGIN DEFINITION
+	 * ======================== */
+
+	$.fn.stashsell = function(model) {
+		return this.each(function() {
+			var $this = $(this);
+
+			stashSell.sell(model);
+		});
+	};
+
+	$.fn.stashsell.defaults = {
+
+	};
+
+	// only want one created really
+	var stashSell = new StashSell();
+
+	//$.fn.stashfulladd.Constructor = StashFullAdd
+
+	/* DATA-API
+	 * =============== */
+
+	$(function() {
+		stashSell.initialize();
+		$('.stashable').on('click', '.stash-sell', function(e) {
+			var $anchor = $(e.currentTarget);
+
+			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+
+			$anchor.stashsell(collectibleModel);
+			e.preventDefault();
+		});
+	});
+}(window.jQuery);

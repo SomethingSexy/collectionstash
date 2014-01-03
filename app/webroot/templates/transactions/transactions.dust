@@ -191,10 +191,10 @@
 								<td>
 									{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
 										{@eq key="{listing_type_id}" value="2" type="string"}
-											External Listing
+											User Sale
 										{/eq}
 										{@eq key="{listing_type_id}" value="3" type="string"}
-											External Trade
+											User Trade
 										{/eq}
 									{:else}
 										{type}

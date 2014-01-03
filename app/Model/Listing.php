@@ -109,10 +109,8 @@ class Listing extends AppModel {
 
 	/**
 	 * listing_Type_id = 1 eBay
-	 * listing_type_id = 2 external sell
-	 * listing_type_id = 3 external trade
-	 * listing_type_id = 4 internal sell
-	 * listing_type_id = 5 internal trade
+	 * listing_type_id = 2 personal sell
+	 * listing_type_id = 3 personal trade
 	 */
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();

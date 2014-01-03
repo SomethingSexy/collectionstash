@@ -63,6 +63,7 @@ class CollectiblesUsersController extends AppController {
 		}
 
 		if ($this -> request -> isPut()) {
+			// this will handle updating for sale
 
 		} else if ($this -> request -> isPost()) {
 			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);

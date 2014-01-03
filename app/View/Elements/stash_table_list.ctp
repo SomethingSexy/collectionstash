@@ -153,7 +153,7 @@ foreach ($collectibles as $key => $myCollectible) {
 				//
 				echo '<li><a href="stash-edit-listing" title=' . __('Edit Listing') . '><i class="icon-dollar"></i>  ' . __('Edit Listing') . '</a></li>';
 			} else {
-				echo '<li><a href="" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
+				echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
 			}
 		}
 
