@@ -5,7 +5,7 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUsersController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
-	
+
 	/**
 	 * This is for viewing an collectible in a user's stash
 	 */
@@ -63,8 +63,16 @@ class CollectiblesUsersController extends AppController {
 		}
 
 		if ($this -> request -> isPut()) {
-			// this will handle updating for sale
-
+			// this will handle updating for sale and future changes when moving update to modal
+			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);
+			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
+			$response = $this -> CollectiblesUser -> update($collectible, $this -> getUser());
+			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+				$this -> response -> statusCode(401);
+			} else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
+				$this -> response -> statusCode(500);
+			}
+			$this -> set('returnData', $response);
 		} else if ($this -> request -> isPost()) {
 			$collectible['CollectiblesUser'] = $this -> request -> input('json_decode', true);
 			$collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
@@ -98,7 +106,7 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	/**
-	 * This method edits a user's collectible, via standard post 
+	 * This method edits a user's collectible, via standard post
 	 */
 	function edit($id = null) {
 		$this -> checkLogIn();

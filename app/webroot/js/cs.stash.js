@@ -119,7 +119,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -608,7 +609,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -742,8 +744,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -808,9 +809,14 @@
 
 	};
 
-	StashSell.prototype.sell = function(collectibleModel) {
-		this.collectibleUser = new CollectibleUserModel({
-			'collectible_id' : collectibleModel.get('id')
+	StashSell.prototype.sell = function(collectibleModel, collectibleUserModel) {
+		this.collectibleUser = collectibleUserModel;
+	
+		// mark that we are selling this guy
+		this.collectibleUser.set({
+			'sale' : true
+		}, {
+			silent : true
 		});
 
 		if (this.stashSellView) {
@@ -831,11 +837,11 @@
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
-	$.fn.stashsell = function(model) {
+	$.fn.stashsell = function(model, collectibleUserModel) {
 		return this.each(function() {
 			var $this = $(this);
 
-			stashSell.sell(model);
+			stashSell.sell(model, collectibleUserModel);
 		});
 	};
 
@@ -857,8 +863,11 @@
 			var $anchor = $(e.currentTarget);
 
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+			var collectibleUserData = JSON.parse($anchor.attr('data-collectible-user'));
 
-			$anchor.stashsell(collectibleModel);
+			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
+
+			$anchor.stashsell(collectibleModel, collectibleUserModel);
 			e.preventDefault();
 		});
 	});

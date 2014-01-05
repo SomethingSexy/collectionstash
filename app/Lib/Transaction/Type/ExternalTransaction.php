@@ -10,8 +10,14 @@ class ExternalTransaction extends Object implements Transactionable {
 		// Create headers to send with CURL request.
 
 		$data['Listing']['type'] = 'BIN';
-		$data['Listing']['processed'] = true;
-		$data['Listing']['status'] = 'completed';
+		if ($data['Listing']['active_sale']) {
+			$data['Listing']['processed'] = false;
+			$data['Listing']['status'] = 'active';
+		} else {
+			$data['Listing']['processed'] = true;
+			$data['Listing']['status'] = 'completed';
+		}
+		
 		$data['Listing']['quantity'] = 1;
 		$data['Listing']['quantity_sold'] = 1;
 		$data['Listing']['listing_name'] = __('Sold by ') . $user['User']['username'];
