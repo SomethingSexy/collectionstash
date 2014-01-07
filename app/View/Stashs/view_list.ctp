@@ -21,6 +21,9 @@
 						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wish List') . '</a>'; ?>
 						</li>
 						<li>
+						<?php echo '<a href="/sale/' . $stashUsername . '">' . __('Sale List') . '</a>'; ?>
+						</li>
+						<li>
 						<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
 						</li>
 						<li><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
@@ -73,37 +76,4 @@ if (isset($reasons)) {
 	echo 'var reasons = \'' . json_encode($reasons) . '\';';
 }
 	?>
-		$(function() {
-			var $container = $('div.tiles');
-			$container.imagesLoaded(function() {
-				$container.masonry({
-					itemSelector : '.tile',
-					columnWidth : 422,
-					isAnimated : true
-				});
-			});
-
-			$container.infinitescroll({
-				nextSelector : "#titles-nav a",
-				navSelector : "#titles-nav",
-				itemSelector : ".tile",
-				loading : {
-					finishedMsg : "All collectibles have been loaded!",
-					msgText : "<em>Loading the next set of collectibles.</em>",
-				}
-			}, function(newElements) {
-				// hide new items while they are loading
-				var $newElems = $(newElements).css({
-					opacity : 0
-				});
-				// ensure that images load before adding to masonry layout
-				$newElems.imagesLoaded(function() {
-					// show elems now they're ready
-					$newElems.animate({
-						opacity : 1
-					});
-					$container.masonry('appended', $newElems, true);
-				});
-			});
-		});
 </script>

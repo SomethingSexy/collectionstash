@@ -474,8 +474,6 @@
 
 	};
 
-	$.fn.stashremove.Constructor = StashRemove;
-
 	var stashPromptRemove = new StashPromptRemove();
 
 	/* DATA-API

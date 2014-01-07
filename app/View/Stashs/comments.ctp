@@ -8,6 +8,9 @@
 				</li>
 				<li><?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wish List') . '</a>'; ?></li>
 				<li>
+				<?php echo '<a href="/sale/' . $stashUsername . '">' . __('Sale List') . '</a>'; ?>
+				</li>
+				<li>
 				<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	
 				</li>
 				<li class="active"><?php echo '<a href="/stashs/comments/' . $stashUsername . '">' . __('Comments') . '</a>'; ?></li>
