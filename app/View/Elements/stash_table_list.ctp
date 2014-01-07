@@ -24,16 +24,15 @@ if ($showThumbnail) {
 }
 echo '<th>' . $this -> Paginator -> sort('Collectible.name', 'Name') . '</th>';
 echo '<th>' . $this -> Paginator -> sort('Collectible.manufacture_id', 'Manufacturer') . '</th>';
-if ($stashType === 'default') {
-	echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
-	echo '<th>' . $this -> Paginator -> sort('cost', 'Price Paid') . '</th>';
-	echo '<th>' . $this -> Paginator -> sort('Collectible.average_price', 'Collection Stash Value') . '</th>';
-	echo '<th>' . $this -> Paginator -> sort('purchased', 'Date Purchased') . '</th>';
-	if ($history) {
-		echo '<th>' . __('Sold For') . '</th>';
-		echo '<th>' . __('Date Sold') . '</th>';
-	}
+echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
+echo '<th>' . $this -> Paginator -> sort('cost', 'Price Paid') . '</th>';
+echo '<th>' . $this -> Paginator -> sort('Collectible.average_price', 'Collection Stash Value') . '</th>';
+echo '<th>' . $this -> Paginator -> sort('purchased', 'Date Purchased') . '</th>';
+if ($history) {
+	echo '<th>' . __('Sold For') . '</th>';
+	echo '<th>' . __('Date Sold') . '</th>';
 }
+
 echo '<th>' . $this -> Paginator -> sort('created', 'Date Added') . '</th>';
 if (isset($myStash) && $myStash) {
 	echo '<th>' . __('Actions') . '</th>';
@@ -68,54 +67,53 @@ foreach ($collectibles as $key => $myCollectible) {
 
 		echo '</td>';
 	}
-	echo '<td><a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' .  $myCollectible['Collectible']['name'] . '</a></td>';
+	echo '<td><a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['name'] . '</a></td>';
 	if (!empty($myCollectible['Collectible']['Manufacture']['title'])) {
 		echo '<td>' . $myCollectible['Collectible']['Manufacture']['title'] . '</td>';
 	} else {
 		echo '<td>N/A</td>';
 	}
 
-	if ($stashType === 'default') {
-		if (empty($myCollectible['Collectible']['edition_size'])) {
-			echo '<td> - </td>';
-		} else if (empty($myCollectible['CollectiblesUser']['edition_size'])) {
-			echo '<td>' . __('Not Recorded') . '</td>';
-		} else {
-			echo '<td>' . $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'] . '</td>';
-		}
-
-		if (!empty($myCollectible['CollectiblesUser']['cost'])) {
-			echo '<td>' . $myCollectible['CollectiblesUser']['cost'] . '</td>';
-		} else {
-			echo '<td>' . __('Not Recorded') . '</td>';
-		}
-
-		if (isset($myCollectible['Collectible']['CollectiblePriceFact'])) {
-			echo '<td>' . $myCollectible['Collectible']['CollectiblePriceFact']['average_price'] . '</td>';
-		} else {
-			echo '<td> - </td>';
-		}
-
-		if (!empty($myCollectible['CollectiblesUser']['purchase_date'])) {
-			echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['CollectiblesUser']['purchase_date'], null) . '</td>';
-		} else {
-			echo '<td>' . __('Not Recorded') . '</td>';
-		}
-
-		if ($history) {
-			if ($myCollectible['CollectiblesUser']['active']) {
-				echo '<td> - </td>';
-				echo '<td> - </td>';
-			} else if (isset($myCollectible['Listing'])) {
-				echo '<td>' . $myCollectible['Listing']['Transaction'][0]['sale_price'] . '</td>';
-				echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['Listing']['Transaction'][0]['sale_date'], null) . '</td>';
-			} else {
-				echo '<td> - </td>';
-				echo '<td> - </td>';
-			}
-		}
-
+	if (empty($myCollectible['Collectible']['edition_size'])) {
+		echo '<td> - </td>';
+	} else if (empty($myCollectible['CollectiblesUser']['edition_size'])) {
+		echo '<td>' . __('Not Recorded') . '</td>';
+	} else {
+		echo '<td>' . $myCollectible['CollectiblesUser']['edition_size'] . '/' . $myCollectible['Collectible']['edition_size'] . '</td>';
 	}
+
+	if (!empty($myCollectible['CollectiblesUser']['cost'])) {
+		echo '<td>' . $myCollectible['CollectiblesUser']['cost'] . '</td>';
+	} else {
+		echo '<td>' . __('Not Recorded') . '</td>';
+	}
+
+	if (isset($myCollectible['Collectible']['CollectiblePriceFact'])) {
+		echo '<td>' . $myCollectible['Collectible']['CollectiblePriceFact']['average_price'] . '</td>';
+	} else {
+		echo '<td> - </td>';
+	}
+
+	if (!empty($myCollectible['CollectiblesUser']['purchase_date'])) {
+		echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['CollectiblesUser']['purchase_date'], null) . '</td>';
+	} else {
+		echo '<td>' . __('Not Recorded') . '</td>';
+	}
+
+	if ($history) {
+		if ($myCollectible['CollectiblesUser']['active']) {
+			echo '<td> - </td>';
+			echo '<td> - </td>';
+		} else if (isset($myCollectible['Listing'])) {
+			echo '<td>' . $myCollectible['Listing']['Transaction'][0]['sale_price'] . '</td>';
+			echo '<td>' . $this -> Time -> format('F jS, Y', $myCollectible['Listing']['Transaction'][0]['sale_date'], null) . '</td>';
+		} else {
+			echo '<td> - </td>';
+			echo '<td> - </td>';
+		}
+	}
+
+	
 
 	echo '<td>' . $this -> Time -> format('F jS, Y h:i A', $myCollectible['CollectiblesUser']['created'], null) . '</td>';
 
@@ -125,15 +123,7 @@ foreach ($collectibles as $key => $myCollectible) {
 		echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 		echo '<ul class="dropdown-menu">';
 
-		if ($stashType === 'default') {
-			echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '><i class="icon-edit"></i>  Edit</a></li>';
-		}
-
-		if ($stashType === 'default') {
-			$prompt = 'data-prompt="true"';
-		} else {
-			$prompt = 'data-prompt="false"';
-		}
+		echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '><i class="icon-edit"></i>  Edit</a></li>';
 
 		$collectibleJSON = json_encode($myCollectible['Collectible']);
 		$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
@@ -141,7 +131,7 @@ foreach ($collectibles as $key => $myCollectible) {
 		$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 		$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 
-		echo '<li><a ' . $prompt . ' data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i> Remove</a></li>';
+		echo '<li><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i> Remove</a></li>';
 
 		// these should already be filtered by active
 		if (!$history) {
