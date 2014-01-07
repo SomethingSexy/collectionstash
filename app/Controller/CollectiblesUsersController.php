@@ -144,104 +144,6 @@ class CollectiblesUsersController extends AppController {
 		}
 	}
 
-	/**
-	 * Removes a user's collectible
-	 *
-	 * This will still be used for now to remove wishlist items
-	 *
-	 */
-	function remove($id = null) {
-		//This can handle both ajax requests and standards requests...need to merge this logic though
-		//problem is ajax is coming through as a POST and the other is coming through as a GET, should
-		//probably make them all the same at some point TODO
-		if ($this -> request -> isAjax()) {
-			$data = array();
-			$data['response'] = array();
-			$data['response']['isSuccess'] = false;
-			$data['response']['errors'] = array();
-			//must be logged in to post comment
-			if (!$this -> isLoggedIn()) {
-				$error = array('message' => __('You must be logged in to add an item.'));
-				$error['inline'] = false;
-
-				array_push($data['response']['errors'], $error);
-				$this -> set('removeCollectiblesUsers', $data);
-				return;
-			}
-			if ($this -> request -> is('post') || $this -> request -> is('put')) {
-				$id = Sanitize::clean($id);
-
-				if (!is_null($id) && is_numeric($id)) {
-					$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User', 'Collectible', 'Stash')));
-					if (isset($collectiblesUser) && !empty($collectiblesUser)) {
-						$loggedInUserId = $this -> getUserId();
-						if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
-							if ($this -> CollectiblesUser -> delete($id)) {
-								$data['response']['isSuccess'] = true;
-								$this -> set('removeCollectiblesUsers', $data);
-								$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $this -> getUser(), 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
-								return;
-							} else {
-								$data['response']['isSuccess'] = false;
-								array_push($data['response']['errors'], array('message' => __('Invalid request.')));
-								$this -> set('removeCollectiblesUsers', $data);
-								return;
-							}
-						} else {
-							$data['response']['isSuccess'] = false;
-							array_push($data['response']['errors'], array('message' => __('Invalid request.')));
-							$this -> set('removeCollectiblesUsers', $data);
-							return;
-						}
-					} else {
-						$data['response']['isSuccess'] = false;
-						array_push($data['response']['errors'], array('message' => __('Invalid request.')));
-						$this -> set('removeCollectiblesUsers', $data);
-						return;
-					}
-				} else {
-					$data['response']['isSuccess'] = false;
-					array_push($data['response']['errors'], array('message' => __('Invalid request.')));
-					$this -> set('removeCollectiblesUsers', $data);
-					return;
-				}
-			} else {
-				$data['response']['isSuccess'] = false;
-				array_push($data['response']['errors'], array('message' => __('Invalid request.')));
-				$this -> set('removeCollectiblesUsers', $data);
-				return;
-			}
-		} else {
-			$this -> checkLogIn();
-			if (!is_null($id) && is_numeric($id)) {
-				$collectiblesUser = $this -> CollectiblesUser -> find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('User')));
-				if (isset($collectiblesUser) && !empty($collectiblesUser)) {
-					$loggedInUserId = $this -> getUserId();
-					if ($loggedInUserId === $collectiblesUser['CollectiblesUser']['user_id']) {
-						if ($this -> CollectiblesUser -> delete($id)) {
-							$this -> Session -> setFlash(__('Your collectible has been successfully removed.', true), null, null, 'success');
-							$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $this -> getUser(), 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
-							$this -> redirect(array('controller' => 'stashs', 'action' => 'view', $collectiblesUser['User']['username']), null, true);
-						} else {
-							$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
-							$this -> redirect(array('action' => 'view', $id), null, true);
-						}
-					} else {
-						$this -> Session -> setFlash(__('Invalid access', true), null, null, 'error');
-						$this -> redirect($this -> referer(), null, true);
-					}
-				} else {
-					$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
-					$this -> redirect($this -> referer(), null, true);
-				}
-			} else {
-				$this -> Session -> setFlash(__('Invalid collectible', true), null, null, 'error');
-				$this -> redirect($this -> referer(), null, true);
-			}
-		}
-
-	}
-
 	// I might maintain 2 add functions because they will do different things
 	// Quick add will be for when you are adding something without entering any
 	// information or you are adding to your wishlist.
@@ -280,6 +182,10 @@ class CollectiblesUsersController extends AppController {
 			$this -> set('returnData', $data);
 			return;
 		}
+	}
+
+	public function sale($id = null) {
+
 	}
 
 	// TODO: This should get moved to the CollectibleController

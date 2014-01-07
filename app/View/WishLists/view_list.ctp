@@ -84,14 +84,13 @@
 									echo '<div class="btn-group">';
 									echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 									echo '<ul class="dropdown-menu">';
-									$prompt = 'data-prompt="false"';
 									$collectibleJSON = json_encode($myCollectible['Collectible']);
 									$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 
 									$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 									$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 
-									echo '<li><a ' . $prompt . ' data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove" href="#">Remove from Wish List</a></li>';
+									echo '<li><a data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove" href="#">Remove from Wish List</a></li>';
 									echo '</ul>';
 									echo '</div>';
 									echo '</td>';

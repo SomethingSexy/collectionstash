@@ -394,68 +394,6 @@ class CollectiblesUser extends AppModel {
 			}
 		}
 
-		// first check if there is a cost and it is new or there is a traded for field
-		// if ((isset($data['CollectiblesUser']['sold_cost']) && !empty($data['CollectiblesUser']['sold_cost'])) || (isset($data['CollectiblesUser']['traded_for']) && !empty($data['CollectiblesUser']['traded_for']))) {
-		// // if the listing is empty then we don't haave one
-		//
-		// if (empty($collectiblesUser['Listing'])) {
-		// $listingData = array();
-		//
-		// if (isset($data['CollectiblesUser']['sold_cost'])) {
-		// $listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-		// $listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-		// $listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-		// $listingData['Listing']['listing_type_id'] = 2;
-		// }
-		//
-		// if (isset($data['CollectiblesUser']['traded_for'])) {
-		// $listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-		// $listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-		// $listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-		// $listingData['Listing']['listing_type_id'] = 3;
-		// }
-		//
-		// $listing = $this -> Listing -> createListing($listingData, $user);
-		//
-		// if (!$listing['response']['isSuccess']) {
-		// $dataSource -> rollback();
-		// $retVal['response']['code'] = 500;
-		// return $retVal;
-		// }
-		// $data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
-		// } else if ($data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {
-		// // TODO: This should not be done here, moved to the Listing model for update
-		// $transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
-		// $transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
-		//
-		// if (!$this -> Listing -> Transaction -> save($transaction)) {
-		// $dataSource -> rollback();
-		// $retVal['response']['code'] = 500;
-		// return $retVal;
-		// }
-		// } else if ($data['CollectiblesUser']['traded_for'] !== $collectiblesUser['CollectiblesUser']['traded_for']) {
-		// // TODO: This should not be done here, moved to the Listing model for update
-		// $transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
-		// $transaction['Transaction']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-		//
-		// if (!$this -> Listing -> Transaction -> save($transaction)) {
-		// $dataSource -> rollback();
-		// $retVal['response']['code'] = 500;
-		// return $retVal;
-		// }
-		// }
-		// } else {
-		// // We don't have a sold_cost or a traded_for, see if we had a listing previously
-		// if (!empty($collectiblesUser['Listing'])) {
-		// $data['CollectiblesUser']['listing_id'] = null;
-		// if (!$this -> Listing -> delete($collectiblesUser['Listing']['id'])) {
-		// $dataSource -> rollback();
-		// $retVal['response']['code'] = 500;
-		// return $retVal;
-		// }
-		// }
-		// }
-
 		if ($this -> save($data, true, $fieldList)) {
 			$retVal['response']['isSuccess'] = true;
 			$dataSource -> commit();

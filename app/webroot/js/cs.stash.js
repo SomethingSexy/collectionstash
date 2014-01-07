@@ -367,6 +367,9 @@
 		$('#stash-remove-dialog').on('click', '.save', function() {
 			var $button = $(this);
 			$button.button('loading');
+			// TODO: The business logic here should know if this is an update or destroy
+			// if we are removing because it is sold, it should be an update, we are not actually
+			// remove the model.
 			self.collectibleUser.destroy({
 				url : self.collectibleUser.url('delete'),
 				success : function(model, response, options) {
@@ -393,7 +396,9 @@
 							timeout : 2000
 						});
 
-						if (response.response.data && self.historyView) {
+						// checking for array here is pretty dumb
+						if (response.response.data && !_.isArray(response.response.data) && self.historyView) {
+							// should update the view to indicate the values that were set
 							self.$stashItem.find('.bought-sold-icon').html('<i class="icon-minus"></i>');
 						} else {
 							if (self.redirect) {
@@ -454,107 +459,13 @@
 		$('#stash-remove-dialog').modal();
 	};
 
-	var StashRemove = function(element, options) {
-		this.$element = $(element);
-		this.$stashItem = this.$element.closest('.stash-item');
-		this.options = $.extend({}, $.fn.stashremove.defaults, options);
-		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
-		if (options.tiles) {
-			this.$tiles = $('.tiles');
-		}
-	};
-
-	StashRemove.prototype.remove = function() {
-
-		var self = this;
-		$.ajax({
-			dataType : 'json',
-			type : 'post',
-			data : {
-				'_method' : 'POST'
-			},
-			url : '/collectibles_users/remove/' + this.collectibleUserId,
-			beforeSend : function(formData, jqForm, options) {
-
-			},
-			// success identifies the function to invoke when the server response
-			// has been received
-			success : function(data, textStatus, jqXHR) {
-				if (data.response.isSuccess) {
-					var message = 'Collectible has been removed from your Stash!';
-					$.blockUI({
-						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-						showOverlay : false,
-						css : {
-							top : '100px',
-							'background-color' : '#DDFADE',
-							border : '1px solid #93C49F',
-							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-							'border-radius' : '4px 4px 4px 4px',
-							color : '#333333',
-							'margin-bottom' : '20px',
-							padding : '8px 35px 8px 14px',
-							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-							'z-index' : 999999
-						},
-						timeout : 2000
-					});
-					if (self.$tiles) {
-						self.$tiles.masonry('remove', self.$stashItem);
-						self.$tiles.masonry('reload');
-					} else {
-						self.$stashItem.remove();
-					}
-
-				} else {
-					if (data.response.errors) {
-						$.each(data.response.errors, function(index, value) {
-							if (value.inline) {
-								$(':input[name="data[' + value.model + '][' + value.name + ']"]', '#AttributeRemoveForm').after('<div class="error-message">' + value.message + '</div>');
-							} else {
-								$.blockUI({
-									message : '<button class="close" data-dismiss="alert" type="button">×</button>' + value.message,
-									showOverlay : false,
-									css : {
-										top : '100px',
-										'background-color' : '#DDFADE',
-										border : '1px solid #93C49F',
-										'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-										'border-radius' : '4px 4px 4px 4px',
-										color : '#333333',
-										'margin-bottom' : '20px',
-										padding : '8px 35px 8px 14px',
-										'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-										'z-index' : 999999
-									},
-									timeout : 2000
-								});
-							}
-
-						});
-					}
-				}
-			}
-		});
-
-	};
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
 	$.fn.stashremove = function(options) {
 		return this.each(function() {
 			var $this = $(this);
-			if (options.prompt === 'true') {
-				stashPromptRemove.remove(options);
-			} else {
-
-				var data = $this.data('stashremove');
-				if (!data) {
-					$this.data('stashremove', ( data = new StashRemove(this, options)));
-				}
-
-				data.remove();
-			}
+			stashPromptRemove.remove(options);
 
 		});
 	};
@@ -589,7 +500,6 @@
 
 			var historyView = $anchor.closest('.stashable').attr('data-history');
 
-			var prompt = $anchor.attr('data-prompt');
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
 			var collectibleUserId = $anchor.attr('data-collectible-user-id');
@@ -598,7 +508,6 @@
 			$anchor.stashremove({
 				$stashItem : $stashItem,
 				tiles : tile,
-				prompt : prompt,
 				collectibleModel : collectibleModel,
 				collectibleUserModel : collectibleUserModel,
 				reasons : reasonsCollection,
@@ -811,7 +720,7 @@
 
 	StashSell.prototype.sell = function(collectibleModel, collectibleUserModel) {
 		this.collectibleUser = collectibleUserModel;
-	
+
 		// mark that we are selling this guy
 		this.collectibleUser.set({
 			'sale' : true

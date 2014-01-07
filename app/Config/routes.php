@@ -62,6 +62,8 @@ Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action
 Router::connect('/artist/*', array('controller' => 'artists', 'action' => 'index'));
 
 Router::connect('/profile/*', array('controller' => 'profiles', 'action' => 'index'));
+
+Router::connect('/sale/*', array('controller' => 'collectibles_users', 'action' => 'sale'));
 /**
  * Load all plugin routes.  See the CakePlugin documentation on
  * how to customize the loading of plugin routes.

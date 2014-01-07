@@ -73,10 +73,9 @@
 				if (isset($myStash) && $myStash) {
 					$collectibleJSON = json_encode($myCollectible['Collectible']);
 					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-					$prompt = 'data-prompt="false"';
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-					echo '<span><a ' . $prompt . ' data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="icon-trash"></i></a></span>';
+					echo '<span><a data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="icon-trash"></i></a></span>';
 				}
 
 				echo '</div>';
