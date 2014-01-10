@@ -88,6 +88,5 @@ class Transaction extends AppModel {
 
 		return $retVal;
 	}
-
 }
 ?>

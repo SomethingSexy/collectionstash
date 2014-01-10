@@ -191,6 +191,14 @@ class EbayTransaction extends Object implements Transactionable {
 		return $data;
 	}
 
+	public function createTransaction($data, $listing, $user) {
+
+	}
+
+	public function updateTransaction($data, $listing, $user) {
+
+	}
+
 	/**
 	 * This will process a single transasction
 	 */

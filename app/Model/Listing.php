@@ -95,7 +95,7 @@ class Listing extends AppModel {
 	 * Used for updating, the only thing you can update right now from here
 	 * is the flagged
 	 */
-	public function updatetListing($data, $user) {
+	public function updatetFlag($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
 		$this -> id = $data['id'];
@@ -197,6 +197,48 @@ class Listing extends AppModel {
 		}
 
 		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function updateListing($data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+
+		if (!$this -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = false;
+		}
+
+		return $retVal;
+	}
+
+	/**
+	 * Running the api through Listing so it is all contained here
+	 */
+	public function updateTransaction($data, $listing, $user) {
+
+		$factory = new TransactionFactory();
+
+		$transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
+
+		// if it is empty, we need to create
+		if (empty($listing['Listing']['Transaction'])) {
+			$data = $transactionable -> createTransaction($data, $listing, $user);
+		} else {
+			$data = $transactionable -> updateTransaction($data, $listing, $user);
+		}
+
+		if ($this -> saveAssociated($data, array('validate' => false))) {
+
+		}
+
+	}
+
+	/**
+	 * Running the api through Listing so it is all contained here
+	 */
+	public function createTransaction($data) {
+
 	}
 
 }
