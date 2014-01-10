@@ -305,6 +305,7 @@ class CollectiblesUser extends AppModel {
 		$removeListing = false;
 		$addListing = false;
 		$updateListing = false;
+		$updateTransaction = false;
 		// check first to see if the collectible is active or not
 		if ($collectiblesUser['CollectiblesUser']['active']) {
 			// If it is marked as sale, we know we have a listing
@@ -323,9 +324,11 @@ class CollectiblesUser extends AppModel {
 			// if there is a sold_cost or a traded_for then we need do add/update a listing
 			if ((isset($data['CollectiblesUser']['sold_cost']) && !empty($data['CollectiblesUser']['sold_cost'])) || (isset($data['CollectiblesUser']['traded_for']) && !empty($data['CollectiblesUser']['traded_for']))) {
 				if (empty($collectiblesUser['Listing'])) {
+					// this would also add a transaction since it is not active
 					$addListing = true;
 				} else {
-					$updateListing = true;
+					// since this is not active and we have a listing, just update the transaction
+					$updateTransaction = true;
 				}
 			} else {
 				// else if there is no sold_cost or traded_for cost and there is a listing, then remove it
@@ -341,6 +344,7 @@ class CollectiblesUser extends AppModel {
 			if (isset($data['CollectiblesUser']['sold_cost'])) {
 				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
 				$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+				$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
 				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 				$listingData['Listing']['listing_type_id'] = 2;
 			}
@@ -352,7 +356,8 @@ class CollectiblesUser extends AppModel {
 				$listingData['Listing']['listing_type_id'] = 3;
 			}
 
-			// this will basically determine if we process or not
+			// this will basically determine if we process/create transaction
+			// if it is not active and we are adding a listing we will also add a transaction
 			$listingData['Listing']['active_sale'] = $data['CollectiblesUser']['sale'];
 
 			$listing = $this -> Listing -> createListing($listingData, $user);
@@ -364,26 +369,28 @@ class CollectiblesUser extends AppModel {
 			}
 			$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
 		} else if ($updateListing) {
-			if ($data['CollectiblesUser']['sold_cost'] !== $collectiblesUser['CollectiblesUser']['sold_cost']) {
-				// TODO: This should not be done here, moved to the Listing model for update
-				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
-				$transaction['Transaction']['sale_price'] = $data['CollectiblesUser']['sold_cost'];
+			// this would just update the listing and not any transactions
 
-				if (!$this -> Listing -> Transaction -> save($transaction)) {
-					$dataSource -> rollback();
-					$retVal['response']['code'] = 500;
-					return $retVal;
-				}
-			} else if ($data['CollectiblesUser']['traded_for'] !== $collectiblesUser['CollectiblesUser']['traded_for']) {
-				// TODO: This should not be done here, moved to the Listing model for update
-				$transaction['Transaction'] = $collectiblesUser['Listing']['Transaction'][0];
-				$transaction['Transaction']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+			$listingData = $collectiblesUser['Listing'];
+			$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+			$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
+			$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+			// TODO: Where should validation for these happen?
+			$response = $this -> Listing -> update($listingData, $user);
 
-				if (!$this -> Listing -> Transaction -> save($transaction)) {
-					$dataSource -> rollback();
-					$retVal['response']['code'] = 500;
-					return $retVal;
-				}
+			if (!$response['response']['isSuccess']) {
+				$dataSource -> rollback();
+				$retVal['response']['code'] = 500;
+				return $retVal;
+			}
+		} else if ($updateTransaction) {
+			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
+
+			if (!$response['response']['isSuccess']) {
+				$dataSource -> rollback();
+				$retVal['response']['code'] = 500;
+				return $retVal;
 			}
 		} else if ($removeListing) {
 			$data['CollectiblesUser']['listing_id'] = null;

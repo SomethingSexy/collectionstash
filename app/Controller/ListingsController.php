@@ -55,8 +55,8 @@ class ListingsController extends AppController {
 			$transaction = $this -> request -> input('json_decode', true);
 			// no need to clean for now on the update
 			//$transaction = Sanitize::clean($transaction);
-
-			$response = $this -> Listing -> updatetListing($transaction, $this -> getUser());
+			// TODO: right now this is just updating the status, this should get converted over to use the updateListing method.
+			$response = $this -> Listing -> updatetFlag($transaction, $this -> getUser());
 
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {// delete
