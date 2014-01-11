@@ -42,7 +42,14 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 	}
 
 	public function createTransaction($data, $listing, $user) {
+		$transaction = array();
+		$transaction['Transaction'] = array();
+		$transaction['Transaction']['collectible_id'] = $data['Listing']['collectible_id'];
+		$transaction['Transaction']['traded_for'] = $data['Listing']['traded_for'];
+		$transaction['Transaction']['sale_date'] = $data['Listing']['end_date'];
+		$transaction['Transaction']['listing_id'] = $data['Listing']['id'];
 
+		return $transaction;
 	}
 
 	public function updateTransaction($data, $listing, $user) {
@@ -51,6 +58,8 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 		$retVal['Transaction']['traded_for'] = $data['traded_for'];
 
 		$retVal['Transaction']['sale_date'] = $data['remove_date'];
+
+		return $retVal;
 	}
 
 }

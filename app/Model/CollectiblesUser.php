@@ -337,7 +337,10 @@ class CollectiblesUser extends AppModel {
 				}
 			}
 		}
-
+		debug($removeListing);
+		debug($addListing);
+		debug($updateListing);
+		debug($updateTransaction);
 		if ($addListing) {
 			$listingData = array();
 
@@ -376,6 +379,7 @@ class CollectiblesUser extends AppModel {
 			$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
 			$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
 			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+
 			// TODO: Where should validation for these happen?
 			$response = $this -> Listing -> update($listingData, $user);
 
@@ -385,6 +389,8 @@ class CollectiblesUser extends AppModel {
 				return $retVal;
 			}
 		} else if ($updateTransaction) {
+			debug($data['CollectiblesUser']);
+			
 			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
 
 			if (!$response['response']['isSuccess']) {

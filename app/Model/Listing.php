@@ -205,8 +205,8 @@ class Listing extends AppModel {
 	public function updateListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
-		if (!$this -> save($data, array('validate' => false))) {
-			$retVal['response']['isSuccess'] = false;
+		if ($this -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
 		}
 
 		return $retVal;
@@ -216,22 +216,25 @@ class Listing extends AppModel {
 	 * Running the api through Listing so it is all contained here
 	 */
 	public function updateTransaction($data, $listing, $user) {
-
+		$retVal = $this -> buildDefaultResponse();
+		// grab our transaction type
 		$factory = new TransactionFactory();
 
 		$transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
 
-		// if it is empty, we need to create
+		// if there is no transaction right now we need to create one, otherwise update
+		// an existing one
 		if (empty($listing['Listing']['Transaction'])) {
 			$data = $transactionable -> createTransaction($data, $listing, $user);
 		} else {
 			$data = $transactionable -> updateTransaction($data, $listing, $user);
 		}
-
-		if ($this -> saveAssociated($data, array('validate' => false))) {
-
+		debug($data);
+		if ($this -> Transaction -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
 		}
 
+		return $retVal;
 	}
 
 	/**

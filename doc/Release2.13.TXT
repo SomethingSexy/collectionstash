@@ -7,3 +7,21 @@ Database Updates
 - add "sale" boolean column to collectible_users and collectible_users_revs
 - add "traded" boolean and "traded_for" text to transactions - this will be for what the user actually traded it for
 - add "traded_for" text to listing - this is what the user whats to trade for
+
+
+
+
+
+
+Test Cases
+- Update active collectible
+- Remove Collectible - mark sold
+- Remove Collectible - mark traded
+- Remove Collectible - delete
+- Update unactive collectible that was sold - update cost
+- update unactive collectible that was traded - update traded
+- update unactive collectible that was sold - update date
+- update unactive collectible that was traded - update date
+- update active collectible mark as sold
+- update active collectible update selling cost
+- update active collectible update traded_for
