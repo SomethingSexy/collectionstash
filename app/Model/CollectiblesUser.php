@@ -381,7 +381,7 @@ class CollectiblesUser extends AppModel {
 			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 
 			// TODO: Where should validation for these happen?
-			$response = $this -> Listing -> update($listingData, $user);
+			$response = $this -> Listing -> updateListing($listingData, $user);
 
 			if (!$response['response']['isSuccess']) {
 				$dataSource -> rollback();

@@ -4,6 +4,7 @@
 <ul>
 	<li>Internally separated Wish List from Stash.  This was done for better future support.</li>
 	<li>Updated Stash Remove, if you indicated a trade you can now enter what you traded for.  Right now this is just a text field.</li>
+	<li>Updated the view for a collectible in the user's stash to show more detail.</li>
 </ul>
 <h3>Release Notes for v2.12</h3>
 <p>Added the following new sharing features:</p>

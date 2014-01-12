@@ -53,7 +53,7 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 	}
 
 	public function updateTransaction($data, $listing, $user) {
-		$retVal = $listing['Listing']['Transaction'][0];
+		$retVal['Transaction'] = $listing['Listing']['Transaction'][0];
 
 		$retVal['Transaction']['traded_for'] = $data['traded_for'];
 
