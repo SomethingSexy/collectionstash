@@ -15,6 +15,7 @@ class CollectiblesUsersController extends AppController {
 			//TODO should be more model behavior but whateves
 			//First lets grab the collectible user
 			$collectiblesUser = $this -> CollectiblesUser -> getUserCollectible($id);
+			debug($collectiblesUser);
 			if (isset($collectiblesUser) && !empty($collectiblesUser)) {
 				//First see if the person viewing this collectible is logged in
 				$this -> set('stashUsername', $collectiblesUser['User']['username']);
@@ -185,7 +186,42 @@ class CollectiblesUsersController extends AppController {
 	}
 
 	public function sale($id = null) {
+		$this -> layout = 'fluid';
+		if (is_null($id)) {
+			$this -> redirect('/', null, true);
+			return;
+		}
+		$id = Sanitize::clean($id, array('encode' => false));
+		$user = $this -> CollectiblesUser -> User -> find("first", array('conditions' => array('User.username' => $id), 'contain' => array('Stash')));
+		//Ok we have a user, although this seems kind of inefficent but it works for now
+		if (empty($user)) {
+			$this -> render('view_no_exist');
+			return;
+		}
+		if (empty($user['Stash'])) {
+			//This is a fucking error
+			$this -> redirect('/', null, true);
+			return;
+		}
 
+		$loggedInUser = $this -> getUser();
+		$viewingMyStash = false;
+		if ($loggedInUser['User']['id'] === $user['User']['id']) {
+			$viewingMyStash = true;
+		}
+		$this -> set('myStash', $viewingMyStash);
+		$this -> set('stashUsername', $id);
+		//If the privacy is 0 or you are viewing your own stash then always show
+		//or if it is set to 1 and this person is logged in also show.
+		if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this -> isLoggedIn())) {
+			// Be very careful when changing this contains, it is tied to the type
+			$this -> paginate = array('findType' => 'orderAveragePrice', 'joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+			$collectibles = $this -> paginate('CollectiblesUser');
+			$this -> set(compact('collectibles'));
+		} else {
+			$this -> render('view_private');
+			return;
+		}
 	}
 
 	// TODO: This should get moved to the CollectibleController

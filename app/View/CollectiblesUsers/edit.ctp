@@ -119,8 +119,18 @@
 						<?php echo $this -> Form -> text('remove_date', array('class' => 'form-control', 'div' => false, 'label' => false, 'maxLength' => 10, 'required')); ?>
 					</div>
 				</div>
-		<?php } ?>           
+		<?php } ?>         
+		<input type="hidden" name="data[CollectiblesUser][sale]" value="<?php echo $collectible['CollectiblesUser']['sale'] ?>" />  
 		<input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
+		<?php if(isset($collectible['CollectiblesUser']['sold_cost'] )) { ?>
+			<input type="hidden" name="data[CollectiblesUser][sold_cost]" value="<?php echo $collectible['CollectiblesUser']['sold_cost'] ?>" />  
+		<?php }?>
+		<?php if(isset($collectible['CollectiblesUser']['traded_for'] )) { ?>
+			<input type="hidden" name="data[CollectiblesUser][traded_for]" value="<?php echo $collectible['CollectiblesUser']['traded_for'] ?>" />  
+		<?php }?>
+		<?php if(isset($collectible['CollectiblesUser']['remove_date'] )) { ?>
+			<input type="hidden" name="data[CollectiblesUser][remove_date]" value="<?php echo $collectible['CollectiblesUser']['remove_date'] ?>" />  
+		<?php }?>		
 	</fieldset>
 	<div class="form-group">
 		<div class="col-lg-offset-3 col-lg-9">

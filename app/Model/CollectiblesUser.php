@@ -145,6 +145,13 @@ class CollectiblesUser extends AppModel {
 						} else if ($val['Listing']['listing_type_id'] === '3') {
 							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
 						}
+						// if it is for sale, keep the listing
+					} else if ($val['CollectiblesUser']['sale']) {
+						if ($val['Listing']['listing_type_id'] === '2') {
+							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['current_price'];
+						} else if ($val['Listing']['listing_type_id'] === '3') {
+							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['traded_for'];
+						}
 					} else {
 						unset($results[$key]['Listing']);
 					}
@@ -306,16 +313,17 @@ class CollectiblesUser extends AppModel {
 		$addListing = false;
 		$updateListing = false;
 		$updateTransaction = false;
+
 		// check first to see if the collectible is active or not
 		if ($collectiblesUser['CollectiblesUser']['active']) {
 			// If it is marked as sale, we know we have a listing
-			if ($collectiblesUser['CollectiblesUser']['sale'] !== $data['CollectiblesUser']['sale']) {
-				if ($collectiblesUser['CollectiblesUser']['sale'] === true && $data['CollectiblesUser']['sale'] === false) {
+			if ($collectiblesUser['CollectiblesUser']['sale'] !== (bool)$data['CollectiblesUser']['sale']) {
+				if ($collectiblesUser['CollectiblesUser']['sale'] === true && ((bool)$data['CollectiblesUser']['sale']) === false) {
 					$removeListing = true;
 				} else {
 					$addListing = true;
 				}
-			} else if ($collectiblesUser['CollectiblesUser']['sale'] === true && $data['CollectiblesUser']['sale'] === true) {
+			} else if ($collectiblesUser['CollectiblesUser']['sale'] === true && ((bool)$data['CollectiblesUser']['sale']) === true) {
 				// update if they are both equal to true, so it is still for sale but the user might want to update their sale/traded for
 				$updateListing = true;
 			}
@@ -390,7 +398,7 @@ class CollectiblesUser extends AppModel {
 			}
 		} else if ($updateTransaction) {
 			debug($data['CollectiblesUser']);
-			
+
 			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
 
 			if (!$response['response']['isSuccess']) {

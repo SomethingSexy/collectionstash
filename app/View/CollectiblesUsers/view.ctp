@@ -50,7 +50,7 @@
 			<?php
 			if ($collectible['CollectiblesUser']['active'] && $collectible['CollectiblesUser']['sale']) {
 				echo '<div class="alert alert-success">';
-				echo '<p>' . $collectible['Collectible']['name'] . __(' is currently for ');
+				echo '<p>' . __('This collectible is currently for ');
 				if ($collectible['Listing']['listing_type_id'] === '2') {
 					echo __('sale.');
 				} else if ($collectible['Listing']['listing_type_id'] === '2') {
@@ -59,7 +59,7 @@
 				echo '</p></div>';
 			} else {
 				echo '<div class="alert alert-danger">';
-				echo '<p>' . $collectible['Collectible']['name'] . __(' is inactive.  It was removed on ') . $collectible['CollectiblesUser']['remove_date'] . __(' because it was ');
+				echo '<p>' . __('This collectible is inactive.  It was removed on ') . $collectible['CollectiblesUser']['remove_date'] . __(' because it was ');
 				if ($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '1') {
 					echo __('sold.');
 				} else if ($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '2') {
@@ -166,31 +166,37 @@
 				?>		
 				<?php
 				// right now this only supports type 1 and 2 remove reasons which only have one transaction
-				if (!$collectible['CollectiblesUser']['active']) {
-					if (isset($collectible['CollectiblesUser']['sold_cost'])) {
-						echo '<dt>';
+				if (isset($collectible['CollectiblesUser']['sold_cost'])) {
+					echo '<dt>';
+					if ($collectible['CollectiblesUser']['active']) {
+						echo __('Asking Price');
+					} else {
 						echo __('Sold For');
-						echo '</dt>';
-						echo '<dd>';
-						echo $collectible['CollectiblesUser']['sold_cost'];
-						echo '</dd>';
-					} else if (isset($collectible['CollectiblesUser']['traded_for'])) {
-						echo '<dt>';
+					}
+					echo '</dt>';
+					echo '<dd>';
+					echo '$'. $collectible['CollectiblesUser']['sold_cost'];
+					echo '</dd>';
+				} else if (isset($collectible['CollectiblesUser']['traded_for'])) {
+					echo '<dt>';
+					if ($collectible['CollectiblesUser']['active']) {
+						echo __('Trade For');
+					} else {
 						echo __('Traded For');
-						echo '</dt>';
-						echo '<dd>';
-						echo $collectible['CollectiblesUser']['traded_for'];
-						echo '</dd>';
 					}
-					
-					if (isset($collectible['CollectiblesUser']['remove_date'])) {
-						echo '<dt>';
-						echo __('Remove Date');
-						echo '</dt>';
-						echo '<dd>';
-						echo $collectible['CollectiblesUser']['remove_date'];
-						echo '</dd>';						
-					}
+					echo '</dt>';
+					echo '<dd>';
+					echo $collectible['CollectiblesUser']['traded_for'];
+					echo '</dd>';
+				}
+
+				if (isset($collectible['CollectiblesUser']['remove_date'])) {
+					echo '<dt>';
+					echo __('Remove Date');
+					echo '</dt>';
+					echo '<dd>';
+					echo $collectible['CollectiblesUser']['remove_date'];
+					echo '</dd>';
 				}
 				?>		
 				</dl>
