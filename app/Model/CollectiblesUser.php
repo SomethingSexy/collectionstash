@@ -145,7 +145,8 @@ class CollectiblesUser extends AppModel {
 						} else if ($val['Listing']['listing_type_id'] === '3') {
 							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
 						}
-						// if it is for sale, keep the listing
+						// if it is for sale, keep the listing, we also need these fields for updatintg purposes if 
+						// it is an active listing we want to know how much or what the user wants for it
 					} else if ($val['CollectiblesUser']['sale']) {
 						if ($val['Listing']['listing_type_id'] === '2') {
 							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['current_price'];
