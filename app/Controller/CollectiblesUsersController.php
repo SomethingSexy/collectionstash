@@ -60,6 +60,7 @@ class CollectiblesUsersController extends AppController {
 			$data['response']['errors'] = array();
 			array_push($data['response']['errors'], $error);
 			$this -> set('returnData', $data);
+			$this -> response -> statusCode(401);
 			return;
 		}
 

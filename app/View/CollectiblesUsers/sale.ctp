@@ -87,10 +87,10 @@
 									echo '<td> - </td>';
 								}
 
-								if (!empty($myCollectible['Listing']['current_price'])) {
-									echo '<td>$' . $myCollectible['Listing']['current_price'] . '</td>';
-								} else if (!empty($myCollectible['Listing']['traded_for'])) {
-									echo '<td>$' . $myCollectible['Listing']['traded_for'] . '</td>';
+								if (!empty($myCollectible['CollectiblesUser']['sold_cost'])) {
+									echo '<td>$' . $myCollectible['CollectiblesUser']['sold_cost'] . '</td>';
+								} else if (!empty($myCollectible['CollectiblesUser']['traded_for'])) {
+									echo '<td>$' . $myCollectible['CollectiblesUser']['traded_for'] . '</td>';
 								} else {
 									echo '<td> - </td>';
 								}
@@ -108,11 +108,11 @@
 
 									if ($myCollectible['CollectiblesUser']['sale']) {
 										// this will bring up the remove from stash modal
-										echo '<li><a href="stash-mark-as-sold" title=' . __('Mark as Sold') . '><i class="icon-dollar"></i>  ' . __('Mark as Sold') . '</a></li>';
+										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-mark-as-sold" title=' . __('Mark as Sold') . '><i class="icon-dollar"></i>  ' . __('Mark as Sold') . '</a></li>';
 										// this will remove the listing completely and mark it as unsold
-										echo '<li><a href="stash-remove-listing" title=' . __('Remove Listing') . '><i class="icon-dollar"></i>  ' . __('Remove Listing') . '</a></li>';
+										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-remove-listing" title=' . __('Remove Listing') . '><i class="icon-dollar"></i>  ' . __('Remove Listing') . '</a></li>';
 										//
-										echo '<li><a href="stash-edit-listing" title=' . __('Edit Listing') . '><i class="icon-dollar"></i>  ' . __('Edit Listing') . '</a></li>';
+										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-edit-listing" title=' . __('Edit Listing') . '><i class="icon-dollar"></i>  ' . __('Edit Listing') . '</a></li>';
 									} else {
 										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
 									}

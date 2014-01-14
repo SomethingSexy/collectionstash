@@ -149,7 +149,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = 'Collectible has been added to your Stash!';
+					var message = 'The collectible has been added to your Stash!';
 					$.blockUI({
 						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 						showOverlay : false,
@@ -261,7 +261,7 @@
 			// success identifies the function to invoke when the server response
 			// has been received
 			success : function(data, textStatus, jqXHR) {
-				var message = 'The Collectible has been added to your Wish List!';
+				var message = 'The collectible has been added to your Wish List!';
 				$.blockUI({
 					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
@@ -548,7 +548,7 @@
 			// success identifies the function to invoke when the server response
 			// has been received
 			success : function(data, textStatus, jqXHR) {
-				var message = 'The Collectible has been removed from your Wish List!';
+				var message = 'The collectible has been removed from your Wish List!';
 				$.blockUI({
 					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
 					showOverlay : false,
@@ -775,6 +775,135 @@
 			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
 
 			$anchor.stashsell(collectibleModel, collectibleUserModel);
+			e.preventDefault();
+		});
+	});
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
+
+	/* PUBLIC CLASS DEFINITION
+	 ** ============================== */
+
+	var SaleRemove = function(element, options) {
+		this.$element = $(element);
+		this.$stashItem = this.$element.closest('.stash-item');
+		this.options = $.extend({}, $.fn.saleremove.defaults, options);
+		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
+		if (options.tiles) {
+			this.$tiles = $('.tiles');
+		}
+		this.collectibleUser = options.collectibleUserModel;
+	};
+
+	SaleRemove.prototype.remove = function() {
+		var self = this;
+		this.collectibleUser.set({
+			sale : false
+		});
+
+		this.collectibleUser.save({}, {
+			success : function(model, response, options) {
+				var message = 'The collectible has been removed from your sale/trade list!';
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
+				});
+
+				if (self.$tiles) {
+					self.$tiles.masonry('remove', self.$stashItem);
+					self.$tiles.masonry('reload');
+				} else {
+					self.$stashItem.remove();
+				}
+			},
+			error : function(model, xhr, options) {
+				var errorMessage = 'Oops! Something went terribly wrong!';
+				if (xhr.status === 400) {
+					$.each(xhr.responseJSON.response.errors, function(index, value) {
+						errorMessage = value.message;
+					});
+				} else if (xhr.status === 401) {
+					errorMessage = 'You are not authorized to do that!';
+				}
+
+				$.blockUI({
+					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+					showOverlay : false,
+					css : {
+						top : '100px',
+						'background-color' : '#DDFADE',
+						border : '1px solid #93C49F',
+						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						'border-radius' : '4px 4px 4px 4px',
+						color : '#333333',
+						'margin-bottom' : '20px',
+						padding : '8px 35px 8px 14px',
+						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						'z-index' : 999999
+					},
+					timeout : 2000
+				});
+
+			}
+		});
+	};
+	/* BUTTON PLUGIN DEFINITION
+	 * ======================== */
+
+	$.fn.saleremove = function(options) {
+		return this.each(function() {
+			var $this = $(this);
+
+			var data = $this.data('saleremove');
+			if (!data) {
+				$this.data('saleremove', ( data = new SaleRemove(this, options)));
+			}
+
+			data.remove();
+		});
+	};
+
+	$.fn.saleremove.defaults = {
+
+	};
+
+	$.fn.saleremove.Constructor = SaleRemove;
+
+	/* DATA-API
+	 * =============== */
+
+	$(function() {
+		var tile = false;
+		if ($('.stashable').hasClass('tiles')) {
+			tile = true;
+		}
+
+		$('.stashable').on('click', '.stash-remove-listing', function(e) {
+			var $anchor = $(e.currentTarget);
+			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
+			var collectibleUserId = $anchor.attr('data-collectible-user-id');
+			var $stashItem = $anchor.closest('.stash-item');
+			$anchor.saleremove({
+				$stashItem : $stashItem,
+				tiles : tile,
+				collectibleModel : collectibleModel,
+				collectibleUserModel : collectibleUserModel,
+				collectibleUserId : collectibleUserId
+			});
 			e.preventDefault();
 		});
 	});
