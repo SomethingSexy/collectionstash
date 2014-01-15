@@ -264,6 +264,7 @@ else
 	echo $this -> element('stash_add_modal');
 	echo $this -> element('stash_remove_modal');
 	echo $this -> element('stash_sell_modal');
+	echo $this -> element('stash_remove_sold_modal');
 	?>	
 	<?php echo $this -> element('sql_dump'); ?>
 	

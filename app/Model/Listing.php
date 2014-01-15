@@ -10,6 +10,7 @@ class Listing extends AppModel {
 	public $validate = array('ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.'), 'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.')));
 
 	function afterFind($results, $primary = false) {
+
 		if ($results) {
 			// If it is primary handle all of these things
 			if ($primary) {
@@ -24,6 +25,13 @@ class Listing extends AppModel {
 							$datetime = strtotime($val['Listing']['end_date']);
 							$datetime = date("m/d/y g:i A", $datetime);
 							$results[$key]['Listing']['end_date'] = $datetime;
+						}
+						// this should go in the database somewhere but for now add here
+						// a mapping of collectible_user_remove_reason_id
+						if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
+							$results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+						} else if ($val['Listing']['listing_type_id'] === '2') {
+							$results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
 						}
 					}
 				}
@@ -40,6 +48,13 @@ class Listing extends AppModel {
 						$datetime = date("m/d/y g:i A", $datetime);
 						$results['end_date'] = $datetime;
 					}
+					// this should go in the database somewhere but for now add here
+					// a mapping of collectible_user_remove_reason_id
+					if ($results['listing_type_id'] === '1' || $results['listing_type_id'] === '2') {
+						$results['collectible_user_remove_reason_id'] = 1;
+					} else if ($results['listing_type_id'] === '2') {
+						$results['collectible_user_remove_reason_id'] = 3;
+					}
 				} else {
 
 					foreach ($results as $key => $val) {
@@ -55,12 +70,23 @@ class Listing extends AppModel {
 								$datetime = date("m/d/y g:i A", $datetime);
 								$results[$key]['Listing']['end_date'] = $datetime;
 							}
+							// this should go in the database somewhere but for now add here
+							// a mapping of collectible_user_remove_reason_id
+							if (isset($val['Listing']['listing_type_id'])) {
+								if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
+									$results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+								} else if ($val['Listing']['listing_type_id'] === '2') {
+									$results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
+								}
+							}
+
 						}
 					}
 				}
 			}
 
 		}
+
 		return $results;
 	}
 
@@ -229,7 +255,7 @@ class Listing extends AppModel {
 		} else {
 			$data = $transactionable -> updateTransaction($data, $listing, $user);
 		}
-		debug($data);
+
 		if ($this -> Transaction -> save($data, array('validate' => false))) {
 			$retVal['response']['isSuccess'] = true;
 		}
@@ -241,6 +267,19 @@ class Listing extends AppModel {
 	 * Running the api through Listing so it is all contained here
 	 */
 	public function createTransaction($data) {
+		$retVal = $this -> buildDefaultResponse();
+		// grab our transaction type
+		$factory = new TransactionFactory();
+
+		$transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
+
+		$data = $transactionable -> createTransaction($data, $listing, $user);
+
+		if ($this -> Transaction -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
+		}
+
+		return $retVal;
 
 	}
 
