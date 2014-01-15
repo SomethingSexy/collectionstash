@@ -219,6 +219,10 @@ class CollectiblesUsersController extends AppController {
 			$this -> paginate = array('findType' => 'orderAveragePrice', 'joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
 			$collectibles = $this -> paginate('CollectiblesUser');
 			$this -> set(compact('collectibles'));
+			
+			// grab these for display purposes
+			$reasons = $this -> CollectiblesUser -> CollectibleUserRemoveReason -> find('all', array('contain' => false));
+			$this -> set(compact('reasons'));
 		} else {
 			$this -> render('view_private');
 			return;

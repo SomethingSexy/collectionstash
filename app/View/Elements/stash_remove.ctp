@@ -29,7 +29,7 @@
 <form>
 	<div class="form-group {#inlineErrors.collectible_user_remove_reason_id}has-error{/inlineErrors.collectible_user_remove_reason_id}">
 		<label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
-		{@ne key="{model.active}" value="true" type="boolean"}
+		{@if cond=" ( '{model.active}' != true ||  '{model.changeReason}' == false )" }
 			{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
 				 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input"> {CollectibleUserRemoveReason.reason}</span>{/eq}
 			{/reasons}
@@ -44,7 +44,7 @@
 			{#inlineErrors.collectible_user_remove_reason_id}
 			<span class="help-inline">{.}</span>
 			{/inlineErrors.collectible_user_remove_reason_id}			
-		{/ne}
+		{/if}
 	</div>
 	{@if cond=" ( '{model.collectible_user_remove_reason_id}' == 1 ||  '{model.collectible_user_remove_reason_id}' == 2 )" }
 		{@eq key="{model.collectible_user_remove_reason_id}" value="1"}

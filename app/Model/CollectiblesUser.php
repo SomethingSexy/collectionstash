@@ -145,7 +145,7 @@ class CollectiblesUser extends AppModel {
 						} else if ($val['Listing']['listing_type_id'] === '3') {
 							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
 						}
-						// if it is for sale, keep the listing, we also need these fields for updatintg purposes if 
+						// if it is for sale, keep the listing, we also need these fields for updatintg purposes if
 						// it is an active listing we want to know how much or what the user wants for it
 					} else if ($val['CollectiblesUser']['sale']) {
 						if ($val['Listing']['listing_type_id'] === '2') {
@@ -434,7 +434,7 @@ class CollectiblesUser extends AppModel {
 	public function remove($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 		// grab the collectible we are removing first, needed for the event
-		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('User', 'Collectible', 'Stash')));
+		$collectiblesUser = $this -> find("first", array('conditions' => array('CollectiblesUser.id' => array($data['CollectiblesUser']['id'])), 'contain' => array('User', 'Collectible', 'Stash', 'Listing' => array('Transaction'))));
 
 		// we need to check permissions first
 		// return 401 if they are not allowed to edit this one
@@ -499,14 +499,27 @@ class CollectiblesUser extends AppModel {
 			$dataSource = $this -> getDataSource();
 			$dataSource -> begin();
 
-			// TODO: When removing, check to see if this already has a listing (from marking as a sale/trade), and update that one
-			// only add a list if they supplied a cost or what they traded it for
+			// When removing, check to see if this already has a listing (from marking as a sale/trade) by checking if the sale flag is true.
+			// For now because the Listing/Transaction API kind of sucks.  Delete the current listing and add a new one with a transaction
+			// That way, if they decide they sold it but don't want to tell us how much they paid, no listing will be added 
+			if ($collectiblesUser['CollectiblesUser']['sale']) {
+				// Make sure this is now set to false
+				$data['CollectiblesUser']['sale'] = false;
+				$data['CollectiblesUser']['listing_id'] = null;
+				if (!$this -> Listing -> delete($collectiblesUser['Listing']['id'])) {
+					$dataSource -> rollback();
+					$retVal['response']['code'] = 500;
+					return $retVal;
+				}
+			}
+
 			if (isset($data['CollectiblesUser']['sold_cost']) || isset($data['CollectiblesUser']['traded_for'])) {
 				$listingData = array();
 
 				if (isset($data['CollectiblesUser']['sold_cost'])) {
 					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
 					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+					$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
 					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 					$listingData['Listing']['listing_type_id'] = 2;
 				}
