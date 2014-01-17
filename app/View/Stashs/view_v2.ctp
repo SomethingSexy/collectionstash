@@ -90,7 +90,7 @@
 				echo '</div>';
 				echo '<div class="menu tile-links clearfix">';
 				if ($myCollectible['CollectiblesUser']['sale']) {
-					echo '<span class="pull-left"><a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>';
+					echo '<span class="pull-left marked-for-sale"><a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>';
 				}
 				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a></span>';
 				if (isset($myStash) && $myStash) {
@@ -99,6 +99,9 @@
 					echo '<span><a class="" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a></span>';
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
+					if (!$myCollectible['CollectiblesUser']['sale']) {
+						echo '<span><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i></a></span>';
+					}
 					echo '<span><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>';
 				}
 
@@ -119,6 +122,7 @@
 <?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/views/view.stash.sell', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
 
 <script><?php
@@ -160,5 +164,5 @@ if (isset($reasons)) {
 				});
 			});
 
-		}); 
+		});
 </script>
