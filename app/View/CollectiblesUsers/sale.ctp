@@ -90,7 +90,7 @@
 								if (!empty($myCollectible['CollectiblesUser']['sold_cost'])) {
 									echo '<td>$' . $myCollectible['CollectiblesUser']['sold_cost'] . '</td>';
 								} else if (!empty($myCollectible['CollectiblesUser']['traded_for'])) {
-									echo '<td>$' . $myCollectible['CollectiblesUser']['traded_for'] . '</td>';
+									echo '<td>' . $myCollectible['CollectiblesUser']['traded_for'] . '</td>';
 								} else {
 									echo '<td> - </td>';
 								}

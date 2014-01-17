@@ -1233,6 +1233,10 @@ a.forgot-password {
 .form-control.selectable {
 	cursor: pointer;
 }
+
+.marked-for-sale a {
+	color : green;
+}
 /*!
  * Yamm!3
  * Yet another megamenu for Bootstrap 3
