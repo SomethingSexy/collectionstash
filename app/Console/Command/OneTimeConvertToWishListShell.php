@@ -19,7 +19,7 @@ class OneTimeConvertToWishListShell extends AppShell {
 			$wishList = array();
 			$wishList['WishList'] = array();
 			$wishList['WishList']['user_id'] = $stash['Stash']['user_id'];
-			$wishList['WishList']['privacy'] = $stash['Stash']['privacy'];
+			//$wishList['WishList']['privacy'] = $stash['Stash']['privacy'];
 			$wishList['CollectiblesWishList'] = array();
 
 			// copy over collectibles

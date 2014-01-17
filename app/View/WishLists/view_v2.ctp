@@ -18,7 +18,7 @@
 						<?php echo '<a href="/wishlist/' . $stashUsername . '">' . __('Wish List') . '</a>'; ?>
 						</li>
 						<li>
-						<?php echo '<a href="/sale/' . $stashUsername . '">' . __('Sale List') . '</a>'; ?>
+						<?php echo '<a href="/sale/' . $stashUsername . '">' . __('Sale/Trade List') . '</a>'; ?>
 						</li>
 						<li>
 						<?php echo '<a href="/user_uploads/view/' . $stashUsername . '">' . __('Photos') . '</a>'; ?>	

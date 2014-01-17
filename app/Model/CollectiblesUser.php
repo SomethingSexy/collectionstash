@@ -139,23 +139,26 @@ class CollectiblesUser extends AppModel {
 					}
 
 					// make sure we have a listing, these listings will only have one transaction
-					if (isset($val['Listing']) && !empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
-						if ($val['Listing']['listing_type_id'] === '2') {
-							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
-						} else if ($val['Listing']['listing_type_id'] === '3') {
-							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
+					if (isset($val['Listing'])) {
+						if (!empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
+							if ($val['Listing']['listing_type_id'] === '2') {
+								$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['Transaction'][0]['sale_price'];
+							} else if ($val['Listing']['listing_type_id'] === '3') {
+								$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
+							}
+							// if it is for sale, keep the listing, we also need these fields for updatintg purposes if
+							// it is an active listing we want to know how much or what the user wants for it
+						} else if ($val['CollectiblesUser']['sale']) {
+							if ($val['Listing']['listing_type_id'] === '2') {
+								$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['current_price'];
+							} else if ($val['Listing']['listing_type_id'] === '3') {
+								$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['traded_for'];
+							}
+						} else {
+							unset($results[$key]['Listing']);
 						}
-						// if it is for sale, keep the listing, we also need these fields for updatintg purposes if
-						// it is an active listing we want to know how much or what the user wants for it
-					} else if ($val['CollectiblesUser']['sale']) {
-						if ($val['Listing']['listing_type_id'] === '2') {
-							$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['current_price'];
-						} else if ($val['Listing']['listing_type_id'] === '3') {
-							$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['traded_for'];
-						}
-					} else {
-						unset($results[$key]['Listing']);
 					}
+
 				}
 			}
 		}
@@ -501,8 +504,10 @@ class CollectiblesUser extends AppModel {
 
 			// When removing, check to see if this already has a listing (from marking as a sale/trade) by checking if the sale flag is true.
 			// For now because the Listing/Transaction API kind of sucks.  Delete the current listing and add a new one with a transaction
-			// That way, if they decide they sold it but don't want to tell us how much they paid, no listing will be added 
-			if ($collectiblesUser['CollectiblesUser']['sale']) {
+			// That way, if they decide they sold it but don't want to tell us how much they paid, no listing will be added
+
+			$forSale = $collectiblesUser['CollectiblesUser']['sale'];
+			if ($forSale) {
 				// Make sure this is now set to false
 				$data['CollectiblesUser']['sale'] = false;
 				$data['CollectiblesUser']['listing_id'] = null;
@@ -519,7 +524,14 @@ class CollectiblesUser extends AppModel {
 				if (isset($data['CollectiblesUser']['sold_cost'])) {
 					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
 					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-					$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
+					// if this was originally for sale, mark down what the original current_price was as the listing price.
+					// This will indicate what they asked for the collectible.
+					if ($forSale) {
+						$listingData['Listing']['listing_price'] = $collectiblesUser['Listing']['current_price'];
+					} else {
+						$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
+					}
+
 					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 					$listingData['Listing']['listing_type_id'] = 2;
 				}

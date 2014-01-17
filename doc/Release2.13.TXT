@@ -8,7 +8,7 @@ Database Updates
 - add "traded" boolean and "traded_for" text to transactions - this will be for what the user actually traded it for
 - add "traded_for" text to listing - this is what the user whats to trade for
 
-
+ - Run one time update for wishlist
 
 
 
