@@ -14,14 +14,16 @@
 				if (!empty($variant['CollectiblesUpload'])) {
 					foreach ($variant['CollectiblesUpload'] as $key => $upload) {
 						if ($upload['primary']) {
+							$this -> FileUpload -> reset();
 							echo '<a  class="thumbnail col-md-12" href="/collectibles/view/' . $variant['Collectible']['id'] . '">';
-							echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false, 'width' => 150, 'height' => 150));
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('escape' => false));
 							echo '</a>';
 							break;
 						}
 					}
+					$this -> FileUpload -> reset();
 				} else {
-					echo '<a class="thumbnail" href="/collectibles/view/' . $variant['Collectible']['id'] . '"><img src="/img/silhouette_thumb.png"/></a>';
+					echo '<a class="thumbnail" href="/collectibles/view/' . $variant['Collectible']['id'] . '"><img alt="" src="/img/no-photo.png"></a>';
 				}
 			?>
 			</li>
@@ -31,6 +33,6 @@
 
 	<p><?php echo __('This collectible has no variants.'); ?></p>	
 	
-<?php	  }?>
+<?php	  } ?>
 	</div>
 </div>

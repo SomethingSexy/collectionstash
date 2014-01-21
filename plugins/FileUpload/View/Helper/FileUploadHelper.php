@@ -307,7 +307,7 @@ class FileUploadHelper extends AppHelper {
 		}
 
 		//return the impage path or image html
-		if ($this -> options['imagePathOnly']) {
+		if (isset($this -> options['imagePathOnly']) && $this -> options['imagePathOnly']) {
 			return $image;
 		} else {
 			unset($this -> newImage);
