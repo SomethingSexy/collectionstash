@@ -6,6 +6,7 @@
 	<li>Updated Stash Remove, if you indicated a trade you can now enter what you traded for.  Right now this is just a text field.</li>
 	<li>Updated the view for a collectible in the user's stash to show more detail.</li>
 	<li>Fixed issue where variant images were not displaying.</li>
+	<li>Fixed issue where collectible price facts were getting carried over when creating variants.</li>
 </ul>
 <h3>Release Notes for v2.12</h3>
 <p>Added the following new sharing features:</p>
