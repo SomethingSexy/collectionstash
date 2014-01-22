@@ -7,6 +7,8 @@ Database Updates
 - add "sale" boolean column to collectible_users and collectible_users_revs
 - add "traded" boolean and "traded_for" text to transactions - this will be for what the user actually traded it for
 - add "traded_for" text to listing - this is what the user whats to trade for
+- update table listings end_date column to allow null
+- update table listings start_date column to allow null
 
  - Run one time update for wishlist
 

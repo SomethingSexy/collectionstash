@@ -170,8 +170,6 @@ class AppController extends Controller {
 		}
 
 		// Here I need to check the query string for all possible filters
-		debug($this -> request -> query);
-
 		$currentFilters = array();
 		$currentFilters['Search'] = array();
 		foreach ($this -> filters as $filterkey => $filter) {
@@ -197,8 +195,6 @@ class AppController extends Controller {
 			}
 		}
 
-		debug($saveSearchFilters);
-
 		if (isset($saveSearchFilters['t'])) {
 			reset($saveSearchFilters['t']);
 			// make sure array pointer is at first element
@@ -208,7 +204,6 @@ class AppController extends Controller {
 			$saveSearchFilters['tag'] = $tag['Tag'];
 		}
 
-		debug($currentFilters);
 		//If nothing is set, use alphabetical order as the default
 		$order = array();
 		$order['Collectible.name'] = 'ASC';

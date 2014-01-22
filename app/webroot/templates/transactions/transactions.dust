@@ -91,9 +91,36 @@
 						{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
 							{@if cond=" (!'{processed}') "}
 								<tr>
-									<td>{type}</td>
-									<td><a target="_blank" href="{url}">{listing_name}</a></td>
-									<td>{current_price}</td>
+									<td>
+										{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
+											{@eq key="{listing_type_id}" value="2" type="string"}
+												User Sale
+											{/eq}
+											{@eq key="{listing_type_id}" value="3" type="string"}
+												User Trade
+											{/eq}
+										{:else}
+											{type}
+										{/if}
+									</td>
+									<td>
+										{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
+											{listing_name}
+										{:else}
+											<a target="_blank" href="{url}">{listing_name}</a>
+										{/if}	
+									</td>
+									<td>
+										{@eq key="{listing_type_id}" value="1" type="string"}
+											{current_price}
+										{/eq}
+										{@eq key="{listing_type_id}" value="2" type="string"}
+											{current_price}
+										{/eq}
+										{@eq key="{listing_type_id}" value="3" type="string"}
+											{traded_for}
+										{/eq}										
+									</td>
 									<td>{condition_name}</td>
 									<td>{start_date}</td>
 									<td>{end_date}</td>

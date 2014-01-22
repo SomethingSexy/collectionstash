@@ -349,10 +349,7 @@ class CollectiblesUser extends AppModel {
 				}
 			}
 		}
-		debug($removeListing);
-		debug($addListing);
-		debug($updateListing);
-		debug($updateTransaction);
+
 		if ($addListing) {
 			$listingData = array();
 
@@ -401,8 +398,6 @@ class CollectiblesUser extends AppModel {
 				return $retVal;
 			}
 		} else if ($updateTransaction) {
-			debug($data['CollectiblesUser']);
-
 			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
 
 			if (!$response['response']['isSuccess']) {
