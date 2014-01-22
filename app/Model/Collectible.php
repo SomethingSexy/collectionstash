@@ -837,6 +837,7 @@ class Collectible extends AppModel {
 		unset($collectible['Collectible']['created']);
 		unset($collectible['Collectible']['modified']);
 		unset($collectible['Collectible']['collectibles_user_count']);
+		unset($collectible['Collectible']['collectible_price_fact_id']);
 
 		// Then we need to loop through each
 		foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
