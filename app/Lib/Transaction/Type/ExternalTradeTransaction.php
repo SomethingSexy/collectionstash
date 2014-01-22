@@ -13,9 +13,12 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 		if ($data['Listing']['active_sale']) {
 			$data['Listing']['processed'] = false;
 			$data['Listing']['status'] = 'active';
+			$data['Listing']['start_date'] = null;
+			$data['Listing']['end_date'] = null;
 		} else {
 			$data['Listing']['processed'] = true;
 			$data['Listing']['status'] = 'completed';
+			$data['Listing']['start_date'] = null;
 		}
 
 		$data['Listing']['quantity'] = 1;

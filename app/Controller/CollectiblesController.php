@@ -34,7 +34,7 @@ class CollectiblesController extends AppController {
 				//If we are adding a variant, copy the collectible completely
 				// setting its parent to this collectible and making it a variant
 				$response = $this -> Collectible -> createCopy($collectibleId, $this -> getUserId(), true);
-				debug($response);
+
 				if ($response['response']['isSuccess']) {
 					$this -> redirect(array('action' => 'edit', $response['response']['data']['collectible_id']));
 				} else {
@@ -60,7 +60,7 @@ class CollectiblesController extends AppController {
 			if ($response['response']['isSuccess']) {
 				$this -> redirect(array('action' => 'edit', $response['response']['data']['id']));
 			} else {
-				debug($response);
+
 			}
 		}
 
@@ -693,6 +693,10 @@ class CollectiblesController extends AppController {
 						//Ugh need to get this again so I can get the Revision id
 						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'), 'User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
 						//update with the new revision id
+						// TODO: this should be added to all uploads, and tags, and artists, etc...I am not sure how much this matter anymore.
+						// I am wonder if instead we do an activity based approach on the collectible itself instead of trying to do this revision stuff. 
+						// we have rev tables to show changes that happen between updates but the revision table was suppose to show overall changes.
+						// we are probably better off doing something more useful like an activity table.
 						if (isset($collectible['CollectiblesUpload']) && !empty($collectible['CollectiblesUpload'])) {
 
 							$this -> Collectible -> CollectiblesUpload -> id = $collectible['CollectiblesUpload'][0]['id'];
