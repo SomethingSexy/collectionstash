@@ -37,6 +37,9 @@
 			<input type="radio" name="listing_type_id" value="3" {@eq key="{model.listing_type_id}" value="3"}checked{/eq}>
 			Trade this collectible. </label>
 	</div>
+	{#inlineErrors.listing_type_id}
+	<span class="help-inline">{.}</span>
+	{/inlineErrors.listing_type_id}	
 	{@eq key="{model.listing_type_id}" value="2"}
 	<div class="form-group {#inlineErrors.sold_cost}has-error{/inlineErrors.sold_cost}">
 		<label class="control-label" for="CollectiblesUserRemoveCost">How much do you want to sell it for?</label>

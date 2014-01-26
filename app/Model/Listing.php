@@ -75,8 +75,8 @@ class Listing extends AppModel {
 							if (isset($val['Listing']['listing_type_id'])) {
 								if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
 									$results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
-								} else if ($val['Listing']['listing_type_id'] === '2') {
-									$results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
+								} else if ($val['Listing']['listing_type_id'] === '3') {
+									$results[$key]['Listing']['collectible_user_remove_reason_id'] = 2;
 								}
 							}
 
@@ -149,6 +149,7 @@ class Listing extends AppModel {
 			$data['Listing']['listing_type_id'] = 1;
 		}
 
+		// TODO: We should validate ALL TYPES HERE
 		if ($data['Listing']['listing_type_id'] === 1) {
 			$this -> set($data['Listing']);
 

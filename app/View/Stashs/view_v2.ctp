@@ -1,4 +1,4 @@
-<?php echo $this -> Minify -> script('js/cs.stash', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div class="col-md-12">
 	<h2><?php
 	echo $stashUsername . '\'s';

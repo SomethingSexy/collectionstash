@@ -5,8 +5,10 @@
 	<li>Internally separated Wish List from Stash.  This was done for better future support.</li>
 	<li>Updated Stash Remove, if you indicated a trade you can now enter what you traded for.  Right now this is just a text field.</li>
 	<li>Updated the view for a collectible in the user's stash to show more detail.</li>
-	<li>Fixed issue where variant images were not displaying.</li>
-	<li>Fixed issue where collectible price facts were getting carried over when creating variants.</li>
+	<li>Added the ability to mark collectible for sale/trade.  This can be used to keep your Stash organized so you know what you own and what you are currently selling (and for how much).</li>
+	<li>Fixed an issue where variant images were not displaying.</li>
+	<li>Fixed an issue where collectible price facts were getting carried over when creating variants.</li>
+	<li>Fixed an issue where unactive user collectibles were showing up in the registry.</li>
 </ul>
 <h3>Release Notes for v2.12</h3>
 <p>Added the following new sharing features:</p>
