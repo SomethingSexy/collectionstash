@@ -22,7 +22,7 @@ var StashRemoveView = Backbone.View.extend({
 		data.errors = this.errors;
 		data.inlineErrors = {};
 		data.reasons = this.reasons.toJSON();
-		data.changeReason = this.changeReason;
+		data.model.changeReason = this.changeReason;
 		_.each(this.errors, function(error) {
 			if (error.inline) {
 				data.inlineErrors[error.name] = error.message;

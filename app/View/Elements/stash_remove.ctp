@@ -29,11 +29,9 @@
 <form>
 	<div class="form-group {#inlineErrors.collectible_user_remove_reason_id}has-error{/inlineErrors.collectible_user_remove_reason_id}">
 		<label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
-		{@if cond=" ( '{model.active}' != true ||  '{model.changeReason}' == false )" }
-			{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
-				 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input"> {CollectibleUserRemoveReason.reason}</span>{/eq}
-			{/reasons}
-		{:else}
+		
+		<!-- Either I am dumb or dust is dumb and I cannot get multiple boolan checks in an if statement -->
+		{@eq key="{model.changeReason}" value="true" type="boolean"}
 			<select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
 				<option value=""></option>
 				{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
@@ -44,7 +42,24 @@
 			{#inlineErrors.collectible_user_remove_reason_id}
 			<span class="help-inline">{.}</span>
 			{/inlineErrors.collectible_user_remove_reason_id}			
-		{/if}
+		{:else}
+			{@eq key="{model.active}" value="false" type="boolean"}
+					{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
+						 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input"> {CollectibleUserRemoveReason.reason}</span>{/eq}
+					{/reasons}			
+				{:else}
+					<select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
+						<option value=""></option>
+						{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
+						<option {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}selected{/eq} value="{CollectibleUserRemoveReason.id}">{CollectibleUserRemoveReason.reason}</option>
+						{/reasons}
+					</select>
+					<span class="help-inline">This is the reason why you are removing this collectible.</span>
+					{#inlineErrors.collectible_user_remove_reason_id}
+					<span class="help-inline">{.}</span>
+					{/inlineErrors.collectible_user_remove_reason_id}				
+			{/eq}
+		{/eq}
 	</div>
 	{@if cond=" ( '{model.collectible_user_remove_reason_id}' == 1 ||  '{model.collectible_user_remove_reason_id}' == 2 )" }
 		{@eq key="{model.collectible_user_remove_reason_id}" value="1"}

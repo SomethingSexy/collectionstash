@@ -29,8 +29,13 @@ class CollectiblesUser extends AppModel {
 	'collectible_user_remove_reason_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid reason.'),
 	// this is only needed when deleting
 	'remove_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
-	// this is only needed when deleting
+
+	//
+	'listing_type_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid listing type.'),
+	// this is only needed when deleting or selling
 	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
+	//traded for, only needed when deleting or selling
+	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')),
 	//notes
 	'notes' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Notes must be less than 1000 characters.')), );
 
@@ -222,9 +227,9 @@ class CollectiblesUser extends AppModel {
 	 */
 	public function getListOfUsersWho($collectibleId, $editionSize = false) {
 		if ($editionSize) {
-			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'order' => array('CollectiblesUser.edition_size' => 'ASC'), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId, 'CollectiblesUser.active' => true), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		} else {
-			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
+			$data = $this -> find("all", array('joins' => array( array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'conditions' => array('CollectiblesUser.collectible_id' => $collectibleId, 'CollectiblesUser.active' => true), 'contain' => array('User' => array('fields' => array('id', 'username'), 'Stash'))));
 		}
 
 		return $data;
@@ -351,6 +356,29 @@ class CollectiblesUser extends AppModel {
 		}
 
 		if ($addListing) {
+			// validate first but ONLY if they are making it for sale, otherwise data is not required
+			// TODO: Move this to the listing and there should be a validate method for each listing type
+			if ((bool)$data['CollectiblesUser']['sale']) {
+				$this -> validate['listing_type_id']['allowEmpty'] = false;
+				$this -> validate['listing_type_id']['required'] = true;
+				if (isset($data['CollectiblesUser']['listing_type_id']) && $data['CollectiblesUser']['listing_type_id'] == 2) {
+					$this -> validate['sold_cost']['allowEmpty'] = false;
+					$this -> validate['sold_cost']['required'] = true;
+				} else if (isset($data['CollectiblesUser']['listing_type_id']) && $data['CollectiblesUser']['listing_type_id'] == 3) {
+					$this -> validate['traded_for']['maxLength']['allowEmpty'] = false;
+					$this -> validate['traded_for']['maxLength']['required'] = true;
+				}
+			}
+
+			$this -> set($data['CollectiblesUser']);
+
+			if (!$this -> validates()) {
+				$retVal['response']['isSuccess'] = false;
+				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
+				$retVal['response']['errors'] = $errors;
+				return $retVal;
+			}
+
 			$listingData = array();
 
 			if (isset($data['CollectiblesUser']['sold_cost'])) {
@@ -473,6 +501,12 @@ class CollectiblesUser extends AppModel {
 		if ($reason['CollectibleUserRemoveReason']['remove']) {
 			// just remove it completely
 			if ($this -> delete($data['CollectiblesUser']['id'])) {
+				// If this collectible user was actively for sale, delete that listing, but if they marked it as sold
+				// and the are removing, it keep that listing for our price facts
+				if ($collectiblesUser['CollectiblesUser']['sale'] && !is_null($collectiblesUser['CollectiblesUser']['listing_id'])) {
+					$this -> Listing -> delete($collectiblesUser['CollectiblesUser']['listing_id']);
+				}
+
 				$retVal['response']['isSuccess'] = true;
 				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_COLLECTIBLE_STASH, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
 			}
@@ -499,7 +533,7 @@ class CollectiblesUser extends AppModel {
 
 			// When removing, check to see if this already has a listing (from marking as a sale/trade) by checking if the sale flag is true.
 			// For now because the Listing/Transaction API kind of sucks.  Delete the current listing and add a new one with a transaction
-			// That way, if they decide they sold it but don't want to tell us how much they paid, no listing will be added
+			// That way, if they decide they sold it but don't want to tell us how much they sold it for, no listing will be added
 
 			$forSale = $collectiblesUser['CollectiblesUser']['sale'];
 			if ($forSale) {

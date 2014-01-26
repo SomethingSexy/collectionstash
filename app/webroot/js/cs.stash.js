@@ -703,8 +703,8 @@
 						});
 					} else {
 						if (response.response.errors) {
-							self.stashAddView.errors = response.response.errors;
-							self.stashAddView.render();
+							self.stashSellView.errors = response.response.errors;
+							self.stashSellView.render();
 						}
 					}
 				},

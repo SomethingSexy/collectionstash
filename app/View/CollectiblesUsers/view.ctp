@@ -48,15 +48,17 @@
     	
     	<div class="col-md-8">
 			<?php
-			if ($collectible['CollectiblesUser']['active'] && $collectible['CollectiblesUser']['sale']) {
-				echo '<div class="alert alert-success">';
-				echo '<p>' . __('This collectible is currently for ');
-				if ($collectible['Listing']['listing_type_id'] === '2') {
-					echo __('sale.');
-				} else if ($collectible['Listing']['listing_type_id'] === '2') {
-					echo __('trade.');
+			if ($collectible['CollectiblesUser']['active']) {
+				if ($collectible['CollectiblesUser']['sale']) {
+					echo '<div class="alert alert-success">';
+					echo '<p>' . __('This collectible is currently for ');
+					if ($collectible['Listing']['listing_type_id'] === '2') {
+						echo __('sale.');
+					} else if ($collectible['Listing']['listing_type_id'] === '2') {
+						echo __('trade.');
+					}
+					echo '</p></div>';
 				}
-				echo '</p></div>';
 			} else {
 				echo '<div class="alert alert-danger">';
 				echo '<p>' . __('This collectible is inactive.  It was removed on ') . $collectible['CollectiblesUser']['remove_date'] . __(' because it was ');
@@ -175,7 +177,7 @@
 					}
 					echo '</dt>';
 					echo '<dd>';
-					echo '$'. $collectible['CollectiblesUser']['sold_cost'];
+					echo '$' . $collectible['CollectiblesUser']['sold_cost'];
 					echo '</dd>';
 				} else if (isset($collectible['CollectiblesUser']['traded_for'])) {
 					echo '<dt>';
