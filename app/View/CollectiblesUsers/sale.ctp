@@ -115,7 +115,7 @@
 										// this will remove the listing completely and mark it as unsold
 										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-remove-listing" title="' . __('Remove Listing') . '"><i class="icon-dollar"></i>  ' . __('Remove Listing') . '</a></li>';
 										//
-										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-edit-listing" title="' . __('Edit Listing') . '"><i class="icon-dollar"></i>  ' . __('Edit Listing') . '</a></li>';
+										//echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-edit-listing" title="' . __('Edit Listing') . '"><i class="icon-dollar"></i>  ' . __('Edit Listing') . '</a></li>';
 									} else {
 										echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title="' . __('Sell') . '"><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
 									}
