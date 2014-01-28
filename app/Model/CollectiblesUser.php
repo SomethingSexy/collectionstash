@@ -137,6 +137,7 @@ class CollectiblesUser extends AppModel {
 					}
 
 					// make sure we have a listing, these listings will only have one transaction
+					// TODO, this should go through the Listing/Transaction API to get this data
 					if (isset($val['Listing'])) {
 						if (!empty($val['Listing']['id']) && !empty($val['Listing']['Transaction'])) {
 							if ($val['Listing']['listing_type_id'] === '2') {
@@ -361,6 +362,9 @@ class CollectiblesUser extends AppModel {
 			$listingData = array();
 
 			//pass through all possible data
+			// TODO: This defeats the purpose of the list/trasnaction API
+			// basically we should send in the fields as sold_cost, traded_for, remove_date and listing_type_id
+			// then the api should handle all of that
 			$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
 			$listingData['Listing']['current_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
 			$listingData['Listing']['listing_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
