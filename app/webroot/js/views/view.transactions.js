@@ -68,7 +68,8 @@ var TransactionsView = Backbone.View.extend({
 		var self = this;
 		var model = new ListingModel({
 			'ext_item_id' : $('#inputListingItem', this.el).val(),
-			'collectible_id' : this.collectible.get('id')
+			'collectible_id' : this.collectible.get('id'),
+			'listing_type_id' : 1
 		});
 
 		$('.add-transaction', this.el).button('loading');

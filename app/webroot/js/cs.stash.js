@@ -710,6 +710,11 @@
 				},
 				error : function(model, xhr, options) {
 					$button.button('reset');
+
+					if (xhr.status === 500) {
+						self.stashSellView.errors = xhr.responseJSON.response.errors;
+						self.stashSellView.render();
+					}
 				}
 			});
 
