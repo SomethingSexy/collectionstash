@@ -281,6 +281,8 @@ class CollectiblesUser extends AppModel {
 
 	/**
 	 * TODO: Until we actually support buying/selling on the site the user can modify the transaction.  Once we have the ability to buy from someone on the board then we will lock down the sale amount.
+	 * 
+	 * TODO: Should update this so that listing updates actually go to the listing controller
 	 */
 	public function update($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
@@ -457,6 +459,10 @@ class CollectiblesUser extends AppModel {
 
 	}
 
+	/**
+	 * TODO: This should be updated to just handle deleting a CollectileUser, anything that is just updating
+	 * the collectible, like sales and trades should be moved to the update function
+	 */
 	public function remove($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 		// grab the collectible we are removing first, needed for the event
