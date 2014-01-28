@@ -80,6 +80,9 @@ linux: ./cake
 ./cake -app /var/www/collectionstash/app one_time_add_points_fact_table
 
 
+./cake -app /var/www/collectionstash/app one_time_convert_to_wish_list
+
+
    ./cake -app /var/www/collectionstash/app process_notifications
    
    ./cake -app /var/www/collectionstash/app process_collectible_price
