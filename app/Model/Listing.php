@@ -138,7 +138,8 @@ class Listing extends AppModel {
 		$data['Listing']['user_id'] = $user['User']['id'];
 
 		// if it is 2 or 3 and it is marked as a sale then they are required
-		debug($data);
+		// TODO this should come from the listing/transaction that gets generated
+		// it would return the validation
 		if (isset($data['Listing']['listing_type_id'])) {
 			if ($data['Listing']['listing_type_id'] == 1) {
 				$this -> validate['listing_price']['allowEmpty'] = true;
