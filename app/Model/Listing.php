@@ -7,7 +7,17 @@ class Listing extends AppModel {
 	public $actsAs = array('Containable');
 
 	//TODO: need to check duplicates
-	public $validate = array('ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.'), 'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.')));
+	public $validate = array(
+	//
+	'ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.')),
+	//
+	'listing_type_id' => array('rule' => 'numeric', 'allowEmpty' => false, 'required' => true, 'message' => 'Must be a valid listing type.'),
+	// this is only needed when deleting or selling
+	'listing_price' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
+	//traded for, only needed when deleting or selling
+	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')),
+	//
+	'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.'));
 
 	function afterFind($results, $primary = false) {
 
@@ -118,22 +128,6 @@ class Listing extends AppModel {
 	}
 
 	/**
-	 * Used for updating, the only thing you can update right now from here
-	 * is the flagged
-	 */
-	public function updatetFlag($data, $user) {
-		$retVal = $this -> buildDefaultResponse();
-
-		$this -> id = $data['id'];
-		$this -> saveField('flagged', $data['flagged']);
-
-		$retVal['response']['data'] = $data;
-		$retVal['response']['isSuccess'] = true;
-
-		return $retVal;
-	}
-
-	/**
 	 * listing_Type_id = 1 eBay
 	 * listing_type_id = 2 personal sell
 	 * listing_type_id = 3 personal trade
@@ -142,24 +136,38 @@ class Listing extends AppModel {
 		$retVal = $this -> buildDefaultResponse();
 
 		$data['Listing']['user_id'] = $user['User']['id'];
-		// right now we only support eBay which will be 1
-		if (isset($data['Listing']['listing_type_id']) && !empty($data['Listing']['listing_type_id'])) {
 
-		} else {
-			$data['Listing']['listing_type_id'] = 1;
+		// if it is 2 or 3 and it is marked as a sale then they are required
+		debug($data);
+		if (isset($data['Listing']['listing_type_id'])) {
+			if ($data['Listing']['listing_type_id'] == 1) {
+				$this -> validate['listing_price']['allowEmpty'] = true;
+				$this -> validate['listing_price']['required'] = false;
+				$this -> validate['traded_for']['maxLength']['allowEmpty'] = true;
+				$this -> validate['traded_for']['maxLength']['required'] = false;
+			} else if ($data['Listing']['listing_type_id'] == 2 && $data['Listing']['active_sale']) {
+				$this -> validate['listing_price']['allowEmpty'] = false;
+				$this -> validate['listing_price']['required'] = true;
+				$this -> validate['ext_item_id']['maxLength']['allowEmpty'] = true;
+				$this -> validate['ext_item_id']['maxLength']['required'] = false;
+				unset($this -> validate['dups']);
+			} else if ($data['Listing']['listing_type_id'] == 3 && $data['Listing']['active_sale']) {
+				$this -> validate['traded_for']['maxLength']['allowEmpty'] = false;
+				$this -> validate['traded_for']['maxLength']['required'] = true;
+				$this -> validate['ext_item_id']['maxLength']['allowEmpty'] = true;
+				$this -> validate['ext_item_id']['maxLength']['required'] = false;
+				unset($this -> validate['dups']);
+			}
 		}
 
-		// TODO: We should validate ALL TYPES HERE
-		if ($data['Listing']['listing_type_id'] === 1) {
-			$this -> set($data['Listing']);
+		$this -> set($data['Listing']);
 
-			// Validate first
-			if (!$this -> validates()) {
-				$retVal['response']['isSuccess'] = false;
-				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
-				$retVal['response']['errors'] = $errors;
-				return $retVal;
-			}
+		// Validate first
+		if (!$this -> validates()) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
+			$retVal['response']['errors'] = $errors;
+			return $retVal;
 		}
 
 		$factory = new TransactionFactory();
@@ -232,8 +240,22 @@ class Listing extends AppModel {
 	public function updateListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
-		if ($this -> save($data, array('validate' => false))) {
+		// double equals is here on purpose
+		if ($data['Listing']['listing_type_id'] == 1) {
+			$this -> id = $data['Listing']['id'];
+			$this -> saveField('flagged', $data['Listing']['flagged']);
+
+			$retVal['response']['data'] = $data;
 			$retVal['response']['isSuccess'] = true;
+
+			return $retVal;
+		} else {
+			// this would only be able to update the listing_price and traded for
+			
+			// otherwise we should be checking for permissions here
+			if ($this -> save($data, array('validate' => false))) {
+				$retVal['response']['isSuccess'] = true;
+			}
 		}
 
 		return $retVal;

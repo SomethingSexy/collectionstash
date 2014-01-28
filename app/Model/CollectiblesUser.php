@@ -29,13 +29,6 @@ class CollectiblesUser extends AppModel {
 	'collectible_user_remove_reason_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid reason.'),
 	// this is only needed when deleting
 	'remove_date' => array('rule' => array('date', 'mdy'), 'allowEmpty' => true, 'message' => 'Must be a valid date.'),
-
-	//
-	'listing_type_id' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be a valid listing type.'),
-	// this is only needed when deleting or selling
-	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
-	//traded for, only needed when deleting or selling
-	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')),
 	//notes
 	'notes' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Notes must be less than 1000 characters.')), );
 
@@ -281,8 +274,8 @@ class CollectiblesUser extends AppModel {
 
 	/**
 	 * TODO: Until we actually support buying/selling on the site the user can modify the transaction.  Once we have the ability to buy from someone on the board then we will lock down the sale amount.
-	 * 
-	 * TODO: Should update this so that listing updates actually go to the listing controller
+	 *
+	 * Adding listings goes through here because we are really updating the CollectiblesUser model to mark it for sale and then adding a listing
 	 */
 	public function update($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
@@ -299,11 +292,6 @@ class CollectiblesUser extends AppModel {
 		if (!$collectiblesUser['CollectiblesUser']['active']) {
 			$this -> validate['remove_date']['allowEmpty'] = false;
 			$this -> validate['remove_date']['required'] = true;
-			// if sold cost is required, then
-			if ($collectiblesUser['CollectibleUserRemoveReason']['sold_cost_required']) {
-				$this -> validate['sold_cost']['allowEmpty'] = false;
-				$this -> validate['sold_cost']['required'] = true;
-			}
 		}
 
 		// adding sold_cost here for validation but it will not be added to the collectibles_users table
@@ -358,24 +346,13 @@ class CollectiblesUser extends AppModel {
 		}
 
 		if ($addListing) {
-			// validate first but ONLY if they are making it for sale, otherwise data is not required
-			// TODO: Move this to the listing and there should be a validate method for each listing type
-			if ((bool)$data['CollectiblesUser']['sale']) {
-				$this -> validate['listing_type_id']['allowEmpty'] = false;
-				$this -> validate['listing_type_id']['required'] = true;
-				if (isset($data['CollectiblesUser']['listing_type_id']) && $data['CollectiblesUser']['listing_type_id'] == 2) {
-					$this -> validate['sold_cost']['allowEmpty'] = false;
-					$this -> validate['sold_cost']['required'] = true;
-				} else if (isset($data['CollectiblesUser']['listing_type_id']) && $data['CollectiblesUser']['listing_type_id'] == 3) {
-					$this -> validate['traded_for']['maxLength']['allowEmpty'] = false;
-					$this -> validate['traded_for']['maxLength']['required'] = true;
-				}
-			}
 
 			$this -> set($data['CollectiblesUser']);
 
+			// this is here to validate remove date
 			if (!$this -> validates()) {
 				$retVal['response']['isSuccess'] = false;
+				$retVal['response']['code'] = 500;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
 				$retVal['response']['errors'] = $errors;
 				return $retVal;
@@ -383,30 +360,32 @@ class CollectiblesUser extends AppModel {
 
 			$listingData = array();
 
-			if (isset($data['CollectiblesUser']['sold_cost'])) {
-				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-				$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-				$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
-				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-				$listingData['Listing']['listing_type_id'] = 2;
-			}
-
-			if (isset($data['CollectiblesUser']['traded_for'])) {
-				$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-				$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-				$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-				$listingData['Listing']['listing_type_id'] = 3;
-			}
+			//pass through all possible data
+			$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
+			$listingData['Listing']['current_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
+			$listingData['Listing']['listing_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
+			$listingData['Listing']['traded_for'] = isset($data['CollectiblesUser']['traded_for']) ? $data['CollectiblesUser']['traded_for'] : null;
+			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+			$listingData['Listing']['listing_type_id'] = isset($data['CollectiblesUser']['listing_type_id']) ? $data['CollectiblesUser']['listing_type_id'] : null;
 
 			// this will basically determine if we process/create transaction
 			// if it is not active and we are adding a listing we will also add a transaction
-			$listingData['Listing']['active_sale'] = $data['CollectiblesUser']['sale'];
+			$listingData['Listing']['active_sale'] = (bool)$data['CollectiblesUser']['sale'];
 
 			$listing = $this -> Listing -> createListing($listingData, $user);
 
 			if (!$listing['response']['isSuccess']) {
 				$dataSource -> rollback();
 				$retVal['response']['code'] = 500;
+				$retVal['response']['errors'] = $listing['response']['errors'];
+
+				// recorrect name, since we are pretending like CollectibleUser owns the cost
+				foreach ($retVal['response']['errors'] as $key => $value) {
+					if ($value['name'] === 'listing_price') {
+						$retVal['response']['errors'][$key]['name'] = 'sold_cost';
+					}
+				}
+
 				return $retVal;
 			}
 			$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
@@ -583,6 +562,7 @@ class CollectiblesUser extends AppModel {
 				if (!$listing['response']['isSuccess']) {
 					$dataSource -> rollback();
 					$retVal['response']['code'] = 500;
+					$retVal['response']['errors'] = $listing['response']['errors'];
 					return $retVal;
 				}
 
@@ -604,9 +584,6 @@ class CollectiblesUser extends AppModel {
 				$dataSource -> rollback();
 			}
 		}
-
-		// $this -> validate['remove_date']['allowEmpty'] = false;
-		// $this -> validate['sold_cost']['allowEmpty'] = false;
 
 		return $retVal;
 	}
