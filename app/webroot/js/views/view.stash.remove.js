@@ -8,11 +8,11 @@ var StashRemoveView = Backbone.View.extend({
 	initialize : function(options) {
 		this.collectible = options.collectible;
 		this.reasons = options.reasons;
-		this.changeReason = options.changeReason || true;
+		this.changeReason = ( typeof options.changeReason === 'undefined') ? true : options.changeReason;
 		this.model.on('change:collectible_user_remove_reason_id', function() {
 			this.model.unset('sold_cost');
 			this.render();
-			
+
 		}, this);
 	},
 	render : function() {

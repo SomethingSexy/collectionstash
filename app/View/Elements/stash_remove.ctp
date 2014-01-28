@@ -43,7 +43,7 @@
 			<span class="help-inline">{.}</span>
 			{/inlineErrors.collectible_user_remove_reason_id}			
 		{:else}
-			{@eq key="{model.active}" value="false" type="boolean"}
+			{@eq key="{model.active}" value="true" type="boolean"}
 					{#reasons collectible_user_remove_reason_id=model.collectible_user_remove_reason_id}
 						 {@eq key="{collectible_user_remove_reason_id}" value="{CollectibleUserRemoveReason.id}"}<span class="input-xlarge uneditable-input"> {CollectibleUserRemoveReason.reason}</span>{/eq}
 					{/reasons}			
