@@ -6,6 +6,10 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 		parent::__construct();
 	}
 
+	public function createListing($model, $data, $user) {
+
+	}
+
 	public function processTransaction($data, $user) {
 		// Create headers to send with CURL request.
 

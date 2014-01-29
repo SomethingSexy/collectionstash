@@ -1,9 +1,85 @@
 <?php
 App::uses('Transactionable', 'Lib/Transaction');
-class EbayTransaction extends Object implements Transactionable {
+App::uses('BaseTransaction', 'Lib/Transaction');
+class EbayTransaction extends BaseTransaction implements Transactionable {
 
 	public function __construct() {
 		parent::__construct();
+	}
+
+	/**
+	 *
+	 */
+	public function createListing($model, $data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+
+		$model -> validate['listing_price']['allowEmpty'] = true;
+		$model -> validate['listing_price']['required'] = false;
+		$model -> validate['traded_for']['maxLength']['allowEmpty'] = true;
+		$model -> validate['traded_for']['maxLength']['required'] = false;
+
+		$model -> set($data);
+
+		// Validate first
+		if (!$model -> validates()) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($model -> validationErrors, 'Listing');
+			$retVal['response']['errors'] = $errors;
+			return $retVal;
+		}
+
+		$listingData['Listing'] = $data;
+		$listingData['Listing']['user_id'] = $user['User']['id'];
+
+		$listingData = $this -> processTransaction($listingData, $user);
+
+		if (!$listingData) {
+			$retVal['response']['isSuccess'] = false;
+			$errors = array();
+			$error = array();
+			$error['message'] = __('There was an error retrieving the listing, either it did not exist or it is too old.');
+			$error['inline'] = false;
+			array_push($errors, $error);
+
+			$retVal['response']['errors'] = $errors;
+
+			return $retVal;
+		}
+
+		if ($model -> saveAssociated($listingData, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
+			$retVal['response']['data']['id'] = $model -> id;
+
+			// if this is a relisting, take the relist id, if it hasn't been added
+			// already then we want
+			if (isset($listingData['Listing']['relisted']) && $listingData['Listing']['relisted'] && $listingData['Listing']['relisted_ext_id']) {
+
+				$relisting = array();
+				$relisting['Listing']['listing_type_id'] = $listingData['Listing']['listing_type_id'];
+				$relisting['Listing']['collectible_id'] = $listingData['Listing']['collectible_id'];
+				$relisting['Listing']['user_id'] = $user['User']['id'];
+				$relisting['Listing']['ext_item_id'] = $listingData['Listing']['relisted_ext_id'];
+
+				$model -> set($relisting['Listing']);
+
+				if ($model -> validates()) {
+					$relisting = $this -> processTransaction($relisting, $user);
+					// set this guy to false so it will be processed later, this is for the rare
+					// cases of a relisting of a relisting
+					$relisting['Listing']['processed'] = false;
+					// save but don't worry about it failing for now
+					$model -> saveAssociated($relisting);
+				}
+			}
+
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($model -> validationErrors, 'Listing');
+			$retVal['response']['errors'] = $errors;
+		}
+
+		return $retVal;
+
 	}
 
 	public function processTransaction($data, $user) {
