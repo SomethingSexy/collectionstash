@@ -45,8 +45,8 @@ class ListingsController extends AppController {
 
 		// create
 		if ($this -> request -> isPost()) {
-			$transaction['Listing'] = $this -> request -> input('json_decode', true);
-			$transaction['Listing'] = Sanitize::clean($transaction['Listing']);
+			$transaction = $this -> request -> input('json_decode', true);
+			$transaction = Sanitize::clean($transaction);
 
 			$response = $this -> Listing -> createListing($transaction, $this -> getUser());
 

@@ -9,15 +9,13 @@ class Listing extends AppModel {
 	//TODO: need to check duplicates
 	public $validate = array(
 	//
-	'ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.')),
+	'ext_item_id' => array('maxLength' => array('rule' => array('maxLength', 200), 'required' => true, 'allowEmpty' => false, 'message' => 'Item is required and cannot be more than 200 characters.'), 'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.')),
 	//
 	'listing_type_id' => array('rule' => 'numeric', 'allowEmpty' => false, 'required' => true, 'message' => 'Must be a valid listing type.'),
 	// this is only needed when deleting or selling
-	'listing_price' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
+	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//traded for, only needed when deleting or selling
-	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')),
-	//
-	'dups' => array('rule' => array('checkDuplicateItems'), 'message' => 'A listing with that item has already been added.'));
+	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')), );
 
 	function afterFind($results, $primary = false) {
 
@@ -101,6 +99,7 @@ class Listing extends AppModel {
 	}
 
 	function checkDuplicateItems($check) {
+		debug($this -> data);
 		// we need these to proceed
 		if (empty($check['ext_item_id']) || empty($this -> data['Listing']['listing_type_id']) || empty($this -> data['Listing']['collectible_id'])) {
 			return false;
@@ -131,68 +130,43 @@ class Listing extends AppModel {
 	 * listing_Type_id = 1 eBay
 	 * listing_type_id = 2 personal sell
 	 * listing_type_id = 3 personal trade
+	 *
+	 * // this is all of the possible fields this method will accept
+	 * ext_item_id
+	 * sold_cost
+	 * traded_for
+	 * end_date
+	 * active_sale
+	 * collectible_id
+	 *
 	 */
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
+		debug($data);
+		if (isset($data['collectible_user_remove_reason_id'])) {
 
-		$data['Listing']['user_id'] = $user['User']['id'];
-
-		// if it is 2 or 3 and it is marked as a sale then they are required
-		// TODO this should come from the listing/transaction that gets generated
-		// it would return the validation
-		if (isset($data['Listing']['listing_type_id'])) {
-			if ($data['Listing']['listing_type_id'] == 1) {
-				$this -> validate['listing_price']['allowEmpty'] = true;
-				$this -> validate['listing_price']['required'] = false;
-				$this -> validate['traded_for']['maxLength']['allowEmpty'] = true;
-				$this -> validate['traded_for']['maxLength']['required'] = false;
-			} else if ($data['Listing']['listing_type_id'] == 2 && $data['Listing']['active_sale']) {
-				$this -> validate['listing_price']['allowEmpty'] = false;
-				$this -> validate['listing_price']['required'] = true;
-				$this -> validate['ext_item_id']['maxLength']['allowEmpty'] = true;
-				$this -> validate['ext_item_id']['maxLength']['required'] = false;
-				unset($this -> validate['dups']);
-			} else if ($data['Listing']['listing_type_id'] == 3 && $data['Listing']['active_sale']) {
-				$this -> validate['traded_for']['maxLength']['allowEmpty'] = false;
-				$this -> validate['traded_for']['maxLength']['required'] = true;
-				$this -> validate['ext_item_id']['maxLength']['allowEmpty'] = true;
-				$this -> validate['ext_item_id']['maxLength']['required'] = false;
-				unset($this -> validate['dups']);
+			if ($data['collectible_user_remove_reason_id'] == 1) {
+				$data['listing_type_id'] = 1;
+			} else if ($data['collectible_user_remove_reason_id'] == 2) {
+				$data['listing_type_id'] = 3;
 			}
 		}
 
-		$this -> set($data['Listing']);
-
-		// Validate first
-		if (!$this -> validates()) {
+		// we must have this first
+		if (!isset($data['listing_type_id']) || empty($data['listing_type_id'])) {
 			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
-			$retVal['response']['errors'] = $errors;
+			array_push($retVal['response']['errors'], array('name' => 'listing_type_id', 'message' => __('Must be a valid listing type.'), 'inline' => true));
 			return $retVal;
 		}
 
 		$factory = new TransactionFactory();
 
-		$transactionable = $factory -> getTransaction($data['Listing']['listing_type_id']);
+		$transactionable = $factory -> getTransaction($data['listing_type_id']);
 
-		// TODO: If it comes back with an error, do not save and send error message to user
-		$data = $transactionable -> processTransaction($data, $user);
+		$retVal = $transactionable -> createListing($this, $data, $user);
 
-		if (!$data) {
-			$retVal['response']['isSuccess'] = false;
-			$errors = array();
-			$error = array();
-			$error['message'] = __('There was an error retrieving the listing, either it did not exist or it is too old.');
-			$error['inline'] = false;
-			array_push($errors, $error);
-
-			$retVal['response']['errors'] = $errors;
-
-			return $retVal;
-		}
-
-		if ($this -> saveAssociated($data, array('validate' => false))) {
-			$transactionId = $this -> id;
+		if ($retVal['response']['isSuccess']) {
+			$transactionId = $retVal['response']['data']['id'];
 			$transaction = $this -> find('first', array('contain' => array('User', 'Transaction', 'Collectible'), 'conditions' => array('Listing.id' => $transactionId)));
 
 			// As of now, we just need to the id but we
@@ -201,35 +175,10 @@ class Listing extends AppModel {
 			$retVal['response']['data']['User'] = $transaction['User'];
 			$retVal['response']['data']['Transaction'] = $transaction['Transaction'];
 			$retVal['response']['isSuccess'] = true;
+
 			// since we can only add attributes through collectibles right
 			// now, do not do any event stuff here
 			$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_LISTING, 'user' => $user, 'object' => $transaction, 'type' => 'Listing')));
-			// if this is a relisting, take the relist id, if it hasn't been added
-			// already then we want
-			if (isset($data['Listing']['relisted']) && $data['Listing']['relisted'] && $data['Listing']['relisted_ext_id']) {
-
-				$relisting = array();
-				$relisting['Listing']['listing_type_id'] = $data['Listing']['listing_type_id'];
-				$relisting['Listing']['collectible_id'] = $data['Listing']['collectible_id'];
-				$relisting['Listing']['user_id'] = $user['User']['id'];
-				$relisting['Listing']['ext_item_id'] = $data['Listing']['relisted_ext_id'];
-
-				$this -> set($relisting['Listing']);
-
-				if ($this -> validates()) {
-					$relisting = $transactionable -> processTransaction($relisting, $user);
-					// set this guy to false so it will be processed later, this is for the rare
-					// cases of a relisting of a relisting
-					$relisting['Listing']['processed'] = false;
-					// save but don't worry about it failing for now
-					$this -> saveAssociated($relisting);
-				}
-			}
-
-		} else {
-			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'Listing');
-			$retVal['response']['errors'] = $errors;
 		}
 
 		return $retVal;
@@ -252,7 +201,7 @@ class Listing extends AppModel {
 			return $retVal;
 		} else {
 			// this would only be able to update the listing_price and traded for
-			
+
 			// otherwise we should be checking for permissions here
 			if ($this -> save($data, array('validate' => false))) {
 				$retVal['response']['isSuccess'] = true;

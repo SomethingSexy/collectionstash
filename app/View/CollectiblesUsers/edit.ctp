@@ -98,6 +98,7 @@
 							 <?php echo $this -> Form -> input('sold_cost', array('class' => 'form-control', 'type' => 'number', 'div' => false, 'label' => false, 'maxLength' => 23)); ?>
 						</div>
 					</div>
+					<input type="hidden" name="data[CollectiblesUser][listing_type_id]" value="2" />  
 				<?php } else if ($collectible['CollectiblesUser']['collectible_user_remove_reason_id'] === '2') { ?>
 					<div class="form-group ">
 						<label for="CollectiblesUserTradedFor" class="col-lg-3 control-label">What did you trade this collectible for?</label>
@@ -111,7 +112,8 @@
 							}?>
 							<textarea id="CollectiblesUserTradedFor" class="form-control" maxlength="1000" name="data[CollectiblesUser][traded_for]"><?php echo $value; ?></textarea>
 						</div>
-					</div>				
+					</div>	
+					<input type="hidden" name="data[CollectiblesUser][listing_type_id]" value="3" />  			
 				<?php } ?>
 				<div class="form-group ">
 					<label for="CollectiblesUserRemoveDate" class="col-lg-3 control-label"> When did you sell this collectible? </label>

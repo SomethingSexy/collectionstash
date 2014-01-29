@@ -362,21 +362,19 @@ class CollectiblesUser extends AppModel {
 			$listingData = array();
 
 			//pass through all possible data
-			// TODO: This defeats the purpose of the list/trasnaction API
-			// basically we should send in the fields as sold_cost, traded_for, remove_date and listing_type_id
-			// then the api should handle all of that
-			$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-			$listingData['Listing']['current_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
-			$listingData['Listing']['listing_price'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
-			$listingData['Listing']['traded_for'] = isset($data['CollectiblesUser']['traded_for']) ? $data['CollectiblesUser']['traded_for'] : null;
-			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-			$listingData['Listing']['listing_type_id'] = isset($data['CollectiblesUser']['listing_type_id']) ? $data['CollectiblesUser']['listing_type_id'] : null;
-
+			$listingData['collectible_id'] = $collectiblesUser['Collectible']['id'];
+			$listingData['sold_cost'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
+			$listingData['traded_for'] = isset($data['CollectiblesUser']['traded_for']) ? $data['CollectiblesUser']['traded_for'] : null;
+			$listingData['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+			$listingData['listing_type_id'] = isset($data['CollectiblesUser']['listing_type_id']) ? $data['CollectiblesUser']['listing_type_id'] : null;
+debug($listingData);
 			// this will basically determine if we process/create transaction
 			// if it is not active and we are adding a listing we will also add a transaction
-			$listingData['Listing']['active_sale'] = (bool)$data['CollectiblesUser']['sale'];
+			$listingData['active_sale'] = (bool)$data['CollectiblesUser']['sale'];
 
 			$listing = $this -> Listing -> createListing($listingData, $user);
+			
+			debug($listing);
 
 			if (!$listing['response']['isSuccess']) {
 				$dataSource -> rollback();
@@ -505,11 +503,7 @@ class CollectiblesUser extends AppModel {
 
 			$this -> validate['remove_date']['allowEmpty'] = false;
 			$this -> validate['remove_date']['required'] = true;
-			if ($reason['CollectibleUserRemoveReason']['sold_cost_required']) {
-				$this -> validate['sold_cost']['allowEmpty'] = false;
-				$this -> validate['sold_cost']['required'] = true;
-			}
-
+	
 			if (!$this -> validates()) {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
@@ -538,28 +532,18 @@ class CollectiblesUser extends AppModel {
 
 			if (isset($data['CollectiblesUser']['sold_cost']) || isset($data['CollectiblesUser']['traded_for'])) {
 				$listingData = array();
+				$listingData['collectible_user_remove_reason_id'] = $data['CollectiblesUser']['collectible_user_remove_reason_id'];
+				$listingData['collectible_id'] = $collectiblesUser['Collectible']['id'];
+				$listingData['active_sale'] = false;
 
-				if (isset($data['CollectiblesUser']['sold_cost'])) {
-					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-					$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-					// if this was originally for sale, mark down what the original current_price was as the listing price.
-					// This will indicate what they asked for the collectible.
-					if ($forSale) {
-						$listingData['Listing']['listing_price'] = $collectiblesUser['Listing']['current_price'];
-					} else {
-						$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
-					}
-
-					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-					$listingData['Listing']['listing_type_id'] = 2;
+				if ($forSale) {
+					$listingData['sold_cost'] = $collectiblesUser['Listing']['current_price'];
+				} else {
+					$listingData['sold_cost'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
 				}
 
-				if (isset($data['CollectiblesUser']['traded_for'])) {
-					$listingData['Listing']['collectible_id'] = $collectiblesUser['Collectible']['id'];
-					$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-					$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-					$listingData['Listing']['listing_type_id'] = 3;
-				}
+				$listingData['traded_for'] = isset($data['CollectiblesUser']['traded_for']) ? $data['CollectiblesUser']['traded_for'] : null;
+				$listingData['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 
 				$listing = $this -> Listing -> createListing($listingData, $user);
 
