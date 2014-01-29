@@ -60,6 +60,7 @@ class ExternalTransaction extends BaseTransaction implements Transactionable {
 		$retVal['Listing'] = array();
 		$retVal['Listing']['type'] = 'BIN';
 		$retVal['Listing']['listing_type_id'] = $data['listing_type_id'];
+		$retVal['Listing']['collectible_id'] = $data['collectible_id'];
 		if ($data['active_sale']) {
 			$retVal['Listing']['processed'] = false;
 			$retVal['Listing']['status'] = 'active';

@@ -367,14 +367,12 @@ class CollectiblesUser extends AppModel {
 			$listingData['traded_for'] = isset($data['CollectiblesUser']['traded_for']) ? $data['CollectiblesUser']['traded_for'] : null;
 			$listingData['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
 			$listingData['listing_type_id'] = isset($data['CollectiblesUser']['listing_type_id']) ? $data['CollectiblesUser']['listing_type_id'] : null;
-debug($listingData);
+
 			// this will basically determine if we process/create transaction
 			// if it is not active and we are adding a listing we will also add a transaction
 			$listingData['active_sale'] = (bool)$data['CollectiblesUser']['sale'];
 
 			$listing = $this -> Listing -> createListing($listingData, $user);
-			
-			debug($listing);
 
 			if (!$listing['response']['isSuccess']) {
 				$dataSource -> rollback();
