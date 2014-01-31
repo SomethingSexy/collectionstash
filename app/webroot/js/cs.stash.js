@@ -1,5 +1,24 @@
 // TODO: Lot's of duplicate code in here
-! function($) {"use strict";// jshint ;_;
+
+function csStashSuccessMessage(message) {
+	$.blockUI({
+		message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+		showOverlay : false,
+		css : {
+			top : '100px',
+			'background-color' : '#DDFADE',
+			border : '1px solid #93C49F',
+			'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+			'border-radius' : '4px 4px 4px 4px',
+			color : '#333333',
+			'margin-bottom' : '20px',
+			padding : '8px 35px 8px 14px',
+			'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+			'z-index' : 999999
+		},
+		timeout : 2000
+	});
+}! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -29,25 +48,9 @@
 					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-add-dialog').modal('hide');
-						var message = 'You have successfully added the collectible to your stash!';
 
-						$.blockUI({
-							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-							showOverlay : false,
-							css : {
-								top : '100px',
-								'background-color' : '#DDFADE',
-								border : '1px solid #93C49F',
-								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-								'border-radius' : '4px 4px 4px 4px',
-								color : '#333333',
-								'margin-bottom' : '20px',
-								padding : '8px 35px 8px 14px',
-								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-								'z-index' : 999999
-							},
-							timeout : 2000
-						});
+						csStashSuccessMessage('You have successfully added the collectible to your stash!');
+
 					} else {
 						if (response.response.errors) {
 							self.stashAddView.errors = response.response.errors;
@@ -120,8 +123,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -150,25 +152,7 @@
 			// has been received
 			success : function(data, textStatus, jqXHR) {
 				if (data.response.isSuccess) {
-					var message = 'The collectible has been added to your Stash!';
-					$.blockUI({
-						message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-						showOverlay : false,
-						css : {
-							top : '100px',
-							'background-color' : '#DDFADE',
-							border : '1px solid #93C49F',
-							'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-							'border-radius' : '4px 4px 4px 4px',
-							color : '#333333',
-							'margin-bottom' : '20px',
-							padding : '8px 35px 8px 14px',
-							'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-							'z-index' : 999999
-						},
-						timeout : 2000
-					});
-
+					csStashSuccessMessage('The collectible has been added to your Stash!');
 				} else {
 					if (data.response.errors) {
 						$.each(data.response.errors, function(index, value) {
@@ -262,24 +246,7 @@
 			// success identifies the function to invoke when the server response
 			// has been received
 			success : function(data, textStatus, jqXHR) {
-				var message = 'The collectible has been added to your Wish List!';
-				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-					showOverlay : false,
-					css : {
-						top : '100px',
-						'background-color' : '#DDFADE',
-						border : '1px solid #93C49F',
-						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-						'border-radius' : '4px 4px 4px 4px',
-						color : '#333333',
-						'margin-bottom' : '20px',
-						padding : '8px 35px 8px 14px',
-						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index' : 999999
-					},
-					timeout : 2000
-				});
+				csStashSuccessMessage('The collectible has been added to your Wish List!');
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				var errorMessage = 'Oops! Something went terribly wrong!';
@@ -377,25 +344,7 @@
 					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-remove-dialog').modal('hide');
-						var message = 'You have successfully removed the collectible from your stash!';
-
-						$.blockUI({
-							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-							showOverlay : false,
-							css : {
-								top : '100px',
-								'background-color' : '#DDFADE',
-								border : '1px solid #93C49F',
-								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-								'border-radius' : '4px 4px 4px 4px',
-								color : '#333333',
-								'margin-bottom' : '20px',
-								padding : '8px 35px 8px 14px',
-								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-								'z-index' : 999999
-							},
-							timeout : 2000
-						});
+						csStashSuccessMessage('You have successfully removed the collectible from your stash!');
 
 						// checking for array here is pretty dumb
 						if (response.response.data && !_.isArray(response.response.data) && self.historyView) {
@@ -517,8 +466,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -549,24 +497,7 @@
 			// success identifies the function to invoke when the server response
 			// has been received
 			success : function(data, textStatus, jqXHR) {
-				var message = 'The collectible has been removed from your Wish List!';
-				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-					showOverlay : false,
-					css : {
-						top : '100px',
-						'background-color' : '#DDFADE',
-						border : '1px solid #93C49F',
-						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-						'border-radius' : '4px 4px 4px 4px',
-						color : '#333333',
-						'margin-bottom' : '20px',
-						padding : '8px 35px 8px 14px',
-						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index' : 999999
-					},
-					timeout : 2000
-				});
+				csStashSuccessMessage('The collectible has been removed from your Wish List!');
 
 				if (self.$tiles) {
 					self.$tiles.masonry('remove', self.$stashItem);
@@ -652,7 +583,8 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -682,25 +614,7 @@
 					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-sell-dialog').modal('hide');
-						var message = 'You have successfully added the collectible to your sale/trade list!';
-
-						$.blockUI({
-							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-							showOverlay : false,
-							css : {
-								top : '100px',
-								'background-color' : '#DDFADE',
-								border : '1px solid #93C49F',
-								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-								'border-radius' : '4px 4px 4px 4px',
-								color : '#333333',
-								'margin-bottom' : '20px',
-								padding : '8px 35px 8px 14px',
-								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-								'z-index' : 999999
-							},
-							timeout : 2000
-						});
+						csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
 					} else {
 						if (response.response.errors) {
 							self.stashSellView.errors = response.response.errors;
@@ -784,8 +698,7 @@
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -809,24 +722,7 @@
 
 		this.collectibleUser.save({}, {
 			success : function(model, response, options) {
-				var message = 'The collectible has been removed from your sale/trade list!';
-				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-					showOverlay : false,
-					css : {
-						top : '100px',
-						'background-color' : '#DDFADE',
-						border : '1px solid #93C49F',
-						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-						'border-radius' : '4px 4px 4px 4px',
-						color : '#333333',
-						'margin-bottom' : '20px',
-						padding : '8px 35px 8px 14px',
-						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index' : 999999
-					},
-					timeout : 2000
-				});
+				csStashSuccessMessage('The collectible has been removed from your sale/trade list!');
 
 				if (self.$tiles) {
 					self.$tiles.masonry('remove', self.$stashItem);
@@ -947,26 +843,7 @@
 					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-remove-sold-dialog').modal('hide');
-						var message = 'You have successfully removed the collectible from your stash!';
-
-						$.blockUI({
-							message : '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-							showOverlay : false,
-							css : {
-								top : '100px',
-								'background-color' : '#DDFADE',
-								border : '1px solid #93C49F',
-								'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-								'border-radius' : '4px 4px 4px 4px',
-								color : '#333333',
-								'margin-bottom' : '20px',
-								padding : '8px 35px 8px 14px',
-								'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-								'z-index' : 999999
-							},
-							timeout : 2000
-						});
-
+						csStashSuccessMessage('You have successfully removed the collectible from your stash!');
 						// checking for array here is pretty dumb
 						if (response.response.data && !_.isArray(response.response.data) && self.historyView) {
 							// should update the view to indicate the values that were set
@@ -1081,6 +958,116 @@
 				reasons : reasonsCollection,
 				collectibleUserId : collectibleUserId
 			});
+			e.preventDefault();
+		});
+	});
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+
+	/* PUBLIC CLASS DEFINITION
+	 *
+	 * Add in here later whether or not we quick add or not - TODO
+	 *
+	 * This requires, Backbone, dust, stash model, stash view
+	 ** ============================== */
+
+	var EditSale = function() {
+	};
+
+	EditSale.prototype.initialize = function() {
+		dust.loadSource(dust.compile($('#template-stash-sell').html(), 'stash.sell'));
+		var self = this;
+		this.stashSellView = null;
+		this.collectibleUser = null;
+
+		$('#stash-edit-sale-dialog', 'body').on('hidden', function() {
+			self.stashSellView.remove();
+		});
+
+		$('#stash-edit-sale-dialog').on('click', '.save', function() {
+			var $button = $(this);
+			$button.button('loading');
+			self.collectibleUser.save({}, {
+				success : function(model, response, options) {
+					$button.button('reset');
+
+					$('#stash-sell-dialog').modal('hide');
+					csStashSuccessMessage('You have successfully updated your collectible!');
+					// we also need to update the data-attribute on the field with the new values
+
+				},
+				error : function(model, xhr, options) {
+					$button.button('reset');
+
+					if (xhr.status === 500) {
+						self.stashSellView.errors = xhr.responseJSON.response.errors;
+						self.stashSellView.render();
+					}
+				}
+			});
+
+		});
+
+	};
+
+	EditSale.prototype.edit = function(collectibleModel, collectibleUserModel) {
+		this.collectibleUser = collectibleUserModel;
+
+		// mark that we are selling this guy
+		this.collectibleUser.set({
+			'sale' : true
+		}, {
+			silent : true
+		});
+
+		if (this.stashEditSaleView) {
+			this.stashEditSaleView.remove();
+			delete this.stashEditSaleView;
+		}
+
+		this.stashEditSaleView = new StashSellView({
+			collectible : collectibleModel,
+			model : this.collectibleUser
+		});
+
+		$('.modal-body', '#stash-edit-sale-dialog').html(this.stashEditSaleView.render().el);
+
+		$('#stash-edit-sale-dialog').modal();
+	};
+
+	/* BUTTON PLUGIN DEFINITION
+	 * ======================== */
+
+	$.fn.editsale = function(model, collectibleUserModel) {
+		return this.each(function() {
+			var $this = $(this);
+
+			editSale.edit(model, collectibleUserModel);
+		});
+	};
+
+	$.fn.editsale.defaults = {
+
+	};
+
+	// only want one created really
+	var editSale = new EditSale();
+
+	//$.fn.stashfulladd.Constructor = StashFullAdd
+
+	/* DATA-API
+	 * =============== */
+
+	$(function() {
+		editSale.initialize();
+		$('.stashable').on('click', '.stash-edit-sale', function(e) {
+			var $anchor = $(e.currentTarget);
+
+			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+			var collectibleUserData = JSON.parse($anchor.attr('data-collectible-user'));
+
+			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
+
+			$anchor.editsale(collectibleModel, collectibleUserModel);
 			e.preventDefault();
 		});
 	});

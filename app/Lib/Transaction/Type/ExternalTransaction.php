@@ -11,8 +11,8 @@ class ExternalTransaction extends BaseTransaction implements Transactionable {
 		$retVal = $this -> buildDefaultResponse();
 
 		if (isset($data['active_sale']) && $data['active_sale']) {
-			$model -> validate['listing_price']['allowEmpty'] = false;
-			$model -> validate['listing_price']['required'] = true;
+			$model -> validate['sold_cost']['allowEmpty'] = false;
+			$model -> validate['sold_cost']['required'] = true;
 		}
 
 		unset($model -> validate['ext_item_id']);

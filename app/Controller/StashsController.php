@@ -17,7 +17,6 @@ class StashsController extends AppController {
 		$user = $this -> getUser();
 
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			debug($this -> request -> data);
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
 
 			// foreach ($this -> request -> data['CollectiblesUser'] as $key => $value) {
@@ -34,7 +33,6 @@ class StashsController extends AppController {
 			if ($this -> Stash -> CollectiblesUser -> saveMany($this -> request -> data['CollectiblesUser'], array('fieldList' => array('sort_number'), 'callbacks' => false))) {
 				$this -> Session -> setFlash(__('Your sort was successfully saved.', true), null, null, 'success');
 			} else {
-				debug($this -> Stash -> CollectiblesUser -> validationErrors);
 				$this -> Session -> setFlash(__('There was a problem saving your sort.', true), null, null, 'error');
 			}
 

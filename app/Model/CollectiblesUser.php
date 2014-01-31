@@ -311,7 +311,7 @@ class CollectiblesUser extends AppModel {
 
 		$removeListing = false;
 		$addListing = false;
-		$updateListing = false;
+		// $updateListing = false;
 		$updateTransaction = false;
 
 		// check first to see if the collectible is active or not
@@ -323,10 +323,13 @@ class CollectiblesUser extends AppModel {
 				} else {
 					$addListing = true;
 				}
-			} else if ($collectiblesUser['CollectiblesUser']['sale'] === true && ((bool)$data['CollectiblesUser']['sale']) === true) {
-				// update if they are both equal to true, so it is still for sale but the user might want to update their sale/traded for
-				$updateListing = true;
 			}
+			// Update listing should go directly through the ListingController, model...there is no reason we should have to worry about it here
+			// because on the CollectiblesUser edit page you cannot modify a listing, just collectible details
+			// else if ($collectiblesUser['CollectiblesUser']['sale'] === true && ((bool)$data['CollectiblesUser']['sale']) === true) {
+			// // update if they are both equal to true, so it is still for sale but the user might want to update their sale/traded for
+			// $updateListing = true;
+			// }
 		} else {
 			// this means the collectible has already been removed but we are modifying something, still need to check
 			// if there is a sold_cost or a traded_for then we need do add/update a listing
@@ -389,24 +392,26 @@ class CollectiblesUser extends AppModel {
 				return $retVal;
 			}
 			$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
-		} else if ($updateListing) {
-			// this would just update the listing and not any transactions
-
-			$listingData = $collectiblesUser['Listing'];
-			$listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-			$listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
-			$listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-			$listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-
-			// TODO: Where should validation for these happen?
-			$response = $this -> Listing -> updateListing($listingData, $user);
-
-			if (!$response['response']['isSuccess']) {
-				$dataSource -> rollback();
-				$retVal['response']['code'] = 500;
-				return $retVal;
-			}
-		} else if ($updateTransaction) {
+		}
+		// else if ($updateListing) {
+		// // this would just update the listing and not any transactions
+		//
+		// $listingData = $collectiblesUser['Listing'];
+		// $listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
+		// $listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
+		// $listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
+		// $listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
+		//
+		// // TODO: Where should validation for these happen?
+		// $response = $this -> Listing -> updateListing($listingData, $user);
+		//
+		// if (!$response['response']['isSuccess']) {
+		// $dataSource -> rollback();
+		// $retVal['response']['code'] = 500;
+		// return $retVal;
+		// }
+		// }
+		else if ($updateTransaction) {
 			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
 
 			if (!$response['response']['isSuccess']) {
@@ -501,7 +506,7 @@ class CollectiblesUser extends AppModel {
 
 			$this -> validate['remove_date']['allowEmpty'] = false;
 			$this -> validate['remove_date']['required'] = true;
-	
+
 			if (!$this -> validates()) {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
