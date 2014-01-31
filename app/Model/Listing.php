@@ -99,7 +99,6 @@ class Listing extends AppModel {
 	}
 
 	function checkDuplicateItems($check) {
-		debug($this -> data);
 		// we need these to proceed
 		if (empty($check['ext_item_id']) || empty($this -> data['Listing']['listing_type_id']) || empty($this -> data['Listing']['collectible_id'])) {
 			return false;
@@ -142,7 +141,7 @@ class Listing extends AppModel {
 	 */
 	public function createListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
-		debug($data);
+
 		if (isset($data['collectible_user_remove_reason_id'])) {
 
 			if ($data['collectible_user_remove_reason_id'] == 1) {

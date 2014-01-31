@@ -1,5 +1,20 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.14</h3>
+<ul>
+	<li>Updated the user stash routes to be cleaner and more uniform. Example:
+		<ul>
+			<li>/user/Something/stash</li>
+			<li>/user/Something/wishlist</li>
+			<li>/user/Something/sale</li>
+			<li>/user/Something/photos</li>
+			<li>/user/Something/comments</li>
+			<li>/user/Something/history</li>
+		</ul>	
+	</li>
+	<li>Added the ability to edit a listing.</li>
+	<li>Interally cleaned up the Listing/Transaction API.</li>
+</ul>
 <h3>Release Notes for v2.13</h3>
 <ul>
 	<li>Internally separated Wish List from Stash.  This was done for better future support.</li>

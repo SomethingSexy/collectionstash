@@ -35,35 +35,53 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 /**
  * Renamed a url so keep it alive here.
  */
-Router::connect('/user/home', array('controller' => 'users', 'action' => 'home')); 
- 
-Router::connect('/user/home/activity', array('controller' => 'users', 'action' => 'activity'));  
-
-Router::connect('/user/home/history', array('controller' => 'users', 'action' => 'history'));  
-
-Router::connect('/user/home/notifications', array('controller' => 'users', 'action' => 'notifications'));  
- 
-Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
-
-Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' => 'comments'));
+// Logged in user home
+Router::connect('/user/home', array('controller' => 'users', 'action' => 'home'));
+// Logged in user home
+Router::connect('/user/home/activity', array('controller' => 'users', 'action' => 'activity'));
+// Logged in user home
+Router::connect('/user/home/history', array('controller' => 'users', 'action' => 'history'));
+// Logged in user home
+Router::connect('/user/home/notifications', array('controller' => 'users', 'action' => 'notifications'));
+//public user profile, right now this routes to stash but this might route to a profile eventually
+Router::connect('/user/:id', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
+// public user stash
+Router::connect('/user/:id/stash', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
+//public user profile
+Router::connect('/user/:id/wishlist', array('controller' => 'wish_lists', 'action' => 'view'), array('pass' => array('id')));
+// public sale
+Router::connect('/user/:id/sale', array('controller' => 'collectibles_users', 'action' => 'sale'), array('pass' => array('id')));
+//public photos
+Router::connect('/user/:id/photos', array('controller' => 'user_uploads', 'action' => 'view'), array('pass' => array('id')));
+//public stash comments
+Router::connect('/user/:id/comments', array('controller' => 'stashs', 'action' => 'comments'), array('pass' => array('id')));
+//public history
+Router::connect('/user/:id/history', array('controller' => 'stashs', 'action' => 'history'), array('pass' => array('id')));
 
 Router::connect('/stash/*', array('controller' => 'stashs', 'action' => 'view'));
-
-Router::connect('/wishlist/*', array('controller' => 'wish_lists', 'action' => 'view'));
-
-Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => 'view'));
-
 Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
+//TODO: not sure why this one is here
+Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
 
+//old replaced by public
+Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' => 'comments'));
+//old replaced by public
+Router::connect('/wishlist/*', array('controller' => 'wish_lists', 'action' => 'view'));
+//old replaced by public
+Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => 'view'));
+//old replaced by public
+Router::connect('/sale/*', array('controller' => 'collectibles_users', 'action' => 'sale'));
+
+// maintaining ths old manufactures since I can't spell
 Router::connect('/manufactures/view/*', array('controller' => 'manufactures', 'action' => 'index'));
 // since I can't spell right
 Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action' => 'index'));
 
 Router::connect('/artist/*', array('controller' => 'artists', 'action' => 'index'));
-
+// logged in user profile
 Router::connect('/profile/*', array('controller' => 'profiles', 'action' => 'index'));
 
-Router::connect('/sale/*', array('controller' => 'collectibles_users', 'action' => 'sale'));
+
 /**
  * Load all plugin routes.  See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
