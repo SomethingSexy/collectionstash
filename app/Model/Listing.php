@@ -189,23 +189,11 @@ class Listing extends AppModel {
 	public function updateListing($data, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
-		// double equals is here on purpose
-		if ($data['Listing']['listing_type_id'] == 1) {
-			$this -> id = $data['Listing']['id'];
-			$this -> saveField('flagged', $data['Listing']['flagged']);
+		$factory = new TransactionFactory();
 
-			$retVal['response']['data'] = $data;
-			$retVal['response']['isSuccess'] = true;
+		$transactionable = $factory -> getTransaction($data['Listing']['listing_type_id']);
 
-			return $retVal;
-		} else {
-			// this would only be able to update the listing_price and traded for
-
-			// otherwise we should be checking for permissions here
-			if ($this -> save($data, array('validate' => false))) {
-				$retVal['response']['isSuccess'] = true;
-			}
-		}
+		$retVal = $transactionable -> updateListing($this, $data, $user);
 
 		return $retVal;
 	}

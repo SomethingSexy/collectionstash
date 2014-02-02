@@ -6,6 +6,8 @@ interface Transactionable {
 	 */
 	public function createListing($model, $data, $user);
 	
+	public function updateListing($model, $data, $user);
+	
 	public function processTransaction($data, $user);
 
 	public function createTransaction($data, $listing, $user);

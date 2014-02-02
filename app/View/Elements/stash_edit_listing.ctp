@@ -43,7 +43,7 @@
 	{@eq key="{listing_type_id}" value="2"}
 	<div class="form-group {#inlineErrors.listing_price}has-error{/inlineErrors.listing_price}">
 		<label class="control-label" for="CollectiblesUserRemoveCost">How much do you want to sell it for?</label>
-		<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{listing_price}" >
+		<input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="listing_price" value="{listing_price}" >
 		{#inlineErrors.listing_price}
 		<span class="help-inline">{.}</span>
 		{/inlineErrors.listing_price}			

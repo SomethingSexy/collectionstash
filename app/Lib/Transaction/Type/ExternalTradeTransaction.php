@@ -1,6 +1,7 @@
 <?php
 App::uses('Transactionable', 'Lib/Transaction');
-class ExternalTradeTransaction extends Object implements Transactionable {
+App::uses('BaseTransaction', 'Lib/Transaction');
+class ExternalTradeTransaction extends BaseTransaction implements Transactionable {
 
 	public function __construct() {
 		parent::__construct();
@@ -52,6 +53,19 @@ class ExternalTradeTransaction extends Object implements Transactionable {
 
 		return $retVal;
 
+	}
+
+	public function updateListing($model, $data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+		// this would only be able to update the listing_price and traded for
+		$fieldList = array('listing_price', 'traded_for', 'listing_type_id');
+
+		// otherwise we should be checking for permissions here
+		if ($this -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
+		}
+
+		return $retVal;
 	}
 
 	public function processTransaction($data, $user) {
