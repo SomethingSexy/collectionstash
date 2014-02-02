@@ -261,7 +261,7 @@
 	echo $this -> element('stash_remove_modal');
 	echo $this -> element('stash_sell_modal');
 	echo $this -> element('stash_remove_sold_modal');
-	echo $this -> element('stash_edit_sale_modal');
+	echo $this -> element('stash_edit_listing_modal');
 	?>	
 		<?php echo $this -> element('sql_dump'); ?>
 	<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
@@ -307,6 +307,9 @@
 	</script>
 	<script id="template-stash-sell" type="text/x-tmpl">
 		<?php echo $this -> element('stash_sell'); ?>	
+	</script>
+	<script id="template-stash-listing-edit" type="text/x-tmpl">
+		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
 		<?php
 		echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');

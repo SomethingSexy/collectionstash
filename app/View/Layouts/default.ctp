@@ -14,17 +14,17 @@
 	?>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="og:title" content="<?php echo $title_for_layout;?>">
+	<meta name="og:title" content="<?php echo $title_for_layout; ?>">
 	<meta name="og:site_name" content="Collection Stash">
-	<meta name="og:url" content="<?php echo Router::url( $this->here, true ); ?>">
+	<meta name="og:url" content="<?php echo Router::url($this -> here, true); ?>">
 	<?php
 	if (isset($description_for_layout)) {
-		 echo "<meta name='og:description' content='" . $description_for_layout . "' />";
+		echo "<meta name='og:description' content='" . $description_for_layout . "' />";
 	}
 	?>
 	<?php
 	if (isset($og_image_url)) {
-		 echo "<meta name='og:image' content='" . $og_image_url . "' />";
+		echo "<meta name='og:image' content='" . $og_image_url . "' />";
 	}
 	?>
 	
@@ -122,7 +122,7 @@ if (isset($bodyClass))
 				if (isset($isLoggedIn) && $isLoggedIn === true) {
 					echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"> ' . __('Welcome, ') . $username . '</a>';
 				} else {
-					echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>'; 
+					echo '<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>';
 				}
 				?>
 			</div>
@@ -172,13 +172,13 @@ if (isset($bodyClass))
 				<ul class="nav navbar-nav navbar-right account">
 						<li>
 						<?php
-							$homeLinkLabel = '<i class="icon-home"></i>';
-							$homeLinkClass = '';
-							if ($notificationsCount !== 0) {
-								$homeLinkLabel .= ' ' . $notificationsCount;
-								$homeLinkClass = 'warning';
-							} 
-							echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+						$homeLinkLabel = '<i class="icon-home"></i>';
+						$homeLinkClass = '';
+						if ($notificationsCount !== 0) {
+							$homeLinkLabel .= ' ' . $notificationsCount;
+							$homeLinkClass = 'warning';
+						}
+						echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
 						?>
 						</li>
 						<?php
@@ -203,8 +203,8 @@ if (isset($bodyClass))
 						<?php } ?>
 
 						<?php  }
-else
-{
+	else
+	{
 							?>
 						<li>
 							<a href="/users/login"><?php echo __('Login'); ?></a>
@@ -265,7 +265,7 @@ else
 	echo $this -> element('stash_remove_modal');
 	echo $this -> element('stash_sell_modal');
 	echo $this -> element('stash_remove_sold_modal');
-	echo $this -> element('stash_edit_sale_modal');
+	echo $this -> element('stash_edit_listing_modal');
 	?>	
 	<?php echo $this -> element('sql_dump'); ?>
 	
@@ -313,13 +313,26 @@ else
 	<script id="template-stash-sell" type="text/x-tmpl">
 		<?php echo $this -> element('stash_sell'); ?>	
 	</script>
+	<script id="template-stash-listing-edit" type="text/x-tmpl">
+		<?php echo $this -> element('stash_edit_listing'); ?>	
+	</script>
 	<?php
 	echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');
 	echo $this -> Minify -> script('js/thirdparty/jquery.blueimp-gallery');
 	echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> script('js/thirdparty/placeholder');
 		?>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<script>
+			! function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (!d.getElementById(id)) {
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "https://platform.twitter.com/widgets.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				}
+			}(document, "script", "twitter-wjs"); 
+</script>
 	<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
 </html>
