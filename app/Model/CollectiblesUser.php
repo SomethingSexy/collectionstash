@@ -149,7 +149,9 @@ class CollectiblesUser extends AppModel {
 							// it is an active listing we want to know how much or what the user wants for it
 						} else if ($val['CollectiblesUser']['sale']) {
 							if ($val['Listing']['listing_type_id'] === '2') {
-								$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['current_price'];
+								// if it is currently for sale and it is a type 2, use the listing_price as that will be the
+								// most active one
+								$results[$key]['CollectiblesUser']['sold_cost'] = $val['Listing']['listing_price'];
 							} else if ($val['Listing']['listing_type_id'] === '3') {
 								$results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['traded_for'];
 							}
@@ -311,7 +313,6 @@ class CollectiblesUser extends AppModel {
 
 		$removeListing = false;
 		$addListing = false;
-		// $updateListing = false;
 		$updateTransaction = false;
 
 		// check first to see if the collectible is active or not
@@ -324,12 +325,6 @@ class CollectiblesUser extends AppModel {
 					$addListing = true;
 				}
 			}
-			// Update listing should go directly through the ListingController, model...there is no reason we should have to worry about it here
-			// because on the CollectiblesUser edit page you cannot modify a listing, just collectible details
-			// else if ($collectiblesUser['CollectiblesUser']['sale'] === true && ((bool)$data['CollectiblesUser']['sale']) === true) {
-			// // update if they are both equal to true, so it is still for sale but the user might want to update their sale/traded for
-			// $updateListing = true;
-			// }
 		} else {
 			// this means the collectible has already been removed but we are modifying something, still need to check
 			// if there is a sold_cost or a traded_for then we need do add/update a listing

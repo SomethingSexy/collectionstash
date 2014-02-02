@@ -55,6 +55,19 @@ class ExternalTransaction extends BaseTransaction implements Transactionable {
 
 	}
 
+	public function updateListing($model, $data, $user) {
+		$retVal = $this -> buildDefaultResponse();
+		// this would only be able to update the listing_price and traded for
+		$fieldList = array('listing_price', 'traded_for', 'listing_type_id');
+
+		// otherwise we should be checking for permissions here
+		if ($this -> save($data, array('validate' => false))) {
+			$retVal['response']['isSuccess'] = true;
+		}
+
+		return $retVal;
+	}
+
 	public function processTransaction($data, $user) {
 		// Create headers to send with CURL request.
 		$retVal['Listing'] = array();

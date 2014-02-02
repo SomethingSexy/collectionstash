@@ -123,7 +123,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -466,7 +467,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -583,8 +585,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -698,7 +699,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -961,7 +963,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -978,6 +981,7 @@ function csStashSuccessMessage(message) {
 		var self = this;
 		this.stashSellView = null;
 		this.listingModel = null;
+		this.$element = null;
 
 		$('#stash-edit-listing-dialog', 'body').on('hidden', function() {
 			self.stashSellView.remove();
@@ -992,7 +996,10 @@ function csStashSuccessMessage(message) {
 
 					$('#stash-edit-listing-dialog').modal('hide');
 					csStashSuccessMessage('You have successfully updated your collectible!');
+					
 					// we also need to update the data-attribute on the field with the new values
+					self.$element.attr('data-listing', JSON.stringify(model.toJSON()));
+					// as well as the display values
 
 				},
 				error : function(model, xhr, options) {
@@ -1009,8 +1016,9 @@ function csStashSuccessMessage(message) {
 
 	};
 
-	EditSale.prototype.edit = function(listingModel, collectibleModel, collectibleUserModel) {
+	EditSale.prototype.edit = function(listingModel, collectibleModel, collectibleUserModel, $element) {
 		this.listingModel = listingModel;
+		this.$element = $element;
 
 		// mark that we are selling this guy
 
@@ -1037,7 +1045,7 @@ function csStashSuccessMessage(message) {
 		return this.each(function() {
 			var $this = $(this);
 
-			editSale.edit(listingModel, collectibleModel, collectibleUserModel);
+			editSale.edit(listingModel, collectibleModel, collectibleUserModel, $this);
 		});
 	};
 
@@ -1060,7 +1068,7 @@ function csStashSuccessMessage(message) {
 
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			var collectibleUserData = JSON.parse($anchor.attr('data-collectible-user'));
-			var listingModel = new Backbone.Model(JSON.parse($anchor.attr('data-listing')));
+			var listingModel = new ListingModel(JSON.parse($anchor.attr('data-listing')));
 
 			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
 
