@@ -974,23 +974,23 @@ function csStashSuccessMessage(message) {
 	};
 
 	EditSale.prototype.initialize = function() {
-		dust.loadSource(dust.compile($('#template-stash-sell').html(), 'stash.sell'));
+		dust.loadSource(dust.compile($('#template-stash-listing-edit').html(), 'stash.listing.edit'));
 		var self = this;
 		this.stashSellView = null;
-		this.collectibleUser = null;
+		this.listingModel = null;
 
-		$('#stash-edit-sale-dialog', 'body').on('hidden', function() {
+		$('#stash-edit-listing-dialog', 'body').on('hidden', function() {
 			self.stashSellView.remove();
 		});
 
-		$('#stash-edit-sale-dialog').on('click', '.save', function() {
+		$('#stash-edit-listing-dialog').on('click', '.save', function() {
 			var $button = $(this);
 			$button.button('loading');
-			self.collectibleUser.save({}, {
+			self.listingModel.save({}, {
 				success : function(model, response, options) {
 					$button.button('reset');
 
-					$('#stash-sell-dialog').modal('hide');
+					$('#stash-edit-listing-dialog').modal('hide');
 					csStashSuccessMessage('You have successfully updated your collectible!');
 					// we also need to update the data-attribute on the field with the new values
 
@@ -1009,39 +1009,35 @@ function csStashSuccessMessage(message) {
 
 	};
 
-	EditSale.prototype.edit = function(collectibleModel, collectibleUserModel) {
-		this.collectibleUser = collectibleUserModel;
+	EditSale.prototype.edit = function(listingModel, collectibleModel, collectibleUserModel) {
+		this.listingModel = listingModel;
 
 		// mark that we are selling this guy
-		this.collectibleUser.set({
-			'sale' : true
-		}, {
-			silent : true
-		});
 
 		if (this.stashEditSaleView) {
 			this.stashEditSaleView.remove();
 			delete this.stashEditSaleView;
 		}
 
-		this.stashEditSaleView = new StashSellView({
+		this.stashEditSaleView = new StashListingEditView({
 			collectible : collectibleModel,
-			model : this.collectibleUser
+			collectibleUser : this.collectibleUser,
+			model : listingModel
 		});
 
-		$('.modal-body', '#stash-edit-sale-dialog').html(this.stashEditSaleView.render().el);
+		$('.modal-body', '#stash-edit-listing-dialog').html(this.stashEditSaleView.render().el);
 
-		$('#stash-edit-sale-dialog').modal();
+		$('#stash-edit-listing-dialog').modal();
 	};
 
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
-	$.fn.editsale = function(model, collectibleUserModel) {
+	$.fn.editsale = function(listingModel, collectibleModel, collectibleUserModel) {
 		return this.each(function() {
 			var $this = $(this);
 
-			editSale.edit(model, collectibleUserModel);
+			editSale.edit(listingModel, collectibleModel, collectibleUserModel);
 		});
 	};
 
@@ -1059,15 +1055,16 @@ function csStashSuccessMessage(message) {
 
 	$(function() {
 		editSale.initialize();
-		$('.stashable').on('click', '.stash-edit-sale', function(e) {
+		$('.stashable').on('click', '.stash-edit-listing', function(e) {
 			var $anchor = $(e.currentTarget);
 
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 			var collectibleUserData = JSON.parse($anchor.attr('data-collectible-user'));
+			var listingModel = new Backbone.Model(JSON.parse($anchor.attr('data-listing')));
 
 			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
 
-			$anchor.editsale(collectibleModel, collectibleUserModel);
+			$anchor.editsale(listingModel, collectibleModel, collectibleUserModel);
 			e.preventDefault();
 		});
 	});
