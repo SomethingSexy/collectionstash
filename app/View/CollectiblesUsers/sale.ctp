@@ -40,7 +40,7 @@
 							echo '<th>' . $this -> Paginator -> sort('condition_id', 'Condition') . '</th>';
 							echo '<th>' . $this -> Paginator -> sort('edition_size', 'Edition Size') . '</th>';
 							echo '<th>' . $this -> Paginator -> sort('Collectible.average_price', 'Collection Stash Value') . '</th>';
-							echo '<th>' . $this -> Paginator -> sort('cost', 'Price') . '</th>';
+							echo '<th>' . $this -> Paginator -> sort('cost', 'Price/Trade') . '</th>';
 							if (isset($myStash) && $myStash) {
 								echo '<th>' . __('Actions') . '</th>';
 							}
@@ -66,7 +66,7 @@
 								echo '</td>';
 
 								echo '<td><a class="title" target="_blank" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '">' . $myCollectible['Collectible']['name'] . '</a></td>';
-								
+
 								if (!empty($myCollectible['CollectiblesUser']['condition_id'])) {
 									echo '<td>' . $myCollectible['Condition']['name'] . '</td>';
 								} else {
@@ -86,14 +86,15 @@
 								} else {
 									echo '<td> - </td>';
 								}
-
+								echo '<td class="sold-cost">';
 								if (!empty($myCollectible['CollectiblesUser']['sold_cost'])) {
-									echo '<td>$' . $myCollectible['CollectiblesUser']['sold_cost'] . '</td>';
+									echo '$' . $myCollectible['CollectiblesUser']['sold_cost'];
 								} else if (!empty($myCollectible['CollectiblesUser']['traded_for'])) {
-									echo '<td>' . $myCollectible['CollectiblesUser']['traded_for'] . '</td>';
+									echo $myCollectible['CollectiblesUser']['traded_for'];
 								} else {
-									echo '<td> - </td>';
+									echo ' - ';
 								}
+								echo '</td>';
 
 								if (isset($myStash) && $myStash) {
 									echo '<td>';
@@ -105,7 +106,7 @@
 
 									$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 									$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-									
+
 									$collectibleUserListingJSON = json_encode($myCollectible['Listing']);
 									$collectibleUserListingJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserListingJSON));
 

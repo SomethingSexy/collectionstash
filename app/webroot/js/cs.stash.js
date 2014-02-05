@@ -123,8 +123,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -467,8 +466,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -585,7 +583,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -699,8 +698,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -963,8 +961,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -995,11 +992,16 @@ function csStashSuccessMessage(message) {
 					$button.button('reset');
 
 					$('#stash-edit-listing-dialog').modal('hide');
-					csStashSuccessMessage('You have successfully updated your collectible!');
-					
+					csStashSuccessMessage('You have successfully updated your listing!');
+
 					// we also need to update the data-attribute on the field with the new values
 					self.$element.attr('data-listing', JSON.stringify(model.toJSON()));
 					// as well as the display values
+					if (model.get('listing_type_id') === '2') {
+						self.$element.closest('.stash-item').find('.sold-cost').text(model.get('listing_price'));
+					} else if (model.get('listing_type_id') === '3') {
+						self.$element.closest('.stash-item').find('.sold-cost').text(model.get('traded_for'));
+					}
 
 				},
 				error : function(model, xhr, options) {
