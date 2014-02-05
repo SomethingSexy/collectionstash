@@ -18,6 +18,23 @@ function csStashSuccessMessage(message) {
 		},
 		timeout : 2000
 	});
+
+}
+
+function removeFromWishList(collectibleUserId, success, error) {
+	return $.ajax({
+		dataType : 'json',
+		type : 'delete',
+		data : {
+			'_method' : 'DELETE'
+		},
+		url : '/collectibles_wish_lists/collectible/' + collectibleUserId,
+		beforeSend : function(formData, jqForm, options) {
+
+		},
+		success : success,
+		error : error
+	});
 }! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
@@ -35,6 +52,10 @@ function csStashSuccessMessage(message) {
 		var self = this;
 		this.stashAddView = null;
 		this.collectibleUser = null;
+		this.removeFromWishList = false;
+		this.$tiles = null;
+		this.$stashItem = null;
+		this.collectibleUserId = null;
 
 		$('#stash-add-dialog', 'body').on('hidden', function() {
 			self.stashAddView.remove();
@@ -50,6 +71,43 @@ function csStashSuccessMessage(message) {
 						$('#stash-add-dialog').modal('hide');
 
 						csStashSuccessMessage('You have successfully added the collectible to your stash!');
+
+						if (self.removeFromWishList) {
+							removeFromWishList(self.collectibleUserId, function(data, textStatus, jqXHR) {
+								if (self.$tiles) {
+									self.$tiles.masonry('remove', self.$stashItem);
+									self.$tiles.masonry('reload');
+								} else {
+									self.$stashItem.remove();
+								}
+							}, function(jqXHR, textStatus, errorThrown) {
+								var errorMessage = 'Oops! Something went terribly wrong!';
+								if (jqXHR.status === 400) {
+									$.each(jqXHR.responseJSON.response.errors, function(index, value) {
+										errorMessage = value.message;
+									});
+								}
+
+								$.blockUI({
+									message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+									showOverlay : false,
+									css : {
+										top : '100px',
+										'background-color' : '#DDFADE',
+										border : '1px solid #93C49F',
+										'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+										'border-radius' : '4px 4px 4px 4px',
+										color : '#333333',
+										'margin-bottom' : '20px',
+										padding : '8px 35px 8px 14px',
+										'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+										'z-index' : 999999
+									},
+									timeout : 2000
+								});
+
+							});
+						}
 
 					} else {
 						if (response.response.errors) {
@@ -67,10 +125,18 @@ function csStashSuccessMessage(message) {
 
 	};
 
-	StashFullAdd.prototype.add = function(collectibleModel) {
+	StashFullAdd.prototype.add = function(collectibleModel, removeFromWishList, options) {
+		if (options.tiles) {
+			this.$tiles = $('.tiles');
+		}
+
+		this.$stashItem = options.$stashItem;
+
 		this.collectibleUser = new CollectibleUserModel({
 			'collectible_id' : collectibleModel.get('id')
 		});
+		this.removeFromWishList = removeFromWishList;
+		this.collectibleUserId = options.collectibleUserId;
 
 		if (this.stashAddView) {
 			this.stashAddView.remove();
@@ -90,13 +156,12 @@ function csStashSuccessMessage(message) {
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
-	$.fn.stashfulladd = function(option, model) {
+	$.fn.stashfulladd = function(model, removeFromWishList, options) {
 		return this.each(function() {
 			var $this = $(this);
 
-			if (option == 'add') {
-				stashFullAdd.add(model);
-			}
+			stashFullAdd.add(model, removeFromWishList, options);
+
 		});
 	};
 
@@ -113,17 +178,38 @@ function csStashSuccessMessage(message) {
 	 * =============== */
 
 	$(function() {
+		var tile = false;
+		if ($('.stashable').hasClass('tiles')) {
+			tile = true;
+		}
+
 		stashFullAdd.initialize();
 		$('.stashable').on('click', '.add-full-to-stash', function(e) {
 			var $anchor = $(e.currentTarget);
 
 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
 
-			$anchor.stashfulladd('add', collectibleModel, 'Default');
+			var removeFromWishList = false;
+			var collectibleUserId = null;
+			// if this is a wishlist, then we want to add then 
+			// remove
+			if ($anchor.attr('data-type') === 'wishlist') {
+				removeFromWishList = true;
+				collectibleUserId = $anchor.attr('data-collectible-user-id');
+			}
+
+			var $stashItem = $anchor.closest('.stash-item');
+
+			$anchor.stashfulladd(collectibleModel, removeFromWishList, {
+				tiles : tile,
+				$stashItem : $stashItem,
+				collectibleUserId : collectibleUserId
+			});
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -466,7 +552,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -484,57 +571,43 @@ function csStashSuccessMessage(message) {
 	WishListRemove.prototype.remove = function() {
 
 		var self = this;
-		$.ajax({
-			dataType : 'json',
-			type : 'delete',
-			data : {
-				'_method' : 'DELETE'
-			},
-			url : '/collectibles_wish_lists/collectible/' + this.collectibleUserId,
-			beforeSend : function(formData, jqForm, options) {
 
-			},
-			// success identifies the function to invoke when the server response
-			// has been received
-			success : function(data, textStatus, jqXHR) {
-				csStashSuccessMessage('The collectible has been removed from your Wish List!');
+		removeFromWishList(this.collectibleUserId, function(data, textStatus, jqXHR) {
+			csStashSuccessMessage('The collectible has been removed from your Wish List!');
 
-				if (self.$tiles) {
-					self.$tiles.masonry('remove', self.$stashItem);
-					self.$tiles.masonry('reload');
-				} else {
-					self.$stashItem.remove();
-				}
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				var errorMessage = 'Oops! Something went terribly wrong!';
-				if (jqXHR.status === 400) {
-					$.each(jqXHR.responseJSON.response.errors, function(index, value) {
-						errorMessage = value.message;
-					});
-				}
-
-				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
-					showOverlay : false,
-					css : {
-						top : '100px',
-						'background-color' : '#DDFADE',
-						border : '1px solid #93C49F',
-						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-						'border-radius' : '4px 4px 4px 4px',
-						color : '#333333',
-						'margin-bottom' : '20px',
-						padding : '8px 35px 8px 14px',
-						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index' : 999999
-					},
-					timeout : 2000
-				});
-
+			if (self.$tiles) {
+				self.$tiles.masonry('remove', self.$stashItem);
+				self.$tiles.masonry('reload');
+			} else {
+				self.$stashItem.remove();
 			}
-		});
+		}, function(jqXHR, textStatus, errorThrown) {
+			var errorMessage = 'Oops! Something went terribly wrong!';
+			if (jqXHR.status === 400) {
+				$.each(jqXHR.responseJSON.response.errors, function(index, value) {
+					errorMessage = value.message;
+				});
+			}
 
+			$.blockUI({
+				message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+				showOverlay : false,
+				css : {
+					top : '100px',
+					'background-color' : '#DDFADE',
+					border : '1px solid #93C49F',
+					'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+					'border-radius' : '4px 4px 4px 4px',
+					color : '#333333',
+					'margin-bottom' : '20px',
+					padding : '8px 35px 8px 14px',
+					'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+					'z-index' : 999999
+				},
+				timeout : 2000
+			});
+
+		});
 	};
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
@@ -583,8 +656,7 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -698,7 +770,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -961,7 +1034,8 @@ function csStashSuccessMessage(message) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *

@@ -5,7 +5,7 @@
 {@if cond=" ('{errors}'.length === 0) "}
 
 {:else}
-	<div class="alert {@eq key="{hasErrors}" value="true" type="boolean"}alert-danger{/eq}">
+	<div class="alert alert-danger">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<h4>Oops! Something went wrong.</h4>
 		<ul>

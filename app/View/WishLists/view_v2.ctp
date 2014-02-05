@@ -79,6 +79,9 @@
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 					echo '<span><a data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="icon-trash"></i></a></span>';
+					echo '<span><a class="add-full-to-stash btn" data-type="wishlist" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $myCollectible['Collectible']['id'] . '" data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+					echo '<img src="/img/icon/add_stash_link_25x25.png">';
+					echo '</a></span>';
 				}
 
 				echo '</div>';
@@ -93,10 +96,12 @@
 		</div>
 	</div>
 </div>
-<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
+	echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false));
+	echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false));
+	echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
+	echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+?>
 
 <script><?php
 if (isset($reasons)) {
@@ -137,5 +142,5 @@ if (isset($reasons)) {
 				});
 			});
 
-		});
+		}); 
 </script>
