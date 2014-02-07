@@ -11,8 +11,8 @@ class ExternalTradeTransaction extends BaseTransaction implements Transactionabl
 		$retVal = $this -> buildDefaultResponse();
 
 		if (isset($data['active_sale']) && $data['active_sale']) {
-			$model -> validate['traded_for']['allowEmpty'] = false;
-			$model -> validate['traded_for']['required'] = true;
+			$model -> validate['traded_for']['maxLength']['allowEmpty'] = false;
+			$model -> validate['traded_for']['maxLength']['required'] = true;
 		}
 
 		unset($model -> validate['ext_item_id']);
@@ -85,6 +85,7 @@ class ExternalTradeTransaction extends BaseTransaction implements Transactionabl
 			$retVal['Listing']['status'] = 'active';
 			$retVal['Listing']['start_date'] = null;
 			$retVal['Listing']['end_date'] = null;
+			$retVal['Listing']['traded_for'] = $data['traded_for'];
 		} else {
 			$retVal['Listing']['processed'] = true;
 			$retVal['Listing']['status'] = 'completed';
