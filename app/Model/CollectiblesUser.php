@@ -535,8 +535,13 @@ class CollectiblesUser extends AppModel {
 				$listingData['collectible_id'] = $collectiblesUser['Collectible']['id'];
 				$listingData['active_sale'] = false;
 
+				// if this is marked for sale a price is required
 				if ($forSale) {
-					$listingData['sold_cost'] = $collectiblesUser['Listing']['current_price'];
+					if (!isset($data['CollectiblesUser']['sold_cost']) || empty($data['CollectiblesUser']['sold_cost'])) {
+						$listingData['sold_cost'] = $collectiblesUser['Listing']['current_price'];
+					} else {
+						$listingData['sold_cost'] = $data['CollectiblesUser']['sold_cost'];
+					}
 				} else {
 					$listingData['sold_cost'] = isset($data['CollectiblesUser']['sold_cost']) ? $data['CollectiblesUser']['sold_cost'] : null;
 				}
