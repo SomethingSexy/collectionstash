@@ -55,18 +55,32 @@ class ExternalTransaction extends BaseTransaction implements Transactionable {
 
 	}
 
+	/**
+	 *
+	 */
 	public function updateListing($model, $data, $user) {
 		$retVal = $this -> buildDefaultResponse();
+
+		$model -> validate['listing_price']['allowEmpty'] = false;
+		$model -> validate['listing_price']['required'] = true;
+		unset($model -> validate['ext_item_id']);
+
 		// this would only be able to update the listing_price and traded for
-		$fieldList = array('listing_price','current_price', 'traded_for', 'listing_type_id');
-		
+		$fieldList = array('listing_price', 'current_price', 'traded_for', 'listing_type_id');
+
 		$data['Listing']['current_price'] = $data['Listing']['listing_price'];
 		// updating just in case they are switching between types
 		$data['Listing']['listing_name'] = __('Sold by ') . $user['User']['username'];
 
+		$data['Listing']['traded_for'] = null;
+
 		// otherwise we should be checking for permissions here
-		if ($model -> save($data, array('validate' => false))) {
+		if ($model -> save($data)) {
 			$retVal['response']['isSuccess'] = true;
+		} else {
+			$retVal['response']['isSuccess'] = false;
+			$errors = $this -> convertErrorsJSON($model -> validationErrors, 'Listing');
+			$retVal['response']['errors'] = $errors;
 		}
 
 		return $retVal;

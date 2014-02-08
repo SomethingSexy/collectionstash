@@ -1,0 +1,2 @@
+Release 
+- Update database listings table so that current_price and listing_price can be nulls

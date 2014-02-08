@@ -14,8 +14,10 @@ class Listing extends AppModel {
 	'listing_type_id' => array('rule' => 'numeric', 'allowEmpty' => false, 'required' => true, 'message' => 'Must be a valid listing type.'),
 	// this is only needed when deleting or selling
 	'sold_cost' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
+	// this is only used for updates
+	'listing_price' => array('rule' => array('money', 'left'), 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
 	//traded for, only needed when deleting or selling
-	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for must be less than 1000 characters.')), );
+	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for is required and must be less than 1000 characters.')), );
 
 	function afterFind($results, $primary = false) {
 
