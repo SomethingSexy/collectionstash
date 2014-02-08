@@ -13,6 +13,7 @@
 		</ul>	
 	</li>
 	<li>Added the ability to edit a listing.</li>
+	<li>Added the ability to add a collectible from your wishlist, this will also remove the collectible from your wishlist.</li>
 	<li>Interally cleaned up the Listing/Transaction API.</li>
 </ul>
 <h3>Release Notes for v2.13</h3>

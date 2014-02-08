@@ -57,6 +57,10 @@ class ListingsController extends AppController {
 			// no need to clean for now on the update
 			$response = $this -> Listing -> updateListing($transaction, $this -> getUser());
 
+			if (!$response['response']['isSuccess']) {
+				$this -> response -> statusCode(400);
+			}
+
 			$this -> set('returnData', $response);
 		} else if ($this -> request -> isDelete()) {// delete
 			// have to be a user admin to delete
