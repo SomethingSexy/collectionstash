@@ -89,9 +89,11 @@
 				echo '<p></p>';
 				echo '</div>';
 				echo '<div class="menu tile-links clearfix">';
-				if ($myCollectible['CollectiblesUser']['sale']) {
-					echo '<span class="pull-left marked-for-sale"><a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>';
+				echo '<span class="pull-left marked-for-sale ';
+				if (!$myCollectible['CollectiblesUser']['sale']) {
+					echo 'hidden';
 				}
+				echo '"><a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>';
 				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a></span>';
 				if (isset($myStash) && $myStash) {
 					$collectibleJSON = json_encode($myCollectible['Collectible']);

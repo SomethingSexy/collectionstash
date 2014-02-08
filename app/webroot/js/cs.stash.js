@@ -191,7 +191,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 
 			var removeFromWishList = false;
 			var collectibleUserId = null;
-			// if this is a wishlist, then we want to add then 
+			// if this is a wishlist, then we want to add then
 			// remove
 			if ($anchor.attr('data-type') === 'wishlist') {
 				removeFromWishList = true;
@@ -208,8 +208,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -552,8 +551,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -656,7 +654,8 @@ function removeFromWishList(collectibleUserId, success, error) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery); ! function($) {"use strict";// jshint ;_;
+}(window.jQuery);
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -668,11 +667,13 @@ function removeFromWishList(collectibleUserId, success, error) {
 	var StashSell = function() {
 	};
 
-	StashSell.prototype.initialize = function() {
+	StashSell.prototype.initialize = function(options) {
 		dust.loadSource(dust.compile($('#template-stash-sell').html(), 'stash.sell'));
 		var self = this;
 		this.stashSellView = null;
 		this.collectibleUser = null;
+		this.tiles = options.tiles;
+		this.$stashItem = null;
 
 		$('#stash-sell-dialog', 'body').on('hidden', function() {
 			self.stashSellView.remove();
@@ -682,11 +683,21 @@ function removeFromWishList(collectibleUserId, success, error) {
 			var $button = $(this);
 			$button.button('loading');
 			self.collectibleUser.save({}, {
+				// TODO: This should get converted error status
 				success : function(model, response, options) {
 					$button.button('reset');
 					if (response.response.isSuccess) {
 						$('#stash-sell-dialog').modal('hide');
 						csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
+
+						// now we need to mark it for sale.  Normally we would use backbone to
+						// re-render the view but we aren't that far yet
+						if (self.tiles) {
+							$('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+							$('.menu .marked-for-sale', self.$stashItem).removeClass('hidden');
+						} else {
+							$('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+						}
 					} else {
 						if (response.response.errors) {
 							self.stashSellView.errors = response.response.errors;
@@ -708,8 +719,9 @@ function removeFromWishList(collectibleUserId, success, error) {
 
 	};
 
-	StashSell.prototype.sell = function(collectibleModel, collectibleUserModel) {
+	StashSell.prototype.sell = function(collectibleModel, collectibleUserModel, options) {
 		this.collectibleUser = collectibleUserModel;
+		this.$stashItem = options.$stashItem;
 
 		// mark that we are selling this guy
 		this.collectibleUser.set({
@@ -736,11 +748,11 @@ function removeFromWishList(collectibleUserId, success, error) {
 	/* BUTTON PLUGIN DEFINITION
 	 * ======================== */
 
-	$.fn.stashsell = function(model, collectibleUserModel) {
+	$.fn.stashsell = function(model, collectibleUserModel, options) {
 		return this.each(function() {
 			var $this = $(this);
 
-			stashSell.sell(model, collectibleUserModel);
+			stashSell.sell(model, collectibleUserModel, options);
 		});
 	};
 
@@ -757,7 +769,13 @@ function removeFromWishList(collectibleUserId, success, error) {
 	 * =============== */
 
 	$(function() {
-		stashSell.initialize();
+		var tile = false;
+		if ($('.stashable').hasClass('tiles')) {
+			tile = true;
+		}
+		stashSell.initialize({
+			tiles : tile
+		});
 		$('.stashable').on('click', '.stash-sell', function(e) {
 			var $anchor = $(e.currentTarget);
 
@@ -766,12 +784,15 @@ function removeFromWishList(collectibleUserId, success, error) {
 
 			var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
 
-			$anchor.stashsell(collectibleModel, collectibleUserModel);
+			var $stashItem = $anchor.closest('.stash-item');
+
+			$anchor.stashsell(collectibleModel, collectibleUserModel, {
+				$stashItem : $stashItem
+			});
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 ** ============================== */
@@ -1034,8 +1055,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 			e.preventDefault();
 		});
 	});
-}(window.jQuery);
-! function($) {"use strict";// jshint ;_;
+}(window.jQuery); ! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
