@@ -116,7 +116,7 @@ foreach ($collectibles as $key => $myCollectible) {
 	echo '<td>' . $this -> Time -> format('F jS, Y h:i A', $myCollectible['CollectiblesUser']['created'], null) . '</td>';
 
 	if (isset($myStash) && $myStash) {
-		echo '<td>';
+		echo '<td class="menu">';
 		echo '<div class="btn-group">';
 		echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 		echo '<ul class="dropdown-menu">';
