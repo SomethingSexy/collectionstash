@@ -2,7 +2,7 @@
 $config['Settings'] = Configure::read('Settings');
 
 $config['Settings'] = Set::merge($config['Settings'], array(
-	'version' => '2.14.1',
+	'version' => '2.14.2',
   	'title' => 'My Application',
   	'domain' => 'http://collectionstash.com',
   	'registration' => array(
