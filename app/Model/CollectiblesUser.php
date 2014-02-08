@@ -471,6 +471,7 @@ class CollectiblesUser extends AppModel {
 		// now let's validate, we need a reason first
 		$this -> validate['collectible_user_remove_reason_id']['allowEmpty'] = false;
 		$this -> validate['collectible_user_remove_reason_id']['required'] = true;
+		// we are removing we don't need this
 		// we NEED a reason here
 		if (!$this -> validates()) {
 			$retVal['response']['isSuccess'] = false;
