@@ -147,7 +147,7 @@ class Listing extends AppModel {
 		if (isset($data['collectible_user_remove_reason_id'])) {
 
 			if ($data['collectible_user_remove_reason_id'] == 1) {
-				$data['listing_type_id'] = 1;
+				$data['listing_type_id'] = 2;
 			} else if ($data['collectible_user_remove_reason_id'] == 2) {
 				$data['listing_type_id'] = 3;
 			}
