@@ -64,6 +64,8 @@ class Collectible extends AppModel {
 	//pieces
 	'pieces' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')));
 
+	private $collectibleCacheKey = 'collectible_';
+
 	function __construct($id = false, $table = null, $ds = null) {
 		// This allows us to easily order collectibles by average price from outside
 		$this -> virtualFields['orderAveragePrice'] = 'SELECT MIN(CollectiblePriceFact.average_price) FROM collectible_price_facts AS CollectiblePriceFact WHERE CollectiblePriceFact.id = Collectible.collectible_price_fact_id';
@@ -77,6 +79,10 @@ class Collectible extends AppModel {
 	function beforeSave() {
 		$this -> data = $this -> processBeforeSave($this -> data);
 		return true;
+	}
+
+	function afterSave($created, $options = array()) {
+		$this -> clearCache($this -> data['Collectible']['id']);
 	}
 
 	private function processBeforeSave($data) {
@@ -941,12 +947,30 @@ class Collectible extends AppModel {
 			$retVal['response']['isSuccess'] = false;
 			$retVal['response']['errors'] = array('message', __('Invalid request.'));
 		}
-		// TODO: We really need to start caching collectibles I think...we are fetching A LOT of data
-		// 12/17/12 - Welp I was right, this is WAY too many joins for my little server to handle
-		//$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => 'User.username'), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('AttributesCollectible.active' => 1)))));
-		$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CollectiblePriceFact', 'Listing' => array('User', 'Transaction'), 'CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
 
-		// so let's do this manually and try that out
+		// First try to grab it from the cache
+		$collectible = Cache::read($this -> collectibleCacheKey . $id, 'long');
+
+		// if it isn't in the cache, add it to the cache
+		if (!$collectible) {
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CollectiblePriceFact', 'CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'long');
+		}
+
+		// So instead of doing one giant call because we have to worry about clearing caches, let's break these calls out
+		// so they can manage their own caches instead of the sub-models invalidating the collectible cache
+
+		//'Listing' => array('User', 'Transaction')
+		$listings = $this -> Listing -> findByCollectibleId($id);
+		$collectible['Listing'] = array();
+		// we need to modify this for a listing
+		foreach ($listings as $key => $value) {
+			$collectible['Listing'][$key] = $value['Listing'];
+			$collectible['Listing'][$key]['User'] = $value['User'];
+			$collectible['Listing'][$key]['Transaction'] = $value['Transaction'];
+		}
+
+		// pulling out manually so run faster
 		if (!empty($collectible['AttributesCollectible'])) {
 			// ok if we have some of these
 			// loop through each one
@@ -1075,6 +1099,7 @@ class Collectible extends AppModel {
 			if ($allowDelete) {
 				if ($this -> delete($collectibleId, true)) {
 					$retVal['response']['isSuccess'] = true;
+					$this -> clearCache($collectibleId);
 				} else {
 					$retVal['response']['isSuccess'] = false;
 					array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
@@ -1426,6 +1451,13 @@ class Collectible extends AppModel {
 		$retVal = $this -> validates();
 
 		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function clearCache($d) {
+		Cache::delete($this -> collectibleCacheKey . $d, 'long');
 	}
 
 }

@@ -84,9 +84,9 @@ class EbayTransaction extends BaseTransaction implements Transactionable {
 
 	public function updateListing($model, $data, $user) {
 		$retVal = $this -> buildDefaultResponse();
-		
+
 		$model -> id = $data['Listing']['id'];
-		$model -> saveField('flagged', $data['Listing']['flagged']);
+		$model -> save($data, array('fieldList' => array('flagged')));
 
 		$retVal['response']['data'] = $data;
 		$retVal['response']['isSuccess'] = true;
