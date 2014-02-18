@@ -1,0 +1,4 @@
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<h4>Oops! There was a severe error.  Contact Collection Stash somehow!</h4>
+</div>
