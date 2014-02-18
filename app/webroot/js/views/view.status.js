@@ -15,7 +15,7 @@ var StatusView = Backbone.View.extend({
 
 		var model = this.model.toJSON();
 		model.allowEdit = this.allowEdit;
-		if(this.collectible){
+		if (this.collectible) {
 			model.collectible = this.collectible.toJSON();
 		}
 		dust.render(this.template, model, function(error, output) {
@@ -29,13 +29,18 @@ var StatusView = Backbone.View.extend({
 		this.model.save({}, {
 			error : function(model, response) {
 				$(event.currentTarget).button('reset');
-				var responseObj = $.parseJSON(response.responseText);
-				if (responseObj.response.data.hasOwnProperty('dupList')) {
-					pageEvents.trigger('status:change:dupList', responseObj.response.data.dupList);
-				} else {
-					pageEvents.trigger('status:change:error', responseObj.response.errors);
-				}
 
+				if (response.status === 500) {
+					pageEvents.trigger('status:change:error:severe');
+				} else {
+
+					var responseObj = $.parseJSON(response.responseText);
+					if (responseObj.response.data.hasOwnProperty('dupList')) {
+						pageEvents.trigger('status:change:dupList', responseObj.response.data.dupList);
+					} else {
+						pageEvents.trigger('status:change:error', responseObj.response.errors);
+					}
+				}
 			}
 		});
 	},

@@ -2094,6 +2094,27 @@ var MessageView = Backbone.View.extend({
 	}
 });
 
+var SevereMessageView = Backbone.View.extend({
+	template : 'message.error.severe',
+	className : "col-md-12",
+	events : {
+
+	},
+	initialize : function(options) {
+
+	},
+	render : function() {
+		var self = this;
+		var data = {};
+
+		dust.render(this.template, data, function(error, output) {
+			$(self.el).html(output);
+		});
+
+		return this;
+	}
+});
+
 var DupListMessageView = Backbone.View.extend({
 	template : 'message.duplist',
 	className : "col-md-12",
@@ -3281,6 +3302,8 @@ $(function() {
 	//
 	$.get('/templates/collectibles/message.dust'),
 	//
+	$.get('/templates/collectibles/message.error.severe.dust'),
+	//
 	$.get('/templates/collectibles/tags.default.dust'),
 	//
 	$.get('/templates/collectibles/tag.default.dust'),
@@ -3327,13 +3350,14 @@ $(function() {
 	//
 	$.get('/templates/collectibles/directional.original.dust'),
 	//
-	$.get('/templates/collectibles/attribute.add.new.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate) {
+	$.get('/templates/collectibles/attribute.add.new.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
 		dust.loadSource(dust.compile(attributeTemplate[0], 'attributecollectible.default.edit'));
 		dust.loadSource(dust.compile(statusTemplate[0], 'status.edit'));
 		dust.loadSource(dust.compile(messageTemplate[0], 'message.edit'));
+		dust.loadSource(dust.compile(messageSevereTemplate[0], 'message.error.severe'));
 		dust.loadSource(dust.compile(tagsTemplate[0], 'tags.edit'));
 		dust.loadSource(dust.compile(tagTemplate[0], 'tag.edit'));
 		dust.loadSource(dust.compile(addTagTemplate[0], 'tag.add'));
@@ -3415,7 +3439,19 @@ $(function() {
 					}
 					messageView = new MessageView({
 						errors : new Errors(errors)
-					})
+					});
+
+					$('#message-container').html(messageView.render().el);
+
+				});
+
+				pageEvents.on('status:change:error:severe', function() {
+					if (messageView) {
+						messageView.remove();
+						messageView = null;
+					}
+					messageView = new SevereMessageView({
+					});
 
 					$('#message-container').html(messageView.render().el);
 
