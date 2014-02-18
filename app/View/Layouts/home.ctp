@@ -111,8 +111,7 @@
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 			    </button>
-		     
-	
+				<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
 			</div>
 		    <!-- Be sure to leave the brand out there if you want it shown 
 		    	

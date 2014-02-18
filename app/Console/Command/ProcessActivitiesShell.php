@@ -1,11 +1,8 @@
 <?php
 /**
- * This will process notifications and determine what to do with them.
- *
- * Right now it will convert them over to emails.
- *
- * This will run once every hour.
+ * 
  */
+
 class ProcessActivitiesShell extends AppShell {
 	public $uses = array('Activity', 'UserPointFact', 'Point');
 
