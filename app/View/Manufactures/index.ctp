@@ -111,8 +111,8 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 		</div>
 	</div>
 </div>
-<?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.masonry.min', array('inline' => false)); ?>
 
 <script>
 	$(function() {

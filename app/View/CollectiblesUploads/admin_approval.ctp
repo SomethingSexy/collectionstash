@@ -1,8 +1,8 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.form', array('inline' => false)); ?>
 <?php
-echo $this -> Minify -> script('js/jquery.treeview', array('inline' => false));
-echo $this -> Minify -> script('js/cs.core.tree', array('inline' => false));
-echo $this -> Minify -> script('js/cs.attribute', array('inline' => false));
+echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
+echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
+echo $this -> Minify -> script('cs.attribute', array('inline' => false));
 ?>
 <div id="admin-edit" class="two-column-page">
 	<div class="inside">

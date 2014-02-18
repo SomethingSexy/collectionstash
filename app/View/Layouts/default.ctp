@@ -30,36 +30,36 @@
 	
 	<?php
 	echo $this -> Html -> css('thirdparty/bootstrap');
-	echo $this -> Minify -> css('css/thirdparty/datepicker');
-	echo $this -> Minify -> css('css/thirdparty/font-awesome');
-	echo $this -> Minify -> css('css/layout/layout');
-	echo $this -> Minify -> css('css/jquery.treeview');
-	echo $this -> Minify -> css('css/thirdparty/blueimp-gallery');
-	echo $this -> Minify -> css('css/thirdparty/bootstrap-image-gallery');
-	echo $this -> Minify -> css('css/layout/theme');
-	echo $this -> Minify -> css('css/layout/default');
+	echo $this -> Minify -> css('thirdparty/datepicker');
+	echo $this -> Minify -> css('thirdparty/font-awesome');
+	echo $this -> Minify -> css('layout/layout');
+	echo $this -> Minify -> css('jquery.treeview');
+	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
+	echo $this -> Minify -> css('thirdparty/bootstrap-image-gallery');
+	echo $this -> Minify -> css('layout/theme');
+	echo $this -> Minify -> css('layout/default');
 
-	echo $this -> Minify -> script('js/thirdparty/json2');
+	echo $this -> Minify -> script('thirdparty/json2');
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
-	echo $this -> Minify -> script('js/thirdparty/jquery-1.10.1');
-	echo $this -> Minify -> script('js/jquery-ui-1.10.2');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap-datepicker');
-	echo $this -> Minify -> script('js/thirdparty/backbone');
-	echo $this -> Minify -> script('js/thirdparty/backbone.paginator');
-	echo $this -> Minify -> script('js/thirdparty/backbone.validation');
-	echo $this -> Minify -> script('js/thirdparty/typeahead');
-	echo $this -> Minify -> script('js/jquery-plugins');
-	echo $this -> Minify -> script('js/jquery.autocomplete');
+	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
+	echo $this -> Minify -> script('jquery-ui-1.10.2');
+	echo $this -> Minify -> script('thirdparty/bootstrap');
+	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
+	echo $this -> Minify -> script('thirdparty/backbone');
+	echo $this -> Minify -> script('thirdparty/backbone.paginator');
+	echo $this -> Minify -> script('thirdparty/backbone.validation');
+	echo $this -> Minify -> script('thirdparty/typeahead');
+	echo $this -> Minify -> script('jquery-plugins');
+	echo $this -> Minify -> script('jquery.autocomplete');
 	// Replace this with dust eventually
-	echo $this -> Minify -> script('js/thirdparty/tmpl');
-	echo $this -> Minify -> script('js/thirdparty/load-image');
-	echo $this -> Minify -> script('js/thirdparty/canvas-to-blob');
+	echo $this -> Minify -> script('thirdparty/tmpl');
+	echo $this -> Minify -> script('thirdparty/load-image');
+	echo $this -> Minify -> script('thirdparty/canvas-to-blob');
 
-	echo $this -> Minify -> script('js/thirdparty/dust-full-1.1.1');
-	echo $this -> Minify -> script('js/thirdparty/dust-helpers-1.1.0');
-	echo $this -> Minify -> script('js/cs.dust-helpers');
+	echo $this -> Minify -> script('thirdparty/dust-full-1.1.1');
+	echo $this -> Minify -> script('thirdparty/dust-helpers-1.1.0');
+	echo $this -> Minify -> script('cs.dust-helpers');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	
@@ -310,10 +310,10 @@ if (isset($bodyClass))
 		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
 	<?php
-	echo $this -> Minify -> script('js/thirdparty/blueimp-gallery');
-	echo $this -> Minify -> script('js/thirdparty/jquery.blueimp-gallery');
-	echo $this -> Minify -> script('js/thirdparty/bootstrap-image-gallery');
-	echo $this -> Minify -> script('js/thirdparty/placeholder');
+	echo $this -> Minify -> script('thirdparty/blueimp-gallery');
+	echo $this -> Minify -> script('thirdparty/jquery.blueimp-gallery');
+	echo $this -> Minify -> script('thirdparty/bootstrap-image-gallery');
+	echo $this -> Minify -> script('thirdparty/placeholder');
 		?>
 	<script>
 			! function(d, s, id) {

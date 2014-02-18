@@ -34,8 +34,8 @@
 		</div>
 	</div>
 </div>
-<?php echo $this -> Html -> script('jquery.comments', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.comments', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('cs.subscribe', array('inline' => false)); ?>
 <script>
 	$(function() {
 

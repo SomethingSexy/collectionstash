@@ -1,4 +1,4 @@
-<?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
 			<h2><?php echo __('See what is being discussed...')
 			?></h2>
 <div id="latest-comments-component" class="widget">
