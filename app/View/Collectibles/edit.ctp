@@ -14,7 +14,7 @@ echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
 echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
 echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
 
-echo $this -> Minify -> script('js/locale', array('inline' => false));
+echo $this -> Minify -> script('locale', array('inline' => false));
 ?>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">

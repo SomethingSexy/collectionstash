@@ -702,6 +702,7 @@ class Collectible extends AppModel {
 			foreach ($names as $key => $value) {
 				// in case any weird characters get in there that this will trim
 				$name = trim($value);
+				$name = str_replace(array('(', ')'), '', $name);
 				array_push($regSearch, array('Collectible.name REGEXP' => '[[:<:]]' . $name . '[[:>:]]'));
 			}
 
