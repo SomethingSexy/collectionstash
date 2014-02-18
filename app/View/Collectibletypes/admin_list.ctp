@@ -1,7 +1,7 @@
 <?php
-echo $this -> Minify -> script('js/jquery.treeview', array('inline' => false));
-echo $this -> Minify -> script('js/cs.core.tree', array('inline' => false));
-echo $this -> Minify -> script('js/cs.type.admin', array('inline' => false));
+echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
+echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
+echo $this -> Minify -> script('cs.type.admin', array('inline' => false));
 ?>
 
 <?php echo $this -> element('admin_actions'); ?>

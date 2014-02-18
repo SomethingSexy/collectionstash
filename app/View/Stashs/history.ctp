@@ -1,9 +1,9 @@
-<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot.categories', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/thirdparty/jquery.flot.stack', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('thirdparty/jquery.flot.categories', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('thirdparty/jquery.flot.stack', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('views/view.stash.remove', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('cs.stash', array('inline' => false)); ?>
 <div class="col-md-12">
 	<h2><?php
 	echo $stashUsername . '\'s History';

@@ -1,4 +1,4 @@
-<?php echo $this -> Minify -> css('css/layout/home'); ?>
+<?php echo $this -> Minify -> css('layout/home'); ?>
 <div class="row">
 
 	<div class="row featurette">

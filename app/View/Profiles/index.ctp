@@ -1,5 +1,5 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false));?>
-<?php echo $this -> Html -> script('pages/page.profile', array('inline' => false));?>
+<?php echo $this -> Minify -> script('jquery.form', array('inline' => false));?>
+<?php echo $this -> Minify -> script('pages/page.profile', array('inline' => false));?>
 
 <div class="panel panel-default">
 	<div class="panel-heading">

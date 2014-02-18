@@ -72,9 +72,9 @@
 		</div>
 	</div>
 </div>
-<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false)); ?>
-<?php echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('cs.subscribe', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.masonry.min', array('inline' => false)); ?>
 <script>
 	$(function() {
 		var $container = $('div.tiles');

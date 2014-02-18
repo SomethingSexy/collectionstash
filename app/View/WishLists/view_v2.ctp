@@ -96,11 +96,11 @@
 		</div>
 	</div>
 </div>
-<?php echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
-	echo $this -> Minify -> script('js/jquery.infinitescroll', array('inline' => false));
-	echo $this -> Minify -> script('js/jquery.masonry.min', array('inline' => false));
-	echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
-	echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+<?php echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
+	echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false));
+	echo $this -> Minify -> script('jquery.masonry.min', array('inline' => false));
+	echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
+	echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
 ?>
 
 <script><?php

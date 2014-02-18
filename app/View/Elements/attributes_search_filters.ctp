@@ -1,7 +1,7 @@
 <script type="text/javascript"><?php
 echo 'var searchUrl = "' . $searchUrl . '";';
 ?></script>
-<?php echo $this -> Minify -> script('js/jquery.filters', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.filters', array('inline' => false)); ?>
 <div id="filters">
 	<?php
 	foreach ($filters as $key => $filterGroup) {

@@ -1,13 +1,13 @@
-<?php echo $this -> Minify -> script('js/jquery.form', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('jquery.form', array('inline' => false)); ?>
 <?php
-echo $this -> Minify -> script('js/jquery.iframe-transport', array('inline' => false));
-echo $this -> Minify -> script('js/cors/jquery.postmessage-transport', array('inline' => false));
-echo $this -> Minify -> script('js/jquery.getimagedata', array('inline' => false));
-echo $this -> Minify -> script('js/jquery.fileupload', array('inline' => false));
-echo $this -> Minify -> script('js/jquery.fileupload-fp', array('inline' => false));
-echo $this -> Minify -> script('js/jquery.fileupload-ui', array('inline' => false));
+echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
+echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
+echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
+echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
+echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
+echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
 
-echo $this -> Minify -> script('js/locale', array('inline' => false));
+echo $this -> Minify -> script('locale', array('inline' => false));
 ?>
 <h2><?php echo $username . '\'s' .__(' Photos', true)?></h2>
 <div id="user-uploads-component" class="panel panel-default">

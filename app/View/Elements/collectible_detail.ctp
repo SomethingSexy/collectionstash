@@ -51,22 +51,22 @@ if (!isset($allowStatusEdit)) {
 	$allowStatusEdit = false;
 }
 
-echo $this -> Minify -> script('js/jquery.comments', array('inline' => false));
-echo $this -> Minify -> script('js/cs.subscribe', array('inline' => false));
-echo $this -> Minify -> script('js/cs.stash', array('inline' => false));
-echo $this -> Minify -> script('js/models/model.status', array('inline' => false));
-echo $this -> Minify -> script('js/views/view.status', array('inline' => false));
+echo $this -> Minify -> script('jquery.comments', array('inline' => false));
+echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
+echo $this -> Minify -> script('cs.stash', array('inline' => false));
+echo $this -> Minify -> script('models/model.status', array('inline' => false));
+echo $this -> Minify -> script('views/view.status', array('inline' => false));
 
-echo $this -> Minify -> script('js/models/model.listing', array('inline' => false));
-echo $this -> Minify -> script('js/collections/collection.listings', array('inline' => false));
-echo $this -> Minify -> script('js/views/view.transactions', array('inline' => false));
-echo $this -> Minify -> script('js/views/view.stash.add', array('inline' => false));
-echo $this -> Minify -> script('js/models/model.collectible.user', array('inline' => false));
-echo $this -> Minify -> script('js/models/model.collectible', array('inline' => false));
-echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
-echo $this -> Minify -> script('js/thirdparty/jquery.flot', array('inline' => false));
-echo $this -> Minify -> script('js/thirdparty/jquery.flot.time', array('inline' => false));
-echo $this -> Html -> script('thirdparty/ZeroClipboard', array('inline' => false));
+echo $this -> Minify -> script('models/model.listing', array('inline' => false));
+echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
+echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
+echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
+echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
+echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => false));
+echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false));
+echo $this -> Minify -> script('thirdparty/jquery.flot.time', array('inline' => false));
+echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
 ?>
 
 

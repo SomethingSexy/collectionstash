@@ -23,7 +23,14 @@ class MinifyHelper extends AppHelper {
 		if (!is_array($assets)) {
 			$assets = array($assets);
 		}
-		$path = $this -> webroot . "min/?f=";
+		$path = $this -> webroot ."min/?f=";
+
+		if ($ext === 'js') {
+			$path .= 'js/';
+		} else if ($ext === 'css') {
+			$path .= 'css/';
+		}
+
 		foreach ($assets as $asset) {
 			$path .= ($asset . ".$ext,");
 		}
