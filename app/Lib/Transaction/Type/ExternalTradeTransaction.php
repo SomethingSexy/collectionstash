@@ -71,7 +71,7 @@ class ExternalTradeTransaction extends BaseTransaction implements Transactionabl
 		$data['Listing']['listing_price'] = null;
 
 		// otherwise we should be checking for permissions here
-		if ($model -> save($data)) {
+		if ($model -> save($data, array('fieldList' => $fieldList))) {
 			$retVal['response']['isSuccess'] = true;
 		} else {
 			$retVal['response']['isSuccess'] = false;

@@ -82,4 +82,12 @@ Configure::write('Dispatcher.filters', array('AssetDispatcher', 'CacheDispatcher
 // Add logging configuration.
 CakeLog::config('debug', array('engine' => 'FileLog', 'types' => array('notice', 'info', 'debug'), 'file' => 'debug', ));
 CakeLog::config('error', array('engine' => 'FileLog', 'types' => array('warning', 'error', 'critical', 'alert', 'emergency'), 'file' => 'error', ));
+
+$engine = 'File';
+if (extension_loaded('apc') && function_exists('apc_dec') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
+	$engine = 'Apc';
+}
+
+// long
+Cache::config('long', array('engine' => $engine, 'duration' => '+1 week', 'probability' => 100, 'path' => CACHE . 'long' . DS, 'mask' => 0666));
 ?>

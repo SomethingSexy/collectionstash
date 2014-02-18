@@ -19,6 +19,15 @@ class Listing extends AppModel {
 	//traded for, only needed when deleting or selling
 	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for is required and must be less than 1000 characters.')), );
 
+	private $collectibleCacheKey = 'list_collectible_';
+
+	function afterSave($created, $options = array()) {
+		// so far we only doing singles, I don't think we do multiple
+		if (isset($this -> data['Listing']['collectible_id'])) {
+			$this -> clearCache($this -> data['Listing']['collectible_id']);
+		}
+	}
+
 	function afterFind($results, $primary = false) {
 
 		if ($results) {
@@ -111,13 +120,30 @@ class Listing extends AppModel {
 		return $count === 0;
 	}
 
+	public function findByCollectibleId($id) {
+
+		$listings = Cache::read($this -> collectibleCacheKey . $id, 'long');
+
+		// if it isn't in the cache, add it to the cache
+		if (!$listings) {
+			$listings = $this -> find('all', array('conditions' => array('Listing.collectible_id' => $id), 'contain' => array('User', 'Transaction')));
+			Cache::write($this -> collectibleCacheKey . $id, $listings, 'long');
+		}
+
+		return $listings;
+	}
+
 	/**
 	 *
 	 */
 	public function remove($id, $user) {
 		$retVal = $this -> buildDefaultResponse();
 
+		// we need the collectible_id so we know which cache to clear
+		$listing = $this -> find('first', array('conditions' => array('Listing.id' => $id), 'contain' => false));
+
 		if ($this -> delete($id, true)) {
+			$this -> clearCache($listing['Listing']['collectible_id']);
 			$retVal['response']['isSuccess'] = true;
 		} else {
 			$retVal['response']['isSuccess'] = false;
@@ -219,6 +245,7 @@ class Listing extends AppModel {
 		}
 
 		if ($this -> Transaction -> save($data, array('validate' => false))) {
+			$this -> clearCache($listing['Listing']['collectible_id']);
 			$retVal['response']['isSuccess'] = true;
 		}
 
@@ -228,21 +255,28 @@ class Listing extends AppModel {
 	/**
 	 * Running the api through Listing so it is all contained here
 	 */
-	public function createTransaction($data) {
-		$retVal = $this -> buildDefaultResponse();
-		// grab our transaction type
-		$factory = new TransactionFactory();
+	// public function createTransaction($data) {
+	// $retVal = $this -> buildDefaultResponse();
+	// // grab our transaction type
+	// $factory = new TransactionFactory();
+	//
+	// $transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
+	//
+	// $data = $transactionable -> createTransaction($data, $listing, $user);
+	//
+	// if ($this -> Transaction -> save($data, array('validate' => false))) {
+	// $retVal['response']['isSuccess'] = true;
+	// }
+	//
+	// return $retVal;
+	//
+	// }
 
-		$transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
-
-		$data = $transactionable -> createTransaction($data, $listing, $user);
-
-		if ($this -> Transaction -> save($data, array('validate' => false))) {
-			$retVal['response']['isSuccess'] = true;
-		}
-
-		return $retVal;
-
+	/**
+	 *
+	 */
+	public function clearCache($d) {
+		Cache::delete($this -> collectibleCacheKey . $d, 'long');
 	}
 
 }
