@@ -19,7 +19,7 @@ class Listing extends AppModel {
 	//traded for, only needed when deleting or selling
 	'traded_for' => array('maxLength' => array('rule' => array('maxLength', 1000), 'allowEmpty' => true, 'message' => 'Traded for is required and must be less than 1000 characters.')), );
 
-	private $collectibleCacheKey = 'list_collectible_';
+	private $collectibleCacheKey = 'listing_collectible_';
 
 	function afterSave($created, $options = array()) {
 		// so far we only doing singles, I don't think we do multiple
