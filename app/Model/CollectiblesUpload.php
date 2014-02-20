@@ -15,6 +15,8 @@ class CollectiblesUpload extends AppModel {
 	//upload id field
 	'upload_id' => array('rule' => array('validateUploadId'), 'required' => true, 'message' => 'Must be a valid image.'));
 
+	private $collectibleCacheKey = 'upload_collectible_';
+
 	public function beforeSave($options = array()) {
 		// Before we save check to see if there is an existin image that is the primary
 		// if not, set
@@ -27,6 +29,13 @@ class CollectiblesUpload extends AppModel {
 		return true;
 	}
 
+	function afterSave($created, $options = array()) {
+		// so far we only doing singles, I don't think we do multiple
+		if (isset($this -> data['CollectiblesUpload']['collectible_id'])) {
+			$this -> clearCache($this -> data['CollectiblesUpload']['collectible_id']);
+		}
+	}
+
 	function validateUploadId($check) {
 		if (!isset($check['upload_id']) || empty($check['upload_id'])) {
 			return false;
@@ -34,6 +43,18 @@ class CollectiblesUpload extends AppModel {
 		$result = $this -> Upload -> find('count', array('id' => $check['upload_id']));
 
 		return $result > 0;
+	}
+
+	public function findByCollectibleId($id) {
+		$uploads = Cache::read($this -> collectibleCacheKey . $id, 'long');
+
+		// if it isn't in the cache, add it to the cache
+		if (!$uploads) {
+			$uploads = $this -> find('all', array('conditions' => array('CollectiblesUpload.collectible_id' => $id), 'contain' => array('Upload')));
+			Cache::write($this -> collectibleCacheKey . $id, $uploads, 'long');
+		}
+
+		return $uploads;
 	}
 
 	public function remove($upload, $user, $autoUpdate = false) {
@@ -79,6 +100,8 @@ class CollectiblesUpload extends AppModel {
 						$this -> saveField('primary', true, false);
 					}
 				}
+
+				$this -> clearCache($currentVersion['CollectiblesUpload']['collectible_id']);
 			}
 		} else {
 			// Doing this so that we have a record of the current version
@@ -256,6 +279,8 @@ class CollectiblesUpload extends AppModel {
 							$this -> saveField('primary', true, false);
 						}
 					}
+
+					$this -> clearCache($collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id']);
 
 					$retVal = true;
 				}
