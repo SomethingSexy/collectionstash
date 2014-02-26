@@ -5,6 +5,27 @@ class CollectiblesTag extends AppModel {
 	public $belongsTo = array('Collectible', 'Tag' => array('counterCache' => true), 'Revision');
 	public $actsAs = array('Containable', 'Editable' => array('type' => 'tag', 'model' => 'CollectiblesTagEdit'));
 
+	private $collectibleCacheKey = 'tag_collectible_';
+
+	function afterSave($created, $options = array()) {
+		// so far we only doing singles, I don't think we do multiple
+		if (isset($this -> data['CollectiblesTag']['collectible_id'])) {
+			$this -> clearCache($this -> data['CollectiblesTag']['collectible_id']);
+		}
+	}
+
+	public function findByCollectibleId($id) {
+		$tags = Cache::read($this -> collectibleCacheKey . $id, 'collectible');
+
+		// if it isn't in the cache, add it to the cache
+		if (!$tags) {
+			$tags = $this -> find('all', array('conditions' => array('CollectiblesTag.collectible_id' => $id), 'contain' => array('Tag')));
+			Cache::write($this -> collectibleCacheKey . $id, $tags, 'collectible');
+		}
+
+		return $tags;
+	}
+
 	function publishEdit($tagEditId, $notes = null) {
 		//Grab out edit collectible
 		$tagEditVersion = $this -> findEdit($tagEditId);
@@ -25,6 +46,8 @@ class CollectiblesTag extends AppModel {
 			// At this point this has to have been approved, so delete it
 			if (!$this -> delete($tagEditVersion['CollectiblesTagEdit']['base_id'])) {
 				return false;
+			} else {
+				$this -> clearCache($tagEditVersion['CollectiblesTagEdit']['collectible_id']);
 			}
 		}
 
@@ -145,16 +168,22 @@ class CollectiblesTag extends AppModel {
 		$action['Action']['reason'] = '';
 
 		$currentVersion = $this -> findById($data['CollectiblesTag']['id']);
+		if (empty($currentVersion)) {
+			$retVal['response']['isSuccess'] = false;
+		}
+
 		// Now let's check to see if we need to update this based
 		// on collectible status
 		// If we are already auto updating, no need to check
 		if ($autoUpdate === 'false' || $autoUpdate === false) {
+
 			$autoUpdate = $this -> Collectible -> allowAutoUpdate($currentVersion['CollectiblesTag']['collectible_id'], $user);
 		}
 
 		if ($autoUpdate === true || $autoUpdate === 'true') {
 			if ($this -> delete($data['CollectiblesTag']['id'])) {
 				$retVal['response']['isSuccess'] = true;
+				$this -> clearCache($currentVersion['CollectiblesTag']['collectible_id']);
 			} else {
 				$retVal['response']['isSuccess'] = false;
 			}
@@ -168,6 +197,13 @@ class CollectiblesTag extends AppModel {
 			}
 		}
 		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function clearCache($d) {
+		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
 	}
 
 }

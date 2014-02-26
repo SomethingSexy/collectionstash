@@ -122,12 +122,12 @@ class Listing extends AppModel {
 
 	public function findByCollectibleId($id) {
 
-		$listings = Cache::read($this -> collectibleCacheKey . $id, 'long');
+		$listings = Cache::read($this -> collectibleCacheKey . $id, 'collectible');
 
 		// if it isn't in the cache, add it to the cache
 		if (!$listings) {
 			$listings = $this -> find('all', array('conditions' => array('Listing.collectible_id' => $id), 'contain' => array('User', 'Transaction')));
-			Cache::write($this -> collectibleCacheKey . $id, $listings, 'long');
+			Cache::write($this -> collectibleCacheKey . $id, $listings, 'collectible');
 		}
 
 		return $listings;
@@ -253,30 +253,10 @@ class Listing extends AppModel {
 	}
 
 	/**
-	 * Running the api through Listing so it is all contained here
-	 */
-	// public function createTransaction($data) {
-	// $retVal = $this -> buildDefaultResponse();
-	// // grab our transaction type
-	// $factory = new TransactionFactory();
-	//
-	// $transactionable = $factory -> getTransaction($listing['Listing']['listing_type_id']);
-	//
-	// $data = $transactionable -> createTransaction($data, $listing, $user);
-	//
-	// if ($this -> Transaction -> save($data, array('validate' => false))) {
-	// $retVal['response']['isSuccess'] = true;
-	// }
-	//
-	// return $retVal;
-	//
-	// }
-
-	/**
 	 *
 	 */
 	public function clearCache($d) {
-		Cache::delete($this -> collectibleCacheKey . $d, 'long');
+		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
 	}
 
 }
