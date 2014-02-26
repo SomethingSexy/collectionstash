@@ -954,21 +954,8 @@ class Collectible extends AppModel {
 
 		// if it isn't in the cache, add it to the cache
 		if (!$collectible) {
-			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
 			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'collectible');
-		}
-
-		// pulling out manually so run faster
-		if (!empty($collectible['AttributesCollectible'])) {
-			// ok if we have some of these
-			// loop through each one
-			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
-				//'AttributesCollectible' => array('Collectible' )
-				if (!empty($attributesCollectible['Attribute'])) {
-					$existingAttributeCollectibles = $this -> AttributesCollectible -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
-					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
-				}
-			}
 		}
 
 		// So instead of doing one giant call because we have to worry about clearing caches, let's break these calls out
@@ -1001,11 +988,34 @@ class Collectible extends AppModel {
 
 		//'CollectiblesTag' => array('Tag'),
 
-		$uploads = $this -> CollectiblesTag -> findByCollectibleId($id);
+		$tags = $this -> CollectiblesTag -> findByCollectibleId($id);
 		$collectible['CollectiblesTag'] = array();
-		foreach ($uploads as $key => $value) {
+		foreach ($tags as $key => $value) {
 			$collectible['CollectiblesTag'][$key] = $value['CollectiblesTag'];
 			$collectible['CollectiblesTag'][$key]['Tag'] = $value['Tag'];
+		}
+
+		//'ArtistsCollectible' => array('Artist'),
+
+		$artists = $this -> ArtistsCollectible -> findByCollectibleId($id);
+		$collectible['ArtistsCollectible'] = array();
+		foreach ($artists as $key => $value) {
+			$collectible['ArtistsCollectible'][$key] = $value['ArtistsCollectible'];
+			$collectible['ArtistsCollectible'][$key]['Artist'] = $value['Artist'];
+		}
+
+		// pulling out manually so run faster
+		// this will grab any other collectibles that an attribute tied to this collectible are
+		if (!empty($collectible['AttributesCollectible'])) {
+			// ok if we have some of these
+			// loop through each one
+			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
+				//'AttributesCollectible' => array('Collectible' )
+				if (!empty($attributesCollectible['Attribute'])) {
+					$existingAttributeCollectibles = $this -> AttributesCollectible -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
+					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
+				}
+			}
 		}
 
 		if (!empty($collectible)) {

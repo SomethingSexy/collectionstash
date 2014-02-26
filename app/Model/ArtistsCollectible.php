@@ -4,6 +4,27 @@ class ArtistsCollectible extends AppModel {
 	public $belongsTo = array('Collectible', 'Artist' => array('counterCache' => true), 'Revision');
 	public $actsAs = array('Containable', 'Editable' => array('type' => 'artist', 'model' => 'ArtistsCollectibleEdit'));
 
+	private $collectibleCacheKey = 'artists_collectible_';
+
+	function afterSave($created, $options = array()) {
+		// so far we only doing singles, I don't think we do multiple
+		if (isset($this -> data['ArtistsCollectible']['collectible_id'])) {
+			$this -> clearCache($this -> data['ArtistsCollectible']['collectible_id']);
+		}
+	}
+
+	public function findByCollectibleId($id) {
+		$artists = Cache::read($this -> collectibleCacheKey . $id, 'collectible');
+
+		// if it isn't in the cache, add it to the cache
+		if (!$artists) {
+			$artists = $this -> find('all', array('conditions' => array('ArtistsCollectible.collectible_id' => $id), 'contain' => array('Artist')));
+			Cache::write($this -> collectibleCacheKey . $id, $artists, 'collectible');
+		}
+
+		return $artists;
+	}
+
 	function publishEdit($tagEditId, $notes = null) {
 		//Grab out edit collectible
 		$tagEditVersion = $this -> findEdit($tagEditId);
@@ -24,6 +45,8 @@ class ArtistsCollectible extends AppModel {
 			// At this point this has to have been approved, so delete it
 			if (!$this -> delete($tagEditVersion['ArtistsCollectibleEdit']['base_id'])) {
 				return false;
+			} else {
+				$this -> clearCache($tagEditVersion['ArtistsCollectibleEdit']['collectible_id']);
 			}
 		}
 
@@ -153,6 +176,7 @@ class ArtistsCollectible extends AppModel {
 
 		if ($autoUpdate === true || $autoUpdate === 'true') {
 			if ($this -> delete($data['ArtistsCollectible']['id'])) {
+				$this -> clearCache($currentVersion['ArtistsCollectible']['collectible_id']);
 				$retVal['response']['isSuccess'] = true;
 			} else {
 				$retVal['response']['isSuccess'] = false;
@@ -167,6 +191,13 @@ class ArtistsCollectible extends AppModel {
 			}
 		}
 		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function clearCache($d) {
+		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
 	}
 
 }
