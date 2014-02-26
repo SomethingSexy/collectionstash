@@ -1004,6 +1004,9 @@ class Collectible extends AppModel {
 			$collectible['ArtistsCollectible'][$key]['Artist'] = $value['Artist'];
 		}
 
+		// I don't think I will actually cache AttributesCollectible but I will cache the attributes themselves
+		// so find all attributesCollectible by collectible_id, then take that list and find all attributes, cache them
+
 		// pulling out manually so run faster
 		// this will grab any other collectibles that an attribute tied to this collectible are
 		if (!empty($collectible['AttributesCollectible'])) {

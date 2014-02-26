@@ -360,7 +360,7 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 					<?php if ($collectibleDetail['Status']['id'] === '4' && Configure::read('Settings.TransactionManager.enabled')){ ?>
 						<div class="tab-pane" id="price">
 							<div id="transactions">						
-							
+								<?php echo $this -> element('collectible_listings', array('collectibleDetail' => $collectibleDetail, 'allowAddListing' => $isLoggedIn, 'allowDeleteListing' => $isUserAdmin)); ?>
 							</div>	
 							<?php if(!empty($transactionGraphData)) { ?>
 							<div class="graph-container">
