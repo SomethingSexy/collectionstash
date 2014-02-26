@@ -46,12 +46,12 @@ class CollectiblesUpload extends AppModel {
 	}
 
 	public function findByCollectibleId($id) {
-		$uploads = Cache::read($this -> collectibleCacheKey . $id, 'long');
+		$uploads = Cache::read($this -> collectibleCacheKey . $id, 'collectible');
 
 		// if it isn't in the cache, add it to the cache
 		if (!$uploads) {
 			$uploads = $this -> find('all', array('conditions' => array('CollectiblesUpload.collectible_id' => $id), 'contain' => array('Upload')));
-			Cache::write($this -> collectibleCacheKey . $id, $uploads, 'long');
+			Cache::write($this -> collectibleCacheKey . $id, $uploads, 'collectible');
 		}
 
 		return $uploads;
@@ -333,6 +333,13 @@ class CollectiblesUpload extends AppModel {
 		}
 
 		return $retVal;
+	}
+
+	/**
+	 *
+	 */
+	public function clearCache($d) {
+		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
 	}
 
 }

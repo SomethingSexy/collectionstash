@@ -950,12 +950,12 @@ class Collectible extends AppModel {
 		}
 
 		// First try to grab it from the cache
-		$collectible = Cache::read($this -> collectibleCacheKey . $id, 'long');
+		$collectible = Cache::read($this -> collectibleCacheKey . $id, 'collectible');
 
 		// if it isn't in the cache, add it to the cache
 		if (!$collectible) {
-			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CollectiblePriceFact', 'CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'CollectiblesTag' => array('Tag'), 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
-			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'long');
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'collectible');
 		}
 
 		// pulling out manually so run faster
@@ -983,14 +983,30 @@ class Collectible extends AppModel {
 			$collectible['Listing'][$key]['User'] = $value['User'];
 			$collectible['Listing'][$key]['Transaction'] = $value['Transaction'];
 		}
-		
+
 		//'CollectiblesUpload' => array('Upload'),
 		$uploads = $this -> CollectiblesUpload -> findByCollectibleId($id);
 		$collectible['CollectiblesUpload'] = array();
 		foreach ($uploads as $key => $value) {
 			$collectible['CollectiblesUpload'][$key] = $value['CollectiblesUpload'];
 			$collectible['CollectiblesUpload'][$key]['Upload'] = $value['Upload'];
-		}		
+		}
+
+		// this one is actually not cached yet because it isn't a big call
+		//'CollectiblePriceFact',
+		if (!is_null($collectible['Collectible']['collectible_price_fact_id'])) {
+			$priceFact = $this -> CollectiblePriceFact -> find('first', array('contain' => false, 'conditions' => array('CollectiblePriceFact.id' => $collectible['Collectible']['collectible_price_fact_id'])));
+			$collectible['CollectiblePriceFact'] = $priceFact['CollectiblePriceFact'];
+		}
+
+		//'CollectiblesTag' => array('Tag'),
+
+		$uploads = $this -> CollectiblesTag -> findByCollectibleId($id);
+		$collectible['CollectiblesTag'] = array();
+		foreach ($uploads as $key => $value) {
+			$collectible['CollectiblesTag'][$key] = $value['CollectiblesTag'];
+			$collectible['CollectiblesTag'][$key]['Tag'] = $value['Tag'];
+		}
 
 		if (!empty($collectible)) {
 			$variants = $this -> getCollectibleVariants($id);
@@ -1466,7 +1482,7 @@ class Collectible extends AppModel {
 	 *
 	 */
 	public function clearCache($d) {
-		Cache::delete($this -> collectibleCacheKey . $d, 'long');
+		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
 	}
 
 }
