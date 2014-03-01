@@ -46,6 +46,7 @@ var TransactionsView = Backbone.View.extend({
 						});
 
 						$('.active-listings', self.el).show();
+						$('.no-active-listings', self.el).hide();
 					} else if (model.get('status') === 'completed' && model.get('quantity_sold') === '0') {
 						// render as unsold listing
 						dust.render('transaction.unsold', data, function(error, output) {
@@ -55,18 +56,35 @@ var TransactionsView = Backbone.View.extend({
 						});
 
 						$('.unsold-listings', self.el).show();
+						$('.no-unsold-listings', self.el).hide();
 					}
 
-					if (model.get('Transactions') && model.get('Transactions').length > 0) {
-						// if it has any transactions render them
-						dust.render('transaction.completed', data, function(error, output) {
-							var $output = $(output);
-							$output.attr('data-listing', JSON.stringify(model.toJSON()));
-							$('.completed-listings tbody', self.el).append($output);
+					if (model.get('Transaction') && model.get('Transaction').length > 0) {
+
+						//allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd listing_type_id=listing_type_id
+						_.each(model.get('Transaction'), function(transaction) {
+							// if it has any transactions render them
+							var data = transaction;
+							data.type = model.get('type');
+							data.listing_name = model.get('listing_name');
+							data.listing_type_id = model.get('listing_type_id');
+							data.allowMaintenance = self.allowMaintenance;
+							data.allowAdd = self.allowAdd;
+							
+							dust.render('transaction.completed', data, function(error, output) {
+								var $output = $(output);
+								$output.attr('data-listing', JSON.stringify(model.toJSON()));
+								$('.completed-listings tbody', self.el).append($output);
+							});
+
 						});
 
 						$('.completed-listings', self.el).show();
+						$('.no-completed-listings', self.el).hide();
 					}
+
+					$('.no-transactions', self.el).hide();
+					$('.all-transactions', self.el).show();
 				} else {
 					dust.render('message', {
 						errors : response.response.errors,

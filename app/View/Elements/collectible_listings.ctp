@@ -69,28 +69,42 @@
 			</div><span class="help-block inline-error"></span>
 		
 		<?php } ?>
-		<?php if(empty($collectibleDetail['Listing'])){ ?>
-			<p><?php echo __('No listings have been added.'); ?></p>
-		<?php } else {
+		<?php 
+	
+		if(empty($collectibleDetail['Listing'])){ ?>
+			<p class="no-transactions"><?php echo __('No listings have been added.'); ?></p>
+		<?php } ?>
+		
+		<?php 
 				$activeListings = false;
 				$completedTransactions = false;
 				$unsoldListings = false;
+				
+				$activeListingCount = 0;
+				$completedTransactionsCount = 0;
+				$unsoldListingsCount = 0;
+				
 				foreach ($collectibleDetail['Listing'] as $key => $value) {
-				if (!$value['processed']) {
-				$activeListings = true;
-				} else if ($value['status'] === 'completed' && $value['quantity_sold'] === '0') {
-				$unsoldListings = true;
-				}
-
-				if (count($value['Transaction']) > 0) {
-				$completedTransactions = true;
-				}
-
+					if (!$value['processed']) {
+						$activeListings = true;
+						$activeListingCount = $activeListingCount + 1;
+					} else if ($value['status'] === 'completed' && $value['quantity_sold'] === '0') {
+						$unsoldListings = true;
+						$unsoldListingsCount = $unsoldListingsCount + 1;
+					}
+					if (count($value['Transaction']) > 0) {
+						$completedTransactions = true;
+						$completedTransactionsCount = $completedTransactionsCount + count($value['Transaction']);
+					}
 				}
 			?>
-
-		 	<h4>Active Listings</h4>
-		 	<div class="table-responsive active-listings" <?php if(!$activeListings){ echo 'style="display: none;';}?>>
+			
+			<div class="all-transactions" <?php if(empty($collectibleDetail['Listing'])){ echo 'style="display: none"';} ?>>
+		 	<h4>Active Listings <span class="count">(<?php echo $activeListingCount;?>)</span></h4>
+		 	<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".active-listings">
+				<i class="icon-expand"></i> Expand
+			</button>	
+		 	<div class="table-responsive active-listings collapse">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -187,8 +201,11 @@
 		 		<p class="no-active-listings"><?php echo __('There are no active listings.'); ?></p>
 		 	<?php } ?>
 		 	
-		 	<h4>Unsold Listings</h4>
-		 	<div class="table-responsive unsold-listings" <?php if(!$unsoldListings){ echo 'style="display: none;'; }?>>
+		 	<h4>Unsold Listings <span class="count">(<?php echo $unsoldListingsCount;?>)</span></h4>	 
+			<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".unsold-listings">
+				<i class="icon-expand"></i> Expand
+			</button>	
+		 	<div class="table-responsive unsold-listings collapse">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -257,8 +274,11 @@
 		 	<?php } ?>
 		 	
 			
-			<h4>Completed Transactions</h4>
-			<div class="table-responsive completed-listings" <?php if(!$completedTransactions){ echo 'style="display: none;'; }?>>
+			<h4>Completed Transactions <span class="count">(<?php echo $completedTransactionsCount;?>)</span></h4>
+			<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".completed-listings">
+				<i class="icon-expand"></i> Expand
+			</button>
+			<div class="table-responsive completed-listings collapse">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -359,8 +379,6 @@
 		 	<?php if(!$completedTransactions){ ?>
 		 		<p class="no-completed-transactions"><?php echo __('There are no completed listings.'); ?></p>
 		 	<?php } ?>		
-			
-		<?php } ?>
-		
+		</div>	
 	</div>
 </div>
