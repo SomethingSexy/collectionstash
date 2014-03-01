@@ -10,9 +10,9 @@
 				<span class="average-value">$<?php echo $collectibleDetail['CollectiblePriceFact']['average_price']; ?></span>
 				Average price from <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions']; ?><?php
 				if ($collectibleDetail['CollectiblePriceFact']['total_transactions'] == 1) {
-					echo __('transaction');
+					echo __(' transaction');
 				} else {
-					echo __('transactions');
+					echo __(' transactions');
 				}
 			?>
 			</div>
@@ -20,9 +20,9 @@
 				<span class="average-value">$<?php echo $collectibleDetail['CollectiblePriceFact']['average_price_ebay']; ?></span>
 				Average eBay price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions']; ?><?php
 				if ($collectibleDetail['CollectiblePriceFact']['total_transactions_ebay'] == 1) {
-					echo __('transaction');
+					echo __(' transaction');
 				} else {
-					echo __('transactions');
+					echo __(' transactions');
 				}
 			?>
 				
@@ -31,9 +31,9 @@
 				<span class="average-value">$<?php echo $collectibleDetail['CollectiblePriceFact']['average_price_external']; ?></span>
 				Average eBay price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions_external']; ?><?php
 				if ($collectibleDetail['CollectiblePriceFact']['total_transactions_external'] == 1) {
-					echo __('transaction');
+					echo __(' transaction');
 				} else {
-					echo __('transactions');
+					echo __(' transactions');
 				}
 			?>	
 			</div>			
@@ -53,22 +53,6 @@
 		<h3 class="panel-title">Listings and Transaction History</h3>
 	</div>
 	<div class="panel-body">	
-		{@if cond=" ('{errors}'.length === 0) "}
-		
-		{:else}
-			<div class="alert alert-danger">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<h4>Oops! Something went wrong.</h4>
-				<ul>
-				{#errors}
-					{#message}
-					<li>{.}</li>
-					{/message}
-				
-				{/errors}
-				</ul>
-			</div>
-		{/if}
 		<?php if($allowAddListing){ ?>
 		<div class="form-group clearfix">
 			<div class="input-group col-lg-6">
@@ -106,8 +90,7 @@
 			?>
 
 		 	<h4>Active Listings</h4>
-		 	<?php if($activeListings){ ?>
-		 	<div class="table-responsive">
+		 	<div class="table-responsive active-listings" <?php if(!$activeListings){ echo 'style="display: none;';}?>>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -122,8 +105,12 @@
 					</thead>
 					<tbody>
 						<?php foreach ($collectibleDetail['Listing'] as $key => $value) { ?>
-							 <?php if(!$value['processed']){ ?>
-								<tr>
+							 <?php if(!$value['processed']){ 
+							 	
+								$listingJSON = json_encode($value);
+								$listingJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $listingJSON));
+								?>
+								<tr class="listing" data-listing="<?php echo $listingJSON?>">
 									<td>
 										<?php
 										if ($value['listing_type_id'] === '2') {
@@ -184,10 +171,10 @@
 											}
 										?>
 										<?php if($allowDeleteListing){?>
-											<a data-id="<?php echo  $value['id'];?>" class="btn btn-default delete" href="#" title="Delete">
+											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
 												<i class="icon-remove"></i>
 											</a>
-										<?php }?>
+										<?php } ?>
 										</div>
 									</td>
 								</tr>
@@ -196,13 +183,12 @@
 					</tbody>
 				</table> 	
 			</div>
-		 	<?php } else { ?>
-		 		<p><?php echo __('There are no active listings.'); ?></p>
+		 	<?php if(!$activeListings){ ?>
+		 		<p class="no-active-listings"><?php echo __('There are no active listings.'); ?></p>
 		 	<?php } ?>
 		 	
 		 	<h4>Unsold Listings</h4>
-		 	{@eq key="{unsoldListings}" value="true" type="boolean"}
-		 	<div class="table-responsive">
+		 	<div class="table-responsive unsold-listings" <?php if(!$unsoldListings){ echo 'style="display: none;'; }?>>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -216,42 +202,63 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
-							{@if cond=" ('{processed}' && '{status}' === 'completed' && '{quantity_sold}' === '0') "}
-								<tr>
-									<td>{type}</td>
-									<td><a target="_blank" href="{url}">{listing_name}</a></td>
-									<td>{listing_price}</td>
-									<td>{condition_name}</td>
-									<td>{start_date}</td>
-									<td>{end_date}</td>
+						<?php foreach ($collectibleDetail['Listing'] as $key => $value) { ?>
+							<?php if($value['processed'] && $value['status'] === 'completed' && $value['quantity_sold'] === '0'){ 
+								$listingJSON = json_encode($value);
+								$listingJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $listingJSON));
+								?>
+								<tr class="listing" data-listing="<?php echo $listingJSON?>">
+									<td><?php echo $value['type']; ?></td>
+									<td><a target="_blank" href="{url}"><?php echo $value['listing_name']; ?></a></td>
+									<td><?php echo $value['listing_price']; ?></td>
+									<td><?php echo $value['condition_name']; ?></td>
+									<td><?php echo $value['start_date']; ?></td>
+									<td><?php echo $value['end_date']; ?></td>
 									<td>
 										<div class="btn-group actions">
-											{@eq key="{allowAdd}" value="true" type="boolean"}
-											<a data-id="{id}" class="btn btn-default flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
-												<i class=" icon-exclamation-sign"></i>
+											<?php
+											if ($allowAddListing) {
+												echo '<a data-id="' . $value['id'] . '" class="btn btn-default flag';
+												if ($value['flagged'] && !$allowDeleteListing) {
+													echo ' disabled';
+												}
+
+												if ($value['flagged']) {
+													echo ' btn-danger';
+												}
+
+												echo '"  href="#" title="';
+												// end class
+
+												if ($value['flagged']) {
+													echo __('This listing has been flagged already.');
+												} else {
+													echo __('Flag if you think there is an error.');
+												}
+
+												echo '"><i class=" icon-exclamation-sign"></i></a>';
+											}
+										?>
+										<?php if($allowDeleteListing){?>
+											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
+												<i class="icon-remove"></i>
 											</a>
-											{/eq}
-											{@eq key="{allowMaintenance}" value="true" type="boolean"}
-												<a data-id="{id}" class="btn btn-default delete" href="#" title="Delete">
-													<i class="icon-remove"></i>
-												</a>
-											{/eq}
+										<?php } ?>
 										</div>
 									</td>
 								</tr>
-							{/if}
-						{/listings}
+							<?php } ?>						
+						<?php } ?>
 					</tbody>
 				</table> 
 			</div>	
-		 	{:else}
-		 		<p>There are no unsold listings.</p>
-		 	{/eq}
+		 	<?php if(!$unsoldListings){ ?>
+		 		<p class="no-unsold-listings"><?php echo __('There are no unsold listings.'); ?></p>
+		 	<?php } ?>
+		 	
 			
 			<h4>Completed Transactions</h4>
-			{@eq key="{completedTransactions}" value="true" type="boolean"}
-			<div class="table-responsive">
+			<div class="table-responsive completed-listings" <?php if(!$completedTransactions){ echo 'style="display: none;'; }?>>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -264,64 +271,94 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#listings allowMaintenance=allowMaintenance allowAdd=allowAdd}
-							{#Transaction allowDeleteListing=allowDeleteListing type=type itemId=ext_item_id listing_name=listing_name flagged=flagged allowAdd=allowAdd listing_type_id=listing_type_id}
-							<tr>
+						<?php foreach ($collectibleDetail['Listing'] as $key => $value) { ?>
+							<?php foreach ($value['Transaction'] as $key => $transaction) { 
+								$listingJSON = json_encode($value);
+								$listingJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $listingJSON));
+								?>
+							<tr class="listing" data-listing="<?php echo $listingJSON?>">
 								<td>
-									{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
-										{@eq key="{listing_type_id}" value="2" type="string"}
-											User Sale
-										{/eq}
-										{@eq key="{listing_type_id}" value="3" type="string"}
-											User Trade
-										{/eq}
-									{:else}
-										{type}
-									{/if}
+									<?php
+									if ($value['listing_type_id'] === '2') {
+										echo 'User Sale';
+									} else if ($value['listing_type_id'] === '3') {
+										echo 'User Trade';
+									} else {
+										echo $value['type'];
+									}
+									?>
 								</td>
 								<td>
-									{@if cond="( '{listing_type_id}' === '2' ||  '{listing_type_id}' === '3' )"}
-										{listing_name}
-									{:else}
-										<a target="_blank" href="{url}">{listing_name}</a>
-									{/if}							
+									<?php
+									if ($value['listing_type_id'] === '2' || $value['listing_type_id'] === '3') {
+										echo $value['listing_name'];
+									} else {
+										echo '<a target="_blank" href="' . $value['url'] . '">' . $value['listing_name'] . '</a>';
+									}
+									?>						
 								</td>
 								<td>
-										{@eq key="{listing_type_id}" value="1" type="string"}
-											{sale_price}
-										{/eq}
-										{@eq key="{listing_type_id}" value="2" type="string"}
-											{sale_price}
-										{/eq}
-										{@eq key="{listing_type_id}" value="3" type="string"}
-											{traded_for}
-										{/eq}
+									<?php
+									if ($value['listing_type_id'] === '1') {
+										echo '$' . $transaction['sale_price'];
+									} else if ($value['listing_type_id'] === '2') {
+										echo '$' . $transaction['sale_price'];
+									} else if ($value['listing_type_id'] === '3') {
+										echo $transaction['traded_for'];
+									}
+									?>
 								</td>
-								<td>{condition_name}</td>
-								<td>{#sale_date} {.} {:else} Missing {/sale_date}</td>
+								<td><?php echo $value['condition_name']; ?></td>
+								<td>
+									<?php
+									if ($transaction['sale_date']) {
+										echo $transaction['sale_date'];
+									} else {
+										echo 'Missing';
+									}
+								?>
+								</td>
 								<td>
 									<div class="btn-group actions">
-										{@eq key="{allowAdd}" value="true" type="boolean"}
-											<a data-id="{listing_id}" class="btn btn-default flag {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
-												<i class=" icon-exclamation-sign"></i>
-											</a>
-										{/eq}
-										{@eq key="{allowMaintenance}" value="true" type="boolean"}
-											<a data-id="{listing_id}" class="btn btn-default delete" href="#" title="Delete">
+										<?php
+										if ($allowAddListing) {
+											echo '<a data-id="' . $value['id'] . '" class="btn btn-default flag';
+											if ($value['flagged'] && !$allowDeleteListing) {
+												echo ' disabled';
+											}
+
+											if ($value['flagged']) {
+												echo ' btn-danger';
+											}
+
+											echo '"  href="#" title="';
+											// end class
+
+											if ($value['flagged']) {
+												echo __('This listing has been flagged already.');
+											} else {
+												echo __('Flag if you think there is an error.');
+											}
+
+											echo '"><i class=" icon-exclamation-sign"></i></a>';
+										}
+										?>
+										<?php if($allowDeleteListing){?>
+											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
 												<i class="icon-remove"></i>
 											</a>
-										{/eq}
+										<?php } ?>
 									</div>
 								</td>
 							</tr>
-							{/Transaction}
-						{/listings}
+							<?php } ?>						
+						<?php } ?>
 					</tbody>
 				</table>	
 			</div>
-			{:else}
-		 		<p>There are no completed transactions.</p>
-		 	{/eq}			
+		 	<?php if($completedTransactions){ ?>
+		 		<p class="no-completed-transactions"><?php echo __('There are no completed listings.'); ?></p>
+		 	<?php } ?>		
 			
 		<?php } ?>
 		
