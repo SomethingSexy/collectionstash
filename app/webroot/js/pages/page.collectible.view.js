@@ -1,16 +1,15 @@
 $(function() {
 
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/status.dust'), $.get('/templates/transactions/transactions.dust')).done(function(statusTemplate, transactionsTemplate) {
-		dust.loadSource(dust.compile(transactionsTemplate[0], 'transactions'));
+	$.when($.get('/templates/collectibles/status.dust'), $.get('/templates/transactions/transaction.active.dust'), $.get('/templates/transactions/transaction.unsold.dust'), $.get('/templates/transactions/transaction.completed.dust'), $.get('/templates/collectibles/message.dust')).done(function(statusTemplate, activeTemplate, unsoldTemplate, completedTemplate, messageTemplate) {
+		dust.loadSource(dust.compile(unsoldTemplate[0], 'transaction.unsold'));
+		dust.loadSource(dust.compile(activeTemplate[0], 'transaction.active'));
+		dust.loadSource(dust.compile(completedTemplate[0], 'transaction.completed'));
+		dust.loadSource(dust.compile(messageTemplate[0], 'message'));
+		
+		
 		// grab the template-stash-add
 		var collectibleModel = new Backbone.Model(collectible);
-		var listingsList = new Listings(listings);
-		// null means we don't have anything
-		var priceData = null;
-		if (collectiblePriceData !== null) {
-			var priceData = new Backbone.Model(collectiblePriceData);
-		}
 
 		// global variable that comes from the page, status is only for new collectibles
 		if (showStatus) {
@@ -44,40 +43,38 @@ $(function() {
 		}
 
 		// var Router = Backbone.Router.extend({
-			// routes : {
-				// "detail" : "detail", // #help
-				// "price" : "price", // #search/kiwis
-			// },
-			// detail : function() {
-				// $('#myTab a.detail').tab('show');
-			// },
-			// price : function() {
-				// $('#myTab a.price').tab('show');
-			// }
+		// routes : {
+		// "detail" : "detail", // #help
+		// "price" : "price", // #search/kiwis
+		// },
+		// detail : function() {
+		// $('#myTab a.detail').tab('show');
+		// },
+		// price : function() {
+		// $('#myTab a.price').tab('show');
+		// }
 		// });
-// 
+		//
 		// var router = new Router();
-// 
+		//
 		// Backbone.history.start();
-// 
+		//
 		// $('#myTab a').click(function(e) {
-			// e.preventDefault();
-			// router.navigate($(e.currentTarget).attr('data-id'), {
-				// trigger : true
-			// });
+		// e.preventDefault();
+		// router.navigate($(e.currentTarget).attr('data-id'), {
+		// trigger : true
+		// });
 		// });
 
 		// currently the other sections on the detail page are
 		// not backbone (not sure they ever will be), so we are going to have
 		// to do some hiding/showing
 
-		// $('#transactions').html(new TransactionsView({
-			// collectible : collectibleModel,
-			// collection : listingsList,
-			// allowDeleteListing : allowDeleteListing,
-			// allowAddListing : allowAddListing,
-			// priceData : priceData
-		// }).render().el);
+		new TransactionsView({
+			collectible : collectibleModel,
+			allowDeleteListing : allowDeleteListing,
+			allowAddListing : allowAddListing
+		});
 
 		// lol this should probably get moved to the view file
 		function showTooltip(x, y, contents) {

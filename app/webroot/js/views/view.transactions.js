@@ -2,7 +2,7 @@
 // I also put the price data in this view so I didn't have to create more files
 // performance vs standards
 var TransactionsView = Backbone.View.extend({
-	template : 'transactions',
+	el : '#transactions',
 	className : '',
 	events : {
 		'click .add-transaction' : 'submit',
@@ -11,58 +11,7 @@ var TransactionsView = Backbone.View.extend({
 
 	},
 	initialize : function(options) {
-		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
-		this.allowMaintenance = options.allowDeleteListing;
-		this.allowAdd = options.allowAddListing;
 		this.collectible = options.collectible;
-		this.priceData = options.priceData;
-		this.collection.on('add', this.render, this);
-		this.collection.on('remove', this.render, this);
-		this.collection.on('change:flagged', this.render, this);
-		this.errors = [];
-	},
-	render : function() {
-		var self = this;
-
-		var activeListings = false;
-		var completedTransactions = false;
-		var unsoldListings = false;
-
-		this.collection.each(function(listing) {
-			if (!listing.get('processed')) {
-				activeListings = true;
-			} else if (listing.get('status') === 'completed' && listing.get('quantity_sold') === '0') {
-				unsoldListings = true;
-			}
-
-			if (listing.get('Transaction').length > 0) {
-				completedTransactions = true;
-			}
-		});
-
-		var data = {
-			listings : this.collection.toJSON(),
-			errors : this.errors,
-			activeListings : activeListings,
-			completedTransactions : completedTransactions,
-			unsoldListings : unsoldListings,
-			allowMaintenance : this.allowMaintenance,
-			allowAdd : this.allowAdd
-		};
-
-		if (this.priceData !== null) {
-			data.showPriceBreakdown = true;
-			data.priceBreakdown = this.priceData.toJSON();
-		}
-
-		dust.render(this.template, data, function(error, output) {
-			$(self.el).html(output);
-		});
-
-		//once we are done rendering clear errors
-		this.errors = [];
-
-		return this;
 	},
 	submit : function() {
 		var self = this;
@@ -76,12 +25,39 @@ var TransactionsView = Backbone.View.extend({
 
 		model.save({}, {
 			success : function(model, response, options) {
+				$('#inputListingItem', this.el).val(''),
 				$('.add-transaction', self.el).button('reset');
 				if (response.response.isSuccess) {
-					self.collection.add(model);
+
+					// if it not processed then it is active
+					if (!model.get('processed')) {
+						// render as active listing
+						dust.render('transaction.active', model.toJSON(), function(error, output) {
+							$('.active-listings tbody', self.el).append(output);
+						});
+
+						$('.active-listings', self.el).show();
+					} else if (model.get('status') === 'completed' && model.get('quantity_sold') === '0') {
+						// render as unsold listing
+						dust.render('transaction.unsold', model.toJSON(), function(error, output) {
+							$('.unsold-listings tbody', self.el).append(output);
+						});
+
+						$('.unsold-listings', self.el).show();
+					}
+
+					if (model.get('Transactions') && model.get('Transactions').length > 0) {
+						// if it has any transactions render them
+						dust.render('transaction.completed', model.toJSON(), function(error, output) {
+							$('.completed-listings tbody', self.el).append(output);
+						});
+
+						$('.completed-listings', self.el).show();
+					}
 				} else {
 					self.errors = response.response.errors;
-					self.render();
+					// render message
+					//self.render();
 				}
 			},
 			error : function(model, xhr, options) {
@@ -98,7 +74,7 @@ var TransactionsView = Backbone.View.extend({
 					}];
 				}
 
-				self.render();
+				//self.render();
 			}
 		});
 
@@ -106,28 +82,40 @@ var TransactionsView = Backbone.View.extend({
 	deleteListing : function(event) {
 		event.preventDefault();
 		var modelId = $(event.currentTarget, this.el).attr('data-id');
-		var model = this.collection.get(modelId);
+		var model = new ListingModel({
+			id : modelId
+		});
+		// delete
 		model.destroy();
+		// don't wait, just remove
+		$(event.currentTarget).closest('.listing').remove();
 	},
 	flag : function(event) {
 		event.preventDefault();
-		var modelId = $(event.currentTarget, this.el).attr('data-id');
 
-		if (!$(event.currentTarget, this.el).hasClass('disabled')) {
-			var model = this.collection.get(modelId);
+		if (!$(event.currentTarget).hasClass('disabled')) {
+			var $tr = $(event.currentTarget).closest('.listing');
+
+			var listingData = JSON.parse($tr.attr('data-listing'));
+
+			var model = new ListingModel(listingData);
 
 			if (model.get('flagged')) {
 				model.set({
 					flagged : false
 				});
+				$(event.currentTarget).removeClass('btn-danger');
 			} else {
 				model.set({
 					flagged : true
 				});
+				$(event.currentTarget).addClass('btn-danger');
 			}
 
-			model.save();
+			// reset the data in case it gets clicked again
+			$tr.attr('data-listing', JSON.stringify(model.toJSON()));
 
+			model.save();
 		}
 
 	}

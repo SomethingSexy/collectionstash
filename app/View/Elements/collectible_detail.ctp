@@ -59,7 +59,7 @@ echo $this -> Minify -> script('views/view.status', array('inline' => false));
 
 echo $this -> Minify -> script('models/model.listing', array('inline' => false));
 echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
-echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
+echo $this -> Html -> script('views/view.transactions', array('inline' => false));
 echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
@@ -442,15 +442,7 @@ var collectibleStatus = {
 	status:<?php echo json_encode($collectibleDetail['Status']); ?>
 };
 var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
-var listings =  <?php echo json_encode($collectibleDetail['Listing']); ?>;
 var transactionsGraphData = <?php echo json_encode($transactionGraphData); ?>;
-var collectiblePriceData = <?php
-		if (isset($collectibleDetail['CollectiblePriceFact'])) {
-			echo json_encode($collectibleDetail['CollectiblePriceFact']);
-		} else {
-			echo 'null';
-		}
-	?>;
  <?php
 if ($isUserAdmin) {
 	echo 'var allowDeleteListing = true;';
