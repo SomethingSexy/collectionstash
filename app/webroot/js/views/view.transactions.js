@@ -12,6 +12,8 @@ var TransactionsView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		this.collectible = options.collectible;
+		this.allowMaintenance = options.allowDeleteListing;
+		this.allowAdd = options.allowAddListing;
 	},
 	submit : function() {
 		var self = this;
@@ -25,22 +27,31 @@ var TransactionsView = Backbone.View.extend({
 
 		model.save({}, {
 			success : function(model, response, options) {
-				$('#inputListingItem', this.el).val(''),
+				$('#inputListingItem', self.el).val('');
 				$('.add-transaction', self.el).button('reset');
+				$('.alert', self.el).remove();
 				if (response.response.isSuccess) {
+
+					var data = model.toJSON();
+					data.allowMaintenance = self.allowMaintenance;
+					data.allowAdd = self.allowAdd;
 
 					// if it not processed then it is active
 					if (!model.get('processed')) {
 						// render as active listing
-						dust.render('transaction.active', model.toJSON(), function(error, output) {
-							$('.active-listings tbody', self.el).append(output);
+						dust.render('transaction.active', data, function(error, output) {
+							var $output = $(output);
+							$output.attr('data-listing', JSON.stringify(model.toJSON()));
+							$('.active-listings tbody', self.el).append($output);
 						});
 
 						$('.active-listings', self.el).show();
 					} else if (model.get('status') === 'completed' && model.get('quantity_sold') === '0') {
 						// render as unsold listing
-						dust.render('transaction.unsold', model.toJSON(), function(error, output) {
-							$('.unsold-listings tbody', self.el).append(output);
+						dust.render('transaction.unsold', data, function(error, output) {
+							var $output = $(output);
+							$output.attr('data-listing', JSON.stringify(model.toJSON()));
+							$('.unsold-listings tbody', self.el).append($output);
 						});
 
 						$('.unsold-listings', self.el).show();
@@ -48,33 +59,45 @@ var TransactionsView = Backbone.View.extend({
 
 					if (model.get('Transactions') && model.get('Transactions').length > 0) {
 						// if it has any transactions render them
-						dust.render('transaction.completed', model.toJSON(), function(error, output) {
-							$('.completed-listings tbody', self.el).append(output);
+						dust.render('transaction.completed', data, function(error, output) {
+							var $output = $(output);
+							$output.attr('data-listing', JSON.stringify(model.toJSON()));
+							$('.completed-listings tbody', self.el).append($output);
 						});
 
 						$('.completed-listings', self.el).show();
 					}
 				} else {
-					self.errors = response.response.errors;
-					// render message
-					//self.render();
+					dust.render('message', {
+						errors : response.response.errors,
+						hasErrors : true
+					}, function(error, output) {
+						$('.panel-body', self.el).prepend(output);
+					});
 				}
 			},
 			error : function(model, xhr, options) {
+				$('.alert', self.el).remove();
 				$('.add-transaction', self.el).button('reset');
+				var errors = [];
 				if (xhr && xhr.status) {
-					self.errors = [{
+					errors.push({
 						message : 'You must be logged in to submit listings.',
 						inline : 'false'
-					}];
+					});
 				} else {
-					self.errors = [{
+					errors.push({
 						message : 'There was an issue with the request.',
 						inline : 'false'
-					}];
+					});
 				}
 
-				//self.render();
+				dust.render('message', {
+					errors : errors,
+					hasErrors : true
+				}, function(error, output) {
+					$('.panel-body', self.el).prepend(output);
+				});
 			}
 		});
 

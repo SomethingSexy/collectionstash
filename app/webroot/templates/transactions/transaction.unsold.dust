@@ -1,4 +1,4 @@
-<tr>
+<tr class="listing">
 	<td>{type}</td>
 	<td><a target="_blank" href="{url}">{listing_name}</a></td>
 	<td>{listing_price}</td>
