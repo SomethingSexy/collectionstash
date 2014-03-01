@@ -42,34 +42,6 @@ $(function() {
 			$('#status-container').remove();
 		}
 
-		// var Router = Backbone.Router.extend({
-		// routes : {
-		// "detail" : "detail", // #help
-		// "price" : "price", // #search/kiwis
-		// },
-		// detail : function() {
-		// $('#myTab a.detail').tab('show');
-		// },
-		// price : function() {
-		// $('#myTab a.price').tab('show');
-		// }
-		// });
-		//
-		// var router = new Router();
-		//
-		// Backbone.history.start();
-		//
-		// $('#myTab a').click(function(e) {
-		// e.preventDefault();
-		// router.navigate($(e.currentTarget).attr('data-id'), {
-		// trigger : true
-		// });
-		// });
-
-		// currently the other sections on the detail page are
-		// not backbone (not sure they ever will be), so we are going to have
-		// to do some hiding/showing
-
 		new TransactionsView({
 			collectible : collectibleModel,
 			allowDeleteListing : allowDeleteListing,

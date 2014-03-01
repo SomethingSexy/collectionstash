@@ -356,7 +356,7 @@
 					</tbody>
 				</table>	
 			</div>
-		 	<?php if($completedTransactions){ ?>
+		 	<?php if(!$completedTransactions){ ?>
 		 		<p class="no-completed-transactions"><?php echo __('There are no completed listings.'); ?></p>
 		 	<?php } ?>		
 			
