@@ -45,7 +45,11 @@ var TransactionsView = Backbone.View.extend({
 							$('.active-listings tbody', self.el).append($output);
 						});
 
-						$('.active-listings', self.el).show();
+						// update the count
+						$('.active-listings-count', self.el).text(parseInt($('.active-listings-count', self.el).text()) + 1);
+
+						$('.active-listings', self.el).collapse('show');
+						$('.btn-active-listings', self.el).show();
 						$('.no-active-listings', self.el).hide();
 					} else if (model.get('status') === 'completed' && model.get('quantity_sold') === '0') {
 						// render as unsold listing
@@ -54,8 +58,11 @@ var TransactionsView = Backbone.View.extend({
 							$output.attr('data-listing', JSON.stringify(model.toJSON()));
 							$('.unsold-listings tbody', self.el).append($output);
 						});
+						// update the count
+						$('.unsold-listings-count', self.el).text(parseInt($('.active-listings-count', self.el).text()) + 1);
 
-						$('.unsold-listings', self.el).show();
+						$('.unsold-listings', self.el).collapse('show');
+						$('.btn-unsold-listings', self.el).show();
 						$('.no-unsold-listings', self.el).hide();
 					}
 
@@ -70,7 +77,7 @@ var TransactionsView = Backbone.View.extend({
 							data.listing_type_id = model.get('listing_type_id');
 							data.allowMaintenance = self.allowMaintenance;
 							data.allowAdd = self.allowAdd;
-							
+
 							dust.render('transaction.completed', data, function(error, output) {
 								var $output = $(output);
 								$output.attr('data-listing', JSON.stringify(model.toJSON()));
@@ -79,7 +86,11 @@ var TransactionsView = Backbone.View.extend({
 
 						});
 
-						$('.completed-listings', self.el).show();
+						// update the count
+						$('.unsold-listings-count', self.el).text(parseInt($('.active-listings-count', self.el).text()) + _.size(model.get('Transaction')));
+
+						$('.btn-completed-listings', self.el).show();
+						$('.completed-listings', self.el).collapse('show');
 						$('.no-completed-listings', self.el).hide();
 					}
 
