@@ -100,11 +100,11 @@
 			?>
 			
 			<div class="all-transactions" <?php if(empty($collectibleDetail['Listing'])){ echo 'style="display: none"';} ?>>
-		 	<h4>Active Listings <span class="count">(<?php echo $activeListingCount;?>)</span></h4>
-		 	<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".active-listings">
+		 	<h4>Active Listings (<span class="active-listings-count"><?php echo $activeListingCount;?></span>)</h4>
+		 	<button type="button" class="btn btn-default btn-active-listings" <?php if(!$activeListings){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".active-listings">
 				<i class="icon-expand"></i> Expand
 			</button>	
-		 	<div class="table-responsive active-listings collapse">
+		 	<div class="table-responsive active-listings collapse spacer">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -201,11 +201,11 @@
 		 		<p class="no-active-listings"><?php echo __('There are no active listings.'); ?></p>
 		 	<?php } ?>
 		 	
-		 	<h4>Unsold Listings <span class="count">(<?php echo $unsoldListingsCount;?>)</span></h4>	 
-			<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".unsold-listings">
+		 	<h4>Unsold Listings (<span class="unsold-listings-count"><?php echo $unsoldListingsCount;?></span>)</h4>	 
+			<button type="button" class="btn btn-default btn-unsold-listings" <?php if(!$unsoldListings){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".unsold-listings">
 				<i class="icon-expand"></i> Expand
 			</button>	
-		 	<div class="table-responsive unsold-listings collapse">
+		 	<div class="table-responsive unsold-listings collapse spacer">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -274,11 +274,11 @@
 		 	<?php } ?>
 		 	
 			
-			<h4>Completed Transactions <span class="count">(<?php echo $completedTransactionsCount;?>)</span></h4>
-			<button type="button" class="btn btn-default" data-toggle="collapse" data-target=".completed-listings">
+			<h4>Completed Listings (<span class="completed-listings-count"><?php echo $completedTransactionsCount;?></span>)</h4>
+			<button type="button" class="btn btn-default btn-completed-listings" <?php if(!$completedTransactions){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".completed-listings">
 				<i class="icon-expand"></i> Expand
 			</button>
-			<div class="table-responsive completed-listings collapse">
+			<div class="table-responsive completed-listings collapse spacer">
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -377,7 +377,7 @@
 				</table>	
 			</div>
 		 	<?php if(!$completedTransactions){ ?>
-		 		<p class="no-completed-transactions"><?php echo __('There are no completed listings.'); ?></p>
+		 		<p class="no-completed-listings"><?php echo __('There are no completed listings.'); ?></p>
 		 	<?php } ?>		
 		</div>	
 	</div>
