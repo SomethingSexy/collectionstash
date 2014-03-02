@@ -7,7 +7,8 @@ var TransactionsView = Backbone.View.extend({
 	events : {
 		'click .add-transaction' : 'submit',
 		'click .flag' : 'flag',
-		'click .delete' : 'deleteListing'
+		'click .delete' : 'deleteListing',
+		'click .btn-collapser' : 'toggleCollapse'
 
 	},
 	initialize : function(options) {
@@ -170,5 +171,13 @@ var TransactionsView = Backbone.View.extend({
 			model.save();
 		}
 
+	},
+	toggleCollapse : function(event) {
+		var $button = $(event.currentTarget);
+		if ($button.hasClass('collapsed')) {
+			$button.html('<i class="icon-collapse-top"></i>');
+		} else {
+			$button.html('<i class="icon-expand"></i>');
+		}
 	}
 });
