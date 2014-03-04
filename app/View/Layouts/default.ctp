@@ -35,7 +35,6 @@
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
 	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
-	echo $this -> Minify -> css('thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
@@ -263,7 +262,7 @@ if (isset($bodyClass))
 	<?php echo $this -> element('sql_dump'); ?>
 	
 	<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
-	<div id="blueimp-gallery" class="blueimp-gallery">
+	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false">
 	    <!-- The container for the modal slides -->
 	    <div class="slides"></div>
 	    <!-- Controls for the borderless lightbox -->
@@ -273,28 +272,6 @@ if (isset($bodyClass))
 	    <a class="close">×</a>
 	    <a class="play-pause"></a>
 	    <ol class="indicator"></ol>
-	    <!-- The modal dialog, which will be used to wrap the lightbox content -->
-	    <div class="modal fade">
-	        <div class="modal-dialog">
-	            <div class="modal-content">
-	                <div class="modal-header">
-	                    <button type="button" class="close" aria-hidden="true">&times;</button>
-	                    <h4 class="modal-title"></h4>
-	                </div>
-	                <div class="modal-body next"></div>
-	                <div class="modal-footer">
-	                    <button type="button" class="btn btn-default pull-left prev">
-	                        <i class="glyphicon glyphicon-chevron-left"></i>
-	                        Previous
-	                    </button>
-	                    <button type="button" class="btn btn-primary next">
-	                        Next
-	                        <i class="glyphicon glyphicon-chevron-right"></i>
-	                    </button>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
 	</div>
 	<!-- todo - remove all of this once we add requirejs support -->
 	<script id="template-stash-add" type="text/x-tmpl">
@@ -312,7 +289,6 @@ if (isset($bodyClass))
 	<?php
 	echo $this -> Minify -> script('thirdparty/blueimp-gallery');
 	echo $this -> Minify -> script('thirdparty/jquery.blueimp-gallery');
-	echo $this -> Minify -> script('thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> script('thirdparty/placeholder');
 		?>
 	<script>

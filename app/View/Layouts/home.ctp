@@ -34,7 +34,6 @@
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
 	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
-	echo $this -> Minify -> css('thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
@@ -264,7 +263,7 @@ else
 		<?php echo $this -> element('sql_dump'); ?>
 		
 	<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
-	<div id="blueimp-gallery" class="blueimp-gallery">
+	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false">
 	    <!-- The container for the modal slides -->
 	    <div class="slides"></div>
 	    <!-- Controls for the borderless lightbox -->
@@ -274,33 +273,10 @@ else
 	    <a class="close">×</a>
 	    <a class="play-pause"></a>
 	    <ol class="indicator"></ol>
-	    <!-- The modal dialog, which will be used to wrap the lightbox content -->
-	    <div class="modal fade">
-	        <div class="modal-dialog">
-	            <div class="modal-content">
-	                <div class="modal-header">
-	                    <button type="button" class="close" aria-hidden="true">&times;</button>
-	                    <h4 class="modal-title"></h4>
-	                </div>
-	                <div class="modal-body next"></div>
-	                <div class="modal-footer">
-	                    <button type="button" class="btn btn-default pull-left prev">
-	                        <i class="glyphicon glyphicon-chevron-left"></i>
-	                        Previous
-	                    </button>
-	                    <button type="button" class="btn btn-primary next">
-	                        Next
-	                        <i class="glyphicon glyphicon-chevron-right"></i>
-	                    </button>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
 	</div>
 		<?php
 	echo $this -> Minify -> script('thirdparty/blueimp-gallery');
 	echo $this -> Minify -> script('thirdparty/jquery.blueimp-gallery');
-	echo $this -> Minify -> script('thirdparty/bootstrap-image-gallery');
 	echo $this -> Minify -> script('thirdparty/placeholder');
 			?>
 	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
