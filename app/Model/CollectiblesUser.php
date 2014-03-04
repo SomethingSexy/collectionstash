@@ -387,26 +387,7 @@ class CollectiblesUser extends AppModel {
 				return $retVal;
 			}
 			$data['CollectiblesUser']['listing_id'] = $listing['response']['data']['id'];
-		}
-		// else if ($updateListing) {
-		// // this would just update the listing and not any transactions
-		//
-		// $listingData = $collectiblesUser['Listing'];
-		// $listingData['Listing']['current_price'] = $data['CollectiblesUser']['sold_cost'];
-		// $listingData['Listing']['listing_price'] = $data['CollectiblesUser']['sold_cost'];
-		// $listingData['Listing']['traded_for'] = $data['CollectiblesUser']['traded_for'];
-		// $listingData['Listing']['end_date'] = date('Y-m-d', strtotime($data['CollectiblesUser']['remove_date']));
-		//
-		// // TODO: Where should validation for these happen?
-		// $response = $this -> Listing -> updateListing($listingData, $user);
-		//
-		// if (!$response['response']['isSuccess']) {
-		// $dataSource -> rollback();
-		// $retVal['response']['code'] = 500;
-		// return $retVal;
-		// }
-		// }
-		else if ($updateTransaction) {
+		} else if ($updateTransaction) {
 			$response = $this -> Listing -> updateTransaction($data['CollectiblesUser'], $collectiblesUser, $user);
 
 			if (!$response['response']['isSuccess']) {
@@ -416,7 +397,9 @@ class CollectiblesUser extends AppModel {
 			}
 		} else if ($removeListing) {
 			$data['CollectiblesUser']['listing_id'] = null;
-			if (!$this -> Listing -> delete($collectiblesUser['Listing']['id'])) {
+
+			$response = $this -> Listing -> remove($collectiblesUser['Listing']['id']);
+			if (!$response['response']['isSuccess']) {
 				$dataSource -> rollback();
 				$retVal['response']['code'] = 500;
 				return $retVal;

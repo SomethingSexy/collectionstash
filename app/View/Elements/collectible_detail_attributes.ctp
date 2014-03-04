@@ -70,7 +70,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '</div>';
 
 			$outputAttribtes .= '<div class="row">';
-			$outputAttribtes .= '<div class="col-md-3">';
+			$outputAttribtes .= '<div class="col-md-2">';
 
 			if (!empty($attribute['Attribute']['AttributesUpload'])) {
 				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
@@ -85,7 +85,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 
 			$outputAttribtes .= '</div>';
 
-			$outputAttribtes .= '<div class="col-md-9">';
+			$outputAttribtes .= '<div class="col-md-10">';
 
 			$outputAttribtes .= '<div class="row"><div class="col-md-12"><span class="name">' . $attribute['Attribute']['name'] . '</span></div></div>';
 			if (isset($attribute['Attribute']['Scale']['scale'])) {
