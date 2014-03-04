@@ -106,6 +106,13 @@ class Manufacture extends AppModel {
 		return $retVal;
 	}
 
+	/**
+	 * This should be the main find for a manufacturer, it will handle caching eventually.
+	 */
+	public function findByManufacturerId($id) {
+		return $this -> find('first', array('conditions' => array('Manufacture.id' => $id), 'contain' => false));
+	}
+
 	public function getManufactureList() {
 		return $this -> find('list', array('order' => array('Manufacture.title' => 'ASC')));
 	}
@@ -145,7 +152,7 @@ class Manufacture extends AppModel {
 	}
 
 	/**
-	 *
+	 * TODO: Do I still need this?
 	 */
 	public function getSeriesLevels($manufactureId, $seriesId = null) {
 
@@ -179,10 +186,8 @@ class Manufacture extends AppModel {
 				/*
 				 * If it is not null then we need to get the level
 				 */
-				debug($seriesId);
 				$paths = $this -> Series -> getPath($seriesId, array(), true);
 				$lastKey = 0;
-				debug($paths);
 				foreach ($paths as $key => $value) {
 					$processedSeries = array();
 					/*
@@ -200,7 +205,6 @@ class Manufacture extends AppModel {
 						$series = $this -> Series -> children($value['Series']['parent_id'], true);
 						$processedSeries = $this -> processSeries($series);
 					}
-					debug($processedSeries);
 					$returnData['selected']['L' . $key] = $value['Series']['id'];
 					$returnData['L' . $key] = $processedSeries;
 					$lastKey = $key;
@@ -211,7 +215,6 @@ class Manufacture extends AppModel {
 				 * has any children to return
 				 */
 				$series = $this -> Series -> children($seriesId, true);
-				debug($series);
 				if (!empty($series)) {
 					$processedChildrenSeries = $this -> processSeries($series);
 					$returnData['L' . ++$lastKey] = $processedChildrenSeries;

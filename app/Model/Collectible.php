@@ -954,7 +954,7 @@ class Collectible extends AppModel {
 
 		// if it isn't in the cache, add it to the cache
 		if (!$collectible) {
-			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'Manufacture', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer', 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1)))));
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer')));
 			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'collectible');
 		}
 
@@ -1006,20 +1006,22 @@ class Collectible extends AppModel {
 
 		// I don't think I will actually cache AttributesCollectible but I will cache the attributes themselves
 		// so find all attributesCollectible by collectible_id, then take that list and find all attributes, cache them
-
-		// pulling out manually so run faster
-		// this will grab any other collectibles that an attribute tied to this collectible are
-		if (!empty($collectible['AttributesCollectible'])) {
-			// ok if we have some of these
-			// loop through each one
-			foreach ($collectible['AttributesCollectible'] as $key => $attributesCollectible) {
-				//'AttributesCollectible' => array('Collectible' )
-				if (!empty($attributesCollectible['Attribute'])) {
-					$existingAttributeCollectibles = $this -> AttributesCollectible -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
-					$collectible['AttributesCollectible'][$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
-				}
-			}
+		// 'AttributesCollectible' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')), 'conditions' => array('AttributesCollectible.active' => 1))
+		$attributes = $this -> AttributesCollectible -> findByCollectibleId($id);
+		$collectible['AttributesCollectible'] = array();
+		foreach ($attributes as $key => $value) {
+			$collectible['AttributesCollectible'][$key] = $value['AttributesCollectible'];
+			$collectible['AttributesCollectible'][$key]['Revision'] = $value['Revision'];
+			$collectible['AttributesCollectible'][$key]['Attribute'] = $value['Attribute'];
 		}
+
+		// Grab manufacturer, grab these by their ids since they will probably cache themselves at some point
+		if (!empty($collectible['Collectible']['manufacture_id'])) {
+			$manufacturer = $this -> Manufacture -> findByManufacturerId($collectible['Collectible']['manufacture_id']);
+			$collectible['Manufacture'] = $manufacturer['Manufacture'];
+		}
+
+		// grab brand
 
 		if (!empty($collectible)) {
 			$variants = $this -> getCollectibleVariants($id);

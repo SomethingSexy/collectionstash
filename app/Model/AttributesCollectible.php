@@ -15,7 +15,6 @@ class AttributesCollectible extends AppModel {
 	'attribute_id' => array('rule' => array('validateAttributeId'), 'required' => true, 'message' => 'Must be a valid item.'));
 
 	function validateAttributeId($check) {
-		debug($check['attribute_id']);
 		if (!isset($check['attribute_id']) || empty($check['attribute_id'])) {
 			return false;
 		}
@@ -75,12 +74,23 @@ class AttributesCollectible extends AppModel {
 		return $results;
 	}
 
-	public function beforeSave($options = array()) {
-		if (isset($this -> data['Attribute'])) {
-
+	public function findByCollectibleId($id) {
+		$attributes = $this -> find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')))));
+		// pulling out manually so run faster
+		// this will grab any other collectibles that an attribute tied to this collectible are
+		if (!empty($attributes)) {
+			// ok if we have some of these
+			// loop through each one
+			foreach ($attributes as $key => $attributesCollectible) {
+				//'AttributesCollectible' => array('Collectible' )
+				if (!empty($attributesCollectible['Attribute'])) {
+					$existingAttributeCollectibles = $this -> find('all', array('joins' => array( array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
+					$attributes[$key]['Attribute']['AttributesCollectible'] = $existingAttributeCollectibles;
+				}
+			}
 		}
 
-		return true;
+		return $attributes;
 	}
 
 	public function get($id) {
