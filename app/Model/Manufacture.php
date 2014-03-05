@@ -22,6 +22,20 @@ class Manufacture extends AppModel {
 		return $results;
 	}
 
+	public function beforeDelete($cascade = true) {
+		// delete the series
+		$manufacturer = $this -> find('first', array('conditions' => array('Manufacture.id' => $this -> id), 'contain' => false));
+
+		if ($manufacturer && !empty($manufacturer['Manufacture']['series_id'])) {
+			if (!$this -> Series -> delete($manufacturer['Manufacture']['series_id'])) {
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
 	public function add($data, $user, $autoUpdate = false) {
 		$retVal = $this -> buildDefaultResponse();
 
