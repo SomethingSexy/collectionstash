@@ -1,0 +1,23 @@
+<div class="alert {@eq key="{error}" value="true" type="boolean"}alert-danger{:else}alert-success{/eq}">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	
+	{@ne key="{titleMessage}" value="false" type="boolean"}
+		<h4>{titleMessage}</h4>
+	{:else}
+		{@eq key="{error}" value="true" type="boolean"}
+			<h4>Oops! Something went wrong.</h4>
+		{:else}
+			<h4>Success!</h4>
+		{/eq}
+	{/ne}
+
+	{@eq key="{hasMessages}" value="true" type="boolean"}
+		<ul>
+		{#messages}
+			{#message}
+			<li>{.}</li>
+			{/message}
+		{/messages}
+		</ul>
+	{/eq}
+</div>

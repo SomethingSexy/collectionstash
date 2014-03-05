@@ -1,0 +1,14 @@
+<div class="col-md-4">
+	<form role="form">
+		<div class="form-group">
+			<label for="collectibleId">Collectible Id</label>
+			<input type="text" class="form-control" id="collectibleId" placeholder="Enter collectible id">
+		</div>
+		<button type="submit" class="btn btn-default btn-primary clearOne">
+			Clear One
+		</button>
+		<button type="submit" class="btn btn-default clearAll">
+			Clear All
+		</button>
+	</form>
+</div>

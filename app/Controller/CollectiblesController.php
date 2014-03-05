@@ -339,6 +339,39 @@ class CollectiblesController extends AppController {
 		$this -> set(compact('returnData'));
 	}
 
+	/**
+	 * This will process cache clearing requests
+	 */
+	public function cache() {
+		// we don't need a view for this one
+		$this -> autoRender = false;
+		if (!$this -> isLoggedIn()) {
+			$this -> response -> body(__('You do not have permissions to complete this request.'));
+			$this -> response -> statusCode(401);
+			return;
+		}
+
+		if (!$this -> isUserAdmin()) {
+			$this -> response -> body(__('You do not have permissions to complete this request.'));
+			$this -> response -> statusCode(401);
+			return;
+		}
+
+		if ($this -> request -> isPost()) {
+			$cache = $this -> request -> input('json_decode', true);
+
+			if ($cache['clearAll']) {
+				$this -> Collectible -> clearAll();
+			} else if ($cache['collectible_id']) {
+
+			} else {
+				$this -> response -> body(__('Invalid request.'));
+				// invalid request
+				$this -> response -> statusCode(400);
+			}
+		}
+	}
+
 	function view($id = null) {
 		if (!$id) {
 			$this -> Session -> setFlash(__('Invalid collectible', true));
@@ -582,6 +615,14 @@ class CollectiblesController extends AppController {
 
 	}
 
+	function admin_cache() {
+		$this -> checkLogIn();
+		$this -> checkAdmin();
+
+		$this -> layout = 'fluid';
+
+	}
+
 	function admin_view($id = null) {
 		$this -> checkLogIn();
 		$this -> checkAdmin();
@@ -694,7 +735,7 @@ class CollectiblesController extends AppController {
 						$collectible = $this -> Collectible -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'), 'User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
 						//update with the new revision id
 						// TODO: this should be added to all uploads, and tags, and artists, etc...I am not sure how much this matter anymore.
-						// I am wonder if instead we do an activity based approach on the collectible itself instead of trying to do this revision stuff. 
+						// I am wonder if instead we do an activity based approach on the collectible itself instead of trying to do this revision stuff.
 						// we have rev tables to show changes that happen between updates but the revision table was suppose to show overall changes.
 						// we are probably better off doing something more useful like an activity table.
 						if (isset($collectible['CollectiblesUpload']) && !empty($collectible['CollectiblesUpload'])) {

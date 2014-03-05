@@ -59,7 +59,7 @@ echo $this -> Minify -> script('views/view.status', array('inline' => false));
 
 echo $this -> Minify -> script('models/model.listing', array('inline' => false));
 echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
-echo $this -> Html -> script('views/view.transactions', array('inline' => false));
+echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
 echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
