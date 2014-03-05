@@ -60,7 +60,7 @@ var TransactionsView = Backbone.View.extend({
 							$('.unsold-listings tbody', self.el).append($output);
 						});
 						// update the count
-						$('.unsold-listings-count', self.el).text(parseInt($('.active-listings-count', self.el).text()) + 1);
+						$('.unsold-listings-count', self.el).text(parseInt($('.unsold-listings-count', self.el).text()) + 1);
 
 						$('.unsold-listings', self.el).collapse('show');
 						$('.btn-unsold-listings', self.el).show();
@@ -88,7 +88,7 @@ var TransactionsView = Backbone.View.extend({
 						});
 
 						// update the count
-						$('.unsold-listings-count', self.el).text(parseInt($('.active-listings-count', self.el).text()) + _.size(model.get('Transaction')));
+						$('.completed-listings-count', self.el).text(parseInt($('.completed-listings-count', self.el).text()) + _.size(model.get('Transaction')));
 
 						$('.btn-completed-listings', self.el).show();
 						$('.completed-listings', self.el).collapse('show');
