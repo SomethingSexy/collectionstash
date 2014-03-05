@@ -2,7 +2,7 @@
 class Series extends AppModel {
 	public $name = 'Series';
 	public $useTable = 'series';
-	public $hasMany = array('Collectible', 'Manufacture' => array('dependent' => true));
+	public $hasMany = array('Collectible', 'Manufacture');
 	public $actsAs = array('Tree', 'Containable');
 
 	public $validate = array(
@@ -12,7 +12,6 @@ class Series extends AppModel {
 	public function add($data, $user, $autoUpdate = true) {
 		$retVal = $this -> buildDefaultResponse();
 		$data['Series']['user_id'] = $user['User']['id'];
-		debug($data);
 		if ($this -> save($data)) {
 			$id = $this -> id;
 			$series = $this -> find('first', array('contain' => false, 'conditions' => array('Series.id' => $id)));
