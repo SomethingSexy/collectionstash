@@ -253,10 +253,10 @@ class Listing extends AppModel {
 	}
 
 	/**
-	 *
+	 * $id = collectible_id
 	 */
-	public function clearCache($d) {
-		Cache::delete($this -> collectibleCacheKey . $d, 'collectible');
+	public function clearCache($id) {
+		Cache::delete($this -> collectibleCacheKey . $id, 'collectible');
 	}
 
 }
