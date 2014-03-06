@@ -9,6 +9,7 @@
 	<li>Added admin page to clear cache.</li>
 	<li>Updated deploy script so that cache folders are emptied upon deploy.</li>
 	<li>Updated the UI for transactions to make it cleaner.</li>
+	<li>Fixed an issue where if you deleted the primary image and then the next primary image and there was still one image left, it wouldn't become the primary.</li>
 </ul>
 <h3>Release Notes for v2.14</h3>
 <ul>
