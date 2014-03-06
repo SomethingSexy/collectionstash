@@ -124,10 +124,8 @@ class CollectiblesUploadsController extends AppController {
 		 * If it is pending, we will look up the edit, check to see if it was done by that person
 		 * if so then we will delete it
 		 */
-		debug($pending);
 		if ($pending === 'true') {
 			$edit = $this -> CollectiblesUpload -> findEdit($id);
-			debug($edit);
 			$this -> loadModel('Edit');
 			//TODO Check to make sure the person deleting it is the owner
 			// Going through the edit model because it will handle stuff for us
@@ -173,7 +171,6 @@ class CollectiblesUploadsController extends AppController {
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$response = $this -> CollectiblesUpload -> add($this -> request -> data, $this -> getUser());
-			debug($response);
 			if ($response) {
 				if ($response['response']['isSuccess']) {
 					$upload = $response['response']['data'];
