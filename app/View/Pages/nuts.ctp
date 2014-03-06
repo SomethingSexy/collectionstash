@@ -20,6 +20,17 @@
 	</div>
 </div>
 <p>Winner will be responsible for shipping.</p>
+
+<h3>2014 Top Nuts</h3>
+<h4>February</h4>
+<ol>
+    <li>ComingOfShadows with 16009 nuts</li>
+    <li>jlaavenger with 1305 nuts</li>
+    <li>BonezGT with 1203 nuts</li>
+    <li>EVILFACE with 603 nuts</li>
+    <li>arnabeus with 400 nuts</li>
+</ol>
+
 <h3>2013 Top Nuts</h3>
 <ol>
 	<li>ComingOfShadows with 647346 nuts</li>
