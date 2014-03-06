@@ -357,19 +357,28 @@ class CollectiblesController extends AppController {
 			return;
 		}
 
-		if ($this -> request -> isPost()) {
-			$cache = $this -> request -> input('json_decode', true);
-
-			if ($cache['clearAll']) {
-				$this -> Collectible -> clearAll();
-			} else if ($cache['collectible_id']) {
-
-			} else {
-				$this -> response -> body(__('Invalid request.'));
-				// invalid request
-				$this -> response -> statusCode(400);
-			}
+		if (!$this -> request -> isPost()) {
+			$this -> response -> body(__('Invalid request.'));
+			// invalid request
+			$this -> response -> statusCode(400);
+			return;
 		}
+
+		$cache = $this -> request -> input('json_decode', true);
+
+		if ($cache['clearAll']) {
+			$this -> Collectible -> clearAll();
+		} else if ($cache['collectible_id']) {
+			$this -> Collectible -> clearCache($cache['collectible_id'], true);
+		} else {
+			$this -> response -> body(__('Invalid request.'));
+			// invalid request
+			$this -> response -> statusCode(400);
+			return;
+		}
+
+		$this -> response -> body('{}');
+
 	}
 
 	function view($id = null) {

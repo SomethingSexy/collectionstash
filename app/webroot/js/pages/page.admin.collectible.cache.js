@@ -4,28 +4,54 @@ var CacheView = Backbone.View.extend({
 		'click .clearOne' : 'clearOne',
 		'click .clearAll' : 'clearAll'
 	},
+	initialize : function(options) {
+		var self = this;
+		this.errors = [];
+		this.listenTo(this.model, 'sync', function() {
+			self.errors = [];
+			self.render();
+		});
+	},
 	render : function() {
 		var self = this;
-		dust.render(this.template, {}, function(error, output) {
+		var data = {};
+		data.errors = this.errors;
+		data.inlineErrors = {};
+		_.each(this.errors, function(error) {
+			if (error.inline) {
+				data.inlineErrors[error.name] = error.message;
+			}
+		});
+
+		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);
 		});
 
 		return this;
 	},
-	clearOne : function() {
+	clearOne : function(event) {
+		event.preventDefault();
+		if ($('#collectibleId', this.el).val() === '') {
+			this.errors.push({
+				inline : true,
+				name : 'collectible_id',
+				message : 'Collectible Id is required'
+			});
 
+			this.render();
+			return;
+		}
+
+		this.model.set('clearAll', false);
+		this.model.set('collectible_id', $('#collectibleId', this.el).val());
+
+		this.model.save({});
 	},
 	clearAll : function(event) {
-		var self = this;
 		event.preventDefault();
 		this.model.set('clearAll', true);
 
-		this.model.save({}, {
-			success : function() {
-
-			}
-		});
-
+		this.model.save({});
 	}
 });
 
@@ -58,9 +84,16 @@ $(function() {
 		});
 
 		cacheModel.on('error', function(model, response, options) {
-
 			$('#message-container').html(new AlertView({
 				error : true,
+				status : response.status,
+				responseText : response.responseText
+			}).render().el);
+		});
+
+		cacheModel.on('sync', function(model, response, options) {
+			$('#message-container').html(new AlertView({
+				error : false,
 				status : response.status,
 				responseText : response.responseText
 			}).render().el);

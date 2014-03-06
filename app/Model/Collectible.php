@@ -1496,12 +1496,18 @@ class Collectible extends AppModel {
 	/**
 	 *
 	 */
-	public function clearCache($id) {
+	public function clearCache($id, $all = false) {
 		Cache::delete($this -> collectibleCacheKey . $id, 'collectible');
+		if ($all) {
+			$this -> Listing -> clearCache($id);
+			$this -> CollectiblesUpload -> clearCache($id);
+			$this -> CollectiblesTag -> clearCache($id);
+			$this -> ArtistsCollectible -> clearCache($id);
+		}
 	}
 
 	public function clearAll() {
-		Cache::delete(true, 'collectible');
+		Cache::clear(false, 'collectible');
 	}
 
 }

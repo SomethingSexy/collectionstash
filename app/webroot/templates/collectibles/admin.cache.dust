@@ -1,8 +1,11 @@
 <div class="col-md-4">
 	<form role="form">
-		<div class="form-group">
-			<label for="collectibleId">Collectible Id</label>
-			<input type="text" class="form-control" id="collectibleId" placeholder="Enter collectible id">
+		<div class="form-group {#inlineErrors.collectible_id}has-error{/inlineErrors.collectible_id}">
+			<label class="control-label" for="collectibleId">Collectible Id</label>
+			<input type="text" class="form-control" id="collectibleId" name="collectible_id" placeholder="Enter collectible id">
+			{#inlineErrors.collectible_id}
+				<span class="help-block">{.}</span>
+			{/inlineErrors.collectible_id}	
 		</div>
 		<button type="submit" class="btn btn-default btn-primary clearOne">
 			Clear One
