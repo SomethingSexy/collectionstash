@@ -1168,7 +1168,7 @@ var PhotoView = Backbone.View.extend({
 
 		});
 
-		$(self.el).on('click', '#upload-link', function() {
+		$(self.el).on('click', '.upload-link', function() {
 			$.blockUI({
 				message : 'Loading...',
 				css : {

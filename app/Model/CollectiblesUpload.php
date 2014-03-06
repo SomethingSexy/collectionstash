@@ -263,15 +263,22 @@ class CollectiblesUpload extends AppModel {
 				$retVal = true;
 			}
 		} else if ($collectiblesUploadEditVersion['Action']['action_type_id'] === '4') {// Delete
+
+			// we are deleting, we need to grab the upload we are deleting to know if it was primary
+			// we cannot look at the edit if it is primary, incase someone submits edits to delete the primary and then the next primary
+			// the edit wouldn't be marked as a primary so then there is no primary
+
+			$uploadPriorDelete = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.id' => $collectiblesUploadEditVersion['CollectiblesUploadEdit']['base_id'])));
+
 			// At this point, this collectible upload has to be approved because I cannot
 			// delete a pending removal.
 			if ($this -> delete($collectiblesUploadEditVersion['CollectiblesUploadEdit']['base_id'])) {
 				if ($this -> Upload -> delete($collectiblesUploadEditVersion['Upload']['id'])) {
 
-					// After we delete the collectible, we need to check and see if
+					// After we delete the collectible upload, we need to check and see if
 					// we are deleting a primary, if so and there are other
 					// uploads, set the first one as the primary
-					if ($collectiblesUploadEditVersion['CollectiblesUploadEdit']['primary']) {
+					if ($uploadPriorDelete['CollectiblesUpload']['primary']) {
 						$firstExisting = $this -> find('first', array('contain' => false, 'conditions' => array('CollectiblesUpload.collectible_id' => $collectiblesUploadEditVersion['CollectiblesUploadEdit']['collectible_id'])));
 						// if we do have one
 						if (!empty($firstExisting)) {

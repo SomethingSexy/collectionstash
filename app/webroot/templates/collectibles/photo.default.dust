@@ -1,4 +1,4 @@
-<div class="row" id="upload-link">
+<div class="row upload-link">
 	<div class="col-md-12">
 	{#uploads uploadDirectory=uploadDirectory}
 		{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-<div class="row spacer">
+<div class="row spacer upload-link">
 {#uploads uploadDirectory=uploadDirectory}
 	{@ne key="{primary}" value="true" type="boolean"}
 	<div class="col-lg-4">
