@@ -954,7 +954,7 @@ class Collectible extends AppModel {
 
 		// if it isn't in the cache, add it to the cache
 		if (!$collectible) {
-			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'License', 'Series', 'Scale', 'Retailer')));
+			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
 			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'collectible');
 		}
 
@@ -1019,6 +1019,11 @@ class Collectible extends AppModel {
 		if (!empty($collectible['Collectible']['manufacture_id'])) {
 			$manufacturer = $this -> Manufacture -> findByManufacturerId($collectible['Collectible']['manufacture_id']);
 			$collectible['Manufacture'] = $manufacturer['Manufacture'];
+		}
+
+		if (!empty($collectible['Collectible']['license_id'])) {
+			$license = $this -> License -> findByLicenseId($collectible['Collectible']['license_id']);
+			$collectible['License'] = $license['License'];
 		}
 
 		// grab brand
