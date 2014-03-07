@@ -12,5 +12,12 @@ class License extends AppModel {
 		return $this -> find('all', array('contain' => false, 'order' => array('License.name' => 'ASC')));
 	}
 
+	/**
+	 * This should be the main find for a manufacturer, it will handle caching eventually.
+	 */
+	public function findByLicenseId($id) {
+		return $this -> find('first', array('conditions' => array('License.id' => $id), 'contain' => false));
+	}
+
 }
 ?>
