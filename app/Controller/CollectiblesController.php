@@ -73,32 +73,10 @@ class CollectiblesController extends AppController {
 		// Need to check login
 		$this -> checkLogIn();
 		$this -> checkAdmin();
-		// Need to get the collectible
-		// Based on status and the logged in user, need to determine if we can proceed
-
-		// If the status is draft, then the only person who can edit it is the person who submitted it
-		// If the status is submitted, then the only person who can edit it is the persno who submitted it and an admin
-		// If the status is active, then anyone can edit it
 		$collectible = $this -> Collectible -> find('first', array('contain' => array('Status'), 'conditions' => array('Collectible.id' => $id)));
 
-		if (!empty($collectible)) {
-			$statusId = $collectible['Status']['id'];
-			$submittedUserId = $collectible['Collectible']['user_id'];
-			if ($statusId === '1') {
-				if ($submittedUserId !== $this -> getUserId()) {
-					$this -> render('editAccess');
-					return;
-				}
-			} else if ($statusId === '2') {
-				if ($submittedUserId !== $this -> getUserId() && !$this -> isUserAdmin()) {
-					$this -> render('editAccess');
-					return;
-				}
-
-			} else if ($statusId === '4') {
-				// always access
-			}
-		} else {
+		// Admin gets allowed access to view and edit everything
+		if (empty($collectible)) {
 			$this -> render('viewMissing');
 			return;
 		}
@@ -110,6 +88,9 @@ class CollectiblesController extends AppController {
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
 		$this -> set('adminMode', true);
+		// For now, we only need to worrying about deleting if it is status 4, otherwise
+		// the admin can just deny an approval if it is status 2
+		$this -> set('allowDelete', $this -> isUserAdmin() && $collectible['Status']['id'] === '4');
 		$this -> render('edit');
 	}
 
@@ -144,6 +125,8 @@ class CollectiblesController extends AppController {
 
 		// Pass the id to the view to use
 		$this -> set('collectibleId', $id);
+		// if the user is an admin and the status is 4 then allow deleting
+		$this -> set('allowDelete', $this -> isUserAdmin() && $collectible['Status']['id'] === '4');
 
 		//TODO: This is here temporarily until all of the attribute modals are
 		// converted to backbone
@@ -391,6 +374,7 @@ class CollectiblesController extends AppController {
 		$collectible = $collectible['response']['data']['collectible'];
 
 		// View should also work for status of submitted and active
+		// any other status should redirect to a missing view: daft and deleted
 		if (!empty($collectible) && ($collectible['Collectible']['status_id'] === '4' || $collectible['Collectible']['status_id'] === '2')) {
 			// Figure out all permissions
 			$editPermission = $this -> Collectible -> isEditPermission($collectible, $this -> getUser());
@@ -399,7 +383,8 @@ class CollectiblesController extends AppController {
 			$stashablePermission = $this -> Collectible -> isStashable($collectible, $this -> getUser());
 			$this -> set('isStashable', $stashablePermission);
 
-			// figure out how to merge this with the rest later
+			// if it is submitted and the accesing user is the one who created it
+			// then they can edit the status, which means they can make it a draft
 			if ($collectible['Collectible']['status_id'] === '2') {
 				$this -> set('showStatus', true);
 				if ($collectible['Collectible']['user_id'] === $this -> getUserId()) {

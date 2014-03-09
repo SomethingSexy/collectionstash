@@ -26,7 +26,9 @@ $(function() {
 			$('#status-container').html(new StatusView({
 				model : status,
 				allowEdit : allowStatusEdit,
-				collectible : collectibleModel
+				collectible : collectibleModel,
+				// can't global delete from view anyway
+				allowDelete : false
 			}).render().el);
 
 			// If the status has changed and I am on the view

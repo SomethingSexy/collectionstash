@@ -86,6 +86,11 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	} else {
 		echo 'var adminMode = false;';
 	}
+	if(isset($allowDelete) && $allowDelete){
+		echo 'var allowDelete = true;';
+	} else {
+		echo 'var allowDelete = false;';
+	}
 ?></script>
 
 <!-- Each view will get a span -->

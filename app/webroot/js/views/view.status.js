@@ -8,6 +8,7 @@ var StatusView = Backbone.View.extend({
 	initialize : function(options) {
 		options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
 		this.collectible = options.collectible ? options.collectible : {};
+		this.allowDelete = (options.allowDelete && options.allowDelete === true) ? true : false;
 		//this.model.on("change", this.render, this);
 	},
 	render : function() {
@@ -15,6 +16,7 @@ var StatusView = Backbone.View.extend({
 
 		var model = this.model.toJSON();
 		model.allowEdit = this.allowEdit;
+		model.allowDelete = this.allowDelete;
 		if (this.collectible) {
 			model.collectible = this.collectible.toJSON();
 		}
