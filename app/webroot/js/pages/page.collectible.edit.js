@@ -3473,19 +3473,6 @@ $(function() {
 					$('#message-container').html(messageView.render().el);
 				});
 
-				pageEvents.on('collectible:delete', function() {
-					collectibleModel.destroy({
-						wait : true,
-						error : function(model, response) {
-
-							var responseObj = $.parseJSON(response.responseText);
-
-							pageEvents.trigger('status:change:error', responseObj.response.errors);
-
-						}
-					});
-				});
-
 				pageEvents.on('upload:close', function() {
 					uploads.fetch();
 				});

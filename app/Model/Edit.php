@@ -139,7 +139,6 @@ class Edit extends AppModel {
 		$dataSource -> begin();
 		$success = true;
 		foreach ($edit['Edits'] as $key => $value) {
-			debug($value);
 			if ($success) {
 				// new model only handles attributes for now
 				if ($value['edit_type'] === 'Attribute') {
@@ -266,6 +265,51 @@ class Edit extends AppModel {
 		} else {
 			$dataSource -> rollback();
 			return false;
+		}
+	}
+
+	/**
+	 * This method will remove all edits given a collectible id
+	 */
+	public function removeCollectibleEdits($collectibleId) {
+		$CollectiblesUpload = ClassRegistry::init('CollectiblesUpload');
+		$uploadEdits = $CollectiblesUpload -> findPendingEdits(array('collectible_id' => $collectibleId));
+		debug($uploadEdits);
+		foreach ($uploadEdits as $key => $value) {
+			$CollectiblesUpload -> deleteEdit($value);
+			$this -> delete($value['CollectiblesUploadEdit']['edit_id']);
+		}
+
+		$AttributesCollectible = ClassRegistry::init('AttributesCollectible');
+		$attributesEdits = $AttributesCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		debug($attributesEdits);
+		foreach ($attributesEdits as $key => $value) {
+			$AttributesCollectible -> deleteEdit($value);
+			$this -> delete($value['AttributesCollectibleEdit']['edit_id']);
+		}
+
+		$ArtistsCollectible = ClassRegistry::init('ArtistsCollectible');
+		$artistEdits = $ArtistsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		debug($artistEdits);
+		foreach ($artistEdits as $key => $value) {
+			$ArtistsCollectible -> deleteEdit($value);
+			$this -> delete($value['ArtistsCollectibleEdit']['edit_id']);
+		}
+
+		$TagsCollectible = ClassRegistry::init('TagsCollectible');
+		$tagEdits = $TagsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		debug($tagEdits);
+		foreach ($tagEdits as $key => $value) {
+			$TagsCollectible -> deleteEdit($value);
+			$this -> delete($value['TagsCollectibleEdit']['edit_id']);
+		}
+
+		$Collectible = ClassRegistry::init('Collectible');
+		$collectibleEdits = $Collectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		debug($collectibleEdits);
+		foreach ($collectibleEdits as $key => $value) {
+			$Collectible -> deleteEdit($value);
+			$this -> delete($value['TagsCollectibleEdit']['edit_id']);
 		}
 	}
 

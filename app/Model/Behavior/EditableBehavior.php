@@ -125,6 +125,7 @@ class EditableBehavior extends ModelBehavior {
 			//If it is a one model save then we can just do the edit here
 			$saveEdit['Edit']['user_id'] = $userId;
 		} else {
+			// TODO: I don't think this is being used anymore
 			$multipleSave = true;
 			$saveEdit = array();
 			foreach ($editData as $key => $value) {
@@ -138,7 +139,6 @@ class EditableBehavior extends ModelBehavior {
 		$retVal = array();
 		$Model -> EditModel -> bindModel(array('belongsTo' => array('Edit')));		if (!$multipleSave) {
 			$Model -> EditModel -> create();
-			debug($saveEdit);
 			if ($Model -> EditModel -> saveAll($saveEdit, array('validate' => false, 'deep' => true))) {
 				$id = $Model -> EditModel -> id;
 				//Grab the one we just submitted
