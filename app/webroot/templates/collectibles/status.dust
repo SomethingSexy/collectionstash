@@ -70,23 +70,23 @@
 	
 	{:else}
 		{@eq key="{status.id}" value="1"}
-		<h3>Create New Collectible</h3>
-		<p>The collectible you are editing is a draft.  This means you can make any changes you want to it.  While the collectible is a draft, it will not be in the queue for approval.  Change the status to 'submitted' to add it to the queue to be approved.</p>
-		<p>If you no longer wish to work on this collectible, or found out it is already submitted, click the delete button below to remove it.</p>
+			<h3>Create New Collectible</h3>
+			<p>The collectible you are editing is a draft.  This means you can make any changes you want to it.  While the collectible is a draft, it will not be in the queue for approval.  Change the status to 'submitted' to add it to the queue to be approved.</p>
+			<p>If you no longer wish to work on this collectible, or found out it is already submitted, click the delete button below to remove it.</p>
 		{/eq}
 		{@eq key="{status.id}" value="2"}
-		<h3>New Collectible</h3>
-		<p>This collectible has been submitted for approval.</p>
-		{@eq key="{allowEdit}" value="true" type="boolean"}
-		<p>If you wish to make a change to it before it is approved, please change the status back to Draft.</p>
-		{/eq}
+			<h3>New Collectible</h3>
+			<p>This collectible has been submitted for approval.</p>
+			{@eq key="{allowEdit}" value="true" type="boolean"}
+				<p>If you wish to make a change to it before it is approved, please change the status back to Draft.</p>
+			{/eq}
 		{/eq}
 		{@eq key="{status.id}" value="3"}
-		<h3>Create New Collectible</h3>
+			<h3>Create New Collectible</h3>
 		{/eq}
 		{@eq key="{status.id}" value="4"}
-		<h3>Edit Collectible</h3>
-		<p>The collectible you are editing is already active.  This means any changes you submit below will be submitted as individual edits for approval.</p>
+			<h3>Edit Collectible</h3>
+			<p>The collectible you are editing is already active.  This means any changes you submit below will be submitted as individual edits for approval.</p>
 		{/eq}
 		<dl class="dl-horizontal">
 			<dt>
@@ -109,9 +109,10 @@
 				<button class="btn btn-danger submit" type="button">Make draft</button>
 			{/eq}
 		{/eq}
+		{@eq key="{allowDelete}" value="true" type="boolean"}
+			<div class="btn-group">
+				<button class="btn btn-danger delete" type="button">Delete</button>
+			</div>		
+		{/eq}
 	{/if}
-	
-	
-
-
 </div>

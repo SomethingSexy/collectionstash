@@ -3537,7 +3537,9 @@ $(function() {
 				$('#status-container').html(new StatusView({
 					model : status,
 					collectible : collectibleModel,
-					allowEdit : true
+					// we set allow edit here and then base everything off of status in the template, kind of sucks
+					allowEdit : true,
+					allowDelete : allowDelete
 				}).render().el);
 
 				$('#collectible-container').append(new TagsView({
@@ -3556,7 +3558,7 @@ $(function() {
 				// go to the edit page
 				status.on('sync', function() {
 					if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
-						window.location.href = '/collectibles/view/' + this.id
+						window.location.href = '/collectibles/view/' + this.id;
 					}
 				}, status);
 
