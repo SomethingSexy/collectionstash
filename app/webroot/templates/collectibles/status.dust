@@ -111,7 +111,7 @@
 		{/eq}
 		{@eq key="{allowDelete}" value="true" type="boolean"}
 			<div class="btn-group">
-				<button class="btn btn-danger delete" type="button">Delete</button>
+				<button class="btn btn-danger delete" data-prompt="true" type="button">Delete</button>
 			</div>		
 		{/eq}
 	{/if}
