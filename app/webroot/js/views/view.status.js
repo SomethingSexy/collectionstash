@@ -48,9 +48,8 @@ var StatusView = Backbone.View.extend({
 	},
 	remove : function(event) {
 		if ($(event.currentTarget).attr('data-prompt')) {
-			// display modal about delete, this is most likely for cases where this 
-			// collectible is active and we need to delete it
-			// this will allow the user to enter in an id to replace this collectible with
+
+
 		} else {
 			this.collectible.destroy({
 				wait : true,

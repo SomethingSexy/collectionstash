@@ -1138,14 +1138,27 @@ class Collectible extends AppModel {
 			}
 
 			if ($allowDelete) {
-				// if it is status 4
-				// we need to delete any edits, we need to delete CollectiblesPriceFact, and EntityType, Revision
-				// TODO: We should probably be deleting revs of the collectible and their associated tables
-
-				$Edit = ClassRegistry::init('Edit');
-				$Edit -> removeCollectibleEdits($collectibleId);
-
 				if ($this -> delete($collectibleId, true)) {
+
+					// if it is status 4
+					// we need to delete any edits, we need to delete CollectiblesPriceFact, and EntityType, Revision
+					// TODO: We should probably be deleting revs of the collectible and their associated tables
+
+					$Edit = ClassRegistry::init('Edit');
+					$Edit -> removeCollectibleEdits($collectibleId);
+
+					if (!empty($collectible['Collectible']['entity_type_id'])) {
+						$this -> EntityType -> delete($collectible['Collectible']['entity_type_id']);
+					}
+
+					if (!empty($collectible['Collectible']['collectible_price_fact_id'])) {
+						$this -> CollectiblePriceFact -> delete($collectible['Collectible']['entity_type_id']);
+					}
+
+					if (!empty($collectible['Collectible']['revision_id'])) {
+						$this -> Revision -> delete($collectible['Collectible']['entity_type_id']);
+					}
+
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);
 				} else {
@@ -1164,7 +1177,6 @@ class Collectible extends AppModel {
 		}
 
 		return $retVal;
-
 	}
 
 	/**

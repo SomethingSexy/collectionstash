@@ -193,6 +193,31 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	</div>
 </div>
 
+<div id="collectible-delete-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 id="myModalLabel">Delete Collectible</h4>
+			</div>
+			<div class="modal-body">
+		
+			</div>
+		
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+					Close
+				</button>
+				<button class="btn btn-primary save" autocomplete="off">
+					Delete
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php
 //Temporary until we get features moved elswhere
 $featureAttributeIds = array(2, 4, 20, 3);

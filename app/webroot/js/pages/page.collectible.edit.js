@@ -3383,6 +3383,7 @@ $(function() {
 		dust.loadSource(dust.compile(directionalOriginalTemplate[0], 'directional.original'));
 		dust.loadSource(dust.compile(attributeAddNewTemplate[0], 'attribute.add.new'));
 
+		// Soooo, I could probably make this call when rendering the edit.ctp
 		$.ajax({
 			url : "/collectibles/getCollectible/" + collectibleId,
 			dataType : "json",
@@ -3521,13 +3522,40 @@ $(function() {
 					scales : scales
 				}).render().el);
 
-				$('#status-container').html(new StatusView({
+				var statusView = new StatusView({
 					model : status,
 					collectible : collectibleModel,
 					// we set allow edit here and then base everything off of status in the template, kind of sucks
 					allowEdit : true,
 					allowDelete : allowDelete
-				}).render().el);
+				});
+
+				$('#status-container').html(statusView.render().el);
+
+				var collectibleDeleteView = null;
+				
+				// handle the modal
+				$('#collectible-delete-dialog', 'body').on('hidden', function() {
+					collectibleDeleteView.remove();
+					collectibleDeleteView = null;
+				});
+
+				// if there is a delete from the status view that is a prompt
+				statusView.on('delete:collectible:prompt', function() {
+					// display modal about delete, this is most likely for cases where this
+					// collectible is active and we need to delete it
+					// this will allow the user to enter in an id to replace this collectible with
+					if (collectibleDeleteView) {
+						collectibleDeleteView.remove();
+						collectibleDeleteView = null;
+					}
+
+					collectibleDeleteView = new CollectibleDeleteView({});
+
+					$('.modal-body', '#collectible-delete-dialog').html(collectibleDeleteView.render().el);
+
+					$('#collectible-delete-dialog').modal();
+				}, this);
 
 				$('#collectible-container').append(new TagsView({
 					collection : tags
