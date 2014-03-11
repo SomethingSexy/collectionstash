@@ -1110,7 +1110,7 @@ class Collectible extends AppModel {
 	 *
 	 * Edit is not supported yet
 	 */
-	public function remove($collectibleId, $user) {
+	public function remove($collectibleId, $user, $replaceId = null) {
 		$retVal = $this -> buildDefaultResponse();
 		$collectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $collectibleId)));
 		if (!empty($collectible)) {
@@ -1141,7 +1141,7 @@ class Collectible extends AppModel {
 				if ($this -> delete($collectibleId, true)) {
 
 					// if it is status 4
-					// we need to delete any edits, we need to delete CollectiblesPriceFact, and EntityType, Revision
+					// we need to delete any edits, we need to delete CollectiblesPriceFact, and EntityType (handles comments and subscriptions), Revision
 					// TODO: We should probably be deleting revs of the collectible and their associated tables
 
 					$Edit = ClassRegistry::init('Edit');
@@ -1158,6 +1158,11 @@ class Collectible extends AppModel {
 					if (!empty($collectible['Collectible']['revision_id'])) {
 						$this -> Revision -> delete($collectible['Collectible']['entity_type_id']);
 					}
+
+					
+					// TODO  What about variants?
+					// If I am deleting this collectible and it has variants, update those collectibles so that
+					// they aren't variants of this collectible anymore.
 
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);

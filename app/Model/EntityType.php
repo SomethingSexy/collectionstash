@@ -32,7 +32,7 @@
  */
 class EntityType extends AppModel {
 	public $name = 'EntityType';
-	public $hasMany = array('Comment' => array('dependent' => true));
+	public $hasMany = array('Comment' => array('dependent' => true), 'Subscription' => array('dependent' => true));
 	//EntityType only has one and the id belongs in the stash/collectible
 	public $hasOne = array('Stash', 'Collectible', 'Attribute');
 	public $actsAs = array('Containable');
