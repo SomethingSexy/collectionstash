@@ -57,7 +57,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 		this.$stashItem = null;
 		this.collectibleUserId = null;
 
-		$('#stash-add-dialog', 'body').on('hidden', function() {
+		$('#stash-add-dialog', 'body').on('hidden.bs.modal', function() {
 			self.stashAddView.remove();
 		});
 
@@ -413,7 +413,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 		this.stashRemoveView = null;
 		this.collectibleUser = null;
 
-		$('#stash-remove-dialog', 'body').on('hidden', function() {
+		$('#stash-remove-dialog', 'body').on('hidden.bs.modal', function() {
 			self.stashRemoveView.remove();
 		});
 
@@ -675,7 +675,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 		this.tiles = options.tiles;
 		this.$stashItem = null;
 
-		$('#stash-sell-dialog', 'body').on('hidden', function() {
+		$('#stash-sell-dialog', 'body').on('hidden.bs.modal', function() {
 			self.stashSellView.remove();
 		});
 
@@ -921,7 +921,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 		this.stashRemoveView = null;
 		this.collectibleUser = null;
 
-		$('#stash-remove-sold-dialog', 'body').on('hidden', function() {
+		$('#stash-remove-sold-dialog', 'body').on('hidden.bs.modal', function() {
 			self.stashRemoveView.remove();
 		});
 
@@ -1074,7 +1074,7 @@ function removeFromWishList(collectibleUserId, success, error) {
 		this.listingModel = null;
 		this.$element = null;
 
-		$('#stash-edit-listing-dialog', 'body').on('hidden', function() {
+		$('#stash-edit-listing-dialog', 'body').on('hidden.bs.modal', function() {
 			self.stashSellView.remove();
 		});
 

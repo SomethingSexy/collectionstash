@@ -1,6 +1,6 @@
 var StatusView = Backbone.View.extend({
 	template : 'status.edit',
-	className : "scol-md-12",
+	className : "col-md-12",
 	events : {
 		'click .submit' : 'changeStatus',
 		'click .delete' : 'remove'
@@ -48,8 +48,7 @@ var StatusView = Backbone.View.extend({
 	},
 	remove : function(event) {
 		if ($(event.currentTarget).attr('data-prompt')) {
-
-
+			this.trigger('delete:collectible:prompt');
 		} else {
 			this.collectible.destroy({
 				wait : true,

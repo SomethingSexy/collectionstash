@@ -3533,9 +3533,9 @@ $(function() {
 				$('#status-container').html(statusView.render().el);
 
 				var collectibleDeleteView = null;
-				
+
 				// handle the modal
-				$('#collectible-delete-dialog', 'body').on('hidden', function() {
+				$('#collectible-delete-dialog', 'body').on('hidden.bs.modal', function() {
 					collectibleDeleteView.remove();
 					collectibleDeleteView = null;
 				});
@@ -3550,7 +3550,9 @@ $(function() {
 						collectibleDeleteView = null;
 					}
 
-					collectibleDeleteView = new CollectibleDeleteView({});
+					collectibleDeleteView = new CollectibleDeleteView({
+						model : collectibleModel
+					});
 
 					$('.modal-body', '#collectible-delete-dialog').html(collectibleDeleteView.render().el);
 
