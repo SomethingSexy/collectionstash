@@ -3350,7 +3350,9 @@ $(function() {
 	//
 	$.get('/templates/collectibles/directional.original.dust'),
 	//
-	$.get('/templates/collectibles/attribute.add.new.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate) {
+	$.get('/templates/collectibles/attribute.add.new.dust'),
+	//
+	$.get('/templates/collectibles/collectible.delete.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -3382,6 +3384,7 @@ $(function() {
 		dust.loadSource(dust.compile(originalTemplate[0], 'collectible.original.edit'));
 		dust.loadSource(dust.compile(directionalOriginalTemplate[0], 'directional.original'));
 		dust.loadSource(dust.compile(attributeAddNewTemplate[0], 'attribute.add.new'));
+		dust.loadSource(dust.compile(collectibleDeleteTemplate[0], 'collectible.delete'));
 
 		// Soooo, I could probably make this call when rendering the edit.ctp
 		$.ajax({
@@ -3410,6 +3413,7 @@ $(function() {
 				var brands = new Brands(data.response.data.brands);
 				var tags = new Tags(data.response.data.collectible.CollectiblesTag);
 				var artists = new Artists(data.response.data.collectible.ArtistsCollectible);
+				var variants = new Backbone.Collection(data.response.data.variants);
 
 				var status = new Status();
 				status.set({
@@ -3532,31 +3536,22 @@ $(function() {
 
 				$('#status-container').html(statusView.render().el);
 
-				var collectibleDeleteView = null;
-
-				// handle the modal
-				$('#collectible-delete-dialog', 'body').on('hidden.bs.modal', function() {
-					collectibleDeleteView.remove();
-					collectibleDeleteView = null;
-				});
-
 				// if there is a delete from the status view that is a prompt
 				statusView.on('delete:collectible:prompt', function() {
 					// display modal about delete, this is most likely for cases where this
 					// collectible is active and we need to delete it
 					// this will allow the user to enter in an id to replace this collectible with
-					if (collectibleDeleteView) {
-						collectibleDeleteView.remove();
-						collectibleDeleteView = null;
-					}
-
-					collectibleDeleteView = new CollectibleDeleteView({
-						model : collectibleModel
+					var collectibleDeleteView = new CollectibleDeleteView({
+						model : collectibleModel,
+						variants : variants
 					});
 
-					$('.modal-body', '#collectible-delete-dialog').html(collectibleDeleteView.render().el);
+					var modal = new Backbone.BootstrapModal({
+						content : collectibleDeleteView,
+						title : 'Delete Collectible',
+						animate : true
+					}).open();
 
-					$('#collectible-delete-dialog').modal();
 				}, this);
 
 				$('#collectible-container').append(new TagsView({
@@ -3582,6 +3577,7 @@ $(function() {
 				collectibleModel.on('destroy', function() {
 					window.location.href = '/users/home';
 				});
+
 				if (collectibleModel.get('custom')) {
 					// view is overkill here
 					dust.render('directional.custom', {}, function(error, output) {
