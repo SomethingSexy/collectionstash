@@ -4,6 +4,8 @@ var AlertView = Backbone.View.extend({
 
 	},
 	initialize : function(options) {
+		options = options || {};
+
 		this.error = options.error || false;
 
 		if (options.responseText) {
@@ -21,6 +23,8 @@ var AlertView = Backbone.View.extend({
 			this.titleMessage = false;
 		}
 
+		// default true
+		this.dismiss = options.dismiss === false ? false : true;
 		this.messages = options.messages;
 
 	},
@@ -29,7 +33,8 @@ var AlertView = Backbone.View.extend({
 
 		var data = {
 			error : this.error,
-			titleMessage : this.titleMessage
+			titleMessage : this.titleMessage,
+			dismiss : this.dismiss
 		};
 
 		if (this.collection && this.collection.size() > 0) {

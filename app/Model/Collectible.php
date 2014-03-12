@@ -1138,6 +1138,18 @@ class Collectible extends AppModel {
 			}
 
 			if ($allowDelete) {
+				// let's see if we have a replacement collectible id
+				if (!is_null($replaceId)) {
+					$replacementCollectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $replaceId)));
+					if (empty($replacementCollectible)) {
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('The replacement collectible id does not exist.')));
+
+						return $retVal;
+					}
+
+				}
+
 				if ($this -> delete($collectibleId, true)) {
 
 					// if it is status 4
@@ -1159,10 +1171,19 @@ class Collectible extends AppModel {
 						$this -> Revision -> delete($collectible['Collectible']['entity_type_id']);
 					}
 
-					
-					// TODO  What about variants?
 					// If I am deleting this collectible and it has variants, update those collectibles so that
 					// they aren't variants of this collectible anymore.
+					$variants = $this -> find('all', array('contain' => false, 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId)));
+					$saveVariants = array();
+					if (!empty($variants)) {
+						foreach ($variants as $key => $value) {
+							$variants[$key]['Collectible']['variant_collectible_id'] = 0;
+							$variants[$key]['Collectible']['variant'] = false;
+							array_push($saveVariants, $variants[$key]['Collectible']);
+						}
+
+						$this -> saveMany($saveVariants, array('validate' => false));
+					}
 
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);
@@ -1178,7 +1199,6 @@ class Collectible extends AppModel {
 		} else {
 			$retVal['response']['isSuccess'] = false;
 			array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
-
 		}
 
 		return $retVal;

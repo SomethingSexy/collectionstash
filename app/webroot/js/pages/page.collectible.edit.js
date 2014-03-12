@@ -3352,7 +3352,9 @@ $(function() {
 	//
 	$.get('/templates/collectibles/attribute.add.new.dust'),
 	//
-	$.get('/templates/collectibles/collectible.delete.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate) {
+	$.get('/templates/collectibles/collectible.delete.dust'),
+	//
+	$.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
 		dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
 		dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
 		dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -3385,6 +3387,7 @@ $(function() {
 		dust.loadSource(dust.compile(directionalOriginalTemplate[0], 'directional.original'));
 		dust.loadSource(dust.compile(attributeAddNewTemplate[0], 'attribute.add.new'));
 		dust.loadSource(dust.compile(collectibleDeleteTemplate[0], 'collectible.delete'));
+		dust.loadSource(dust.compile(alertTemplate[0], 'alert'));
 
 		// Soooo, I could probably make this call when rendering the edit.ctp
 		$.ajax({
@@ -3549,7 +3552,8 @@ $(function() {
 					var modal = new Backbone.BootstrapModal({
 						content : collectibleDeleteView,
 						title : 'Delete Collectible',
-						animate : true
+						animate : true,
+						okCloses : false
 					}).open();
 
 				}, this);

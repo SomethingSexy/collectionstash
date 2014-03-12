@@ -133,7 +133,7 @@ class CollectiblesController extends AppController {
 		$this -> set(compact('collectible'));
 	}
 
-	public function collectible($adminMode = false, $id = null) {
+	public function collectible($adminMode = false, $id = null, $replacementId = null) {
 		// check login
 		// check to make sure they can make this change
 		if ($adminMode === true) {
@@ -150,7 +150,7 @@ class CollectiblesController extends AppController {
 			$response = $this -> Collectible -> saveCollectible($collectible, $this -> getUser(), $adminMode);
 
 			$request = $this -> request -> input('json_decode');
-			debug($request);
+
 			if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
 				$this -> response -> statusCode(401);
 			} else {
@@ -164,7 +164,7 @@ class CollectiblesController extends AppController {
 			// for changing the status to a delete
 			// although I am going to physically delete it
 			// not change the status :)
-			$response = $this -> Collectible -> remove($id, $this -> getUser());
+			$response = $this -> Collectible -> remove($id, $this -> getUser(), $replacementId);
 
 			if (!$response['response']['isSuccess']) {
 				$this -> response -> statusCode(400);

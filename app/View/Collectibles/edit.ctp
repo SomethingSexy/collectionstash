@@ -6,6 +6,7 @@ echo $this -> Minify -> script('cs.attribute', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
 echo $this -> Minify -> script('models/model.status', array('inline' => false));
 echo $this -> Minify -> script('views/view.status', array('inline' => false));
+echo $this -> Html -> script('views/view.alert', array('inline' => false));
 echo $this -> Html -> script('views/view.collectible.delete', array('inline' => false));
 echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.edit', array('inline' => false));
