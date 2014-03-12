@@ -296,20 +296,20 @@ class Edit extends AppModel {
 			$this -> delete($value['ArtistsCollectibleEdit']['edit_id']);
 		}
 
-		$TagsCollectible = ClassRegistry::init('TagsCollectible');
+		$TagsCollectible = ClassRegistry::init('CollectiblesTag');
 		$tagEdits = $TagsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
 		debug($tagEdits);
 		foreach ($tagEdits as $key => $value) {
 			$TagsCollectible -> deleteEdit($value);
-			$this -> delete($value['TagsCollectibleEdit']['edit_id']);
+			$this -> delete($value['CollectiblesTagEdit']['edit_id']);
 		}
 
 		$Collectible = ClassRegistry::init('Collectible');
-		$collectibleEdits = $Collectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		$collectibleEdits = $Collectible -> findPendingEdits(array('base_id' => $collectibleId));
 		debug($collectibleEdits);
 		foreach ($collectibleEdits as $key => $value) {
 			$Collectible -> deleteEdit($value);
-			$this -> delete($value['TagsCollectibleEdit']['edit_id']);
+			$this -> delete($value['CollectibleEdit']['edit_id']);
 		}
 	}
 

@@ -27,7 +27,7 @@
 	<div class="form-group">
 		<label class="control-label" for="inputReplaceId">Replace Collectible Id</label>
 		<div class="">
-			<input type="text" id="inputReplaceId" class="form-control" name="name" value="{replace_collectible_id}">
+			<input type="text" id="inputReplaceId" class="form-control" name="replace_collectible_id" value="{replace_collectible_id}">
 		</div>
 	</div>
 	</fieldset>

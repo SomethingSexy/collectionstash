@@ -1,5 +1,5 @@
 <div class="alert {@eq key="{error}" value="true" type="boolean"}alert-danger{:else}alert-success{/eq}">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	{#dismiss}<button type="button" class="close" data-dismiss="alert">&times;</button>{/dismiss}
 	
 	{@ne key="{titleMessage}" value="false" type="boolean"}
 		<h4>{titleMessage}</h4>

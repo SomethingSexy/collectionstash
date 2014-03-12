@@ -6,6 +6,8 @@ var CollectibleDeleteView = Backbone.View.extend({
 	},
 	initialize : function(options) {
 		this.variants = options.variants;
+		this.on('ok', this.remove, this);
+		this.alertView = null;
 	},
 	render : function() {
 		var self = this;
@@ -20,13 +22,28 @@ var CollectibleDeleteView = Backbone.View.extend({
 			$(self.el).html(output);
 		});
 
+		this.alertView = new AlertView({
+			dismiss : false
+		});
+
+		$('.well', this.el).before(this.alertView.render().el);
+
 		return this;
 	},
 	remove : function() {
-		this.collectible.destroy({
+		var self = this;
+		var url = this.model.url();
+
+		if ($('#inputReplaceId', this.el).val() !== '') {
+			url = url + '/' + $('#inputReplaceId', this.el).val();
+		}
+
+		this.model.destroy({
+			url : url,
 			wait : true,
 			error : function(model, response) {
 				var responseObj = $.parseJSON(response.responseText);
+
 				//pageEvents.trigger('status:change:error', responseObj.response.errors);
 			}
 		});
