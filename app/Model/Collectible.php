@@ -942,7 +942,10 @@ class Collectible extends AppModel {
 
 		if (!$id) {
 			$retVal['response']['isSuccess'] = false;
+			$retVal['response']['code'] = 1;
 			$retVal['response']['errors'] = array('message', __('Invalid request.'));
+
+			return $retVal;
 		}
 
 		// First try to grab it from the cache
@@ -953,6 +956,16 @@ class Collectible extends AppModel {
 			$collectible = $this -> find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
 			Cache::write($this -> collectibleCacheKey . $id, $collectible, 'collectible');
 		}
+
+		if (empty($collectible)) {
+			$retVal['response']['isSuccess'] = false;
+			$retVal['response']['code'] = 1;
+			$retVal['response']['errors'] = array('message', __('Invalid request.'));
+
+			return $retVal;
+		}
+
+		$retVal['response']['isSuccess'] = true;
 
 		// So instead of doing one giant call because we have to worry about clearing caches, let's break these calls out
 		// so they can manage their own caches instead of the sub-models invalidating the collectible cache
@@ -1022,24 +1035,15 @@ class Collectible extends AppModel {
 			$collectible['License'] = $license['License'];
 		}
 
-		// grab brand
+		$variants = $this -> getCollectibleVariants($id);
+		$retVal['response']['data']['collectible'] = $collectible;
+		$retVal['response']['data']['variants'] = $variants;
+		if (isset($retVal['response']['data']['collectible']['Collectible']['description'])) {
+			// why the fuck do I need to do this?
+			$description = str_replace('\n', "\n", $retVal['response']['data']['collectible']['Collectible']['description']);
+			$description = str_replace('\r', "\r", $description);
 
-		if (!empty($collectible)) {
-			$variants = $this -> getCollectibleVariants($id);
-			$retVal['response']['data']['collectible'] = $collectible;
-			$retVal['response']['data']['variants'] = $variants;
-			if (isset($retVal['response']['data']['collectible']['Collectible']['description'])) {
-				// why the fuck do I need to do this?
-				$description = str_replace('\n', "\n", $retVal['response']['data']['collectible']['Collectible']['description']);
-				$description = str_replace('\r', "\r", $description);
-
-				$retVal['response']['data']['collectible']['Collectible']['description'] = $description;
-			}
-
-		} else {
-			$retVal['response']['isSuccess'] = false;
-			// Missing
-			$retVal['response']['code'] = 1;
+			$retVal['response']['data']['collectible']['Collectible']['description'] = $description;
 		}
 
 		return $retVal;

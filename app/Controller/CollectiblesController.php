@@ -371,6 +371,12 @@ class CollectiblesController extends AppController {
 		}
 
 		$collectible = $this -> Collectible -> getCollectible($id);
+	
+		if (!$collectible['response']['isSuccess']) {
+			$this -> render('viewMissing');
+			return;
+		}
+
 		$collectible = $collectible['response']['data']['collectible'];
 
 		// View should also work for status of submitted and active

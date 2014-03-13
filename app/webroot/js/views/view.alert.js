@@ -37,7 +37,7 @@ var AlertView = Backbone.View.extend({
 			dismiss : this.dismiss
 		};
 
-		if (this.collection && this.collection.size() > 0) {
+		if (this.messages && this.messages.size() > 0) {
 			data.hasMessages = true;
 			data.messages = this.messages.toJSON();
 		} else {

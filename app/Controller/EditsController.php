@@ -55,7 +55,6 @@ class EditsController extends AppController {
 	 */
 	function admin_view($id = null) {
 		$editDetail = $this -> Edit -> findById($id);
-		debug($editDetail);
 		$this -> set(compact('editDetail'));
 	}
 
@@ -95,9 +94,7 @@ class EditsController extends AppController {
 					}
 				}
 
-				$this -> redirect(array('action' => 'index'), null, true);			} else {
-
-			}
+				$this -> redirect(array('action' => 'index'), null, true);			}
 		}
 	}
 
@@ -110,7 +107,6 @@ class EditsController extends AppController {
 		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), "limit" => 10);
 
 		$edits = $this -> paginate('Edit');
-		debug($edits);
 		//TODO: Either on the paginate we need to get the detail of that edit or get it after the fact or not show it on the main page
 		//I think I will add it back to the paginate because I don't want to drastically change the UI
 		foreach ($edits as &$edit) {
@@ -131,7 +127,7 @@ class EditsController extends AppController {
 				unset($edit['UploadEdit']);
 			}
 		}
-		debug($edits);
+
 		$this -> set('edits', $edits);
 	}
 
