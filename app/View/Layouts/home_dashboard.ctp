@@ -63,18 +63,6 @@
 	?>
 	<?php echo $scripts_for_layout; ?>
 	
-	
-	<script>
-		$(function() {
-			$('#q').focus(function() {
-				var firstTime = $('#q').data('firstTime');
-				if ( typeof firstTime === "undefined") {
-					$('#q').val('');
-					$('#q').data('firstTime', false);
-				}
-			});
-		});
-	</script>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-25703659-1']);
