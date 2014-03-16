@@ -1,5 +1,10 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.15.1</h3>
+<ul>
+	<li>Fixed issue with deleting pending collectible uploads.</li>
+</ul>
+
 <h3>Release Notes for v2.15</h3>
 <ul>
 	<li>Updated collectible detail transaction view so that the data is rendered via cake instead of dust.  This should make the page load faster and help with crawling.</li>
