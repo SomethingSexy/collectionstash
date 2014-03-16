@@ -1151,6 +1151,14 @@ class Collectible extends AppModel {
 
 						return $retVal;
 					}
+					
+					// check to see if the collectible we are deleting is in 
+					// stashes
+					// wish lists
+					// variants
+					
+					// replace them with this collectible.
+					
 
 				}
 
