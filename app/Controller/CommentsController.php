@@ -157,7 +157,9 @@ class CommentsController extends AppController {
 			$userId = $this -> getUserId();
 		}
 
+		CakeLog::write('CommentTest', '$entityTypeId= ' . $entityTypeId . ' $userId=  ' . $userId . ' ' . date("Y-m-d H:i:s", time()));
 		$comments = $this -> Comment -> getComments($entityTypeId, $userId);
+		CakeLog::write('CommentTest', '$entityTypeId= ' . $entityTypeId . ' $comments.count= ' . count($comments) . ' ' . date("Y-m-d H:i:s", time()));
 		$this -> set('comments', array('commentsData' => $comments));
 	}
 
