@@ -135,6 +135,8 @@ class Comment extends AppModel {
 		//Get the entity owner
 		$ownerId = $this -> EntityType -> getEntityOwner($entityType);
 
+		CakeLog::write('CommentTest', '$entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' ' . date("Y-m-d H:i:s", time()));
+
 		$conditions = array_merge(array('Comment.entity_type_id' => $entityType['EntityType']['id']), $conditions);
 
 		$comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
@@ -206,7 +208,7 @@ class Comment extends AppModel {
 
 		$actionComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User', 'EntityType')));
 
-		$ownerId =  $stash = $this -> EntityType -> getEntityOwner($actionComment);
+		$ownerId = $stash = $this -> EntityType -> getEntityOwner($actionComment);
 
 		$userId = $actionComment['Comment']['user_id'];
 		//To remove the comment, they need to either be an admin, the one who added the comment or the owner of the domain of the comment
@@ -228,5 +230,6 @@ class Comment extends AppModel {
 
 		return $retVal;
 	}
+
 }
 ?>
