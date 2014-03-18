@@ -141,6 +141,8 @@ class Comment extends AppModel {
 
 		$comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
 
+		CakeLog::write('CommentTest', 'comment.php $entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' $comments.count=' . count($comments) . ' ' . date("Y-m-d H:i:s", time()));
+
 		$commentMetaData = $this -> addPermissions($comments, $userId, $ownerId);
 
 		return $commentMetaData;
@@ -169,9 +171,11 @@ class Comment extends AppModel {
 					if ($loggedInUser['User']['admin']) {
 						$commentPermissions['permissions']['remove'] = true;
 					}
+					CakeLog::write('CommentTest', 'comment.php $entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' $loggedInUser=' . $loggedInUser['User']['id'] . ' ' . date("Y-m-d H:i:s", time()));
 					//If they are the owner, they also get to remove
 					if ($ownerId != null && is_numeric($ownerId) && $loggedInUser['User']['id'] === $ownerId) {
 						$ownerUser = $this -> User -> find("first", array('conditions' => array('User.id' => $ownerId)));
+
 						//If the logged in user and the owner are the same, give them mod rights
 						if (!empty($ownerUser)) {
 							//If there is an owner and it is the same as the logged in user then give them "mod" rights over all comments
