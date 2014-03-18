@@ -1,5 +1,10 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v2.15.2</h3>
+<ul>
+	<li>Fixed issue where a user with a huge stash would view their comments and the response would blow up.</li>
+</ul>
+
 <h3>Release Notes for v2.15.1</h3>
 <ul>
 	<li>Fixed issue with deleting pending collectible uploads.</li>
