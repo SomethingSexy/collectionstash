@@ -135,13 +135,9 @@ class Comment extends AppModel {
 		//Get the entity owner
 		$ownerId = $this -> EntityType -> getEntityOwner($entityType);
 
-		CakeLog::write('CommentTest', '$entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' ' . date("Y-m-d H:i:s", time()));
-
 		$conditions = array_merge(array('Comment.entity_type_id' => $entityType['EntityType']['id']), $conditions);
 
 		$comments = $this -> find("all", array('contain' => 'User', 'conditions' => $conditions));
-
-		CakeLog::write('CommentTest', 'comment.php $entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' $comments.count=' . count($comments) . ' ' . date("Y-m-d H:i:s", time()));
 
 		$commentMetaData = $this -> addPermissions($comments, $userId, $ownerId);
 
@@ -160,7 +156,7 @@ class Comment extends AppModel {
 		//so no permissions are given
 		if ($userId !== null && is_numeric($userId)) {
 			//Grab the user information for the person who is logged in and viewing these comments
-			$loggedInUser = $this -> User -> find("first", array('conditions' => array('User.id' => $userId)));
+			$loggedInUser = $this -> User -> find("first", array('contain' => false, 'conditions' => array('User.id' => $userId)));
 			//Make sure it is a valid user first
 			if (!empty($loggedInUser)) {
 				//If they are an admin then they have all rights regardless
@@ -171,10 +167,9 @@ class Comment extends AppModel {
 					if ($loggedInUser['User']['admin']) {
 						$commentPermissions['permissions']['remove'] = true;
 					}
-					CakeLog::write('CommentTest', 'comment.php $entityTypeId= ' . $entityTypeId . ' $ownerId= ' . $ownerId . ' $loggedInUser=' . $loggedInUser['User']['id'] . ' ' . date("Y-m-d H:i:s", time()));
 					//If they are the owner, they also get to remove
 					if ($ownerId != null && is_numeric($ownerId) && $loggedInUser['User']['id'] === $ownerId) {
-						$ownerUser = $this -> User -> find("first", array('conditions' => array('User.id' => $ownerId)));
+						$ownerUser = $this -> User -> find("first", array('contain' => false, 'conditions' => array('User.id' => $ownerId)));
 
 						//If the logged in user and the owner are the same, give them mod rights
 						if (!empty($ownerUser)) {
