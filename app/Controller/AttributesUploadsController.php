@@ -124,7 +124,7 @@ class AttributesUploadsController extends AppController {
 		 * If it is pending, we will look up the edit, check to see if it was done by that person
 		 * if so then we will delete it
 		 */
-		if ($pending === 'true') {
+		if ($pending === 'true' || $pending === '1') {
 			$edit = $this -> AttributesUpload -> findEdit($id);
 			$this -> loadModel('Edit');
 			//TODO Check to make sure the person deleting it is the owner
