@@ -2,14 +2,17 @@
 <h2>Change Log</h2>
 <h3>Release Notes for v2.15.2</h3>
 <ul>
+	<li>Fixed an issue where an admin could not automatically delete photos.</li>
+</ul>
+<h3>Release Notes for v2.15.2</h3>
+<ul>
 	<li>Fixed issue where a user with a huge stash would view their comments and the response would blow up.</li>
 </ul>
 
 <h3>Release Notes for v2.15.1</h3>
 <ul>
-	<li>Fixed issue with deleting pending collectible uploads.</li>
+	<li>Fixed an issue with deleting pending collectible uploads.</li>
 </ul>
-
 <h3>Release Notes for v2.15</h3>
 <ul>
 	<li>Updated collectible detail transaction view so that the data is rendered via cake instead of dust.  This should make the page load faster and help with crawling.</li>
