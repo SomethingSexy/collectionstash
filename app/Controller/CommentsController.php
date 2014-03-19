@@ -158,6 +158,7 @@ class CommentsController extends AppController {
 		}
 
 		$comments = $this -> Comment -> getComments($entityTypeId, $userId);
+
 		$this -> set('comments', array('commentsData' => $comments));
 	}
 

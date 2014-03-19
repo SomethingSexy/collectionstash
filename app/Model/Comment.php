@@ -156,7 +156,7 @@ class Comment extends AppModel {
 		//so no permissions are given
 		if ($userId !== null && is_numeric($userId)) {
 			//Grab the user information for the person who is logged in and viewing these comments
-			$loggedInUser = $this -> User -> find("first", array('conditions' => array('User.id' => $userId)));
+			$loggedInUser = $this -> User -> find("first", array('contain' => false, 'conditions' => array('User.id' => $userId)));
 			//Make sure it is a valid user first
 			if (!empty($loggedInUser)) {
 				//If they are an admin then they have all rights regardless
@@ -169,7 +169,8 @@ class Comment extends AppModel {
 					}
 					//If they are the owner, they also get to remove
 					if ($ownerId != null && is_numeric($ownerId) && $loggedInUser['User']['id'] === $ownerId) {
-						$ownerUser = $this -> User -> find("first", array('conditions' => array('User.id' => $ownerId)));
+						$ownerUser = $this -> User -> find("first", array('contain' => false, 'conditions' => array('User.id' => $ownerId)));
+
 						//If the logged in user and the owner are the same, give them mod rights
 						if (!empty($ownerUser)) {
 							//If there is an owner and it is the same as the logged in user then give them "mod" rights over all comments
@@ -206,7 +207,7 @@ class Comment extends AppModel {
 
 		$actionComment = $this -> find("first", array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User', 'EntityType')));
 
-		$ownerId =  $stash = $this -> EntityType -> getEntityOwner($actionComment);
+		$ownerId = $stash = $this -> EntityType -> getEntityOwner($actionComment);
 
 		$userId = $actionComment['Comment']['user_id'];
 		//To remove the comment, they need to either be an admin, the one who added the comment or the owner of the domain of the comment
@@ -228,5 +229,6 @@ class Comment extends AppModel {
 
 		return $retVal;
 	}
+
 }
 ?>
