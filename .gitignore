@@ -1,7 +1,5 @@
 /app/config
 /app/tmp
-/plugins
-/vendors
 /lib
 /app/webroot/user_uploads
 /app/webroot/files
@@ -11,3 +9,8 @@
 /app.rar
 /index.php
 /testmysql.php
+/vendors/File
+/vendors/PHP
+/vendors/PHPUnit
+/vendors/Symfony
+/vendors/Text

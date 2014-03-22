@@ -1142,6 +1142,10 @@ class Collectible extends AppModel {
 			}
 
 			if ($allowDelete) {
+
+				$dataSource = $this -> getDataSource();
+				$dataSource -> begin();
+
 				// let's see if we have a replacement collectible id
 				if (!is_null($replaceId)) {
 					$replacementCollectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $replaceId)));
@@ -1151,15 +1155,16 @@ class Collectible extends AppModel {
 
 						return $retVal;
 					}
-					
-					// check to see if the collectible we are deleting is in 
+					// check to see if the collectible we are deleting is in
 					// stashes
+					$this -> CollectiblesUser -> updateAll(array('CollectiblesUser.collectible_id' => $replaceId), array('CollectiblesUser.collectible_id' => $collectibleId));
 					// wish lists
+					$this -> CollectiblesWishlist -> updateAll(array('CollectiblesWishlist.collectible_id' => $replaceId), array('CollectiblesWishlist.collectible_id' => $collectibleId));
 					// variants
-					
-					// replace them with this collectible.
-					
-
+					$this -> updateAll(array('Collectible.variant_collectible_id' => $replaceId), array('Collectible.variant_collectible_id' => $collectibleId));
+					// listings
+					$this -> Listing -> updateAll(array('Listing.collectible_id' => $replaceId), array('Listing.collectible_id' => $collectibleId));
+					$this -> Listing -> Transaction -> updateAll(array('Transaction.collectible_id' => $replaceId), array('Transaction.collectible_id' => $collectibleId));
 				}
 
 				if ($this -> delete($collectibleId, true)) {
@@ -1185,17 +1190,18 @@ class Collectible extends AppModel {
 
 					// If I am deleting this collectible and it has variants, update those collectibles so that
 					// they aren't variants of this collectible anymore.
-					$variants = $this -> find('all', array('contain' => false, 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId)));
-					$saveVariants = array();
-					if (!empty($variants)) {
-						foreach ($variants as $key => $value) {
-							$variants[$key]['Collectible']['variant_collectible_id'] = 0;
-							$variants[$key]['Collectible']['variant'] = false;
-							array_push($saveVariants, $variants[$key]['Collectible']);
-						}
-
-						$this -> saveMany($saveVariants, array('validate' => false));
-					}
+					$this -> updateAll(array('Collectible.variant_collectible_id' => 0, 'Collectible.variant' => false), array('Collectible.variant_collectible_id' => $collectibleId));
+					// $variants = $this -> find('all', array('contain' => false, 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId)));
+					// $saveVariants = array();
+					// if (!empty($variants)) {
+					// foreach ($variants as $key => $value) {
+					// $variants[$key]['Collectible']['variant_collectible_id'] = 0;
+					// $variants[$key]['Collectible']['variant'] = false;
+					// array_push($saveVariants, $variants[$key]['Collectible']);
+					// }
+					//
+					// $this -> saveMany($saveVariants, array('validate' => false));
+					// }
 
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);
