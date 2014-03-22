@@ -6,6 +6,9 @@ var CollectibleView = Backbone.View.extend({
 		var data = this.model.toJSON();
 		data.uploadDirectory = uploadDirectory;
 		data.isLogggedIn = isLogggedIn;
+		if (data.Collectible.description) {
+			data.Collectible.description = data.Collectible.description.replace("\\n", "<br />", "g");
+		}
 
 		dust.render(this.template, data, function(error, output) {
 			$(self.el).html(output);

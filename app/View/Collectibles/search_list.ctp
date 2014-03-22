@@ -112,8 +112,12 @@ unset($urlparams['url']);
 						echo '<div class="row">';
 						echo '<div class="col-md-12">';
 						echo '<span class="description">';
+						$description = str_replace('\n', "\n", $collectible['Collectible']['description']);
+						$description = str_replace('\r', "\r", $description);
+						$description = nl2br($description);
+						$description = html_entity_decode($description);
 
-						echo $collectible['Collectible']['description'];
+						echo $description;
 						echo '</span>';
 						echo '</div>';
 						echo '</div>';
@@ -221,7 +225,7 @@ unset($urlparams['url']);
 	</div>
 </div>
 
-<script>var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
+<script>var uploadDirectory =   "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
 	";
 	<?php
 	if ($isLoggedIn) {
