@@ -2,6 +2,11 @@
 <h2>Change Log</h2>
 <h3>Release Notes for v2.15.2</h3>
 <ul>
+	<li>Added the ability for an admin to delete a collectible and replace a duplicate collectible.</li>
+	<li>Fixed some UI issues with the collectible search page.</li>
+</ul>
+<h3>Release Notes for v2.15.3</h3>
+<ul>
 	<li>Fixed an issue where an admin could not automatically delete photos.</li>
 </ul>
 <h3>Release Notes for v2.15.2</h3>

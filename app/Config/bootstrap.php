@@ -67,6 +67,7 @@ CakePlugin::loadAll();
 // Loads all plugins at once
 Configure::load('config');
 
+
 App::uses('CakeEventManager', 'Event');
 App::uses('EntityChangeEventListener', 'Event');
 App::uses('NotifyEventListener', 'Event');
