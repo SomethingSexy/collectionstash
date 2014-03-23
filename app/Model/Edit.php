@@ -272,45 +272,45 @@ class Edit extends AppModel {
 	 * This method will remove all edits given a collectible id
 	 */
 	public function removeCollectibleEdits($collectibleId) {
-		$CollectiblesUpload = ClassRegistry::init('CollectiblesUpload');
-		$uploadEdits = $CollectiblesUpload -> findPendingEdits(array('collectible_id' => $collectibleId));
-		debug($uploadEdits);
+		$this -> bindModel(array('belongsTo' => array('CollectiblesUpload')));
+		$uploadEdits = $this -> CollectiblesUpload -> findPendingEdits(array('collectible_id' => $collectibleId));
 		foreach ($uploadEdits as $key => $value) {
-			$CollectiblesUpload -> deleteEdit($value);
+			$this -> CollectiblesUpload -> deleteEdit($value);
 			$this -> delete($value['CollectiblesUploadEdit']['edit_id']);
 		}
+		$this -> unbindModel(array('belongsTo' => array('CollectiblesUpload')));
 
-		$AttributesCollectible = ClassRegistry::init('AttributesCollectible');
-		$attributesEdits = $AttributesCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
-		debug($attributesEdits);
-		foreach ($attributesEdits as $key => $value) {
-			$AttributesCollectible -> deleteEdit($value);
-			$this -> delete($value['AttributesCollectibleEdit']['edit_id']);
-		}
-
-		$ArtistsCollectible = ClassRegistry::init('ArtistsCollectible');
-		$artistEdits = $ArtistsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
-		debug($artistEdits);
-		foreach ($artistEdits as $key => $value) {
-			$ArtistsCollectible -> deleteEdit($value);
-			$this -> delete($value['ArtistsCollectibleEdit']['edit_id']);
-		}
-
-		$TagsCollectible = ClassRegistry::init('CollectiblesTag');
-		$tagEdits = $TagsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
-		debug($tagEdits);
-		foreach ($tagEdits as $key => $value) {
-			$TagsCollectible -> deleteEdit($value);
-			$this -> delete($value['CollectiblesTagEdit']['edit_id']);
-		}
-
-		$Collectible = ClassRegistry::init('Collectible');
-		$collectibleEdits = $Collectible -> findPendingEdits(array('base_id' => $collectibleId));
-		debug($collectibleEdits);
-		foreach ($collectibleEdits as $key => $value) {
-			$Collectible -> deleteEdit($value);
-			$this -> delete($value['CollectibleEdit']['edit_id']);
-		}
+		// $this -> bindModel(array('belongsTo' => array('AttributesCollectible')));
+		// $attributesEdits = $this -> AttributesCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		// foreach ($attributesEdits as $key => $value) {
+			// $this -> AttributesCollectible -> deleteEdit($value);
+			// $this -> delete($value['AttributesCollectibleEdit']['edit_id']);
+		// }
+		// $this -> unbindModel(array('belongsTo' => array('AttributesCollectible')));
+// 
+		// $this -> bindModel(array('belongsTo' => array('ArtistsCollectible')));
+		// $artistEdits = $this -> ArtistsCollectible -> findPendingEdits(array('collectible_id' => $collectibleId));
+		// foreach ($artistEdits as $key => $value) {
+			// $this -> ArtistsCollectible -> deleteEdit($value);
+			// $this -> delete($value['ArtistsCollectibleEdit']['edit_id']);
+		// }
+		// $this -> unbindModel(array('belongsTo' => array('ArtistsCollectible')));
+// 
+		// $this -> bindModel(array('belongsTo' => array('CollectiblesTag')));
+		// $tagEdits = $this -> CollectiblesTag -> findPendingEdits(array('collectible_id' => $collectibleId));
+		// foreach ($tagEdits as $key => $value) {
+			// $this -> CollectiblesTag -> deleteEdit($value);
+			// $this -> delete($value['CollectiblesTagEdit']['edit_id']);
+		// }
+		// $this -> unbindModel(array('belongsTo' => array('CollectiblesTag')));
+// 
+		// $this -> bindModel(array('belongsTo' => array('Collectible')));
+		// $collectibleEdits = $this -> Collectible -> findPendingEdits(array('base_id' => $collectibleId));
+		// foreach ($collectibleEdits as $key => $value) {
+			// $this -> Collectible -> deleteEdit($value);
+			// $this -> delete($value['CollectibleEdit']['edit_id']);
+		// }
+		// $this -> unbindModel(array('belongsTo' => array('Collectible')));
 	}
 
 }

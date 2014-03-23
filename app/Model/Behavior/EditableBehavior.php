@@ -65,6 +65,7 @@ class EditableBehavior extends ModelBehavior {
 		} else {
 			$shadow_table = Inflector::tableize($Model -> name);
 		}
+
 		$shadow_table = $shadow_table . $this -> edit_suffix;
 		$prefix = $Model -> tablePrefix ? $Model -> tablePrefix : $db -> config['prefix'];
 		$full_table_name = $prefix . $shadow_table;
@@ -96,6 +97,7 @@ class EditableBehavior extends ModelBehavior {
 		 * in controller when calling the render)
 		 *
 		 */
+
 		$Model -> EditModel -> alias = $Model -> alias . 'Edit';
 		$Model -> EditModel -> primaryKey = 'id';
 		return true;
