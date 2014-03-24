@@ -12,6 +12,11 @@ class CollectibleTest extends CakeTestCase {
 		$this -> Manufacture = ClassRegistry::init('Manufacture');
 		$this -> License = ClassRegistry::init('License');
 		$this -> Collectibletype = ClassRegistry::init('Collectibletype');
+		$this -> Edit = ClassRegistry::init('Edit');
+		$this -> CollectiblesUpload = ClassRegistry::init('CollectiblesUpload');
+		$this -> AttributesCollectible = ClassRegistry::init('AttributesCollectible');
+		$this -> ArtistsCollectible = ClassRegistry::init('ArtistsCollectible');
+		$this -> CollectiblesTag = ClassRegistry::init('CollectiblesTag');
 	}
 
 	/**
@@ -32,12 +37,42 @@ class CollectibleTest extends CakeTestCase {
 	}
 
 	/**
-	 * Testing admin remove of a single collectible
+	 * Testing admin remove of a collectible with edits
 	 */
 	public function testRemoveWithEdits() {
 		$result = $this -> Collectible -> remove(2, array('User' => array('id' => 1, 'admin' => true)));
 		$this -> assertEquals(true, $result['response']['isSuccess']);
 		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 2)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> Edit -> find('first', array('contain' => false, 'conditions' => array('Edit.id' => 1)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> Collectible -> findEdit(1);
+		$this -> assertEmpty($results);
+
+		$results = $this -> Edit -> find('first', array('contain' => false, 'conditions' => array('Edit.id' => 2)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> CollectiblesUpload -> findEdit(1);
+		$this -> assertEmpty($results);
+
+		$results = $this -> Edit -> find('first', array('contain' => false, 'conditions' => array('Edit.id' => 3)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> AttributesCollectible -> findEdit(1);
+		$this -> assertEmpty($results);
+
+		$results = $this -> Edit -> find('first', array('contain' => false, 'conditions' => array('Edit.id' => 4)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> ArtistsCollectible -> findEdit(1);
+		$this -> assertEmpty($results);
+
+		$results = $this -> Edit -> find('first', array('contain' => false, 'conditions' => array('Edit.id' => 5)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> CollectiblesTag -> findEdit(1);
 		$this -> assertEmpty($results);
 
 	}
