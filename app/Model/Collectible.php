@@ -1185,7 +1185,7 @@ class Collectible extends AppModel {
 					}
 
 					if (!empty($collectible['Collectible']['revision_id'])) {
-						$this -> Revision -> delete($collectible['Collectible']['entity_type_id']);
+						$this -> Revision -> delete($collectible['Collectible']['revision_id']);
 					}
 
 					// If I am deleting this collectible and it has variants, update those collectibles so that

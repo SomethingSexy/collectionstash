@@ -11,18 +11,22 @@ class Comment extends AppModel {
 	public function afterFind($results, $primary = false) {
 		foreach ($results as $key => $val) {
 			if (isset($results[$key]['Comment'])) {
-				$datetime = strtotime($results[$key]['Comment']['created']);
-				$mysqldate = date("m/d/y g:i A", $datetime);
-				$results[$key]['Comment']['formatted_created'] = $mysqldate;
-
-				//Create a shorthand for this comment
-				$comment = $results[$key]['Comment']['comment'];
-				$commentLength = strlen($comment);
-
-				if ($commentLength > 200) {
-					$comment = substr($comment, 0, 200);
+				if (isset($results[$key]['Comment']['created'])) {
+					$datetime = strtotime($results[$key]['Comment']['created']);
+					$mysqldate = date("m/d/y g:i A", $datetime);
+					$results[$key]['Comment']['formatted_created'] = $mysqldate;
 				}
-				$results[$key]['Comment']['shorthand_comment'] = $comment;
+
+				if (isset($results[$key]['Comment']['comment'])) {
+					//Create a shorthand for this comment
+					$comment = $results[$key]['Comment']['comment'];
+					$commentLength = strlen($comment);
+
+					if ($commentLength > 200) {
+						$comment = substr($comment, 0, 200);
+					}
+					$results[$key]['Comment']['shorthand_comment'] = $comment;
+				}
 			}
 		}
 
