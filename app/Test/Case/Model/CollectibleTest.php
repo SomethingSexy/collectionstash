@@ -4,7 +4,7 @@ App::import('Behavior', 'Editable');
 
 class CollectibleTest extends CakeTestCase {
 	// ugh these are all pretty much needed for collectible remove since it has to remove a lot of stuff
-	public $fixtures = array('app.collectible', 'app.user', 'app.collectible_price_fact', 'app.listing', 'app.collectibles_user', 'app.collectibles_wishlist', 'app.collectibles_upload', 'app.attributes_collectible', 'app.artists_collectible', 'app.collectibles_tag', 'app.specialized_type', 'app.manufacture', 'app.collectibletype', 'app.license', 'app.scale', 'app.retailer', 'app.custom_status', 'app.status', 'app.entity_type', 'app.revision', 'app.series', 'app.currency', 'app.profile', 'app.wish_list', 'app.action', 'app.upload', 'app.attribute', 'app.collectibles_edit', 'app.collectibles_uploads_edit', 'app.attributes_collectibles_edit', 'app.artists_collectibles_edit', 'app.collectibles_tags_edit', 'app.edit', 'app.uploads_edit', 'app.comment', 'app.subscription', 'app.stash');
+	public $fixtures = array('app.collectible', 'app.user', 'app.collectible_price_fact', 'app.listing', 'app.collectibles_user', 'app.collectibles_wishlist', 'app.collectibles_upload', 'app.attributes_collectible', 'app.artists_collectible', 'app.collectibles_tag', 'app.specialized_type', 'app.manufacture', 'app.collectibletype', 'app.license', 'app.scale', 'app.retailer', 'app.custom_status', 'app.status', 'app.entity_type', 'app.revision', 'app.series', 'app.currency', 'app.profile', 'app.wish_list', 'app.action', 'app.upload', 'app.attribute', 'app.collectibles_edit', 'app.collectibles_uploads_edit', 'app.attributes_collectibles_edit', 'app.artists_collectibles_edit', 'app.collectibles_tags_edit', 'app.edit', 'app.uploads_edit', 'app.comment', 'app.subscription', 'app.stash', 'app.latest_comment');
 
 	public function setUp() {
 		parent::setUp();
@@ -17,6 +17,8 @@ class CollectibleTest extends CakeTestCase {
 		$this -> AttributesCollectible = ClassRegistry::init('AttributesCollectible');
 		$this -> ArtistsCollectible = ClassRegistry::init('ArtistsCollectible');
 		$this -> CollectiblesTag = ClassRegistry::init('CollectiblesTag');
+		$this -> EntityType = ClassRegistry::init('EntityType');
+		$this -> Comment = ClassRegistry::init('Comment');
 	}
 
 	/**
@@ -34,6 +36,12 @@ class CollectibleTest extends CakeTestCase {
 		$this -> assertNotEmpty($results);
 		$results = $this -> Collectibletype -> find('first', array('contain' => false, 'conditions' => array('Collectibletype.id' => 1)));
 		$this -> assertNotEmpty($results);
+
+		$results = $this -> EntityType -> find('first', array('contain' => false, 'conditions' => array('EntityType.id' => 1)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> Comment -> find('first', array('contain' => false, 'conditions' => array('Comment.entity_type_id' => 1)));
+		$this -> assertEmpty($results);
 	}
 
 	/**
