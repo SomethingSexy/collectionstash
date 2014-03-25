@@ -1159,7 +1159,7 @@ class Collectible extends AppModel {
 					// stashes
 					$this -> CollectiblesUser -> updateAll(array('CollectiblesUser.collectible_id' => $replaceId), array('CollectiblesUser.collectible_id' => $collectibleId));
 					// wish lists
-					$this -> CollectiblesWishlist -> updateAll(array('CollectiblesWishlist.collectible_id' => $replaceId), array('CollectiblesWishlist.collectible_id' => $collectibleId));
+					$this -> CollectiblesWishList -> updateAll(array('CollectiblesWishList.collectible_id' => $replaceId), array('CollectiblesWishList.collectible_id' => $collectibleId));
 					// variants
 					$this -> updateAll(array('Collectible.variant_collectible_id' => $replaceId), array('Collectible.variant_collectible_id' => $collectibleId));
 					// listings

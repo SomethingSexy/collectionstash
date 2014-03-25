@@ -1,10 +1,10 @@
 <?php
-class CollectiblesWishListFixture extends CakeTestFixture {
+class TransactionFixture extends CakeTestFixture {
 
 	// Optional.
 	// Set this property to load fixtures to a different test datasource
 	public $useDbConfig = 'test';
-	public $import = 'CollectiblesWishList';
+	public $import = 'Transaction';
 	public $records = array();
 }
 ?>

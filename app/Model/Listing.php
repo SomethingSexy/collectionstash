@@ -2,7 +2,8 @@
 App::uses('TransactionFactory', 'Lib/Transaction');
 class Listing extends AppModel {
 	public $name = 'Listing';
-	public $belongsTo = array('Collectible', 'User', 'CollectiblesUser');
+	public $belongsTo = array('Collectible', 'User');
+	public $hasOne = array('CollectiblesUser');
 	public $hasMany = array('Transaction' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
