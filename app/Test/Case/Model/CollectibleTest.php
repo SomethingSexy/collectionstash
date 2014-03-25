@@ -20,6 +20,7 @@ class CollectibleTest extends CakeTestCase {
 		$this -> EntityType = ClassRegistry::init('EntityType');
 		$this -> Comment = ClassRegistry::init('Comment');
 		$this -> CollectiblePriceFact = ClassRegistry::init('CollectiblePriceFact');
+		$this -> Listing = ClassRegistry::init('Listing');
 	}
 
 	/**
@@ -45,6 +46,9 @@ class CollectibleTest extends CakeTestCase {
 		$this -> assertEmpty($results);
 
 		$results = $this -> CollectiblePriceFact -> find('first', array('contain' => false, 'conditions' => array('CollectiblePriceFact.id' => 1)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> Listing -> find('first', array('contain' => false, 'conditions' => array('Listing.id' => '51b938ad-e988-4011-999e-555d4537ee41')));
 		$this -> assertEmpty($results);
 	}
 
