@@ -1181,7 +1181,7 @@ class Collectible extends AppModel {
 					}
 
 					if (!empty($collectible['Collectible']['collectible_price_fact_id'])) {
-						$this -> CollectiblePriceFact -> delete($collectible['Collectible']['entity_type_id']);
+						$this -> CollectiblePriceFact -> delete($collectible['Collectible']['collectible_price_fact_id']);
 					}
 
 					if (!empty($collectible['Collectible']['revision_id'])) {
@@ -1191,17 +1191,6 @@ class Collectible extends AppModel {
 					// If I am deleting this collectible and it has variants, update those collectibles so that
 					// they aren't variants of this collectible anymore.
 					$this -> updateAll(array('Collectible.variant_collectible_id' => 0, 'Collectible.variant' => false), array('Collectible.variant_collectible_id' => $collectibleId));
-					// $variants = $this -> find('all', array('contain' => false, 'conditions' => array('Collectible.variant_collectible_id' => $collectibleId)));
-					// $saveVariants = array();
-					// if (!empty($variants)) {
-					// foreach ($variants as $key => $value) {
-					// $variants[$key]['Collectible']['variant_collectible_id'] = 0;
-					// $variants[$key]['Collectible']['variant'] = false;
-					// array_push($saveVariants, $variants[$key]['Collectible']);
-					// }
-					//
-					// $this -> saveMany($saveVariants, array('validate' => false));
-					// }
 
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);
