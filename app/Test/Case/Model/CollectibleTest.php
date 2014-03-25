@@ -4,7 +4,7 @@ App::import('Behavior', 'Editable');
 
 class CollectibleTest extends CakeTestCase {
 	// ugh these are all pretty much needed for collectible remove since it has to remove a lot of stuff
-	public $fixtures = array('app.collectible', 'app.user', 'app.collectible_price_fact', 'app.listing', 'app.collectibles_user', 'app.collectibles_wishlist', 'app.collectibles_upload', 'app.attributes_collectible', 'app.artists_collectible', 'app.collectibles_tag', 'app.specialized_type', 'app.manufacture', 'app.collectibletype', 'app.license', 'app.scale', 'app.retailer', 'app.custom_status', 'app.status', 'app.entity_type', 'app.revision', 'app.series', 'app.currency', 'app.profile', 'app.wish_list', 'app.action', 'app.upload', 'app.attribute', 'app.collectibles_edit', 'app.collectibles_uploads_edit', 'app.attributes_collectibles_edit', 'app.artists_collectibles_edit', 'app.collectibles_tags_edit', 'app.edit', 'app.uploads_edit', 'app.comment', 'app.subscription', 'app.stash', 'app.latest_comment');
+	public $fixtures = array('app.collectible', 'app.user', 'app.collectible_price_fact', 'app.listing', 'app.collectibles_user', 'app.collectibles_wish_list', 'app.collectibles_upload', 'app.attributes_collectible', 'app.artists_collectible', 'app.collectibles_tag', 'app.specialized_type', 'app.manufacture', 'app.collectibletype', 'app.license', 'app.scale', 'app.retailer', 'app.custom_status', 'app.status', 'app.entity_type', 'app.revision', 'app.series', 'app.currency', 'app.profile', 'app.wish_list', 'app.action', 'app.upload', 'app.attribute', 'app.collectibles_edit', 'app.collectibles_uploads_edit', 'app.attributes_collectibles_edit', 'app.artists_collectibles_edit', 'app.collectibles_tags_edit', 'app.edit', 'app.uploads_edit', 'app.comment', 'app.subscription', 'app.stash', 'app.latest_comment', 'app.merchant', 'app.collectible_user_remove_reason', 'app.condition', 'app.transaction');
 
 	public function setUp() {
 		parent::setUp();
@@ -100,6 +100,20 @@ class CollectibleTest extends CakeTestCase {
 		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4)));
 		$this -> assertEquals(false, $results['Collectible']['variant']);
 		$this -> assertEquals(0, $results['Collectible']['variant_collectible_id']);
+	}
+
+	/**
+	 * This tests removing a collectible and replaces it with another collectible
+	 */
+	public function testRemoveReplace() {
+		$result = $this -> Collectible -> remove(5, array('User' => array('id' => 1, 'admin' => true)), 6);
+		$this -> assertEquals(true, $result['response']['isSuccess']);
+		// should be deleted
+		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 5)));
+		$this -> assertEmpty($results);
+		// should exist
+		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 6)));
+		$this -> assertCount(1, $results);
 	}
 
 }
