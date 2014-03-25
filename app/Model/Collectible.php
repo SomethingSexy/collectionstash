@@ -1160,7 +1160,7 @@ class Collectible extends AppModel {
 					$this -> CollectiblesUser -> updateAll(array('CollectiblesUser.collectible_id' => $replaceId), array('CollectiblesUser.collectible_id' => $collectibleId));
 					// wish lists
 					$this -> CollectiblesWishList -> updateAll(array('CollectiblesWishList.collectible_id' => $replaceId), array('CollectiblesWishList.collectible_id' => $collectibleId));
-					// variants
+					// Find all collectibles that are variants of the collectible we are deleting and replace them with the collectible
 					$this -> updateAll(array('Collectible.variant_collectible_id' => $replaceId), array('Collectible.variant_collectible_id' => $collectibleId));
 					// listings
 					$this -> Listing -> updateAll(array('Listing.collectible_id' => $replaceId), array('Listing.collectible_id' => $collectibleId));
