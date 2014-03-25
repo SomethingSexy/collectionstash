@@ -19,6 +19,7 @@ class CollectibleTest extends CakeTestCase {
 		$this -> CollectiblesTag = ClassRegistry::init('CollectiblesTag');
 		$this -> EntityType = ClassRegistry::init('EntityType');
 		$this -> Comment = ClassRegistry::init('Comment');
+		$this -> CollectiblePriceFact = ClassRegistry::init('CollectiblePriceFact');
 	}
 
 	/**
@@ -41,6 +42,9 @@ class CollectibleTest extends CakeTestCase {
 		$this -> assertEmpty($results);
 
 		$results = $this -> Comment -> find('first', array('contain' => false, 'conditions' => array('Comment.entity_type_id' => 1)));
+		$this -> assertEmpty($results);
+
+		$results = $this -> CollectiblePriceFact -> find('first', array('contain' => false, 'conditions' => array('CollectiblePriceFact.id' => 1)));
 		$this -> assertEmpty($results);
 	}
 
@@ -83,6 +87,19 @@ class CollectibleTest extends CakeTestCase {
 		$results = $this -> CollectiblesTag -> findEdit(1);
 		$this -> assertEmpty($results);
 
+	}
+
+	/**
+	 * This tests removing a collectible that has variants and makes sure that the variants are not attached to the main anymore
+	 */
+	public function testRemoveSingleWithVariant() {
+		$result = $this -> Collectible -> remove(3, array('User' => array('id' => 1, 'admin' => true)));
+		$this -> assertEquals(true, $result['response']['isSuccess']);
+		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 3)));
+		$this -> assertEmpty($results);
+		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4)));
+		$this -> assertEquals(false, $results['Collectible']['variant']);
+		$this -> assertEquals(0, $results['Collectible']['variant_collectible_id']);
 	}
 
 }
