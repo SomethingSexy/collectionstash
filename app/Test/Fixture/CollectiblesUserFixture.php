@@ -5,6 +5,8 @@ class CollectiblesUserFixture extends CakeTestFixture {
 	// Set this property to load fixtures to a different test datasource
 	public $useDbConfig = 'test';
 	public $import = 'CollectiblesUser';
-	public $records = array();
+	public $records = array(
+	//
+	array('id' => 1, 'user_id' => 1, 'collectible_id' => 1, 'stash_id' => 1, 'listing_id' => '51b938ad-e988-4011-999e-555d4537ee41', 'sale' => true));
 }
 ?>
