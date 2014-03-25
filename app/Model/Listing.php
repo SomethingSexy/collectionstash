@@ -48,10 +48,12 @@ class Listing extends AppModel {
 						}
 						// this should go in the database somewhere but for now add here
 						// a mapping of collectible_user_remove_reason_id
-						if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
-							$results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
-						} else if ($val['Listing']['listing_type_id'] === '2') {
-							$results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
+						if (isset($val['Listing']['listing_type_id'])) {
+							if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
+								$results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+							} else if ($val['Listing']['listing_type_id'] === '2') {
+								$results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
+							}
 						}
 					}
 				}
