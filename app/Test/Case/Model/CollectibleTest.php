@@ -21,6 +21,8 @@ class CollectibleTest extends CakeTestCase {
 		$this -> Comment = ClassRegistry::init('Comment');
 		$this -> CollectiblePriceFact = ClassRegistry::init('CollectiblePriceFact');
 		$this -> Listing = ClassRegistry::init('Listing');
+		$this -> CollectiblesUser = ClassRegistry::init('CollectiblesUser');
+		$this -> CollectiblesWishList = ClassRegistry::init('CollectiblesWishList');
 	}
 
 	/**
@@ -118,6 +120,23 @@ class CollectibleTest extends CakeTestCase {
 		// should exist
 		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 6)));
 		$this -> assertCount(1, $results);
+
+		// make collectible users have moved
+		$this -> assertEmpty($this -> CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.collectible_id' => 5))));
+		$this -> assertCount(2, $this -> CollectiblesUser -> find('all', array('conditions' => array('CollectiblesUser.collectible_id' => 6))));
+
+		// make sure wishlists have moved
+		$this -> assertEmpty($this -> CollectiblesWishList -> find('all', array('conditions' => array('CollectiblesWishList.collectible_id' => 5))));
+		$this -> assertCount(1, $this -> CollectiblesWishList -> find('all', array('conditions' => array('CollectiblesWishList.collectible_id' => 6))));
+
+		// make sure variants have been updated
+		$results = $this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 7)));
+		$this -> assertEquals(true, $results['Collectible']['variant']);
+		$this -> assertEquals(6, $results['Collectible']['variant_collectible_id']);
+
+		// make sure listing and variants are updated
+		$this -> assertEmpty($this -> Listing -> find('all', array('conditions' => array('Listing.collectible_id' => 5))));
+		$this -> assertCount(2, $this -> Listing -> find('all', array('conditions' => array('Listing.collectible_id' => 6))));
 	}
 
 }

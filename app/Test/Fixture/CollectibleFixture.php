@@ -17,6 +17,8 @@ class CollectibleFixture extends CakeTestFixture {
 	// base collectible to get deleted and replaced
 	array('id' => 5, 'entity_type_id' => '5', 'revision_id' => 5, 'user_id' => 1, 'status_id' => 4, 'name' => 'Test Collectible Replace', 'manufacture_id' => 1, 'collectibletype_id' => 1, 'license_id' => 1, 'description' => 'Test Collectible Desc', 'variant' => false, 'exclusive' => false, 'variant_collectible_id' => 0, 'numbered' => false, 'original' => false, 'custom' => false),
 	// replacement collectible
-	array('id' => 6, 'entity_type_id' => '6', 'revision_id' => 6, 'user_id' => 1, 'status_id' => 4, 'name' => 'Test Collectible Replacement', 'manufacture_id' => 1, 'collectibletype_id' => 1, 'license_id' => 1, 'description' => 'Test Collectible Desc', 'variant' => false, 'exclusive' => false, 'variant_collectible_id' => 0, 'numbered' => false, 'original' => false, 'custom' => false));
+	array('id' => 6, 'entity_type_id' => '6', 'revision_id' => 6, 'user_id' => 1, 'status_id' => 4, 'name' => 'Test Collectible Replacement', 'manufacture_id' => 1, 'collectibletype_id' => 1, 'license_id' => 1, 'description' => 'Test Collectible Desc', 'variant' => false, 'exclusive' => false, 'variant_collectible_id' => 0, 'numbered' => false, 'original' => false, 'custom' => false),
+	// this is a variant of collectible 5 which will be deleted and replaced by 6
+	array('id' => 7, 'entity_type_id' => '7', 'revision_id' => 7, 'user_id' => 1, 'status_id' => 4, 'name' => 'Test Collectible Replace Variant', 'manufacture_id' => 1, 'collectibletype_id' => 1, 'license_id' => 1, 'description' => 'Test Collectible Desc', 'variant' => true, 'exclusive' => false, 'variant_collectible_id' => 5, 'numbered' => false, 'original' => false, 'custom' => false));
 }
 ?>
