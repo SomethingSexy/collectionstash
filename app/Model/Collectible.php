@@ -1140,14 +1140,21 @@ class Collectible extends AppModel {
 				$retVal['response']['isSuccess'] = false;
 				array_push($retVal['response']['errors'], array('message' => __('You do not have permission to do that.')));
 			}
-			
+
 			if ($allowDelete) {
-// 
+				//
 				// $dataSource = $this -> getDataSource();
 				// $dataSource -> begin();
 
 				// let's see if we have a replacement collectible id
 				if (!is_null($replaceId)) {
+					if ($replaceId === $collectibleId) {
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('The collectible you are replacing is the same one you are trying to delete.')));
+
+						return $retVal;
+					}
+
 					$replacementCollectible = $this -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => $replaceId)));
 					if (empty($replacementCollectible)) {
 						$retVal['response']['isSuccess'] = false;

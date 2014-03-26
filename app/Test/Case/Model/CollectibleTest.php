@@ -139,5 +139,18 @@ class CollectibleTest extends CakeTestCase {
 		$this -> assertCount(2, $this -> Listing -> find('all', array('conditions' => array('Listing.collectible_id' => 6))));
 	}
 
+	public function testRemoveReplaceSame() {
+		$result = $this -> Collectible -> remove(4, array('User' => array('id' => 1, 'admin' => true)), 4);
+		$this -> assertEquals(false, $result['response']['isSuccess']);
+		$this -> assertNotEmpty($this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4))));
+	}
+
+	public function testRemoveReplaceNotFound() {
+		$result = $this -> Collectible -> remove(4, array('User' => array('id' => 1, 'admin' => true)), 4838);
+		$this -> assertEquals(false, $result['response']['isSuccess']);
+		$this -> assertNotEmpty($this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4))));
+	}
+
+
 }
 ?>
