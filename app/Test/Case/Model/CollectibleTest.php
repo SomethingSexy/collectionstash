@@ -151,6 +151,11 @@ class CollectibleTest extends CakeTestCase {
 		$this -> assertNotEmpty($this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4))));
 	}
 
+	public function testRemoveNoAccess() {
+		$result = $this -> Collectible -> remove(4, array('User' => array('id' => 2, 'admin' => false)));
+		$this -> assertEquals(false, $result['response']['isSuccess']);
+		$this -> assertNotEmpty($this -> Collectible -> find('first', array('contain' => false, 'conditions' => array('Collectible.id' => 4))));
+	}
 
 }
 ?>
