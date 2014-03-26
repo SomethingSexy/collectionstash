@@ -1143,8 +1143,8 @@ class Collectible extends AppModel {
 
 			if ($allowDelete) {
 				//
-				// $dataSource = $this -> getDataSource();
-				// $dataSource -> begin();
+				$dataSource = $this -> getDataSource();
+				$dataSource -> begin();
 
 				// let's see if we have a replacement collectible id
 				if (!is_null($replaceId)) {
@@ -1164,17 +1164,44 @@ class Collectible extends AppModel {
 					}
 					// check to see if the collectible we are deleting is in
 					// stashes
-					$this -> CollectiblesUser -> updateAll(array('CollectiblesUser.collectible_id' => $replaceId), array('CollectiblesUser.collectible_id' => $collectibleId));
+					if (!$this -> CollectiblesUser -> updateAll(array('CollectiblesUser.collectible_id' => $replaceId), array('CollectiblesUser.collectible_id' => $collectibleId))) {
+						$dataSource -> rollback();
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+						return $retVal;
+					}
 					// wish lists
-					$this -> CollectiblesWishList -> updateAll(array('CollectiblesWishList.collectible_id' => $replaceId), array('CollectiblesWishList.collectible_id' => $collectibleId));
+					if (!$this -> CollectiblesWishList -> updateAll(array('CollectiblesWishList.collectible_id' => $replaceId), array('CollectiblesWishList.collectible_id' => $collectibleId))) {
+						$dataSource -> rollback();
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+						return $retVal;
+					}
 					// Find all collectibles that are variants of the collectible we are deleting and replace them with the collectible
-					$this -> updateAll(array('Collectible.variant_collectible_id' => $replaceId), array('Collectible.variant_collectible_id' => $collectibleId));
+					if (!$this -> updateAll(array('Collectible.variant_collectible_id' => $replaceId), array('Collectible.variant_collectible_id' => $collectibleId))) {
+						$dataSource -> rollback();
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+						return $retVal;
+					}
 					// listings
-					$this -> Listing -> updateAll(array('Listing.collectible_id' => $replaceId), array('Listing.collectible_id' => $collectibleId));
-					$this -> Listing -> Transaction -> updateAll(array('Transaction.collectible_id' => $replaceId), array('Transaction.collectible_id' => $collectibleId));
+					if (!$this -> Listing -> updateAll(array('Listing.collectible_id' => $replaceId), array('Listing.collectible_id' => $collectibleId))) {
+						$dataSource -> rollback();
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+						return $retVal;
+					}
+					if (!$this -> Listing -> Transaction -> updateAll(array('Transaction.collectible_id' => $replaceId), array('Transaction.collectible_id' => $collectibleId))) {
+						$dataSource -> rollback();
+						$retVal['response']['isSuccess'] = false;
+						array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+						return $retVal;
+					}
 				}
 
 				if ($this -> delete($collectibleId, true)) {
+					// at this point, commit. If these things don't save, not a huge deal
+					$dataSource -> commit();
 
 					// if it is status 4
 					// we need to delete any edits, we need to delete CollectiblesPriceFact, and EntityType (handles comments and subscriptions), Revision
@@ -1201,6 +1228,9 @@ class Collectible extends AppModel {
 
 					$retVal['response']['isSuccess'] = true;
 					$this -> clearCache($collectibleId);
+					if (!is_null($replaceId)) {
+						$this -> clearCache($replaceId);
+					}
 				} else {
 					$retVal['response']['isSuccess'] = false;
 					array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
