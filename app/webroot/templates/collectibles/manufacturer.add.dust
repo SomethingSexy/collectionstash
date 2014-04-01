@@ -23,7 +23,9 @@
 		<div class="form-group">
 			<label class="control-label col-lg-2 " for="inputManBrand">Brand</label>
 			<div class="input-group col-lg-10">
-				<input id="inputManBrand" class="form-control" type="text" value="" name="brand" maxlength="200" autocomplete="off">
+				<div class="manufacturer-brand">
+					<input id="inputManBrand" class="form-control typeahead" type="text" value="" name="brand" maxlength="200" autocomplete="off">
+				</div>
 				<span class="input-group-btn">
 					<button class="btn btn-primary manufacturer-brand-add" type="button">
 						Add
