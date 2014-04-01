@@ -23,12 +23,7 @@ unset($urlparams['url']);
 	</div>
 	<?php } ?>
 	<div class="row">
-		<div class="col-md-7">
-			<div class="widget">
-			<div class="widget-header">
-				<h3><?php echo __('Collectibles Catalog'); ?></h3>
-			</div>
-			<div class="widget-content">
+		<div class="col-md-10">
 				<?php echo $this -> element('flash'); ?>
 				<div class="btn-group pull-right">
 			    	<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
@@ -212,21 +207,90 @@ unset($urlparams['url']);
 					</div>
 					
 				</div>			
-			</div>
-			</div>
 		</div>
-		<div class="col-md-5 collectible-detail">
+		<div class="col-md-2">
+		
+				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content='<input id="search-input-tools" type="text" class="form-text form-text-normal ui-autocomplete-input" autocomplete="off" placeholder="Start typing to see list">'>Left</button>
+  				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Middle</button>
+  				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Right</button>	
+			
+<!-- 			<div id="sidebar-fixed-sticky-wrapper" class="sticky" style=""><div id="sidebar-fixed" class="" style="">
+			    <div class="filter-block">
+			    	<div class="form-item form-item-text ui-front" id="search-container">
+			    		<span role="status" aria-live="polite" class="ui-helper-hidden-accessible">No search results.</span>
+			    		<input name="search" type="text" class="form-text form-text form-search form-searchi ui-autocomplete-input" id="search" placeholder="Search..." autocomplete="off">
+						<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all be-autosuggest-disabled ui-state-disabled" id="ui-id-1" tabindex="0" aria-disabled="true" style="display: none;"></ul>
+					</div>   
+				</div>
+
+			    <div class="filter-block hide" id="related-tags">
+			    	<div class="list-header">Related Tags</div>
+			      	<div id="object-tags" class="cfix"></div>
+			      	<div id="object-tags-see-all" style="display: none;">
+			        	<span class="viewing-less-copy fake-link">See all <span class="tags-number"></span> tags</span>
+			        	<span class="viewing-more-copy fake-link">See fewer tags</span>
+			      	</div>
+			    </div>
+			    <div class="filter-block hide-wip">
+			    	<div class="list-header">Filter By</div>
+			      	<ul class="block-menu" id="filter-menu">
+			        	<li class="filter">
+			          		<div class="menu-item filter-schools discover-sprite">Schools</div>
+			        	</li>
+			        	<li class="filter filter-temp-last">
+			          		<div class="menu-item filter-tools discover-sprite">Tools Used</div>
+				        		<div class="sort-menu search-option search-option-no-confirm" style="top: -60px;">
+				  
+				  				<div class="search-option-header">Tools</div>
+
+				 				<div class="search-option-content ui-front search-option-tools">
+				    				<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+				    				<input id="search-input-tools" type="text" class="form-text form-text-normal ui-autocomplete-input" autocomplete="off" placeholder="Start typing to see list">
+				  					<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-2" tabindex="0" style="display: none;"></ul>
+				  				</div>
+				  				<ul class="listselector_selections autocomplete_selections"></ul>			  
+				  				<div class="search-option-nub"></div>
+							</div>
+						</li>
+			        	<li class="filter hide-users">
+			          		<div class="menu-item filter-color discover-sprite">Color</div>
+			        	</li>
+			      	</ul>
+
+			      	<ul class="block-menu" id="gallery-menu">
+			        	<li>
+			          		<a href="/galleries" class="menu-item filter-arrow discover-sprite uppercase">
+			            		Visit Galleries
+			          		</a>
+			        	</li>
+			      	</ul>
+			    </div>
+			  </div>
+			</div> -->
+
+		</div>
+<!-- 		<div class="col-md-5 collectible-detail">
 			<div class="well" data-spy="affix" data-offset-top="200">
 				<p class="text-center lead">Select a collectible to see more detail here!</p>
 				
 				
        		</div>	
-		</div>
+		</div> -->
 	</div>
 </div>
 
-<script>var uploadDirectory =   "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>
-	";
+<script>
+$('.filter').popover();
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
 	<?php
 	if ($isLoggedIn) {
 		echo 'var isLogggedIn = true;';

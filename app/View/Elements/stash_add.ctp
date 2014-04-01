@@ -74,14 +74,17 @@
 	</div>	
 	<div class="form-group {#inlineErrors.merchant}has-error{/inlineErrors.merchant}">
 		<label class="control-label" for="CollectiblesUserMerchantId">Where did you purchase the collectible?</label>
-			<input type="text" id="CollectiblesUserMerchantId" class="form-control" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
+			<div class="merchants">
+				<input type="text" id="CollectiblesUserMerchantId" class="form-control typeahead" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
+			</div>
 			{#inlineErrors.merchant}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.merchant}
 	</div>			
 	<div class="form-group {#inlineErrors.purchase_date}has-error{/inlineErrors.purchase_date}">
 		<label class="control-label" for="CollectiblesUserPurchaseDate">When did you purchase this collectible?</label>
-			<input type="text" id="CollectiblesUserPurchaseDate" class="form-control" maxlength="10" name="purchase_date" value="{model.purchase_date}">
+				<input type="text" id="CollectiblesUserPurchaseDate" class="form-control" maxlength="10" name="purchase_date" value="{model.purchase_date}">
+			</div>
 			{#inlineErrors.purchase_date}
 				<span class="help-inline">{.}</span>
 			{/inlineErrors.purchase_date}
