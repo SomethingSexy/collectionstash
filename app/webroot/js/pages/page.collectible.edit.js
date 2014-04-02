@@ -2002,15 +2002,36 @@ var AddTagView = Backbone.View.extend({
         'click .add-tag': 'addTag',
         'keypress #inputTag': 'inputChange'
     },
-    initialize: function(options) {},
+    initialize: function(options) {
+        this.tagsHound = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/tags/getTagList?query=%QUERY',
+                filter: function(list) {
+                    return $.map(list, function(tag) {
+                        return {
+                            value: tag
+                        };
+                    });
+                }
+            }
+        });
+        this.tagsHound.initialize();
+    },
     render: function() {
         var self = this;
         dust.render(this.template, {}, function(error, output) {
             $(self.el).html(output);
         });
-        $('#inputTag', self.el).typeahead({
+        $('.tags-typeahead .typeahead', self.el).typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        }, {
             name: 'tags',
-            remote: '/tags/getTagList?query=%QUERY',
+            displayKey: 'value',
+            source: this.tagsHound.ttAdapter()
         });
         return this;
     },
@@ -2170,9 +2191,9 @@ var AddArtistView = Backbone.View.extend({
             remote: {
                 url: '/artists/getArtistList?query=%QUERY',
                 filter: function(list) {
-                    return $.map(list, function(country) {
+                    return $.map(list, function(artist) {
                         return {
-                            value: country
+                            value: artist
                         };
                     });
                 }
