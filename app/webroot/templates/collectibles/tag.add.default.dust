@@ -1,7 +1,9 @@
 <form role="form">
 	<fieldset>
 		<div class="input-group col-lg-6">
-			<input autocomplete="off" type="text" class="form-control" id="inputTag" name="tag" value="">
+			<div class="tags-typeahead">
+				<input autocomplete="off" type="text" class="form-control typeahead" id="inputTag" name="tag" value="">
+			</div>
 			<span class="input-group-btn">
 				<button class="btn btn-primary add-tag" type="button">
 					Add
