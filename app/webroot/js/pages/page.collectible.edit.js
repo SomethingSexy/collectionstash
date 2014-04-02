@@ -1609,6 +1609,20 @@ var CollectibleView = Backbone.View.extend({
             name: 'retailers',
             displayKey: 'value',
             source: this.retailersHound.ttAdapter()
+        }).on('typeahead:selected', function(event, suggested, name) {
+            // since we are validating, we need to handle the case when 
+            // they select it
+            var data = {};
+            data[$(event.currentTarget).attr('name')] = suggested.value;
+            self.model.set(data, {
+                forceUpdate: true
+            });
+        }).on('typeahead:autocompleted', function(event, suggested, name) {
+            var data = {};
+            data[$(event.currentTarget).attr('name')] = suggested.value;
+            self.model.set(data, {
+                forceUpdate: true
+            });
         });
         return this;
     },
