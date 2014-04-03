@@ -1,5 +1,6 @@
 <?php
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
+echo $this -> Html -> script('views/view.filters', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
@@ -209,11 +210,11 @@ unset($urlparams['url']);
 				</div>			
 		</div>
 		<div class="col-md-2">
-		
-				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content='<input id="search-input-tools" type="text" class="form-text form-text-normal ui-autocomplete-input" autocomplete="off" placeholder="Start typing to see list">'>Left</button>
+			<div id="fancy-filters">
+				<button type="button" class="btn btn-default btn-lg btn-block filter manufacturer" data-title="Manufacturer Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content='<div class="manufacturer-typeahead"><input id="search-input-tools" type="text" class="form-control typeahead input-lg" autocomplete="off" placeholder="Start typing to see list"></div></div>'>Left</button>
   				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Middle</button>
   				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Right</button>	
-			
+			</div>
 <!-- 			<div id="sidebar-fixed-sticky-wrapper" class="sticky" style=""><div id="sidebar-fixed" class="" style="">
 			    <div class="filter-block">
 			    	<div class="form-item form-item-text ui-front" id="search-container">
@@ -280,16 +281,6 @@ unset($urlparams['url']);
 </div>
 
 <script>
-$('.filter').popover();
-$('body').on('click', function (e) {
-    $('[data-toggle="popover"]').each(function () {
-        //the 'is' for buttons that trigger popups
-        //the 'has' for icons within a button that triggers a popup
-        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-            $(this).popover('hide');
-        }
-    });
-});
 var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
 	<?php
 	if ($isLoggedIn) {
