@@ -109,8 +109,6 @@ class ManufacturesController extends AppController
         $this->autoRender = false;
         $query = $this->request->query['query'];
         $manufacturers = $this->Manufacture->find('all', array('fields' => array('Manufacture.id', 'Manufacture.title'), 'contain' => false, 'conditions' => array('Manufacture.title LIKE' => $query . '%')));
-        $keys = array_keys($manufacturers);
-        $values = array_values($manufacturers);
         $this->response->body(json_encode(Set::extract('/Manufacture/.', $manufacturers)));
     }
     
