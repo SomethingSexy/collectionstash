@@ -1,4 +1,5 @@
 <?php
+echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('views/view.filters', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
