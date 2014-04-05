@@ -27,7 +27,8 @@ var FiltersView = Backbone.View.extend({
                 filter: function(list) {
                     return $.map(list, function(manufacturer) {
                         return {
-                            value: manufacturer
+                            value: manufacturer.title,
+                            id: manufacturer.id
                         };
                     });
                 }
@@ -43,11 +44,20 @@ var FiltersView = Backbone.View.extend({
             $('.manufacturer-typeahead .typeahead', manPopover.data("bs.popover").$tip).typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 1
+                minLength: 1,
+                autoselect: true
             }, {
                 name: 'manufacturers',
                 displayKey: 'value',
                 source: self.manufacturerHound.ttAdapter()
+            }).on('typeahead:selected', function(event, selected, obj) {
+                selected.value;
+
+                var uri = new URI().setSearch({
+                    m: selected.id
+                });
+
+                window.location.href = uri.href();
             });
         });
 
