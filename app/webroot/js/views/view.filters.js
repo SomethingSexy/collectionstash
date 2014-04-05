@@ -51,10 +51,14 @@ var FiltersView = Backbone.View.extend({
                 displayKey: 'value',
                 source: self.manufacturerHound.ttAdapter()
             }).on('typeahead:selected', function(event, selected, obj) {
-                selected.value;
+                var uri = new URI(document.URL);
+                var filterValue = selected.id;
+                if (uri.query(true)['m']) {
+                    filterValue = uri.query(true)['m'] + ',' + selected.id;
+                }
 
-                var uri = new URI().setSearch({
-                    m: selected.id
+                uri.setSearch({
+                    m: filterValue
                 });
 
                 window.location.href = uri.href();
