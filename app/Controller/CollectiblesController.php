@@ -9,7 +9,25 @@ class CollectiblesController extends AppController
     
     var $actsAs = array('Searchable.Searchable');
     
-    public $filters = array('m' => array('model' => 'Collectible', 'id' => 'manufacture_id'), 'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id'), 'l' => array('model' => 'Collectible', 'id' => 'license_id'), 's' => array('model' => 'Collectible', 'id' => 'scale_id'), 't' => array('model' => 'Tag', 'id' => 'id'), 'o' => array('custom' => true, 'id' => 'order'));
+    public $filters = array(
+    
+    //
+    'm' => array('model' => 'Collectible', 'id' => 'manufacture_id', 'source' => '/manufactures/data', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
+    
+    //
+    'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id', 'source' => '/collectibletypes/data', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
+    
+    //
+    'l' => array('model' => 'Collectible', 'id' => 'license_id', 'source' => '/licenses/data', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
+    
+    //
+    's' => array('model' => 'Collectible', 'id' => 'scale_id', 'source' => '/scales/data', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
+    
+    //
+    't' => array('model' => 'Tag', 'id' => 'id'),
+    
+    //
+    'o' => array('custom' => true, 'id' => 'order'));
     
     /**
      * This method will allow us to quick add a collectible from a selected collectible.
@@ -19,10 +37,10 @@ class CollectiblesController extends AppController
      * we are doing first.
      *
      * Use Cases:
-     * 	- Add a similar collectible (collectible Id = xx, variant = false)
+     *  - Add a similar collectible (collectible Id = xx, variant = false)
      *  - Add a variant collectible (collectible Id = xx, variant = true)
      *  - Add a similar collectible that is a variant of a base collectible (collectible Id = xx, variant = false)
-     * 		- For this case, we will determine here IF the collectible we are copying from IS a variant, then we will use its base collectible as the base collectible for the new collectible
+     *      - For this case, we will determine here IF the collectible we are copying from IS a variant, then we will use its base collectible as the base collectible for the new collectible
      *
      * $collectibleId - this is the id that we are "Copying"
      * $variant - this is a variant add?
@@ -204,6 +222,7 @@ class CollectiblesController extends AppController
             
             // we need to check the response here
             
+            
         }
     }
     
@@ -230,6 +249,7 @@ class CollectiblesController extends AppController
             $this->set('returnData', $response);
             
             // we need to check the response here
+            
             
         } else if ($this->request->isDelete()) {
             $collectible['CollectiblesTag'] = array();
@@ -266,6 +286,7 @@ class CollectiblesController extends AppController
             $this->set('returnData', $response);
             
             // we need to check the response here
+            
             
         } else if ($this->request->isDelete()) {
             $collectible['ArtistsCollectible'] = array();
@@ -578,6 +599,7 @@ class CollectiblesController extends AppController
         } else {
             
             //$this -> redirect($this -> referer());
+            
             
         }
     }

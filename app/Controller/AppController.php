@@ -327,164 +327,55 @@ class AppController extends Controller
         
         $this->set('collectibles', $data);
         
-        $filters = $this->_getFilters($saveSearchFilters);
-        $this->set(compact('filters'));
+        // $filters = $this->_getFilters($saveSearchFilters);
+        $this->set('filters', $this->filters);
+        $saveSearchFilters = $this->_processFilters($saveSearchFilters);
         $this->set(compact('saveSearchFilters'));
+        debug($saveSearchFilters);
+        debug($this->filters);
         
         return $data;
     }
     
-    private function _getFilters($searchFilters) {
+    private function _processFilters($searchFilters) {
+        $retVal = array();
         
-        $searchFilterGroups = array();
-        $this->loadModel('Manufacture');
-        $manufacturers = $this->Manufacture->find("all", array('order' => array('Manufacture.title' => 'ASC'), 'contain' => false));
-        
-        //$categories = $this -> Attribute -> AttributeCategory -> find("all", array('contain' => false));
-        //$scales = $this -> Attribute -> Scale -> find("all", array('contain' => false));
-        
-        $manufacturerSearchGroup = array();
-        $manufacturerSearchGroup['filters'] = array();
-        $manufacturerSearchGroup['selected'] = array();
-        $manufacturerSearchGroup['label'] = __('Manufacturer');
-        $manufacturerSearchGroup['type'] = 'm';
-        $manufacturerSearchGroup['allowMultiple'] = 'true';
-        
-        foreach ($manufacturers as $key => $value) {
-            $serachFilter = array();
-            $serachFilter['id'] = $value['Manufacture']['id'];
-            $serachFilter['label'] = $value['Manufacture']['title'];
-            array_push($manufacturerSearchGroup['filters'], $serachFilter);
-        }
-        array_push($searchFilterGroups, $manufacturerSearchGroup);
-        
-        // If a manufacturer is selected, let's filter our the filter data :)
+        // if we have some settings
         if (isset($searchFilters['m'])) {
             
-            $this->loadModel('CollectibletypesManufacture');
-            
-            $collectibleTypes = $this->CollectibletypesManufacture->find('all', array('order' => array('Collectibletype.name' => 'ASC'), 'contain' => array('Collectibletype'), 'conditions' => array('CollectibletypesManufacture.manufacture_id' => $searchFilters['m'])));
-            $collectibleTypesSearchGroup = array();
-            $collectibleTypesSearchGroup['filters'] = array();
-            $collectibleTypesSearchGroup['selected'] = array();
-            $collectibleTypesSearchGroup['label'] = __('Platform');
-            $collectibleTypesSearchGroup['type'] = 'ct';
-            $collectibleTypesSearchGroup['allowMultiple'] = 'true';
-            
-            foreach ($collectibleTypes as $key => $value) {
-                $serachFilter = array();
-                $serachFilter['id'] = $value['Collectibletype']['id'];
-                $serachFilter['label'] = $value['Collectibletype']['name'];
-                array_push($collectibleTypesSearchGroup['filters'], $serachFilter);
+            $this->loadModel('Manufacture');
+            foreach ($searchFilters['m'] as $key => $value) {
+                $manufacturer = $this->Manufacture->find("first", array('conditions' => array('Manufacture.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $manufacturer['Manufacture']['title'], 'type' => 'm'));
             }
-            $collectibleTypesSearchGroup['filters'] = $this->my_array_unique($collectibleTypesSearchGroup['filters']);
-            array_push($searchFilterGroups, $collectibleTypesSearchGroup);
+        }
+        
+        if (isset($searchFilters['ct'])) {
             
-            $this->loadModel('LicensesManufacture');
-            
-            $licenses = $this->LicensesManufacture->find('all', array('order' => array('License.name' => 'ASC'), 'contain' => array('License'), 'conditions' => array('LicensesManufacture.manufacture_id' => $searchFilters['m'])));
-            $licenseSearchGroup = array();
-            $licenseSearchGroup['filters'] = array();
-            $licenseSearchGroup['selected'] = array();
-            $licenseSearchGroup['label'] = __('Brand');
-            $licenseSearchGroup['type'] = 'l';
-            $licenseSearchGroup['allowMultiple'] = 'true';
-            
-            foreach ($licenses as $key => $value) {
-                $serachFilter = array();
-                $serachFilter['id'] = $value['License']['id'];
-                $serachFilter['label'] = $value['License']['name'];
-                array_push($licenseSearchGroup['filters'], $serachFilter);
-            }
-            $licenseSearchGroup['filters'] = $this->my_array_unique($licenseSearchGroup['filters']);
-            array_push($searchFilterGroups, $licenseSearchGroup);
-        } else {
             $this->loadModel('Collectibletype');
-            $collectibleTypes = $this->Collectibletype->find("all", array('contain' => false, 'order' => array('Collectibletype.name' => 'ASC')));
-            
-            $collectibleTypesSearchGroup = array();
-            $collectibleTypesSearchGroup['filters'] = array();
-            $collectibleTypesSearchGroup['selected'] = array();
-            $collectibleTypesSearchGroup['label'] = __('Platform');
-            $collectibleTypesSearchGroup['type'] = 'ct';
-            $collectibleTypesSearchGroup['allowMultiple'] = 'true';
-            
-            foreach ($collectibleTypes as $key => $value) {
-                $serachFilter = array();
-                $serachFilter['id'] = $value['Collectibletype']['id'];
-                $serachFilter['label'] = $value['Collectibletype']['name'];
-                array_push($collectibleTypesSearchGroup['filters'], $serachFilter);
+            foreach ($searchFilters['ct'] as $key => $value) {
+                $collectibleType = $this->Collectibletype->find("first", array('conditions' => array('Collectibletype.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $collectibleType['Collectibletype']['name'], 'type' => 'ct'));
             }
-            array_push($searchFilterGroups, $collectibleTypesSearchGroup);
-            
+        }
+
+        if (isset($searchFilters['l'])) {
             $this->loadModel('License');
-            $licenses = $this->License->find("all", array('contain' => false, 'order' => array('License.name' => 'ASC')));
-            
-            $licenseSearchGroup = array();
-            $licenseSearchGroup['filters'] = array();
-            $licenseSearchGroup['selected'] = array();
-            $licenseSearchGroup['label'] = __('Brand');
-            $licenseSearchGroup['type'] = 'l';
-            $licenseSearchGroup['allowMultiple'] = 'true';
-            
-            foreach ($licenses as $key => $value) {
-                $serachFilter = array();
-                $serachFilter['id'] = $value['License']['id'];
-                $serachFilter['label'] = $value['License']['name'];
-                array_push($licenseSearchGroup['filters'], $serachFilter);
+            foreach ($searchFilters['l'] as $key => $value) {
+                $license = $this->License->find("first", array('conditions' => array('License.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $license['License']['name'], 'type' => 'l'));
             }
-            array_push($searchFilterGroups, $licenseSearchGroup);
+        }
+
+        if (isset($searchFilters['s'])) {
+            $this->loadModel('Scale');
+            foreach ($searchFilters['s'] as $key => $value) {
+                $license = $this->License->find("first", array('conditions' => array('Scale.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $license['Scale']['scale'], 'type' => 's'));
+            }
         }
         
-        // always add all scales
-        $this->loadModel('Scale');
-        $scales = $this->Scale->find("all", array('contain' => false));
-        
-        $scaleSearchGroup = array();
-        $scaleSearchGroup['filters'] = array();
-        $scaleSearchGroup['selected'] = array();
-        $scaleSearchGroup['label'] = __('Scale');
-        $scaleSearchGroup['type'] = 's';
-        $scaleSearchGroup['allowMultiple'] = 'true';
-        
-        foreach ($scales as $key => $value) {
-            $serachFilter = array();
-            $serachFilter['id'] = $value['Scale']['id'];
-            $serachFilter['label'] = $value['Scale']['scale'];
-            array_push($scaleSearchGroup['filters'], $serachFilter);
-        }
-        array_push($searchFilterGroups, $scaleSearchGroup);
-        
-        $orderSearchGroup = array();
-        $orderSearchGroup['filters'] = array();
-        $orderSearchGroup['selected'] = array();
-        $orderSearchGroup['label'] = __('Order');
-        $orderSearchGroup['type'] = 'o';
-        $orderSearchGroup['allowMultiple'] = 'false';
-        
-        $serachFilter = array();
-        $serachFilter['id'] = 'a';
-        $serachFilter['label'] = 'Ascending';
-        array_push($orderSearchGroup['filters'], $serachFilter);
-        
-        $serachFilter = array();
-        $serachFilter['id'] = 'd';
-        $serachFilter['label'] = 'Descending';
-        array_push($orderSearchGroup['filters'], $serachFilter);
-        
-        $serachFilter = array();
-        $serachFilter['id'] = 'n';
-        $serachFilter['label'] = 'Newest';
-        array_push($orderSearchGroup['filters'], $serachFilter);
-        
-        $serachFilter = array();
-        $serachFilter['id'] = 'o';
-        $serachFilter['label'] = 'Oldest';
-        array_push($orderSearchGroup['filters'], $serachFilter);
-        
-        array_push($searchFilterGroups, $orderSearchGroup);
-        
-        return $searchFilterGroups;
+        return $retVal;
     }
     
     function my_array_unique($array, $keep_key_assoc = false) {
@@ -513,7 +404,7 @@ class AppController extends Controller
         $subscription['Subscription']['subject'] = $subject;
         array_push($subscriptions, $subscription);
         
-        CakeEventManager::instance()->dispatch(new CakeEvent('Controller.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
+        CakeEventManager::instance()->dispatch(new CakeEvent('Controller . Subscription . notify', $this, array('subscriptions' => $subscriptions)));
     }
     
     public function convertErrorsJSON($errors = null, $model = null) {

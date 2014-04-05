@@ -4,6 +4,13 @@ class LicensesController extends AppController {
 
 	public $helpers = array('Html', 'Js', 'Minify');
 
+    public function data() {
+        $this->autoRender = false;
+        $query = $this->request->query['query'];
+        $licenses = $this->License->find('all', array('fields' => array('License.id', 'License.name'), 'contain' => false, 'conditions' => array('License.name LIKE' => $query . '%')));
+        $this->response->body(json_encode(Set::extract('/License/.', $licenses)));
+    }
+
 	public function admin_list() {
 		$this -> checkLogIn();
 		$this -> checkAdmin();

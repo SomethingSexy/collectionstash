@@ -7,9 +7,9 @@ if(isset($saveSearchFilters['search'])){
 }
 
 ?></script>
-<?php echo $this -> Html -> script('jquery.filters', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('views/view.filters', array('inline' => false)); ?>
 
-<div class="search-query">
+<!--<div class="search-query">
 	<?php
 	if (isset($saveSearchFilters['search'])) {
 		echo __('You searched for: ', true) . $saveSearchFilters['search'];
@@ -17,53 +17,14 @@ if(isset($saveSearchFilters['search'])){
 		echo '<span class="tag"><span class="tag-name">' . $saveSearchFilters['tag']['tag'] . '</span></span>';
 	}
 	?>
-</div>
+</div> -->
 
-<div id="filters">
+<div id="fancy-filters">
 	<?php
-	foreach ($filters as $key => $filterGroup) {
-		$count = 0;
-		if (isset($saveSearchFilters[$filterGroup['type']])) {
-			$count = count($saveSearchFilters[$filterGroup['type']]);
-		}
-
-		echo '<div class="btn-group filter checkbox-select" data-type="' . $filterGroup['type'] . '" data-allow-multiple="' . $filterGroup['allowMultiple'] . '">';
-		echo '<button href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle">';
-
-		if ($count > 0) {
-			echo $count . __(' selected');
-		} else {
-			echo $filterGroup['label'];
-		}
-		echo ' <span class="caret"></span>';
-		echo '</button>';
-		echo '<ul class="dropdown-menu">';
-		if ($filterGroup['allowMultiple'] == 'true') {
-			echo '<li class="action"><a class="deselect">Deselect All</a></li>';
-			echo '<li class="divider"></li>';
-		}
-
-		foreach ($filterGroup['filters'] as $key => $filter) {
-			echo '<li>';
-			echo '<label>';
-			echo '<input  data-filter="' . $filter['id'] . '" class="filter-links" type="checkbox" value="' . $filter['id'] . '"';
-			if (isset($saveSearchFilters[$filterGroup['type']]) && in_array($filter['id'], $saveSearchFilters[$filterGroup['type']])) {
-				echo ' checked ';
+		foreach ($filters as $key => $filter) {
+			if(isset($filter['user_selectable']) && $filter['user_selectable']) {
+				echo '<button type="button" class="btn btn-default btn-lg btn-block filter" data-type="' . $key . '" data-source-key="' . $filter['key'] .'" data-source="' . $filter['source'] .'" data-title="' . $filter['label'] . ' Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content=\'<div class="typeahead-container"><input id="search-input-tools" type="text" class="form-control typeahead input-lg" autocomplete="off" placeholder="Start typing to see list"></div></div>\'>' . $filter['label'] .'</button>';				
 			}
-
-			echo '/>';
-			echo '<span>' . $filter['label'] . '</span>';
-			echo '</label>';
-			echo '</li>';
 		}
-		echo '</ul>';
-
-		echo '</div>';
-	}
 	?>
 </div>
-<script>
-	$(function() {
-		$('#filters').filters();
-	}); 
-</script>

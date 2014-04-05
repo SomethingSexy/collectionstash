@@ -36,7 +36,7 @@ unset($urlparams['url']);
 				if ($viewType === 'tiles') {
 					$url = '/collectibles/searchTiles/';
 				}
-				echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
+				echo $this -> element('selected_search_filters', array('searchUrl' => $url . $viewType));
 				?>
 				<div class="row spacer">
 					<div class="col-md-12">
@@ -211,65 +211,7 @@ unset($urlparams['url']);
 				</div>			
 		</div>
 		<div class="col-md-2">
-			<div id="fancy-filters">
-				<button type="button" class="btn btn-default btn-lg btn-block filter manufacturer" data-title="Manufacturer Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content='<div class="manufacturer-typeahead"><input id="search-input-tools" type="text" class="form-control typeahead input-lg" autocomplete="off" placeholder="Start typing to see list"></div></div>'>Left</button>
-  				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Middle</button>
-  				<button type="button" class="btn btn-default btn-lg btn-block filter" data-title="Filter" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Right</button>	
-			</div>
-<!-- 			<div id="sidebar-fixed-sticky-wrapper" class="sticky" style=""><div id="sidebar-fixed" class="" style="">
-			    <div class="filter-block">
-			    	<div class="form-item form-item-text ui-front" id="search-container">
-			    		<span role="status" aria-live="polite" class="ui-helper-hidden-accessible">No search results.</span>
-			    		<input name="search" type="text" class="form-text form-text form-search form-searchi ui-autocomplete-input" id="search" placeholder="Search..." autocomplete="off">
-						<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all be-autosuggest-disabled ui-state-disabled" id="ui-id-1" tabindex="0" aria-disabled="true" style="display: none;"></ul>
-					</div>   
-				</div>
-
-			    <div class="filter-block hide" id="related-tags">
-			    	<div class="list-header">Related Tags</div>
-			      	<div id="object-tags" class="cfix"></div>
-			      	<div id="object-tags-see-all" style="display: none;">
-			        	<span class="viewing-less-copy fake-link">See all <span class="tags-number"></span> tags</span>
-			        	<span class="viewing-more-copy fake-link">See fewer tags</span>
-			      	</div>
-			    </div>
-			    <div class="filter-block hide-wip">
-			    	<div class="list-header">Filter By</div>
-			      	<ul class="block-menu" id="filter-menu">
-			        	<li class="filter">
-			          		<div class="menu-item filter-schools discover-sprite">Schools</div>
-			        	</li>
-			        	<li class="filter filter-temp-last">
-			          		<div class="menu-item filter-tools discover-sprite">Tools Used</div>
-				        		<div class="sort-menu search-option search-option-no-confirm" style="top: -60px;">
-				  
-				  				<div class="search-option-header">Tools</div>
-
-				 				<div class="search-option-content ui-front search-option-tools">
-				    				<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-				    				<input id="search-input-tools" type="text" class="form-text form-text-normal ui-autocomplete-input" autocomplete="off" placeholder="Start typing to see list">
-				  					<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-2" tabindex="0" style="display: none;"></ul>
-				  				</div>
-				  				<ul class="listselector_selections autocomplete_selections"></ul>			  
-				  				<div class="search-option-nub"></div>
-							</div>
-						</li>
-			        	<li class="filter hide-users">
-			          		<div class="menu-item filter-color discover-sprite">Color</div>
-			        	</li>
-			      	</ul>
-
-			      	<ul class="block-menu" id="gallery-menu">
-			        	<li>
-			          		<a href="/galleries" class="menu-item filter-arrow discover-sprite uppercase">
-			            		Visit Galleries
-			          		</a>
-			        	</li>
-			      	</ul>
-			    </div>
-			  </div>
-			</div> -->
-
+			<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
 		</div>
 <!-- 		<div class="col-md-5 collectible-detail">
 			<div class="well" data-spy="affix" data-offset-top="200">
