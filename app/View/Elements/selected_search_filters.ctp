@@ -2,7 +2,10 @@
 			<div class="col-md-12 selected-search-filters">
 				<?php
 					foreach ($saveSearchFilters as $key => $value) {
-						# code...
+						echo '<span class="filter label label-info">';
+						echo $value['label'];
+						echo '<span data-role="remove"></span>';
+						echo '</span>';
 					}
 				?>
 
