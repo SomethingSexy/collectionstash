@@ -18,8 +18,9 @@ if(isset($saveSearchFilters['search'])){
 	}
 	?>
 </div> -->
-
+<h4>Filter By </h4>
 <div id="fancy-filters">
+	<div class="filter-btn">
 	<?php
 		foreach ($filters as $key => $filter) {
 			if(isset($filter['user_selectable']) && $filter['user_selectable']) {
@@ -27,4 +28,5 @@ if(isset($saveSearchFilters['search'])){
 			}
 		}
 	?>
+	</div>
 </div>

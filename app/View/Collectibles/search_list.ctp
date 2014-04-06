@@ -25,12 +25,16 @@ unset($urlparams['url']);
 	</div>
 	<?php } ?>
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-9 filterable-list">
 				<?php echo $this -> element('flash'); ?>
-				<div class="btn-group pull-right">
-			    	<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
-			    	<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
-			    </div>
+				<div class="row spacer">
+					<div class="col-md-12">
+						<div class="btn-group pull-right">
+							<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
+							<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
+						</div>
+					</div>
+				</div>
 				<?php
 				$url = '/collectibles/search/list';
 				if ($viewType === 'tiles') {
@@ -210,8 +214,10 @@ unset($urlparams['url']);
 					
 				</div>			
 		</div>
-		<div class="col-md-2">
-			<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
+		<div class="col-md-3">
+			<div class="" data-spy="affix" data-offset-top="">
+				<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
+			</div>
 		</div>
 <!-- 		<div class="col-md-5 collectible-detail">
 			<div class="well" data-spy="affix" data-offset-top="200">
