@@ -370,8 +370,8 @@ class AppController extends Controller
         if (isset($searchFilters['s'])) {
             $this->loadModel('Scale');
             foreach ($searchFilters['s'] as $key => $value) {
-                $license = $this->License->find("first", array('conditions' => array('Scale.id' => $value), 'contain' => false));
-                array_push($retVal, array('id' => $value, 'label' => $license['Scale']['scale'], 'type' => 's'));
+                $scale = $this->Scale->find("first", array('conditions' => array('Scale.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $scale['Scale']['scale'], 'type' => 's'));
             }
         }
         
