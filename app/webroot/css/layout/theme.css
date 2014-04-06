@@ -1189,8 +1189,8 @@ background-color: none !important;
 }
 .selected-search-filters {
     background-color: #FAFAFA;
+    border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid #E5E5E5;
-    border-top: 1px solid #FFF;
     color: #777;
     padding: 15px 20px;
 }
@@ -1205,6 +1205,18 @@ background-color: none !important;
 .selected-search-filters .filter span[data-role="remove"] {
     margin-left: 8px;
     cursor: pointer;
+}
+
+.filter-btn {
+    width: 300px;
+}
+
+#fancy-filters {
+    padding: 20px;
+}
+
+.filterable-list {
+    border-right: 1px solid #DDD;
 }
 @media (max-width: 969px) {
     .yamm .dropdown.yamm-fullwidth .dropdown-menu {
