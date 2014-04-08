@@ -37,6 +37,10 @@ $(function() {
 
         filtersView.render();
 
+        var selectedFiltersView = new SelectedFiltersView();
+        selectedFiltersView.render();
+
+
         $('.collectible', '#collectibles-list-component').on('click', function(event) {
             var collectibleData = $(event.currentTarget).attr('data-collectible');
 

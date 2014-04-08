@@ -60,6 +60,8 @@ cake -app D:\Development\wamp\www\app process_collectible_price
 
 cake -app D:\Development\wamp\www\collectionstash\app one_time_convert_to_wish_list
 
+cake -app D:\Development\wamp\www\collectionstash\app phpunit
+
 
 linux: ./cake 
 

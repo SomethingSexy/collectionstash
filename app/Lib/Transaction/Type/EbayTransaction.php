@@ -101,7 +101,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable {
 		$appId = Configure::read('Settings.TransactionManager.eBay.AppID');
 
 		//grab the current version of the wsdl we are using
-		$wsdl_url = APP . 'vendors' . DS . 'transactions' . DS . 'ebay' . DS . 'eBaySvc.wsdl';
+		$wsdl_url = APP . 'Vendor' . DS . 'transactions' . DS . 'ebay' . DS . 'eBaySvc.wsdl';
 		// downloaded from http://developer.ebay.com/webservices/latest/eBaySvc.wsdl
 
 		$apiCall = 'GetItemTransactions';

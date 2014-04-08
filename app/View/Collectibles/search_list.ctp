@@ -1,7 +1,5 @@
 <?php
-echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
-echo $this -> Html -> script('views/view.filters', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
@@ -215,7 +213,7 @@ unset($urlparams['url']);
 				</div>			
 		</div>
 		<div class="col-md-3">
-			<div class="" data-spy="affix" data-offset-top="">
+			<div class="">
 				<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
 			</div>
 		</div>

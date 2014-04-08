@@ -9,8 +9,8 @@
 /app.rar
 /index.php
 /testmysql.php
-/vendors/File
-/vendors/PHP
-/vendors/PHPUnit
-/vendors/Symfony
-/vendors/Text
+/app/Vendor/File
+/app/Vendor/PHP
+/app/Vendor/PHPUnit
+/app/Vendor/Symfony
+/app/Vendor/Text
