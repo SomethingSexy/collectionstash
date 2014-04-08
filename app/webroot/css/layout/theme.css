@@ -1206,15 +1206,17 @@ background-color: none !important;
     margin-left: 8px;
     cursor: pointer;
 }
-
 .filter-btn {
     width: 300px;
 }
-
+.filter-btn .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+}
 #fancy-filters {
     padding: 20px;
 }
-
 .filterable-list {
     border-right: 1px solid #DDD;
 }
