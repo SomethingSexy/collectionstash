@@ -1,24 +1,19 @@
-// TODO: Need to make this configurable, or we have extending views 
-$(function() {
-    $('body').on('click', function(e) {
-        $('[data-toggle="popover"]').each(function() {
-            //the 'is' for buttons that trigger popups
-            //the 'has' for icons within a button that triggers a popup
-            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                $(this).popover('hide');
-            }
-        });
-    });
-});
-
 var FiltersView = Backbone.View.extend({
-    //template : 'alert',
     el: '#fancy-filters',
     events: {
 
     },
     initialize: function(options) {
         this.hounds = {};
+        $('body').on('click', function(e) {
+            $('[data-toggle="popover"]').each(function() {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
     },
     render: function() {
         var self = this;
@@ -34,6 +29,7 @@ var FiltersView = Backbone.View.extend({
             self.hounds[type] = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
+                limit: 20,
                 remote: {
                     url: source + '?query=%QUERY',
                     filter: function(list) {
@@ -74,7 +70,7 @@ var FiltersView = Backbone.View.extend({
                 uri.setSearch(search);
 
                 window.location.href = uri.href();
-            });
+            }).focus();
         });
 
         return this;
