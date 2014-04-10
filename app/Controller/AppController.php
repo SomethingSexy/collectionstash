@@ -227,10 +227,8 @@ class AppController extends Controller
                 $filtersSet = false;
                 
                 foreach ($filterGroup as $key => $value) {
-                    if ($value != 0) {
-                        array_push($modelFilters[0]['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
-                        $filtersSet = true;
-                    }
+                    array_push($modelFilters[0]['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
+                    $filtersSet = true;
                 }
                 
                 if ($filtersSet) {
@@ -289,6 +287,7 @@ class AppController extends Controller
         
         // set status here, this one is a litte special because we need a default
         array_push($conditions, $status);
+        debug($tableFilters);
         
         //See if a search was set
         if (isset($search)) {
