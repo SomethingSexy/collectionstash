@@ -68,7 +68,7 @@
 }
 /* fixes problem with typeahead in modals */
 .typeahead {
-	z-index: 1051;
+	z-index: 1000;
 }
 .edits table tr, .submissions table tr {
 	cursor: pointer;
