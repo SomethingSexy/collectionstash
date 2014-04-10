@@ -8,6 +8,8 @@ if(isset($saveSearchFilters['search'])){
 
 ?></script>
 <?php 
+echo $this -> Html -> script('thirdparty/select2', array('inline' => false));
+echo $this -> Html -> css('thirdparty/select2', array('inline' => false));
 echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
 echo $this -> Html -> script('views/view.filters', array('inline' => false)); 
 
@@ -36,16 +38,20 @@ echo $this -> Html -> script('views/view.filters', array('inline' => false));
   			}
 		}
 
-		debug($count_values);
-
 		foreach ($filters as $key => $filter) {
 			if(isset($filter['user_selectable']) && $filter['user_selectable']) {
-				echo '<button type="button" class="btn btn-default btn-block filter" data-type="' . $key . '" data-source-key="' . $filter['key'] .'" data-source="' . $filter['source'] .'" data-title="' . $filter['label'] . ' Filter" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-content=\'<div class="typeahead-container"><input id="search-input-tools" type="text" class="form-control typeahead input-lg" autocomplete="off" placeholder="Start typing to see list"></div></div>\'>' . $filter['label'];
-				if(!empty($saveSearchFilters)){
-
+				echo '<h5>' .$filter['label'];
+				if(isset($count_values[$key])){
+					echo '<span class="badge pull-right">' . $count_values[$key]. '</span>';
 				}
-				
-				echo '</button>';					
+				echo '</h5>';
+				if(isset($filter['values'])){
+					echo '<select data-multiple="' . $filter['multiple'] . '" data-type="' . $key .'"><option></option>'; 
+					foreach ($filter['values'] as $key => $value) {
+						echo "<option value='" . $key . "'>" . $value . '</option>';
+					}
+					echo '</select>';
+				}				
 			}
 		}
 	?>

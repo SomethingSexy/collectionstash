@@ -12,16 +12,22 @@ class CollectiblesController extends AppController
     public $filters = array(
     
     //
-    'm' => array('model' => 'Collectible', 'id' => 'manufacture_id', 'source' => '/manufactures/data', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
+    'm' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'manufacture_id', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
     
     //
-    'ct' => array('model' => 'Collectible', 'id' => 'collectibletype_id', 'source' => '/collectibletypes/data', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
+    'ct' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'collectibletype_id', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
     
     //
-    'l' => array('model' => 'Collectible', 'id' => 'license_id', 'source' => '/licenses/data', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
+    'l' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'license_id', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
     
     //
-    's' => array('model' => 'Collectible', 'id' => 'scale_id', 'source' => '/scales/data', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
+    's' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'scale_id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
+    
+    //
+    'v' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array('1' => 'Yes', '0' => 'No')),
+    
+    //
+    'status' => array('custom' => true, 'multiple' => false, 'model' => 'Collectible', 'id' => 'status_id', 'user_selectable' => true, 'label' => 'Status', 'values' => array('2' => 'Pending', '4' => 'Active')),
     
     //
     't' => array('model' => 'Tag', 'id' => 'id'),
@@ -874,6 +880,17 @@ class CollectiblesController extends AppController
             $this->Session->setFlash(__('Invalid collectible.', true), null, null, 'error');
             $this->redirect(array('admin' => true, 'action' => 'index'), null, true);
         }
+    }
+    
+    protected function getFilters() {
+        $filters = $this->filters;
+        
+        $filters['m']['values'] = $this->Collectible->Manufacture->find('list', array('contain' => false));
+        $filters['ct']['values'] = $this->Collectible->Collectibletype->find('list', array('contain' => false));
+        $filters['l']['values'] = $this->Collectible->License->find('list', array('contain' => false));
+        $filters['s']['values'] = $this->Collectible->Scale->find('list', array('contain' => false));
+        
+        return $filters;
     }
 }
 ?>

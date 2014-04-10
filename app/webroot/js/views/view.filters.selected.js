@@ -1,7 +1,8 @@
 var SelectedFiltersView = Backbone.View.extend({
     el: '#fancy-filters-selected',
     events: {
-        'click [data-role="remove"]': 'removeFilter'
+        'click [data-role="remove"]': 'removeFilter',
+        'click [data-role="remove-all"]': 'removeAll'
     },
     initialize: function(options) {
         this.hounds = {};
@@ -36,6 +37,10 @@ var SelectedFiltersView = Backbone.View.extend({
             uri.removeSearch(type);
         }
 
+        window.location.href = uri.href();
+    },
+    removeAll: function() {
+        var uri = new URI(document.URL).search("");
         window.location.href = uri.href();
     }
 });
