@@ -24,7 +24,7 @@ class CollectiblesController extends AppController
     's' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'scale_id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
     
     //
-    'v' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array('1' => 'Yes', '0' => 'No')),
+    'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
     
     //
     'status' => array('custom' => true, 'multiple' => false, 'model' => 'Collectible', 'id' => 'status_id', 'user_selectable' => true, 'label' => 'Status', 'values' => array('2' => 'Pending', '4' => 'Active')),

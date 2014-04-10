@@ -35,7 +35,7 @@ var FiltersView = Backbone.View.extend({
                     type = $(event.target).data('type'),
                     multiple = $(event.target).data('multiple');
                 var filterValue = event.val;
-                if (uri.query(true)[type] && multiple === '1') {
+                if (uri.query(true)[type] && multiple === 1) {
                     filterValue = uri.query(true)[type] + ',' + event.val;
                 }
 
