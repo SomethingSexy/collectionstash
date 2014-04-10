@@ -1194,6 +1194,10 @@ background-color: none !important;
     color: #777;
     padding: 15px 20px;
 }
+.selected-search-filters .clear-all {
+    cursor: pointer;
+}
+
 .selected-search-filters .filter {
     color: white;
     margin-right: 2px;

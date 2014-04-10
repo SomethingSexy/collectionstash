@@ -1,8 +1,8 @@
 <?php
 class Collectibletype extends AppModel {
-	var $name = 'Collectibletype';
-	var $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'collectibletype_id'), 'CollectibletypesManufacture');
-	var $actsAs = array('Tree', 'Containable');
+	public $name = 'Collectibletype';
+	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'collectibletype_id'), 'CollectibletypesManufacture');
+	public $actsAs = array('Tree', 'Containable');
 
 	public $validate = array(
 	//name field

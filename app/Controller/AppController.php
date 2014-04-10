@@ -214,6 +214,8 @@ class AppController extends Controller
         //If nothing is set, use alphabetical order as the default
         $order = array();
         $order['Collectible.name'] = 'ASC';
+        $status = array();
+        $status['Collectible.status_id'] = '4';
         $tableFilters = array();
         foreach ($currentFilters['Search'] as $filterKey => $filterGroup) {
             
@@ -261,6 +263,8 @@ class AppController extends Controller
                     default:
                         $order['Collectible.name'] = 'ASC';
                 }
+            } else if ($filterKey === 'status') {
+                $status['Collectible.status_id'] = $filterGroup[0];
             }
         }
         
@@ -283,8 +287,8 @@ class AppController extends Controller
         
         $listSize = Configure::read('Settings.Search.list-size');
         
-        // When doing this search, we only want to see the active ones
-        array_push($conditions, array('Collectible.status_id' => '4'));
+        // set status here, this one is a litte special because we need a default
+        array_push($conditions, $status);
         
         //See if a search was set
         if (isset($search)) {
@@ -328,11 +332,9 @@ class AppController extends Controller
         $this->set('collectibles', $data);
         
         // $filters = $this->_getFilters($saveSearchFilters);
-        $this->set('filters', $this->filters);
+        $this->set('filters', $this->getFilters());
         $saveSearchFilters = $this->_processFilters($saveSearchFilters);
         $this->set(compact('saveSearchFilters'));
-        debug($saveSearchFilters);
-        debug($this->filters);
         
         return $data;
     }
@@ -358,7 +360,7 @@ class AppController extends Controller
                 array_push($retVal, array('id' => $value, 'label' => $collectibleType['Collectibletype']['name'], 'type' => 'ct'));
             }
         }
-
+        
         if (isset($searchFilters['l'])) {
             $this->loadModel('License');
             foreach ($searchFilters['l'] as $key => $value) {
@@ -366,7 +368,7 @@ class AppController extends Controller
                 array_push($retVal, array('id' => $value, 'label' => $license['License']['name'], 'type' => 'l'));
             }
         }
-
+        
         if (isset($searchFilters['s'])) {
             $this->loadModel('Scale');
             foreach ($searchFilters['s'] as $key => $value) {
@@ -375,7 +377,21 @@ class AppController extends Controller
             }
         }
         
+        if (isset($searchFilters['status'])) {
+            foreach ($searchFilters['status'] as $key => $value) {
+                if ($value === '2') {
+                    array_push($retVal, array('id' => '2', 'label' => __('Pending'), 'type' => 'status'));
+                } else if ($value === '4') {
+                    array_push($retVal, array('id' => '4', 'label' => __('Active'), 'type' => 'status'));
+                }
+            }
+        }
+        
         return $retVal;
+    }
+    
+    protected function getFilters() {
+        return $this->filters;
     }
     
     function my_array_unique($array, $keep_key_assoc = false) {

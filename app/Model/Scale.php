@@ -1,7 +1,9 @@
 <?php
-class Scale extends AppModel {
-	var $name = 'Scale';
-	var $hasMany = array('Collectible');
-	var $actsAs = array('Containable');
+class Scale extends AppModel
+{
+    public $name = 'Scale';
+    public $hasMany = array('Collectible');
+    public $actsAs = array('Containable');
+    public $displayField = 'scale';
 }
 ?>
