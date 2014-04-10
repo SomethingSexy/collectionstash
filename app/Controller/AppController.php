@@ -287,7 +287,6 @@ class AppController extends Controller
         
         // set status here, this one is a litte special because we need a default
         array_push($conditions, $status);
-        debug($tableFilters);
         
         //See if a search was set
         if (isset($search)) {
@@ -382,6 +381,16 @@ class AppController extends Controller
                     array_push($retVal, array('id' => '2', 'label' => __('Pending'), 'type' => 'status'));
                 } else if ($value === '4') {
                     array_push($retVal, array('id' => '4', 'label' => __('Active'), 'type' => 'status'));
+                }
+            }
+        }
+
+        if (isset($searchFilters['v'])) {
+            foreach ($searchFilters['v'] as $key => $value) {
+                if ($value === '1') {
+                    array_push($retVal, array('id' => 1, 'label' => __('Variant'), 'type' => 'v'));
+                } else if ($value === '0') {
+                    array_push($retVal, array('id' => 0, 'label' => __('Not a Variant'), 'type' => 'v'));
                 }
             }
         }
