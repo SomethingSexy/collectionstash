@@ -147,7 +147,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 						echo '<div class="btn-group pull-right">';
 						echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 						echo '<ul class="dropdown-menu">';
-						if ($isLoggedIn) {
+						if ($isLoggedIn && $collectible['Collectible']['status_id'] === '4') {
 							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
 							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#"><img src="/img/icon/add_stash_link_25x25.png"> Quick Add to Stash</a></li>';
 							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="icon-star"></i> Add to Wish List</a></li>';
