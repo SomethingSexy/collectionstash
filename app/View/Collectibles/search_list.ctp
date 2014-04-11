@@ -10,6 +10,7 @@ unset($urlparams['url']);
 ?>
 
 <div id="collectibles-list-component" class="col-md-12">
+<h3><?php echo __('Collectibles Catalog'); ?></h3>
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn) {
 	?>
@@ -38,7 +39,7 @@ unset($urlparams['url']);
 				if ($viewType === 'tiles') {
 					$url = '/collectibles/searchTiles/';
 				}
-				echo $this -> element('selected_search_filters', array('searchUrl' => $url . $viewType));
+				echo $this -> element('selected_search_filters');
 				?>
 				<div class="row spacer">
 					<div class="col-md-12">
