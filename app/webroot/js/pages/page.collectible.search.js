@@ -40,14 +40,14 @@ $(function() {
         var selectedFiltersView = new SelectedFiltersView();
         selectedFiltersView.render();
 
+        // TODO: This is turned off for now, prrobably do a fancy popover or something later
+        // $('.collectible', '#collectibles-list-component').on('click', function(event) {
+        //     var collectibleData = $(event.currentTarget).attr('data-collectible');
 
-        $('.collectible', '#collectibles-list-component').on('click', function(event) {
-            var collectibleData = $(event.currentTarget).attr('data-collectible');
-
-            $('.collectible-detail .well', '#collectibles-list-component').html(new CollectibleView({
-                model: new Backbone.Model(JSON.parse(collectibleData))
-            }).render().el);
-        });
+        //     $('.collectible-detail .well', '#collectibles-list-component').html(new CollectibleView({
+        //         model: new Backbone.Model(JSON.parse(collectibleData))
+        //     }).render().el);
+        // });
     });
 
 });
