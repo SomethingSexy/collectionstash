@@ -252,7 +252,20 @@ class AppController extends Controller
                         $order['Collectible.name'] = 'ASC';
                 }
             } else if ($filterKey === 'status') {
-                $status['Collectible.status_id'] = $filterGroup[0];
+                $statusType = $filterGroup[0];
+
+                switch ($statusType) {
+                    case 2:
+                        $status['Collectible.status_id'] = 2;
+                        break;
+
+                    case 4:
+                        $status['Collectible.status_id'] = 4;
+                        break;
+
+                    default:
+                        $status['Collectible.status_id'] = 4;
+                }
             }
         }
         
@@ -394,10 +407,10 @@ class AppController extends Controller
                 array_push($retVal, array('id' => $value, 'label' => $tag['Tag']['tag'], 'type' => 't'));
             }
         }
-
+        
         if (isset($searchFilters['o'])) {
             foreach ($searchFilters['o'] as $key => $value) {
-                array_push($retVal, array('id' => $value, 'label' => $this -> filters['o']['values'][$value], 'type' => 'o'));
+                array_push($retVal, array('id' => $value, 'label' => $this->filters['o']['values'][$value], 'type' => 'o'));
             }
         }
         
