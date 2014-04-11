@@ -213,13 +213,6 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 				<?php echo $this -> element('search_filters'); ?>
 			</div>
 		</div>
-<!-- 		<div class="col-md-5 collectible-detail">
-			<div class="well" data-spy="affix" data-offset-top="200">
-				<p class="text-center lead">Select a collectible to see more detail here!</p>
-				
-				
-       		</div>	
-		</div> -->
 	</div>
 </div>
 
