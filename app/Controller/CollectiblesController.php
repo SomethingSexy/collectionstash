@@ -885,10 +885,10 @@ class CollectiblesController extends AppController
     protected function getFilters() {
         $filters = $this->filters;
         
-        $filters['m']['values'] = $this->Collectible->Manufacture->find('list', array('contain' => false));
-        $filters['ct']['values'] = $this->Collectible->Collectibletype->find('list', array('contain' => false));
-        $filters['l']['values'] = $this->Collectible->License->find('list', array('contain' => false));
-        $filters['s']['values'] = $this->Collectible->Scale->find('list', array('contain' => false));
+        $filters['m']['values'] = $this->Collectible->Manufacture->find('list', array('contain' => false, 'fields' => array('Manufacture.id', 'Manufacture.title'), 'order' => array('Manufacture.title' => 'asc')));
+        $filters['ct']['values'] = $this->Collectible->Collectibletype->find('list', array('contain' => false, 'fields' => array('Collectibletype.id', 'Collectibletype.name')));
+        $filters['l']['values'] = $this->Collectible->License->find('list', array('contain' => false, 'fields' => array('License.id', 'License.name')));
+        $filters['s']['values'] = $this->Collectible->Scale->find('list', array('contain' => false, 'fields' => array('Scale.id', 'Scale.scale')));
         
         return $filters;
     }
