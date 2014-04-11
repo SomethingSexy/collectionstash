@@ -33,7 +33,15 @@ var FiltersView = Backbone.View.extend({
             if (event.val && event.val !== '') {
                 var uri = new URI(document.URL),
                     type = $(event.target).data('type'),
-                    multiple = $(event.target).data('multiple');
+                    multiple = $(event.target).data('multiple'),
+                    segements = uri.segmentCoded();
+                // if we are at a page and we are changing the filter
+                // reset the page.
+                _.each(segements, function(segment, key) {
+                    if (segment.indexOf('page') !== -1) {
+                        uri.segmentCoded(key, "");
+                    }
+                });
                 var filterValue = event.val;
                 if (uri.query(true)[type] && multiple === 1) {
                     filterValue = uri.query(true)[type] + ',' + event.val;

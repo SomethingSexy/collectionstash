@@ -328,8 +328,6 @@ class AppController extends Controller
         $data = $this->paginate('Collectible');
         
         $this->set('collectibles', $data);
-        
-        // $filters = $this->_getFilters($saveSearchFilters);
         $this->set('filters', $this->getFilters());
         $saveSearchFilters = $this->_processFilters($saveSearchFilters);
         $this->set(compact('saveSearchFilters'));
@@ -384,7 +382,7 @@ class AppController extends Controller
                 }
             }
         }
-
+        
         if (isset($searchFilters['v'])) {
             foreach ($searchFilters['v'] as $key => $value) {
                 if ($value === '1') {
@@ -393,6 +391,10 @@ class AppController extends Controller
                     array_push($retVal, array('id' => 0, 'label' => __('Not a Variant'), 'type' => 'v'));
                 }
             }
+        }
+        
+        if (isset($searchFilters['search'])) {
+            array_push($retVal, array('id' => $searchFilters['search'], 'label' => $searchFilters['search'], 'type' => 'q'));
         }
         
         return $retVal;
