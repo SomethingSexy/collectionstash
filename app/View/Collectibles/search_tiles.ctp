@@ -22,62 +22,71 @@ unset($urlparams['url']);
 	if ($viewType === 'tiles') {
 		$url = '/collectibles/searchTiles/';
 	}
-	echo $this -> element('search_filters', array('searchUrl' => $url . $viewType));
+	echo $this -> element('selected_search_filters');
 	?>
+	<div class="row">
+		<div class="col-md-9 filterable-list">
 			<div data-toggle="modal-gallery" data-target="#modal-gallery">
-			<?php
-			echo '<div id="titles-nav" class="hidden">';
-			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
-			echo '</div>';
-			echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
+					<?php
+					echo '<div id="titles-nav" class="hidden">';
+					echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
+					echo '</div>';
+					echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
-			foreach ($collectibles as $collectible) {
-				$collectibleJSON = json_encode($collectible['Collectible']);
-				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-				echo '<div class="tile" data-collectible=\'' . $collectibleJSON . '\'>';
-				if (!empty($collectible['CollectiblesUpload'])) {
-					foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
-						if ($upload['primary']) {
-							echo '<div class="image">';
-							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
-							$this -> FileUpload -> reset();
-							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
-							echo '</div>';
-							break;
+					foreach ($collectibles as $collectible) {
+						$collectibleJSON = json_encode($collectible['Collectible']);
+						$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+						echo '<div class="tile" data-collectible=\'' . $collectibleJSON . '\'>';
+						if (!empty($collectible['CollectiblesUpload'])) {
+							foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
+								if ($upload['primary']) {
+									echo '<div class="image">';
+									echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
+									$this -> FileUpload -> reset();
+									echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
+									echo '</div>';
+									break;
+								}
+							}
+
+							//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
+						} else {
+							echo '<div class="image"><img alt="" src="/img/no-photo.png"></div>';
 						}
+
+						echo '<div class="header"><h2>';
+						echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
+						echo '</h2></div>';
+						echo '<div class="content">';
+
+						$description = str_replace('\n', "\n", $collectible['Collectible']['description']);
+						$description = str_replace('\r', "\r", $description);
+
+						echo '<p>' . $description . '</p>';
+						echo '</div>';
+						echo '<div class="menu tile-links clearfix adjust">';
+						
+						if ($isLoggedIn) {
+							echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="icon-star"></i></a></span>';
+							echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+							echo '<img src="/img/icon/add_stash_link_25x25.png">';
+							echo '</a></span>';
+						}
+						
+						echo '</div>';
+						echo '</div>';
+
 					}
-
-					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
-				} else {
-					echo '<div class="image"><img alt="" src="/img/no-photo.png"></div>';
-				}
-
-				echo '<div class="header"><h2>';
-				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
-				echo '</h2></div>';
-				echo '<div class="content">';
-
-				$description = str_replace('\n', "\n", $collectible['Collectible']['description']);
-				$description = str_replace('\r', "\r", $description);
-
-				echo '<p>' . $description . '</p>';
-				echo '</div>';
-				echo '<div class="menu tile-links clearfix adjust">';
-				
-				if ($isLoggedIn) {
-					echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="icon-star"></i></a></span>';
-					echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
-					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo '</a></span>';
-				}
-				
-				echo '</div>';
-				echo '</div>';
-
-			}
-			echo '</div>';
-			     ?>
+					echo '</div>';
+					     ?>
 			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="">
+				<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
@@ -118,3 +127,6 @@ unset($urlparams['url']);
 		});
 	}); 
 </script>
+<?php
+echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));
+?>
