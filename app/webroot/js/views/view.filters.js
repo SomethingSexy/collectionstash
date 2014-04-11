@@ -28,7 +28,7 @@ var FiltersView = Backbone.View.extend({
 
         var type = $(this).data('type');
         $('select', this.el).select2({
-            width: 'element'
+            width: '250px'
         }).on('change', function(event) {
             if (event.val && event.val !== '') {
                 var uri = new URI(document.URL),
