@@ -33,7 +33,7 @@ class CollectiblesController extends AppController
     't' => array('model' => 'Tag', 'id' => 'id'),
     
     //
-    'o' => array('custom' => true, 'id' => 'order'));
+    'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending')));
     
     /**
      * This method will allow us to quick add a collectible from a selected collectible.

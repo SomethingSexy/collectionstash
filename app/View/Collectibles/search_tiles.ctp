@@ -3,20 +3,10 @@ echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
-<?php
-$urlparams = $this -> request -> query;
-unset($urlparams['url']);
-?>
 <div class="col-md-12">
 <h3><?php echo __('Collectibles Catalog'); ?></h3>
-
-
 	<?php echo $this -> element('flash'); ?>
 
-		<div class="btn-group pull-right">
-			<?php echo '<a class="btn" href="/collectibles/searchTiles?' . http_build_query($urlparams) . '"><i class="icon-th-large"></i></a>'; ?>
-			<?php echo '<a class="btn" href="/collectibles/search?' . http_build_query($urlparams) . '"><i class="icon-list"></i></a>'; ?>
-		</div>
 	<?php
 	$url = '/collectibles/search/list';
 	if ($viewType === 'tiles') {
@@ -26,6 +16,14 @@ unset($urlparams['url']);
 	?>
 	<div class="row">
 		<div class="col-md-9 filterable-list">
+			<div class="row spacer">
+				<div class="col-md-12">
+					<div class="btn-group pull-right">
+						<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="icon-th-large"></i></a>'; ?>
+						<?php echo '<a class="btn" href="/collectibles/search"><i class="icon-list"></i></a>'; ?>
+					</div>
+				</div>
+			</div>		
 			<div data-toggle="modal-gallery" data-target="#modal-gallery">
 					<?php
 					echo '<div id="titles-nav" class="hidden">';
@@ -83,7 +81,7 @@ unset($urlparams['url']);
 		</div>
 		<div class="col-md-3">
 			<div class="">
-				<?php echo $this -> element('search_filters', array('searchUrl' => $url . $viewType)); ?>
+				<?php echo $this -> element('search_filters'); ?>
 			</div>
 		</div>
 	</div>

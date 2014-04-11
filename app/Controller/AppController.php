@@ -394,6 +394,12 @@ class AppController extends Controller
                 array_push($retVal, array('id' => $value, 'label' => $tag['Tag']['tag'], 'type' => 't'));
             }
         }
+
+        if (isset($searchFilters['o'])) {
+            foreach ($searchFilters['o'] as $key => $value) {
+                array_push($retVal, array('id' => $value, 'label' => $this -> filters['o']['values'][$value], 'type' => 'o'));
+            }
+        }
         
         return $retVal;
     }
