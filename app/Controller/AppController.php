@@ -201,16 +201,6 @@ class AppController extends Controller
             }
         }
         
-        if (isset($saveSearchFilters['t'])) {
-            reset($saveSearchFilters['t']);
-            
-            // make sure array pointer is at first element
-            $firstKey = $saveSearchFilters['t'][0];
-            $this->loadModel('Tag');
-            $tag = $this->Tag->find("first", array('contain' => false, 'conditions' => array('Tag.id' => $firstKey)));
-            $saveSearchFilters['tag'] = $tag['Tag'];
-        }
-        
         //If nothing is set, use alphabetical order as the default
         $order = array();
         $order['Collectible.name'] = 'ASC';
@@ -395,6 +385,14 @@ class AppController extends Controller
         
         if (isset($searchFilters['search'])) {
             array_push($retVal, array('id' => $searchFilters['search'], 'label' => $searchFilters['search'], 'type' => 'q'));
+        }
+        
+        if (isset($searchFilters['t'])) {
+            $this->loadModel('Tag');
+            foreach ($searchFilters['t'] as $key => $value) {
+                $tag = $this->Tag->find("first", array('conditions' => array('Tag.id' => $value), 'contain' => false));
+                array_push($retVal, array('id' => $value, 'label' => $tag['Tag']['tag'], 'type' => 't'));
+            }
         }
         
         return $retVal;
