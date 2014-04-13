@@ -41,17 +41,6 @@ class StashsController extends AppController
         if ($this->request->is('post') || $this->request->is('put')) {
             $this->request->data = Sanitize::clean($this->request->data);
             
-            // foreach ($this -> request -> data['CollectiblesUser'] as $key => $value) {
-            // // $this -> Stash -> CollectiblesUser -> id = $value['id'];
-            // // $this -> Stash -> CollectiblesUser -> saveField('sort_number', $value['sort_number']);
-            //
-            // if ($this -> Stash -> CollectiblesUser -> save($value, array('fieldList' => array('sort_number'), 'callbacks' => false))) {
-            //
-            // } else {
-            // debug($this -> Stash -> CollectiblesUser -> validationErrors);
-            // }
-            // }
-            
             if ($this->Stash->CollectiblesUser->saveMany($this->request->data['CollectiblesUser'], array('fieldList' => array('sort_number'), 'callbacks' => false))) {
                 $this->Session->setFlash(__('Your sort was successfully saved.', true), null, null, 'success');
             } else {
@@ -131,9 +120,13 @@ class StashsController extends AppController
                     //If the privacy is 0 or you are viewing your own stash then always show
                     //or if it is set to 1 and this person is logged in also show.
                     if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this->isLoggedIn())) {
+                        $joins = array();
+                        array_push($joins, array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"')));
+                        array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
+                        array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
                         
                         // Be very careful when changing this contains, it is tied to the type
-                        $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+                        $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('Manufacture.id' => 1, 'CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
                         $collectibles = $this->paginate('CollectiblesUser');
                         $this->set(compact('collectibles'));
                         $this->set('stash', $user['Stash'][0]);
