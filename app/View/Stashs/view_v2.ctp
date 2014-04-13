@@ -5,26 +5,26 @@
 	echo __(' Stash', true);
 	?></h2>
 	<div id="my-stashes-component" class="widget widget-tabs">
-					<ul class="nav nav-tabs widget-wide">
-						<?php
-						echo '<li class="active">';
-						?>
-						<?php echo '<a href="/user/' . $stashUsername . '/stash">' . __('Collectibles') . '</a>'; ?>
-						</li>
-						<?php
-						echo '<li>';
-						?>
-						<?php echo '<a href="/user/' . $stashUsername . '/wishlist">' . __('Wish List') . '</a>'; ?>
-						</li>
-						<li>
-						<?php echo '<a href="/user/' . $stashUsername . '/sale">' . __('Sale/Trade List') . '</a>'; ?>
-						</li>
-						<li>
-						<?php echo '<a href="/user/' . $stashUsername . '/photos">' . __('Photos') . '</a>'; ?>	
-						</li>
-						<li><?php echo '<a href="/user/' . $stashUsername . '/comments">' . __('Comments') . '</a>'; ?></li>
-						<li><?php echo '<a href="/user/' . $stashUsername . '/history">' . __('History') . '</a>'; ?></li>
-					</ul>	
+		<ul class="nav nav-tabs widget-wide">
+			<?php
+			echo '<li class="active">';
+			?>
+			<?php echo '<a href="/user/' . $stashUsername . '/stash">' . __('Collectibles') . '</a>'; ?>
+			</li>
+			<?php
+			echo '<li>';
+			?>
+			<?php echo '<a href="/user/' . $stashUsername . '/wishlist">' . __('Wish List') . '</a>'; ?>
+			</li>
+			<li>
+			<?php echo '<a href="/user/' . $stashUsername . '/sale">' . __('Sale/Trade List') . '</a>'; ?>
+			</li>
+			<li>
+			<?php echo '<a href="/user/' . $stashUsername . '/photos">' . __('Photos') . '</a>'; ?>	
+			</li>
+			<li><?php echo '<a href="/user/' . $stashUsername . '/comments">' . __('Comments') . '</a>'; ?></li>
+			<li><?php echo '<a href="/user/' . $stashUsername . '/history">' . __('History') . '</a>'; ?></li>
+		</ul>	
 		<div class="widget-content">
 				<div class="clearfix">
 					<div class="btn-group actions pull-left">
@@ -51,7 +51,8 @@
 				</div>			
 		<?php
 		if (isset($collectibles) && !empty($collectibles)) {
-
+			echo '<div class="row">';
+			echo '<div class="col-md-9 filterable-list">';
 			echo '<div id="titles-nav" class="hidden">';
 			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 			echo '</div>';
@@ -109,12 +110,18 @@
 
 				echo '</div>';
 				echo '</div>';
+
 			}
 			echo '</div>';
-
+			echo '</div>';
+			echo '<div class="col-md-3">';
+			echo '<div class="">';
+			echo $this -> element('search_filters');
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
 		} else {
 			echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
-
 		}
 		?>
 		</div>

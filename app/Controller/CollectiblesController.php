@@ -7,7 +7,7 @@ class CollectiblesController extends AppController
     
     public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Tree');
     
-    var $actsAs = array('Searchable.Searchable');
+    public $actsAs = array('Searchable.Searchable');
     
     public $filters = array(
     
