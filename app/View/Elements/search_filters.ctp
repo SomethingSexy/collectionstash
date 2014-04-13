@@ -1,5 +1,5 @@
 <script type="text/javascript"><?php
-echo 'var searchUrl = "' . $searchUrl . '";';
+//echo 'var searchUrl = "' . $searchUrl . '";';
 if(isset($saveSearchFilters['search'])){
 	echo 'var searchFilter= "' . $saveSearchFilters['search'] . '"';
 } else {
@@ -11,17 +11,7 @@ if(isset($saveSearchFilters['search'])){
 echo $this -> Html -> script('thirdparty/select2', array('inline' => false));
 echo $this -> Html -> css('thirdparty/select2', array('inline' => false));
 echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
-echo $this -> Html -> script('views/view.filters', array('inline' => false)); 
-
-/*<div class="search-query">
-	
-	if (isset($saveSearchFilters['search'])) {
-		echo __('You searched for: ', true) . $saveSearchFilters['search'];
-	} else if (isset($saveSearchFilters['tag'])) {
-		echo '<span class="tag"><span class="tag-name">' . $saveSearchFilters['tag']['tag'] . '</span></span>';
-	}
-	
-</div> */ ?>
+echo $this -> Html -> script('views/view.filters', array('inline' => false)); ?>
 <h4>Filter By </h4>
 <div id="fancy-filters">
 	<div class="filter-btn">
@@ -37,7 +27,7 @@ echo $this -> Html -> script('views/view.filters', array('inline' => false));
 	    				$count_values[$b]++;
 	    			}
 	  			}
-			}
+			}			
 		}
 
 		foreach ($filters as $key => $filter) {
