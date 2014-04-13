@@ -27,15 +27,17 @@ echo $this -> Html -> script('views/view.filters', array('inline' => false));
 	<div class="filter-btn">
 	<?php
 		$count_values = array();
-		foreach ($saveSearchFilters as $a) {
-  			foreach ($a as $key => $b) {
-  				if($key === 'type') {
-  					if(!isset($count_values[$b])){
-  						$count_values[$b] = 0;
-  					}
-    				$count_values[$b]++;
-    			}
-  			}
+		if(isset($saveSearchFilters)){
+			foreach ($saveSearchFilters as $a) {
+	  			foreach ($a as $key => $b) {
+	  				if($key === 'type') {
+	  					if(!isset($count_values[$b])){
+	  						$count_values[$b] = 0;
+	  					}
+	    				$count_values[$b]++;
+	    			}
+	  			}
+			}
 		}
 
 		foreach ($filters as $key => $filter) {
