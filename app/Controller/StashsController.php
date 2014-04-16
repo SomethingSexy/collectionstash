@@ -8,16 +8,16 @@ class StashsController extends AppController
     public $filters = array(
     
     //
-    'm' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'manufacture_id', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
+    'm' => array('model' => 'Manufacture', 'multiple' => true, 'id' => 'id', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
     
     //
-    'ct' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'collectibletype_id', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
+    'ct' => array('model' => 'Collectibletype', 'multiple' => true, 'id' => 'id', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
     
     //
-    'l' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'license_id', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
+    'l' => array('model' => 'License', 'multiple' => true, 'id' => 'id', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
     
     //
-    's' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'scale_id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
+    's' => array('model' => 'Scale', 'multiple' => true, 'id' => 'id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
     
     //
     'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
@@ -82,7 +82,24 @@ class StashsController extends AppController
         }
     }
     
-    private function search() {
+    private function search($user) {
+        $saveSearchFilters = $this->getFiltersFromQuery();
+        $tableFilters = $this->processQueryFilters($saveSearchFilters);
+        debug($saveSearchFilters);
+        debug($tableFilters);
+        
+        $joins = array();
+        array_push($joins, array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"')));
+        array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
+        array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
+        array_push($joins, array('table' => 'licenses', 'alias' => 'License', 'type' => 'inner', 'conditions' => array('Collectible2.license_id = License.id')));
+        
+        $conditions = array('CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']);
+        array_push($conditions, $tableFilters);
+        
+        // Be very careful when changing this contains, it is tied to the type
+        $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => $conditions, 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+        return $this->paginate('CollectiblesUser');
     }
     protected function getFilters($userId) {
         
@@ -120,14 +137,8 @@ class StashsController extends AppController
                     //If the privacy is 0 or you are viewing your own stash then always show
                     //or if it is set to 1 and this person is logged in also show.
                     if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this->isLoggedIn())) {
-                        $joins = array();
-                        array_push($joins, array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"')));
-                        array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
-                        array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
+                        $collectibles = $this->search($user);
                         
-                        // Be very careful when changing this contains, it is tied to the type
-                        $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('Manufacture.id' => 1, 'CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
-                        $collectibles = $this->paginate('CollectiblesUser');
                         $this->set(compact('collectibles'));
                         $this->set('stash', $user['Stash'][0]);
                         
