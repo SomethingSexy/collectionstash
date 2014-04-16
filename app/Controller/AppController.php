@@ -143,6 +143,57 @@ class AppController extends Controller
             $this->handleNotLoggedIn();
         }
     }
+
+    // This will pull the current filters from the query
+    protected function getFiltersFromQuery() {
+        $saveSearchFilters = array();
+        foreach ($this->filters as $filterkey => $filter) {
+            if (isset($this->request->query[$filterkey])) {
+                
+                $queryValue = $this->request->query[$filterkey];
+                if (strpos($queryValue, ',') !== false) {
+                    $queryValue = rtrim($queryValue, ",");
+                    $queryValue = explode(",", $queryValue);
+                } else {
+                    $queryValue = array($queryValue);
+                }
+                
+                foreach ($queryValue as $key => $value) {
+                    if (!isset($saveSearchFilters[$filterkey])) {
+                        $saveSearchFilters[$filterkey] = array();
+                    }
+                    array_push($saveSearchFilters[$filterkey], $value);
+                }
+            }
+        }
+        
+        return $saveSearchFilters;
+    }
+    
+    // this will take the filters from the query and make table filters out of them
+    protected function processQueryFilters($currentFilters = array()) {
+        $tableFilters = array();
+        foreach ($currentFilters as $filterKey => $filterGroup) {
+            
+            // if the one we are looking at is a custom
+            if (!isset($this->filters[$filterKey]['custom']) || !$this->filters[$filterKey]['custom']) {
+                $modelFilters = array('AND' => array());
+                array_push($modelFilters['AND'], array('OR' => array()));
+                $filtersSet = false;
+                
+                foreach ($filterGroup as $key => $value) {
+                    array_push($modelFilters['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
+                    $filtersSet = true;
+                }
+                
+                if ($filtersSet) {
+                    array_push($tableFilters, $modelFilters);
+                }
+            }
+        }
+        
+        return $tableFilters;
+    }
     
     /**
      * This is the insane search method to search on a collectible.
