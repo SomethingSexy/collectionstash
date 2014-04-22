@@ -123,7 +123,22 @@
 			echo '</div>';
 			echo '</div>';
 		} else {
-			echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+			// if filters are set, change the message
+			if(!empty($saveSearchFilters)){
+				echo '<div class="row">';
+				echo '<div class="col-md-9 filterable-list">';
+				echo $this -> element('selected_search_filters');
+				echo '<div class="row spacer"><p class="empty clearfix">' . __(' There are no collectibles with those filters!', true) . '</p></div>';
+				echo '</div>';
+				echo '<div class="col-md-3">';
+				echo '<div class="">';
+				echo $this -> element('search_filters');
+				echo '</div>';
+				echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<p class="empty clearfix">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
+			}
 		}
 		?>
 		</div>
