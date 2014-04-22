@@ -53,7 +53,17 @@
 				</div>
 						<?php
 						if (isset($collectibles) && !empty($collectibles)) {
+							echo '<div class="row">';
+							echo '<div class="col-md-9 filterable-list">';
+							echo $this -> element('selected_search_filters');
 							echo $this -> element('stash_table_list', array('collectibles' => $collectibles));
+							echo '</div>';
+							echo '<div class="col-md-3">';
+							echo '<div class="">';
+							echo $this -> element('search_filters');
+							echo '</div>';
+							echo '</div>';
+							echo '</div>';
 						} else {
 							echo '<p class="empty">' . $stashUsername . __(' has no collectibles in their stash!', true) . '</p>';
 						}

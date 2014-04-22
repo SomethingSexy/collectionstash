@@ -86,7 +86,7 @@ class StashsController extends AppController
     private function search($user) {
         $saveSearchFilters = $this->getFiltersFromQuery();
         $tableFilters = $this->processQueryFilters($saveSearchFilters);
-
+        
         $joins = array();
         array_push($joins, array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"')));
         array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
@@ -112,11 +112,12 @@ class StashsController extends AppController
         $filters = $this->filters;
         
         $values = $this->Stash->getFilters($userId);
-        
-        $filters['m']['values'] = $values['m']['values'];
-        $filters['ct']['values'] = $values['ct']['values'];
-        $filters['l']['values'] = $values['l']['values'];
-        $filters['s']['values'] = $values['s']['values'];
+        if (!empty($values)) {
+            $filters['m']['values'] = $values['m']['values'];
+            $filters['ct']['values'] = $values['ct']['values'];
+            $filters['l']['values'] = $values['l']['values'];
+            $filters['s']['values'] = $values['s']['values'];
+        }
         
         return $filters;
     }
