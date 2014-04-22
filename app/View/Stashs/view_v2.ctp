@@ -50,9 +50,11 @@
 				    </div>
 				</div>			
 		<?php
+
 		if (isset($collectibles) && !empty($collectibles)) {
 			echo '<div class="row">';
 			echo '<div class="col-md-9 filterable-list">';
+			echo $this -> element('selected_search_filters');
 			echo '<div id="titles-nav" class="hidden">';
 			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 			echo '</div>';

@@ -23,7 +23,8 @@ class StashsController extends AppController
     'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
     
     //
-    'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending')));
+    //'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending'))
+    );
     
     /*
      * This action will be used to allow the user to view/edit their stash.  Individual collectible edits will happen in
@@ -85,6 +86,7 @@ class StashsController extends AppController
     private function search($user) {
         $saveSearchFilters = $this->getFiltersFromQuery();
         $tableFilters = $this->processQueryFilters($saveSearchFilters);
+
         debug($saveSearchFilters);
         debug($tableFilters);
         
@@ -93,12 +95,17 @@ class StashsController extends AppController
         array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
         array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
         array_push($joins, array('table' => 'licenses', 'alias' => 'License', 'type' => 'inner', 'conditions' => array('Collectible2.license_id = License.id')));
+        array_push($joins, array('table' => 'scales', 'alias' => 'Scale', 'type' => 'inner', 'conditions' => array('Collectible2.scale_id = Scale.id')));
         
         $conditions = array('CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']);
         array_push($conditions, $tableFilters);
         
         // Be very careful when changing this contains, it is tied to the type
         $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => $conditions, 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+        
+        $saveSearchFilters = $this->_processFilters($saveSearchFilters);
+        $this->set(compact('saveSearchFilters'));
+        
         return $this->paginate('CollectiblesUser');
     }
     protected function getFilters($userId) {
