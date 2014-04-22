@@ -143,10 +143,31 @@ class AppController extends Controller
             $this->handleNotLoggedIn();
         }
     }
-
+    
     // This will pull the current filters from the query
     protected function getFiltersFromQuery() {
         $saveSearchFilters = array();
+        
+        // handle this one separately for now as well
+        if (isset($this->request->query['q'])) {
+            $this->request->data['Search'] = array();
+            $this->request->data['Search']['search'] = '';
+            $this->request->data['Search']['search'] = $this->request->query['q'];
+        }
+        
+        // handle this one separately
+        if (isset($this->request->query['o'])) {
+        } else {
+            $this->request->query['o'] = 'a';
+        }
+        
+        if (isset($this->request->data['Search']['search']) && trim($this->request->data['Search']['search']) !== '') {
+            $search = $this->request->data['Search']['search'];
+            $search = ltrim($search);
+            $search = rtrim($search);
+            $saveSearchFilters['search'] = $search;
+        }
+        
         foreach ($this->filters as $filterkey => $filter) {
             if (isset($this->request->query[$filterkey])) {
                 
@@ -181,9 +202,11 @@ class AppController extends Controller
                 array_push($modelFilters['AND'], array('OR' => array()));
                 $filtersSet = false;
                 
-                foreach ($filterGroup as $key => $value) {
-                    array_push($modelFilters['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
-                    $filtersSet = true;
+                if (is_array($filterGroup)) {
+                    foreach ($filterGroup as $key => $value) {
+                        array_push($modelFilters['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
+                        $filtersSet = true;
+                    }
                 }
                 
                 if ($filtersSet) {
@@ -205,52 +228,7 @@ class AppController extends Controller
     public function searchCollectible($conditions = null) {
         $this->loadModel('Collectible');
         
-        $saveSearchFilters = array();
-        
-        // handle this one separately for now as well
-        if (isset($this->request->query['q'])) {
-            $this->request->data['Search'] = array();
-            $this->request->data['Search']['search'] = '';
-            $this->request->data['Search']['search'] = $this->request->query['q'];
-        }
-        
-        // handle this one separately
-        if (isset($this->request->query['o'])) {
-        } else {
-            $this->request->query['o'] = 'a';
-        }
-        
-        if (isset($this->request->data['Search']['search']) && trim($this->request->data['Search']['search']) !== '') {
-            $search = $this->request->data['Search']['search'];
-            $search = ltrim($search);
-            $search = rtrim($search);
-            $saveSearchFilters['search'] = $search;
-        }
-        
-        // Here I need to check the query string for all possible filters
-        $currentFilters = array();
-        $currentFilters['Search'] = array();
-        foreach ($this->filters as $filterkey => $filter) {
-            if (isset($this->request->query[$filterkey])) {
-                
-                $queryValue = $this->request->query[$filterkey];
-                if (strpos($queryValue, ',') !== false) {
-                    $queryValue = rtrim($queryValue, ",");
-                    $queryValue = explode(",", $queryValue);
-                } else {
-                    $queryValue = array($queryValue);
-                }
-                
-                $currentFilters['Search'][$filterkey] = array();
-                foreach ($queryValue as $key => $value) {
-                    array_push($currentFilters['Search'][$filterkey], $value);
-                    if (!isset($saveSearchFilters[$filterkey])) {
-                        $saveSearchFilters[$filterkey] = array();
-                    }
-                    array_push($saveSearchFilters[$filterkey], $value);
-                }
-            }
-        }
+        $saveSearchFilters = $this->getFiltersFromQuery();
         
         //If nothing is set, use alphabetical order as the default
         $order = array();
@@ -258,18 +236,19 @@ class AppController extends Controller
         $status = array();
         $status['Collectible.status_id'] = '4';
         $tableFilters = array();
-        foreach ($currentFilters['Search'] as $filterKey => $filterGroup) {
+        debug($saveSearchFilters);
+        foreach ($saveSearchFilters as $filterKey => $filterGroup) {
             
             // if the one we are looking at is a custom
             if (!isset($this->filters[$filterKey]['custom']) || !$this->filters[$filterKey]['custom']) {
-                $modelFilters = array();
-                array_push($modelFilters, array('AND' => array()));
-                array_push($modelFilters[0]['AND'], array('OR' => array()));
+                $modelFilters = array('AND' => array());
+                array_push($modelFilters['AND'], array('OR' => array()));
                 $filtersSet = false;
-                
-                foreach ($filterGroup as $key => $value) {
-                    array_push($modelFilters[0]['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
-                    $filtersSet = true;
+                if (is_array($filterGroup)) {
+                    foreach ($filterGroup as $key => $value) {
+                        array_push($modelFilters['AND'][0]['OR'], array($this->filters[$filterKey]['model'] . '.' . $this->filters[$filterKey]['id'] => $value));
+                        $filtersSet = true;
+                    }
                 }
                 
                 if ($filtersSet) {
@@ -304,7 +283,7 @@ class AppController extends Controller
                 }
             } else if ($filterKey === 'status') {
                 $statusType = $filterGroup[0];
-
+                
                 switch ($statusType) {
                     case 2:
                         $status['Collectible.status_id'] = 2;
@@ -343,10 +322,10 @@ class AppController extends Controller
         array_push($conditions, $status);
         
         //See if a search was set
-        if (isset($search)) {
+        if (isset($saveSearchFilters['search'])) {
             
             //Is the search an empty string?
-            if ($search == '') {
+            if ($saveSearchFilters['search'] == '') {
                 $this->paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
             } else {
                 
@@ -357,7 +336,7 @@ class AppController extends Controller
                 
                 //array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
                 
-                $names = explode(' ', $search);
+                $names = explode(' ', $saveSearchFilters['search']);
                 $regSearch = array();
                 foreach ($names as $key => $value) {
                     
@@ -368,7 +347,7 @@ class AppController extends Controller
                 array_push($test[0]['AND'][0]['OR'], $regSearch);
                 
                 // keep this one a standard like
-                array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $search . '%'));
+                array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $saveSearchFilters['search'] . '%'));
                 
                 array_push($conditions, $test);
                 $this->paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
@@ -389,7 +368,7 @@ class AppController extends Controller
         return $data;
     }
     
-    private function _processFilters($searchFilters) {
+    protected function _processFilters($searchFilters) {
         $retVal = array();
         
         // if we have some settings
