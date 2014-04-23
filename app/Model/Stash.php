@@ -214,7 +214,6 @@ class Stash extends AppModel
     public function getFilters($userId) {
         $filters = array();
         $collectibles = $this->CollectiblesUser->find('all', array('conditions' => array('CollectiblesUser.user_id' => $userId, 'CollectiblesUser.active' => true), 'contain' => array('Collectible', 'Stash')));
-        debug($collectibles);
         if (empty($collectibles)) {
             return $filters;
         }
@@ -228,8 +227,6 @@ class Stash extends AppModel
         $filters['ct']['values'] = $this->CollectiblesUser->Collectible->Collectibletype->find('list', array('conditions' => array('Collectibletype.id' => $typeIds), 'contain' => false, 'fields' => array('Collectibletype.id', 'Collectibletype.name')));
         $filters['l']['values'] = $this->CollectiblesUser->Collectible->License->find('list', array('conditions' => array('License.id' => $licenseIds), 'contain' => false, 'fields' => array('License.id', 'License.name')));
         $filters['s']['values'] = $this->CollectiblesUser->Collectible->Scale->find('list', array('conditions' => array('Scale.id' => $scaleIds), 'contain' => false, 'fields' => array('Scale.id', 'Scale.scale')));
-        
-        debug($filters);
         
         return $filters;
     }

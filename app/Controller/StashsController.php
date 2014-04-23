@@ -157,8 +157,6 @@ class StashsController extends AppController
                     if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this->isLoggedIn())) {
                         $collectibles = $this->search($user);
                         
-                        debug($collectibles);
-                        
                         $this->set(compact('collectibles'));
                         $this->set('stash', $user['Stash'][0]);
                         
