@@ -84,4 +84,10 @@ if (isset($reasons)) {
 	echo 'var reasons = \'' . json_encode($reasons) . '\';';
 }
 	?>
+    var filtersView = new FiltersView();
+
+    filtersView.render();
+
+    var selectedFiltersView = new SelectedFiltersView();
+    selectedFiltersView.render();
 </script>

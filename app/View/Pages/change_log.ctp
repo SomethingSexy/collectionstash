@@ -1,6 +1,16 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
-<h3>Release Notes for v2.15.2</h3>
+<h3>Release Notes for v2.18</h3>
+<ul>
+	<li>Added filters to the user stash page.</li>
+</ul>
+<h3>Release Notes for v2.17</h3>
+<ul>
+	<li>Updated the UI for filtering on the collectible catalog.</li>
+	<li>Added filters for pending collectibles, variants, and scales.</li>
+	<li>Updated the version of Twitter typeahead</li>
+</ul>
+<h3>Release Notes for v2.16</h3>
 <ul>
 	<li>Added the ability for an admin to delete a collectible and replace a duplicate collectible.</li>
 	<li>Fixed some UI issues with the collectible search page.</li>

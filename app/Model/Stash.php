@@ -213,8 +213,8 @@ class Stash extends AppModel
      */
     public function getFilters($userId) {
         $filters = array();
-        $collectibles = $this->CollectiblesUser->find('all', array('conditions' => array('CollectiblesUser.user_id' => $userId), 'contain' => array('Collectible')));
-        
+        $collectibles = $this->CollectiblesUser->find('all', array('conditions' => array('CollectiblesUser.user_id' => $userId, 'CollectiblesUser.active' => true), 'contain' => array('Collectible', 'Stash')));
+        debug($collectibles);
         if (empty($collectibles)) {
             return $filters;
         }
