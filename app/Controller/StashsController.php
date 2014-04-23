@@ -88,12 +88,24 @@ class StashsController extends AppController
         $tableFilters = $this->processQueryFilters($saveSearchFilters);
         
         $joins = array();
-        array_push($joins, array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"')));
-        array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
-        array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
-        array_push($joins, array('table' => 'licenses', 'alias' => 'License', 'type' => 'inner', 'conditions' => array('Collectible2.license_id = License.id')));
-        array_push($joins, array('table' => 'scales', 'alias' => 'Scale', 'type' => 'inner', 'conditions' => array('Collectible2.scale_id = Scale.id')));
-        array_push($joins, array('table' => 'collectibletypes', 'alias' => 'Collectibletype', 'type' => 'inner', 'conditions' => array('Collectible2.collectibletype_id = Collectibletype.id')));
+        
+        if (!empty($saveSearchFilters)) {
+            array_push($joins, array('table' => 'collectibles', 'alias' => 'Collectible2', 'type' => 'inner', 'conditions' => array('Collectible2.id = CollectiblesUser.collectible_id')));
+            
+            // if I am not filtering on something I will have to not add these joins because if the value is null then collectibles won't show up
+            if (!empty($saveSearchFilters['m'])) {
+                array_push($joins, array('table' => 'manufactures', 'alias' => 'Manufacture', 'type' => 'inner', 'conditions' => array('Collectible2.manufacture_id = Manufacture.id')));
+            }
+            if (!empty($saveSearchFilters['ct'])) {
+                array_push($joins, array('table' => 'collectibletypes', 'alias' => 'Collectibletype', 'type' => 'inner', 'conditions' => array('Collectible2.collectibletype_id = Collectibletype.id')));
+            }
+            if (!empty($saveSearchFilters['l'])) {
+                array_push($joins, array('table' => 'licenses', 'alias' => 'License', 'type' => 'inner', 'conditions' => array('Collectible2.license_id = License.id')));
+            }
+            if (!empty($saveSearchFilters['s'])) {
+                array_push($joins, array('table' => 'scales', 'alias' => 'Scale', 'type' => 'inner', 'conditions' => array('Collectible2.scale_id = Scale.id')));
+            }
+        }
         
         $conditions = array('CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']);
         array_push($conditions, $tableFilters);
@@ -144,6 +156,8 @@ class StashsController extends AppController
                     //or if it is set to 1 and this person is logged in also show.
                     if ($user['Stash'][0]['privacy'] === '0' || $viewingMyStash || ($user['Stash'][0]['privacy'] === '1' && $this->isLoggedIn())) {
                         $collectibles = $this->search($user);
+                        
+                        debug($collectibles);
                         
                         $this->set(compact('collectibles'));
                         $this->set('stash', $user['Stash'][0]);
