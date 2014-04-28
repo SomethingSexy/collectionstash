@@ -1,0 +1,23 @@
+{
+  "name": "collectionstash",
+  "description": "",
+  "version": "0.0.1",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "requirejs": "2.1.11",
+    "bootstrap": "3.1.1",
+    "backbone": "1.1.2",
+    "jquery": "2.1.0",
+    "backbone.marionette": "1.8.3",
+    "underscore": "1.6.0",
+    "backbone.marionette.dust": "https://github.com/simonblee/marionette-dust.git#0.1.6",
+    "dustjs-linkedin": "2.3.4",
+    "dustjs-helpers": "https://github.com/linkedin/dustjs-helpers.git#1.2.0",
+    "requirejs-text": "2.0.12"
+  },
+  "devDependencies": {
+  }
+}
