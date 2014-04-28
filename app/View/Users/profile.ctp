@@ -1,0 +1,1 @@
+<?php echo $this -> Html -> script('pages/page.user.profile', array('inline' => false));?>

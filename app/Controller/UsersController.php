@@ -9,6 +9,11 @@ class UsersController extends AppController {
 		parent::beforeFilter();
 	}
 
+	// make this route stash/user
+	public function profile($username = null){
+		$this -> layout = 'require';
+	}
+
 	/**
 	 * User home dashboard
 	 *
