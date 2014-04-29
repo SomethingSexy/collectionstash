@@ -1,0 +1,23 @@
+<div class="row stash-layout">
+	<div class="col-md-2">
+		<ul class="nav nav-pills nav-stacked well">
+          <li class="active"><a href="#"><i class="fa fa-envelope"></i> Compose</a></li>
+          <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+          <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+          <li><a href="#"><i class="fa fa-key"></i> Security</a></li>
+          <li><a href="#"><i class="fa fa-sign-out"></i> Logout</a></li>
+        </ul>	
+	</div>
+	<div class="col-md-9">
+		<div class="profile">
+			<div class="panel">
+                    <img class="pic" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="...">
+                    <div class="name"><small>Something Sexy</small></div>
+            </div>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div class="header"></div>
+	</div>
+</div>
