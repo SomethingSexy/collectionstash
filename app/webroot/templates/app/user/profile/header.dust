@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs stash-tabs">
+	<li class="active"><a href="#stash">Collectibles</a></li>
+	<li><a href="#wishlist">Wish List</a></li>
+	<li><a href="#sale">Sale/Trade List</a></li>
+	<li><a href="#photos">Photos</a></li>
+	<li><a href="#comments">Comments</a></li>
+	<li><a href="#history">History</a></li>
+</ul>
