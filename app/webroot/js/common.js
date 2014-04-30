@@ -13,7 +13,8 @@ requirejs.config({
         dust: '../bower_components/dustjs-linkedin/dist/dust-full',
         'dust-helpers': '../bower_components/dustjs-helpers/dist/dust-helpers',
         text: '../bower_components/requirejs-text/text',
-        bootstrap: '../bower_components/bootstrap/dist/js/bootstrap'
+        bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+        'backbone.validation' : '../bower_components/backbone.validation/dist/backbone-validation-amd'
     },
     shim: {
         'dust': {
