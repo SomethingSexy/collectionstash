@@ -16,7 +16,8 @@
     "backbone.marionette.dust": "https://github.com/simonblee/marionette-dust.git#0.1.6",
     "dustjs-linkedin": "2.3.4",
     "dustjs-helpers": "https://github.com/linkedin/dustjs-helpers.git#1.2.0",
-    "requirejs-text": "2.0.12"
+    "requirejs-text": "2.0.12",
+    "backbone.validation" : "https://github.com/thedersen/backbone.validation.git#v0.9.1"
   },
   "devDependencies": {
   }

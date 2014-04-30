@@ -1,0 +1,11 @@
+<div class="list-group">
+    <a href="#" class="list-group-item">
+        <i class="fa fa-comment-o"></i> Profile
+    </a>
+    <a href="#" class="list-group-item">
+        <i class="fa fa-search"></i> Privacy
+    </a>
+    <a href="#" class="list-group-item">
+        <i class="fa fa-user"></i> Notifications
+    </a>
+</div>
