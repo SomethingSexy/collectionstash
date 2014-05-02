@@ -1,26 +1,56 @@
+<div class="page-header">
+  <h2>Profile</h2>
+</div>
 <form role="form" class="form-horizontal">
   <div class="form-group">
-    <label for="exampleInputEmail1" class="col-sm-2 control-label">First Name</label>
+    <label for="inputFirstName" class="col-sm-2 control-label">First Name</label>
     <div class="col-sm-10">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="first_name" placeholder="Enter first name" value="{first_name}">
+    <input type="text" class="form-control" id="inputFirstName" name="first_name" placeholder="Enter first name" value="{first_name}">
     </div>
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1" class="col-sm-2 control-label">Last Name</label>
+    <label for="inputLastName" class="col-sm-2 control-label">Last Name</label>
     <div class="col-sm-10">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="last_name" placeholder="Enter first name" value="{last_name}">
+    <input type="text" class="form-control" id="inputLastName" name="last_name" placeholder="Enter first name" value="{last_name}">
     </div>
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1" class="col-sm-2 control-label">Email address</label>
+    <label for="inputEmail" class="col-sm-2 control-label">Email address</label>
     <div class="col-sm-10">
-    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{email}">
+    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Enter email" value="{email}">
     </div>
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1" class="col-sm-2 control-label">Display Name</label>
+    <label for="inputDisplayName" class="col-sm-2 control-label">Display Name</label>
     <div class="col-sm-10">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="display_name" placeholder="Enter display name" value="{display_name}">
+    <input type="text" class="form-control" id="inputDisplayName" name="display_name" placeholder="Enter display name" value="{display_name}">
+    <p class="help-block">This will be displayed on your profile page.</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputLocation" class="col-sm-2 control-label">Location</label>
+    <div class="col-sm-10">
+    <input type="text" class="form-control" id="inputLocation" name="location" placeholder="e.g., Milwaukee, Wisconsin" value="{location}">
+    </div>
+  </div>
+  <hr>
+  <h3>Notifications</h3>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <div class="checkbox">
+        <label>
+          <input {# email_notification}checked{/email_notification} type="checkbox" value="true" name="email_notification">
+          Email notifications</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <div class="checkbox">
+        <label>
+          <input {#email_newsletter}checked{/email_newsletter} type="checkbox" value="true" name="email_newsletter">
+          Subscribe to newsletter</label>
+      </div>
     </div>
   </div>
 <!--   <div class="form-group">
@@ -32,7 +62,7 @@
   </div> -->
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary save">Save</button>
+      <button type="submit" class="btn btn-primary save" data-loading="Saving">Save</button>
     </div>
   </div>
 </form>
