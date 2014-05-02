@@ -4,39 +4,42 @@ class Profile extends AppModel
     public $name = 'Profile';
     public $belongsTo = array('User');
     public $actsAs = array('Containable');
-    
+    public $validate = array(
+    // display name
+    'display_name' => array(
+    //valid values
+    'validValues' => array('rule' => '/^[a-z0-9 -,.]*$/i', 'required' => false, 'allowEmpty' => true, 'message' => 'Invalid characters.'),
+    //valid length
+    'validLength' => array('rule' => array('maxLength', 100), 'message' => 'Maximum 100 characters long')),
+    //location
+    'location' => array(
+    //valid values
+    'validValues' => array('rule' => '/^[a-z0-9 -,.]*$/i', 'required' => false, 'allowEmpty' => true, 'message' => 'Invalid characters.'),
+    //valid length
+    'validLength' => array('rule' => array('maxLength', 100), 'message' => 'Maximum 100 characters long')));
     /**
      * This will handle update the user profile, which might contain user model data as well
      */
     public function updateProfile($data, $user) {
         $retVal = $this->buildDefaultResponse();
-        
         // make sure there is no hacking
-        $data['id'] = $user['User']['id'];
-        $fields = array('first_name', 'last_name', 'modified');
+        unset($data['id']);
+        $userFields = array('first_name', 'last_name', 'modified');
+        $profileFields = array('email_newsletter', 'email_notification', 'modified', 'display_name', 'location');
         $activeUserModel = $this->User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'contain' => array('Profile')));
-        
         // if it is a change then we need to validate and verify it is not a dup
-        if ($data['email'] !== $activeUserModel['User']['email']) {
-            array_push($fields, 'email');
+        if (isset($data['email']) && $data['email'] !== $activeUserModel['User']['email']) {
+            array_push($userFields, 'email');
         }
         
-        $this->User->id = $user['User']['id'];
-        if (!$this->User->save($data, true, $fields)) {
+        $data = array('User' => $data, 'Profile' => $data);
+        $data['User']['id'] = $user['User']['id'];
+        $data['Profile']['id'] = $activeUserModel['Profile']['id'];
+        // using saveAssociated should help with transactional issues and validation
+        if (!$this->User->saveAssociated($data, array('fieldList' => array('User' => $userFields, 'Profile' => $profileFields)))) {
             $retVal['response']['data'] = $this->User->validationErrors;
             return $retVal;
         }
-        
-        $this->id = $activeUserModel['Profile']['id'];
-        $profileData = array();
-        if (isset($data['email_newsletter'])) {
-            $profileData['email_newsletter'] = $data['email_newsletter'];
-        }
-        if (isset($data['email_notification'])) {
-            $profileData['email_notification'] = $data['email_notification'];
-        }
-        
-        $this->save($profileData, false, array('email_newsletter', 'email_notification', 'modified'));
         
         $retVal['response']['data'] = $data;
         $retVal['response']['isSuccess'] = true;

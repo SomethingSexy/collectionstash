@@ -96,5 +96,103 @@ class ProfileTest extends CakeTestCase
         $this->assertEqual($user['Profile']['email_notification'], false);
         $this->assertEqual($user['Profile']['email_newsletter'], false);
     }
+
+    public function testUpdateProfileDisplayName() {
+    	$userData = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => false));
+    	$userData = $userData['User'];
+    	unset($userData['id']);
+    	$userData['display_name'] = 'Tyler Cvetan';
+
+        $result = $this->Profile->updateProfile($userData, array('User' => array('id' => 2)));
+        
+        $this->assertNotEmpty($result);
+        
+        $this->assertEqual($result['response']['isSuccess'], true);
+        
+        $user = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => array('Profile')));
+        
+        $this->assertEqual($user['User']['first_name'], 'Tyler');
+        $this->assertEqual($user['User']['last_name'], 'Cvetan');
+        $this->assertEqual($user['User']['email'], 'tyler.cvetan@gmail.com');
+        $this->assertEqual($user['User']['username'], 'Balls');
+
+        $this->assertEqual($user['Profile']['email_notification'], true);
+        $this->assertEqual($user['Profile']['email_newsletter'], true);
+        $this->assertEqual($user['Profile']['display_name'], 'Tyler Cvetan');
+    }
+
+    public function testUpdateProfileDisplayNameInvalid() {
+    	$userData = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => false));
+    	$userData = $userData['User'];
+    	unset($userData['id']);
+    	$userData['display_name'] = 'Tyler <>Cvetan';
+
+        $result = $this->Profile->updateProfile($userData, array('User' => array('id' => 2)));
+        
+        $this->assertNotEmpty($result);
+        
+        $this->assertEqual($result['response']['isSuccess'], false);
+        
+        $user = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => array('Profile')));
+        
+        $this->assertEqual($user['User']['first_name'], 'Tyler');
+        $this->assertEqual($user['User']['last_name'], 'Cvetan');
+        $this->assertEqual($user['User']['email'], 'tyler.cvetan@gmail.com');
+        $this->assertEqual($user['User']['username'], 'Balls');
+
+        $this->assertEqual($user['Profile']['email_notification'], true);
+        $this->assertEqual($user['Profile']['email_newsletter'], true);
+        $this->assertEqual($user['Profile']['display_name'], null);
+    }
+
+    // for this test we are changing the user model and the profile model, the profile model fails, we want to role back user changes
+    public function testUpdateProfileInvalidProfileModel() {
+    	$userData = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => false));
+    	$userData = $userData['User'];
+    	unset($userData['id']);
+    	$userData['first_name'] = 'butthole';
+    	$userData['display_name'] = 'Tyler <>Cvetan';
+
+        $result = $this->Profile->updateProfile($userData, array('User' => array('id' => 2)));
+        
+        $this->assertNotEmpty($result);
+        
+        $this->assertEqual($result['response']['isSuccess'], false);
+        
+        $user = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => array('Profile')));
+        
+        $this->assertEqual($user['User']['first_name'], 'Tyler');
+        $this->assertEqual($user['User']['last_name'], 'Cvetan');
+        $this->assertEqual($user['User']['email'], 'tyler.cvetan@gmail.com');
+        $this->assertEqual($user['User']['username'], 'Balls');
+
+        $this->assertEqual($user['Profile']['email_notification'], true);
+        $this->assertEqual($user['Profile']['email_newsletter'], true);
+        $this->assertEqual($user['Profile']['display_name'], null);
+    }
+
+    public function testUpdateProfileLocation() {
+    	$userData = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => false));
+    	$userData = $userData['User'];
+    	unset($userData['id']);
+    	$userData['location'] = 'Milwaukee, Wisconsin';
+
+        $result = $this->Profile->updateProfile($userData, array('User' => array('id' => 2)));
+        
+        $this->assertNotEmpty($result);
+        
+        $this->assertEqual($result['response']['isSuccess'], true);
+        
+        $user = $this->User->find('first', array('conditions' => array('User.id' => 2), 'contain' => array('Profile')));
+        
+        $this->assertEqual($user['User']['first_name'], 'Tyler');
+        $this->assertEqual($user['User']['last_name'], 'Cvetan');
+        $this->assertEqual($user['User']['email'], 'tyler.cvetan@gmail.com');
+        $this->assertEqual($user['User']['username'], 'Balls');
+
+        $this->assertEqual($user['Profile']['email_notification'], true);
+        $this->assertEqual($user['Profile']['email_newsletter'], true);
+        $this->assertEqual($user['Profile']['location'], 'Milwaukee, Wisconsin');
+    }
 }
 ?>
