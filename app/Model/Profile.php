@@ -14,7 +14,7 @@ class Profile extends AppModel
         // make sure there is no hacking
         $data['id'] = $user['User']['id'];
         $fields = array('first_name', 'last_name', 'modified');
-        $activeUserModel = $this->User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'contain' => false));
+        $activeUserModel = $this->User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'contain' => array('Profile')));
         
         // if it is a change then we need to validate and verify it is not a dup
         if ($data['email'] !== $activeUserModel['User']['email']) {
@@ -27,8 +27,16 @@ class Profile extends AppModel
             return $retVal;
         }
         
-        // $this->id = $data['id'];
-        // $this->save($data, false, array('email_newsletter', 'email_notification', 'modified'));
+        $this->id = $activeUserModel['Profile']['id'];
+        $profileData = array();
+        if (isset($data['email_newsletter'])) {
+            $profileData['email_newsletter'] = $data['email_newsletter'];
+        }
+        if (isset($data['email_notification'])) {
+            $profileData['email_notification'] = $data['email_notification'];
+        }
+        
+        $this->save($profileData, false, array('email_newsletter', 'email_notification', 'modified'));
         
         $retVal['response']['data'] = $data;
         $retVal['response']['isSuccess'] = true;
