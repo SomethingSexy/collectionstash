@@ -1,9 +1,9 @@
-define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/settings/privacy.dust', 'marionette-dust', 'backbone.validation'], function(require, _, Marionette, dust, template) {
+define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/settings/stash.dust', 'marionette-dust', 'backbone.validation'], function(require, _, Marionette, dust, template) {
 
-    dust.loadSource(dust.compile(template, 'user.settings.privacy'));
+    dust.loadSource(dust.compile(template, 'user.settings.stash'));
 
     return Marionette.ItemView.extend({
-        template: 'user.settings.privacy',
+        template: 'user.settings.stash',
         events: {
             'click .save': 'save'
         },
