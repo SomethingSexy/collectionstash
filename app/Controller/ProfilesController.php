@@ -12,15 +12,14 @@ class ProfilesController extends AppController
         $this->loadModel('Stash');
         
         $stashProfileSettings = $this->Stash->getProfileSettings($this->getUser());
-        debug($stashProfileSettings);
+        
         $this->set(compact('stashProfileSettings'));
         
         $profile = $this->Profile->find('first', array('conditions' => array('Profile.user_id' => $this->getUserId()), 'contain' => false));
-        debug($profile);
         
         $user = $this->Profile->User->find('first', array('conditions' => array('User.id' => $this->getUserId()), 'contain' => false));
         // build model data
-        $profile = array('id' => $user['User']['id'], 'first_name' => $user['User']['first_name'], 'last_name' => $user['User']['last_name'], 'email' => $user['User']['email'], 'email_notification' => $profile['Profile']['email_notification'], 'email_newsletter' => $profile['Profile']['email_newsletter']);
+        $profile = array('id' => $user['User']['id'], 'first_name' => $user['User']['first_name'], 'last_name' => $user['User']['last_name'], 'email' => $user['User']['email'], 'email_notification' => $profile['Profile']['email_notification'], 'email_newsletter' => $profile['Profile']['email_newsletter'], 'location' => $profile['Profile']['location'], 'display_name' => $profile['Profile']['display_name']);
         
         $this->set(compact('profile'));
     }

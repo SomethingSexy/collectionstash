@@ -61,6 +61,7 @@ define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/
                 'last_name': $('[name=last_name]', this.el).val(),
                 'email': $('[name=email]', this.el).val(),
                 'display_name': $('[name=display_name]', this.el).val(),
+                'location': $('[name=location]', this.el).val(),
                 'email_notification': $('[name=email_notification]', this.el).is(':checked') ? $('[name=email_notification]', this.el).val() : false,
                 'email_newsletter': $('[name=email_newsletter]', this.el).is(':checked') ? $('[name=email_newsletter]', this.el).val() : false
             };

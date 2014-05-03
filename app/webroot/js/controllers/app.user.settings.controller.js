@@ -22,7 +22,17 @@ define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/u
                 App.layout = new UserProfileLayout();
                 App.main.show(App.layout);
 
-                App.layout.sidebar.show(new MenuView());
+                // not sure if this is the best way to do it
+                var menuView = new MenuView();
+
+                App.listenTo(menuView, 'navigate:privacy', function(){
+                    // supposedly triggering true is a bad design, however I would
+                    // just be calling the method manually in here so whatever, this works
+                    // for now
+                    Backbone.history.navigate('privacy', {trigger: true});
+                });
+
+                App.layout.sidebar.show(menuView);
             },
             //gets mapped to in AppRouter's appRoutes
             index: function() {
