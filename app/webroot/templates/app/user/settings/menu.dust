@@ -1,8 +1,8 @@
 <div class="list-group">
-    <a href="#" class="list-group-item">
+    <a href="/profile" class="list-group-item">
         <i class="fa fa-comment-o"></i> Profile
     </a>
-    <a href="/profiles/privacy" class="list-group-item _privacy">
+    <a href="/profile/privacy" class="list-group-item _privacy">
         <i class="fa fa-search"></i> Privacy
     </a>
 </div>

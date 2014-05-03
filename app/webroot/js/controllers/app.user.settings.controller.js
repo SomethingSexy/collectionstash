@@ -1,5 +1,5 @@
-define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/user/settings/layout.dust', 'views/app/user/settings/view.menu', 'views/app/user/settings/view.profile', 'dust', 'marionette-dust'],
-    function(App, Backbone, Marionette, layout, MenuView, ProfileView, dust) {
+define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/user/settings/layout.dust', 'views/app/user/settings/view.menu', 'views/app/user/settings/view.profile', 'views/app/user/settings/view.privacy', 'dust', 'marionette-dust'],
+    function(App, Backbone, Marionette, layout, MenuView, ProfileView, PrivacyView, dust) {
 
         dust.loadSource(dust.compile(layout, "user.settings.layout"));
 
@@ -25,11 +25,13 @@ define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/u
                 // not sure if this is the best way to do it
                 var menuView = new MenuView();
 
-                App.listenTo(menuView, 'navigate:privacy', function(){
+                App.listenTo(menuView, 'navigate:privacy', function() {
                     // supposedly triggering true is a bad design, however I would
                     // just be calling the method manually in here so whatever, this works
                     // for now
-                    Backbone.history.navigate('privacy', {trigger: true});
+                    Backbone.history.navigate('privacy', {
+                        trigger: true
+                    });
                 });
 
                 App.layout.sidebar.show(menuView);
@@ -42,6 +44,16 @@ define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/u
                 // }));
 
                 App.layout.main.show(new ProfileView({
+                    model: App.profile
+                }));
+            },
+            privacy: function() {
+                // this is going to add 
+                // App.main.show(new MoviesView({
+                //     collection: App.movies
+                // }));
+
+                App.layout.main.show(new PrivacyView({
                     model: App.profile
                 }));
             }

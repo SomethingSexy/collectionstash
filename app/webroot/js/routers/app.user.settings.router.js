@@ -3,7 +3,7 @@ define(['backbone', 'marionette'], function(Backbone, Marionette) {
         //"index" must be a method in AppRouter's controller
         appRoutes: {
             "": "index",
-            "privacy": "index"
+            "privacy": "privacy"
         }
     });
 });
