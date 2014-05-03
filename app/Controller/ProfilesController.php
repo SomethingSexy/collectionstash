@@ -11,9 +11,9 @@ class ProfilesController extends AppController
         $this->layout = 'require';
         $this->loadModel('Stash');
         
-        $stashProfileSettings = $this->Stash->getProfileSettings($this->getUser());
+        $stashSettings = $this->Stash->getProfileSettings($this->getUser());
         
-        $this->set(compact('stashProfileSettings'));
+        $this->set(compact('stashSettings'));
         
         $profile = $this->Profile->find('first', array('conditions' => array('Profile.user_id' => $this->getUserId()), 'contain' => false));
         

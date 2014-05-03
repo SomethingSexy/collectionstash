@@ -1,4 +1,4 @@
-define(['marionette', 'models/model.profile'], function(Marionette, ProfileModel) {
+define(['marionette', 'models/model.profile', 'models/model.stash.settings'], function(Marionette, ProfileModel, StashSettingsModel) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -23,6 +23,7 @@ define(['marionette', 'models/model.profile'], function(Marionette, ProfileModel
 
     // adding initial collection here
     MyApp.profile = new ProfileModel(rawProfile);
+    MyApp.stashSettings = new StashSettingsModel(rawStashSettings);
 
     // export the app from this module
     return MyApp;

@@ -58,7 +58,28 @@ class StashsController extends AppController
         $this->set(compact('collectibles'));
     }
     
-    public function updateProfileSettings() {
+    public function profile() {
+        $this->autoRender = false;
+        // need to be logged in
+        if (!$this->isLoggedIn()) {
+            $this->response->statusCode(401);
+            return;
+        }
+        // create
+        if ($this->request->isPost()) {
+        } else if ($this->request->isPut()) {
+            // update
+            $profile = $this->request->input('json_decode', true);
+            $profile = Sanitize::clean($profile);
+            $response = $this->Profile->updateProfile($profile, $this->getUser());
+            if (!$response['response']['isSuccess']) {
+                $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
+            }
+        } else if ($this->request->isDelete()) {
+        }
+
+
         $this->request->data = Sanitize::clean($this->request->data, array('encode' => false));
         if ($this->isLoggedIn()) {
             if (!empty($this->request->data)) {
