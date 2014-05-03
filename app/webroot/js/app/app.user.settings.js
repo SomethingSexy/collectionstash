@@ -11,7 +11,14 @@ define(['marionette', 'models/model.profile'], function(Marionette, ProfileModel
     });
 
     MyApp.on('initialize:after', function() {
-        Backbone.history.start();
+        Backbone.history.start({
+            pushState: true,
+            root: "/profile/"
+        });
+    });
+
+    MyApp.vent.on("search:term", function(searchTerm) {
+        Backbone.history.navigate("search/" + searchTerm);
     });
 
     // adding initial collection here

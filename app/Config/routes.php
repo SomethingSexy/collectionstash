@@ -79,7 +79,10 @@ Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action
 
 Router::connect('/artist/*', array('controller' => 'artists', 'action' => 'index'));
 // logged in user profile
-Router::connect('/profile/*', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/profile', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/profile/privacy', array('controller' => 'profiles', 'action' => 'privacy'));
+Router::connect('/profile/*', array('controller' => 'users', 'action' => 'profile'));
+
 
 
 /**
