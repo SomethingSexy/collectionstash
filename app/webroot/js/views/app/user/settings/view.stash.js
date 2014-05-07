@@ -1,9 +1,7 @@
-define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/settings/stash.dust', 'marionette-dust', 'backbone.validation'], function(require, _, Marionette, dust, template) {
-
-    dust.loadSource(dust.compile(template, 'user.settings.stash'));
+define(['require', 'underscore', 'marionette', 'text!templates/app/user/settings/stash.mustache', 'mustache', 'marionette.mustache', 'backbone.validation'], function(require, _, Marionette, template, mustache) {
 
     return Marionette.ItemView.extend({
-        template: 'user.settings.stash',
+        template: template,
         events: {
             'click .save': 'save'
         },
@@ -25,7 +23,7 @@ define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/
             this.errors = {};
         },
         onRender: function() {
-
+            $('[name=privacy] option[value=' + this.model.get('privacy') + ']', this.el).prop('selected', 'selected');
         },
         onError: function() {
             $('.btn-primary', this.el).button('reset');
@@ -57,13 +55,7 @@ define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/
             // call save on the model, this should validate
 
             var data = {
-                'first_name': $('[name=first_name]', this.el).val(),
-                'last_name': $('[name=last_name]', this.el).val(),
-                'email': $('[name=email]', this.el).val(),
-                'display_name': $('[name=display_name]', this.el).val(),
-                'location': $('[name=location]', this.el).val(),
-                'email_notification': $('[name=email_notification]', this.el).is(':checked') ? $('[name=email_notification]', this.el).val() : false,
-                'email_newsletter': $('[name=email_newsletter]', this.el).is(':checked') ? $('[name=email_newsletter]', this.el).val() : false
+                'privacy': $('[name=privacy]', this.el).val(),
             };
 
             $('.btn-primary', this.el).button('loading');

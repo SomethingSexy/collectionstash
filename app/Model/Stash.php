@@ -204,6 +204,7 @@ class Stash extends AppModel
         $stash = $this->find("first", array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
         $profileSettings = array();
         $profileSettings['privacy'] = $stash['Stash']['privacy'];
+        $profileSettings['id'] = $stash['Stash']['id'];
         
         return $profileSettings;
     }
