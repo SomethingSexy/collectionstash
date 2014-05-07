@@ -13,7 +13,7 @@ define(['marionette', 'models/model.profile', 'models/model.stash.settings'], fu
     MyApp.on('initialize:after', function() {
         Backbone.history.start({
             pushState: true,
-            root: "/profile/"
+            root: "/settings/"
         });
     });
 

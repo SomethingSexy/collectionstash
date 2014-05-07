@@ -163,7 +163,7 @@
 						<li class="dropdown">
 							<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-								<li><?php echo $this -> Html -> link('Account Settings', '/profiles', array('escape' => false, 'admin' => false)); ?></li>
+								<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
 								<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
 								<li class="divider"></li>
 								<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
