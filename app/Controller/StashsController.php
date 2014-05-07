@@ -72,6 +72,8 @@ class StashsController extends AppController
             }
             if (!$this->Stash->saveField('privacy', $profile['privacy'])) {
                 $this->response->statusCode(400);
+            } else {
+                $this->response->body('{}');
             }
         } else if ($this->request->isDelete()) {
         }
