@@ -1,9 +1,7 @@
-define(['require', 'underscore', 'marionette', 'dust', 'text!templates/app/user/settings/profile.dust', 'marionette-dust', 'backbone.validation'], function(require, _, Marionette, dust, template) {
-
-    dust.loadSource(dust.compile(template, 'user.settings.profile'));
+define(['require', 'underscore', 'marionette', 'text!templates/app/user/settings/profile.mustache', 'backbone.validation', 'mustache', 'marionette.mustache'], function(require, _, Marionette, template, mustache) {
 
     return Marionette.ItemView.extend({
-        template: 'user.settings.profile',
+        template: template,
         events: {
             'click .save': 'save'
         },

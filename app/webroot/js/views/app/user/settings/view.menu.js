@@ -1,23 +1,21 @@
-define(['require', 'marionette', 'dust', 'text!templates/app/user/settings/menu.dust', 'marionette-dust'], function(require, Marionette, dust, template) {
-
-    dust.loadSource(dust.compile(template, 'user.settings.menu'));
+define(['require', 'marionette', 'text!templates/app/user/settings/menu.mustache', 'mustache', 'marionette.mustache'], function(require, Marionette, template, mustache) {
 
     return Marionette.ItemView.extend({
-        template: 'user.settings.menu',
+        template: template,
         events: {
-        	'click ._privacy' : 'privacy',
-        	'click ._profile' : 'profile'
+            'click ._privacy': 'privacy',
+            'click ._profile': 'profile'
         },
         onRender: function() {
 
         },
         profile: function(event) {
-        	event.preventDefault();
-        	this.trigger('navigate:profile');
+            event.preventDefault();
+            this.trigger('navigate:profile');
         },
         privacy: function(event) {
-        	event.preventDefault();
-        	this.trigger('navigate:stash');
+            event.preventDefault();
+            this.trigger('navigate:stash');
         }
     });
 });

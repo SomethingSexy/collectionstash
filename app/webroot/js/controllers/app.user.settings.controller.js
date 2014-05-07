@@ -1,11 +1,9 @@
-define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/user/settings/layout.dust', 'views/app/user/settings/view.menu', 'views/app/user/settings/view.profile', 'views/app/user/settings/view.stash', 'dust', 'marionette-dust'],
-    function(App, Backbone, Marionette, layout, MenuView, ProfileView, PrivacyView, dust) {
-
-        dust.loadSource(dust.compile(layout, "user.settings.layout"));
+define(['app/app.user.settings', 'backbone', 'marionette', 'text!templates/app/user/settings/layout.mustache', 'views/app/user/settings/view.menu', 'views/app/user/settings/view.profile', 'views/app/user/settings/view.stash', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, layout, MenuView, ProfileView, PrivacyView, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
-            template: "user.settings.layout",
+            template: layout,
             // header (stash list)
             // sidebar
             // content - default activity
