@@ -73,6 +73,7 @@ class StashsController extends AppController
             if (!$this->Stash->saveField('privacy', $profile['privacy'])) {
                 $this->response->statusCode(400);
             } else {
+                // this needs to be here otherwise backbone doesn't process the response correctly
                 $this->response->body('{}');
             }
         } else if ($this->request->isDelete()) {
