@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'text!templates/app/user/profile/layout.dust', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, layout, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'text!templates/app/user/profile/layout.mustache', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, layout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -10,7 +10,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             //
             regions: {
                 header: ".header",
-                anotherRegion: ".another-element"
+                userCard: "._user-card"
             }
         });
 
@@ -21,6 +21,9 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 App.main.show(App.layout);
 
                 App.layout.header.show(new HeaderView());
+                App.layout.userCard.show(new UserView({
+                    model: App.profile
+                }));
             },
             //gets mapped to in AppRouter's appRoutes
             index: function() {

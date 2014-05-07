@@ -1,4 +1,4 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/header.dust', 'mustache', 'marionette.mustache'], function(require, Marionette, template, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/header.mustache', 'mustache', 'marionette.mustache'], function(require, Marionette, template, mustache) {
 
     return Marionette.ItemView.extend({
         template: template,
