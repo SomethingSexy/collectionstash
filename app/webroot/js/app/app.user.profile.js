@@ -11,7 +11,10 @@ define(['marionette', 'backbone', 'models/model.profile'], function(Marionette, 
     });
 
     MyApp.on('initialize:after', function() {
-        Backbone.history.start();
+        Backbone.history.start({
+            pushState: true,
+            root: "/profile/"
+        });
     });
 
     MyApp.profile = new ProfileModel(rawProfile);
