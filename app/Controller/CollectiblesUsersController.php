@@ -64,7 +64,7 @@ class CollectiblesUsersController extends AppController
     }
     
     /**
-     * This will handle add, update, delete asynchronously
+     * This will handle add, update, delete asynchronously of a single collectible
      */
     public function collectible($id = null) {
         

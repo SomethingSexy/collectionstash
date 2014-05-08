@@ -1,4 +1,4 @@
-define(['marionette', 'backbone', 'models/model.profile'], function(Marionette, Backbone, ProfileModel) {
+define(['marionette', 'backbone', 'models/model.profile', 'collections/collection.collectible.user'], function(Marionette, Backbone, ProfileModel, CollectiblesCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -19,6 +19,7 @@ define(['marionette', 'backbone', 'models/model.profile'], function(Marionette, 
 
     MyApp.profile = new ProfileModel(rawProfile);
     MyApp.facts = new Backbone.Model(rawFacts);
+    MyApp.collectibles = new CollectiblesCollection(rawCollectibles);
 
     // export the app from this module
     return MyApp;

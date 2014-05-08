@@ -12,7 +12,8 @@ requirejs.config({
         'backbone.babysitter' : '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
         text: '../bower_components/requirejs-text/text',
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
-        'backbone.validation' : '../bower_components/backbone.validation/dist/backbone-validation-amd'
+        'backbone.validation' : '../bower_components/backbone.validation/dist/backbone-validation-amd',
+        'backbone.pageable' : '../bower_components/backbone-pageable/lib/backbone-pageable'
     },
     shim: {
         'dust': {

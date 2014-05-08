@@ -1,15 +1,8 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'mustache', 'marionette.mustache'], function(require, Marionette, template, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'marionette.mustache'], function(require, Marionette, template, CollectibleView, mustache) {
 
-    return Marionette.ItemView.extend({
+    return Marionette.CompositeView.extend({
         template: template,
-        onRender: function() {
-            // this.$el.removeClass('active completed');
-
-            // if (this.model.get('completed')) {
-            // 	this.$el.addClass('completed');
-            // } else {
-            // 	this.$el.addClass('active');
-            // }
-        }
+        itemView: CollectibleView,
+        itemViewContainer: "._tiles",
     });
 });
