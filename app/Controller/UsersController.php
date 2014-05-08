@@ -3,8 +3,8 @@ App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
 {
-    
     public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
+    public $components = array('StashSearch');
     
     public function beforeFilter() {
         parent::beforeFilter();
@@ -24,7 +24,6 @@ class UsersController extends AppController
         $profile['display_name'] = $user['Profile']['display_name'];
         $profile['location'] = $user['Profile']['location'];
         $this->set(compact('profile'));
-
         // grab stash information..note collectibles_user_count is all collectibles in the stash including history
         $stashFacts = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
         $currentOwnedCount = $this->User->CollectiblesUser->find('count', array('conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'active' => true), 'contain' => false));
@@ -48,9 +47,19 @@ class UsersController extends AppController
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
-
-
         // Not sure if this is the best way to handle this yet but depending on the view we need to pull back certain data to start
+        if ($view === 'stash') {
+            $collectibles = $this->StashSearch->search($user);
+            debug($collectibles);
+            
+            $this->set(compact('collectibles'));
+            // $this->set('stash', $user['Stash'][0]);
+            
+            // $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));
+            // $this->set(compact('reasons'));
+            
+            $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
+        }
         debug($view);
         debug($username);
     }
