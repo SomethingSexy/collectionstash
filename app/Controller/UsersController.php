@@ -23,8 +23,31 @@ class UsersController extends AppController
         $profile['last_name'] = $user['User']['last_name'];
         $profile['display_name'] = $user['Profile']['display_name'];
         $profile['location'] = $user['Profile']['location'];
-        
         $this->set(compact('profile'));
+
+        // grab stash information..note collectibles_user_count is all collectibles in the stash including history
+        $stashFacts = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
+        $currentOwnedCount = $this->User->CollectiblesUser->find('count', array('conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'active' => true), 'contain' => false));
+        $currentSaleCount = $this->User->CollectiblesUser->find('count', array('conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'active' => true, 'sale' => true), 'contain' => false));
+        $pointsYear = $this->User->UserPointFact->getUserTotalPointsCurrentYear($user['User']['id']);
+        $pointsMonth = $this->User->UserPointFact->getUserTotalPointsCurrentMonth($user['User']['id']);
+        $facts = array();
+        $facts['owned'] = $currentOwnedCount;
+        $facts['sale'] = $currentSaleCount;
+        $facts['collectibles_user_count'] = $stashFacts['Stash']['collectibles_user_count'];
+        $facts['collectibles_wish_list_count'] = $user['User']['collectibles_wish_list_count'];
+        $facts['user_upload_count'] = $user['User']['user_upload_count'];
+        $facts['comment_count'] = $user['User']['comment_count'];
+        $facts['collectible_count'] = $user['User']['collectible_count'];
+        $facts['edit_count'] = $user['User']['edit_count'];
+        $facts['points'] = $user['User']['points'];
+        $facts['points_month'] = $pointsMonth;
+        $facts['points_year'] = $pointsYear;
+        
+        $this->set(compact('facts'));
+        
+        $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
+        $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
     }
     /**
      * User home dashboard

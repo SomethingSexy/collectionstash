@@ -1,7 +1,9 @@
 <div class="panel panel-default">
 	<div class="panel-body">
-		<h2>{{display_name}}</h2><!-- this would be profile display name...for now add First + Last ...users can update this then -->
+		<h2>{{#display_name}}{{.}}{{/display_name}}{{^display_name}}{{first_name}}{{/display_name}}</h2><!-- this would be profile display name...for now add First + Last ...users can update this then -->
 		<p>Member since {{member_since}}</p>
-		<p>{{location}}</p>
+		{{#location}}
+		<p>{{.}}</p>
+		{{/location}}
 	</div>
 </div>
