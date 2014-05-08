@@ -4,10 +4,6 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
             template: layout,
-            // header (stash list)
-            // sidebar
-            // content - default activity
-            //
             regions: {
                 header: '.header',
                 userCard: '._user-card',
