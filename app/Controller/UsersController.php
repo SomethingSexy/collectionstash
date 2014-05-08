@@ -10,7 +10,7 @@ class UsersController extends AppController
         parent::beforeFilter();
     }
     // make this route stash/user
-    public function profile($username = null) {
+    public function profile($username = null, $view = 'stash') {
         $this->layout = 'require';
         // grab the user settings and the profile settings for the given user
         
@@ -48,6 +48,11 @@ class UsersController extends AppController
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
+
+
+        // Not sure if this is the best way to handle this yet but depending on the view we need to pull back certain data to start
+        debug($view);
+        debug($username);
     }
     /**
      * User home dashboard
