@@ -43,9 +43,14 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             },
             //gets mapped to in AppRouter's appRoutes
             index: function() {
-                App.layout.main.show(new StashView({
-                    collection: App.collectibles
-                }));
+
+                App.collectibles.getFirstPage().done(function() {
+
+                    App.layout.main.show(new StashView({
+                        collection: App.collectibles
+                    }));
+                })
+
             },
             wishlist: function() {
                 App.layout.main.show(new WishlistView({
