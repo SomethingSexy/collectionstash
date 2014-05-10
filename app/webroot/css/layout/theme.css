@@ -600,6 +600,10 @@ padding: 20px 15px 15px;
     border: 0;
     padding: 0;
 }
+.fluid-tiles div.thumbnail a.thumbnail img {
+    width: 180px;
+    height: 135px;
+}
 
 .tiles .tile {
     background-color: #FFFFFF;
