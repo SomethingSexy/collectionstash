@@ -72,147 +72,144 @@
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>
-    <header class="navbar navbar-default navbar-fixed-top" role="navigation">
-	   <!-- <div class="container"> -->
-	
-	   		<div class="navbar-header"> 
-			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-			   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-			    </button>
-				<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
-			</div>
-		    <!-- Be sure to leave the brand out there if you want it shown 
-		    	
-		    	-->
-		  
-		     
-		    <!-- Everything you want hidden at 940px or less, place within here -->
-		    <nav class="navbar-collapse collapse top-nav">
-				<ul class="nav navbar-nav">
-					<?php
-					if(isset($isLoggedIn) && $isLoggedIn === true)
-					{  ?>
-					<li>
-						<?php
-						echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
-						?>
-					</li>
-					<?php  } ?>
-					<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
-					<li>
-						<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
-					</li>
-					<?php } ?>
-					<li class="dropdown">
-						<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
-						
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-							<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
-							<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
-						</ul>
-					</li>
-					<li>
-						<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
-					</li>
-					<li>
-						<?php echo $this -> Html -> link('User Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
-					</li>
-					<li>
-						<a href="/comments/"><?php echo __('Discussion'); ?></a>
-					</li>									
-				</ul>
-				<form method="get" class="navbar-form navbar-left" role="search" action="/collectibles/search">
-					<input id="q" type="text" name="q" class="search-query form-control col-lg-8" placeholder="Search">
-				</form>
-				<ul class="nav navbar-nav navbar-right account">
-						<li>
-						<?php
-						$homeLinkLabel = '<i class="icon-home"></i>';
-						$homeLinkClass = '';
-						if ($notificationsCount !== 0) {
-							$homeLinkLabel .= ' ' . $notificationsCount;
-							$homeLinkClass = 'warning';
-						}
-						echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
-						?>
-						</li>
+	<div id="wrap">
+	    <header class="navbar navbar-default navbar-fixed-top" role="navigation">
+		   <!-- <div class="container"> -->
+		
+		   		<div class="navbar-header"> 
+				    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+				   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
+					    <span class="icon-bar"></span>
+					    <span class="icon-bar"></span>
+					    <span class="icon-bar"></span>
+				    </button>
+					<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
+				</div>
+			    <!-- Be sure to leave the brand out there if you want it shown 
+			    	
+			    	-->
+			  
+			     
+			    <!-- Everything you want hidden at 940px or less, place within here -->
+			    <nav class="navbar-collapse collapse top-nav">
+					<ul class="nav navbar-nav">
 						<?php
 						if(isset($isLoggedIn) && $isLoggedIn === true)
 						{  ?>
-	
-						<li class="dropdown">
-							<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-								<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
-								<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
-								<li class="divider"></li>
-								<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
-							</ul>
-						</li>
-						<?php
-						if($isUserAdmin)
-						{ ?>
 						<li>
-							<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+							<?php
+							echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
+							?>
+						</li>
+						<?php  } ?>
+						<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
+						<li>
+							<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
 						</li>
 						<?php } ?>
-
-						<?php  }
-	else
-	{
-							?>
-						<li>
-							<a href="/users/login"><?php echo __('Login'); ?></a>
+						<li class="dropdown">
+							<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+							
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
+								<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
+							</ul>
 						</li>
-						<?php
-						if (Configure::read('Settings.registration.open')) {
-							echo '<li>';
-							echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
-							echo '</li>';
-						}
-						}
-						?>					
-				</ul>
-		    </nav>
-	</header>
-	<div class="container" id="main">
-		<?php echo $content_for_layout; ?>
-	</div>	
-	<footer>
-		<div id="footer">
-			<div class="container">
-				<div class="row spacer">
-					<div class="col-md-12">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="social">
-									<div>
-										<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
-									</div>
-									<div>
-										<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
-									</div>
-								</div>					
-							</div>
-							<div class="col-md-6">
-								<ul class="links list-unstyled pull-right">
-									<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
+						<li>
+							<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
+						</li>
+						<li>
+							<?php echo $this -> Html -> link('User Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
+						</li>
+						<li>
+							<a href="/comments/"><?php echo __('Discussion'); ?></a>
+						</li>									
+					</ul>
+					<form method="get" class="navbar-form navbar-left" role="search" action="/collectibles/search">
+						<input id="q" type="text" name="q" class="search-query form-control col-lg-8" placeholder="Search">
+					</form>
+					<ul class="nav navbar-nav navbar-right account">
+							<li>
+							<?php
+							$homeLinkLabel = '<i class="icon-home"></i>';
+							$homeLinkClass = '';
+							if ($notificationsCount !== 0) {
+								$homeLinkLabel .= ' ' . $notificationsCount;
+								$homeLinkClass = 'warning';
+							}
+							echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+							?>
+							</li>
+							<?php
+							if(isset($isLoggedIn) && $isLoggedIn === true)
+							{  ?>
+		
+							<li class="dropdown">
+								<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
+									<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
+									<li class="divider"></li>
+									<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
 								</ul>
-							</div>	
+							</li>
+							<?php
+							if($isUserAdmin)
+							{ ?>
+							<li>
+								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+							</li>
+							<?php } ?>
+
+							<?php  }
+		else
+		{
+								?>
+							<li>
+								<a href="/users/login"><?php echo __('Login'); ?></a>
+							</li>
+							<?php
+							if (Configure::read('Settings.registration.open')) {
+								echo '<li>';
+								echo $this -> Html -> link('Register', array('controller' => 'users', 'action' => 'register'));
+								echo '</li>';
+							}
+							}
+							?>					
+					</ul>
+			    </nav>
+		</header>
+		<div class="container" id="main">
+			<?php echo $content_for_layout; ?>
+		</div>	
+		<div id="push"></div>
+	</div>
+	<footer id="footer">
+		<div class="container">
+			<div class="row spacer">
+				<div class="col-md-6">
+					<div class="social">
+						<div>
+							<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
 						</div>
-						<div class="row spacer">
-							<div class="col-md-12">
-								<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
-								<p>Original logo created by Bamboota.  Artwork created by Devil_666.</p>
-							</div>
+						<div>
+							<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
 						</div>
-					</div>
+					</div>					
+				</div>
+				<div class="col-md-6">
+					<ul class="links list-unstyled pull-right">
+						<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
+					</ul>
+				</div>	
+			</div>
+			<div class="row spacer">
+				<div class="col-md-12">
+					<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
+					<p>Original logo created by Bamboota.  Artwork created by Devil_666.</p>
 				</div>
 			</div>
-		</div>		
+		</div>	
 	</footer>
 	<?php
 	// list out any modals here that might be common

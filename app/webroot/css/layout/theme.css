@@ -590,9 +590,17 @@ padding: 20px 15px 15px;
     text-align: center;
     z-index: 100;
 }  
-.tiles {
+.fluid-tiles {
     position: relative;
 }
+.fluid-tiles div.thumbnail {
+    padding: 0;
+}
+.fluid-tiles div.thumbnail a.thumbnail {
+    border: 0;
+    padding: 0;
+}
+
 .tiles .tile {
     background-color: #FFFFFF;
     transition: box-shadow 0.2s ease 0s;
@@ -601,6 +609,7 @@ padding: 20px 15px 15px;
     float: left;
     border: 1px solid #E5E5E5;
 }
+
 .tiles.sort-mode .tile {
     height: 150px;
 }

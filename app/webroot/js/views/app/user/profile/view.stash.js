@@ -6,24 +6,59 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._tiles",
+        events: {
+            'click ._more': 'next'
+        },
+        initialize: function() {
+            this.listenTo(this.collection, "reset", this.renderMore);
+        },
+        _initialEvents: function() {
+
+        },
         onRender: function() {
-            var handler = $('._tiles .tile', this.el);
+            this.handler = $('._tiles .tile', this.el);
+        },
+        next: function(event) {
+            this.collection.getNextPage();
+        },
+        renderMore: function() {
+            var self = this;
+            var ItemView;
+            this.collection.each(function(item, index) {
+                ItemView = this.getItemView(item);
+                this.addItemView(item, ItemView, index);
+            }, this);
             $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                self.handler = $('._tiles .tile', this.el);
                 // Call the layout function.
-                handler.wookmark({
+                self.handler.wookmark({
                     autoResize: true, // This will auto-update the layout when the browser window is resized.
-                    container: $('._tiles', this.el)
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left'
                 });
-
-                // Capture clicks on grid items.
-                handler.click(function() {
-                    // Randomize the height of the clicked item.
-                    var newHeight = $('img', this).height() + Math.round(Math.random() * 300 + 30);
-                    $(this).css('height', newHeight + 'px');
-
-                    // Update the layout.
-                    handler.wookmark();
+                // Update the layout.
+                self.handler.wookmark();
+            });
+        },
+        onCompositeCollectionRendered: function() {
+            var self = this;
+            $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                // Call the layout function.
+                self.handler.wookmark({
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left'
                 });
+                // Update the layout.
+                self.handler.wookmark();
             });
         }
     });
