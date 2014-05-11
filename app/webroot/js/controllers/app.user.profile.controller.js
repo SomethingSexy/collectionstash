@@ -47,7 +47,8 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 App.collectibles.getFirstPage().done(function() {
 
                     App.layout.main.show(new StashView({
-                        collection: App.collectibles
+                        collection: App.collectibles,
+                        permissions : App.permissions
                     }));
                 })
 

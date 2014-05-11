@@ -6,11 +6,17 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._tiles",
+        itemViewOptions: function(model, index) {
+            return {
+                permissions: this.permissions
+            };
+        },
         events: {
             'click ._more': 'next'
         },
-        initialize: function() {
+        initialize: function(options) {
             this.listenTo(this.collection, "reset", this.renderMore);
+            this.permissions = options.permissions;
         },
         _initialEvents: function() {
 

@@ -17,3 +17,6 @@ var CollectibleUserModel = Backbone.Model.extend({
 		return response.response.data;
 	}
 });
+define(['require', 'backbone'], function(require, backbone){
+	return CollectibleUserModel;
+});

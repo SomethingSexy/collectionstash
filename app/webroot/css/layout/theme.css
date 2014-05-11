@@ -601,8 +601,8 @@ padding: 20px 15px 15px;
     padding: 0;
 }
 .fluid-tiles div.thumbnail a.thumbnail img {
-    width: 180px;
-    height: 135px;
+    width: 200px;
+    height: 200px;
 }
 
 .tiles .tile {

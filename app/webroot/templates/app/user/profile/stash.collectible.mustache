@@ -2,7 +2,7 @@
 	{{#Collectible.CollectiblesUpload}}
 		{{#primary}}
 			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
-				<img width="180" height="135" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+				<img width="200" height="200" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
 			</a>
 		{{/primary}}
 	{{/Collectible.CollectiblesUpload}}
@@ -25,17 +25,13 @@
 	<span class="pull-left marked-for-sale {{^CollectiblesUser.sale}}hidden{{/CollectiblesUser.sale}}">
 	<a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>
 	<span><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="icon-info"></i></a></span>
-	{{#myStash}}
-		$collectibleJSON = json_encode($myCollectible['Collectible']);
-		$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-		echo '<span><a class="" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a></span>';
-		$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
-		$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-		if (!$myCollectible['CollectiblesUser']['sale']) {
-			echo '<span><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i></a></span>';
-		}
-		echo '<span><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>';
-	{{/myStash}}
+	{{#permissions.edit_collectible_user}}
+		<span><a class="" title="Edit" href="/collectibles_users/edit/{{CollectiblesUser.id}}"><i class="icon-edit"></i></a></span>
+		{{^CollectiblesUser.sale}}
+			<span><a href="javascript:void(0);" data-collectible-user="{{CollectiblesUser}}" data-collectible="{{Collectible}}" data-collectible-user-id="{{CollectiblesUser.id}}" class="stash-sell" title="Sell"><i class="icon-dollar"></i></a></span>
+		{{/CollectiblesUser.sale}}
+		<span><a data-prompt="true" data-stash-type="$stashType" data-collectible-user="{{CollectiblesUser}}" data-collectible="{{Collectible}}" data-collectible-user-id="{{CollectiblesUser.id}}" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>
+	{{/permissions.edit_collectible_user}}
 
 	</div>
 

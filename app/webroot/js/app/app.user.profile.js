@@ -19,6 +19,7 @@ define(['marionette', 'backbone', 'models/model.profile', 'collections/collectio
 
     MyApp.profile = new ProfileModel(rawProfile);
     MyApp.facts = new Backbone.Model(rawFacts);
+    MyApp.permissions = new Backbone.Model(rawPermissions);
     MyApp.collectibles = new CollectiblesCollection([], {
         username: MyApp.profile.get('username')
     });
