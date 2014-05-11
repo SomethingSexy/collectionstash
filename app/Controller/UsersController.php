@@ -47,12 +47,25 @@ class UsersController extends AppController
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
+        
+        $loggedInUser = $this->getUser();
+        // permissions
+        $permissions = array();
+        if ($loggedInUser['User']['id'] === $user['User']['id']) {
+             $permissions['edit_collectible_user'] = true;
+        } else {
+             $permissions['edit_collectible_user'] = false;
+        }
+        
+        $this->set(compact('permissions'));
+       
+        $this->set('myStash', $viewingMyStash);
         // Not sure if this is the best way to handle this yet but depending on the view we need to pull back certain data to start
         if ($view === 'stash') {
-            $collectibles = $this->StashSearch->search($user);
-            debug($collectibles);
+            //$collectibles = $this->StashSearch->search($user);
+            //debug($collectibles);
             
-            $this->set(compact('collectibles'));
+            //$this->set(compact('collectibles'));
             // $this->set('stash', $user['Stash'][0]);
             
             // $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));

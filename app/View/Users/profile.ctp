@@ -2,4 +2,4 @@
 
 <?php echo $this -> Html -> scriptBlock('var rawProfile = ' .  json_encode($profile) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawFacts = ' .  json_encode($facts) . ';', array('inline' => false));?>
-<?php echo $this -> Html -> scriptBlock('var rawCollectibles = ' .  json_encode($collectibles) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>
