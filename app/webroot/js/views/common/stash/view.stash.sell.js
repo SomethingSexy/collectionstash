@@ -5,17 +5,20 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
             "change input": "fieldChanged",
             "change select": "selectionChanged",
             'change textarea': 'fieldChanged',
+            'click .save': 'save'
         },
         initialize: function(options) {
-            this.model.on('change:listing_type_id', this.render, this);
+            this.listenTo(this.model, 'change:listing_type_id', this.render);
         },
         onRender: function() {
             if (this.model.get('listing_type_id')) {
                 $('[name=listing_type_id][value=' + this.model.get('listing_type_id') + ']', this.el).attr('checked', 'checked');
             }
+            this.errors = [];
         },
         serializeData: function() {
             var data = this.model.toJSON();
+            data.Collectible = this.model.collectible.toJSON();
             if (data.listing_type_id) {
                 if (data.listing_type_id === '2') {
                     data.showSoldCost = true;
@@ -23,6 +26,14 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
                     data.showTradedFor = true;
                 }
             }
+
+            data.errors = this.errors;
+            data.inlineErrors = {};
+            _.each(this.errors, function(error) {
+                if (error.inline) {
+                    data.inlineErrors[error.name] = error.message;
+                }
+            });
 
             return data;
         },
@@ -82,9 +93,39 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
                 forceUpdate: true
             });
         },
-        remove: function() {
-            Backbone.View.prototype.remove.call(this);
-            this.model.off();
+        save: function(event) {
+            var self = this;
+            var $button = $(event.currentTarget);
+            $button.button('loading');
+            this.model.save({
+                'sale': true
+            }, {
+                wait: true,
+                success: function(model, response, options) {
+                    $button.button('reset');
+                    if (response.response.isSuccess) {
+                        $('#stash-sell-dialog').modal('hide');
+                        csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
+
+                        // now we need to mark it for sale.  Normally we would use backbone to
+                        // re-render the view but we aren't that far yet
+                        if (self.tiles) {
+                            $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+                            $('.menu .marked-for-sale', self.$stashItem).removeClass('hidden');
+                        } else {
+                            $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+                        }
+                    }
+                },
+                error: function(model, xhr, options) {
+                    $button.button('reset');
+
+                    if (xhr.status === 500) {
+                        self.errors = xhr.responseJSON.response.errors;
+                        self.render();
+                    }
+                }
+            });
         }
     });
 });
