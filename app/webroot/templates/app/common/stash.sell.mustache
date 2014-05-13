@@ -8,29 +8,28 @@
     <div class="modal-body">
         <div class="well">
             <p>
-            You are selling/trading {name|s} from your stash.
+            You are selling/trading {{{Collectible.name}}} from your stash.
             </p>
         </div>
-        {@if cond=" ('{errors}'.length === 0) "}
-        {:else}
+        {{#errors}}
         <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert">
             &times;
             </button>
             <h4>Oops! Something went wrong.</h4>
             <ul>
-                {#errors}
-                {@eq key="inline" value="false" type="boolean" }
-                {#message}
-                <li>
-                    {.}
-                </li>
-                {/message}
-                {/eq}
-                {/errors}
+                {{#errors}}
+                    {{^inline}}
+                        {{#message}}
+                        <li>
+                            {{.}}
+                        </li>
+                        {{/message}}
+                    {{/inline}}
+                {{/errors}}
             </ul>
         </div>
-        {/if}
+        {{/errors}}
         <form>
             <div class="radio">
                 <label>
@@ -42,28 +41,27 @@
                     <input type="radio" name="listing_type_id" value="3">
                 Trade this collectible. </label>
             </div>
-            {#inlineErrors.listing_type_id}
-            <span class="help-inline">{.}</span>
-            {/inlineErrors.listing_type_id}
+            {{#inlineErrors.listing_type_id}}
+            <span class="help-inline">{{.}}</span>
+            {{/inlineErrors.listing_type_id}}
             {{#showSoldCost}}
-            <div class="form-group {#inlineErrors.sold_cost}has-error{/inlineErrors.sold_cost}">
+            <div class="form-group {{#inlineErrors.sold_cost}}has-error{{/inlineErrors.sold_cost}}">
                 <label class="control-label" for="CollectiblesUserRemoveCost">How much do you want to sell it for?</label>
                 <input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{{sold_cost}}" >
-                {#inlineErrors.sold_cost}
-                <span class="help-inline">{.}</span>
-                {/inlineErrors.sold_cost}
+                {{#inlineErrors.sold_cost}}
+                <span class="help-inline">{{.}}</span>
+                {{/inlineErrors.sold_cost}}
             </div>
             {{/showSoldCost}}
             {{#showTradedFor}}
-            <div class="form-group {#inlineErrors.traded_for}has-error{/inlineErrors.traded_for}">
+            <div class="form-group {{#inlineErrors.traded_for}}has-error{{/inlineErrors.traded_for}}">
                 <label class="control-label" for="CollectiblesUserTradedFor">What did you want to trade for this collectible for?</label>
                 <textarea id="CollectiblesUserTradedFor" class="form-control" name="traded_for">{{{model.traded_for}}}</textarea>
-                {#inlineErrors.traded_for}
-                <span class="help-inline">{.}</span>
-                {/inlineErrors.traded_for}
+                {{#inlineErrors.traded_for}}
+                <span class="help-inline">{{.}}</span>
+                {{/inlineErrors.traded_for}}
             </div>
             {{/showTradedFor}}
-            {/eq}
         </form>
     </div>
     <div class="modal-footer">
