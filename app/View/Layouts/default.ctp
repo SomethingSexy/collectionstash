@@ -244,8 +244,6 @@ if (isset($bodyClass))
 	<?php
 	// list out any modals here that might be common
 	echo $this -> element('stash_add_modal');
-	echo $this -> element('stash_remove_modal');
-	echo $this -> element('stash_sell_modal');
 	echo $this -> element('stash_remove_sold_modal');
 	echo $this -> element('stash_edit_listing_modal');
 	?>	
@@ -266,12 +264,6 @@ if (isset($bodyClass))
 	<!-- todo - remove all of this once we add requirejs support -->
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
-	</script>
-	<script id="template-stash-remove" type="text/x-tmpl">
-		<?php echo $this -> element('stash_remove'); ?>	
-	</script>
-	<script id="template-stash-sell" type="text/x-tmpl">
-		<?php echo $this -> element('stash_sell'); ?>	
 	</script>
 	<script id="template-stash-listing-edit" type="text/x-tmpl">
 		<?php echo $this -> element('stash_edit_listing'); ?>	

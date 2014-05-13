@@ -50,7 +50,7 @@ class StashSearchComponent extends Component
         $conditions = array('CollectiblesUser.active' => true, 'CollectiblesUser.user_id' => $user['User']['id']);
         array_push($conditions, $tableFilters);
         // Be very careful when changing this contains, it is tied to the type
-        $this->controller->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => $conditions, 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+        $this->controller->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'joins' => $joins, 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => $conditions, 'contain' => array('Condition', 'Merchant', 'Collectible' => array('User' => array('fields' => array('id', 'username')), 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
         
         $saveSearchFilters = $this->Search->processFilters($saveSearchFilters);
         $this->controller->set(compact('saveSearchFilters'));

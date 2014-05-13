@@ -214,8 +214,6 @@
 	<?php
 	// list out any modals here that might be common
 	echo $this -> element('stash_add_modal');
-	echo $this -> element('stash_remove_modal');
-	echo $this -> element('stash_sell_modal');
 	echo $this -> element('stash_remove_sold_modal');
 	echo $this -> element('stash_edit_listing_modal');
 	?>	
@@ -236,15 +234,11 @@
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
 	</script>
-	<script id="template-stash-remove" type="text/x-tmpl">
-		<?php echo $this -> element('stash_remove'); ?>	
-	</script>
-	<script id="template-stash-sell" type="text/x-tmpl">
-		<?php echo $this -> element('stash_sell'); ?>	
-	</script>
 	<script id="template-stash-listing-edit" type="text/x-tmpl">
 		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
+	<div id="modal"><div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"></div></div></div><
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
