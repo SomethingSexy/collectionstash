@@ -3,3 +3,4 @@
 <?php echo $this -> Html -> scriptBlock('var rawProfile = ' .  json_encode($profile) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawFacts = ' .  json_encode($facts) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var rawReasons = ' .  json_encode(Set::extract('/CollectibleUserRemoveReason/.', $reasons)) . ';', array('inline' => false));?>

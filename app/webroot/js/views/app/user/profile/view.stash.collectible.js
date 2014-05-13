@@ -1,4 +1,4 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/stash.collectible.mustache', 'mustache', 'models/model.collectible.user', 'marionette.mustache', 'stash.tools'], function(require, Marionette, template, mustache, CollectibleUserModel) {
+define(['require', 'marionette', 'text!templates/app/user/profile/stash.collectible.mustache', 'mustache', 'models/model.collectible.user', 'marionette.mustache'], function(require, Marionette, template, mustache, CollectibleUserModel) {
 
     return Marionette.ItemView.extend({
         className: 'tile stash-item col-xs-6 col-md-3',
@@ -7,32 +7,33 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.collecti
             this.permissions = options.permissions;
         },
         events: {
-            'click .stash-sell': 'sell'
+            'click .stash-sell': 'sell',
+            'click .remove-from-stash': 'removeFromStash'
         },
         serializeData: function() {
             var data = {};
             data = this.model.toJSON();
+            data.Collectible = this.model.collectible.toJSON();
             data['permissions'] = this.permissions.toJSON();
             return data;
         },
         onRender: function() {
-            $('.stash-sell', this.el).attr('data-collectible-user', JSON.stringify(this.model.get('CollectiblesUser'))).attr('data-collectible', JSON.stringify(this.model.get('Collectible'))).attr('data-collectible-user-id', this.model.get('CollectiblesUser').id);
-            $('.remove-from-stash', this.el).attr('data-collectible-user', JSON.stringify(this.model.get('CollectiblesUser'))).attr('data-collectible', JSON.stringify(this.model.get('Collectible'))).attr('data-collectible-user-id', this.model.get('CollectiblesUser').id);
-
+            // $('.stash-sell', this.el).attr('data-collectible-user-id', this.model.get('id'));
+            // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
         },
         sell: function(event) {
             var $anchor = $(event.currentTarget);
 
-            var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
-            var collectibleUserData = JSON.parse($anchor.attr('data-collectible-user'));
+            var collectibleUserId = $anchor.attr('data-collectible-user-id');
+            this.trigger('stash:sell', collectibleUserId);
 
-            var collectibleUserModel = new CollectibleUserModel(collectibleUserData);
+            event.preventDefault();
+        },
+        removeFromStash: function(event) {
+            var $anchor = $(event.currentTarget);
+            var collectibleUserId = $anchor.attr('data-collectible-user-id');
+            this.trigger('stash:remove', collectibleUserId);
 
-            var $stashItem = $anchor.closest('.stash-item');
-
-            $anchor.stashsell(collectibleModel, collectibleUserModel, {
-                $stashItem: $stashItem
-            });
             event.preventDefault();
         }
     });

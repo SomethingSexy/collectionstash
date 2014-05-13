@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, ModalRegion, StashSellView, StashRemoveView, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -8,7 +8,8 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 header: '.header',
                 userCard: '._user-card',
                 facts: '._facts',
-                main: '._main'
+                main: '._main',
+                modal: ModalRegion
             }
         });
 
@@ -46,10 +47,22 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
                 App.collectibles.getFirstPage().done(function() {
 
-                    App.layout.main.show(new StashView({
+                    var stashView = new StashView({
                         collection: App.collectibles,
-                        permissions : App.permissions
-                    }));
+                        permissions: App.permissions
+                    });
+
+                    stashView.on('stash:remove', function(id) {
+
+                    });
+
+                    stashView.on('stash:sell', function(id) {
+                        App.layout.modal.show(new StashSellView({
+                            model: App.collectibles.get(id)
+                        }));
+                    });
+
+                    App.layout.main.show(stashView);
                 })
 
             },

@@ -64,9 +64,16 @@ class CollectiblesUsersController extends AppController
         if ($this->request->isGet()) {
             $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             $collectibles = $this->StashSearch->search($user);
-            debug($collectibles);
+            // I am sure there is as better way to do this, I don't feel smart right now
+            //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
             
-            $this->set(compact('collectibles'));
+            $extractUserCollectibles = Set::extract('/CollectiblesUser/.', $collectibles);
+            
+            foreach ($extractUserCollectibles as $key => $value) {
+                $extractUserCollectibles[$key]['Collectible'] = $collectibles[$key]['Collectible'];
+            }
+            
+            $this->set('collectibles', $extractUserCollectibles);
         }
     }
     /**

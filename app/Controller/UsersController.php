@@ -52,27 +52,18 @@ class UsersController extends AppController
         // permissions
         $permissions = array();
         if ($loggedInUser['User']['id'] === $user['User']['id']) {
-             $permissions['edit_collectible_user'] = true;
+            $permissions['edit_collectible_user'] = true;
         } else {
-             $permissions['edit_collectible_user'] = false;
+            $permissions['edit_collectible_user'] = false;
         }
         
+        $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));
+        $this->set(compact('reasons'));
+        
         $this->set(compact('permissions'));
-       
-        $this->set('myStash', $viewingMyStash);
-        // Not sure if this is the best way to handle this yet but depending on the view we need to pull back certain data to start
-        if ($view === 'stash') {
-            //$collectibles = $this->StashSearch->search($user);
-            //debug($collectibles);
-            
-            //$this->set(compact('collectibles'));
-            // $this->set('stash', $user['Stash'][0]);
-            
-            // $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));
-            // $this->set(compact('reasons'));
-            
-            $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
-        }
+        
+        $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
+        
         debug($view);
         debug($username);
     }
