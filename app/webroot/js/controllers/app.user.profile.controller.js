@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, ModalRegion, StashSellView, StashRemoveView, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/profile.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, ModalRegion, StashSellView, StashRemoveView, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -7,9 +7,15 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             regions: {
                 header: '.header',
                 userCard: '._user-card',
-                facts: '._facts',
                 main: '._main',
                 modal: ModalRegion
+            }
+        });
+
+        var ProfileLayout = Backbone.Marionette.Layout.extend({
+            template: profileLayout,
+            regions: {
+                facts: '._facts',
             }
         });
 
@@ -38,13 +44,21 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 App.layout.userCard.show(new UserView({
                     model: App.profile
                 }));
-                App.layout.facts.show(new FactsView({
+
+            },
+            index: function() {
+                var profileLayout = new ProfileLayout();
+                App.layout.main.show(profileLayout);
+
+                profileLayout.facts.show(new FactsView({
                     model: App.facts
                 }));
             },
             //gets mapped to in AppRouter's appRoutes
-            index: function() {
-
+            stash: function() {
+                // TODO: probably need to check to see if we have stuff or not, this is blowing
+                // up if you come back here while on the page, since it already has the first page, it does
+                // not return a deferred
                 App.collectibles.getFirstPage().done(function() {
 
                     var stashView = new StashView({
