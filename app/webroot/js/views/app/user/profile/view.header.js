@@ -3,6 +3,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
     return Marionette.ItemView.extend({
         template: template,
         events: {
+            'click ._profile': 'profile',
             'click ._stash': 'stash',
             'click ._wishlist': 'wishlist',
             'click ._sale': 'sale',
@@ -12,6 +13,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
         },
         onRender: function() {
 
+        },
+        profile: function(event) {
+            event.preventDefault();
+            this.trigger('navigate:menu', 'profile');
         },
         stash: function(event) {
             event.preventDefault();

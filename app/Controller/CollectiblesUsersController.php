@@ -61,6 +61,7 @@ class CollectiblesUsersController extends AppController
     }
     
     public function collectibles($username = null) {
+        $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             $collectibles = $this->StashSearch->search($user);
