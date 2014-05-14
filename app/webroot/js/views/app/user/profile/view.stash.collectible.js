@@ -1,7 +1,7 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/stash.collectible.mustache', 'mustache', 'models/model.collectible.user', 'marionette.mustache'], function(require, Marionette, template, mustache, CollectibleUserModel) {
 
     return Marionette.ItemView.extend({
-        className: 'tile stash-item col-xs-6 col-md-3',
+        className: 'tile stash-item col-xs-6 col-md-2',
         template: template,
         initialize: function(options) {
             this.permissions = options.permissions;

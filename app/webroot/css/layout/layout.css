@@ -4,7 +4,8 @@ html, body {
 body {
     /*background: none repeat scroll 0 0 #F1F1F1;
      padding: 80px;*/
-    background-color: #FFF;
+
+background-color: #FFF;
     padding-top: 80px;
     overflow-x: hidden;
     /* bootstrap 3.0 fluid layout broken, showing horizontal scrollbar
@@ -18,8 +19,10 @@ body.home {
     height: auto !important;
     height: 100%;
     margin: 0 auto -60px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
-#footer,#push {
+#footer, #push {
     height: 200px;
 }
 #footer .version {

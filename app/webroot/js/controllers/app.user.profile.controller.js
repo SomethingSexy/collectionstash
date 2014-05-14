@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/profile.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, ModalRegion, StashSellView, StashRemoveView, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache','text!templates/app/user/profile/layout.stash.mustache',  'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -8,17 +8,25 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 header: '.header',
                 userCard: '._user-card',
                 main: '._main',
-                modal: ModalRegion
+                modal: ModalRegion,
+                facts: '._facts'
             }
         });
 
         var ProfileLayout = Backbone.Marionette.Layout.extend({
             template: profileLayout,
             regions: {
-                facts: '._facts',
+
             }
         });
 
+        var StashLayout = Backbone.Marionette.Layout.extend({
+            template: stashLayout,
+            regions: {
+                stash: '._stash',
+                filters: '._filters'
+            }
+        });
 
         return Backbone.Marionette.Controller.extend({
             initialize: function(options) {
@@ -45,17 +53,23 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                     model: App.profile
                 }));
 
+                App.layout.facts.show(new FactsView({
+                    model: App.facts
+                }));
+
             },
             index: function() {
                 var profileLayout = new ProfileLayout();
-                App.layout.main.show(profileLayout);
+                App.main.show(profileLayout);
 
-                profileLayout.facts.show(new FactsView({
-                    model: App.facts
-                }));
+
             },
             //gets mapped to in AppRouter's appRoutes
             stash: function() {
+                var stashLayout = new StashLayout();
+                App.layout.main.show(stashLayout);
+
+
                 // TODO: probably need to check to see if we have stuff or not, this is blowing
                 // up if you come back here while on the page, since it already has the first page, it does
                 // not return a deferred
@@ -76,8 +90,8 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                         }));
                     });
 
-                    App.layout.main.show(stashView);
-                })
+                    stashLayout.stash.show(stashView);
+                });
 
             },
             wishlist: function() {

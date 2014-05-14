@@ -179,7 +179,7 @@
 					</ul>
 			    </nav>
 		</header>
-		<div class="container" id="main">
+		<div id="main">
 			<?php echo $content_for_layout; ?>
 		</div>	
 		<div id="push"></div>
