@@ -21,7 +21,9 @@
         "imagesloaded" : "3.1.5",
         "dustjs-linkedin" : "2.3.5",
         "dustjs-linkedin-helpers": "1.2.0",
-        "blockui": "v2.65"
+        "blockui": "v2.65",
+        "select2": "3.4.8",
+        "uri.js" : "v1.13.1"
 
     },
     "devDependencies": {}

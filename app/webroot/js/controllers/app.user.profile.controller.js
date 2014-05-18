@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache','text!templates/app/user/profile/layout.stash.mustache',  'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/view.filters', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, FiltersView, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -60,7 +60,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             },
             index: function() {
                 var profileLayout = new ProfileLayout();
-                App.main.show(profileLayout);
+                App.layout.main.show(profileLayout);
 
 
             },
@@ -69,6 +69,9 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 var stashLayout = new StashLayout();
                 App.layout.main.show(stashLayout);
 
+                // App.collectibles.setQuery({
+                //     m: '1'
+                // });
 
                 // TODO: probably need to check to see if we have stuff or not, this is blowing
                 // up if you come back here while on the page, since it already has the first page, it does
@@ -91,6 +94,18 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                     });
 
                     stashLayout.stash.show(stashView);
+
+                    var filtersView = new FiltersView({
+                        collection: App.filters
+                    });
+
+
+                    filtersView.on('filter:selected', function(type, values) {
+                        App.collectibles.queryParams[type] = values;
+                        App.collectibles.fetch();
+                    });
+
+                    stashLayout.filters.show(filtersView);
                 });
 
             },

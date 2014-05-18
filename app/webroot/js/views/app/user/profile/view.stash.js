@@ -27,7 +27,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             this.permissions = options.permissions;
         },
         _initialEvents: function() {
-
+            // do nothing we want our own events
+        },
+        serializeData: function() {
+            var data = {
+                showMore: this.collection.hasNextPage()
+            };
+            return data;
         },
         onShow: function() {
             var self = this;
@@ -52,6 +58,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         renderMore: function() {
             var self = this;
             var ItemView;
+            if (this.collection.state.currentPage === 1) {
+                $('._tiles', this.el).empty();
+            }
             this.startBuffering();
             this.collection.each(function(item, index) {
                 ItemView = this.getItemView(item);
