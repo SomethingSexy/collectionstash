@@ -1,5 +1,10 @@
 requirejs.config({
     baseUrl: '/js',
+    map: {
+        '*' :{
+             'uri' : '../bower_components/uri.js/src/URI'
+        }
+    },
     paths: {
         templates: '../templates',
         backbone: '../bower_components/backbone/backbone',
@@ -21,7 +26,9 @@ requirejs.config({
         // for the old stuff that is brought into the newer stuff until it can be rewritten
         'dust': '../bower_components/dustjs-linkedin/dist/dust-full',
         'dust-helpers': '../bower_components/dustjs-linkedin-helpers/dist/dust-helpers',
-        'blockui' : '../bower_components/blockui/jquery.blockUI'
+        'blockui': '../bower_components/blockui/jquery.blockUI',
+        'select2': '../bower_components/select2/select2'
+       
     },
     shim: {
         'dust': {
@@ -36,6 +43,9 @@ requirejs.config({
         // at some point we can turn stash.tools into an AMD module that will pull in all of these deps
         'stash.tools': {
             deps: ['jquery', 'backbone', 'bootstrap', 'dust', 'dust-helpers', 'views/common/stash/view.stash.sell', 'blockui']
+        },
+        'select2': {
+            deps: ['jquery']
         }
     }
 });

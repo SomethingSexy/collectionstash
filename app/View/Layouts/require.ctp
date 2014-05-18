@@ -39,6 +39,7 @@
 	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
+	echo $this -> Minify -> css('thirdparty/select2');
 	?>
 	<script type="text/javascript" src="/bower_components/requirejs/require.js"></script>
 	<?php echo $scripts_for_layout; ?>

@@ -1,4 +1,4 @@
-define(['marionette', 'backbone', 'models/model.profile', 'collections/collection.collectible.user'], function(Marionette, Backbone, ProfileModel, CollectiblesCollection) {
+define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collections/collection.collectible.user'], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -24,7 +24,27 @@ define(['marionette', 'backbone', 'models/model.profile', 'collections/collectio
     MyApp.collectibles = new CollectiblesCollection([], {
         username: MyApp.profile.get('username')
     });
-    
+
+    // process the filters and put them in a format taht is 
+    var filters = new Backbone.Collection();
+    _.each(rawFilters, function(rawFilter, key){
+        var filter = _.clone(rawFilter);
+        delete filter.id;
+        filter['filterKey'] = key;
+
+        filter.values = [];
+        _.each(rawFilter.values, function(value, valueKey){
+            filter.values.push({
+                key: valueKey,
+                value: value
+            });
+        });
+
+        filters.add(filter);
+
+    });
+
+    MyApp.filters = filters;
     // export the app from this module
     return MyApp;
 });
