@@ -16,7 +16,9 @@ define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'm
 
             var type = $(this).data('type');
             $('select', this.el).select2({
-                width: '250px'
+                width: '250px',
+                allowClear: true,
+                placeholder: 'test'
             });
         },
         change: function(event) {
@@ -25,7 +27,7 @@ define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'm
                     type = $(event.target).data('type'),
                     multiple = $(event.target).data('multiple');
                 var filterValue = event.val;
-                if (multiple === 1) {
+                if (multiple) {
                     filterValue = $('select', this.el).val();
                 }
 
