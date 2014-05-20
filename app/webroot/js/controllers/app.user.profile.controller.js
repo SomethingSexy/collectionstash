@@ -69,10 +69,6 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 var stashLayout = new StashLayout();
                 App.layout.main.show(stashLayout);
 
-                // App.collectibles.setQuery({
-                //     m: '1'
-                // });
-
                 // TODO: probably need to check to see if we have stuff or not, this is blowing
                 // up if you come back here while on the page, since it already has the first page, it does
                 // not return a deferred
@@ -101,7 +97,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
 
                     filtersView.on('filter:selected', function(type, values) {
-                        App.collectibles.queryParams[type] = values;
+                        App.collectibles.queryParams[type] = _.isArray(values)? values.join(','): values;
                         App.collectibles.fetch();
                     });
 

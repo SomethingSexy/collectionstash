@@ -37,7 +37,7 @@
 					echo '<span class="badge pull-right">' . $count_values[$key]. '</span>';
 				} }}
 </h5>
-<select data-multiple="{{multiple}}" data-type="{{filterKey}}"><option></option>'; 
+<select data-multiple="{{multiple}}" {{#multiple}}multiple{{/multiple}} data-type="{{filterKey}}"><option value=""></option>'; 
 {{#values}}
 	<option value='{{key}}'>{{value}}</option>
 {{/values}}	
