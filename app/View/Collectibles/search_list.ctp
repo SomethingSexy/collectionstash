@@ -1,6 +1,5 @@
 <?php
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
-echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
 
@@ -225,6 +224,3 @@ var uploadDirectory = "<?php echo $this -> FileUpload -> getUploadDirectory(); ?
 		echo 'var isLogggedIn = false;';
 	}
 	?></script>
-<?php
-echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));
-?>

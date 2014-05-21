@@ -98,6 +98,8 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
                     filtersView.on('filter:selected', function(type, values) {
                         App.collectibles.queryParams[type] = _.isArray(values)? values.join(','): values;
+                        // reset current page to 1, 
+                        App.collectibles.state.currentPage = 1;
                         App.collectibles.fetch();
                     });
 

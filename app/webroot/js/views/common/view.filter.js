@@ -15,11 +15,16 @@ define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'm
             // setup hounds
 
             var type = $(this).data('type');
-            $('select', this.el).select2({
+            var selectProps = {
                 width: '250px',
-                allowClear: true,
-                placeholder: 'test'
-            });
+                allowClear: true
+            };
+
+            if (this.model.get('placeholder')) {
+                selectProps['placeholder'] = this.model.get('placeholder');
+            }
+
+            $('select', this.el).select2(selectProps);
         },
         change: function(event) {
             if (event.val && event.val !== '') {

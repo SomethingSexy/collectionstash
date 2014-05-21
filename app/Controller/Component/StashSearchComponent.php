@@ -18,7 +18,7 @@ class StashSearchComponent extends Component
         //
         's' => array('model' => 'Scale', 'multiple' => true, 'id' => 'id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
         //
-        'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
+        'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'placeholder' => 'Variant or exclusive', 'values' => array(1 => 'Yes', 0 => 'No')),
         //
         //'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending'))
         );
