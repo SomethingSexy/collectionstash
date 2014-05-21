@@ -1,6 +1,6 @@
-define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.sell.mustache', 'mustache', 'marionette.mustache'], function(require, Backbone, Marionnette, template) {
+define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.remove.mustache', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, Backbone, Marionnette, template) {
 
-    var StashRemoveView = Marionnette.ItemView.extend({
+    return Marionnette.ItemView.extend({
         template: template,
         events: {
             "change input": "fieldChanged",
@@ -10,6 +10,7 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
         initialize: function(options) {
             this.collectible = options.collectible;
             this.reasons = options.reasons;
+            // this is determing if we require a reason or not depending on what is using it
             this.changeReason = (typeof options.changeReason === 'undefined') ? true : options.changeReason;
             this.model.on('change:collectible_user_remove_reason_id', function() {
                 this.model.unset('sold_cost');
@@ -17,31 +18,27 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
 
             }, this);
         },
-        render: function() {
-            var self = this;
-            var data = this.collectible.toJSON();
-            data.model = this.model.toJSON();
+        onRender: function() {
+            $("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
+                self.fieldChanged(e);
+            });
+            this.errors = [];
+        },
+        serializeData: function() {
+            var data = this.model.toJSON();
+            data.Collectible = this.model.collectible.toJSON();
+            data.reasons = this.reasons.toJSON();
+            data.changeReason = this.changeReason;
+
             data.errors = this.errors;
             data.inlineErrors = {};
-            data.reasons = this.reasons.toJSON();
-            data.model.changeReason = this.changeReason;
             _.each(this.errors, function(error) {
                 if (error.inline) {
                     data.inlineErrors[error.name] = error.message;
                 }
             });
 
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-
-            $("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
-                self.fieldChanged(e);
-            });
-
-            this.errors = [];
-
-            return this;
+            return data;
         },
         selectionChanged: function(e) {
             var field = $(e.currentTarget);
