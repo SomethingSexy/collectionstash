@@ -28,6 +28,45 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             }
         });
 
+        function renderStash() {
+            var stashLayout = new StashLayout();
+            App.layout.main.show(stashLayout);
+
+            var stashView = new StashView({
+                collection: App.collectibles,
+                permissions: App.permissions
+            });
+
+            stashView.on('stash:remove', function(id) {
+                App.layout.modal.show(new StashRemoveView({
+                    model: App.collectibles.fullCollection.get(id),
+                    reasons: App.reasonsCollection
+                }));
+            });
+
+            stashView.on('stash:sell', function(id) {
+                App.layout.modal.show(new StashSellView({
+                    model: App.collectibles.fullCollection.get(id)
+                }));
+            });
+
+            stashLayout.stash.show(stashView);
+
+            var filtersView = new FiltersView({
+                collection: App.filters
+            });
+
+
+            filtersView.on('filter:selected', function(type, values) {
+                App.collectibles.queryParams[type] = _.isArray(values) ? values.join(',') : values;
+                // reset current page to 1, 
+                App.collectibles.state.currentPage = 1;
+                App.collectibles.fetch();
+            });
+
+            stashLayout.filters.show(filtersView);
+        }
+
         return Backbone.Marionette.Controller.extend({
             initialize: function(options) {
                 App.layout = new UserProfileLayout();
@@ -61,51 +100,16 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             index: function() {
                 var profileLayout = new ProfileLayout();
                 App.layout.main.show(profileLayout);
-
-
             },
-            //gets mapped to in AppRouter's appRoutes
             stash: function() {
-                var stashLayout = new StashLayout();
-                App.layout.main.show(stashLayout);
-
-                // TODO: probably need to check to see if we have stuff or not, this is blowing
-                // up if you come back here while on the page, since it already has the first page, it does
-                // not return a deferred
-                App.collectibles.getFirstPage().done(function() {
-
-                    var stashView = new StashView({
-                        collection: App.collectibles,
-                        permissions: App.permissions
-                    });
-
-                    stashView.on('stash:remove', function(id) {
-
-                    });
-
-                    stashView.on('stash:sell', function(id) {
-                        App.layout.modal.show(new StashSellView({
-                            model: App.collectibles.get(id)
-                        }));
-                    });
-
-                    stashLayout.stash.show(stashView);
-
-                    var filtersView = new FiltersView({
-                        collection: App.filters
-                    });
-
-
-                    filtersView.on('filter:selected', function(type, values) {
-                        App.collectibles.queryParams[type] = _.isArray(values)? values.join(','): values;
-                        // reset current page to 1, 
-                        App.collectibles.state.currentPage = 1;
-                        App.collectibles.fetch();
-                    });
-
-                    stashLayout.filters.show(filtersView);
-                });
-
+                if (App.collectibles.isEmpty()) {
+                    App.collectibles.getFirstPage().done(renderStash);
+                } else {
+                    // TODO: we will probably need to blow away this list
+                    // if we come back, incase something was changed from the wish list (add to stash) or 
+                    // from the sale list
+                    renderStash();
+                }
             },
             wishlist: function() {
                 App.layout.main.show(new WishlistView({

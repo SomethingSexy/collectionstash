@@ -27,9 +27,9 @@
 	<span><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="icon-info"></i></a></span>
 	{{#permissions.edit_collectible_user}}
 		<span><a class="" title="Edit" href="/collectibles_users/edit/{{id}}"><i class="icon-edit"></i></a></span>
-		{{^CollectiblesUser.sale}}
+		{{^sale}}
 			<span><a href="javascript:void(0);" data-collectible-user-id="{{id}}" class="stash-sell" title="Sell"><i class="icon-dollar"></i></a></span>
-		{{/CollectiblesUser.sale}}
+		{{/sale}}
 		<span><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>
 	{{/permissions.edit_collectible_user}}
 

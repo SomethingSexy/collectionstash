@@ -1,8 +1,8 @@
 requirejs.config({
     baseUrl: '/js',
     map: {
-        '*' :{
-             'uri' : '../bower_components/uri.js/src/URI'
+        '*': {
+            'uri': '../bower_components/uri.js/src/URI'
         }
     },
     paths: {
@@ -27,8 +27,9 @@ requirejs.config({
         'dust': '../bower_components/dustjs-linkedin/dist/dust-full',
         'dust-helpers': '../bower_components/dustjs-linkedin-helpers/dist/dust-helpers',
         'blockui': '../bower_components/blockui/jquery.blockUI',
-        'select2': '../bower_components/select2/select2'
-       
+        'select2': '../bower_components/select2/select2',
+        'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker'
+
     },
     shim: {
         'dust': {
@@ -39,6 +40,9 @@ requirejs.config({
         },
         'bootstrap': {
             deps: ['jquery']
+        },
+        'bootstrap-datepicker': {
+            deps: ['bootstrap']
         },
         // at some point we can turn stash.tools into an AMD module that will pull in all of these deps
         'stash.tools': {
