@@ -29,7 +29,7 @@
 			</div>
 			<div class="average">
 				<span class="average-value">$<?php echo $collectibleDetail['CollectiblePriceFact']['average_price_external']; ?></span>
-				Average eBay price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions_external']; ?><?php
+				Average external listing price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions_external']; ?><?php
 				if ($collectibleDetail['CollectiblePriceFact']['total_transactions_external'] == 1) {
 					echo __(' transaction');
 				} else {
