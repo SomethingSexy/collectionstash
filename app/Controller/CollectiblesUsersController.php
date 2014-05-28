@@ -131,7 +131,7 @@ class CollectiblesUsersController extends AppController
                 $this->response->statusCode(500);
             }
             
-            $this->set('returnData', $response);
+            //$this->set('returnData', $response);
         } else if ($this->request->isGet()) {
         }
     }

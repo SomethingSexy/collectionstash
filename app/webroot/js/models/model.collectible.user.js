@@ -1,6 +1,6 @@
-define(['require', 'backbone'], function(require, backbone) {
+define(['require', 'backbone', 'underscore'], function(require, backbone, _) {
     return Backbone.Model.extend({
-        url: function(method) {
+        url: function(method, data) {
 
             var url = '/collectibles_users/collectible/' + this.id;
 
@@ -9,7 +9,7 @@ define(['require', 'backbone'], function(require, backbone) {
             }
 
             if (method && method === 'delete') {
-                url = url + '?' + $.param(this.toJSON());
+                url = url + '?' + $.param(_.extend({}, this.toJSON(), data));
             }
 
             return url;
