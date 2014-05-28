@@ -18,8 +18,10 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
             });
         },
         onRender: function() {
-            $("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
-                self.fieldChanged(e);
+            var self = this;
+            $("#CollectiblesUserRemoveDate", this.el).datepicker().on('hide', function(ev) {
+                ev.stopPropagation();
+               
             });
             $('#CollectiblesUserRemoveReason option[value="' + this.model.get('collectible_user_remove_reason_id') + '"]', this.el).prop('selected', 'selected');
             this.errors = [];
@@ -69,7 +71,9 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
         onClose: function() {
             if (this.model.changedAttributes(['collectible_user_remove_reason_id'])) {
                 var prev = this.model.previousAttributes();
-                this.model.set('collectible_user_remove_reason_id', prev['collectible_user_remove_reason_id'], {silent: true});
+                this.model.set('collectible_user_remove_reason_id', prev['collectible_user_remove_reason_id'], {
+                    silent: true
+                });
             }
         },
         // TODO: update this to do what we did for the profile
