@@ -198,7 +198,7 @@
 	padding: 0;
 }
 .datepicker {
-	z-index: 1151;
+	z-index: 1151 !important;
 }
 #collectibles-list-component .well {
 	background-color: #FFF;
