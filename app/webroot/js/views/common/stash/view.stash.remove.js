@@ -4,23 +4,24 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
         template: template,
         events: {
             // TODO Add event for change of reason
-            'click .save': 'save'
+            'click .save': 'save',
+            'change #CollectiblesUserRemoveReason': 'changeReasonEvent'
         },
         initialize: function(options) {
             this.collectible = options.collectible;
             this.reasons = options.reasons;
             // this is determing if we require a reason or not depending on what is using it
             this.changeReason = (typeof options.changeReason === 'undefined') ? true : options.changeReason;
-            this.model.on('change:collectible_user_remove_reason_id', function() {
+            this.listenTo(this.model, 'change:collectible_user_remove_reason_id', function() {
                 this.model.unset('sold_cost');
                 this.render();
-            }, this);
+            });
         },
         onRender: function() {
             $("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
                 self.fieldChanged(e);
             });
-            $('#CollectiblesUserRemoveReason option[value=' + this.model.get('collectible_user_remove_reason_id') + ']').prop('selected', 'selected');
+            $('#CollectiblesUserRemoveReason option[value="' + this.model.get('collectible_user_remove_reason_id') + '"]', this.el).prop('selected', 'selected');
             this.errors = [];
         },
         serializeData: function() {
@@ -38,16 +39,19 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
             var removeReason = this.model.get('collectible_user_remove_reason_id');
 
             var showSale = false,
-                showTrade = false;
-            if (removeReason === 1) {
+                showTrade = false,
+                showDate = false;
+            if (removeReason === '1') {
                 showSale = true;
-            } else if(showTrade === 2){
+                showDate = true;
+            } else if (removeReason === '2') {
                 showTrade = true;
+                showDate = true;
             }
 
             data.showSale = showSale;
             data.showTrade = showTrade;
-
+            data.showDate = showDate;
             data.errors = this.errors;
             data.inlineErrors = {};
             _.each(this.errors, function(error) {
@@ -57,6 +61,16 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
             });
 
             return data;
+        },
+        changeReasonEvent: function(event) {
+            var value = $("option:selected", '[name=collectible_user_remove_reason_id]').val();
+            this.model.set('collectible_user_remove_reason_id', value);
+        },
+        onClose: function() {
+            if (this.model.changedAttributes(['collectible_user_remove_reason_id'])) {
+                var prev = this.model.previousAttributes();
+                this.model.set('collectible_user_remove_reason_id', prev['collectible_user_remove_reason_id'], {silent: true});
+            }
         },
         // TODO: update this to do what we did for the profile
         // only set the fields when we do the save...taht way if they
