@@ -32,7 +32,7 @@
         </div>
         {{/errors}}
         <form>
-            <div class="form-group {#inlineErrors.collectible_user_remove_reason_id}has-error{/inlineErrors.collectible_user_remove_reason_id}">
+            <div class="form-group {{#inlineErrors.collectible_user_remove_reason_id}}has-error{{/inlineErrors.collectible_user_remove_reason_id}}">
                 <label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
                 {{#changeReason}}
                     <select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
@@ -76,13 +76,13 @@
                 </p>
                 {{/showTrade}}
                 {{#showSale}}
-                <div class="form-group {#inlineErrors.sold_cost}has-error{/inlineErrors.sold_cost}">
+                <div class="form-group {{#inlineErrors.sold_cost}}has-error{{/inlineErrors.sold_cost}}">
                     <label class="control-label" for="CollectiblesUserRemoveCost">How much did you sell it for?</label>
                     {{^active}}
                         <span class="input-xlarge uneditable-input"> {{sold_cost}}</span>
                     {{/active}}
                     {{#active}}
-                        <input required type="number" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{model.sold_cost}" >
+                        <input required type="input" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{{sold_cost}}" >
                         {{#inlineErrors.sold_cost}}
                         <span class="help-inline">{{.}}</span>
                        {{/inlineErrors.sold_cost}}
@@ -90,7 +90,7 @@
                 </div>
                 {{/showSale}}
                 {{#showTrade}}
-                <div class="form-group {#inlineErrors.traded_for}has-error{/inlineErrors.traded_for}">
+                <div class="form-group {{#inlineErrors.traded_for}}has-error{{/inlineErrors.traded_for}}">
                     <label class="control-label" for="CollectiblesUserTradedFor">What did you trade this collectible for?</label>
                     {{^active}}
                     <span class="input-xlarge uneditable-input"> {{{traded_for}}}</span>
@@ -104,7 +104,7 @@
                 </div>
                 {{/showTrade}}
                 {{#showDate}}
-                    <div class="form-group {#inlineErrors.remove_date}has-error{/inlineErrors.remove_date}">
+                    <div class="form-group {{#inlineErrors.remove_date}}has-error{{/inlineErrors.remove_date}}">
                     <label class="control-label" for="CollectiblesUserRemoveDate"> 
                         {{#showSale}}
                             When did you sell this collectible?

@@ -10,12 +10,16 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
         initialize: function(options) {
             this.collectible = options.collectible;
             this.reasons = options.reasons;
+
+            this.model.startTracking();
+
             // this is determing if we require a reason or not depending on what is using it
             this.changeReason = (typeof options.changeReason === 'undefined') ? true : options.changeReason;
             this.listenTo(this.model, 'change:collectible_user_remove_reason_id', function() {
                 this.model.unset('sold_cost');
                 this.render();
             });
+
         },
         onRender: function() {
             var self = this;
@@ -54,13 +58,6 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
             data.showSale = showSale;
             data.showTrade = showTrade;
             data.showDate = showDate;
-            data.errors = this.errors;
-            data.inlineErrors = {};
-            _.each(this.errors, function(error) {
-                if (error.inline) {
-                    data.inlineErrors[error.name] = error.message;
-                }
-            });
 
             return data;
         },
@@ -69,15 +66,12 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
             this.model.set('collectible_user_remove_reason_id', value);
         },
         onClose: function() {
-            if (this.model.changedAttributes(['collectible_user_remove_reason_id'])) {
-                var prev = this.model.previousAttributes();
-                this.model.set('collectible_user_remove_reason_id', prev['collectible_user_remove_reason_id'], {
-                    silent: true
-                });
-            }
+            this.model.resetAttributes();
+            this.model.stopTracking();
         },
         onError: function() {
             $('.btn-primary', this.el).button('reset');
+            this.removeErrors();
             var self = this;
             _.each(this.errors, function(error, attr) {
                 $('[name="' + attr + '"]', self.el).addClass('invalid').attr('data-error', true);
@@ -98,6 +92,9 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
 
                 $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
             });
+        },
+        removeErrors: function(){
+           $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty(); 
         },
         // TODO: update this to do what we did for the profile
         // only set the fields when we do the save...taht way if they
@@ -130,40 +127,6 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.re
                     self.onError();
                 }
             });
-
-
-            // var self = this;
-            // var $button = $(event.currentTarget);
-            // $button.button('loading');
-            // this.model.save({
-            //     'sale': true
-            // }, {
-            //     wait: true,
-            //     success: function(model, response, options) {
-            //         $button.button('reset');
-            //         if (response.response.isSuccess) {
-            //             $('#stash-sell-dialog').modal('hide');
-            //             csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
-
-            //             // now we need to mark it for sale.  Normally we would use backbone to
-            //             // re-render the view but we aren't that far yet
-            //             if (self.tiles) {
-            //                 $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
-            //                 $('.menu .marked-for-sale', self.$stashItem).removeClass('hidden');
-            //             } else {
-            //                 $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
-            //             }
-            //         }
-            //     },
-            //     error: function(model, xhr, options) {
-            //         $button.button('reset');
-
-            //         if (xhr.status === 500) {
-            //             self.errors = xhr.responseJSON.response.errors;
-            //             self.render();
-            //         }
-            //     }
-            // });
         }
     });
 
