@@ -67,26 +67,28 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             stashLayout.filters.show(filtersView);
         }
 
+        function renderHeader(selectedMenu) {
+            var header = new HeaderView({
+                model: App.profile,
+                selectedMenu: selectedMenu
+            });
+
+            App.layout.header.show(header);
+
+            // supposedly triggering true is a bad design, however I would
+            // just be calling the method manually in here so whatever, this works
+            // for now
+            App.listenTo(header, 'navigate:menu', function(route) {
+                Backbone.history.navigate(App.profile.get('username') + '/' + route, {
+                    trigger: true
+                });
+            });
+        }
+
         return Backbone.Marionette.Controller.extend({
             initialize: function(options) {
                 App.layout = new UserProfileLayout();
                 App.main.show(App.layout);
-
-                var header = new HeaderView({
-                    model: App.profile
-                });
-
-                App.layout.header.show(header);
-
-                // supposedly triggering true is a bad design, however I would
-                // just be calling the method manually in here so whatever, this works
-                // for now
-                App.listenTo(header, 'navigate:menu', function(route) {
-                    Backbone.history.navigate(App.profile.get('username') + '/' + route, {
-                        trigger: true
-                    });
-                });
-
 
                 App.layout.userCard.show(new UserView({
                     model: App.profile
@@ -98,10 +100,12 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
             },
             index: function() {
+                renderHeader('profile');
                 var profileLayout = new ProfileLayout();
                 App.layout.main.show(profileLayout);
             },
             stash: function() {
+                renderHeader('stash');
                 if (App.collectibles.isEmpty()) {
                     App.collectibles.getFirstPage().done(renderStash);
                 } else {
@@ -112,21 +116,22 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 }
             },
             wishlist: function() {
+                renderHeader('wishlist');
                 App.layout.main.show(new WishlistView({
                     // model: App.facts
                 }));
             },
             sale: function() {
-
+                renderHeader('sale');
             },
             photos: function() {
-
+                renderHeader('photos');
             },
             comments: function() {
-
+                renderHeader('comments');
             },
             history: function() {
-
+                renderHeader('history');
             }
         });
     });

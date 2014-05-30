@@ -103,8 +103,8 @@ class CollectiblesUsersController extends AppController
                 $this->response->statusCode(401);
             } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
                 $this->response->statusCode(500);
+                $this->set('returnData', $response['response']['data']);
             }
-            $this->set('returnData', $response);
         } else if ($this->request->isPost()) {
             $collectible['CollectiblesUser'] = $this->request->input('json_decode', true);
             $collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);

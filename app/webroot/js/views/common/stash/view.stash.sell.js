@@ -8,6 +8,7 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
             'click .save': 'save'
         },
         initialize: function(options) {
+            this.model.startTracking();
             this.listenTo(this.model, 'change:listing_type_id', this.render);
         },
         onRender: function() {
@@ -37,30 +38,10 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
 
             return data;
         },
-        // render: function() {
-        //     var self = this;
-        //     var data = this.collectible.toJSON();
-        //     data.model = this.model.toJSON();
-        //     data.errors = this.errors;
-        //     data.inlineErrors = {};
-        //     _.each(this.errors, function(error) {
-        //         if (error.inline) {
-        //             data.inlineErrors[error.name] = error.message;
-        //         }
-        //     });
-
-        //     dust.render(this.template, data, function(error, output) {
-        //         $(self.el).html(output);
-        //     });
-
-        //     // $("#CollectiblesUserRemoveDate", this.el).datepicker().on('changeDate', function(e) {
-        //     // self.fieldChanged(e);
-        //     // });
-
-        //     this.errors = [];
-
-        //     return this;
-        // },
+        onClose: function() {
+            this.model.resetAttributes();
+            this.model.stopTracking();
+        },        
         selectionChanged: function(e) {
             var field = $(e.currentTarget);
 
@@ -93,6 +74,33 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
                 forceUpdate: true
             });
         },
+        onError: function() {
+            $('.btn-primary', this.el).button('reset');
+            this.removeErrors();
+            var self = this;
+            _.each(this.errors, function(error, attr) {
+                $('[name="' + attr + '"]', self.el).addClass('invalid').attr('data-error', true);
+                $('[name="' + attr + '"]', self.el).closest('.form-group').addClass('has-error');
+                $('[name="' + attr + '"]', self.el).parent().find('._error').remove();
+                var errorHtml = '';
+                if (_.isArray(error)) {
+                    if (error.length === 1) {
+                        errorHtml = error[0];
+                    } else {
+                        _.each(error, function(message) {
+                            errorHtml += '<p>' + message + '</p>';
+                        });
+                    }
+                } else {
+                    errorHtml = error;
+                }
+
+                $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
+            });
+        },
+        removeErrors: function(){
+           $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty(); 
+        },
         save: function(event) {
             var self = this;
             var $button = $(event.currentTarget);
@@ -118,12 +126,9 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
                     }
                 },
                 error: function(model, xhr, options) {
-                    $button.button('reset');
-
-                    if (xhr.status === 500) {
-                        self.errors = xhr.responseJSON.response.errors;
-                        self.render();
-                    }
+                    $('.btn-primary', self.el).button('reset');
+                    self.errors = xhr.responseJSON;
+                    self.onError();
                 }
             });
         }
