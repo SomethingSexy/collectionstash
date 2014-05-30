@@ -11,8 +11,18 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
             'click ._photos': 'photos',
             'click ._history': 'history'
         },
+        initialize: function(options) {
+            this.selectedMenu = options.selectedMenu || 'profile';
+        },
+        serializeData: function() {
+            var data = this.model.toJSON();
+            data.selectedMenu = this.selectedMenu;
+            return data;
+        },
         onRender: function() {
-
+            if(this.selectedMenu){
+                $('a._' + this.selectedMenu, this.el).parent().addClass('active');
+            }
         },
         profile: function(event) {
             event.preventDefault();

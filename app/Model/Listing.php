@@ -178,7 +178,7 @@ class Listing extends AppModel
         // we must have this first
         if (!isset($data['listing_type_id']) || empty($data['listing_type_id'])) {
             $retVal['response']['isSuccess'] = false;
-            array_push($retVal['response']['errors'], array('name' => 'listing_type_id', 'message' => __('Must be a valid listing type.'), 'inline' => true));
+            $retVal['response']['data']['listing_type_id'] = __('Must be a valid listing type.');
             return $retVal;
         }
         
