@@ -458,8 +458,8 @@ class CollectiblesUser extends AppModel {
 		// we NEED a reason here
 		if (!$this -> validates()) {
 			$retVal['response']['isSuccess'] = false;
-			$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
-			$retVal['response']['errors'] = $errors;
+			$retVal['response']['code'] = 500;
+			$retVal['response']['data'] = $this->validationErrors;
 			return $retVal;
 		}
 
@@ -488,8 +488,8 @@ class CollectiblesUser extends AppModel {
 
 			if (!$this -> validates()) {
 				$retVal['response']['isSuccess'] = false;
-				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
-				$retVal['response']['errors'] = $errors;
+				$retVal['response']['code'] = 500;
+				$retVal['response']['data'] = $this->validationErrors;
 				return $retVal;
 			}
 
@@ -512,7 +512,7 @@ class CollectiblesUser extends AppModel {
 				}
 			}
 
-			if (isset($data['CollectiblesUser']['sold_cost']) || isset($data['CollectiblesUser']['traded_for'])) {
+			if (!empty($data['CollectiblesUser']['sold_cost']) || !empty($data['CollectiblesUser']['traded_for'])) {
 				$listingData = array();
 				$listingData['collectible_user_remove_reason_id'] = $data['CollectiblesUser']['collectible_user_remove_reason_id'];
 				$listingData['collectible_id'] = $collectiblesUser['Collectible']['id'];
@@ -537,7 +537,7 @@ class CollectiblesUser extends AppModel {
 				if (!$listing['response']['isSuccess']) {
 					$dataSource -> rollback();
 					$retVal['response']['code'] = 500;
-					$retVal['response']['errors'] = $listing['response']['errors'];
+					$retVal['response']['data'] = $listing['response']['data'];
 					return $retVal;
 				}
 

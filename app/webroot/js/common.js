@@ -28,8 +28,8 @@ requirejs.config({
         'dust-helpers': '../bower_components/dustjs-linkedin-helpers/dist/dust-helpers',
         'blockui': '../bower_components/blockui/jquery.blockUI',
         'select2': '../bower_components/select2/select2',
-        'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker'
-
+        'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
+        'backbone.trackit' : '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit'
     },
     shim: {
         'dust': {
@@ -50,6 +50,9 @@ requirejs.config({
         },
         'select2': {
             deps: ['jquery']
+        },
+        'backbone.trackit' : {
+            deps : ['backbone']
         }
     }
 });
