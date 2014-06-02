@@ -313,9 +313,14 @@ padding: 20px 15px 15px;
     margin-bottom: -60px;
 }
 .stash-layout .profile .name {
-    position: absolute;
     padding-left: 200px;
     font-size: 30px;
+}
+.stash-layout .profile .info {
+    padding-left: 200px;
+}
+.stash-layout .profile .info span {
+    margin-right: 20px;
 }
 .stash-tabs {
     border-bottom: 2px solid #e1e1e1;
@@ -589,7 +594,7 @@ padding: 20px 15px 15px;
     position: fixed;
     text-align: center;
     z-index: 100;
-}  
+}
 .fluid-tiles {
     position: relative;
 }
@@ -604,7 +609,6 @@ padding: 20px 15px 15px;
     width: 200px;
     height: 200px;
 }
-
 .tiles .tile {
     background-color: #FFFFFF;
     transition: box-shadow 0.2s ease 0s;
@@ -613,7 +617,6 @@ padding: 20px 15px 15px;
     float: left;
     border: 1px solid #E5E5E5;
 }
-
 .tiles.sort-mode .tile {
     height: 150px;
 }
@@ -687,6 +690,15 @@ padding: 20px 15px 15px;
 
 .tiles .tile .tile-links span a:hover {
     text-decoration: none;
+}
+.stash-tiles .stash-item h3 {
+    font-size: 16px;
+}
+.stash-tiles .stash-item ._actions span {
+    margin-right: 2px;
+}
+.stash-tiles .stash-item ._actions span a {
+    font-size: 16px;
 }
 .table.table-bordered tbody tr td {
     padding-bottom: 9px;
