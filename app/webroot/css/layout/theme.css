@@ -357,6 +357,31 @@ padding: 20px 15px 15px;
     background: 0;
     color: #444;
 }
+ul.profile-tabs {
+    list-style: none;
+}
+ul.profile-tabs li {
+    float: left;
+    margin: 0 10px 0 0;
+    padding: 0 10px 0 0;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    color: #444;
+    border-right: 1px solid #ddd;
+}
+ul.profile-tabs li a {
+    display: block;
+    float: left;
+    color: #444;
+}
+ul.profile-tabs li span.meta {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
 .widget-users-activity .activity {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     min-height: 60px;

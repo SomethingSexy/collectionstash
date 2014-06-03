@@ -91,7 +91,8 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 App.main.show(App.layout);
 
                 App.layout.userCard.show(new UserView({
-                    model: App.profile
+                    model: App.profile,
+                    facts : App.facts
                 }));
 
                 App.layout.facts.show(new FactsView({
