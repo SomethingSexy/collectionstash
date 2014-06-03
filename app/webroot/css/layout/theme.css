@@ -631,8 +631,8 @@ ul.profile-tabs li span.meta {
     padding: 0;
 }
 .fluid-tiles div.thumbnail a.thumbnail img {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
 }
 .tiles .tile {
     background-color: #FFFFFF;
@@ -715,6 +715,10 @@ ul.profile-tabs li span.meta {
 
 .tiles .tile .tile-links span a:hover {
     text-decoration: none;
+}
+.stash-tiles .stash-item {
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .stash-tiles .stash-item h3 {
     font-size: 16px;
