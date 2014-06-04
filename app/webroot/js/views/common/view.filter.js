@@ -1,7 +1,7 @@
 define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'mustache', 'uri', 'marionette.mustache', 'bootstrap', 'select2'], function(require, Marionette, template, mustache, URI) {
 
     return Marionette.ItemView.extend({
-        className: 'filter-btn',
+        className: 'filter-btn col-md-3',
         template: template,
         events: {
             'change select': 'change',

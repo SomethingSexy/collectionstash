@@ -22,6 +22,13 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
         var StashLayout = Backbone.Marionette.Layout.extend({
             template: stashLayout,
+            events: {
+                'click ._filtersLink': function(event) {
+                    event.preventDefault();
+                    this.trigger('toggle:filters');
+                }
+
+            },
             regions: {
                 stash: '._stash',
                 filters: '._filters'
@@ -30,6 +37,29 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
         function renderStash() {
             var stashLayout = new StashLayout();
+
+            var filtersVisible = false;
+
+            stashLayout.on('toggle:filters', function() {
+                if (filtersVisible) {
+                    stashLayout.filters.close();
+                    filtersVisible = false;
+                } else {
+                    filtersVisible = true;
+                    var filtersView = new FiltersView({
+                        collection: App.filters
+                    });
+
+                    stashLayout.filters.show(filtersView);
+
+                    filtersView.on('filter:selected', function(type, values) {
+                        App.collectibles.queryParams[type] = _.isArray(values) ? values.join(',') : values;
+                        // reset current page to 1, 
+                        App.collectibles.state.currentPage = 1;
+                        App.collectibles.fetch();
+                    });
+                }
+            });
             App.layout.main.show(stashLayout);
 
             var stashView = new StashView({
@@ -52,19 +82,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
             stashLayout.stash.show(stashView);
 
-            var filtersView = new FiltersView({
-                collection: App.filters
-            });
 
-
-            filtersView.on('filter:selected', function(type, values) {
-                App.collectibles.queryParams[type] = _.isArray(values) ? values.join(',') : values;
-                // reset current page to 1, 
-                App.collectibles.state.currentPage = 1;
-                App.collectibles.fetch();
-            });
-
-            stashLayout.filters.show(filtersView);
         }
 
         function renderHeader(selectedMenu) {
@@ -92,7 +110,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
                 App.layout.userCard.show(new UserView({
                     model: App.profile,
-                    facts : App.facts
+                    facts: App.facts
                 }));
 
                 App.layout.facts.show(new FactsView({
