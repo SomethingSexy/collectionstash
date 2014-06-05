@@ -1264,6 +1264,11 @@ background-color: none !important;
 #fancy-filters {
     padding: 20px;
 }
+
+.stash-filters #fancy-filters {
+    padding-top: 0;
+    padding-left: 0;
+}
 .filterable-list {
     border-right: 1px solid #DDD;
 }

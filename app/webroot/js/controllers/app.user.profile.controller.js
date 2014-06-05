@@ -43,6 +43,9 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             stashLayout.on('toggle:filters', function() {
                 if (filtersVisible) {
                     stashLayout.filters.close();
+                    // TODO: on close we need to cache the selected filters
+                    // we could probably pass in some sort of backbone collection or model
+                    // to store the selected values 
                     filtersVisible = false;
                 } else {
                     filtersVisible = true;

@@ -1,4 +1,4 @@
-define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'mustache', 'uri', 'marionette.mustache', 'bootstrap', 'select2'], function(require, Marionette, template, mustache, URI) {
+define(['require', 'underscore', 'marionette', 'text!templates/app/common/filter.mustache', 'mustache', 'uri', 'marionette.mustache', 'bootstrap', 'select2'], function(require, _, Marionette, template, mustache, URI) {
 
     return Marionette.ItemView.extend({
         className: 'filter-btn col-md-3',
@@ -24,6 +24,13 @@ define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'm
                 selectProps['placeholder'] = this.model.get('placeholder');
             }
 
+            if (this.model.get('selected')) {
+                _.each(this.model.get('selected'), function(value) {
+                    $('select option[value=' + value + ']', self.el).prop('selected', 'selected');
+                });
+            }
+
+
             $('select', this.el).select2(selectProps);
         },
         change: function(event) {
@@ -35,6 +42,10 @@ define(['require', 'marionette', 'text!templates/app/common/filter.mustache', 'm
                 if (multiple) {
                     filterValue = $('select', this.el).val();
                 }
+
+                this.model.set('selected', filterValue, {
+                    silent: true
+                });
 
                 this.trigger('filter:selected', type, filterValue);
             }
