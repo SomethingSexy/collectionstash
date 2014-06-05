@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/view.filters', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, FiltersView, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/view.filters', 'text!templates/app/user/profile/layout.wishlist.mustache', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, FiltersView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -22,6 +22,14 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
         var StashLayout = Backbone.Marionette.Layout.extend({
             template: stashLayout,
+            initialize: function(options) {
+                this.permissions = options.permissions;
+            },
+            serializeData: function() {
+                var data = this.model.toJSON();
+                data['edit_collectible_user'] = this.permissions.get('edit_collectible_user');
+                return data;
+            },
             events: {
                 'click ._filtersLink': function(event) {
                     event.preventDefault();
@@ -35,8 +43,30 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             }
         });
 
+        var WishlistLayout = Backbone.Marionette.Layout.extend({
+            template: wishlistLayout,
+            initialize: function(options) {
+                this.permissions = options.permissions;
+            },
+            serializeData: function() {
+                var data = this.model.toJSON();
+                data['edit_collectible_user'] = this.permissions.get('edit_collectible_user');
+                return data;
+            },
+            events: {
+
+
+            },
+            regions: {
+                wishlist: '._wishlist'
+            }
+        });
+
         function renderStash() {
-            var stashLayout = new StashLayout();
+            var stashLayout = new StashLayout({
+                permissions: App.permissions,
+                model: App.profile
+            });
 
             var filtersVisible = false;
 
@@ -84,8 +114,34 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             });
 
             stashLayout.stash.show(stashView);
+        }
 
+        function renderWishlist() {
+            var layout = new WishlistLayout({
+                permissions: App.permissions,
+                model: App.profile
+            });
+            App.layout.main.show(layout);
 
+            var stashView = new WishlistView({
+                collection: App.wishlist,
+                permissions: App.permissions
+            });
+
+            stashView.on('stash:remove', function(id) {
+                App.layout.modal.show(new StashRemoveView({
+                    model: App.wishlist.fullCollection.get(id),
+                    reasons: App.reasonsCollection
+                }));
+            });
+
+            stashView.on('stash:sell', function(id) {
+                App.layout.modal.show(new StashSellView({
+                    model: App.wishlist.fullCollection.get(id)
+                }));
+            });
+
+            layout.wishlist.show(stashView);
         }
 
         function renderHeader(selectedMenu) {
@@ -131,17 +187,16 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 if (App.collectibles.isEmpty()) {
                     App.collectibles.getFirstPage().done(renderStash);
                 } else {
-                    // TODO: we will probably need to blow away this list
-                    // if we come back, incase something was changed from the wish list (add to stash) or 
-                    // from the sale list
                     renderStash();
                 }
             },
             wishlist: function() {
                 renderHeader('wishlist');
-                App.layout.main.show(new WishlistView({
-                    // model: App.facts
-                }));
+                if (App.wishlist.isEmpty()) {
+                    App.wishlist.getFirstPage().done(renderWishlist);
+                } else {
+                    renderWishlist();
+                }
             },
             sale: function() {
                 renderHeader('sale');
