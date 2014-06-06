@@ -27,7 +27,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             this.permissions = options.permissions;
         },
         _initialEvents: function() {
-            // do nothing we want our own events
+            this.listenTo(this.collection, "remove", this.removeItemView);
         },
         serializeData: function() {
             var data = {

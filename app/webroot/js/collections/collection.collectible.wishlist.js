@@ -1,4 +1,4 @@
-define(['backbone', 'backbone.pageable', 'models/model.collectible.user'], function(Backbone, pageable, CollectibleUserModel) {
+define(['backbone', 'backbone.pageable', 'models/model.collectible.wishlist'], function(Backbone, pageable, CollectibleUserModel) {
     return Backbone.PageableCollection.extend({
         model: CollectibleUserModel,
         initialize: function(models, props) {

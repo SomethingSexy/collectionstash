@@ -5,7 +5,6 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/filter
         template: template,
         events: {
             'change select': 'change',
-            'click .remove-from-stash': 'removeFromStash'
         },
         onRender: function() {
             var self = this;
