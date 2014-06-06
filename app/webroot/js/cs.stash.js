@@ -21,21 +21,22 @@ function csStashSuccessMessage(message) {
 
 }
 
-function removeFromWishList(collectibleUserId, success, error) {
-	return $.ajax({
-		dataType : 'json',
-		type : 'delete',
-		data : {
-			'_method' : 'DELETE'
-		},
-		url : '/collectibles_wish_lists/collectible/' + collectibleUserId,
-		beforeSend : function(formData, jqForm, options) {
+// function removeFromWishList(collectibleUserId, success, error) {
+// 	return $.ajax({
+// 		dataType : 'json',
+// 		type : 'delete',
+// 		data : {
+// 			'_method' : 'DELETE'
+// 		},
+// 		url : '/collectibles_wish_lists/collectible/' + collectibleUserId,
+// 		beforeSend : function(formData, jqForm, options) {
 
-		},
-		success : success,
-		error : error
-	});
-}! function($) {"use strict";// jshint ;_;
+// 		},
+// 		success : success,
+// 		error : error
+// 	});
+// }
+! function($) {"use strict";// jshint ;_;
 
 	/* PUBLIC CLASS DEFINITION
 	 *
@@ -72,42 +73,42 @@ function removeFromWishList(collectibleUserId, success, error) {
 
 						csStashSuccessMessage('You have successfully added the collectible to your stash!');
 
-						if (self.removeFromWishList) {
-							removeFromWishList(self.collectibleUserId, function(data, textStatus, jqXHR) {
-								if (self.$tiles) {
-									self.$tiles.masonry('remove', self.$stashItem);
-									self.$tiles.masonry('reload');
-								} else {
-									self.$stashItem.remove();
-								}
-							}, function(jqXHR, textStatus, errorThrown) {
-								var errorMessage = 'Oops! Something went terribly wrong!';
-								if (jqXHR.status === 400) {
-									$.each(jqXHR.responseJSON.response.errors, function(index, value) {
-										errorMessage = value.message;
-									});
-								}
+						// if (self.removeFromWishList) {
+						// 	removeFromWishList(self.collectibleUserId, function(data, textStatus, jqXHR) {
+						// 		if (self.$tiles) {
+						// 			self.$tiles.masonry('remove', self.$stashItem);
+						// 			self.$tiles.masonry('reload');
+						// 		} else {
+						// 			self.$stashItem.remove();
+						// 		}
+						// 	}, function(jqXHR, textStatus, errorThrown) {
+						// 		var errorMessage = 'Oops! Something went terribly wrong!';
+						// 		if (jqXHR.status === 400) {
+						// 			$.each(jqXHR.responseJSON.response.errors, function(index, value) {
+						// 				errorMessage = value.message;
+						// 			});
+						// 		}
 
-								$.blockUI({
-									message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
-									showOverlay : false,
-									css : {
-										top : '100px',
-										'background-color' : '#DDFADE',
-										border : '1px solid #93C49F',
-										'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-										'border-radius' : '4px 4px 4px 4px',
-										color : '#333333',
-										'margin-bottom' : '20px',
-										padding : '8px 35px 8px 14px',
-										'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-										'z-index' : 999999
-									},
-									timeout : 2000
-								});
+						// 		$.blockUI({
+						// 			message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+						// 			showOverlay : false,
+						// 			css : {
+						// 				top : '100px',
+						// 				'background-color' : '#DDFADE',
+						// 				border : '1px solid #93C49F',
+						// 				'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+						// 				'border-radius' : '4px 4px 4px 4px',
+						// 				color : '#333333',
+						// 				'margin-bottom' : '20px',
+						// 				padding : '8px 35px 8px 14px',
+						// 				'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+						// 				'z-index' : 999999
+						// 			},
+						// 			timeout : 2000
+						// 		});
 
-							});
-						}
+						// 	});
+						// }
 
 					} else {
 						if (response.response.errors) {
