@@ -20,7 +20,7 @@ define(['require', 'marionette', 'bootstrap'], function(Marionette) {
             $(this.el).find('.modal').modal();
         },
         hideModal: function() {
-            this.$el.modal('hide');
+            $(this.el).find('.modal').modal('hide');
         }
     });
 });
