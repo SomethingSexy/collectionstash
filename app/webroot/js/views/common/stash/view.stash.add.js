@@ -4,42 +4,27 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
         template: template,
         events: {
             // TODO Add event for change of reason
-            'click .save': 'save',
-            'change #CollectiblesUserRemoveReason': 'changeReasonEvent'
+            'click .save': 'save'
         },
         initialize: function(options) {
             this.collectible = options.collectible;
             this.reasons = options.reasons;
 
             this.model.startTracking();
-
-            // this is determing if we require a reason or not depending on what is using it
-            this.changeReason = (typeof options.changeReason === 'undefined') ? true : options.changeReason;
-            this.listenTo(this.model, 'change:collectible_user_remove_reason_id', function() {
-                this.model.unset('sold_cost');
-                this.render();
-            });
-
         },
         onRender: function() {
             var self = this;
-            $("#CollectiblesUserRemoveDate", this.el).datepicker().on('hide', function(ev) {
+            $("#CollectiblesUserPurchaseDate", this.el).datepicker().on('hide', function(ev) {
                 ev.stopPropagation();
                
             });
-            $('#CollectiblesUserRemoveReason option[value="' + this.model.get('collectible_user_remove_reason_id') + '"]', this.el).prop('selected', 'selected');
+            $('#CollectiblesUserConditionId option[value="' + this.model.get('condition_id') + '"]', this.el).prop('selected', 'selected');
             this.errors = [];
         },
         serializeData: function() {
             var data = this.model.toJSON();
             data.Collectible = this.model.collectible.toJSON();
-
-
             return data;
-        },
-        changeReasonEvent: function(event) {
-            var value = $("option:selected", '[name=collectible_user_remove_reason_id]').val();
-            this.model.set('collectible_user_remove_reason_id', value);
         },
         onClose: function() {
             this.model.resetAttributes();
@@ -82,17 +67,20 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
             // call save on the model, this should validate
 
             var data = {
-                'collectible_user_remove_reason_id': $('[name=collectible_user_remove_reason_id]', this.el).val(),
-                'sold_cost': $('[name=sold_cost]', this.el).val(),
-                'traded_for': $('[name=traded_for]', this.el).val(),
-                'remove_date': $('[name=remove_date]', this.el).val(),
-                'sale': true
+                'edition_size': $('[name=edition_size]', this.el).val(),
+                'artist_proof': $('[name=artist_proof]', this.el).val(),
+                'cost': $('[name=cost]', this.el).val(),
+                'condition_id': $('[name=condition_id]', this.el).val(),
+                'merchant': $('[name=merchant]', this.el).val(),
+                'purchase_date': $('[name=purchase_date]', this.el).val(),
+                'notes': $('[name=notes]', this.el).val(),
+                'notes_private': $('[name=notes_private]', this.el).val(),
             };
+            
 
             $('.btn-primary', this.el).button('loading');
 
-            this.model.destroy({
-                url : this.model.url('delete', data),
+            this.model.save(data, {
                 wait: true,
                 success: function(model, response, options) {
                     $('.btn-primary', self.el).button('reset');
