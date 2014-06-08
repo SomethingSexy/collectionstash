@@ -22,19 +22,12 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.collecti
             // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
         },
         sell: function(event) {
-            var $anchor = $(event.currentTarget);
-
-            var collectibleUserId = $anchor.attr('data-collectible-user-id');
-            this.trigger('stash:sell', collectibleUserId);
-
             event.preventDefault();
+            this.trigger('stash:sell', this.model.get('id'));
         },
         removeFromStash: function(event) {
-            var $anchor = $(event.currentTarget);
-            var collectibleUserId = $anchor.attr('data-collectible-user-id');
-            this.trigger('stash:remove', collectibleUserId);
-
             event.preventDefault();
+            this.trigger('stash:remove', this.model.get('id'));
         }
     });
 });
