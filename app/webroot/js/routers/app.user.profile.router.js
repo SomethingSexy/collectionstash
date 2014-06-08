@@ -4,6 +4,8 @@ define(['backbone', 'marionette'], function(Backbone, Marionette) {
         appRoutes: {
             "*username/profile": "index",
             "*username/stash": "stash",
+            "*username/stash/tiles": "stash",
+            "*username/stash/list": "stashList",
             "*username/wishlist": "wishlist",
             "*username/sale": "sale",
             "*username/photos": "photos",
