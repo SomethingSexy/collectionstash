@@ -29,7 +29,8 @@ requirejs.config({
         'blockui': '../bower_components/blockui/jquery.blockUI',
         'select2': '../bower_components/select2/select2',
         'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
-        'backbone.trackit' : '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit'
+        'backbone.trackit' : '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit',
+        'simplePagination' : '../bower_components/simplePagination/jquery.simplePagination'
     },
     shim: {
         'dust': {
@@ -53,6 +54,9 @@ requirejs.config({
         },
         'backbone.trackit' : {
             deps : ['backbone']
+        },
+        'simplePagination' : {
+            deps : ['jquery', 'bootstrap']
         }
     }
 });

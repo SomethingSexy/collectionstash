@@ -71,6 +71,10 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
         });
 
         function renderStashTiles(stashLayout) {
+            if (App.collectibles.mode !== 'infinite') {
+                App.collectibles.switchMode('infinite');
+            }
+
             var stashView = new StashView({
                 collection: App.collectibles,
                 permissions: App.permissions
@@ -93,6 +97,11 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
         }
 
         function renderStashList(stashLayout) {
+            if (App.collectibles.mode !== 'server') {
+                App.collectibles.switchMode('server', {
+                    fetch: false
+                });
+            }
             var stashView = new StashTableView({
                 collection: App.collectibles,
                 permissions: App.permissions

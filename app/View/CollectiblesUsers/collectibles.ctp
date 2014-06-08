@@ -7,5 +7,10 @@ $pagingHtml .= $this -> Paginator -> prev('<< ' . __('previous', true), array(),
 if($this -> Paginator -> last()){
 	$this->response->header('Link', '</collectibles_users/collectibles/'.$username.'?per_page=25>; rel="next"');
 }
-echo $this -> Js -> object($collectibles);
+
+$response = array();
+array_push($response, array('page' => $paging['page'], 'per_page' => $paging['limit'], 'total_pages' => $paging['pageCount'], 'total_entries' => $paging['count']));
+array_push($response, $collectibles);
+
+echo $this -> Js -> object($response);
 ?>
