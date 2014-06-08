@@ -1,11 +1,16 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'imagesloaded', 'wookmark',
+define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'text!templates/app/user/profile/stash.empty.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'imagesloaded', 'wookmark',
     'marionette.mustache'
-], function(require, Marionette, template, CollectibleView, mustache, Masonry) {
+], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
+
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate
+    });
 
     return Marionette.CompositeView.extend({
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._tiles",
+        emptyView: NoItemsView,
         itemViewOptions: function(model, index) {
             return {
                 permissions: this.permissions
@@ -23,11 +28,11 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             'click ._more': 'next'
         },
         initialize: function(options) {
-            this.listenTo(this.collection, "reset", this.renderMore);
             this.permissions = options.permissions;
         },
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
+            this.listenTo(this.collection, "reset", this.renderMore);
         },
         serializeData: function() {
             var data = {
@@ -59,7 +64,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             var self = this;
             var ItemView;
             if (this.collection.state.currentPage === 1) {
-                $('._tiles', this.el).empty();
+                $(this.itemViewContainer, this.el).empty();
             }
             this.startBuffering();
             this.collection.each(function(item, index) {
@@ -67,6 +72,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
+
             // $('._tiles', this.el).imagesLoaded(function() {
             if (self.handler.wookmarkInstance) {
                 self.handler.wookmarkInstance.clear();
