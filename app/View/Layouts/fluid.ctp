@@ -31,7 +31,8 @@
 	}
 	?>
 	<?php
-	echo $this -> Html -> css('thirdparty/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
 	echo $this -> Minify -> css('thirdparty/datepicker');
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
@@ -45,7 +46,7 @@
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
 	echo $this -> Minify -> script('jquery-ui-1.10.2');
-	echo $this -> Minify -> script('thirdparty/bootstrap');
+	echo $this -> Html -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('thirdparty/backbone');
 	echo $this -> Minify -> script('thirdparty/backbone.paginator');

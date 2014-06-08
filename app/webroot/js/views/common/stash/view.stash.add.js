@@ -16,7 +16,7 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
             var self = this;
             $("#CollectiblesUserPurchaseDate", this.el).datepicker().on('hide', function(ev) {
                 ev.stopPropagation();
-               
+
             });
             $('#CollectiblesUserConditionId option[value="' + this.model.get('condition_id') + '"]', this.el).prop('selected', 'selected');
             this.errors = [];
@@ -54,8 +54,8 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
                 $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
             });
         },
-        removeErrors: function(){
-           $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty(); 
+        removeErrors: function() {
+            $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty();
         },
         // TODO: update this to do what we did for the profile
         // only set the fields when we do the save...taht way if they
@@ -68,15 +68,24 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
 
             var data = {
                 'edition_size': $('[name=edition_size]', this.el).val(),
-                'artist_proof': $('[name=artist_proof]', this.el).val(),
                 'cost': $('[name=cost]', this.el).val(),
                 'condition_id': $('[name=condition_id]', this.el).val(),
                 'merchant': $('[name=merchant]', this.el).val(),
                 'purchase_date': $('[name=purchase_date]', this.el).val(),
                 'notes': $('[name=notes]', this.el).val(),
-                'notes_private': $('[name=notes_private]', this.el).val(),
             };
-            
+
+            if ($('[name=artist_proof]', this.el).is(':checked')) {
+                data['artist_proof'] = true;
+            } else {
+                data['artist_proof'] = false;
+            }
+
+            if ($('[name=notes_private]', this.el).is(':checked')) {
+                data['notes_private'] = true;
+            } else {
+                data['notes_private'] = false;
+            }
 
             $('.btn-primary', this.el).button('loading');
 
