@@ -37,11 +37,15 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 },
                 'click ._tilesLink': function(event) {
                     event.preventDefault();
-                    this.trigger('toggle:tiles');
+                    Backbone.history.navigate(App.profile.get('username') + '/stash/tiles', {
+                        trigger: true
+                    });
                 },
                 'click ._listLink': function(event) {
                     event.preventDefault();
-                    this.trigger('toggle:list');
+                    Backbone.history.navigate(App.profile.get('username') + '/stash/list', {
+                        trigger: true
+                    });
                 }
 
             },
@@ -98,9 +102,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
         function renderStashList(stashLayout) {
             if (App.collectibles.mode !== 'server') {
-                App.collectibles.switchMode('server', {
-                    fetch: false
-                });
+                App.collectibles.switchMode('server');
             }
             var stashView = new StashTableView({
                 collection: App.collectibles,
@@ -123,7 +125,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             stashLayout.stash.show(stashView);
         }
 
-        function renderStash() {
+        function renderStash(view) {
             var stashLayout = new StashLayout({
                 permissions: App.permissions,
                 model: App.profile
@@ -155,17 +157,21 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 }
             });
 
-            stashLayout.on('toggle:tiles', function() {
-                renderStashTiles(stashLayout);
-            });
+            // stashLayout.on('toggle:tiles', function() {
+            //     renderStashTiles(stashLayout);
+            // });
 
-            stashLayout.on('toggle:list', function() {
-                renderStashList(stashLayout);
-            });
+            // stashLayout.on('toggle:list', function() {
+            //     renderStashList(stashLayout);
+            // });
 
             App.layout.main.show(stashLayout);
+            if (view === 'tiles') {
+                renderStashTiles(stashLayout);
+            } else if (view === 'list') {
+                renderStashList(stashLayout);
+            }
 
-            renderStashTiles(stashLayout);
         }
 
         function renderWishlist() {
@@ -245,10 +251,31 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             },
             stash: function() {
                 renderHeader('stash');
-                if (App.collectibles.isEmpty()) {
-                    App.collectibles.getFirstPage().done(renderStash);
+
+                if (App.collectibles.mode !== 'infinite') {
+                    App.collectibles.switchMode('infinite').done(function() {
+                        renderStash('tiles');
+                    });
+                } else if (App.collectibles.isEmpty()) {
+                    App.collectibles.getFirstPage().done(function() {
+                        renderStash('tiles');
+                    });
                 } else {
-                    renderStash();
+                    renderStash('tiles');
+                }
+            },
+            stashList: function() {
+                renderHeader('stash');
+                if (App.collectibles.mode !== 'server') {
+                    App.collectibles.switchMode('server').done(function() {
+                        renderStash('list');
+                    });
+                } else if (App.collectibles.isEmpty()) {
+                    App.collectibles.getFirstPage().done(function() {
+                        renderStash('list');
+                    });
+                } else {
+                    renderStash('list');
                 }
             },
             wishlist: function() {
