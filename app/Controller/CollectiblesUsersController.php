@@ -110,8 +110,12 @@ class CollectiblesUsersController extends AppController
             $collectible['CollectiblesUser'] = Sanitize::clean($collectible['CollectiblesUser']);
             
             $response = $this->CollectiblesUser->add($collectible, $this->getUser());
-            
-            $this->set('returnData', $response);
+            if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+                $this->response->statusCode(401);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
+                $this->response->statusCode(500);
+                $this->set('returnData', $response['response']['data']);
+            }
         } else if ($this->request->isDelete()) {
             // for now this will handle deletes where the user is prompted
             // about the delete

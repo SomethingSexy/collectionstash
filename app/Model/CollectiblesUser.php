@@ -242,7 +242,7 @@ class CollectiblesUser extends AppModel
         $retVal['response']['errors'] = array();
         
         if (empty($data) || empty($user)) {
-            array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
+            array_push($retVal['response']['data'], array('Invalid request.'));
             return $retVal;
         }
         // Give the user id and the stash type, we need to figure out what
@@ -259,9 +259,9 @@ class CollectiblesUser extends AppModel
                 // This is old school event, will be replaced by activity stuff later TODO
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('collectibleUserId' => $this->id, 'stashId' => $stash['Stash']['id'])));
             } else {
+                $retVal['response']['code'] = 500;
                 $retVal['response']['isSuccess'] = false;
-                $errors = $this->convertErrorsJSON($this->validationErrors, 'CollectiblesUser');
-                $retVal['response']['errors'] = $errors;
+                $retVal['response']['data'] = $this->validationErrors;
             }
         }
         
@@ -336,7 +336,6 @@ class CollectiblesUser extends AppModel
             $this->set($data['CollectiblesUser']);
             // this is here to validate remove date
             if (!$this->validates()) {
-                $retVal['response']['isSuccess'] = false;
                 $retVal['response']['code'] = 500;
                 $retVal['response']['isSuccess'] = false;
                 $retVal['response']['data'] = $this->validationErrors;

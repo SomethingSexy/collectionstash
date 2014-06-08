@@ -31,7 +31,8 @@
 	}
 	?>
 	<?php
-	echo $this -> Html -> css('thirdparty/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
 	echo $this -> Minify -> css('thirdparty/datepicker');
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');

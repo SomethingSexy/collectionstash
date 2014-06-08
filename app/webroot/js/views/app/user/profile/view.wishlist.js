@@ -1,11 +1,17 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.mustache', 'views/app/user/profile/view.wishlist.collectible', 'mustache', 'imagesloaded', 'wookmark',
+define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.mustache','text!templates/app/user/profile/wishlist.empty.mustache', 'views/app/user/profile/view.wishlist.collectible', 'mustache', 'imagesloaded', 'wookmark',
     'marionette.mustache'
-], function(require, Marionette, template, CollectibleView, mustache, Masonry) {
+], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
+
+
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate
+    });
 
     return Marionette.CompositeView.extend({
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._tiles",
+        emptyView: NoItemsView,
         itemViewOptions: function(model, index) {
             return {
                 permissions: this.permissions
