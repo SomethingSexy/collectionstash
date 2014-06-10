@@ -634,9 +634,8 @@ ul.profile-tabs li span.meta {
     width: 300px;
     height: 300px;
 }
-
 .empty-view {
-    padding:15px;
+    padding: 15px;
     margin-top: 10px;
 }
 .tiles .tile {
@@ -1269,7 +1268,6 @@ background-color: none !important;
 #fancy-filters {
     padding: 20px;
 }
-
 .stash-filters #fancy-filters {
     padding-top: 0;
     padding-left: 0;
@@ -1345,6 +1343,71 @@ background-color: none !important;
 }
 .user-uploads .ui-selected .thumbnail {
     background-color: #1993D9;
+}
+ol.fancy-comments li[data-count]:before, ol.fancy-comments li.commenter-signin.no-comments:before, ol.fancy-comments li.comment-form.no-comments:before, ol.fancy-comments li.system-message:before {
+    content: attr(data-count);
+    position: absolute;
+    top: -27px;
+    z-index: 100;
+    left: 30px;
+    min-width: 20px;
+    width: 48px;
+    height: 26px;
+    margin-left: -13px;
+    font-family: "Franklin ITC Pro", sans-serif;
+    font-size: 14px;
+    line-height: 28px;
+    color: #fff;
+    background: #bb3825;
+    text-align: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid #890c05;
+}
+ol.fancy-comments {
+    position: relative;
+    margin-top: 72px;
+    list-style-type: none;
+    text-align: left;
+}
+ol.fancy-comments > li {
+    position: relative;
+    min-height: 96px;
+    margin: 12px 0 48px;
+    padding: 17px 11px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+.comment-byline {
+    margin-left: 72px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    font-family: "Franklin ITC Pro Light", sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #666;
+}
+.comment-body {
+    margin-left: 72px;
+    word-break: break-word;
+    -webkit-transition: opacity 200ms ease-in;
+    -moz-transition: opacity 200ms ease-in;
+    -o-transition: opacity 200ms ease-in;
+    -ms-transition: opacity 200ms ease-in;
+    transition: opacity 200ms ease-in;
+}
+.comment-body > p, .comment-body blockquote {
+    margin-bottom: 9px;
+}
+img.commenter-avatar {
+    position: relative;
+    top: 4px;
+    display: block;
+    float: left;
+    margin-right: 12px;
+    border-radius: 6px;
+    width: 60px;
+    height: 60px;
 }
 @media (min-width: 992px) {
     .nav-sidebar .nav > .active > ul {
