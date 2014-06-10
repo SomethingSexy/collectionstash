@@ -14,6 +14,7 @@ class CommentsController extends AppController {
 		$this -> set(compact('comments'));
 	}
 
+	//This is the old way of doing it
 	public function update() {
 		$data = array();
 		if (!$this -> isLoggedIn()) {
@@ -42,7 +43,7 @@ class CommentsController extends AppController {
 			return;
 		}
 	}
-
+	//This is the old way of doing it
 	public function remove() {
 		$data = array();
 		if (!$this -> isLoggedIn()) {
@@ -73,7 +74,9 @@ class CommentsController extends AppController {
 
 	}
 
-	/*
+	/**
+	 * This is the old way of doing it
+	 * 
 	 * Adds a comment
 	 * Post
 	 *  - comment
@@ -114,7 +117,8 @@ class CommentsController extends AppController {
 				}
 				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $this -> request -> data['Comment']['user_id'], 'entityTypeId' => $this -> request -> data['Comment']['entity_type_id'])));
 
-				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this -> getUser(), 'comment' => $comment, 'entity' => $entity)));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this -> getUser(), 'comment' => $comment, 'entity' => $entity)));
+
 				$this -> set('comments', $data);
 
 			} else {

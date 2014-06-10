@@ -63,9 +63,19 @@ class UsersController extends AppController
         $this->set(compact('permissions'));
         
         $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
+        // grab the stash for this user, since comments are tied to a stash
+        $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
+        // retrieve all comments
+        $comments = $this->User->Comment->getComments($stash['Stash']['entity_type_id'], $user['User']['id']);
         
-        debug($view);
-        debug($username);
+        $extractComments = Set::extract('/Comment/.', $comments['comments']);
+        
+        foreach ($extractComments as $key => $value) {
+            $extractComments[$key]['User'] = $comments['comments'][$key]['User'];
+            $extractComments[$key]['permissions'] = $comments['comments'][$key]['permissions'];
+        }
+        
+        $this->set('comments', $extractComments);
     }
     /**
      * User home dashboard
