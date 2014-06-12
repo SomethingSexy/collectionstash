@@ -1373,7 +1373,7 @@ ol.fancy-comments {
 ol.fancy-comments > li {
     position: relative;
     min-height: 96px;
-    margin: 12px 0 48px;
+    margin: 12px 0 30px;
     padding: 17px 11px;
     border: 1px solid #ddd;
     border-radius: 6px;

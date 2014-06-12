@@ -6,14 +6,14 @@ echo $this -> Minify -> script('pages/page.useruploads.edit', array('inline' => 
 ?>
 <div id="user-uploads-component" class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"><i class="icon-camera"></i> Photos</h3>
+			<h3 class="panel-title"><i class="fa fa-camera"></i> Photos</h3>
 		</div>
 		<?php echo $this -> element('flash'); ?>
 		<div class="panel-body">
 			<div class="btn-group actions">
 				<?php
 				if (Configure::read('Settings.User.uploads.allowed')) {
-					echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i> Upload and Delete</a>';
+					echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="fa fa-camera"></i> Upload and Delete</a>';
 				}
 				?>
 			</div>

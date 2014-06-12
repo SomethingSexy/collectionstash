@@ -31,8 +31,8 @@
 				    <div class="btn-group views pull-right">
 				    	<?php
 						$currentStash = 'wishlist';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="fa fa-th-large"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="fa fa-list"></i></a>';
 	 					?>
 				    </div>
 				</div>			
@@ -72,13 +72,13 @@
 				echo '</div>';
 				echo '<div class="menu tile-links clearfix">';
 
-				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a></span>';
+				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="fa fa-info"></i></a></span>';
 				if (isset($myStash) && $myStash) {
 					$collectibleJSON = json_encode($myCollectible['Collectible']);
 					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesWishList']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
-					echo '<span><a data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="icon-trash"></i></a></span>';
+					echo '<span><a data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '" class="remove-from-wishlist" title="Remove from Wish List" href="#"><i class="fa fa-trash-o"></i></a></span>';
 					echo '<span><a class="add-full-to-stash btn" data-type="wishlist" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $myCollectible['Collectible']['id'] . '" data-collectible-user-id="' . $myCollectible['CollectiblesWishList']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 					echo '<img src="/img/icon/add_stash_link_25x25.png">';
 					echo '</a></span>';

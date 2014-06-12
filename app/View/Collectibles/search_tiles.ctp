@@ -10,8 +10,8 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 			<div class="row spacer">
 				<div class="col-md-12">
 					<div class="btn-group pull-right">
-						<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="icon-th-large"></i></a>'; ?>
-						<?php echo '<a class="btn" href="/collectibles/search"><i class="icon-list"></i></a>'; ?>
+						<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="fa fa-th-large"></i></a>'; ?>
+						<?php echo '<a class="btn" href="/collectibles/search"><i class="fa fa-list"></i></a>'; ?>
 					</div>
 				</div>
 			</div>	
@@ -65,7 +65,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 								echo '<div class="menu tile-links clearfix adjust">';
 								
 								if ($isLoggedIn && $collectible['Collectible']['status_id'] === '4') {
-									echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="icon-star"></i></a></span>';
+									echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="fa fa-star"></i></a></span>';
 									echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 									echo '<img src="/img/icon/add_stash_link_25x25.png">';
 									echo '</a></span>';

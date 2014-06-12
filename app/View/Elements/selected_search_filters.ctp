@@ -13,7 +13,7 @@ echo $this -> Html -> script('views/view.filters.selected', array('inline' => fa
             echo '</span>';
             }
             ?>
-            | <span class="clear-all" data-role="remove-all">Clear all <i class="icon-remove"></i></span>
+            | <span class="clear-all" data-role="remove-all">Clear all <i class="fa fa-times-circle"></i></span>
         </div>
     </div>
 </div>

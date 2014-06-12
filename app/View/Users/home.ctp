@@ -21,7 +21,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default stacked">
 				<div class="panel-heading">
-					<h3 class="panel-title"><i class="icon-dollar"></i> Stash Value Breakdown</h3>
+					<h3 class="panel-title"><i class="fa fa-dollar"></i> Stash Value Breakdown</h3>
 					
 				</div>
 				<div class="panel-body">
@@ -58,7 +58,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-default user-stats">
 				<div class="panel-heading">
-					<h3 class="panel-title"><i class="icon-signal"></i> Your Stats</h3>
+					<h3 class="panel-title"><i class="fa fa-signal"></i> Your Stats</h3>
 				</div>
 				<div class="panel-body">
 					<div class="widget-statistics">
@@ -155,7 +155,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title"><i class="icon-trophy"></i> Nut Leaders <a href="/pages/nuts" class="pull-right"><i class="icon-question-sign"></i></a></h3>
+					<h3 class="panel-title"><i class="fa fa-trophy"></i> Nut Leaders <a href="/pages/nuts" class="pull-right"><i class="fa fa-question-circle"></i></a></h3>
 				</div>
 				<div class="panel-body">
 					<h4>Current Month Leaders</h4>
@@ -233,7 +233,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title"><i class="icon-time"></i> Activity</h3>		
+					<h3 class="panel-title"><i class="fa fa-clock-o"></i> Activity</h3>		
 				</div>
 				<div class="panel-body activities-container widget-users-activity">
 					

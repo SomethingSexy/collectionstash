@@ -26,16 +26,16 @@
 					if (array_key_exists($stash['entity_type_id'], $subscriptions)) {
 						$userSubscribed = 'true';
 					}
-					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="fa fa-heart"></i></a>';
 				}
 				?>
 				<?php
 				if (isset($myStash) && $myStash) {
 					if (Configure::read('Settings.User.uploads.allowed')) {
-						echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="icon-camera"></i> Upload</a>';
+						echo '<a title="Upload Photos" class="btn" href="/user_uploads/uploads"><i class="fa fa-camera"></i> Upload</a>';
 					}
 					
-					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit/' . $stashUsername . '"><i class="icon-edit"></i> Share and Edit Photos</a>';
+					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit/' . $stashUsername . '"><i class="fa fa-edit"></i> Share and Edit Photos</a>';
 				}
 				?>
 			</div>

@@ -12,13 +12,13 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 <h2><?php echo $username . '\'s' .__(' Photos', true)?></h2>
 <div id="user-uploads-component" class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"><i class="icon-camera"></i> Photos</h3>
+			<h3 class="panel-title"><i class="fa fa-camera"></i> Photos</h3>
 		</div>
 		<?php echo $this -> element('flash'); ?>
 		<div class="panel-body">
 			<div class="btn-group actions">
 				<?php
-					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit"><i class="icon-edit"></i> Share and Edit Photos</a>';
+					echo '<a title="Share and Edit Photos" class="btn" href="/user_uploads/edit"><i class="fa fa-pencil-square-o"></i> Share and Edit Photos</a>';
 				?>
 			</div>
 			<div class="stats pull-right">
@@ -29,22 +29,9 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 				<div class="row fileupload-buttonbar">
 					<div class="col-md-7">
 						<!-- The fileinput-button span is used to style the file input field as button -->
-						<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
+						<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Add files...</span>
 							<input type="file" name="data[UserUpload][file]" multiple>
 						</span>
-						<!--<button type="submit" class="btn btn-primary start">
-						<i class="icon-upload icon-white"></i>
-						<span>Start upload</span>
-						</button>
-						<button type="reset" class="btn btn-warning cancel">
-						<i class="icon-ban-circle icon-white"></i>
-						<span>Cancel upload</span>
-						</button>
-						<button type="button" class="btn btn-danger delete">
-						<i class="icon-trash icon-white"></i>
-						<span>Delete</span>
-						</button>
-						<input type="checkbox" class="toggle">-->
 					</div>
 					<!-- The global progress information -->
 					<div class="col-md-5 fileupload-progress fade">
@@ -136,7 +123,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	</td>
 	<td class="start">{% if (!o.options.autoUpload) { %}
 	<button class="btn btn-primary">
-	<i class="icon-upload icon-white"></i>
+	<i class="fa fa-upload"></i>
 	<span>{%=locale.fileupload.start%}</span>
 	</button>
 	{% } %}</td>
@@ -145,7 +132,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	{% } %}
 	<td class="cancel">{% if (!i) { %}
 	<button class="btn btn-warning">
-	<i class="icon-ban-circle icon-white"></i>
+	<i class="fa fa-warning"></i>
 	<span>{%=locale.fileupload.cancel%}</span>
 	</button>
 	{% } %}</td>
@@ -173,7 +160,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	{% } %}
 	<td class="delete">
          <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                <i class="icon-trash icon-white"></i>
+                <i class="fa fa-trash-o"></i>
                 <span>Delete</span>
             </button>
 	</td>

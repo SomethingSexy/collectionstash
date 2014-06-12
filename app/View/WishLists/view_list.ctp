@@ -34,8 +34,8 @@
 				    <div class="btn-group views pull-right">
 				    	<?php
 						$currentStash = 'wishlist';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="fa fa-th-large"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="fa fa-list"></i></a>';
 	 					?>
 				    </div>
 				</div>
