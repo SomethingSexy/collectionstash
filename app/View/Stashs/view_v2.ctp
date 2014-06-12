@@ -30,22 +30,22 @@
 					<div class="btn-group actions pull-left">
 							<?php
 							if (isset($myStash) && $myStash) {
-								echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="icon-edit"></i> Edit</a>';
+								echo '<a title="Edit" class="btn" href="/stashs/edit/' . $stashUsername . '"><i class="fa fa-pencil-square-o"></i> Edit</a>';
 							}
 							if (isset($isLoggedIn) && $isLoggedIn === true && !$myStash) {
 								$userSubscribed = 'false';
 								if (array_key_exists($stash['entity_type_id'], $subscriptions)) {
 									$userSubscribed = 'true';
 								}
-								echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+								echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="fa fa-heart"></i></a>';
 							}
 							?>
 					</div>
 				    <div class="btn-group views pull-right">
 				    	<?php
 						$currentStash = 'stash';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="icon-th-large"></i></a>';
-						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="icon-list"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/tile"><i class="fa fa-th-large"></i></a>';
+						echo '<a class="btn" href="/' . $currentStash . '/' . $stashUsername . '/list"><i class="fa fa-list"></i></a>';
 	 					?>
 				    </div>
 				</div>			
@@ -96,18 +96,18 @@
 				if (!$myCollectible['CollectiblesUser']['sale']) {
 					echo 'hidden';
 				}
-				echo '"><a class="" title="Marked for sale"><i class="icon-dollar"></i></a></span>';
-				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="icon-info"></i></a></span>';
+				echo '"><a class="" title="Marked for sale"><i class="fa fa-dollar"></i></a></span>';
+				echo '<span><a class="" title="View Collectible Details" href="/collectibles/view/' . $myCollectible['Collectible']['id'] . '"><i class="fa fa-info"></i></a></span>';
 				if (isset($myStash) && $myStash) {
 					$collectibleJSON = json_encode($myCollectible['Collectible']);
 					$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-					echo '<span><a class="" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="icon-edit"></i></a></span>';
+					echo '<span><a class="" title="Edit" href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '"><i class="fa fa-pencil-square-o"></i></a></span>';
 					$collectibleUserJSON = json_encode($myCollectible['CollectiblesUser']);
 					$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 					if (!$myCollectible['CollectiblesUser']['sale']) {
-						echo '<span><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i></a></span>';
+						echo '<span><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="fa fa-dollar"></i></a></span>';
 					}
-					echo '<span><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i></a></span>';
+					echo '<span><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i></a></span>';
 				}
 
 				echo '</div>';

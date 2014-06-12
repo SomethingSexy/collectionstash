@@ -47,9 +47,9 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 
 			// That means this is a new one, so we don't need the info icon
 			if ($attribute['Attribute']['status_id'] === '2') {
-				$outputAttribtes .= '<span><i class="icon-plus"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
+				$outputAttribtes .= '<span><i class="fa fa-plus"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
 			} else {
-				$outputAttribtes .= '<span class="popup" data-trigger="manual" data-content="' . $popup . '" data-original-title="Part Information"><i class="icon-info-sign"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
+				$outputAttribtes .= '<span class="popup" data-trigger="manual" data-content="' . $popup . '" data-original-title="Part Information"><i class="fa fa-info"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
 
 			}
 

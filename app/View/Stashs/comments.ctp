@@ -26,7 +26,7 @@
 					if (array_key_exists($stash['entity_type_id'], $subscriptions)) {
 						$userSubscribed = 'true';
 					}
-					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="icon-heart"></i></a>';
+					echo '<a  id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $stash['entity_type_id'] . '" class="btn" href="#"><i class="fa fa-heart"></i></a>';
 				}
 				?>
 			</div>

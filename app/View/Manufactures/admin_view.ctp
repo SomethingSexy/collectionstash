@@ -5,8 +5,8 @@
 		<div class="title">
 			<h2><?php echo __('Manufacturer Detail'); ?></h2>
 			<div class="btn-group actions">
-				<a class="btn" href="/admin/manufactures/edit/<?php echo $manufacture['Manufacture']['id']; ?>"> <i class="icon-pencil icon-large"></i> </a>
-				<a class="btn show-delete-modal" href=""> <i class="icon-trash icon-large"></i> </a>
+				<a class="btn" href="/admin/manufactures/edit/<?php echo $manufacture['Manufacture']['id']; ?>"> <i class="fa fa-pencil fa-lg"></i> </a>
+				<a class="btn show-delete-modal" href=""> <i class="fa fa-trash-o fa-lg"></i> </a>
 			</div>
 		</div>
 		<?php echo $this -> element('flash'); ?>
@@ -60,7 +60,7 @@
 				    <div class="title">
                         <h3><?php echo __('Brands'); ?></h3>
                         <div class="btn-group actions">
-                            <?php echo $this -> Html -> link('<i class="icon-pencil icon-large"></i>', array('action' => 'add_license', $manufacture['Manufacture']['id']), array("class" => 'btn', 'escape' => false)); ?> 
+                            <?php echo $this -> Html -> link('<i class="fa fa-pencil fa-lg"></i>', array('action' => 'add_license', $manufacture['Manufacture']['id']), array("class" => 'btn', 'escape' => false)); ?> 
                         </div>						        
 				    </div>
 					<div class="standard-list">
@@ -83,7 +83,7 @@
                     <div class="title">
                         <h3><?php echo __('Collectible Platforms'); ?></h3>
                         <div class="btn-group actions">
-                        	<?php echo $this -> Html -> link('<i class="icon-pencil icon-large"></i>', array('action' => 'add_collectibletype', $manufacture['Manufacture']['id']), array('class' => 'btn', 'escape' => false)); ?>  
+                        	<?php echo $this -> Html -> link('<i class="fa fa-pencil fa-lg"></i>', array('action' => 'add_collectibletype', $manufacture['Manufacture']['id']), array('class' => 'btn', 'escape' => false)); ?>  
                         </div>                              
                     </div>
                     <div class="standard-list">

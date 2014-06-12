@@ -123,7 +123,7 @@ echo $this -> Minify -> script('cs.attribute', array('inline' => false));
 								<div class="actions icon">
 									<ul>
 										<li>
-											<a class="edit" href="#"><i class="icon-pencil icon-large"></i></a>
+											<a class="edit" href="#"><i class="fa fa-pencil fa-lg"></i></a>
 										</li>
 									</ul>
 								</div>

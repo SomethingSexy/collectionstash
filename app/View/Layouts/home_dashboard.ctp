@@ -100,9 +100,7 @@
 	   		<div class="navbar-header"> 
 			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
 			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
+				    <span class="fa fa-bars"></span>
 			    </button>
 				<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
 			</div>
@@ -129,7 +127,7 @@
 					</li>
 					<?php } ?>
 					<li class="dropdown">
-						<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+						<?php echo $this -> Html -> link('Collectibles Catalog<i class="fa fa-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 						
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 							<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
@@ -152,7 +150,7 @@
 				<ul class="nav navbar-nav navbar-right account">
 						<li>
 						<?php
-							$homeLinkLabel = '<i class="icon-home"></i>';
+							$homeLinkLabel = '<i class="fa fa-home"></i>';
 							$homeLinkClass = '';
 							if ($notificationsCount !== 0) {
 								$homeLinkLabel .= ' ' . $notificationsCount;
@@ -166,7 +164,7 @@
 						{  ?>
 	
 						<li class="dropdown">
-							<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+							<?php echo $this -> Html -> link('<i class="fa fa-user"></i><i class="fa fa-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
 								<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
@@ -178,7 +176,7 @@
 						if($isUserAdmin)
 						{ ?>
 						<li>
-							<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+							<?php echo $this -> Html -> link('<i class="fa fa-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
 						</li>
 						<?php } ?>
 
@@ -204,12 +202,12 @@ else
 			<div id="left-panel-content" >
 				<ul style="-webkit-transition: -webkit-transform 0ms; transition: -webkit-transform 0ms; -webkit-transform-origin: 0px 0px; -webkit-transform: translate3d(0px, 0px, 0);">
 					<li <?php if(isset($dashboard) && $dashboard ==='home') echo 'class="active"'; ?>>
-						<?php echo $this -> Html -> link('<span class="icon-home"></span>Home', '/user/home', array('escape' => false, 'admin' => false)); ?>
+						<?php echo $this -> Html -> link('<span class="fa fa-home"></span>Home', '/user/home', array('escape' => false, 'admin' => false)); ?>
 
 					</li>
 					<li <?php if(isset($dashboard) && $dashboard ==='notifications') echo 'class="active"'; ?>>
 						<?php 
-							$notificationLinkLabel = '<span class="icon-warning-sign"></span>Notifications';
+							$notificationLinkLabel = '<span class="fa fa-warning"></span>Notifications';
 							$notificationLinkClass = '';
 							if ($notificationsCount !== 0) {
 								$notificationLinkLabel .= ' ' . $notificationsCount;
@@ -219,15 +217,15 @@ else
 							echo $this -> Html -> link($notificationLinkLabel, '/user/home/notifications', array('escape' => false, 'admin' => false, 'class' => $notificationLinkClass)); ?>
 					</li>
 					<li <?php if(isset($dashboard) && $dashboard ==='activity') echo 'class="active"'; ?>>
-						<?php echo $this -> Html -> link('<span class="icon-time"></span>Activity', '/user/home/activity', array('escape' => false, 'admin' => false)); ?>
+						<?php echo $this -> Html -> link('<span class="fa fa-clock-o"></span>Activity', '/user/home/activity', array('escape' => false, 'admin' => false)); ?>
 					</li>
 					<li <?php if(isset($dashboard) && $dashboard ==='history') echo 'class="active"'; ?>>
-						<?php echo $this -> Html -> link('<span class="icon-bar-chart"></span>History', '/user/home/history', array('escape' => false, 'admin' => false)); ?>
+						<?php echo $this -> Html -> link('<span class="fa fa-bar-chart-o"></span>History', '/user/home/history', array('escape' => false, 'admin' => false)); ?>
 					</li>
 				</ul>
 			</div>
-			<div class="icon-caret-down"></div>
-			<div class="icon-caret-up"></div>
+			<div class="fa fa-caret-down"></div>
+			<div class="fa fa-caret-up"></div>
 		</nav>
 		<div class="col-lg-12">
 			<div class="row">

@@ -23,8 +23,8 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 				<div class="row spacer">
 					<div class="col-md-12">
 						<div class="btn-group pull-right">
-							<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="icon-th-large"></i></a>'; ?>
-							<?php echo '<a class="btn" href="/collectibles/search"><i class="icon-list"></i></a>'; ?>
+							<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="fa fa-th-large"></i></a>'; ?>
+							<?php echo '<a class="btn" href="/collectibles/search"><i class="fa fa-list"></i></a>'; ?>
 						</div>
 					</div>
 				</div>
@@ -149,11 +149,11 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 						if ($isLoggedIn && $collectible['Collectible']['status_id'] === '4') {
 							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
 							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#"><img src="/img/icon/add_stash_link_25x25.png"> Quick Add to Stash</a></li>';
-							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="icon-star"></i> Add to Wish List</a></li>';
+							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="fa fa-star"></i> Add to Wish List</a></li>';
 						}
 
 						echo '<li>';
-						//<i class="icon-search"></i>
+					
 						echo $this -> Html -> link('Details', array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
 						echo '</li>';
 						echo '</ul>';

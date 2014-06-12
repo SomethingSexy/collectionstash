@@ -81,9 +81,7 @@
 		   		<div class="navbar-header"> 
 				    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
 				   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
-					    <span class="icon-bar"></span>
-					    <span class="icon-bar"></span>
-					    <span class="icon-bar"></span>
+					    <span class="fa fa-bars"></span>
 				    </button>
 					<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
 				</div>
@@ -110,7 +108,7 @@
 						</li>
 						<?php } ?>
 						<li class="dropdown">
-							<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+							<?php echo $this -> Html -> link('Collectibles Catalog<i class="fa fa-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
@@ -133,7 +131,7 @@
 					<ul class="nav navbar-nav navbar-right account">
 							<li>
 							<?php
-							$homeLinkLabel = '<i class="icon-home"></i>';
+							$homeLinkLabel = '<i class="fa fa-home"></i>';
 							$homeLinkClass = '';
 							if ($notificationsCount !== 0) {
 								$homeLinkLabel .= ' ' . $notificationsCount;
@@ -147,7 +145,7 @@
 							{  ?>
 		
 							<li class="dropdown">
-								<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+								<?php echo $this -> Html -> link('<i class="fa fa-user"></i><i class="fa fa-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 									<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
 									<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
@@ -159,7 +157,7 @@
 							if($isUserAdmin)
 							{ ?>
 							<li>
-								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+								<?php echo $this -> Html -> link('<i class="fa fa-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
 							</li>
 							<?php } ?>
 
