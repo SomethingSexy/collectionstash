@@ -24,9 +24,24 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
         //         this.trigger('stash:sell', id);
         //     }
         // },
+        events : {
+            'click ._addcomment' : 'addComment'
+        },
+        addComment: function(event) {
+            this.trigger('comment:add');
+            event.preventDefault();
+        },
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
+        },
+        initialize: function(options) {
+            this.permissions = options.permissions;
+        },
+        serializeData: function() {
+            var data = {};
+            data['permissions'] = this.permissions.toJSON();
+            return data;
         },
         onShow: function() {
             // var self = this;

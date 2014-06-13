@@ -56,6 +56,12 @@ class UsersController extends AppController
         } else {
             $permissions['edit_collectible_user'] = false;
         }
+
+        if($this -> isLoggedIn()){
+             $permissions['add_comment'] = true;
+        } else {
+            $permissions['add_comment'] = false;
+        }
         
         $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));
         $this->set(compact('reasons'));

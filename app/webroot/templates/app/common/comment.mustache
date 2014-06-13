@@ -6,4 +6,12 @@
 	</p>
 	<div class="comment-body">
 		<p>{{{comment}}}</p>
-	</div>				
+	</div>	
+	<div class="comment-actions">
+		{{#permissions.edit}}
+			<button class="btn btn-link">Edit</button>
+		{{/permissions.edit}}
+		{{#permissions.remove}}
+			<button class="btn btn-link">Remove</button>
+		{{/permissions.remove}}
+	</div>			
