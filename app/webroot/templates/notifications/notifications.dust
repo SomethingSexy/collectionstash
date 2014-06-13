@@ -2,7 +2,7 @@
 	<!--<div class="btn-group">
 		<a class="btn btn-small" href="javascript:selectAll()">Select All</a>
 		<button data-toggle="dropdown" class="btn btn-small dropdown-toggle">
-			<i class="icon-caret-down"></i>
+			<i class="fa fa-caret-down"></i>
 		</button>
 		<ul class="dropdown-menu">
 			<li>
@@ -15,7 +15,7 @@
 		</ul>
 	</div>
 	<div class="btn-group">
-		<a href="#" data-toggle="dropdown" class="btn btn-small dropdown-toggle"> Actions&nbsp;&nbsp; <i class="icon-caret-down"></i> </a>
+		<a href="#" data-toggle="dropdown" class="btn btn-small dropdown-toggle"> Actions&nbsp;&nbsp; <i class="fa fa-caret-down"></i> </a>
 		<ul class="dropdown-menu">
 			<li>
 				<a href="javascript:markAsRead()">Mark as read</a>
@@ -34,7 +34,7 @@
 		</ul>
 	</div>-->
 	<!--<button class="btn btn-primary btn-small pull-right">
-		<i class="icon-refresh"></i>
+		<i class="fa fa-refresh"></i>
 	</button> -->
 </div>
 <div class="messages">

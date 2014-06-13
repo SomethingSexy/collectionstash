@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="btn-group actions pull-right">
-				<a href="javascript:void(0)" class="btn btn-primary btn-multishare" title="MultiShare"><i class="icon-share"></i> {#multiShare}Stop Sharing{:else}MultiShare{/multiShare}</a>
+				<a href="javascript:void(0)" class="btn btn-primary btn-multishare" title="MultiShare"><i class="fa fa-share"></i> {#multiShare}Stop Sharing{:else}MultiShare{/multiShare}</a>
 			</div>
 		</div>
 	</div>

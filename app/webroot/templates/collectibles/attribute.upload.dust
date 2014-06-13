@@ -31,12 +31,12 @@
 					<div class="row fileupload-buttonbar">
 						<div class="col-md-7">
 							<!-- The fileinput-button span is used to style the file input field as button -->
-							<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Add files...</span>
+							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Add files...</span>
 								<input type="file" name="data[Upload][file]" multiple>
 							</span>
 						</div>
 						<div class="col-md-7 url-upload">
-							<span class="btn btn-success fileinput-button"> <i class="icon-plus icon-white"></i> <span>Upload URL</span>
+							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Upload URL</span>
 								<input autocomplete="off" type="text" name="data[Upload][url]" class="url-upload-input" value="">
 									<button id="" class="btn upload-url" type="button">
 										Upload
