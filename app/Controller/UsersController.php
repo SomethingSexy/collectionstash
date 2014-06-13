@@ -15,6 +15,8 @@ class UsersController extends AppController
         // grab the user settings and the profile settings for the given user
         
         $user = $this->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => array('Profile')));
+        // grab the stash for this user, since comments are tied to a stash
+        $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
         
         $profile = array();
         $profile['username'] = $user['User']['username'];
@@ -23,6 +25,7 @@ class UsersController extends AppController
         $profile['last_name'] = $user['User']['last_name'];
         $profile['display_name'] = $user['Profile']['display_name'];
         $profile['location'] = $user['Profile']['location'];
+        $profile['entity_type_id'] = $stash['Stash']['entity_type_id'];
         $this->set(compact('profile'));
         // grab stash information..note collectibles_user_count is all collectibles in the stash including history
         $stashFacts = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
@@ -56,9 +59,9 @@ class UsersController extends AppController
         } else {
             $permissions['edit_collectible_user'] = false;
         }
-
-        if($this -> isLoggedIn()){
-             $permissions['add_comment'] = true;
+        
+        if ($this->isLoggedIn()) {
+            $permissions['add_comment'] = true;
         } else {
             $permissions['add_comment'] = false;
         }
@@ -69,8 +72,6 @@ class UsersController extends AppController
         $this->set(compact('permissions'));
         
         $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
-        // grab the stash for this user, since comments are tied to a stash
-        $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
         // retrieve all comments
         $comments = $this->User->Comment->getComments($stash['Stash']['entity_type_id'], $user['User']['id']);
         

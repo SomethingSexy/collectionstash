@@ -157,14 +157,6 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 }
             });
 
-            // stashLayout.on('toggle:tiles', function() {
-            //     renderStashTiles(stashLayout);
-            // });
-
-            // stashLayout.on('toggle:list', function() {
-            //     renderStashList(stashLayout);
-            // });
-
             App.layout.main.show(stashLayout);
             if (view === 'tiles') {
                 renderStashTiles(stashLayout);
@@ -256,6 +248,7 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
                 commentsView.on('comment:add', function(id) {
                     var model = new App.comments.model();
+                    model.set('entity_type_id', App.profile.get('entity_type_id'));
 
                     App.layout.modal.show(new CommentAddView({
                         model: model
