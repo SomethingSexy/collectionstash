@@ -34,6 +34,7 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
+            this.listenTo(this.collection, "add", this.addChildView);
         },
         initialize: function(options) {
             this.permissions = options.permissions;

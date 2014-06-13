@@ -25,11 +25,11 @@ class CommentsController extends AppController
         
         if ($this->request->isPut()) {
         } else if ($this->request->isPost()) {
-        	$comment = $this->request->input('json_decode', true);
-            $comment['Comment'] = Sanitize::clean($comment);
-           	$comment['Comment']['user_id'] = $this->getUserId();
-           	debug($comment);
-            if ($this->Comment->saveAll($comment)) {
+        	$postedComment = $this->request->input('json_decode', true);
+            $postedComment['Comment'] = Sanitize::clean($postedComment);
+           	$postedComment['Comment']['user_id'] = $this->getUserId();
+      
+            if ($this->Comment->saveAll($postedComment)) {
                 $data = array();
                 $commentId = $this->Comment->id;
                 $comment = $this->Comment->findById($commentId);
@@ -37,24 +37,24 @@ class CommentsController extends AppController
                 
                 $lastestComments = array();
                 
-                if (isset($this->request->data['Comment']['last_comment_created']) && !empty($this->request->data['Comment']['last_comment_created'])) {
-                    $lastestComments = $this->Comment->getComments($this->request->data['Comment']['entity_type_id'], $this->request->data['Comment']['user_id'], array('Comment.created >' => $this->request->data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
+                if (isset($postedComment['Comment']['last_comment_created']) && !empty($postedComment['Comment']['last_comment_created'])) {
+                    $lastestComments = $this->Comment->getComments($comment['Comment']['entity_type_id'], $comment['Comment']['user_id'], array('Comment.created >' => $postedComment['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
                 } else {
-                    $lastestComments = $this->Comment->getComments($this->request->data['Comment']['entity_type_id'], $this->request->data['Comment']['user_id']);
+                    $lastestComments = $this->Comment->getComments($comment['Comment']['entity_type_id'], $comment['Comment']['user_id']);
                 }
-                
+                debug($lastestComments);
                 if (!empty($lastestComments)) {
-                    $extractComments = Set::extract('/Comment/.', $comments['comments']);
+                    $extractComments = Set::extract('/Comment/.', $lastestComments['comments']);
                     
                     foreach ($extractComments as $key => $value) {
-                        $extractComments[$key]['User'] = $comments['comments'][$key]['User'];
-                        $extractComments[$key]['permissions'] = $comments['comments'][$key]['permissions'];
+                        $extractComments[$key]['User'] = $lastestComments['comments'][$key]['User'];
+                        $extractComments[$key]['permissions'] = $lastestComments['comments'][$key]['permissions'];
                     }
 
                     $data = $extractComments;
                 }
 
-                $this->getEventManager()->dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $this->request->data['Comment']['user_id'], 'entityTypeId' => $this->request->data['Comment']['entity_type_id'])));
+                $this->getEventManager()->dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $comment['Comment']['user_id'], 'entityTypeId' => $comment['Comment']['entity_type_id'])));
                 
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this->getUser(), 'comment' => $comment, 'entity' => $entity)));
                 
@@ -62,9 +62,8 @@ class CommentsController extends AppController
                 $this->response->body(json_encode($data));
             } else {
                 $data['success'] = array('isSuccess' => false);
-                $data['error']['message'] = $this->Comment->invalidFields();
                 $this->response->statusCode(400);
-                $this->response->body(json_encode($data));
+                $this->response->body(json_encode($this->Comment->validationErrors));
             }
         } else if ($this->request->isDelete()) {
         } else if ($this->request->isGet()) {
