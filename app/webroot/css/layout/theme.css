@@ -1366,7 +1366,6 @@ ol.fancy-comments li[data-count]:before, ol.fancy-comments li.commenter-signin.n
 }
 ol.fancy-comments {
     position: relative;
-    margin-top: 72px;
     list-style-type: none;
     text-align: left;
 }
@@ -1395,6 +1394,9 @@ ol.fancy-comments > li {
     -o-transition: opacity 200ms ease-in;
     -ms-transition: opacity 200ms ease-in;
     transition: opacity 200ms ease-in;
+}
+.comment-actions {
+    text-align: right;
 }
 .comment-body > p, .comment-body blockquote {
     margin-bottom: 9px;

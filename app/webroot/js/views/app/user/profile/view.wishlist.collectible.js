@@ -23,7 +23,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.colle
         },
         addToStash: function(event) {
             this.trigger('stash:add', this.model.get('id'));
-
             event.preventDefault();
         },
         removeFromWishlist: function(event) {
