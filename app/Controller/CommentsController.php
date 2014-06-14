@@ -25,10 +25,10 @@ class CommentsController extends AppController
         
         if ($this->request->isPut()) {
         } else if ($this->request->isPost()) {
-        	$postedComment = $this->request->input('json_decode', true);
+            $postedComment = $this->request->input('json_decode', true);
             $postedComment['Comment'] = Sanitize::clean($postedComment);
-           	$postedComment['Comment']['user_id'] = $this->getUserId();
-      
+            $postedComment['Comment']['user_id'] = $this->getUserId();
+            
             if ($this->Comment->saveAll($postedComment)) {
                 $data = array();
                 $commentId = $this->Comment->id;
@@ -42,7 +42,7 @@ class CommentsController extends AppController
                 } else {
                     $lastestComments = $this->Comment->getComments($comment['Comment']['entity_type_id'], $comment['Comment']['user_id']);
                 }
-                debug($lastestComments);
+                
                 if (!empty($lastestComments)) {
                     $extractComments = Set::extract('/Comment/.', $lastestComments['comments']);
                     
@@ -50,10 +50,10 @@ class CommentsController extends AppController
                         $extractComments[$key]['User'] = $lastestComments['comments'][$key]['User'];
                         $extractComments[$key]['permissions'] = $lastestComments['comments'][$key]['permissions'];
                     }
-
+                    
                     $data = $extractComments;
                 }
-
+                
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $comment['Comment']['user_id'], 'entityTypeId' => $comment['Comment']['entity_type_id'])));
                 
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this->getUser(), 'comment' => $comment, 'entity' => $entity)));
@@ -66,6 +66,13 @@ class CommentsController extends AppController
                 $this->response->body(json_encode($this->Comment->validationErrors));
             }
         } else if ($this->request->isDelete()) {
+            $userId = $this->getUserId();
+            $comment['Comment'] = array('id' => $id);
+            $response = $this->Comment->removeComment($comment, $userId);
+            if (!$response['response']['isSuccess']) {
+                $this->response->statusCode(500);
+                $this->response->body(json_encode($response));
+            }
         } else if ($this->request->isGet()) {
         }
     }
