@@ -402,7 +402,7 @@ class CollectiblesController extends AppController
             $transactionGraphData = $this->Collectible->Listing->Transaction->getTransactionGraphData($id);
             $this->set(compact('transactionGraphData'));
             
-            $this->layout = 'fluid';
+            $this->layout = 'require';
         } else {
             $this->render('viewMissing');
         }
