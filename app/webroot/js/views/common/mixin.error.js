@@ -39,8 +39,12 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.
             if (response.status == 400) {
                 this.errors = response.responseJSON;
                 this.onError();
-            } else if(response.status == 401) {
+            } else if (response.status == 401) {
                 this.onGlobalError('You must be logged in to comment');
+            } else {
+                if (response.responseJSON.response.message) {
+                    this.onGlobalError(response.responseJSON.response.message);
+                }
             }
         }
     };

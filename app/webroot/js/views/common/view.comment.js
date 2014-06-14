@@ -8,27 +8,20 @@ define(['require', 'marionette', 'text!templates/app/common/comment.mustache', '
             this.permissions = options.permissions;
         },
         events: {
-            'click .stash-sell': 'sell',
-            'click .remove-from-stash': 'removeFromStash'
+            'click ._edit': 'edit',
+            'click ._remove': 'removeComment'
         },
-        // serializeData: function() {
-        //     var data = {};
-        //     data = this.model.toJSON();
-        //     data.Collectible = this.model.collectible.toJSON();
-        //     data['permissions'] = this.permissions.toJSON();
-        //     return data;
-        // },
         onRender: function() {
             // $('.stash-sell', this.el).attr('data-collectible-user-id', this.model.get('id'));
             // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
         },
-        sell: function(event) {
+        edit: function(event) {
             event.preventDefault();
-            this.trigger('stash:sell', this.model.get('id'));
+            this.trigger('comment:edit', this.model.get('id'));
         },
-        removeFromStash: function(event) {
+        removeComment: function(event) {
             event.preventDefault();
-            this.trigger('stash:remove', this.model.get('id'));
+            this.model.destroy();
         }
     });
 });
