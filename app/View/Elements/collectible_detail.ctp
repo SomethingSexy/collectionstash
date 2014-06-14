@@ -51,26 +51,29 @@ if (!isset($allowStatusEdit)) {
 	$allowStatusEdit = false;
 }
 
-echo $this -> Minify -> script('jquery.comments', array('inline' => false));
-echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
-echo $this -> Minify -> script('cs.stash', array('inline' => false));
-echo $this -> Minify -> script('models/model.status', array('inline' => false));
-echo $this -> Minify -> script('views/view.status', array('inline' => false));
+//echo $this -> Minify -> script('jquery.comments', array('inline' => false));
+//echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
+//echo $this -> Minify -> script('cs.stash', array('inline' => false));
+//echo $this -> Minify -> script('models/model.status', array('inline' => false));
+//echo $this -> Minify -> script('views/view.status', array('inline' => false));
 
-echo $this -> Minify -> script('models/model.listing', array('inline' => false));
-echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
-echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
-echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
-echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
-echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
+//echo $this -> Minify -> script('models/model.listing', array('inline' => false));
+//echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
+//echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
+//echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
+//echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
+//echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
 echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/jquery.flot.time', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
+//echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false));
+//echo $this -> Minify -> script('thirdparty/jquery.flot.time', array('inline' => false));
+//echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
 ?>
 
 
-<div id="collectible-container" class="col-md-12 stashable">
+<div id="collectible-container" class="container-fluid">
+<div class="row">
+
+<div class="col-md-12 stashable">
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn && $collectibleDetail['Status']['id'] === '4' ) {
 	?>
@@ -428,7 +431,8 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 		</div>
 			<?php } ?>	
 </div>
-
+</div>
+</div>
 
 
 <script>

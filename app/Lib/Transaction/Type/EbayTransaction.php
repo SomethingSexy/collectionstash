@@ -22,8 +22,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         // Validate first
         if (!$model->validates()) {
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($model->validationErrors, 'Listing');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $model->validationErrors;
             return $retVal;
         }
         
@@ -34,12 +33,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         
         if (!$listingData) {
             $retVal['response']['isSuccess'] = false;
-            $errors = array();
-            $error = array();
-            $error['message'] = __('There was an error retrieving the listing, either it did not exist or it is too old.');
-            $error['inline'] = false;
-            array_push($errors, $error);
-            
+            $retVal['response']['isSuccess']['message'] = __('There was an error retrieving the listing, either it did not exist or it is too old.');
             $retVal['response']['errors'] = $errors;
             
             return $retVal;
