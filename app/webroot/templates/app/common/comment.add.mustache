@@ -6,32 +6,11 @@
         <h4 id="myModalLabel">Add Comment</h4>
     </div>
     <div class="modal-body">
-        {{#errors}}
-        <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert">
-            &times;
-            </button>
-            <h4>Oops! Something went wrong.</h4>
-            <ul>
-                {{#errors}}
-                    {{^inline}}
-                        {{#message}}
-                        <li>
-                            {{.}}
-                        </li>
-                        {{/message}}
-                    {{/inline}}
-                {{/errors}}
-            </ul>
-        </div>
-        {{/errors}}
+
         <form>
-            <div class="form-group {{#inlineErrors.edition_size}}has-error{{/inlineErrors.edition_size}}">
+            <div class="form-group">
                 <label class="control-label" for="Comment">Comment</label>
-                    <textarea id="Comment" class="form-control" maxlength="1000" name="comment">{{{comment}}}</textarea>
-                        {{#inlineErrors.comment}}
-                            <span class="help-inline">{{inlineErrors.comment}}</span>
-                        {{/inlineErrors.comment}}
+                <textarea id="Comment" class="form-control" maxlength="1000" name="comment">{{{comment}}}</textarea>
             </div>  
         </form>    
     </div>
