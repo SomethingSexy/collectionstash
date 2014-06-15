@@ -1,8 +1,11 @@
-define(['require', 'jquery', 'underscore', 'backbone', 'text!templates/app/collectible/detail/transaction.active.dust', 'text!templates/app/collectible/detail/transaction.unsold.dust', 'text!templates/app/collectible/detail/transaction.completed.dust', 'dust', 'models/model.listing', 'dust-helpers'], function(require, $, _, Backbone, activeTemplate, unsoldTemplate, completedTemplate, dust, ListingModel) {
+define(['require', 'jquery', 'underscore', 'backbone', 'text!templates/app/collectible/detail/transaction.active.dust', 'text!templates/app/collectible/detail/transaction.unsold.dust', 'text!templates/app/collectible/detail/transaction.completed.dust', 'text!templates/collectibles/message.dust',
+    'dust', 'models/model.listing', 'dust-helpers'
+], function(require, $, _, Backbone, activeTemplate, unsoldTemplate, completedTemplate, messageTemplate, dust, ListingModel) {
 
     dust.loadSource(dust.compile(unsoldTemplate, 'transaction.unsold'));
     dust.loadSource(dust.compile(activeTemplate, 'transaction.active'));
     dust.loadSource(dust.compile(completedTemplate, 'transaction.completed'));
+    dust.loadSource(dust.compile(messageTemplate, 'message'));
     // at some point we should probably break this out into transaction views
     // I also put the price data in this view so I didn't have to create more files
     // performance vs standards

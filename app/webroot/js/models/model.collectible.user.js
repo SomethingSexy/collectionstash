@@ -15,8 +15,11 @@ define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(requi
             return url;
         },
         parse: function(response, xhr) {
-            this.collectible = new Backbone.Model(response.Collectible);
-            delete response.Collectible;
+            if (response && response.Collectible) {
+                this.collectible = new Backbone.Model(response.Collectible);
+                delete response.Collectible;
+            }
+
             return response;
         }
     });
