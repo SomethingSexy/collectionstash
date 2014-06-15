@@ -4,7 +4,7 @@
     });
     require(['require', '../js/common'], function(require, common) {
         require(['require', 'bootstrap', 'jquery.flot', 'jquery.flot.time'], function(require, MyApp) {
-            require(['views/app/collectible/detail/view.transactions', 'zeroclipboard', 'views/common/stash/view.stash.add', 'backbone', 'marionette', 'views/common/modal.region', 'models/model.collectible.user', 'jquery.blueimp-gallery'], function(TransactionsView, ZeroClipboard, StashAddView, Backbone, Marionette, ModalRegion, CollectibleUser) {
+            require(['views/app/collectible/detail/view.transactions', 'zeroclipboard', 'views/common/stash/view.stash.add', 'backbone', 'marionette', 'views/common/modal.region', 'models/model.collectible.user', 'models/model.collectible.wishlist', 'views/common/growl', 'jquery.blueimp-gallery'], function(TransactionsView, ZeroClipboard, StashAddView, Backbone, Marionette, ModalRegion, CollectibleUser, CollectibleWishlist, growl) {
                 // Get all of the data here
                 $.when($.get('/templates/collectibles/status.dust')).done(function(statusTemplate) {
                     // grab the template-stash-add
@@ -79,13 +79,41 @@
                         model.collectible = collectibleModel;
 
                         model.once('sync', function() {
-                            App.layout.modal.hideModal();
+                            detailLayout.modal.hideModal();
+                            growl.onSuccess('You have successfully added the collectible to your stash!');
                         });
-                        
+
                         detailLayout.modal.show(new StashAddView({
                             model: model
                         }));
                     });
+
+                    $('.add-to-wishlist').on('click', function() {
+                        var model = new CollectibleWishlist({
+                            'collectible_id': collectibleModel.get('id')
+                        });
+
+                        model.save({}, {
+                            // apparently I am adding this to the URL? dumb TODO
+                            url : model.url() + '/' + collectibleModel.get('id'),
+                            success: function() {
+                                growl.onSuccess('The collectible has been added to your Wish List!');
+                            },
+                            error: function(model, response, options) {
+                                var errorMessage = 'Oops! Something went terribly wrong!';
+                                if (response.status === 400) {
+                                    $.each(response.responseJSON.response.errors, function(index, value) {
+                                        errorMessage = value.message;
+                                    });
+                                }
+
+                                growl.onError(errorMessage)
+                            }
+                        })
+                    });
+
+
+                    CollectibleWishlist
 
                     new TransactionsView({
                         collectible: collectibleModel,

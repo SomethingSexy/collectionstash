@@ -37,7 +37,7 @@ requirejs.config({
         'blueimp-gallery': '../bower_components/blueimp-gallery/js/blueimp-gallery',
         'jquery.blueimp-gallery': '../bower_components/blueimp-gallery/js/jquery.blueimp-gallery',
         'blueimp-helper': '../bower_components/blueimp-gallery/js/blueimp-helper',
-        'jquery.blockui': '../bower_components/blockui.jquery.blockUI'
+        'jquery.blockui': '../bower_components/blockui/jquery.blockUI'
     },
     shim: {
         'dust': {
