@@ -57,15 +57,11 @@ if (!isset($allowStatusEdit)) {
 //echo $this -> Minify -> script('models/model.status', array('inline' => false));
 //echo $this -> Minify -> script('views/view.status', array('inline' => false));
 
-//echo $this -> Minify -> script('models/model.listing', array('inline' => false));
-//echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
-//echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
 //echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
 //echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
 //echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
-echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => false));
-//echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false));
-//echo $this -> Minify -> script('thirdparty/jquery.flot.time', array('inline' => false));
+echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
+
 //echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
 ?>
 
@@ -334,24 +330,6 @@ echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => 
 						<?php
 						if ($showAttributes) {
 							echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
-							<script>
-								$(function() {
-									// If we are in admin mode, we need to pass that in to these methods so that they can
-									// do specific things based on that
-
-									$('span.popup', '.attributes-list').popover({
-										placement : 'bottom',
-										html : 'true',
-										template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
-									}).click(function(e) {
-										e.preventDefault();
-									}).mouseenter(function(e) {
-										$(this).popover('show');
-									});
-
-								});
-							</script>
-					
 						<?php } ?>								
 						
 				
@@ -381,13 +359,7 @@ echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => 
 			<div class="widget">
 				<div class="widget-content">
 					<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
-					<script>
-						//lazy do doing here
-						$(function() {
-							$('#comments').comments();
-						});
-					</script>
-					</div>
+				</div>
 				</div>
 			</div>
 		</div>
@@ -415,18 +387,6 @@ echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => 
 						<button id="deny-button" class="btn btn-default"><?php echo __('Deny'); ?></button>
 					</div>
 				</div>	
-				<script>
-					//Eh move this out of here
-					$('#approval-button').click(function() {
-						$('#approve-input').val('true');
-						$('#approval-form').submit();
-					});
-					$('#deny-button').click(function() {
-						$('#approve-input').val('false');
-						$('#approval-form').submit();
-					});
-
-				</script>
 			</div>
 		</div>
 			<?php } ?>	

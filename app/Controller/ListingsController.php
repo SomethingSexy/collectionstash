@@ -71,7 +71,7 @@ class ListingsController extends AppController
                 $this->response->statusCode(400);
             }
             
-            $this->set('returnData', $response);
+            $this->response->body(json_encode($response['response']['data']));
         } else if ($this->request->isDelete()) { // delete
             // have to be a user admin to delete
             if (!$this->isUserAdmin()) {
