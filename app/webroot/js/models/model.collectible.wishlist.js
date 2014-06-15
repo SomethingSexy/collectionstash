@@ -2,7 +2,11 @@ define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(requi
     return Backbone.Model.extend({
         url: function(method, data) {
 
-            var url = '/collectibles_wishlists/collectible/' + this.id;
+            var url = '/collectibles_wishlists/collectible';
+
+            if (!this.isNew()) {
+                url = url + '/' + this.id;
+            }
 
             if (this.stashType) {
                 url = url + '/' + this.stashType;
@@ -15,8 +19,11 @@ define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(requi
             return url;
         },
         parse: function(response, xhr) {
-            this.collectible = new Backbone.Model(response.Collectible);
-            delete response.Collectible;
+            if (response && response.Collectible) {
+                this.collectible = new Backbone.Model(response.Collectible);
+                delete response.Collectible;
+            }
+
             return response;
         }
     });
