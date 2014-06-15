@@ -53,16 +53,9 @@ if (!isset($allowStatusEdit)) {
 
 //echo $this -> Minify -> script('jquery.comments', array('inline' => false));
 //echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
-//echo $this -> Minify -> script('cs.stash', array('inline' => false));
 //echo $this -> Minify -> script('models/model.status', array('inline' => false));
 //echo $this -> Minify -> script('views/view.status', array('inline' => false));
-
-//echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
-//echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
-//echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
-
-//echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
 ?>
 
 
@@ -427,3 +420,9 @@ if ($showStatus) {
 		echo 'var allowStatusEdit = false;';
 	}
 ?></script>
+<?php
+	if(isset($comments)){
+		echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
+	}
+?>
+<?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>
