@@ -4,7 +4,7 @@
    });
    require(['require', '../js/common'], function(require, common) {
        require(['require', 'bootstrap', 'jquery.flot', 'jquery.flot.time'], function(require, MyApp) {
-           require(['views/app/collectible/detail/view.transactions', 'zeroclipboard'], function(TransactionsView, ZeroClipboard) {
+           require(['views/app/collectible/detail/view.transactions', 'zeroclipboard', 'jquery.blueimp-gallery'], function(TransactionsView, ZeroClipboard) {
                // Get all of the data here
                $.when($.get('/templates/collectibles/status.dust'), $.get('/templates/collectibles/message.dust')).done(function(statusTemplate, messageTemplate) {
                    dust.loadSource(dust.compile(messageTemplate[0], 'message'));

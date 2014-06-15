@@ -35,7 +35,7 @@
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
-	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
+	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
@@ -293,8 +293,8 @@ else
 		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
 		<?php
-	echo $this -> Minify -> script('thirdparty/blueimp-gallery');
-	echo $this -> Minify -> script('thirdparty/jquery.blueimp-gallery');
+	echo $this -> Html -> script('/bower_components/blueimp-gallery/js/blueimp-gallery.min');
+	echo $this -> Html -> script('/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min');
 	echo $this -> Minify -> script('thirdparty/placeholder');
 			?>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->

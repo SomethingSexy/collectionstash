@@ -28,7 +28,8 @@
         "backbone.trackit" : "master",
         "simplePagination" : "https://github.com/flaviusmatis/simplePagination.js.git#master",
         "Flot" : "https://github.com/flot/flot.git#v0.8.3",
-        "zeroclipboard" : "2.1.1"
+        "zeroclipboard" : "2.1.1",
+        "blueimp-gallery" : "2.15.0"
 
     },
     "devDependencies": {}

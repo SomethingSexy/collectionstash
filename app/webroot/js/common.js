@@ -29,11 +29,14 @@ requirejs.config({
         'blockui': '../bower_components/blockui/jquery.blockUI',
         'select2': '../bower_components/select2/select2',
         'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
-        'backbone.trackit' : '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit',
-        'simplePagination' : '../bower_components/simplePagination/jquery.simplePagination',
-        'jquery.flot' : '../bower_components/Flot/jquery.flot',
-        'jquery.flot.time' : '../bower_components/Flot/jquery.flot.time',
-        'zeroclipboard' : '../bower_components/zeroclipboard/dist/ZeroClipboard'
+        'backbone.trackit': '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit',
+        'simplePagination': '../bower_components/simplePagination/jquery.simplePagination',
+        'jquery.flot': '../bower_components/Flot/jquery.flot',
+        'jquery.flot.time': '../bower_components/Flot/jquery.flot.time',
+        'zeroclipboard': '../bower_components/zeroclipboard/dist/ZeroClipboard',
+        'blueimp-gallery': '../bower_components/blueimp-gallery/js/blueimp-gallery',
+        'jquery.blueimp-gallery': '../bower_components/blueimp-gallery/js/jquery.blueimp-gallery',
+        'blueimp-helper': '../bower_components/blueimp-gallery/js/blueimp-helper'
     },
     shim: {
         'dust': {
@@ -55,17 +58,17 @@ requirejs.config({
         'select2': {
             deps: ['jquery']
         },
-        'backbone.trackit' : {
-            deps : ['backbone']
+        'backbone.trackit': {
+            deps: ['backbone']
         },
-        'simplePagination' : {
-            deps : ['jquery', 'bootstrap']
+        'simplePagination': {
+            deps: ['jquery', 'bootstrap']
         },
-        'jquery.flot' :{
-            deps : ['jquery']
+        'jquery.flot': {
+            deps: ['jquery']
         },
-        'jquery.flot.time' :{
-            deps : ['jquery.flot']
+        'jquery.flot.time': {
+            deps: ['jquery.flot']
         }
     }
 });
