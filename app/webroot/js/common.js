@@ -32,7 +32,8 @@ requirejs.config({
         'backbone.trackit' : '../bower_components/backbone.trackit/dist/0.1.0/backbone.trackit',
         'simplePagination' : '../bower_components/simplePagination/jquery.simplePagination',
         'jquery.flot' : '../bower_components/Flot/jquery.flot',
-        'jquery.flot.time' : '../bower_components/Flot/jquery.flot.time'
+        'jquery.flot.time' : '../bower_components/Flot/jquery.flot.time',
+        'zeroclipboard' : '../bower_components/zeroclipboard/dist/ZeroClipboard'
     },
     shim: {
         'dust': {
