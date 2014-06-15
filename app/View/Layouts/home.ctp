@@ -50,6 +50,7 @@
 	echo $this -> Minify -> script('thirdparty/backbone.validation');
 	echo $this -> Minify -> script('thirdparty/typeahead');
 	echo $this -> Minify -> script('jquery-plugins');
+	echo $this -> Html -> script('/bower_components/blockui/jquery.blockUI');
 	echo $this -> Minify -> script('jquery.autocomplete');
 	// Replace this with dust eventually
 	echo $this -> Minify -> script('thirdparty/tmpl');
