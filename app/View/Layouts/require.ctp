@@ -37,10 +37,10 @@
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
-	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
+	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
-	echo $this -> Minify -> css('thirdparty/select2');
+	echo $this -> Html -> css('/bower_components/select2/select2');
 	?>
 	<script type="text/javascript" src="/bower_components/requirejs/require.js"></script>
 	<?php echo $scripts_for_layout; ?>
@@ -238,7 +238,7 @@
 		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
 	<div id="modal"><div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog"></div></div></div><
+    <div class="modal-dialog"></div></div></div>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
 </body>
