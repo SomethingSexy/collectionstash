@@ -7,7 +7,6 @@ class CollectiblesController extends AppController
     
     public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Tree');
     public $components = array('CollectibleSearch');
-
     /**
      * This method will allow us to quick add a collectible from a selected collectible.
      * This method will base the new collectible off the manufacture and type that this collectible is.
@@ -401,6 +400,25 @@ class CollectiblesController extends AppController
             
             $transactionGraphData = $this->Collectible->Listing->Transaction->getTransactionGraphData($id);
             $this->set(compact('transactionGraphData'));
+            // retrieve all comments
+            $comments = $this->Collectible->EntityType->Comment->getComments($collectible['Collectible']['entity_type_id'], $this->getUserId());
+            
+            $extractComments = Set::extract('/Comment/.', $comments['comments']);
+            
+            foreach ($extractComments as $key => $value) {
+                $extractComments[$key]['User'] = $comments['comments'][$key]['User'];
+                $extractComments[$key]['permissions'] = $comments['comments'][$key]['permissions'];
+            }
+            
+            $this->set('comments', $extractComments);
+            // permissions
+            $permissions = array();
+            
+            if ($this->isLoggedIn()) {
+                $permissions['add_comment'] = true;
+            } else {
+                $permissions['add_comment'] = false;
+            }
             
             $this->layout = 'require';
         } else {
