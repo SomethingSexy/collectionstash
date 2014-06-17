@@ -99,6 +99,9 @@ div.subnav-fixed {
     color: #333333;
     text-shadow: none;
 }
+.subscribe-success {
+    color: #dff0d8 !important;
+}
 #lp-active {
     display: block;
     position: absolute;

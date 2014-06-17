@@ -651,7 +651,7 @@ class CollectiblesController extends AppController
             $variants = $this->Collectible->getCollectibleVariants($id);
             $this->set('variants', $variants);
             
-            $this->layout = 'fluid';
+            $this->layout = 'require';
         } else {
             $this->render('viewMissing');
         }
