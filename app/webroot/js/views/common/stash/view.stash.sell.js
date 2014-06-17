@@ -1,4 +1,4 @@
-define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.sell.mustache', 'mustache', 'marionette.mustache'], function(require, Backbone, Marionnette, template) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.sell.mustache', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template) {
     return Marionnette.ItemView.extend({
         template: template,
         events: {
@@ -39,9 +39,12 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
             return data;
         },
         onClose: function() {
-            this.model.resetAttributes();
-            this.model.stopTracking();
-        },        
+            var self = this;
+            _.defer(function() {
+                self.model.resetAttributes();
+                self.model.stopTracking()
+            });
+        },
         selectionChanged: function(e) {
             var field = $(e.currentTarget);
 
@@ -98,8 +101,8 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.se
                 $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
             });
         },
-        removeErrors: function(){
-           $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty(); 
+        removeErrors: function() {
+            $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty();
         },
         save: function(event) {
             var self = this;

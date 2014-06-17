@@ -24,6 +24,16 @@ class CommentsController extends AppController
         }
         
         if ($this->request->isPut()) {
+            $comment = $this->request->input('json_decode', true);
+            $comment['Comment'] = Sanitize::clean($comment);
+            $comment['Comment']['user_id'] = $this->getUserId();
+            $response = $this->Comment->updateComment($comment);
+            if (!$response['response']['isSuccess']) {
+                $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
+            } else {
+                $this->response->body('{}');
+            }
         } else if ($this->request->isPost()) {
             $postedComment = $this->request->input('json_decode', true);
             $postedComment['Comment'] = Sanitize::clean($postedComment);
@@ -74,131 +84,6 @@ class CommentsController extends AppController
                 $this->response->body(json_encode($response));
             }
         } else if ($this->request->isGet()) {
-        }
-    }
-    //This is the old way of doing it
-    public function update() {
-        $data = array();
-        if (!$this->isLoggedIn()) {
-            $data['success'] = array('isSuccess' => false);
-            $data['error']['message'] = __('Clearly I broke something because you are not logged in yet but somehow you are able to submit an update.');
-            $this->set('comments', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            $this->request->data['Comment']['user_id'] = $this->getUserId();
-            
-            $response = $this->Comment->updateComment($this->request->data);
-            if ($response) {
-                $this->set('comments', $response);
-            } else {
-                //Something really fucked up
-                $data['success'] = array('isSuccess' => false);
-                $data['error'] = array('message', __('Invalid request.'));
-                $this->set('comments', $data);
-            }
-        } else {
-            $data['success'] = array('isSuccess' => false);
-            $data['error'] = array('message', __('Invalid request.'));
-            $this->set('comments', $data);
-            return;
-        }
-    }
-    //This is the old way of doing it
-    public function remove() {
-        $data = array();
-        if (!$this->isLoggedIn()) {
-            $data['success'] = array('isSuccess' => false);
-            $data['error']['message'] = __('Clearly I broke something because you are not logged in yet but somehow you are able to submit an update.');
-            $this->set('comments', $data);
-            return;
-        }
-        
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            $userId = $this->getUserId();
-            $response = $this->Comment->removeComment($this->request->data, $userId);
-            if ($response) {
-                $this->set('comments', $response);
-            } else {
-                //Something really fucked up
-                $data['success'] = array('isSuccess' => false);
-                $data['error'] = array('message', __('Invalid request.'));
-                $this->set('comments', $data);
-            }
-        } else {
-            $data['success'] = array('isSuccess' => false);
-            $data['error'] = array('message', __('Invalid request.'));
-            $this->set('comments', $data);
-            return;
-        }
-    }
-    /**
-     * This is the old way of doing it
-     *
-     * Adds a comment
-     * Post
-     *  - comment
-     *  - last comment in the view
-     *  - type
-     *  - type_id
-     */
-    public function add() {
-        $data = array();
-        //must be logged in to post comment
-        if (!$this->isLoggedIn()) {
-            $data['success'] = array('isSuccess' => false);
-            $data['error']['message'] = __('You must be logged in to post a comment.');
-            $this->set('comments', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            $this->request->data['Comment']['user_id'] = $this->getUserId();
-            //TODO: After save we need to also return all comments inbetween this update the last one they viewed.
-            if ($this->Comment->saveAll($this->request->data)) {
-                $data['comments'] = array();
-                $data['success'] = array('isSuccess' => true);
-                $commentId = $this->Comment->id;
-                $comment = $this->Comment->findById($commentId);
-                $entity = $this->Comment->EntityType->getEntityCore($comment['Comment']['entity_type_id']);
-                
-                $lastestComments = array();
-                
-                if (isset($this->request->data['Comment']['last_comment_created']) && !empty($this->request->data['Comment']['last_comment_created'])) {
-                    $lastestComments = $this->Comment->getComments($this->request->data['Comment']['entity_type_id'], $this->request->data['Comment']['user_id'], array('Comment.created >' => $this->request->data['Comment']['last_comment_created'], 'and' => array('Comment.created <=' => $comment['Comment']['created'])));
-                } else {
-                    $lastestComments = $this->Comment->getComments($this->request->data['Comment']['entity_type_id'], $this->request->data['Comment']['user_id']);
-                }
-                
-                if (!empty($lastestComments)) {
-                    $data['comments'] = $lastestComments['comments'];
-                }
-                $this->getEventManager()->dispatch(new CakeEvent('Controller.Comment.add', $this, array('commentId' => $commentId, 'userId' => $this->request->data['Comment']['user_id'], 'entityTypeId' => $this->request->data['Comment']['entity_type_id'])));
-                
-                $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COMMENT, 'user' => $this->getUser(), 'comment' => $comment, 'entity' => $entity)));
-                
-                $this->set('comments', $data);
-            } else {
-                $data['success'] = array('isSuccess' => false);
-                $errors = $this->Comment->invalidFields();
-                /*
-                 * If there is an error, check to see if any of the fields were invalid. if they
-                 * were the only user inputted one is the comment field, otherwise use a generic error mesage
-                */
-                if (!empty($errors)) {
-                    $data['error']['message'] = $errors['comment'][0];
-                } else {
-                    $data['error']['message'] = __('Sorry, your request was invalid.');
-                }
-                $this->set('comments', $data);
-            }
-        } else {
-            $data['success'] = array('isSuccess' => false);
-            $data['error'] = array('message', __('Invalid request.'));
-            $this->set('comments', $data);
-            return;
         }
     }
     
