@@ -67,12 +67,5 @@ if (!empty($collectibleCore['CollectiblesUpload']) && count($collectibleCore['Co
 			</div>
 		</div>
 	</div>
-	<script>
-		$(function() {
-			$('#carousel-example-generic').carousel({
-				wrap : true
-			});
-		});
-	</script>
 	<?php } ?>
 </div>

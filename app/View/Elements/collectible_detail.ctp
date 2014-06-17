@@ -51,8 +51,6 @@ if (!isset($allowStatusEdit)) {
 	$allowStatusEdit = false;
 }
 
-//echo $this -> Minify -> script('jquery.comments', array('inline' => false));
-//echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
 //echo $this -> Minify -> script('models/model.status', array('inline' => false));
 //echo $this -> Minify -> script('views/view.status', array('inline' => false));
 echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
@@ -421,8 +419,8 @@ if ($showStatus) {
 	}
 ?></script>
 <?php
-	if(isset($comments)){
-		echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
-	}
+
+	echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
+
 ?>
 <?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>
