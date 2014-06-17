@@ -1,4 +1,4 @@
-define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, Backbone, Marionnette, template) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, _, Backbone, Marionnette, template) {
 
     return Marionnette.ItemView.extend({
         template: template,
@@ -27,8 +27,11 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/stash.ad
             return data;
         },
         onClose: function() {
-            this.model.resetAttributes();
-            this.model.stopTracking();
+            var self = this;
+            _.defer(function() {
+                self.model.resetAttributes();
+                self.model.stopTracking()
+            });
         },
         onError: function() {
             $('.btn-primary', this.el).button('reset');

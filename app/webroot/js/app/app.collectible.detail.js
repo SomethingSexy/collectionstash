@@ -123,12 +123,12 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
 
                 commentsView.on('comment:add', function(id) {
                     var model = new comments.model();
-                    model.set('entity_type_id', App.profile.get('entity_type_id'));
+                    model.set('entity_type_id', collectibleModel.get('entity_type_id'));
 
                     // set the last comment created so that this will return any comments
                     // created in the mean time
                     if (!comments.isEmpty()) {
-                        model.set('last_comment_created', App.comments.last().get('created'));
+                        model.set('last_comment_created', comments.last().get('created'));
                     }
 
                     detailLayout.modal.show(new CommentAddView({
@@ -141,6 +141,19 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                         }
 
                         detailLayout.modal.hideModal();
+                    });
+                });
+
+                commentsView.on('comment:edit', function(id) {
+                    var model = comments.get(id);
+
+                    App.layout.modal.show(new CommentAddView({
+                        model: model
+                    }));
+
+                    model.once('sync', function(model, response, options) {
+                        // this gets called before tracking is finished updating 
+                        App.layout.modal.hideModal();
                     });
                 });
 

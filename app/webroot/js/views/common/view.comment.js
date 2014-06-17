@@ -6,14 +6,11 @@ define(['require', 'marionette', 'text!templates/app/common/comment.mustache', '
         template: template,
         initialize: function(options) {
             this.permissions = options.permissions;
+            this.listenTo(this.model, 'change', this.render);
         },
         events: {
             'click ._edit': 'edit',
             'click ._remove': 'removeComment'
-        },
-        onRender: function() {
-            // $('.stash-sell', this.el).attr('data-collectible-user-id', this.model.get('id'));
-            // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
         },
         edit: function(event) {
             event.preventDefault();

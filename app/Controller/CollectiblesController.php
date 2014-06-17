@@ -419,6 +419,7 @@ class CollectiblesController extends AppController
             } else {
                 $permissions['add_comment'] = false;
             }
+            $this->set(compact('permissions'));
             
             $this->layout = 'require';
         } else {

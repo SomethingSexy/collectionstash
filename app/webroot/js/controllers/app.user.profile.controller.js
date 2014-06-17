@@ -269,6 +269,21 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                     });
                 });
 
+
+                commentsView.on('comment:edit', function(id) {
+                    var model = App.comments.get(id);
+
+                    App.layout.modal.show(new CommentAddView({
+                        model: model
+                    }));
+
+                    model.once('sync', function(model, response, options) {
+                        // this gets called before tracking is finished updating 
+                        App.layout.modal.hideModal();
+                    });
+                });
+
+
                 profileLayout.comments.show(commentsView);
             },
             stash: function() {

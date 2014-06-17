@@ -1,4 +1,4 @@
-define(['require', 'backbone', 'marionette', 'text!templates/app/common/comment.add.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache'], function(require, Backbone, Marionnette, template, ErrorMixin) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/comment.add.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
 
     var CommentAdd = Marionnette.ItemView.extend({
         template: template,
@@ -13,8 +13,11 @@ define(['require', 'backbone', 'marionette', 'text!templates/app/common/comment.
             this.errors = [];
         },
         onClose: function() {
-            this.model.resetAttributes();
-            this.model.stopTracking();
+            var self = this;
+            _.defer(function() {
+                self.model.resetAttributes();
+                self.model.stopTracking()
+            });
         },
 
         // TODO: update this to do what we did for the profile

@@ -67,13 +67,10 @@ class Comment extends AppModel
                 $retVal['response']['isSuccess'] = true;
             } else {
                 $retVal['response']['isSuccess'] = false;
-                $errors = $this->validationErrors;
-                $retVal['response']['errors'] = $errors;
+                $retVal['response']['data'] = $this->validationErrors;
             }
         } else {
-            $error['code'] = 0;
-            $error['message'] = 'Invalid access';
-            array_push($retVal['response']['errors'], $error);
+            $retVal['response']['message'] = 'Invalid access';
         }
         
         return $retVal;
@@ -99,14 +96,14 @@ class Comment extends AppModel
         $allowed = $this->checkPermission('remove', $comment, $loggedInUserId);
         
         if (!$allowed) {
-            $retVal['response']['message']  = 'Invalid access';
+            $retVal['response']['message'] = 'Invalid access';
             return $retVal;
         }
         
         if ($this->delete($comment['Comment']['id'])) {
             $retVal['response']['isSuccess'] = true;
         } else {
-            $retVal['response']['message']  = 'There was a problem deleting the comment';
+            $retVal['response']['message'] = 'There was a problem deleting the comment';
         }
         
         return $retVal;

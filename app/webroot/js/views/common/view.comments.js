@@ -1,31 +1,24 @@
-define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 'views/common/view.comment', 'mustache',
+define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 'text!templates/app/common/comments.empty.mustache', 'views/common/view.comment', 'mustache',
     'marionette.mustache'
-], function(require, Marionette, template, CommentView, mustache) {
+], function(require, Marionette, template, emptyTemplate, CommentView, mustache) {
 
-    // var NoItemsView = Backbone.Marionette.ItemView.extend({
-    //     template: emptyTemplate
-    // });
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate
+    });
+
 
     return Marionette.CompositeView.extend({
         template: template,
         itemView: CommentView,
         itemViewContainer: "ol._comments",
-        // emptyView: NoItemsView,
-        // itemViewOptions: function(model, index) {
-        //     return {
-        //         permissions: this.permissions
-        //     };
-        // },
-        // itemEvents: {
-        //     "stash:remove": function(event, view, id) {
-        //         this.trigger('stash:remove', id);
-        //     },
-        //     "stash:sell": function(event, view, id) {
-        //         this.trigger('stash:sell', id);
-        //     }
-        // },
-        events : {
-            'click ._addcomment' : 'addComment'
+        emptyView: NoItemsView,
+        itemEvents: {
+            "comment:edit": function(event, view, id) {
+                this.trigger('comment:edit', id);
+            }
+        },
+        events: {
+            'click ._addcomment': 'addComment'
         },
         addComment: function(event) {
             this.trigger('comment:add');
@@ -43,23 +36,6 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
             var data = {};
             data['permissions'] = this.permissions.toJSON();
             return data;
-        },
-        onShow: function() {
-            // var self = this;
-            // this.handler = $('._tiles .tile', this.el);
-            // // $('._tiles', this.el).imagesLoaded(function() {
-            // if (self.handler.wookmarkInstance) {
-            //     self.handler.wookmarkInstance.clear();
-            // }
-            // // Call the layout function.
-            // self.handler.wookmark({
-            //     autoResize: true, // This will auto-update the layout when the browser window is resized.
-            //     container: $('._tiles', self.el),
-            //     verticalOffset: 20,
-            //     align: 'left'
-            // });
-            // // Update the layout.
-            // self.handler.wookmark();
         }
     });
 });
