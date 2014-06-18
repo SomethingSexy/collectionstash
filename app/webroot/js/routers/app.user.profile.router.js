@@ -7,6 +7,8 @@ define(['backbone', 'marionette'], function(Backbone, Marionette) {
             "*username/stash/tiles": "stash",
             "*username/stash/list": "stashList",
             "*username/wishlist": "wishlist",
+            "*username/wishlist/tiles": "wishlist",
+            "*username/wishlist/list": "wishlistList",
             "*username/sale": "sale",
             "*username/photos": "photos",
             "*username/comments": "comments",

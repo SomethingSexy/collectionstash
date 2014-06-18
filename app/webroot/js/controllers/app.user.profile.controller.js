@@ -1,5 +1,5 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.stash.table', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/stash/view.stash.add', 'views/common/view.filters', 'models/model.collectible.user', 'views/common/view.comments', 'views/common/view.comment.add', 'text!templates/app/user/profile/layout.wishlist.mustache', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, StashTableView, WishlistView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.stash.table', 'views/app/user/profile/view.wishlist', 'views/app/user/profile/view.wishlist.table', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/stash/view.stash.add', 'views/common/view.filters', 'models/model.collectible.user', 'views/common/view.comments', 'views/common/view.comment.add', 'text!templates/app/user/profile/layout.wishlist.mustache', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashView, StashTableView, WishlistView, WishlistTableView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -66,7 +66,18 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 return data;
             },
             events: {
-
+                'click ._tilesLink': function(event) {
+                    event.preventDefault();
+                    Backbone.history.navigate(App.profile.get('username') + '/wishlist/tiles', {
+                        trigger: true
+                    });
+                },
+                'click ._listLink': function(event) {
+                    event.preventDefault();
+                    Backbone.history.navigate(App.profile.get('username') + '/wishlist/list', {
+                        trigger: true
+                    });
+                }
 
             },
             regions: {
@@ -85,10 +96,15 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             });
 
             stashView.on('stash:remove', function(id) {
+                var model = App.collectibles.fullCollection.get(id);
                 App.layout.modal.show(new StashRemoveView({
-                    model: App.collectibles.fullCollection.get(id),
+                    model: model,
                     reasons: App.reasonsCollection
                 }));
+
+                model.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
             });
 
             stashView.on('stash:sell', function(id) {
@@ -110,19 +126,93 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             });
 
             stashView.on('stash:remove', function(id) {
+                var model = App.collectibles.get(id);
                 App.layout.modal.show(new StashRemoveView({
-                    model: App.collectibles.fullCollection.get(id),
+                    model: model,
                     reasons: App.reasonsCollection
                 }));
+
+                model.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
             });
 
             stashView.on('stash:sell', function(id) {
                 App.layout.modal.show(new StashSellView({
-                    model: App.collectibles.fullCollection.get(id)
+                    model: App.collectibles.get(id)
                 }));
             });
 
             stashLayout.stash.show(stashView);
+        }
+
+        function renderWishlistTiles(wishlistLayout) {
+            if (App.wishlist.mode !== 'infinite') {
+                App.wishlist.switchMode('infinite');
+            }
+
+            var stashView = new WishlistView({
+                collection: App.wishlist,
+                permissions: App.permissions
+            });
+
+            stashView.on('stash:add', function(id) {
+
+                // upon success, we need to kick off a delete from wish list
+
+                // create a new model here
+                var wishListCollectible = App.wishlist.fullCollection.get(id);
+                var model = new CollectibleUser(wishListCollectible.toJSON());
+                model.unset('id');
+                model.collectible = wishListCollectible.collectible;
+
+                App.layout.modal.show(new StashAddView({
+                    model: model
+                }));
+                // once this has been saved
+                // close the modal and then trigger a delete
+                // on the wishlist 
+                model.once('sync', function() {
+                    wishListCollectible.destroy();
+                    App.layout.modal.hideModal();
+                });
+            });
+
+            wishlistLayout.wishlist.show(stashView);
+        }
+
+        function renderWishlistList(wishlistLayout) {
+            if (App.wishlist.mode !== 'server') {
+                App.wishlist.switchMode('server');
+            }
+            var stashView = new WishlistTableView({
+                collection: App.wishlist,
+                permissions: App.permissions
+            });
+
+            stashView.on('stash:add', function(id) {
+
+                // upon success, we need to kick off a delete from wish list
+
+                // create a new model here
+                var wishListCollectible = App.wishlist.get(id);
+                var model = new CollectibleUser(wishListCollectible.toJSON());
+                model.unset('id');
+                model.collectible = wishListCollectible.collectible;
+
+                App.layout.modal.show(new StashAddView({
+                    model: model
+                }));
+                // once this has been saved
+                // close the modal and then trigger a delete
+                // on the wishlist 
+                model.once('sync', function() {
+                    wishListCollectible.destroy();
+                    App.layout.modal.hideModal();
+                });
+            });
+
+            wishlistLayout.wishlist.show(stashView);
         }
 
         function renderStash(view) {
@@ -166,41 +256,18 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
 
         }
 
-        function renderWishlist() {
+        function renderWishlist(view) {
             var layout = new WishlistLayout({
                 permissions: App.permissions,
                 model: App.profile
             });
+
             App.layout.main.show(layout);
-
-            var stashView = new WishlistView({
-                collection: App.wishlist,
-                permissions: App.permissions
-            });
-
-            stashView.on('stash:add', function(id) {
-
-                // upon success, we need to kick off a delete from wish list
-
-                // create a new model here
-                var wishListCollectible = App.wishlist.fullCollection.get(id);
-                var model = new CollectibleUser(wishListCollectible.toJSON());
-                model.unset('id');
-                model.collectible = wishListCollectible.collectible;
-
-                App.layout.modal.show(new StashAddView({
-                    model: model
-                }));
-                // once this has been saved
-                // close the modal and then trigger a delete
-                // on the wishlist 
-                model.once('sync', function() {
-                    wishListCollectible.destroy();
-                    App.layout.modal.hideModal();
-                });
-            });
-
-            layout.wishlist.show(stashView);
+            if (view === 'tiles') {
+                renderWishlistTiles(layout);
+            } else if (view === 'list') {
+                renderWishlistList(layout);
+            }
         }
 
         function renderHeader(selectedMenu) {
@@ -317,10 +384,31 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             },
             wishlist: function() {
                 renderHeader('wishlist');
-                if (App.wishlist.isEmpty()) {
-                    App.wishlist.getFirstPage().done(renderWishlist);
+
+                if (App.wishlist.mode !== 'infinite') {
+                    App.wishlist.switchMode('infinite').done(function() {
+                        renderWishlist('tiles');
+                    });
+                } else if (App.wishlist.isEmpty()) {
+                    App.wishlist.getFirstPage().done(function() {
+                        renderWishlist('tiles');
+                    });
                 } else {
-                    renderWishlist();
+                    renderWishlist('tiles');
+                }
+            },
+            wishlistList: function() {
+                renderHeader('wishlist');
+                if (App.wishlist.mode !== 'server') {
+                    App.wishlist.switchMode('server').done(function() {
+                        renderWishlist('list');
+                    });
+                } else if (App.wishlist.isEmpty()) {
+                    App.wishlist.getFirstPage().done(function() {
+                        renderWishlist('list');
+                    });
+                } else {
+                    renderWishlist('list');
                 }
             },
             sale: function() {
