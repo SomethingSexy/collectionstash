@@ -7,7 +7,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
             'click ._stash': 'stash',
             'click ._wishlist': 'wishlist',
             'click ._sale': 'sale',
-            'click ._comments': 'comments',
             'click ._photos': 'photos',
             'click ._history': 'history'
         },
@@ -39,10 +38,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
         sale: function(event) {
             event.preventDefault();
             this.trigger('navigate:menu', 'sale');
-        },
-        comments: function(event) {
-            event.preventDefault();
-            this.trigger('navigate:menu', 'comments');
         },
         photos: function(event) {
             event.preventDefault();

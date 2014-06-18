@@ -417,9 +417,6 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             photos: function() {
                 renderHeader('photos');
             },
-            comments: function() {
-                renderHeader('comments');
-            },
             history: function() {
                 renderHeader('history');
             }
