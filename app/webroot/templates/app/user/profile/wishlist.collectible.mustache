@@ -25,8 +25,8 @@
 	<div class="_actions">
 		<span><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i></a></span>
 		{{#permissions.edit_collectible_user}}
+			<span><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-wishlist" title="Remove" href="#"><i class="fa fa-trash-o"></i></a></span>
 			<span><a class="add-full-to-stash btn" data-type="wishlist" data-collectible-user-id="{{id}}"  href="javascript:void(0)" title="Add to Stash"><img src="/img/icon/add_stash_link_25x25.png"></a></span>
-			<span><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-wishlist" title="Remove" href="#"><i class="fa fa-trash"></i></a></span>
 		{{/permissions.edit_collectible_user}}
 	</div>
 	</div>
