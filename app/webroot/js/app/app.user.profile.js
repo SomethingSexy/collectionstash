@@ -24,6 +24,9 @@ define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collect
     if(rawComments){
         MyApp.comments = new CommentCollection(rawComments);
     }
+    if(rawStashFacts){
+        MyApp.stashFacts = new Backbone.Model(rawStashFacts);
+    }
     MyApp.collectibles = new CollectiblesCollection([], {
         username: MyApp.profile.get('username')
     });

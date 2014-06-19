@@ -16,7 +16,7 @@ class UsersController extends AppController
         
         $user = $this->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => array('Profile')));
         // grab the stash for this user, since comments are tied to a stash
-        $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => false));
+        $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
         
         $profile = array();
         $profile['username'] = $user['User']['username'];
@@ -47,6 +47,7 @@ class UsersController extends AppController
         $facts['points_year'] = $pointsYear;
         
         $this->set(compact('facts'));
+
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
@@ -56,8 +57,12 @@ class UsersController extends AppController
         $permissions = array();
         if ($loggedInUser['User']['id'] === $user['User']['id']) {
             $permissions['edit_collectible_user'] = true;
+            $permissions['show_stash_facts'] = true;
+            // set it here so that it isn't rendered on the page either
+             $this->set('stashFacts', $stash['StashFact']);
         } else {
             $permissions['edit_collectible_user'] = false;
+            $permissions['show_stash_facts'] = false;
         }
         
         if ($this->isLoggedIn()) {
