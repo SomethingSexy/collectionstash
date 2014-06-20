@@ -207,7 +207,7 @@ class UsersController extends AppController
         $totalNotifications = $this->User->Notification->getCountNotifications($this->getUser());
         $this->set(compact('notifications'));
         $this->set(compact('totalNotifications'));
-        $this->layout = 'home_dashboard';
+        $this->layout = 'default';
         $this->set('dashboard', 'notifications');
     }
     /**
