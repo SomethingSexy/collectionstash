@@ -156,19 +156,23 @@ if (isset($bodyClass))
 				<ul class="nav navbar-nav navbar-right account">
 						<li>
 						<?php
-						$homeLinkLabel = '<i class="fa fa-home"></i>';
-						$homeLinkClass = '';
-						if ($notificationsCount !== 0) {
-							$homeLinkLabel .= ' ' . $notificationsCount;
-							$homeLinkClass = 'warning';
-						}
-						echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+						echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false));
 						?>
 						</li>
 						<?php
 						if(isset($isLoggedIn) && $isLoggedIn === true)
 						{  ?>
-	
+						<li>
+							<?php 
+								$notificationLinkLabel = '<span class="fa fa-warning"></span>';
+								$notificationLinkClass = '';
+								if ($notificationsCount !== 0) {
+									$notificationLinkLabel .= ' ' . $notificationsCount;
+									$notificationLinkClass = 'warning';
+								} 
+							
+								echo $this -> Html -> link($notificationLinkLabel, '/user/home/notifications', array('escape' => false, 'admin' => false, 'class' => $notificationLinkClass)); ?>
+						</li>		
 						<li class="dropdown">
 							<?php echo $this -> Html -> link('<i class="fa fa-user"></i><i class="fa fa-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
@@ -203,12 +207,13 @@ if (isset($bodyClass))
 						?>					
 				</ul>
 		    </nav>
-	</header>
+		</header>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12"><?php echo $content_for_layout; ?></div>
 			</div>	
 		</div>
+		<div id="push"></div>
 	</div>
 	<footer>
 		<div id="footer">
