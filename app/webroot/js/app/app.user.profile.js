@@ -1,4 +1,4 @@
-define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collections/collection.collectible.user', 'collections/collection.filters.selected', 'collections/collection.collectible.wishlist','collections/collection.comments'], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection) {
+define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collections/collection.collectible.user', 'collections/collection.filters.selected', 'collections/collection.collectible.wishlist', 'collections/collection.comments'], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -21,10 +21,11 @@ define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collect
     MyApp.facts = new Backbone.Model(rawFacts);
     MyApp.permissions = new Backbone.Model(rawPermissions);
     MyApp.reasonsCollection = new Backbone.Collection(rawReasons);
-    if(rawComments){
+    MyApp.activity = new Backbone.Collection(rawActivity);
+    if (rawComments) {
         MyApp.comments = new CommentCollection(rawComments);
     }
-    if(rawStashFacts){
+    if (rawStashFacts) {
         MyApp.stashFacts = new Backbone.Model(rawStashFacts);
     }
     MyApp.collectibles = new CollectiblesCollection([], {

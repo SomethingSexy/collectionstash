@@ -88,6 +88,9 @@ class UsersController extends AppController
         }
         
         $this->set('comments', $extractComments);
+        // grab the latest activity for this user
+        $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions'=> array('Activity.user_id'=> $user['User']['id']),  'order' => array('Activity.created' => 'desc')));
+        $this -> set('activity', Set::extract('/Activity/.', $activity));
     }
     /**
      * User home dashboard
