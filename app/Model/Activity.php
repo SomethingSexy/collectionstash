@@ -65,10 +65,32 @@ class Activity extends AppModel
                         $data->object->object_displayName = $data->object->data->Artist->name;
                     } else if ($data->object->objectType === 'listing') {
                         $data->object->object_displayName = 'listing';
-                        $data->object->url = . $data->object->data->Listing->url;
+                        $data->object->url = $data->object->data->Listing->url;
                     } else {
                         $data->object->object_displayName = $data->object->objectType;
                     }
+                }
+                
+                if (isset($data->target) && !empty($data->target)) {
+                    $data->isTarget = true;
+                    
+                    if ($data->verb === 'approve') {
+                        $data->pre_target = __('submitted by');
+                    } else if ($data->verb === 'remove') {
+                        $data->pre_target = __('from');
+                    } else {
+                        $data->pre_target = __('to');
+                    }
+                    
+                    if (empty($data->target->displayName)) {
+                        if ($data->target->objectType === 'collectible') {
+                            $data->target->displayName = 'Collectible';
+                        } else if ($data->target->objectType === 'attribute') {
+                            $data->target->displayName = 'Part';
+                        }
+                    }
+                } else {
+                    $data->isTarget = false;
                 }
                 
                 $results[$key]['Activity']['data'] = $data;
