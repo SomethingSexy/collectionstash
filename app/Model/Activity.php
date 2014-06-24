@@ -20,10 +20,55 @@ class Activity extends AppModel
                 // edit doesen't have much so process this one separately
                 if ($val['Activity']['activity_type_id}'] === '12') {
                     $data->verb_displayName = __('editied');
+                    $data->isObject = false;
                     if ($data->tagert->displayName === null) {
                         $data->tagert->displayName = __('Collectible');
                     }
                 } else {
+                    // process some verb display names
+                    if ($val['Activity']['activity_type_id'] === '7') {
+                        $data->verb_displayName = __('submitted');
+                    } else {
+                        if ($data->verb === 'add') {
+                            $data->verb_displayName = __('added');
+                        } else if ($data->verb === 'submit') {
+                            $data->verb_displayName = __('submitted');
+                        } else if ($data->verb === 'approve') {
+                            $data->verb_displayName = __('approved');
+                        } else if ($data->verb === 'remove') {
+                            $data->verb_displayName = __('removed');
+                        } else {
+                            $data->verb_displayName = $data->verb;
+                        }
+                    }
+                    // process object
+                    // everyone except type 12 has an object (it should anyway)
+                    $data->isObject = true;
+                    // TODO: update activity code so it builds the object_displayName, this is a bit ridiculous
+                    if ($data->object->objectType === 'photo') {
+                        //<!-- need to handle old format, that does not contain the name -->
+                        if ($val['Activity']['activity_type_id'] === '12') {
+                            if (strrpos($data->object->url, '.') !== false) {
+                                $data->object->url = $data->object->url . $data->object->data->name;
+                            }
+                        }
+                        $data->object->object_displayName = $data->object->objectType;
+                    } else if ($data->object->objectType === 'collectible') {
+                        $data->object->object_displayName = $data->object->data->Collectible->displayTitle;
+                    } else if ($data->object->objectType === 'attribute') {
+                        $data->object->object_displayName = $data->object->data->Attribute->name;
+                    } else if ($data->object->objectType === 'tag') {
+                        $data->object->object_displayName = $data->object->data->Tag->tag;
+                        $data->object->url = '/collectibles/search/?t=' . $data->object->data->Tag->id;
+                    } else if ($data->object->objectType === 'artist') {
+                        $data->object->url = '/artist/' . $data->object->data->Artist->id . '/' . $data->object->data->Artist->slug;
+                        $data->object->object_displayName = $data->object->data->Artist->name;
+                    } else if ($data->object->objectType === 'listing') {
+                        $data->object->object_displayName = 'listing';
+                        $data->object->url = . $data->object->data->Listing->url;
+                    } else {
+                        $data->object->object_displayName = $data->object->objectType;
+                    }
                 }
                 
                 $results[$key]['Activity']['data'] = $data;

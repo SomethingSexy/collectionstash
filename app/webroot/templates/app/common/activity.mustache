@@ -14,37 +14,20 @@
 	{{/data.actor.url}}	
 	<!-- verb -->
 	<span class="verb">{{data.verb_displayName}}</span>
-	<!-- target -->
+	<!-- Object -->
+	{{#data.isObject}}
+		{{#data.object.url}}
+			<a target="_blank" href="{{data.object.url}}"> {{{data.object.object_displayName}}}</a>
+		{{/data.object.url}}
 
-	{@if cond="( '{Activity.activity_type_id}' === '12' )"}
-		edited 
-		{@if cond="( '{Activity.data.target.displayName}' === null )"}
-			Collectible
-		{:else}
-			<a href="{Activity.data.target.url}">{Activity.data.target.displayName|s}</a>
-		{/if}
-	{:else}
-		{@if cond="( '{Activity.activity_type_id}' === '7' )"}
-			<span class="verb">submitted </span>
-		{:else}
-			{@if cond="( '{Activity.data.verb}' === 'add' || '{Activity.data.verb}' === 'submit' || '{Activity.data.verb}' === 'approve' || '{Activity.data.verb}' === 'remove')"}
-				{@if cond="( '{Activity.data.verb}' === 'add' )"}
-					<span class="verb">added </span> 
-				{/if}
-				{@if cond="( '{Activity.data.verb}' === 'submit' )"}
-					<span class="verb">submitted </span> 
-				{/if}
-				{@if cond="( '{Activity.data.verb}' === 'approve' )"}
-					<span class="verb">approved </span> 
-				{/if}
-				{@if cond="( '{Activity.data.verb}' === 'remove' )"}
-					<span class="verb">removed </span> 
-				{/if}
-			{:else}
-				<span class="verb">{Activity.data.verb} </span> 
-			{/if}
-			
-		{/if}
+	{{/data.isObject}}
+
+	<!-- target -->
+	{{#data.isTarget}}
+
+
+	{{/data.isTarget}}
+
 		<!-- Checking for edit here because we don't want default behavior-->
 		{@if cond="( '{Activity.data.object.objectType}' === 'photo' ||  '{Activity.data.object.objectType}' === 'collectible' ||  '{Activity.data.object.objectType}' === 'attribute' || '{Activity.data.object.objectType}' === 'edit' || '{Activity.data.object.objectType}' === 'tag' || '{Activity.data.object.objectType}' === 'artist' || '{Activity.data.object.objectType}' === 'listing' )"}
 			<!-- TODO: We need to find type collectible and type id === 6 and handle both new and old format -->
@@ -115,6 +98,6 @@
 			{/empty}
 		
 		{/eq} 
-	{/if}
+
 </div>
 
