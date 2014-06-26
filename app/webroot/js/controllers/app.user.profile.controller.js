@@ -1,5 +1,33 @@
-define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profile/view.header', 'views/app/user/profile/view.user', 'views/app/user/profile/view.facts', 'views/app/user/profile/view.stash.facts', 'views/app/user/profile/view.stash', 'views/app/user/profile/view.stash.table', 'views/app/user/profile/view.wishlist', 'views/app/user/profile/view.wishlist.table','views/common/view.activities', 'text!templates/app/user/profile/layout.mustache', 'text!templates/app/user/profile/layout.profile.mustache', 'text!templates/app/user/profile/layout.stash.mustache', 'views/common/modal.region', 'views/common/stash/view.stash.sell', 'views/common/stash/view.stash.remove', 'views/common/stash/view.stash.add', 'views/common/view.filters', 'models/model.collectible.user', 'views/common/view.comments', 'views/common/view.comment.add', 'text!templates/app/user/profile/layout.wishlist.mustache', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, WishlistTableView, ActivitiesView, layout, profileLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+define(['app/app.user.profile',
+        'backbone',
+        'marionette',
+        'views/app/user/profile/view.header',
+        'views/app/user/profile/view.user',
+        'views/app/user/profile/view.facts',
+        'views/app/user/profile/view.stash.facts',
+        'views/app/user/profile/view.stash',
+        'views/app/user/profile/view.stash.table',
+        'views/app/user/profile/view.wishlist',
+        'views/app/user/profile/view.photos',
+        'views/app/user/profile/view.wishlist.table',
+        'views/common/view.activities',
+        'text!templates/app/user/profile/layout.mustache',
+        'text!templates/app/user/profile/layout.profile.mustache',
+        'text!templates/app/user/profile/layout.photos.mustache',
+        'text!templates/app/user/profile/layout.stash.mustache',
+        'views/common/modal.region',
+        'views/common/stash/view.stash.sell',
+        'views/common/stash/view.stash.remove',
+        'views/common/stash/view.stash.add',
+        'views/common/view.filters',
+        'models/model.collectible.user',
+        'views/common/view.comments',
+        'views/common/view.comment.add',
+        'text!templates/app/user/profile/layout.wishlist.mustache',
+        'mustache',
+        'marionette.mustache'
+    ],
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -19,6 +47,14 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
                 comments: '._comments',
                 stashFacts: '._stashFacts',
                 activity: '._activity'
+            }
+        });
+
+
+        var PhotosLayout = Backbone.Marionette.Layout.extend({
+            template: photosLayout,
+            regions: {
+                photos: '._photos'
             }
         });
 
@@ -270,6 +306,24 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             } else if (view === 'list') {
                 renderWishlistList(layout);
             }
+
+            layout.photos.show()
+        }
+
+        function renderPhotos(view) {
+            var layout = new PhotosLayout({
+                permissions: App.permissions,
+                model: App.profile
+            });
+
+            App.layout.main.show(layout);
+
+            var view = new PhotosView({
+                collection: App.photos,
+                permissions: App.permissions
+            });
+
+            layout.photos.show(view);
         }
 
         function renderHeader(selectedMenu) {
@@ -427,6 +481,14 @@ define(['app/app.user.profile', 'backbone', 'marionette', 'views/app/user/profil
             },
             photos: function() {
                 renderHeader('photos');
+
+                if (App.photos.isEmpty()) {
+                    App.photos.getFirstPage().done(function() {
+                        renderPhotos();
+                    });
+                } else {
+                    renderPhotos();
+                }
             },
             history: function() {
                 renderHeader('history');
