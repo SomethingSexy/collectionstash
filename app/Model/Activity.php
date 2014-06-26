@@ -13,16 +13,16 @@ class Activity extends AppModel
         foreach ($results as $key => $val) {
             if ($primary && isset($val['Activity'])) {
                 $data = json_decode($results[$key]['Activity']['data']);
-                
+
                 if ($data->actor->objectType === 'user') {
                     $data->actor->url = '/stash/' . $data->actor->displayName;
                 }
                 // edit doesen't have much so process this one separately
-                if ($val['Activity']['activity_type_id}'] === '12') {
+                if ($val['Activity']['activity_type_id'] === '12') {
                     $data->verb_displayName = __('editied');
                     $data->isObject = false;
-                    if ($data->tagert->displayName === null) {
-                        $data->tagert->displayName = __('Collectible');
+                    if ($data->target->displayName === null) {
+                        $data->target->displayName = __('Collectible');
                     }
                 } else {
                     // process some verb display names
