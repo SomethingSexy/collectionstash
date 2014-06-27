@@ -47,7 +47,6 @@ class UsersController extends AppController
         $facts['points_year'] = $pointsYear;
         
         $this->set(compact('facts'));
-
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
@@ -58,8 +57,12 @@ class UsersController extends AppController
         if ($loggedInUser['User']['id'] === $user['User']['id']) {
             $permissions['edit_collectible_user'] = true;
             $permissions['show_stash_facts'] = true;
+            if (Configure::read('Settings.User.uploads.allowed')) {
+                $permissions['upload_photos'] = true;
+                $permissions['edit_photos'] = true;
+            }
             // set it here so that it isn't rendered on the page either
-             $this->set('stashFacts', $stash['StashFact']);
+            $this->set('stashFacts', $stash['StashFact']);
         } else {
             $permissions['edit_collectible_user'] = false;
             $permissions['show_stash_facts'] = false;
@@ -89,8 +92,8 @@ class UsersController extends AppController
         
         $this->set('comments', $extractComments);
         // grab the latest activity for this user
-        $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions'=> array('Activity.user_id'=> $user['User']['id']),  'order' => array('Activity.created' => 'desc')));
-        $this -> set('activity', Set::extract('/Activity/.', $activity));
+        $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions' => array('Activity.user_id' => $user['User']['id']), 'order' => array('Activity.created' => 'desc')));
+        $this->set('activity', Set::extract('/Activity/.', $activity));
     }
     /**
      * User home dashboard

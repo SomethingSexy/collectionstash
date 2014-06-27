@@ -55,7 +55,7 @@ class UserUploadsController extends AppController
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->UserUpload->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
-            $this->paginate = array('limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('UserUpload.user_id' => $user['User']['id']), 'contain' => false);
+            $this->paginate = array('paramType' => 'querystring', 'limit' => 25, 'conditions' => array('UserUpload.user_id' => $user['User']['id']), 'contain' => false);
             $userUploads = $this->paginate('UserUpload');
             
             foreach ($userUploads as $key => $value) {
