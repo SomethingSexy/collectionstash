@@ -5,6 +5,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
         template: template,
         itemViewContainer: "tbody",
         itemView: CollectibleView,
+        sorts: {
+            'active': -1,
+            'created': -1
+        },
         initialize: function(options) {
             this.permissions = options.permissions;
         },
@@ -17,6 +21,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
             this.listenTo(this.collection, "sync", this.renderMore);
+        },
+        events: {
+            'click ._sort': 'sort'
         },
         renderMore: function() {
             var self = this;
@@ -43,6 +50,14 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
                     self.collection.getPage(pageNumber);
                 }
             });
+        },
+        sort: function(event) {
+            var sort = $(event.currentTarget).data('sort');
+            this.sorts[sort] = this.sorts[sort] === -1 ? 1 : -1;
+            this.collection.setSorting(sort, this.sorts[sort], {
+                full: false
+            });
+            this.collection.fetch();
         }
     });
 });

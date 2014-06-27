@@ -135,6 +135,9 @@ class CollectiblesUser extends AppModel
                             }
                         }
                     }
+                    $datetime = strtotime($val['CollectiblesUser']['created']);
+                    $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime); 
+
                     // make sure we have a listing, these listings will only have one transaction
                     // TODO, this should go through the Listing/Transaction API to get this data
                     if (isset($val['Listing'])) {
