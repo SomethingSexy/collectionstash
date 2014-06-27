@@ -53,6 +53,15 @@ define(['app/app.user.profile',
 
         var PhotosLayout = Backbone.Marionette.Layout.extend({
             template: photosLayout,
+            initialize: function(options) {
+                this.permissions = options.permissions;
+            },
+            serializeData: function() {
+                var data = this.model.toJSON();
+                data['upload_photos'] = this.permissions.get('upload_photos');
+                data['edit_photos'] = this.permissions.get('edit_photos');
+                return data;
+            },
             regions: {
                 photos: '._photos'
             }
