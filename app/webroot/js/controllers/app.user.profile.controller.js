@@ -10,11 +10,13 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.wishlist',
         'views/app/user/profile/view.photos',
         'views/app/user/profile/view.wishlist.table',
+        'views/app/user/profile/view.history',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
         'text!templates/app/user/profile/layout.photos.mustache',
         'text!templates/app/user/profile/layout.stash.mustache',
+        'text!templates/app/user/profile/layout.history.mustache',
         'views/common/modal.region',
         'views/common/stash/view.stash.sell',
         'views/common/stash/view.stash.remove',
@@ -27,7 +29,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -66,6 +68,13 @@ define(['app/app.user.profile',
                 photos: '._photos'
             }
         });
+
+        var HistoryLayout = Backbone.Marionette.Layout.extend({
+            template: historyLayout,
+            regions: {
+                history: '._history',
+            }
+        });        
 
         var StashLayout = Backbone.Marionette.Layout.extend({
             template: stashLayout,
@@ -335,6 +344,22 @@ define(['app/app.user.profile',
             layout.photos.show(view);
         }
 
+        function renderHistory(view) {
+            var layout = new HistoryLayout({
+                permissions: App.permissions,
+                model: App.profile
+            });
+
+            App.layout.main.show(layout);
+
+            var view = new HistoryView({
+                collection: App.history,
+                permissions: App.permissions
+            });
+
+            layout.history.show(view);
+        }
+
         function renderHeader(selectedMenu) {
             var header = new HeaderView({
                 model: App.profile,
@@ -501,6 +526,13 @@ define(['app/app.user.profile',
             },
             history: function() {
                 renderHeader('history');
+                if (App.history.isEmpty()) {
+                    App.history.getFirstPage().done(function() {
+                        renderHistory();
+                    });
+                } else {
+                     renderHistory();
+                }
             }
         });
     });

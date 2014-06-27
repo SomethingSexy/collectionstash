@@ -1,0 +1,72 @@
+<td style="min-width: 100px; max-width: 100px;">
+
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}
+
+</td>
+<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}</a></td>
+{{#Collectible.Manufacture.title}}
+	<td>{{{Collectible.Manufacture.title}}}</td>
+{{/Collectible.Manufacture.title}}
+		
+{{^Collectible.Manufacture.title}}
+	<td>N/A</td>
+{{/Collectible.Manufacture.title}}
+
+{{^Collectible.edition_size}}
+	<td> - </td>
+{{/Collectible.edition_size}}	
+{{#Collectible.edition_size}}
+	{{^edition_size}}
+		<td>Not Recorded</td>
+	{{/edition_size}}
+	{{#edition_size}}
+		<td>{{edition_size}}/{{Collectible.edition_size}}</td>
+	{{/edition_size}}
+{{/Collectible.edition_size}}	
+
+{{#cost}}
+	<td>{{cost}}</td>
+{{/cost}}
+{{^cost}}
+	<td>{{Not Recorded}}</td>
+{{/cost}}
+
+{{#CollectiblesUser.CollectiblePriceFact}}
+	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
+{{/CollectiblesUser.CollectiblePriceFact}}
+{{^CollectiblesUser.CollectiblePriceFact}}
+	<td> - </td>
+{{/CollectiblesUser.CollectiblePriceFact}}
+
+{{#purchase_date}}
+	<td>{{purchase_date}}</td>
+{{/purchase_date}}
+{{^purchase_date}}
+	<td>{{Not Recorded}}</td>
+{{/purchase_date}}
+
+<td>{{created}}</td>
+
+{{#permissions.edit_collectible_user}}
+<td class="menu">
+<div class="btn-group">
+<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+<ul class="dropdown-menu">
+<li><a href="/collectibles_users/edit/{{id}}" title="Edit"><i class="fa fa-edit"></i>  Edit</a></li>
+{{^sale}}
+<li><a href="javascript:void(0);" class="stash-sell" title="Sell"><i class="fa fa-dollar"></i>  Sell</a></li>
+{{/sale}}
+<li><a data-prompt="true" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>
+</ul>
+</div>
+</td>
+{{/permissions.edit_collectible_user}}

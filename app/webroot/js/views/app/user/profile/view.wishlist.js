@@ -87,7 +87,12 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
             });
             // Update the layout.
             self.handler.wookmark();
-            // });
+            // })
+            if(!this.collection.hasNextPage()){
+                $('._more', this.el).hide();
+            } else {
+                 $('._more', this.el).show();
+            }
         }
     });
 });
