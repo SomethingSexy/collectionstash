@@ -1,3 +1,11 @@
+{{#active}}
+<td class="bought-sold-icon"><i class="fa fa-plus"></i></td>
+{{/active}}
+{{^active}}
+<td><i class="fa fa-minus"></i></td>
+{{/active}}
+	
+
 <td style="min-width: 100px; max-width: 100px;">
 
 	{{#Collectible.CollectiblesUpload}}
@@ -55,7 +63,23 @@
 {{/purchase_date}}
 
 <td>{{created}}</td>
+	
+{{#active}}
+<td> - </td>
+<td> - </td>
+{{/active}}
+{{^active}}
+	{{#listing_id}}
+		<td>{{sold_cost}}</td>
+		<td>{{sale_date}}</td>
+	{{/listing_id}}
 
+	{{^listing_id}}
+		<td> - </td>
+		<td> - </td>
+	{{/listing_id}}
+
+{{/active}}
 {{#permissions.edit_collectible_user}}
 <td class="menu">
 <div class="btn-group">

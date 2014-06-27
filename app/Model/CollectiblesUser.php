@@ -144,8 +144,11 @@ class CollectiblesUser extends AppModel
                             } else if ($val['Listing']['listing_type_id'] === '3') {
                                 $results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
                             }
+                            $datetime = strtotime($val['Listing']['Transaction'][0]['sale_date']);
+                            $results[$key]['CollectiblesUser']['sale_date'] = date('F jS, Y', $datetime);
                             // if it is for sale, keep the listing, we also need these fields for updatintg purposes if
                             // it is an active listing we want to know how much or what the user wants for it
+                            
                             
                         } else if ($val['CollectiblesUser']['sale']) {
                             if ($val['Listing']['listing_type_id'] === '2') {
@@ -549,6 +552,7 @@ class CollectiblesUser extends AppModel
         if (is_numeric($check) || is_string($check)) {
             $collectible = $this->find('first', array('conditions' => array('CollectiblesUser.id' => $check), 'contain' => false));
             //lol
+            
             
         } else {
             // assume object
