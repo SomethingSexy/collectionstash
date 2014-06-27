@@ -78,13 +78,37 @@ class CollectiblesUsersController extends AppController
         }
     }
     
+    public function history($username = null) {
+        $this->set(compact('username'));
+        $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
+        //Ok we have a user, although this seems kind of inefficent but it works for now
+        if ($this->request->isGet()) {
+            // $graphData = $this->Stash->getStashGraphHistory($user);
+            // $this->set(compact('graphData'));
+            // $this->set('stash', $user['Stash'][0]);
+            
+            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+            $collectibles = $this->paginate('CollectiblesUser');
+            // I am sure there is as better way to do this, I don't feel smart right now
+            //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
+            
+            $extractUserCollectibles = Set::extract('/CollectiblesUser/.', $collectibles);
+            
+            foreach ($extractUserCollectibles as $key => $value) {
+                $extractUserCollectibles[$key]['Collectible'] = $collectibles[$key]['Collectible'];
+            }
+            
+            $this->set('collectibles', $extractUserCollectibles);
+        }
+    }
+    
     public function sale($username = null) {
         
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             // Be very careful when changing this contains, it is tied to the type
-            $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
             $collectibles = $this->paginate('CollectiblesUser');
             // I am sure there is as better way to do this, I don't feel smart right now
             //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);

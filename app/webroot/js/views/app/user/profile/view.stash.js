@@ -88,6 +88,11 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             // Update the layout.
             self.handler.wookmark();
             // });
+            if (!this.collection.hasNextPage()) {
+                $('._more', this.el).hide();
+            } else {
+                $('._more', this.el).show();
+            }
         }
     });
 });
