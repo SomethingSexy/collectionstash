@@ -11,6 +11,7 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.photos',
         'views/app/user/profile/view.wishlist.table',
         'views/app/user/profile/view.history',
+        'views/app/user/profile/view.history.chart',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
@@ -29,7 +30,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -73,8 +74,9 @@ define(['app/app.user.profile',
             template: historyLayout,
             regions: {
                 history: '._history',
+                chart: '._chart'
             }
-        });        
+        });
 
         var StashLayout = Backbone.Marionette.Layout.extend({
             template: stashLayout,
@@ -344,20 +346,21 @@ define(['app/app.user.profile',
             layout.photos.show(view);
         }
 
-        function renderHistory(view) {
-            var layout = new HistoryLayout({
-                permissions: App.permissions,
-                model: App.profile
-            });
-
-            App.layout.main.show(layout);
-
+        function renderHistory(layout) {
             var view = new HistoryView({
                 collection: App.history,
                 permissions: App.permissions
             });
 
             layout.history.show(view);
+        }
+
+        function renderHistoryChart(layout) {
+            var chartView = new HistoryChartView({
+                model: App.histroyGraph
+            });
+
+            layout.chart.show(chartView);
         }
 
         function renderHeader(selectedMenu) {
@@ -526,12 +529,32 @@ define(['app/app.user.profile',
             },
             history: function() {
                 renderHeader('history');
-                if (App.history.isEmpty()) {
-                    App.history.getFirstPage().done(function() {
-                        renderHistory();
+
+                var layout = new HistoryLayout({
+                    permissions: App.permissions,
+                    model: App.profile
+                });
+
+                App.layout.main.show(layout);
+
+                if (App.histroyGraph.isNew()) {
+                    // could bind to sync event but not sure we will
+                    // fetch this again
+                    App.histroyGraph.fetch({
+                        success: function() {
+                            renderHistoryChart(layout);
+                        }
                     });
                 } else {
-                     renderHistory();
+                    renderHistoryChart(layout);
+                }
+
+                if (App.history.isEmpty()) {
+                    App.history.getFirstPage().done(function() {
+                        renderHistory(layout);
+                    });
+                } else {
+                    renderHistory(layout);
                 }
             }
         });

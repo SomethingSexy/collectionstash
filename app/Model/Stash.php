@@ -16,7 +16,6 @@ class Stash extends AppModel
             foreach ($results as $key => $val) {
                 if (isset($val['Stash'])) {
                     if (isset($val['StashFact']) && !empty($val['StashFact'])) {
-                        
                         // currently we only have one
                         $results[$key]['StashFact'] = $val['StashFact'][0];
                     } else {
@@ -33,7 +32,6 @@ class Stash extends AppModel
         $count = $this->CollectiblesUser->find("count", array('conditions' => array('CollectiblesUser.stash_id' => $stashId)));
         return $count;
     }
-    
     /**
      * Given a user id and a stash type, return the stash
      */
@@ -46,7 +44,6 @@ class Stash extends AppModel
         
         return $stash['Stash']['id'];
     }
-    
     /**
      * Depending on the graph we will want to switch these out based on the graph options we support
      *
@@ -55,9 +52,60 @@ class Stash extends AppModel
      * Performance update: create a stats table that calculates every user's stash to add add, remove counts by month and year
      *
      */
+    
+    public function getStashGraphHistory_2($user) {
+        $result = array();
+        $collectibles = $this->CollectiblesUser->find('all', array('joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
+        $source = array();
+        $source['bought'] = array();
+        $source['sold'] = array();
+        // process source data
+        foreach ($collectibles as $collectible) {
+            if ($collectible['CollectiblesUser']['purchase_date'] !== null && $collectible['CollectiblesUser']['purchase_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['purchase_date'])) {
+                $time = strtotime($collectible['CollectiblesUser']['purchase_date']);
+                $date = date('U', $time);
+                array_push($source['bought'], array($time => 1));
+            }
+            if ($collectible['CollectiblesUser']['remove_date'] !== null && $collectible['CollectiblesUser']['remove_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['remove_date'])) {
+                
+                $time = strtotime($collectible['CollectiblesUser']['remove_date']);
+                $date = date('U', $time);
+                array_push($source['sold'], array($time => 1));
+            }
+        }
+        
+        $soldResult = array();
+        foreach ($source['sold'] as $item) {
+            $artist = key($item);
+            $album = current($item);
+            
+            if (!isset($soldResult[$artist])) {
+                $soldResult[$artist] = $album;
+            } else {
+                $soldResult[$artist] = $soldResult[$artist] + $album;
+            }
+        }
+
+        $result['sold'] = $soldResult;
+
+        $boughtResult = array();
+        foreach ($source['bought'] as $item) {
+            $artist = key($item);
+            $album = current($item);
+            
+            if (!isset($boughtResult[$artist])) {
+                $boughtResult[$artist] = $album;
+            } else {
+                $boughtResult[$artist] = $boughtResult[$artist] + $album;
+            }
+        }
+        $result['bought'] = $boughtResult;
+        
+        return $result;
+    }
+    
     public function getStashGraphHistory($user) {
         $collectibles = $this->CollectiblesUser->find('all', array('joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
-        
         // we need to find the beginning and the end
         //
         // then we need to figure out our ranges, every month, or a subset of months or years
@@ -121,7 +169,6 @@ class Stash extends AppModel
             reset($templateData);
             
             for ($i = $oldestYear; $i <= $newestYear; $i++) {
-                
                 // if it isn't set, set the year
                 if (!isset($templateData[$i])) {
                     $templateData[$i] = array();
@@ -144,7 +191,6 @@ class Stash extends AppModel
                 ksort($templateData[$i]);
             }
         }
-        
         // we need to fill out empty years, months now
         
         // if I wanted to do an overall , I would have to do a tally of when things were per month and then if something was removed that month subtract, but each month would have to carry over the previous months count
@@ -160,7 +206,6 @@ class Stash extends AppModel
         
         return $profileSettings;
     }
-    
     /**
      * Get filters for a given stash
      */

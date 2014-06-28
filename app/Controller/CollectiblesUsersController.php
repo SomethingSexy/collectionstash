@@ -102,6 +102,18 @@ class CollectiblesUsersController extends AppController
         }
     }
     
+    public function historyData($username) {
+        $this->autoRender = false;
+        $this->set(compact('username'));
+        $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
+        //Ok we have a user, although this seems kind of inefficent but it works for now
+        if ($this->request->isGet()) {
+            $graphData = $this->CollectiblesUser->User->Stash->getStashGraphHistory_2($user);
+            $graphData['id'] = $username;
+            $this->response->body(json_encode($graphData));
+        }
+    }
+    
     public function sale($username = null) {
         
         $this->set(compact('username'));
