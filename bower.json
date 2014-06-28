@@ -30,8 +30,9 @@
         "Flot" : "https://github.com/flot/flot.git#v0.8.3",
         "zeroclipboard" : "2.1.1",
         "blueimp-gallery" : "2.15.0",
-        "blockui" : "v2.65"
-
+        "blockui" : "v2.65",
+        "rickshaw" : "https://github.com/shutterstock/rickshaw.git#1.5.0",
+        "d3" : "3.4.8"
     },
     "devDependencies": {}
 }

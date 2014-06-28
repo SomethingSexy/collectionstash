@@ -31,6 +31,7 @@
 	}
 	?>
 	<?php
+	// TODO think about moving some of this to require-css
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
 	echo $this -> Minify -> css('thirdparty/datepicker');
@@ -41,6 +42,7 @@
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 	echo $this -> Html -> css('/bower_components/select2/select2');
+	echo $this -> Html -> css('/bower_components/rickshaw/rickshaw.min');
 	?>
 	<script type="text/javascript" src="/bower_components/requirejs/require.js"></script>
 	<?php echo $scripts_for_layout; ?>
