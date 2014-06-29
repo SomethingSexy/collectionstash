@@ -69,16 +69,13 @@
 <td> - </td>
 {{/active}}
 {{^active}}
-	{{#listing_id}}
+	{{#sold_cost}}
 		<td>{{sold_cost}}</td>
-		<td>{{sale_date}}</td>
-	{{/listing_id}}
-
-	{{^listing_id}}
+	{{/sold_cost}}
+	{{^sold_cost}}
 		<td> - </td>
-		<td> - </td>
-	{{/listing_id}}
-
+	{{/sold_cost}}
+<td>{{remove_date_formatted}}</td>
 {{/active}}
 {{#permissions.edit_collectible_user}}
 <td class="menu">

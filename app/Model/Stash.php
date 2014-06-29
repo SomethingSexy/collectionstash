@@ -55,7 +55,7 @@ class Stash extends AppModel
     
     public function getStashGraphHistory_2($user) {
         $result = array();
-        $collectibles = $this->CollectiblesUser->find('all', array('joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
+        $collectibles = $this->CollectiblesUser->find('all', array('order' => array('purchase_date' => 'desc'), 'contain' => false, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id'])));
         $source = array();
         $source['bought'] = array();
         $source['sold'] = array();
@@ -63,13 +63,12 @@ class Stash extends AppModel
         foreach ($collectibles as $collectible) {
             if ($collectible['CollectiblesUser']['purchase_date'] !== null && $collectible['CollectiblesUser']['purchase_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['purchase_date'])) {
                 $time = strtotime($collectible['CollectiblesUser']['purchase_date']);
-                $date = date('U', $time);
+                // $date = date('m/d/y g:i A', $time);
                 array_push($source['bought'], array($time => 1));
             }
             if ($collectible['CollectiblesUser']['remove_date'] !== null && $collectible['CollectiblesUser']['remove_date'] !== '0000-00-00' && !empty($collectible['CollectiblesUser']['remove_date'])) {
-                
                 $time = strtotime($collectible['CollectiblesUser']['remove_date']);
-                $date = date('U', $time);
+                // $date = date('m/d/y g:i A', $time);
                 array_push($source['sold'], array($time => 1));
             }
         }
