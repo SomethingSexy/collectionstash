@@ -7,7 +7,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
         itemView: CollectibleView,
         sorts: {
             'active': -1,
-            'created': -1
+            'created': -1,
+            'Collectible.average_price': -1
         },
         initialize: function(options) {
             this.permissions = options.permissions;
@@ -54,9 +55,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
         sort: function(event) {
             var sort = $(event.currentTarget).data('sort');
             this.sorts[sort] = this.sorts[sort] === -1 ? 1 : -1;
-            this.collection.setSorting(sort, this.sorts[sort], {
-                full: false
-            });
+            this.collection.setSorting(sort, this.sorts[sort]);
             this.collection.fetch();
         }
     });
