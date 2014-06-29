@@ -113,9 +113,12 @@ class CollectiblesUser extends AppModel
                     }
                     if (isset($val['CollectiblesUser']['remove_date'])) {
                         if ($val['CollectiblesUser']['remove_date'] !== null && $val['CollectiblesUser']['remove_date'] !== '0000-00-00') {
-                            $results[$key]['CollectiblesUser']['remove_date'] = date('m/d/Y', strtotime($val['CollectiblesUser']['remove_date']));
+                            $time = strtotime($val['CollectiblesUser']['remove_date']);
+                            $results[$key]['CollectiblesUser']['remove_date'] = date('m/d/Y', $time);
+                            $results[$key]['CollectiblesUser']['remove_date_formatted'] = date('F jS, Y', $time);
                         } else {
                             $results[$key]['CollectiblesUser']['remove_date'] = '';
+                             $results[$key]['CollectiblesUser']['remove_date_formatted'] = '';
                         }
                     }
                     // If it has a merchant, add the merchant name to the merchant field for display purposes
@@ -136,8 +139,7 @@ class CollectiblesUser extends AppModel
                         }
                     }
                     $datetime = strtotime($val['CollectiblesUser']['created']);
-                    $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime); 
-
+                    $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
                     // make sure we have a listing, these listings will only have one transaction
                     // TODO, this should go through the Listing/Transaction API to get this data
                     if (isset($val['Listing'])) {
@@ -147,11 +149,8 @@ class CollectiblesUser extends AppModel
                             } else if ($val['Listing']['listing_type_id'] === '3') {
                                 $results[$key]['CollectiblesUser']['traded_for'] = $val['Listing']['Transaction'][0]['traded_for'];
                             }
-                            $datetime = strtotime($val['Listing']['Transaction'][0]['sale_date']);
-                            $results[$key]['CollectiblesUser']['sale_date'] = date('F jS, Y', $datetime);
                             // if it is for sale, keep the listing, we also need these fields for updatintg purposes if
                             // it is an active listing we want to know how much or what the user wants for it
-                            
                             
                         } else if ($val['CollectiblesUser']['sale']) {
                             if ($val['Listing']['listing_type_id'] === '2') {

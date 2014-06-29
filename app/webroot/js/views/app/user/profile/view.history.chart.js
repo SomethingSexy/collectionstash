@@ -23,47 +23,75 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
                 if (model['sold'].hasOwnProperty(prop)) {
                     soldData.push({
                         x: parseInt(prop),
-                        y: model['sold'][prop]
+                        y: model['sold'][prop],
+                        name: 'balls'
                     });
                 }
             }
 
-            var graph = new Rickshaw.Graph({
-                element: $('.chart', this.el).get(0),
-                renderer: 'bar',
-                width: 900,
-                height: 250,
-                series: [{
+            for (var prop in model['bought']) {
+                if (model['bought'].hasOwnProperty(prop)) {
+                    boughtData.push({
+                        x: parseInt(prop),
+                        y: model['bought'][prop]
+                    });
+                }
+            }
+
+            var series = [];
+            if (soldData.length > 0) {
+                series.push({
                     data: soldData,
+                    color: '#30c020'
+                });
+            }
+
+            if (boughtData.length > 0) {
+                series.push({
+                    data: boughtData,
                     color: 'steelblue'
-                }]
-            });
+                });
+            }
 
-            var axes = new Rickshaw.Graph.Axis.Time({
-                graph: graph
-            });
+            if (series.length > 0) {
+                Rickshaw.Series.zeroFill(series);
+                var graph = new Rickshaw.Graph({
+                    element: $('.chart', this.el).get(0),
+                    renderer: 'bar',
+                    width: 900,
+                    height: 250,
+                    series: series
+                });
 
-            var y_axis = new Rickshaw.Graph.Axis.Y({
-                graph: graph,
-                orientation: 'left',
-                tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-                element: $('.y_axis', this.el).get(0)
-            });
+                var axes = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
 
-            graph.render();
+                var y_axis = new Rickshaw.Graph.Axis.Y({
+                    graph: graph,
+                    orientation: 'left',
+                    tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                    element: $('.y_axis', this.el).get(0)
+                });
 
-            var preview = new Rickshaw.Graph.RangeSlider.Preview({
-                graph: graph,
-                element: $('.preview', this.el).get(0),
-            });
-            var ticksTreatment = 'glow';
-            // var previewXAxis = new Rickshaw.Graph.Axis.Time({
-            //     graph: preview.graph,
-            //     timeFixture: new Rickshaw.Fixtures.Time.Local(),
-            //     ticksTreatment: ticksTreatment
-            // });
+                graph.render();
 
-            // previewXAxis.render();
+                var preview = new Rickshaw.Graph.RangeSlider.Preview({
+                    graph: graph,
+                    element: $('.preview', this.el).get(0),
+                });
+                var hoverDetail = new Rickshaw.Graph.HoverDetail({
+                    graph: graph,
+                    formatter: function(series, x, y, formattedX, formattedY, selected) {
+                        var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+                        var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+                        var content = swatch + selected.value.name + ": " + parseInt(y) + '<br>' + date;
+                        return content;
+                    }
+                });
+
+            }
+
 
         }
     });
