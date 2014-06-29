@@ -23,8 +23,7 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
                 if (model['sold'].hasOwnProperty(prop)) {
                     soldData.push({
                         x: parseInt(prop),
-                        y: model['sold'][prop],
-                        name: 'balls'
+                        y: model['sold'][prop]
                     });
                 }
             }
@@ -42,14 +41,16 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
             if (soldData.length > 0) {
                 series.push({
                     data: soldData,
-                    color: '#30c020'
+                    color: '#30c020',
+                    name : 'Sold'
                 });
             }
 
             if (boughtData.length > 0) {
                 series.push({
                     data: boughtData,
-                    color: 'steelblue'
+                    color: 'steelblue',
+                    name: 'Bought'
                 });
             }
 
@@ -85,7 +86,7 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
                     formatter: function(series, x, y, formattedX, formattedY, selected) {
                         var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
                         var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-                        var content = swatch + selected.value.name + ": " + parseInt(y) + '<br>' + date;
+                        var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
                         return content;
                     }
                 });
