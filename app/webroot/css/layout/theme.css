@@ -1414,19 +1414,22 @@ img.commenter-avatar {
     width: 60px;
     height: 60px;
 }
-.chart_container {
+.chart-container {
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
 }
-.chart {
+.chart-container .chart {
     position: relative;
     left: 40px;
 }
-.y_axis {
+.chart-container .y_axis {
     position: absolute;
     top: 0;
     bottom: 0;
     left: -40px;
+}
+.chart-container .preview {
+    left: 40px;
 }
 @media (min-width: 992px) {
     .nav-sidebar .nav > .active > ul {

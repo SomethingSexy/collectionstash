@@ -48,12 +48,12 @@
 	<td>{{Not Recorded}}</td>
 {{/cost}}
 
-{{#CollectiblesUser.CollectiblePriceFact}}
+{{#Collectible.CollectiblePriceFact}}
 	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
-{{/CollectiblesUser.CollectiblePriceFact}}
-{{^CollectiblesUser.CollectiblePriceFact}}
+{{/Collectible.CollectiblePriceFact}}
+{{^Collectible.CollectiblePriceFact}}
 	<td> - </td>
-{{/CollectiblesUser.CollectiblePriceFact}}
+{{/Collectible.CollectiblePriceFact}}
 
 {{#purchase_date}}
 	<td>{{purchase_date}}</td>
@@ -79,15 +79,11 @@
 {{/active}}
 {{#permissions.edit_collectible_user}}
 <td class="menu">
-<div class="btn-group">
-<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-<ul class="dropdown-menu">
-<li><a href="/collectibles_users/edit/{{id}}" title="Edit"><i class="fa fa-edit"></i>  Edit</a></li>
-{{^sale}}
-<li><a href="javascript:void(0);" class="stash-sell" title="Sell"><i class="fa fa-dollar"></i>  Sell</a></li>
-{{/sale}}
-<li><a data-prompt="true" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>
-</ul>
-</div>
+	<div class="btn-group">
+		<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			<li><a href="/collectibles_users/edit/{{id}}" title="Edit"><i class="fa fa-edit"></i>  Edit</a></li>
+		</ul>
+	</div>
 </td>
 {{/permissions.edit_collectible_user}}
