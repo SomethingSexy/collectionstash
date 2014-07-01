@@ -1,3 +1,10 @@
+body {
+	padding-top: 0;
+}
+#wrap {
+	padding-left: 0;
+	padding-right: 0;
+}
 .jumbotron:after {
 	bottom: 0;
 	content: "";
@@ -23,34 +30,19 @@
 	z-index: 2;
 }
 
-.home {
-
-}
-
-
-.home p {
-	font-size: 16px;
-	line-height: 1.5;
-}
-
 .masthead {
 	color: #FFFFFF;
 	margin-bottom: 0;
 	padding: 70px 0 80px;
+	min-height: 700px;
 }
 
 .masthead h1 {
 	color: #FFFFFF;
-	font-size: 120px;
 	letter-spacing: -2px;
 	line-height: 1;
 	font-weight: bold;
 }
 
-.masthead p {
-	font-size: 40px;
-	font-weight: 200;
-	line-height: 1.25;
-}
 
 
