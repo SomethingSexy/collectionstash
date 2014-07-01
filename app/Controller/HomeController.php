@@ -15,7 +15,7 @@ class HomeController extends AppController {
 		if ($this -> isLoggedIn()) {
 			$this -> redirect(array('controller' => 'user', 'action' => 'home'));
 		} else {
-			$this -> layout = 'home';
+			$this -> layout = 'require';
 		}
 	}
 
