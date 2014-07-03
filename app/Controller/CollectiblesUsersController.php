@@ -115,20 +115,24 @@ class CollectiblesUsersController extends AppController
     }
     
     public function sale($username = null) {
-        
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             // Be very careful when changing this contains, it is tied to the type
-            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id'))), 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User' => array('fields' => array('id', 'username')), 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
             $collectibles = $this->paginate('CollectiblesUser');
+            
+
             // I am sure there is as better way to do this, I don't feel smart right now
             //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
             
             $extractUserCollectibles = Set::extract('/CollectiblesUser/.', $collectibles);
-            
+            debug(count($extractUserCollectibles));
             foreach ($extractUserCollectibles as $key => $value) {
                 $extractUserCollectibles[$key]['Collectible'] = $collectibles[$key]['Collectible'];
+                $extractUserCollectibles[$key]['Listing'] = $collectibles[$key]['Listing'];
+                $extractUserCollectibles[$key]['Condition'] = $collectibles[$key]['Condition'];
+                $extractUserCollectibles[$key]['Merchant'] = $collectibles[$key]['Merchant'];
             }
             
             $this->set('collectibles', $extractUserCollectibles);

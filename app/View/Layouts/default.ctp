@@ -156,7 +156,7 @@ if (isset($bodyClass))
 				<ul class="nav navbar-nav navbar-right account">
 						<li>
 						<?php
-						echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false));
+						echo $this -> Html -> link('<i class="fa fa-home"></i>', '/', array('escape' => false, 'admin' => false));
 						?>
 						</li>
 						<?php
