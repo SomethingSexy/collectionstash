@@ -370,6 +370,21 @@ define(['app/app.user.profile',
                 permissions: App.permissions
             });
 
+            view.on('stash:remove', function(id) {
+                var model = App.sales.get(id);
+
+                App.layout.modal.show(new StashRemoveView({
+                    model: model,
+                    reasons: App.reasonsCollection,
+                    changeReason: false,
+                    removeReasonId: model.get('Listing').collectible_user_remove_reason_id
+                }));
+
+                model.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
+            });
+
             layout.sales.show(view);
         }
 

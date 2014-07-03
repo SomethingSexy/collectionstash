@@ -18,6 +18,14 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mus
                 permissions: this.permissions
             };
         },
+        itemEvents: {
+            "stash:remove": function(event, view, id) {
+                this.trigger('stash:remove', id);
+            },
+            "stash:sell": function(event, view, id) {
+                this.trigger('stash:sell', id);
+            }
+        },
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);

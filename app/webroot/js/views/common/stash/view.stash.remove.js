@@ -15,6 +15,11 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
 
             // this is determing if we require a reason or not depending on what is using it
             this.changeReason = (typeof options.changeReason === 'undefined') ? true : options.changeReason;
+
+            if (options.removeReasonId) {
+                this.model.set('collectible_user_remove_reason_id', options.removeReasonId);
+            }
+
             this.listenTo(this.model, 'change:collectible_user_remove_reason_id', function() {
                 this.model.unset('sold_cost');
                 this.render();
@@ -39,18 +44,19 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             //TODO: If there is no changeReason and its active, I need to grab reason for display collectible_user_remove_reason
             // this is if this is being marked as sold, then this is most likely
             // set already on the model
-            if (data.active && !data.changeReason) {
-                data.collectible_user_remove_reason = "TODO";
-            }
             var removeReason = this.model.get('collectible_user_remove_reason_id');
+            if (data.active && !data.changeReason) {
+                data.collectible_user_remove_reason = this.reasons.get(removeReason).get('reason');
+            }
 
             var showSale = false,
                 showTrade = false,
                 showDate = false;
-            if (removeReason === '1') {
+            // using == might be string or number
+            if (removeReason == '1') {
                 showSale = true;
                 showDate = true;
-            } else if (removeReason === '2') {
+            } else if (removeReason == '2') {
                 showTrade = true;
                 showDate = true;
             }
@@ -109,12 +115,16 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             // call save on the model, this should validate
 
             var data = {
-                'collectible_user_remove_reason_id': $('[name=collectible_user_remove_reason_id]', this.el).val(),
                 'sold_cost': $('[name=sold_cost]', this.el).val(),
                 'traded_for': $('[name=traded_for]', this.el).val(),
                 'remove_date': $('[name=remove_date]', this.el).val(),
                 'sale': true
             };
+
+            // if we can change the reason, then set it, otherwise it should already be added
+            if (this.changeReason) {
+                data['collectible_user_remove_reason_id'] = $('[name=collectible_user_remove_reason_id]', this.el).val();
+            }
 
             $('.btn-primary', this.el).button('loading');
 

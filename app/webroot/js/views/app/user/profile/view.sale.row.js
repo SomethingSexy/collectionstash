@@ -8,8 +8,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
             this.permissions = options.permissions;
         },
         events: {
-            'click .stash-sell': 'sell',
-            'click .remove-from-stash': 'removeFromStash'
+            // 'click .stash-mark-as-sold': 'sell',
+            'click .stash-mark-as-sold': 'removeFromStash'
         },
         serializeData: function() {
             var data = {};
