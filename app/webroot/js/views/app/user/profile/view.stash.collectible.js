@@ -6,6 +6,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.collecti
         initialize: function(options) {
             this.permissions = options.permissions;
         },
+        modelEvents: {
+            "change": "render"
+        },
         events: {
             'click .stash-sell': 'sell',
             'click .remove-from-stash': 'removeFromStash'

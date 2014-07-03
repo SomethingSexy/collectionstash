@@ -8,7 +8,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
             this.permissions = options.permissions;
         },
         events: {
-            // 'click .stash-mark-as-sold': 'sell',
+            'click .stash-remove-listing': 'removeListing',
             'click .stash-mark-as-sold': 'removeFromStash'
         },
         serializeData: function() {
@@ -22,13 +22,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
             // $('.stash-sell', this.el).attr('data-collectible-user-id', this.model.get('id'));
             // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
         },
-        sell: function(event) {
+        removeListing: function(event) {
             event.preventDefault();
-            this.trigger('stash:sell', this.model.get('id'));
+            this.trigger('stash:remove', this.model.get('id'));
         },
         removeFromStash: function(event) {
             event.preventDefault();
-            this.trigger('stash:remove', this.model.get('id'));
+            this.trigger('stash:mark:sold', this.model.get('id'));
         }
     });
 });

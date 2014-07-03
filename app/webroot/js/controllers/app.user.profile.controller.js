@@ -175,9 +175,14 @@ define(['app/app.user.profile',
             });
 
             stashView.on('stash:sell', function(id) {
+                var model = App.collectibles.get(id);
                 App.layout.modal.show(new StashSellView({
-                    model: App.collectibles.fullCollection.get(id)
+                    model: model
                 }));
+
+                model.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
             });
 
             stashLayout.stash.show(stashView);
@@ -205,9 +210,14 @@ define(['app/app.user.profile',
             });
 
             stashView.on('stash:sell', function(id) {
+                var model = App.collectibles.get(id);
                 App.layout.modal.show(new StashSellView({
-                    model: App.collectibles.get(id)
+                    model: model
                 }));
+
+                model.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
             });
 
             stashLayout.stash.show(stashView);
@@ -370,7 +380,7 @@ define(['app/app.user.profile',
                 permissions: App.permissions
             });
 
-            view.on('stash:remove', function(id) {
+            view.on('stash:mark:sold', function(id) {
                 var model = App.sales.get(id);
 
                 App.layout.modal.show(new StashRemoveView({
@@ -382,6 +392,50 @@ define(['app/app.user.profile',
 
                 model.once('sync', function() {
                     App.layout.modal.hideModal();
+                });
+            });
+
+            view.on('stash:remove', function(id) {
+                var model = App.sales.get(id);
+
+                model.save({
+                    sale: false
+                }, {
+                    wait: true,
+                    success: function(model, response, options) {
+                        csStashSuccessMessage('The collectible has been removed from your sale/trade list!');
+
+                        App.sales.remove(model);
+                    },
+                    error: function(model, xhr, options) {
+                        var errorMessage = 'Oops! Something went terribly wrong!';
+                        if (xhr.status === 400) {
+                            $.each(xhr.responseJSON.response.errors, function(index, value) {
+                                errorMessage = value.message;
+                            });
+                        } else if (xhr.status === 401) {
+                            errorMessage = 'You are not authorized to do that!';
+                        }
+
+                        $.blockUI({
+                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+                            showOverlay: false,
+                            css: {
+                                top: '100px',
+                                'background-color': '#DDFADE',
+                                border: '1px solid #93C49F',
+                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
+                                'border-radius': '4px 4px 4px 4px',
+                                color: '#333333',
+                                'margin-bottom': '20px',
+                                padding: '8px 35px 8px 14px',
+                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+                                'z-index': 999999
+                            },
+                            timeout: 2000
+                        });
+
+                    }
                 });
             });
 

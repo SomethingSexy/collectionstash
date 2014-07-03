@@ -114,19 +114,19 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 wait: true,
                 success: function(model, response, options) {
                     $button.button('reset');
-                    if (response.response.isSuccess) {
-                        $('#stash-sell-dialog').modal('hide');
-                        csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
 
-                        // now we need to mark it for sale.  Normally we would use backbone to
-                        // re-render the view but we aren't that far yet
-                        if (self.tiles) {
-                            $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
-                            $('.menu .marked-for-sale', self.$stashItem).removeClass('hidden');
-                        } else {
-                            $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
-                        }
-                    }
+                    // $('#stash-sell-dialog').modal('hide');
+                    // csStashSuccessMessage('You have successfully added the collectible to your sale/trade list!');
+
+                    // // now we need to mark it for sale.  Normally we would use backbone to
+                    // // re-render the view but we aren't that far yet
+                    // if (self.tiles) {
+                    //     $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+                    //     $('.menu .marked-for-sale', self.$stashItem).removeClass('hidden');
+                    // } else {
+                    //     $('.menu', self.$stashItem).find('.stash-sell').parent().remove();
+                    // }
+
                 },
                 error: function(model, xhr, options) {
                     $('.btn-primary', self.el).button('reset');
