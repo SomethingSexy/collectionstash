@@ -19,6 +19,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mus
             };
         },
         itemEvents: {
+            "stash:mark:sold": function(event, view, id) {
+                this.trigger('stash:mark:sold', id);
+            },
             "stash:remove": function(event, view, id) {
                 this.trigger('stash:remove', id);
             },
