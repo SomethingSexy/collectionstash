@@ -60,9 +60,11 @@
 <div class="btn-group">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 <ul class="dropdown-menu">
-<li><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i> Details</a></li>
-<li><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-wishlist" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>
-<li><a class="add-full-to-stash btn" data-type="wishlist" data-collectible-user-id="{{id}}"  href="javascript:void(0)" title="Add to Stash"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>
+{{! // this will bring up the remove from stash modal }}
+<li><a href="javascript:void(0);" class="stash-mark-as-sold" title="Mark as Sold"><i class="fa fa-dollar"></i> Mark as Sold</a></li>
+{{! // this will remove the listing completely and mark it as unsold }}
+<li><a href="javascript:void(0);" class="stash-remove-listing" title="Remove Listing"><i class="fa fa-dollar"></i> Remove Listing</a></li>
+<li><a href="javascript:void(0);" class="stash-edit-listing" title="Edit Listing"><i class="fa fa-dollar"></i> Edit Listing</a></li>
 </ul>
 </div>
 </td>
