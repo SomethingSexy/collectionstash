@@ -12,12 +12,14 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.wishlist.table',
         'views/app/user/profile/view.history',
         'views/app/user/profile/view.history.chart',
+        'views/app/user/profile/view.sale',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
         'text!templates/app/user/profile/layout.photos.mustache',
         'text!templates/app/user/profile/layout.stash.mustache',
         'text!templates/app/user/profile/layout.history.mustache',
+        'text!templates/app/user/profile/layout.sale.mustache',
         'views/common/modal.region',
         'views/common/stash/view.stash.sell',
         'views/common/stash/view.stash.remove',
@@ -30,7 +32,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -75,6 +77,13 @@ define(['app/app.user.profile',
             regions: {
                 history: '._history',
                 chart: '._chart'
+            }
+        });
+
+        var SaleLayout = Backbone.Marionette.Layout.extend({
+            template: saleLayout,
+            regions: {
+                sales: '._sale'
             }
         });
 
@@ -355,6 +364,15 @@ define(['app/app.user.profile',
             layout.history.show(view);
         }
 
+        function renderSale(layout) {
+            var view = new SaleView({
+                collection: App.sales,
+                permissions: App.permissions
+            });
+
+            layout.sales.show(view);
+        }
+
         function renderHistoryChart(layout) {
             var chartView = new HistoryChartView({
                 model: App.histroyGraph
@@ -515,6 +533,18 @@ define(['app/app.user.profile',
             },
             sale: function() {
                 renderHeader('sale');
+                var layout = new SaleLayout({
+                    permissions: App.permissions,
+                    model: App.profile
+                });
+                App.layout.main.show(layout);
+                if (App.sales.isEmpty()) {
+                    App.sales.getFirstPage().done(function() {
+                        renderSale(layout);
+                    });
+                } else {
+                    renderSale(layout);
+                }
             },
             photos: function() {
                 renderHeader('photos');

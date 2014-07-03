@@ -8,8 +8,9 @@ define(['marionette',
     'collections/collection.comments',
     'collections/collection.photos',
     'collections/collection.history',
-    'models/model.history.graph'
-], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection, PhotosCollection, HistoryCollection, GraphModel) {
+    'models/model.history.graph',
+    'collections/collection.collectible.sale',
+], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection, PhotosCollection, HistoryCollection, GraphModel, SaleCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -56,6 +57,10 @@ define(['marionette',
     });
 
     MyApp.histroyGraph = new GraphModel({}, {
+        username: MyApp.profile.get('username')
+    });
+
+    MyApp.sales = new SaleCollection([], {
         username: MyApp.profile.get('username')
     });
 

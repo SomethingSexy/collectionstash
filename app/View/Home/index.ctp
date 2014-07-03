@@ -1,5 +1,5 @@
 <?php echo $this -> Minify -> css('layout/home'); ?>
-<div class="jumbotron masthead">
+<div class="masthead">
     <div class="container">
         <h1>Collection Stash</h1>
         <p>A collector platform for building and sharing your collection.</p>

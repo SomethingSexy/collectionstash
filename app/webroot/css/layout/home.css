@@ -5,7 +5,7 @@ body {
 	padding-left: 0;
 	padding-right: 0;
 }
-.jumbotron:after {
+.masthead:after {
 	bottom: 0;
 	content: "";
 	display: block;
@@ -16,7 +16,7 @@ body {
 	top: 0;
 }
 
-.jumbotron {
+.masthead {
 	background: url("/img/tile.png") repeat scroll 0 0 #444444;
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
 	color: #FFFFFF;
@@ -25,7 +25,7 @@ body {
 	text-align: center;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
 }
-.jumbotron .container {
+.masthead .container {
 	position: relative;
 	z-index: 2;
 }
