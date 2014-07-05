@@ -1,9 +1,17 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mustache', 'views/app/user/profile/view.sale.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, CollectibleView, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mustache', 'text!templates/app/user/profile/sale.table.empty.mustache', 'views/app/user/profile/view.sale.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache) {
+
+
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate,
+        tagName: 'tr'
+    });
+
 
     return Marionette.CompositeView.extend({
         className: 'table-responsive',
         template: template,
         itemViewContainer: "tbody",
+        emptyView: NoItemsView,
         itemView: CollectibleView,
         sorts: {
             'active': -1,
