@@ -129,7 +129,7 @@ class CollectiblesController extends AppController
         
         if ($this->request->isPut()) {
             $collectible['Collectible'] = $this->request->input('json_decode', true);
-            $collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
+            //$collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
             
             $response = $this->Collectible->saveCollectible($collectible, $this->getUser(), $adminMode);
             
