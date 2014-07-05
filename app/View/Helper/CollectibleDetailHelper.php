@@ -39,8 +39,6 @@ class CollectibleDetailHelper extends AppHelper {
 				$value = nl2br($value);
 				$vaule = html_entity_decode($value); 
 
-				$valueAttr = 'data-value="' . $value . '"';
-
 				$class = '';
 				if (isset($options['class']) && $options['class']) {
 					$class = $options['class'];
@@ -48,12 +46,12 @@ class CollectibleDetailHelper extends AppHelper {
 
 				if (isset($options['compare']) && $options['compare']) {
 					if (isset($details[$model][$field . '_changed']) && $details[$model][$field . '_changed']) {
-						$output .= '<dd class="data-value changed ' . $class . '" ' . $valueAttr . '>';
+						$output .= '<dd class="changed ' . $class . '">';
 					} else {
-						$output .= '<dd class="data-value ' . $class . '" ' . $valueAttr . '>';
+						$output .= '<dd class="' . $class . '">';
 					}
 				} else {
-					$output .= '<dd class="data-value ' . $class . '" ' . $valueAttr . '>';
+					$output .= '<dd class="' . $class . '">';
 				}
 
 				if ($isOverrideValue) {
