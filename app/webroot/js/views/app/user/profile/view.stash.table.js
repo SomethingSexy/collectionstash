@@ -1,10 +1,17 @@
-define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!templates/app/user/profile/stash.table.mustache', 'views/app/user/profile/view.stash.collectible.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, StashView, template, CollectibleView, mustache) {
+define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!templates/app/user/profile/stash.table.mustache', 'text!templates/app/user/profile/stash.table.empty.mustache', 'views/app/user/profile/view.stash.collectible.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, StashView, template, emptyTemplate, CollectibleView, mustache) {
+
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate,
+        tagName: 'tr'
+    });
+
 
     return StashView.extend({
         className: 'table-responsive',
         template: template,
         itemViewContainer: "tbody",
         itemView: CollectibleView,
+        emptyView: NoItemsView,
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);

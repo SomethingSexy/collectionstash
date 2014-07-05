@@ -25,6 +25,7 @@ define(['app/app.user.profile',
         'views/common/stash/view.stash.remove',
         'views/common/stash/view.stash.add',
         'views/common/view.filters',
+        'views/common/growl',
         'models/model.collectible.user',
         'views/common/view.comments',
         'views/common/view.comment.add',
@@ -32,7 +33,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -403,7 +404,7 @@ define(['app/app.user.profile',
                 }, {
                     wait: true,
                     success: function(model, response, options) {
-                        csStashSuccessMessage('The collectible has been removed from your sale/trade list!');
+                        growl.onSuccess('The collectible has been removed from your sale/trade list!');
 
                         App.sales.remove(model);
                     },
@@ -417,24 +418,7 @@ define(['app/app.user.profile',
                             errorMessage = 'You are not authorized to do that!';
                         }
 
-                        $.blockUI({
-                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
-                            showOverlay: false,
-                            css: {
-                                top: '100px',
-                                'background-color': '#DDFADE',
-                                border: '1px solid #93C49F',
-                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                'border-radius': '4px 4px 4px 4px',
-                                color: '#333333',
-                                'margin-bottom': '20px',
-                                padding: '8px 35px 8px 14px',
-                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                'z-index': 999999
-                            },
-                            timeout: 2000
-                        });
-
+                        growl.onErrpr(errorMessage);
                     }
                 });
             });
@@ -549,13 +533,19 @@ define(['app/app.user.profile',
                     App.collectibles.switchMode('infinite').done(function() {
                         renderStash('tiles');
                     });
-                } else if (App.collectibles.isEmpty()) {
+                } else {
+                    // for now we want to reset everytime we come to this page
+                    // in case data has changed.  This is the best way I have found
+                    // to handle that for now
+                    App.collectibles.reset();
+                    App.collectibles.fullCollection.reset();
                     App.collectibles.getFirstPage().done(function() {
                         renderStash('tiles');
                     });
-                } else {
-                    renderStash('tiles');
-                }
+                } 
+                // else {
+                //     renderStash('tiles');
+                // }
             },
             stashList: function() {
                 renderHeader('stash');
