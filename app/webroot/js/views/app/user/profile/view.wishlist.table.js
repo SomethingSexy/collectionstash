@@ -16,6 +16,12 @@ define(['require', 'marionette', 'views/app/user/profile/view.wishlist', 'text!t
             this.listenTo(this.collection, "reset", this.renderMore);
             this.listenTo(this.collection, "sync", this.renderMore);
         },
+        serializeData: function() {
+            var data = {
+                showPagination: this.collection.state.totalPages > 1
+            };
+            return data;
+        },    
         renderMore: function() {
             var self = this;
             var ItemView;
