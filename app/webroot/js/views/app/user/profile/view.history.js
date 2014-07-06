@@ -1,10 +1,16 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/history.mustache', 'views/app/user/profile/view.history.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, CollectibleView, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/history.mustache', 'views/app/user/profile/view.history.row', 'text!templates/app/user/profile/history.empty.mustache', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, CollectibleView, emptyTemplate, mustache) {
+
+    var NoItemsView = Backbone.Marionette.ItemView.extend({
+        template: emptyTemplate,
+        tagName: 'tr'
+    });
 
     return Marionette.CompositeView.extend({
         className: 'table-responsive',
         template: template,
         itemViewContainer: "tbody",
         itemView: CollectibleView,
+        emptyView: NoItemsView,
         sorts: {
             'active': -1,
             'created': -1,
@@ -25,6 +31,12 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
         },
         events: {
             'click ._sort': 'sort'
+        },
+        serializeData: function() {
+            var data = {
+                showPagination: this.collection.state.totalPages > 1
+            };
+            return data;
         },
         renderMore: function() {
             var self = this;

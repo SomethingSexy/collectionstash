@@ -1,11 +1,9 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mustache', 'text!templates/app/user/profile/sale.table.empty.mustache', 'views/app/user/profile/view.sale.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache) {
 
-
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate,
         tagName: 'tr'
     });
-
 
     return Marionette.CompositeView.extend({
         className: 'table-responsive',
@@ -37,6 +35,12 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mus
                 this.trigger('stash:sell', id);
             }
         },
+        serializeData: function() {
+            var data = {
+                showPagination: this.collection.state.totalPages > 1
+            };
+            return data;
+        },    
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
