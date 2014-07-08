@@ -6,14 +6,20 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
         tagName: 'tr',
         initialize: function(options) {
             this.permissions = options.permissions;
+            this.listenTo(this.model.listing, 'change', this.render);
+        },
+        modelEvents: {
+            "change": "render"
         },
         events: {
             'click .stash-remove-listing': 'removeListing',
-            'click .stash-mark-as-sold': 'removeFromStash'
+            'click .stash-mark-as-sold': 'removeFromStash',
+            'click .stash-edit-listing': 'editListing'
         },
         serializeData: function() {
             var data = {};
             data = this.model.toJSON();
+            data.Listing = this.model.listing.toJSON();
             data.Collectible = this.model.collectible.toJSON();
             data['permissions'] = this.permissions.toJSON();
             return data;
@@ -29,6 +35,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
         removeFromStash: function(event) {
             event.preventDefault();
             this.trigger('stash:mark:sold', this.model.get('id'));
+        },
+        editListing: function(event) {
+            event.preventDefault();
+            this.trigger('stash:listing:edit', this.model.get('id'));
         }
     });
 });

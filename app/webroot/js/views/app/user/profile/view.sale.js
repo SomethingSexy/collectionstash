@@ -31,8 +31,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.table.mus
             "stash:remove": function(event, view, id) {
                 this.trigger('stash:remove', id);
             },
-            "stash:sell": function(event, view, id) {
-                this.trigger('stash:sell', id);
+            "stash:listing:edit": function(event, view, id) {
+                this.trigger('stash:listing:edit', id);
             }
         },
         serializeData: function() {

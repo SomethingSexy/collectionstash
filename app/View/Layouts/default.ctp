@@ -251,8 +251,6 @@ if (isset($bodyClass))
 	<?php
 	// list out any modals here that might be common
 	echo $this -> element('stash_add_modal');
-	echo $this -> element('stash_remove_sold_modal');
-	echo $this -> element('stash_edit_listing_modal');
 	?>	
 	<?php echo $this -> element('sql_dump'); ?>
 	

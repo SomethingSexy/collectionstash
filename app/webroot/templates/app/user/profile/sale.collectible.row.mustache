@@ -42,16 +42,17 @@
 {{/Collectible.CollectiblePriceFact}}
 									
 <td class="sold-cost">
-{{#sold_cost}}
-	${{sold_cost}}
-{{/sold_cost}}
-{{#traded_for}}
-	{{{traded_for}}}
-{{/traded_for}}
+{{! Use the actual listing data here since this is live }}
+{{#Listing.listing_price}}
+	${{Listing.listing_price}}
+{{/Listing.listing_price}}
+{{#Listing.traded_for}}
+	{{{Listing.traded_for}}}
+{{/Listing.traded_for}}
 
-{{^sold_cost}}{{^traded_for}}
+{{^Listing.listing_price}}{{^Listing.traded_for}}
  - 
-{{/traded_for}}{{/sold_cost}}
+{{/Listing.traded_for}}{{/Listing.listing_price}}
 </td>
 
 

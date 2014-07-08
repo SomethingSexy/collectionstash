@@ -22,6 +22,7 @@ define(['app/app.user.profile',
         'text!templates/app/user/profile/layout.sale.mustache',
         'views/common/modal.region',
         'views/common/stash/view.stash.sell',
+        'views/common/stash/view.stash.listing.edit',
         'views/common/stash/view.stash.remove',
         'views/common/stash/view.stash.add',
         'views/common/view.filters',
@@ -33,7 +34,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -396,6 +397,20 @@ define(['app/app.user.profile',
                 });
             });
 
+
+            view.on('stash:listing:edit', function(id) {
+                var model = App.sales.get(id);
+
+                App.layout.modal.show(new StashListingEditView({
+                    model: model.listing,
+                    collectible: model.collectible
+                }));
+
+                model.listing.once('sync', function() {
+                    App.layout.modal.hideModal();
+                });
+            });
+
             view.on('stash:remove', function(id) {
                 var model = App.sales.get(id);
 
@@ -542,7 +557,7 @@ define(['app/app.user.profile',
                     App.collectibles.getFirstPage().done(function() {
                         renderStash('tiles');
                     });
-                } 
+                }
                 // else {
                 //     renderStash('tiles');
                 // }
