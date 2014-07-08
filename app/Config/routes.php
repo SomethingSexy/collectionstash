@@ -46,19 +46,19 @@ Router::connect('/user/home/notifications', array('controller' => 'users', 'acti
 //public user profile, right now this routes to stash but this might route to a profile eventually
 Router::connect('/user/:id', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
 // public user stash
-Router::connect('/user/:id/stash', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
+Router::connect('/user/:id/stash', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
 //public user profile
-Router::connect('/user/:id/wishlist', array('controller' => 'wish_lists', 'action' => 'view'), array('pass' => array('id')));
+Router::connect('/user/:id/wishlist', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
 // public sale
-Router::connect('/user/:id/sale', array('controller' => 'collectibles_users', 'action' => 'sale'), array('pass' => array('id')));
+Router::connect('/user/:id/sale', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
 //public photos
-Router::connect('/user/:id/photos', array('controller' => 'user_uploads', 'action' => 'view'), array('pass' => array('id')));
+Router::connect('/user/:id/photos', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
 //public stash comments
-Router::connect('/user/:id/comments', array('controller' => 'stashs', 'action' => 'comments'), array('pass' => array('id')));
+Router::connect('/user/:id/comments', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
 //public history
 Router::connect('/user/:id/history', array('controller' => 'stashs', 'action' => 'history'), array('pass' => array('id')));
 
-Router::connect('/stash/*', array('controller' => 'stashs', 'action' => 'view'));
+Router::connect('/stash/*', array('controller' => 'users', 'action' => 'profile'));
 Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
 //TODO: not sure why this one is here
 Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
