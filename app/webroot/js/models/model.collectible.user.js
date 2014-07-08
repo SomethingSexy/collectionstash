@@ -1,4 +1,4 @@
-define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(require, backbone, _) {
+define(['require', 'backbone', 'underscore', 'models/model.listing', 'backbone.trackit'], function(require, backbone, _, ListingModel) {
     return Backbone.Model.extend({
         url: function(method, data) {
 
@@ -15,9 +15,16 @@ define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(requi
             return url;
         },
         parse: function(response, xhr) {
-            if (response && response.Collectible) {
-                this.collectible = new Backbone.Model(response.Collectible);
-                delete response.Collectible;
+            if (response) {
+                if (response.Collectible) {
+                    this.collectible = new Backbone.Model(response.Collectible);
+                    delete response.Collectible;
+                }
+
+                if (response.Listing) {
+                    this.listing = new ListingModel(response.Listing);
+                    delete response.Listing;
+                }
             }
 
             return response;

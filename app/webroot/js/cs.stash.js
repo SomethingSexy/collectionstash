@@ -654,118 +654,118 @@ function csStashSuccessMessage(message) {
 // 		});
 // 	});
 // }(window.jQuery);
- ! function($) {"use strict";// jshint ;_;
+//  ! function($) {"use strict";// jshint ;_;
 
-	/* PUBLIC CLASS DEFINITION
-	 ** ============================== */
+// 	/* PUBLIC CLASS DEFINITION
+// 	 ** ============================== */
 
-	var SaleRemove = function(element, options) {
-		this.$element = $(element);
-		this.$stashItem = this.$element.closest('.stash-item');
-		this.options = $.extend({}, $.fn.saleremove.defaults, options);
-		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
-		if (options.tiles) {
-			this.$tiles = $('.tiles');
-		}
-		this.collectibleUser = options.collectibleUserModel;
-	};
+// 	var SaleRemove = function(element, options) {
+// 		this.$element = $(element);
+// 		this.$stashItem = this.$element.closest('.stash-item');
+// 		this.options = $.extend({}, $.fn.saleremove.defaults, options);
+// 		this.collectibleUserId = this.$element.attr('data-collectible-user-id');
+// 		if (options.tiles) {
+// 			this.$tiles = $('.tiles');
+// 		}
+// 		this.collectibleUser = options.collectibleUserModel;
+// 	};
 
-	SaleRemove.prototype.remove = function() {
-		var self = this;
-		this.collectibleUser.set({
-			sale : false
-		});
+// 	SaleRemove.prototype.remove = function() {
+// 		var self = this;
+// 		this.collectibleUser.set({
+// 			sale : false
+// 		});
 
-		this.collectibleUser.save({}, {
-			success : function(model, response, options) {
-				csStashSuccessMessage('The collectible has been removed from your sale/trade list!');
+// 		this.collectibleUser.save({}, {
+// 			success : function(model, response, options) {
+// 				csStashSuccessMessage('The collectible has been removed from your sale/trade list!');
 
-				if (self.$tiles) {
-					self.$tiles.masonry('remove', self.$stashItem);
-					self.$tiles.masonry('reload');
-				} else {
-					self.$stashItem.remove();
-				}
-			},
-			error : function(model, xhr, options) {
-				var errorMessage = 'Oops! Something went terribly wrong!';
-				if (xhr.status === 400) {
-					$.each(xhr.responseJSON.response.errors, function(index, value) {
-						errorMessage = value.message;
-					});
-				} else if (xhr.status === 401) {
-					errorMessage = 'You are not authorized to do that!';
-				}
+// 				if (self.$tiles) {
+// 					self.$tiles.masonry('remove', self.$stashItem);
+// 					self.$tiles.masonry('reload');
+// 				} else {
+// 					self.$stashItem.remove();
+// 				}
+// 			},
+// 			error : function(model, xhr, options) {
+// 				var errorMessage = 'Oops! Something went terribly wrong!';
+// 				if (xhr.status === 400) {
+// 					$.each(xhr.responseJSON.response.errors, function(index, value) {
+// 						errorMessage = value.message;
+// 					});
+// 				} else if (xhr.status === 401) {
+// 					errorMessage = 'You are not authorized to do that!';
+// 				}
 
-				$.blockUI({
-					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
-					showOverlay : false,
-					css : {
-						top : '100px',
-						'background-color' : '#DDFADE',
-						border : '1px solid #93C49F',
-						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
-						'border-radius' : '4px 4px 4px 4px',
-						color : '#333333',
-						'margin-bottom' : '20px',
-						padding : '8px 35px 8px 14px',
-						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
-						'z-index' : 999999
-					},
-					timeout : 2000
-				});
+// 				$.blockUI({
+// 					message : '<button class="close" data-dismiss="alert" type="button">×</button>' + errorMessage,
+// 					showOverlay : false,
+// 					css : {
+// 						top : '100px',
+// 						'background-color' : '#DDFADE',
+// 						border : '1px solid #93C49F',
+// 						'box-shadow' : '3px 3px 5px rgba(0, 0, 0, 0.5)',
+// 						'border-radius' : '4px 4px 4px 4px',
+// 						color : '#333333',
+// 						'margin-bottom' : '20px',
+// 						padding : '8px 35px 8px 14px',
+// 						'text-shadow' : '0 1px 0 rgba(255, 255, 255, 0.5)',
+// 						'z-index' : 999999
+// 					},
+// 					timeout : 2000
+// 				});
 
-			}
-		});
-	};
-	/* BUTTON PLUGIN DEFINITION
-	 * ======================== */
+// 			}
+// 		});
+// 	};
+// 	/* BUTTON PLUGIN DEFINITION
+// 	 * ======================== */
 
-	$.fn.saleremove = function(options) {
-		return this.each(function() {
-			var $this = $(this);
+// 	$.fn.saleremove = function(options) {
+// 		return this.each(function() {
+// 			var $this = $(this);
 
-			var data = $this.data('saleremove');
-			if (!data) {
-				$this.data('saleremove', ( data = new SaleRemove(this, options)));
-			}
+// 			var data = $this.data('saleremove');
+// 			if (!data) {
+// 				$this.data('saleremove', ( data = new SaleRemove(this, options)));
+// 			}
 
-			data.remove();
-		});
-	};
+// 			data.remove();
+// 		});
+// 	};
 
-	$.fn.saleremove.defaults = {
+// 	$.fn.saleremove.defaults = {
 
-	};
+// 	};
 
-	$.fn.saleremove.Constructor = SaleRemove;
+// 	$.fn.saleremove.Constructor = SaleRemove;
 
-	/* DATA-API
-	 * =============== */
+// 	/* DATA-API
+// 	 * =============== */
 
-	$(function() {
-		var tile = false;
-		if ($('.stashable').hasClass('tiles')) {
-			tile = true;
-		}
+// 	$(function() {
+// 		var tile = false;
+// 		if ($('.stashable').hasClass('tiles')) {
+// 			tile = true;
+// 		}
 
-		$('.stashable').on('click', '.stash-remove-listing', function(e) {
-			var $anchor = $(e.currentTarget);
-			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
-			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
-			var collectibleUserId = $anchor.attr('data-collectible-user-id');
-			var $stashItem = $anchor.closest('.stash-item');
-			$anchor.saleremove({
-				$stashItem : $stashItem,
-				tiles : tile,
-				collectibleModel : collectibleModel,
-				collectibleUserModel : collectibleUserModel,
-				collectibleUserId : collectibleUserId
-			});
-			e.preventDefault();
-		});
-	});
-}(window.jQuery);
+// 		$('.stashable').on('click', '.stash-remove-listing', function(e) {
+// 			var $anchor = $(e.currentTarget);
+// 			var collectibleModel = new Backbone.Model(JSON.parse($anchor.attr('data-collectible')));
+// 			var collectibleUserModel = new CollectibleUserModel(JSON.parse($anchor.attr('data-collectible-user')));
+// 			var collectibleUserId = $anchor.attr('data-collectible-user-id');
+// 			var $stashItem = $anchor.closest('.stash-item');
+// 			$anchor.saleremove({
+// 				$stashItem : $stashItem,
+// 				tiles : tile,
+// 				collectibleModel : collectibleModel,
+// 				collectibleUserModel : collectibleUserModel,
+// 				collectibleUserId : collectibleUserId
+// 			});
+// 			e.preventDefault();
+// 		});
+// 	});
+// }(window.jQuery);
 // Stash remove
 // ! function($) {"use strict";// jshint ;_;
 
