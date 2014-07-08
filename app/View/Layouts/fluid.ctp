@@ -118,7 +118,7 @@
 						{  ?>
 						<li>
 							<?php
-							echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
+							echo $this -> Html -> link('My Stash', '/profile/' . $username, array('admin' => false));
 							?>
 						</li>
 						<?php  } ?>
