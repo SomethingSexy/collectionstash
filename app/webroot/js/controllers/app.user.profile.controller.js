@@ -558,9 +558,6 @@ define(['app/app.user.profile',
                         renderStash('tiles');
                     });
                 }
-                // else {
-                //     renderStash('tiles');
-                // }
             },
             stashList: function() {
                 renderHeader('stash');
@@ -612,13 +609,14 @@ define(['app/app.user.profile',
                     model: App.profile
                 });
                 App.layout.main.show(layout);
-                if (App.sales.isEmpty()) {
-                    App.sales.getFirstPage().done(function() {
-                        renderSale(layout);
-                    });
-                } else {
+                // for now we want to reset everytime we come to this page
+                // in case data has changed.  This is the best way I have found
+                // to handle that for now
+                App.sales.reset();
+                App.sales.fullCollection.reset();
+                App.sales.getFirstPage().done(function() {
                     renderSale(layout);
-                }
+                });
             },
             photos: function() {
                 renderHeader('photos');
