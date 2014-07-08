@@ -348,7 +348,7 @@ define(['app/app.user.profile',
                 renderWishlistList(layout);
             }
 
-            layout.photos.show()
+            layout.wishlist.show()
         }
 
         function renderPhotos(view) {

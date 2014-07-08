@@ -12,11 +12,23 @@ class UsersController extends AppController
     // make this route stash/user
     public function profile($username = null, $view = 'stash') {
         $this->layout = 'require';
+        $loggedInUser = $this->getUser();
         // grab the user settings and the profile settings for the given user
         
         $user = $this->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => array('Profile')));
+        if (empty($user)) {
+            $this->render('viewNoExist');
+            return;
+        }
         // grab the stash for this user, since comments are tied to a stash
         $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
+
+        if ($stash['Stash']['privacy'] === '0' || ($loggedInUser['User']['id'] === $user['User']['id']) || ($stash['Stash']['privacy'] === '1' && $this->isLoggedIn())) {
+        } else {
+            $this->set(compact('username'));
+            $this->render('viewPrivate');
+            return;
+        }
         
         $profile = array();
         $profile['username'] = $user['User']['username'];
@@ -50,8 +62,6 @@ class UsersController extends AppController
         
         $this->set('title_for_layout', $user['User']['username'] . '\'s Stash - Collectible Stash');
         $this->set('description_for_layout', 'Stash profile for user ' . $user['User']['username']);
-        
-        $loggedInUser = $this->getUser();
         // permissions
         $permissions = array();
         if ($loggedInUser['User']['id'] === $user['User']['id']) {
