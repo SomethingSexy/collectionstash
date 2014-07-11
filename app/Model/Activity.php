@@ -13,7 +13,7 @@ class Activity extends AppModel
         foreach ($results as $key => $val) {
             if ($primary && isset($val['Activity'])) {
                 $data = json_decode($results[$key]['Activity']['data']);
-
+                
                 if ($data->actor->objectType === 'user') {
                     $data->actor->url = '/stash/' . $data->actor->displayName;
                 }
@@ -54,7 +54,12 @@ class Activity extends AppModel
                         }
                         $data->object->object_displayName = $data->object->objectType;
                     } else if ($data->object->objectType === 'collectible') {
-                        $data->object->object_displayName = $data->object->data->Collectible->displayTitle;
+                        // I think really old activities this was missing
+                        if ($data->object->data) {
+                            $data->object->object_displayName = $data->object->data->Collectible->displayTitle;
+                        } else {
+                            $data->object->object_displayName = 'collectible';
+                        }
                     } else if ($data->object->objectType === 'attribute') {
                         $data->object->object_displayName = $data->object->data->Attribute->name;
                     } else if ($data->object->objectType === 'tag') {

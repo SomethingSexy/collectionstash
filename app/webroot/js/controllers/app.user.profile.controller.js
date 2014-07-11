@@ -537,7 +537,8 @@ define(['app/app.user.profile',
                 }));
 
                 profileLayout.work.show(new WorkView({
-                    collection: App.work
+                    collection: App.work,
+                    permissions: App.permissions
                 }));
 
                 profileLayout.facts.show(new FactsView({
