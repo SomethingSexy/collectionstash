@@ -24,10 +24,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/sale.collectib
             data['permissions'] = this.permissions.toJSON();
             return data;
         },
-        onRender: function() {
-            // $('.stash-sell', this.el).attr('data-collectible-user-id', this.model.get('id'));
-            // $('.remove-from-stash', this.el).attr('data-collectible-user-id', this.model.get('id'));
-        },
         removeListing: function(event) {
             event.preventDefault();
             this.trigger('stash:remove', this.model.get('id'));

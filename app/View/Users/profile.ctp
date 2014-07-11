@@ -16,3 +16,4 @@ if(isset($stashFacts)){
 if(isset($comments)){
 	echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
 }?>
+<?php echo $this -> Html -> scriptBlock('var rawWork = ' . json_encode($works).';', array('inline' => false));  ?>

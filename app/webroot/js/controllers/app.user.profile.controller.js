@@ -13,6 +13,7 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.history',
         'views/app/user/profile/view.history.chart',
         'views/app/user/profile/view.sale',
+        'views/app/user/profile/view.work',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
@@ -34,7 +35,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -53,7 +54,8 @@ define(['app/app.user.profile',
             regions: {
                 comments: '._comments',
                 stashFacts: '._stashFacts',
-                activity: '._activity'
+                activity: '._activity',
+                work: '._work'
             }
         });
 
@@ -539,6 +541,10 @@ define(['app/app.user.profile',
 
                 profileLayout.activity.show(new ActivitiesView({
                     collection: App.activity
+                }));
+
+                profileLayout.work.show(new WorkView({
+                    collection: App.work
                 }));
             },
             stash: function() {
