@@ -75,9 +75,11 @@ class UsersController extends AppController
             }
             // set it here so that it isn't rendered on the page either
             $this->set('stashFacts', $stash['StashFact']);
+            $permissions['edit_work'] = true;
         } else {
             $permissions['edit_collectible_user'] = false;
             $permissions['show_stash_facts'] = false;
+            $permissions['edit_work'] = false;
         }
         
         if ($this->isLoggedIn()) {

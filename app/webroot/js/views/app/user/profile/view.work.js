@@ -10,13 +10,18 @@ define(['require', 'marionette', 'text!templates/app/user/profile/work.mustache'
         itemViewContainer: "tbody",
         emptyView: NoItemsView,
         itemView: WorkView,
+        itemViewOptions: function(model, index) {
+            return {
+                permissions: this.permissions
+            };
+        },
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.render);
             this.listenTo(this.collection, "sync", this.renderMore);
         },
-        initialize: function() {
-
+        initialize: function(options) {
+        	this.permissions = options.permissions;
         }
     });
 });

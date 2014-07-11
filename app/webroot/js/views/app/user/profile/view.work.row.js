@@ -28,7 +28,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/work.row.musta
         selectCollectible: function(event) {
             event.preventDefault();
             var collectible = this.model.toJSON();
-            if (collectible.Status.id == 1) {
+
+            if (!this.permissions.get('edit_work')) {
+            	// otherwise don't do anything
+                if (collectible.Status.id != 1) {
+                    window.location.href = '/collectibles/view/' + collectible.id;
+                }
+            } else if (collectible.Status.id == 1) {
                 window.location.href = '/collectibles/edit/' + collectible.id;
             } else if (collectible.Status.id == 2) {
                 window.location.href = '/collectibles/view/' + collectible.id;
