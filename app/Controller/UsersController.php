@@ -9,7 +9,7 @@ class UsersController extends AppController
     public function beforeFilter() {
         parent::beforeFilter();
     }
-    // make this route stash/user
+    // Soooo much data :)
     public function profile($username = null, $view = 'stash') {
         $this->layout = 'require';
         $loggedInUser = $this->getUser();
@@ -22,7 +22,7 @@ class UsersController extends AppController
         }
         // grab the stash for this user, since comments are tied to a stash
         $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
-
+        
         if ($stash['Stash']['privacy'] === '0' || ($loggedInUser['User']['id'] === $user['User']['id']) || ($stash['Stash']['privacy'] === '1' && $this->isLoggedIn())) {
         } else {
             $this->set(compact('username'));
@@ -104,6 +104,18 @@ class UsersController extends AppController
         // grab the latest activity for this user
         $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions' => array('Activity.user_id' => $user['User']['id']), 'order' => array('Activity.created' => 'desc')));
         $this->set('activity', Set::extract('/Activity/.', $activity));
+        $works = $this->User->Collectible->find('all', array('conditions' => array('Collectible.user_id' => $user['User']['id'], 'OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'))), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User' => array('fields' => array('id', 'username')))));
+        
+        $extractWorks= Set::extract('/Collectible/.', $works);
+        
+        foreach ($extractWorks as $key => $value) {
+            $extractWorks[$key]['User'] = $works[$key]['User'];
+            $extractWorks[$key]['Collectibletype'] = $works[$key]['Collectibletype'];
+            $extractWorks[$key]['Manufacture'] = $works[$key]['Manufacture'];
+            $extractWorks[$key]['Status'] = $works[$key]['Status'];
+        }
+        
+        $this->set('works', $extractWorks);
     }
     /**
      * User home dashboard
