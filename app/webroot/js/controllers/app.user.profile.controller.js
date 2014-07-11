@@ -44,8 +44,7 @@ define(['app/app.user.profile',
                 header: '.header',
                 userCard: '._user-card',
                 main: '._main',
-                modal: ModalRegion,
-                facts: '._facts'
+                modal: ModalRegion
             }
         });
 
@@ -55,7 +54,8 @@ define(['app/app.user.profile',
                 comments: '._comments',
                 stashFacts: '._stashFacts',
                 activity: '._activity',
-                work: '._work'
+                work: '._work',
+                facts: '._facts'
             }
         });
 
@@ -349,8 +349,6 @@ define(['app/app.user.profile',
             } else if (view === 'list') {
                 renderWishlistList(layout);
             }
-
-            layout.wishlist.show()
         }
 
         function renderPhotos(view) {
@@ -478,11 +476,6 @@ define(['app/app.user.profile',
                     model: App.profile,
                     facts: App.facts
                 }));
-
-                App.layout.facts.show(new FactsView({
-                    model: App.facts
-                }));
-
             },
             index: function() {
                 renderHeader('profile');
@@ -546,6 +539,11 @@ define(['app/app.user.profile',
                 profileLayout.work.show(new WorkView({
                     collection: App.work
                 }));
+
+                profileLayout.facts.show(new FactsView({
+                    model: App.facts
+                }));
+
             },
             stash: function() {
                 renderHeader('stash');

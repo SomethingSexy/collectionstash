@@ -45,6 +45,7 @@ class UsersController extends AppController
         $currentSaleCount = $this->User->CollectiblesUser->find('count', array('conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'active' => true, 'sale' => true), 'contain' => false));
         $pointsYear = $this->User->UserPointFact->getUserTotalPointsCurrentYear($user['User']['id']);
         $pointsMonth = $this->User->UserPointFact->getUserTotalPointsCurrentMonth($user['User']['id']);
+        $previousPointsMonth = $this->User->UserPointFact->getUserTotalPointsPreivousMonth($user['User']['id']);
         $facts = array();
         $facts['owned'] = $currentOwnedCount;
         $facts['sale'] = $currentSaleCount;
@@ -57,6 +58,7 @@ class UsersController extends AppController
         $facts['points'] = $user['User']['points'];
         $facts['points_month'] = $pointsMonth;
         $facts['points_year'] = $pointsYear;
+        $facts['points_previous_month'] = $previousPointsMonth;
         
         $this->set(compact('facts'));
         
@@ -106,7 +108,7 @@ class UsersController extends AppController
         $this->set('activity', Set::extract('/Activity/.', $activity));
         $works = $this->User->Collectible->find('all', array('conditions' => array('Collectible.user_id' => $user['User']['id'], 'OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'))), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User' => array('fields' => array('id', 'username')))));
         
-        $extractWorks= Set::extract('/Collectible/.', $works);
+        $extractWorks = Set::extract('/Collectible/.', $works);
         
         foreach ($extractWorks as $key => $value) {
             $extractWorks[$key]['User'] = $works[$key]['User'];
