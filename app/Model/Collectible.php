@@ -911,7 +911,7 @@ class Collectible extends AppModel
         $collectible = Cache::read($this->collectibleCacheKey . $id, 'collectible');
         // if it isn't in the cache, add it to the cache
         if (!$collectible) {
-            $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
+            $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin', 'User.id')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
             Cache::write($this->collectibleCacheKey . $id, $collectible, 'collectible');
         }
         
