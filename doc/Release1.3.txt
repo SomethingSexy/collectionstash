@@ -44,7 +44,7 @@ cake -app D:\Development\wamp\www\app add_new_stash
 
 cake -app D:\Development\wamp\www\app total_existing_points
 
-cake -app D:\Development\wamp\www\app process_activities
+cake -app D:\Development\wamp\www\collectionstash\app process_activities
 
 cake -app D:\Development\wamp\www\app one_time_add_points_fact_table
 

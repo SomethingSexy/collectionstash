@@ -548,26 +548,29 @@ class CollectiblesController extends AppController
         }
     }
     /**
-     * This function right now will return the history of the collectibles the user has submitted.
+     * This will return all user history, this is a public api
      */
-    function userHistory($draft = false) {
-        //Make sure the user is logged in
-        $this->checkLogIn();
+    function userHistory($username) {
         //Grab the user id of the person logged in
         $userId = $this->getUserId();
         
         $conditions = array();
         $conditions['Collectible.user_id'] = $userId;
         // handle both cases
-        if ($draft === true || $draft === 'true') {
-            $conditions['OR'] = array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'));
-        } else {
-            $conditions['Collectible.status_id'] = array(4, 2);
+        $conditions['OR'] = array('Collectible.status_id' => array('1', '2', '3', '4'));
+        $this->paginate = array('conditions' => $conditions, 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
+        $collectibles = $this->paginate('Collectible');
+        
+        $extractCollectibles = Set::extract('/Collectible/.', $collectibles);
+        
+        foreach ($extractCollectibles as $key => $value) {
+            $extractCollectibles[$key]['User'] = $works[$key]['User'];
+            $extractCollectibles[$key]['Collectibletype'] = $works[$key]['Collectibletype'];
+            $extractCollectibles[$key]['Manufacture'] = $works[$key]['Manufacture'];
+            $extractCollectibles[$key]['Status'] = $works[$key]['Status'];
         }
         
-        $this->paginate = array('conditions' => $conditions, 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
-        $collectibles = $this->paginate('Collectible');
-        $this->set(compact('collectibles'));
+        $this->set('collectibles', $extractCollectibles);
     }
     
     function newCollectibles() {
