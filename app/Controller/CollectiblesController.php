@@ -576,7 +576,7 @@ class CollectiblesController extends AppController
     function newCollectibles() {
         //Make sure the user is logged in
         $this->checkLogIn();
-        $this->paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4);
+        $this->paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4);
         $collectibles = $this->paginate('Collectible');
         $this->set(compact('collectibles'));
     }
@@ -584,7 +584,7 @@ class CollectiblesController extends AppController
     function pending() {
         //Make sure the user is logged in
         $this->checkLogIn();
-        $this->paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4, 'order' => array('Collectible.created' => 'desc'));
+        $this->paginate = array('conditions' => array('Collectible.status_id' => 2), 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4, 'order' => array('Collectible.created' => 'desc'));
         $collectibles = $this->paginate('Collectible');
         $this->set(compact('collectibles'));
     }
