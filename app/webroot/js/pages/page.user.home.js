@@ -384,79 +384,6 @@ var PendingCollectibleView = Backbone.View.extend({
 	}
 });
 
-var WorksView = Backbone.View.extend({
-	template : 'works',
-	tagName : 'div',
-	className : 'table-responsive',
-	initialize : function() {
-		this.collection.on('change', this.render, this);
-		this.collection.on('reset', this.render, this);
-		this.pagesArray = [];
-		// ya fuck you dust
-		for (var i = 1; i <= this.collection.paginator_ui.totalPages; i++) {
-			this.pagesArray.push(i);
-		}
-	},
-	render : function() {
-		var self = this;
-		var data = {};
-		dust.render(this.template, data, function(error, output) {
-			$(self.el).html(output);
-		});
-
-		if (!this.collection.isEmpty()) {
-			this.collection.each(function(model) {
-				$('tbody', self.el).append(new WorkView({
-					model : model
-				}).render().el);
-			});
-
-		} else {
-			$('thead', self.el).empty();
-			$('tbody', self.el).html('<td>You aren\'t working on anything</td>');
-			$('.paging', self.el).remove();
-		}
-
-		return this;
-	}
-});
-
-var WorkView = Backbone.View.extend({
-	tagName : 'tr',
-	template : 'work',
-	events : {
-		'click' : 'selectCollectible'
-	},
-	render : function() {
-		var self = this;
-		var data = this.model.toJSON();
-		data.type = 'Mass-produced';
-		if (data.Collectible.original) {
-			data.type = 'Original';
-		} else if (data.Collectible.custom) {
-			data.type = 'Custom';
-		} else {
-
-		}
-
-		dust.render(this.template, data, function(error, output) {
-			$(self.el).html(output);
-		});
-
-		return this;
-	},
-	selectCollectible : function(event) {
-		event.preventDefault();
-		var collectible = this.model.toJSON();
-		if (collectible.Status.id == 1) {
-			window.location.href = '/collectibles/edit/' + collectible.Collectible.id;
-		} else if (collectible.Status.id == 2) {
-			window.location.href = '/collectibles/view/' + collectible.Collectible.id;
-		} else {
-			window.location.href = '/collectibles/view/' + collectible.Collectible.id;
-		}
-	}
-});
 
 var ActivitiesView = Backbone.View.extend({
 	template : 'activities',
@@ -525,13 +452,11 @@ var ActivitiesView = Backbone.View.extend({
 
 $(function() {
 
-	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/works.dust'), $.get('/templates/user/work.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust'), $.get('/templates/common/paging.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, worksTemplate, workTemplate, acitivitesTemplate, activityTemplate, pagingTemplate) {
+	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust'), $.get('/templates/common/paging.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, acitivitesTemplate, activityTemplate, pagingTemplate) {
 		dust.loadSource(dust.compile(pendingTemplate[0], 'pending'));
 		dust.loadSource(dust.compile(pendingCollectibleTemplate[0], 'pending.collectible'));
 		dust.loadSource(dust.compile(newTemplate[0], 'new'));
 		dust.loadSource(dust.compile(newCollectibleTemplate[0], 'new.collectible'));
-		dust.loadSource(dust.compile(worksTemplate[0], 'works'));
-		dust.loadSource(dust.compile(workTemplate[0], 'work'));
 		dust.loadSource(dust.compile(acitivitesTemplate[0], 'activities'));
 		dust.loadSource(dust.compile(activityTemplate[0], 'activity'));
 		dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
@@ -542,14 +467,6 @@ $(function() {
 
 		$('.new').append(new NewView({
 			collection : newCollectibles
-		}).render().el);
-
-		$('.work .panel-heading').after(new WorksView({
-			collection : works
-		}).render().el);
-
-		$('.work .panel-footer').append(new PagingView({
-			collection : works
 		}).render().el);
 
 		$('.activities-container').append(new ActivitiesView({

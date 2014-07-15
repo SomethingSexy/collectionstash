@@ -25,7 +25,6 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible.user'], funct
             state = this.state = this._checkState(_.extend({}, state, {
                 query: query,
             }));
-            
         }
     });
 });

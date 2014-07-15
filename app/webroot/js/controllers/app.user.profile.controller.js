@@ -14,6 +14,7 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.history.chart',
         'views/app/user/profile/view.sale',
         'views/app/user/profile/view.work',
+        'views/app/user/profile/view.submissions',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
@@ -21,6 +22,7 @@ define(['app/app.user.profile',
         'text!templates/app/user/profile/layout.stash.mustache',
         'text!templates/app/user/profile/layout.history.mustache',
         'text!templates/app/user/profile/layout.sale.mustache',
+        'text!templates/app/user/profile/layout.activity.mustache',
         'views/common/modal.region',
         'views/common/stash/view.stash.sell',
         'views/common/stash/view.stash.listing.edit',
@@ -35,7 +37,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -56,6 +58,14 @@ define(['app/app.user.profile',
                 activity: '._activity',
                 work: '._work',
                 facts: '._facts'
+            }
+        });
+
+        var ActivityLayout = Backbone.Marionette.Layout.extend({
+            template: activityLayout,
+            regions: {
+                submissions: '._submissions',
+                edits: '._edits'
             }
         });
 
@@ -376,6 +386,15 @@ define(['app/app.user.profile',
             layout.history.show(view);
         }
 
+        function renderSubmissions(layout) {
+            var view = new SubmissionsView({
+                collection: App.submissions,
+                permissions: App.permissions
+            });
+
+            layout.submissions.show(view);
+        }
+
         function renderSale(layout) {
             var view = new SaleView({
                 collection: App.sales,
@@ -662,6 +681,23 @@ define(['app/app.user.profile',
                     });
                 } else {
                     renderHistory(layout);
+                }
+            },
+            activity: function() {
+                renderHeader('activity');
+
+                var layout = new ActivityLayout({
+                    permissions: App.permissions,
+                    model: App.profile
+                });
+                App.layout.main.show(layout);
+
+                if (App.submissions.isEmpty()) {
+                    App.submissions.getFirstPage().done(function() {
+                        renderSubmissions(layout);
+                    });
+                } else {
+                    renderSubmissions(layout);
                 }
             }
         });
