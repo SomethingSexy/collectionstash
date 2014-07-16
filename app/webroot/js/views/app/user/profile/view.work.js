@@ -15,13 +15,38 @@ define(['require', 'marionette', 'text!templates/app/user/profile/work.mustache'
                 permissions: this.permissions
             };
         },
-        _initialEvents: function() {
-            this.listenTo(this.collection, "remove", this.removeItemView);
-            this.listenTo(this.collection, "reset", this.render);
-            this.listenTo(this.collection, "sync", this.renderMore);
+        serializeData: function() {
+            var data = {
+                showPagination: this.collection.state.totalPages > 1
+            };
+            return data;
+        },
+        sorts: {
+            'Collectible.status_id': -1,
+            'created': -1,
+            'id': -1,
+            'name': -1,
+            'Collectible.collectibletype_id': -1
         },
         initialize: function(options) {
-        	this.permissions = options.permissions;
+            this.permissions = options.permissions;
+        },
+        onRender: function() {
+            var self = this;
+            $('._pagination', this.el).pagination({
+                items: this.collection.state.totalRecords,
+                itemsOnPage: this.collection.state.pageSize,
+                cssStyle: 'pagination',
+                onPageClick: function(pageNumber, event) {
+                    self.collection.getPage(pageNumber);
+                }
+            });
+        },
+        sort: function(event) {
+            var sort = $(event.currentTarget).data('sort');
+            this.sorts[sort] = this.sorts[sort] === -1 ? 1 : -1;
+            this.collection.setSorting(sort, this.sorts[sort]);
+            this.collection.fetch();
         }
     });
 });
