@@ -129,7 +129,7 @@ class Comment extends AppModel
         
         $conditions = array_merge(array('Comment.entity_type_id' => $entityType['EntityType']['id']), $conditions);
         
-        $comments = $this->find("all", array('contain' => 'User' => array('fields' => array('id', 'username')), 'conditions' => $conditions));
+        $comments = $this->find("all", array('contain' => array('User' => array('fields' => array('id', 'username'))), 'conditions' => $conditions));
         
         $commentMetaData = $this->addPermissions($comments, $userId, $ownerId);
         

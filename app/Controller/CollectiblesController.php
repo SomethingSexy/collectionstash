@@ -558,16 +558,16 @@ class CollectiblesController extends AppController
         $conditions['Collectible.user_id'] = $userId;
         // handle both cases
         $conditions['OR'] = array('Collectible.status_id' => array('1', '2', '3', '4'));
-        $this->paginate = array('conditions' => $conditions, 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
+        $this->paginate = array('paramType' => 'querystring', 'conditions' => $conditions, 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
         $collectibles = $this->paginate('Collectible');
         
         $extractCollectibles = Set::extract('/Collectible/.', $collectibles);
         
         foreach ($extractCollectibles as $key => $value) {
-            $extractCollectibles[$key]['User'] = $works[$key]['User'];
-            $extractCollectibles[$key]['Collectibletype'] = $works[$key]['Collectibletype'];
-            $extractCollectibles[$key]['Manufacture'] = $works[$key]['Manufacture'];
-            $extractCollectibles[$key]['Status'] = $works[$key]['Status'];
+            $extractCollectibles[$key]['User'] = $collectibles[$key]['User'];
+            $extractCollectibles[$key]['Collectibletype'] = $collectibles[$key]['Collectibletype'];
+            $extractCollectibles[$key]['Manufacture'] = $collectibles[$key]['Manufacture'];
+            $extractCollectibles[$key]['Status'] = $collectibles[$key]['Status'];
         }
         
         $this->set('collectibles', $extractCollectibles);
