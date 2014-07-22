@@ -8,11 +8,12 @@ define(['marionette',
     'collections/collection.comments',
     'collections/collection.photos',
     'collections/collection.history',
+    'collections/collection.edits',
     'models/model.history.graph',
     'collections/collection.collectible.sale',
     'collections/collection.work',
     'collections/collection.collectible.history'
-], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection, PhotosCollection, HistoryCollection, GraphModel, SaleCollection, WorkCollection, SubmissionCollection) {
+], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection, PhotosCollection, HistoryCollection, EditsCollection, GraphModel, SaleCollection, WorkCollection, SubmissionCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -71,6 +72,10 @@ define(['marionette',
     });
 
     MyApp.submissions = new SubmissionCollection([], {
+        username: MyApp.profile.get('username')
+    });
+
+    MyApp.edits = new EditsCollection([], {
         username: MyApp.profile.get('username')
     });
 

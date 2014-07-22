@@ -29,30 +29,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/submissions.mu
             'Collectible.collectibletype_id': -1
         },
         _initialEvents: function() {
-            this.listenTo(this.collection, "remove", this.removeItemView);
-            this.listenTo(this.collection, "reset", this.render);
-            this.listenTo(this.collection, "sync", this.renderMore);
+            this.listenTo(this.collection, "sync", this._renderChildren);
         },
         events: {
             'click ._sort': 'sort'
         },
         initialize: function(options) {
             this.permissions = options.permissions;
-        },
-        renderMore: function() {
-            var self = this;
-            var ItemView;
-
-            $(this.itemViewContainer, this.el).empty();
-
-            this.startBuffering();
-            this.collection.each(function(item, index) {
-                ItemView = this.getItemView(item);
-                this.addItemView(item, ItemView, index);
-            }, this);
-            this.endBuffering();
-
-            $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
         },
         onRender: function() {
             var self = this;

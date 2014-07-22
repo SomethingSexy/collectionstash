@@ -1,4 +1,4 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/work.mustache', 'text!templates/app/user/profile/work.empty.mustache', 'views/app/user/profile/view.work.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, emptyTemplate, WorkView, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/edits.mustache', 'text!templates/app/user/profile/edits.empty.mustache', 'views/app/user/profile/view.edit', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, emptyTemplate, WorkView, mustache) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate,
@@ -21,13 +21,15 @@ define(['require', 'marionette', 'text!templates/app/user/profile/work.mustache'
             };
             return data;
         },
+        _initialEvents: function() {
+            this.listenTo(this.collection, "sync", this._renderChildren);
+        },
         sorts: {
             'Collectible.status_id': -1,
             'created': -1,
             'id': -1,
             'name': -1,
-            'Collectible.collectibletype_id': -1,
-            'type': -1
+            'Collectible.collectibletype_id': -1
         },
         events: {
             'click ._sort': 'sort'
@@ -50,7 +52,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/work.mustache'
             var sort = $(event.currentTarget).data('sort');
             this.sorts[sort] = this.sorts[sort] === -1 ? 1 : -1;
             this.collection.setSorting(sort, this.sorts[sort]);
-            this.collection.fullCollection.sort();
+            this.collection.fetch();
         }
     });
 });

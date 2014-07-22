@@ -15,6 +15,7 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.sale',
         'views/app/user/profile/view.work',
         'views/app/user/profile/view.submissions',
+        'views/app/user/profile/view.edits',
         'views/common/view.activities',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
@@ -37,7 +38,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -395,6 +396,15 @@ define(['app/app.user.profile',
             layout.submissions.show(view);
         }
 
+        function renderEdits(layout) {
+            var view = new EditsView({
+                collection: App.edits,
+                permissions: App.permissions
+            });
+
+            layout.edits.show(view);
+        }
+
         function renderSale(layout) {
             var view = new SaleView({
                 collection: App.sales,
@@ -698,6 +708,14 @@ define(['app/app.user.profile',
                     });
                 } else {
                     renderSubmissions(layout);
+                }
+
+                if (App.edits.isEmpty()) {
+                    App.edits.getFirstPage().done(function() {
+                        renderEdits(layout);
+                    });
+                } else {
+                    renderEdits(layout);
                 }
             }
         });
