@@ -194,44 +194,6 @@ class UsersController extends AppController
         $this->set('dashboard', 'home');
     }
     
-    function activity() {
-        $this->checkLogIn();
-        // user
-        $user = $this->getUser();
-        
-        $this->set(compact('user'));
-        // This is all the collectibles approved and submitted
-        $total = $this->User->Collectible->find('count', array('conditions' => array('Collectible.status_id' => array(4, 2), 'Collectible.user_id' => $this->getUserId())));
-        $collectibles = $this->User->Collectible->find('all', array('conditions' => array('Collectible.user_id' => $this->getUserId(), 'Collectible.status_id' => array(4, 2)), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User'), 'limit' => 10));
-        
-        $collectibles = json_encode($collectibles);
-        $this->set(compact('collectibles'));
-        $this->set(compact('total'));
-        
-        $totalEdits = $this->User->Edit->find('count', array('conditions' => array('Edit.user_id' => $this->getUserId())));
-        $edits = $this->User->Edit->find('all', array('conditions' => array('Edit.user_id' => $this->getUserId()), 'limit' => 10));
-        
-        $edits = json_encode($edits);
-        $this->set(compact('edits'));
-        $this->set(compact('totalEdits'));
-        
-        $this->layout = 'home_dashboard';
-        $this->set('dashboard', 'activity');
-    }
-    
-    function history() {
-        $this->checkLogIn();
-        // user
-        $user = $this->getUser();
-        
-        $this->paginate = array('findType' => 'orderAveragePrice', 'joins' => array(array('alias' => 'Stash', 'table' => 'stashes', 'type' => 'inner', 'conditions' => array('Stash.id = CollectiblesUser.stash_id', 'Stash.name = "Default"'))), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
-        $collectibles = $this->paginate('CollectiblesUser');
-        $this->set(compact('collectibles'));
-        
-        $this->layout = 'home_dashboard';
-        $this->set('dashboard', 'history');
-    }
-    
     function notifications() {
         $this->checkLogIn();
         
