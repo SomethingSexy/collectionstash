@@ -552,10 +552,10 @@ class CollectiblesController extends AppController
      */
     function userHistory($username) {
         //Grab the user id of the person logged in
-        $userId = $this->getUserId();
+        $user = $this->Collectible->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
         
         $conditions = array();
-        $conditions['Collectible.user_id'] = $userId;
+        $conditions['Collectible.user_id'] = $user['User']['id'];
         // handle both cases
         $conditions['OR'] = array('Collectible.status_id' => array('1', '2', '3', '4'));
         $this->paginate = array('paramType' => 'querystring', 'conditions' => $conditions, 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
