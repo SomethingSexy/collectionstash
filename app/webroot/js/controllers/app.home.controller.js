@@ -1,5 +1,5 @@
-define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/user/settings/view.menu', 'views/app/user/settings/view.profile', 'views/app/user/settings/view.stash', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, layout, MenuView, ProfileView, PrivacyView, mustache) {
+define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/home/view.collectibles', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, layout, CollectiblesView, mustache) {
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
             template: layout,
             regions: {
@@ -20,9 +20,9 @@ define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layou
                 //     collection: App.movies
                 // }));
 
-                //     App.layout.main.show(new ProfileView({
-                //         model: App.profile
-                //     }));
+                App.layout.pending.show(new CollectiblesView({
+                    collection: App.pendingCollectibles
+                }));
             }
         });
     });

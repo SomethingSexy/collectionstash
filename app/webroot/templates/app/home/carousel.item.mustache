@@ -1,9 +1,3 @@
-{#CollectiblesUpload uploadDirectory=uploadDirectory collectibleId=Collectible.id}
+<a class="thumbnail" href="/collectibles/view/{{id}}"><img src="{{url}}" alt=""></a>
 
-	{@eq key="{primary}" value="true" type="boolean"}
-		<a class="thumbnail" href="/collectibles/view/{collectibleId}"><img src="/{uploadDirectory}/{Upload.name}" alt=""></a>
-	{/eq}
-	{:else}
-		<a class="thumbnail" href="/collectibles/view/{collectibleId}"><img src="/img/no-photo.png" alt=""></a>
-{/CollectiblesUpload}
 
