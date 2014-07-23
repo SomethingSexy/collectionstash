@@ -9,14 +9,7 @@ define(['marionette', 'collections/collection.collectibles'], function(Marionett
     });
 
     MyApp.on('initialize:after', function() {
-        Backbone.history.start({
-            pushState: true,
-            root: "/"
-        });
-    });
-
-    MyApp.vent.on("search:term", function(searchTerm) {
-        Backbone.history.navigate("search/" + searchTerm);
+        Backbone.history.start({});
     });
 
     // adding initial collection here

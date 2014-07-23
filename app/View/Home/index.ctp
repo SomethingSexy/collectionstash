@@ -4,6 +4,8 @@
 <?php echo $this -> Html -> scriptBlock('var totalPending = ' .  json_encode($totalPending) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawNewCollectibles = ' .  json_encode($newCollectibles) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var totalNew = ' .  json_encode($totalNew) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var uploadDirectory = "' .  $this -> FileUpload -> getUploadDirectory() . '";', array('inline' => false));?>
+
 <div class="masthead">
     <div class="container">
         <h1>Collection Stash</h1>
