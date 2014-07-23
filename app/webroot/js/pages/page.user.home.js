@@ -452,14 +452,11 @@ var ActivitiesView = Backbone.View.extend({
 
 $(function() {
 
-	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust'), $.get('/templates/user/activities.dust'), $.get('/templates/activities/activity.dust'), $.get('/templates/common/paging.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, acitivitesTemplate, activityTemplate, pagingTemplate) {
+	$.when($.get('/templates/user/pending.dust'), $.get('/templates/user/pending.collectible.dust'), $.get('/templates/user/new.collectibles.dust'), $.get('/templates/user/new.collectible.dust')).done(function(pendingTemplate, pendingCollectibleTemplate, newTemplate, newCollectibleTemplate, acitivitesTemplate, activityTemplate, pagingTemplate) {
 		dust.loadSource(dust.compile(pendingTemplate[0], 'pending'));
 		dust.loadSource(dust.compile(pendingCollectibleTemplate[0], 'pending.collectible'));
 		dust.loadSource(dust.compile(newTemplate[0], 'new'));
 		dust.loadSource(dust.compile(newCollectibleTemplate[0], 'new.collectible'));
-		dust.loadSource(dust.compile(acitivitesTemplate[0], 'activities'));
-		dust.loadSource(dust.compile(activityTemplate[0], 'activity'));
-		dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
 
 		$('.pending').append(new PendingView({
 			collection : pending
@@ -468,11 +465,6 @@ $(function() {
 		$('.new').append(new NewView({
 			collection : newCollectibles
 		}).render().el);
-
-		$('.activities-container').append(new ActivitiesView({
-			collection : activity
-		}).render().el);
-
 	});
 
 });

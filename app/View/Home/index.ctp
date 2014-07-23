@@ -1,4 +1,9 @@
 <?php echo $this -> Minify -> css('layout/home'); ?>
+<?php echo $this -> Html -> script('pages/page.home', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var rawPending = ' .  json_encode($pending) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var totalPending = ' .  json_encode($totalPending) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var rawNewCollectibles = ' .  json_encode($newCollectibles) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var totalNew = ' .  json_encode($totalNew) . ';', array('inline' => false));?>
 <div class="masthead">
     <div class="container">
         <h1>Collection Stash</h1>
@@ -35,5 +40,8 @@
     <div class="container">
         <strong>Are you squirreling?</strong> For the latest updates and news make sure to follow and like us.     <a href="http://www.twitter.com/collectionstash" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @collectionstash</a> <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fcollectionstash.com%2F&related=mdo%3ACreator%20of%20Collection%20Stash&text=Checkout Collection%20Stash&tw_p=tweetbutton&url=http%3A%2F%2Fcollectionstash.com%2F&via=collectionstash" class="twitter-share-button" data-related="jasoncosta" data-lang="en" data-size="medium" data-count="none">Tweet</a> <div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
     </div>
+
+</div>
+<div class="container _home">
 
 </div>
