@@ -122,6 +122,7 @@ class UsersController extends AppController
         $this->set('works', $extractWorks);
     }
     /**
+     * This is old and going away
      * User home dashboard
      *
      * TODO: Update this method so the JSON stuff is done in the view file
@@ -167,18 +168,7 @@ class UsersController extends AppController
         
         $this->set(compact('works'));
         $this->set(compact('totalWorks'));
-        // Now grab the pending collectible
-        $pending = $this->User->Collectible->getPendingCollectibles(array('limit' => 4, 'order' => array('Collectible.created' => 'desc')));
-        $totalPending = $this->User->Collectible->getNumberOfPendingCollectibles();
-        $pending = json_encode($pending);
-        $this->set(compact('pending'));
-        $this->set(compact('totalPending'));
-        
-        $totalNew = $this->User->Collectible->find('count', array('conditions' => array('Collectible.status_id' => 4), 'limit' => 4));
-        $newCollectibles = $this->User->Collectible->find('all', array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User', 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4));
-        $newCollectibles = json_encode($newCollectibles);
-        $this->set(compact('newCollectibles'));
-        $this->set(compact('totalNew'));
+
         // Load initial activity
         
         // not sure how necessary count will be in the long run
