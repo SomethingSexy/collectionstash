@@ -190,6 +190,7 @@
 		</div>	
 		<div id="push"></div>
 	</div>
+	<div id="footer-decorator"><div id="footer-decorator-diagram"></div></div>	
 	<footer id="footer">
 		<div class="container">
 			<div class="row spacer">
