@@ -207,38 +207,33 @@
 			<?php echo $content_for_layout; ?>
 		</div>	
 	</div>
-	<footer>
-		<div id="footer">
-			<div class="container narrow">
-				<div class="row spacer">
-					<div class="col-md-12">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="social">
-									<div>
-										<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
-									</div>
-									<div>
-										<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
-									</div>
-								</div>					
-							</div>
-							<div class="col-md-6">
-								<ul class="links list-unstyled pull-right">
-									<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
-								</ul>
-							</div>	
+	<div id="footer-decorator"><div id="footer-decorator-diagram"></div></div>	
+	<footer id="footer">
+		<div class="container">
+			<div class="row spacer">
+				<div class="col-md-6">
+					<div class="social">
+						<div>
+							<a href="http://www.twitter.com/collectionstash"><img src="http://twitter-badges.s3.amazonaws.com/t_logo-a.png" alt="Follow collectionstash on Twitter"/></a>
 						</div>
-						<div class="row spacer">
-							<div class="col-md-12">
-								<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
-								<p>Original logo created by Bamboota.  Artwork created by Devil_666.</p>
-							</div>
+						<div>
+							<div class="fb-like" data-href="http://www.facebook.com/pages/Collection-Stash/311656598850547" data-send="true" data-layout="button_count" data-width="125" data-show-faces="false"></div>
 						</div>
-					</div>
+					</div>					
+				</div>
+				<div class="col-md-6">
+					<ul class="links list-unstyled pull-right">
+						<li>&copy; Collection Stash <a href="/pages/change_log">v<?php echo Configure::read('Settings.version'); ?></a></li>
+					</ul>
+				</div>	
+			</div>
+			<div class="row spacer">
+				<div class="col-md-12">
+					<p>All Images & Characters contained within this site are copyright and trademark their respective owners.  No portion of this web site, including the images contained herein, may be reproduced without the express written permission of the appropriate copyright & trademark holder.</p>
+					<p>Original logo created by Bamboota.  Artwork created by Devil_666.</p>
 				</div>
 			</div>
-		</div>		
+		</div>	
 	</footer>
 	<?php
 	// list out any modals here that might be common
