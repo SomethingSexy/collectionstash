@@ -165,7 +165,6 @@ class CollectiblesController extends AppController
         
         $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
         //Make sure the user is logged in
-        $this->checkLogIn();
         $this->paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4);
         $collectibles = $this->paginate('Collectible');
         $this->set(compact('collectibles'));

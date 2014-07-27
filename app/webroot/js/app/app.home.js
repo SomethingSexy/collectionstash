@@ -13,8 +13,20 @@ define(['marionette', 'collections/collection.collectibles'], function(Marionett
     });
 
     // adding initial collection here
-    MyApp.newCollectibles = new CollectiblesCollection(rawNewCollectibles);
-    MyApp.pendingCollectibles = new CollectiblesCollection(rawPending);
+    MyApp.newCollectibles = new CollectiblesCollection(rawNewCollectibles, {
+        mode: 'server',
+        state: {
+            pageSize: 4,
+            totalRecords: totalNew
+        }
+    });
+    MyApp.pendingCollectibles = new CollectiblesCollection(rawPending, {
+        mode: 'server',
+        state: {
+            pageSize: 4,
+            totalRecords: totalPending
+        }
+    });
 
     // export the app from this module
     return MyApp;
