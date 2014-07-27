@@ -91,6 +91,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 
 <?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
 <?php echo $this -> Minify -> script('jquery.masonry.min', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));?>
 
 <script>
 	$(function() {

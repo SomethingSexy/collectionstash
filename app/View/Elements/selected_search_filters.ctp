@@ -1,5 +1,5 @@
 <?php
-echo $this -> Html -> script('views/view.filters.selected', array('inline' => false));
+echo $this -> Html -> script('views/app/collectible/search/view.filters.selected', array('inline' => false));
 ?>
 <?php if(!empty($saveSearchFilters)){ ?>
 <div class="row spacer">

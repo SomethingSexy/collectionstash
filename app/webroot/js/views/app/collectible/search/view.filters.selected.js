@@ -4,9 +4,6 @@ var SelectedFiltersView = Backbone.View.extend({
         'click [data-role="remove"]': 'removeFilter',
         'click [data-role="remove-all"]': 'removeAll'
     },
-    initialize: function(options) {
-        this.hounds = {};
-    },
     render: function() {
         var self = this;
 
