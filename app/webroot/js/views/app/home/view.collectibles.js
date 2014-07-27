@@ -10,17 +10,32 @@ define(['require', 'marionette', 'text!templates/app/common/carousel.mustache', 
         itemViewContainer: ".thumbnails",
         emptyView: NoItemsView,
         itemView: CollectibleView,
+        className: 'carousel slide',
         serializeData: function() {
+
+            // {@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
+
+            // {/gt}         
+
+            // {@ne key="{paginator.total}" value="0"}
+            //     {@ne key="{paginator.totalPages}" value="{paginator.currentPage}" type="number"}
+
+            //     {/ne}
+            // {/ne}   
             var data = {
-                showPagination: this.collection.state.totalPages > 1
+                showPrevious: this.collection.state.currentPage > 1,
+                showNext: (this.collection.state.total !== 0 && this.collection.state.total !== this.collection.state.currentPage)
             };
             return data;
-        },    
+        },
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this.render);
         },
         events: {
-            'click ._sort': 'sort'
+            'click .next': 'next'
+        },
+        next: function(event) {
+            this.collection.getNextPage();
         },
         onRender: function() {
             var self = this;
