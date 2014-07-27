@@ -14,6 +14,17 @@ body.login {
 .hide {
     display: none;
 }
+#footer-decorator {
+    height: 79px;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+#footer-decorator-diagram {
+    background: transparent url(/img/footer_squirrel.png) no-repeat bottom right;
+    height: 79px;
+    margin-right: 2px;
+}
 .btn-primary, .nav-button {
     color: #fff;
     -webkit-text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
