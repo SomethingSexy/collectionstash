@@ -265,7 +265,6 @@ class AttributesController extends AppController {
 		}
 		if ($this -> request -> is('post') || $this -> request -> is('put')) {
 			$this -> request -> data = Sanitize::clean($this -> request -> data);
-			debug($this -> request -> data);
 
 			$response = $this -> Attribute -> update($this -> request -> data, $this -> getUser());
 

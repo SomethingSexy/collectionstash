@@ -30,106 +30,113 @@ App::uses('CakeEmail', 'Network/Email');
  * 				- This way again one edit can be tied to a lot of things
  */
 
-class EditsController extends AppController {
-
-	public $helpers = array('Html', 'Minify');
-
-	// All of these methods would make a good component
-
-	/**
-	 * This method will show all edits grouped together by a collectible.  This way I am only seeing the unique edits by that collectible
-	 */
-	function admin_index() {
-		$this -> checkLogIn();
-		$this -> checkAdmin();
-		$this -> paginate = array('conditions' => array('Edit.status' => 0), "limit" => 25);
-		$edits = $this -> paginate('Edit');
-		$this -> set('edits', $edits);
-		$this -> layout = 'fluid';
-	}
-
-	/**
-	 * This method will show all of the edits for this edit.
-	 *
-	 * For now, we are only allowing one thing to be edited per edit but this will allow us to have multiple different things being edited at once.
-	 */
-	function admin_view($id = null) {
-		$editDetail = $this -> Edit -> findById($id);
-		$this -> set(compact('editDetail'));
-	}
-
-	/**
-	 * This is the new approval method, this will replace the old
-	 *
-	 * Name sucks balls but it is just me so who cares
-	 *
-	 * We also need to add email stuff in here
-	 */
-	function admin_approval_2($id = null) {
-		$this -> checkLogIn();
-		$this -> checkAdmin();
-		if ($id && is_numeric($id)) {
-			// make sure this is a post and it contains the right approval data
-			if (($this -> request -> is('post') || $this -> request -> is('put')) && isset($this -> request -> data['Approval']['approve'])) {
-				$this -> request -> data = Sanitize::clean($this -> request -> data);
-				$approvalNotes = '';
-				if (isset($this -> request -> data['Approval']['notes'])) {
-					$approvalNotes = $this -> request -> data['Approval']['notes'];
-				}
-
-				if ($this -> request -> data['Approval']['approve'] === 'true') {
-					// Because I might be approving something that is new, I need
-					// to pass in the user id of the logged in user because
-					// they will be marked as the one who is doing the approving
-					if ($this -> Edit -> publishEdit($id, $this -> getUserId())) {
-						$this -> Session -> setFlash('The edit has been successfully approved.', null, null, 'success');
-					} else {
-						$this -> Session -> setFlash(__('There was a problem submitting the edit.', true), null, null, 'error');
-					}
-				} else {
-					if ($this -> Edit -> denyEdit($id, $this -> getUserId())) {
-						$this -> Session -> setFlash('The edit has been successfully denied.', null, null, 'success');
-					} else {
-						$this -> Session -> setFlash(__('There was a problem denying the edit.', true), null, null, 'error');
-					}
-				}
-
-				$this -> redirect(array('action' => 'index'), null, true);			}
-		}
-	}
-
-	/**
-	 * This function right now will return the history of the collectibles the user has submitted.
-	 */
-	function userHistory() {
-		$this -> checkLogIn();
-		$userId = $this -> getUserId();
-		$this -> paginate = array('conditions' => array('Edit.user_id' => $userId), "limit" => 10);
-
-		$edits = $this -> paginate('Edit');
-		//TODO: Either on the paginate we need to get the detail of that edit or get it after the fact or not show it on the main page
-		//I think I will add it back to the paginate because I don't want to drastically change the UI
-		foreach ($edits as &$edit) {
-			if (!empty($edit['CollectibleEdit']['id'])) {
-				$edit['type'] = __('Collectible', true);
-				$edit['type_id'] = $edit['CollectibleEdit']['id'];
-				unset($edit['UploadEdit']);
-				unset($edit['AttributesCollectiblesEdit']);
-			} else if (!empty($edit['UploadEdit']['id'])) {
-				$edit['type'] = __('Upload', true);
-				$edit['type_id'] = $edit['UploadEdit']['id'];
-				unset($edit['CollectibleEdit']);
-				unset($edit['AttributesCollectiblesEdit']);
-			} else if (!empty($edit['AttributesCollectiblesEdit']['id'])) {
-				$edit['type'] = __('Attribute', true);
-				$edit['type_id'] = $edit['AttributesCollectiblesEdit']['id'];
-				unset($edit['CollectibleEdit']);
-				unset($edit['UploadEdit']);
-			}
-		}
-
-		$this -> set('edits', $edits);
-	}
-
+class EditsController extends AppController
+{
+    
+    public $helpers = array('Html', 'Minify');
+    // All of these methods would make a good component
+    
+    
+    /**
+     * This method will show all edits grouped together by a collectible.  This way I am only seeing the unique edits by that collectible
+     */
+    function admin_index() {
+        $this->checkLogIn();
+        $this->checkAdmin();
+        $this->paginate = array('conditions' => array('Edit.status' => 0), "limit" => 25);
+        $edits = $this->paginate('Edit');
+        $this->set('edits', $edits);
+        $this->layout = 'fluid';
+    }
+    /**
+     * This method will show all of the edits for this edit.
+     *
+     * For now, we are only allowing one thing to be edited per edit but this will allow us to have multiple different things being edited at once.
+     */
+    function admin_view($id = null) {
+        $editDetail = $this->Edit->findById($id);
+        $this->set(compact('editDetail'));
+    }
+    /**
+     * This is the new approval method, this will replace the old
+     *
+     * Name sucks balls but it is just me so who cares
+     *
+     * We also need to add email stuff in here
+     */
+    function admin_approval_2($id = null) {
+        $this->checkLogIn();
+        $this->checkAdmin();
+        if ($id && is_numeric($id)) {
+            // make sure this is a post and it contains the right approval data
+            if (($this->request->is('post') || $this->request->is('put')) && isset($this->request->data['Approval']['approve'])) {
+                $this->request->data = Sanitize::clean($this->request->data);
+                $approvalNotes = '';
+                if (isset($this->request->data['Approval']['notes'])) {
+                    $approvalNotes = $this->request->data['Approval']['notes'];
+                }
+                
+                if ($this->request->data['Approval']['approve'] === 'true') {
+                    // Because I might be approving something that is new, I need
+                    // to pass in the user id of the logged in user because
+                    // they will be marked as the one who is doing the approving
+                    if ($this->Edit->publishEdit($id, $this->getUserId())) {
+                        $this->Session->setFlash('The edit has been successfully approved.', null, null, 'success');
+                    } else {
+                        $this->Session->setFlash(__('There was a problem submitting the edit.', true), null, null, 'error');
+                    }
+                } else {
+                    if ($this->Edit->denyEdit($id, $this->getUserId())) {
+                        $this->Session->setFlash('The edit has been successfully denied.', null, null, 'success');
+                    } else {
+                        $this->Session->setFlash(__('There was a problem denying the edit.', true), null, null, 'error');
+                    }
+                }
+                
+                $this->redirect(array('action' => 'index'), null, true);
+            }
+        }
+    }
+    /**
+     * This function right now will return the history of the collectible edits the user has submitted.
+     */
+    function userHistory($username = null) {
+        //Grab the user id of the person logged in
+        $user = $this->Edit->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
+        
+        $this->paginate = array('paramType' => 'querystring', 'conditions' => array('Edit.user_id' => $user['User']['id']), "limit" => 10, 'contain' => array('Status', 'User' => array('fields' => array('id', 'username'))));
+        
+        $edits = $this->paginate('Edit');
+        //TODO: Either on the paginate we need to get the detail of that edit or get it after the fact or not show it on the main page
+        //I think I will add it back to the paginate because I don't want to drastically change the UI
+        foreach ($edits as & $edit) {
+            if (!empty($edit['CollectibleEdit']['id'])) {
+                $edit['type'] = __('Collectible', true);
+                $edit['type_id'] = $edit['CollectibleEdit']['id'];
+                unset($edit['UploadEdit']);
+                unset($edit['AttributesCollectiblesEdit']);
+            } else if (!empty($edit['UploadEdit']['id'])) {
+                $edit['type'] = __('Upload', true);
+                $edit['type_id'] = $edit['UploadEdit']['id'];
+                unset($edit['CollectibleEdit']);
+                unset($edit['AttributesCollectiblesEdit']);
+            } else if (!empty($edit['AttributesCollectiblesEdit']['id'])) {
+                $edit['type'] = __('Attribute', true);
+                $edit['type_id'] = $edit['AttributesCollectiblesEdit']['id'];
+                unset($edit['CollectibleEdit']);
+                unset($edit['UploadEdit']);
+            }
+        }
+        
+        $extractEdits = Set::extract('/Edit/.', $edits);
+        
+        foreach ($extractEdits as $key => $value) {
+            $extractEdits[$key]['User'] = $edits[$key]['User'];
+            $extractEdits[$key]['Edits'] = $edits[$key]['Edits'];
+            $extractEdits[$key]['Status'] = $edits[$key]['Status'];
+        }
+        
+        $this->set('edits', $extractEdits);
+    }
 }
 ?>

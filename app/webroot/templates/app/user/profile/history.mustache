@@ -1,0 +1,30 @@
+<table class="table stashable" data-toggle="modal-gallery" data-target="#modal-gallery">
+<thead>
+<tr>
+<th><a class="_sort" data-sort="active" href="javascript:void(0)">Bought/Sold</a></th>
+<th></th>
+<th><a class="_sort" data-sort="Collectible.name" href="javascript:void(0)">Name</a></th>
+<th><a class="_sort" data-sort="Collectible.manufacture_id" href="javascript:void(0)">Manufacturer</a></th>
+<th><a class="_sort" data-sort="edition_size" href="javascript:void(0)">Edition Size</a></th>
+<th><a class="_sort" data-sort="cost" href="javascript:void(0)">Price Paid</a></th>
+<th><a class="_sort" data-sort="Collectible.average_price" href="javascript:void(0)">Collection Stash Value</a></th>
+<th>Date Purchased</th>
+<th><a class="_sort" data-sort="created" href="javascript:void(0)">Date Added</a></th>
+<th>Sold For</th>
+<th>Date Sold</th>
+{{#permissions.edit_collectible_user}}
+	<th>Actions</th>
+{{/permissions.edit_collectible_user}}
+</tr>
+
+</thead>
+
+<tbody>
+	
+
+</tbody>
+
+</table>
+{{#showPagination}}
+<ul class="_pagination"></ul>
+{{/showPagination}}

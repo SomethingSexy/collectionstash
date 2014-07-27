@@ -1,0 +1,38 @@
+<div class="thumbnail">
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}
+	<div class="caption">
+		<h3>
+		{{#Collectible.custom}}
+			<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
+		{{/Collectible.custom}}
+		{{#Collectible.original}}
+			<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
+		{{/Collectible.original}}
+		{{^Collectible.original}}{{^Collectible.custom}}
+			<a class="title" target="_blank" href="/collectibles_users/view/{{id}}">{{{Collectible.displayTitle}}}</a>
+		{{/Collectible.custom}}{{/Collectible.original}}
+		</h3>
+
+		<div class="_actions">
+			<span class="pull-left marked-for-sale {{^sale}}hidden{{/sale}}">
+			<a class="" title="Marked for sale"><i class="fa fa-dollar"></i></a></span>
+			<span><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i></a></span>
+			{{#permissions.edit_collectible_user}}
+				<span><a class="" title="Edit" href="/collectibles_users/edit/{{id}}"><i class="fa fa-edit"></i></a></span>
+				{{^sale}}
+					<span><a href="javascript:void(0);" data-collectible-user-id="{{id}}" class="stash-sell" title="Sell"><i class="fa fa-dollar"></i></a></span>
+				{{/sale}}
+				<span><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i></a></span>
+			{{/permissions.edit_collectible_user}}
+		</div>
+	</div>
+</div>

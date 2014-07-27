@@ -4,11 +4,11 @@
 </div> -->
 <div class="actions">
 	{#read}
-		<i title="You already read this." class="icon-envelope-alt"></i>
+		<i title="You already read this." class="fa fa-envelope"></i>
 	{:else}
-		<i title="Unread. Mark as read." class="icon-envelope unread-message"></i> 
+		<i title="Unread. Mark as read." class="fa fa-envelope-o unread-message"></i> 
 	{/read}
-	<i title="Delete notification." class="icon-trash remove"></i> 
+	<i title="Delete notification." class="fa fa-trash-o remove"></i> 
 	
 </div>
 <a class="from" title="" href="#">Collection Stash</a>

@@ -31,12 +31,13 @@
 	}
 	?>
 	<?php
-	echo $this -> Html -> css('thirdparty/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
+	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
 	echo $this -> Minify -> css('thirdparty/datepicker');
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
-	echo $this -> Minify -> css('thirdparty/blueimp-gallery');
+	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
@@ -45,13 +46,14 @@
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
 	echo $this -> Minify -> script('jquery-ui-1.10.2');
-	echo $this -> Minify -> script('thirdparty/bootstrap');
+	echo $this -> Html -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('thirdparty/backbone');
 	echo $this -> Minify -> script('thirdparty/backbone.paginator');
 	echo $this -> Minify -> script('thirdparty/backbone.validation');
 	echo $this -> Minify -> script('thirdparty/typeahead');
 	echo $this -> Minify -> script('jquery-plugins');
+	echo $this -> Html -> script('/bower_components/blockui/jquery.blockUI');
 	echo $this -> Minify -> script('jquery.autocomplete');
 	// Replace this with dust eventually
 	echo $this -> Minify -> script('thirdparty/tmpl');
@@ -99,9 +101,7 @@
 		   		<div class="navbar-header"> 
 				    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
 				   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
-					    <span class="icon-bar"></span>
-					    <span class="icon-bar"></span>
-					    <span class="icon-bar"></span>
+					    <span class="fa fa-bars"></span>
 				    </button>
 					<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
 				</div>
@@ -118,7 +118,7 @@
 						{  ?>
 						<li>
 							<?php
-							echo $this -> Html -> link('My Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $username));
+							echo $this -> Html -> link('My Stash', '/profile/' . $username, array('admin' => false));
 							?>
 						</li>
 						<?php  } ?>
@@ -128,7 +128,7 @@
 						</li>
 						<?php } ?>
 						<li class="dropdown">
-							<?php echo $this -> Html -> link('Collectibles Catalog<i class="icon-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+							<?php echo $this -> Html -> link('Collectibles Catalog<i class="fa fa-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 							
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
@@ -151,23 +151,27 @@
 					<ul class="nav navbar-nav navbar-right account">
 							<li>
 							<?php
-							$homeLinkLabel = '<i class="icon-home"></i>';
-							$homeLinkClass = '';
-							if ($notificationsCount !== 0) {
-								$homeLinkLabel .= ' ' . $notificationsCount;
-								$homeLinkClass = 'warning';
-							}
-							echo $this -> Html -> link($homeLinkLabel, '/', array('escape' => false, 'admin' => false, 'class' => $homeLinkClass));
+							echo $this -> Html -> link('<i class="fa fa-home"></i>', '/', array('escape' => false, 'admin' => false));
 							?>
 							</li>
 							<?php
 							if(isset($isLoggedIn) && $isLoggedIn === true)
 							{  ?>
-		
+							<li>
+								<?php 
+									$notificationLinkLabel = '<span class="fa fa-warning"></span>';
+									$notificationLinkClass = '';
+									if ($notificationsCount !== 0) {
+										$notificationLinkLabel .= ' ' . $notificationsCount;
+										$notificationLinkClass = 'warning';
+									} 
+								
+									echo $this -> Html -> link($notificationLinkLabel, '/user/home/notifications', array('escape' => false, 'admin' => false, 'class' => $notificationLinkClass)); ?>
+							</li>			
 							<li class="dropdown">
-								<?php echo $this -> Html -> link('<i class="icon-user"></i><i class="icon-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+								<?php echo $this -> Html -> link('<i class="fa fa-user"></i><i class="fa fa-caret-down"></i>', '/profiles', array('escape' => false, 'admin' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-									<li><?php echo $this -> Html -> link('Account Settings', '/profiles', array('escape' => false, 'admin' => false)); ?></li>
+									<li><?php echo $this -> Html -> link('Account Settings', '/settings', array('escape' => false, 'admin' => false)); ?></li>
 									<li><a target="_blank" href="/pages/collection_stash_documentation" class="">Help</a></li>
 									<li class="divider"></li>
 									<li><?php echo $this -> Html -> link('Logout', array('admin' => false, 'action' => 'logout', 'controller' => 'users')); ?></li>
@@ -177,7 +181,7 @@
 							if($isUserAdmin)
 							{ ?>
 							<li>
-								<?php echo $this -> Html -> link('<i class="icon-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
+								<?php echo $this -> Html -> link('<i class="fa fa-cog"></i>', '/admin/collectibles', array('escape' => false, 'admin' => true)); ?>
 							</li>
 							<?php } ?>
 	
@@ -239,10 +243,6 @@
 	<?php
 	// list out any modals here that might be common
 	echo $this -> element('stash_add_modal');
-	echo $this -> element('stash_remove_modal');
-	echo $this -> element('stash_sell_modal');
-	echo $this -> element('stash_remove_sold_modal');
-	echo $this -> element('stash_edit_listing_modal');
 	?>	
 		<?php echo $this -> element('sql_dump'); ?>
 	<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
@@ -261,18 +261,12 @@
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
 	</script>
-	<script id="template-stash-remove" type="text/x-tmpl">
-		<?php echo $this -> element('stash_remove'); ?>	
-	</script>
-	<script id="template-stash-sell" type="text/x-tmpl">
-		<?php echo $this -> element('stash_sell'); ?>	
-	</script>
 	<script id="template-stash-listing-edit" type="text/x-tmpl">
 		<?php echo $this -> element('stash_edit_listing'); ?>	
 	</script>
 		<?php
-		echo $this -> Minify -> script('thirdparty/blueimp-gallery');
-		echo $this -> Minify -> script('thirdparty/jquery.blueimp-gallery');
+		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/blueimp-gallery.min');
+		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min');
 		echo $this -> Minify -> script('thirdparty/placeholder');
 			?>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>

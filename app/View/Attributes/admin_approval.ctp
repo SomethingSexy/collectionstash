@@ -128,7 +128,7 @@
 						foreach ($attributesCollectible as $key => $value) {
 							echo '<tr>';
 							if($value['Collectible']['status_id'] === '1'){
-								echo '<td><i class="icon-plus"></i></td>';
+								echo '<td><i class="fa fa-plus"></i></td>';
 							} else {
 								echo '<td> </td>';
 							}

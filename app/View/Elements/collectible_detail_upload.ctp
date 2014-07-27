@@ -61,18 +61,11 @@ if (!empty($collectibleCore['CollectiblesUpload']) && count($collectibleCore['Co
 				if (count($collectibleCore['CollectiblesUpload']) > 4) {
 					?>
 				<!-- Controls -->
-				<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev"> <span class="icon-prev"></span> </a>
-				<a class="right carousel-control" href="#carousel-example-generic" data-slide="next"> <span class="icon-next"></span> </a>
+				<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev"> <span class="fa fa-angle-left"></span> </a>
+				<a class="right carousel-control" href="#carousel-example-generic" data-slide="next"> <span class="fa fa-angle-right"></span> </a>
 				<?php } ?>
 			</div>
 		</div>
 	</div>
-	<script>
-		$(function() {
-			$('#carousel-example-generic').carousel({
-				wrap : true
-			});
-		});
-	</script>
 	<?php } ?>
 </div>

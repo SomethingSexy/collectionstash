@@ -1,0 +1,22 @@
+<tr class="listing">
+	<td>{type}</td>
+	<td><a target="_blank" href="{url}">{listing_name}</a></td>
+	<td>{listing_price}</td>
+	<td>{condition_name}</td>
+	<td>{start_date}</td>
+	<td>{end_date}</td>
+	<td>
+		<div class="btn-group actions">
+			{@eq key="{allowAdd}" value="true" type="boolean"}
+			<a data-id="{id}" class="btn btn-default flag  {@if cond=" ( '{flagged}' && !'{allowMaintenance}' ) "}disabled{/if} {@eq key="{flagged}" value="true" type="boolean"}btn-danger{/eq}" href="#" title="{@eq key="{flagged}" value="true" type="boolean"}This listing has been flagged already. {:else}Flag if you think there is an error.{/eq}">
+				<i class=" fa fa-exclamation-circle"></i>
+			</a>
+			{/eq}
+			{@eq key="{allowMaintenance}" value="true" type="boolean"}
+				<a data-id="{id}" class="btn btn-default delete" href="#" title="Delete">
+					<i class="fa fa-times-circle"></i>
+				</a>
+			{/eq}
+		</div>
+	</td>
+</tr>

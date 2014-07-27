@@ -74,7 +74,7 @@
 						}
 	
 						echo '<tr  data-original-title="' . __('Collectibles Linked to this Item') . '" data-attribute=\'' . $attributeJSON . '\' data-id="' . $attribute['Attribute']['id'] . '"  data-attached="' . $hasCollectibles . '">';
-						echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="icon-info-sign"></i></span></td>';
+						echo '<td><span title="' . __('Part Information') . '" data-content="' . $popup . '" class="popup"><i class="fa fa-info"></i></span></td>';
 						echo '<td style="min-width: 100px; max-width: 100px;">';
 	
 						if (!empty($attribute['AttributesUpload'])) {

@@ -1,0 +1,125 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        ×
+        </button>
+        <h4 id="myModalLabel">Add Collectible to Stash</h4>
+    </div>
+    <div class="modal-body">
+		<div class="well">
+			<p>You are adding {{{Collectible.name}}} to your stash.</p>
+		</div>	
+        {{#errors}}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+            &times;
+            </button>
+            <h4>Oops! Something went wrong.</h4>
+            <ul>
+                {{#errors}}
+                    {{^inline}}
+                        {{#message}}
+                        <li>
+                            {{.}}
+                        </li>
+                        {{/message}}
+                    {{/inline}}
+                {{/errors}}
+            </ul>
+        </div>
+        {{/errors}}
+
+		<form>
+			{{#numbered}}
+				<div class="form-group {{#inlineErrors.edition_size}}has-error{{/inlineErrors.edition_size}}">
+					<label class="control-label" for="CollectiblesUserEditionSize">Edition Number (Total: {{Collectible.edition_size}})</label>
+						<input type="number" id="CollectiblesUserEditionSize" class="form-control" name="edition_size" value="{{edition_size}}">
+							{{#inlineErrors.edition_size}}
+								<span class="help-inline">{{inlineErrors.edition_size}}</span>
+							{{/inlineErrors.edition_size}}
+				</div>		
+			{{/numbered}}
+			<div class="form-group {{#inlineErrors.artist_proof}}has-error{{/inlineErrors.artist_proof}}">
+				<div class="checkbox">
+					<label for="CollectiblesUserArtistProof">
+						<input type="checkbox" id="CollectiblesUserArtistProof" value="1" name="artist_proof" {{#artist_proof}}checked{{/artist_proof}}>Artist's Proof</label>
+				</div>
+					{{#inlineErrors.artist_proof}}
+						<span class="help-inline">{{inlineErrors.artist_proof}}</span>
+					{{/inlineErrors.artist_proof}}
+			</div>				
+			<div class="form-group {{#inlineErrors.cost}}has-error{{/inlineErrors.cost}}">
+				<label class="control-label" for="dialogCost">How much did you pay? (Retail:${{Collectible.msrp}})</label>
+					<input type="text" maxlength="23" step="any" id="dialogCost" class="form-control" name="cost" value="{{cost}}">
+						{{#inlineErrors.cost}}
+							<span class="help-inline">{{inlineErrors.cost}}</span>
+						{{/inlineErrors.cost}}
+			</div>					
+			<div class="form-group {{#inlineErrors.condition_id}}has-error{{/inlineErrors.condition_id}}">
+				<label class="control-label" for="CollectiblesUserConditionId">Condition</label>
+					<select id="CollectiblesUserConditionId" class="form-control" name="condition_id">
+						<option value=""></option>
+						<option value="14">Fair</option>
+						<option value="11">Fine</option>
+						<option value="13">Good</option>
+						<option value="9">Loose</option>
+						<option value="5">Mint and Complete</option>
+						<option value="2">Mint in Box</option>
+						<option value="3">Mint in package</option>
+						<option value="4">Mint on card</option>
+						<option value="6">Mint, no box</option>
+						<option value="7">Near Mint</option>
+						<option value="8">Never removed from box</option>
+						<option value="1">New</option>
+						<option value="15">Poor</option>
+						<option value="10">Very Fine</option>
+						<option value="12">Very Good</option>
+					</select>
+					{{#inlineErrors.condition_id}}
+						<span class="help-inline">{{inlineErrors.condition_id}}</span>
+					{{/inlineErrors.condition_id}}
+			</div>	
+			<div class="form-group {{#inlineErrors.merchant}}has-error{{/inlineErrors.merchant}}">
+				<label class="control-label" for="CollectiblesUserMerchantId">Where did you purchase the collectible?</label>
+					<div class="merchants">
+						<input type="text" id="CollectiblesUserMerchantId" class="form-control typeahead" maxlength="150" name="merchant" autocomplete="off" value="{{merchant}}">
+					</div>
+					{{#inlineErrors.merchant}}
+						<span class="help-inline">{{inlineErrors.merchant}}</span>
+					{{/inlineErrors.merchant}}
+			</div>			
+			<div class="form-group {{#inlineErrors.purchase_date}}has-error{{/inlineErrors.purchase_date}}">
+				<label class="control-label" for="CollectiblesUserPurchaseDate">When did you purchase this collectible?</label>
+						<input type="text" id="CollectiblesUserPurchaseDate" class="form-control" maxlength="10" name="purchase_date" value="{{purchase_date}}">
+					{{#inlineErrors.purchase_date}}
+						<span class="help-inline">{inlineErrors.purchase_date}</span>
+					{{/inlineErrors.purchase_date}}
+			</div>	
+			<div class="form-group {{#inlineErrors.notes}}has-error{{/inlineErrors.notes}}">
+				<label class="control-label" for="CollectiblesUserNotes">Notes</label>
+				<textarea id="CollectiblesUserNotes" class="form-control" maxlength="1000" name="notes">{{{notes}}}</textarea>
+				{{#inlineErrors.notes}}
+					<span class="help-inline">{{inlineErrors.notes}}</span>
+				{{/inlineErrors.notes}}
+			</div>				
+			<div class="form-group {#inlineErrors.notes_private}has-error{/inlineErrors.notes_private}">
+				<div class="checkbox">
+					<label for="CollectiblesUserNotesPrivate">
+						<input type="checkbox" id="CollectiblesUserNotesPrivate" value="1" name="notes_private" {{#artist_proof}}checked{{/artist_proof}}>
+						Private Notes</label>
+				</div>
+					{{#inlineErrors.notes_private}}
+						<span class="help-inline">{{inlineErrors.notes_private}}</span>
+					{{/inlineErrors.notes_private}}
+			</div>	
+		</form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+        Close
+        </button>
+        <button class="btn btn-primary save" data-loading-text="Adding..." autocomplete="off">
+        Add
+        </button>
+    </div>
+</div>

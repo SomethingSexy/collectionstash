@@ -44,9 +44,9 @@ foreach ($collectibles as $key => $myCollectible) {
 	echo '<tr class="stash-item">';
 	if ($history) {
 		if ($myCollectible['CollectiblesUser']['active']) {
-			echo '<td class="bought-sold-icon"><i class="icon-plus"></i></td>';
+			echo '<td class="bought-sold-icon"><i class="fa fa-plus"></i></td>';
 		} else {
-			echo '<td><i class="icon-minus"></i></td>';
+			echo '<td><i class="fa fa-minus"></i></td>';
 		}
 	}
 
@@ -121,7 +121,7 @@ foreach ($collectibles as $key => $myCollectible) {
 		echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 		echo '<ul class="dropdown-menu">';
 
-		echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '><i class="icon-edit"></i>  Edit</a></li>';
+		echo '<li><a href="/collectibles_users/edit/' . $myCollectible['CollectiblesUser']['id'] . '" title=' . __('Edit') . '><i class="fa fa-pencil-square-o"></i>  Edit</a></li>';
 
 		$collectibleJSON = json_encode($myCollectible['Collectible']);
 		$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
@@ -132,13 +132,13 @@ foreach ($collectibles as $key => $myCollectible) {
 		// these should already be filtered by active
 		if ($history) {
 			if ($myCollectible['CollectiblesUser']['active']) {
-				echo '<li><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i> Remove</a></li>';
+				echo '<li><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>';
 			}
 		} else {
 			if (!$myCollectible['CollectiblesUser']['sale']) {
-				echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="icon-dollar"></i>  ' . __('Sell') . '</a></li>';
+				echo '<li><a href="javascript:void(0);" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="stash-sell" title=' . __('Sell') . '><i class="fa fa-dollar"></i>  ' . __('Sell') . '</a></li>';
 			}
-			echo '<li><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="icon-trash"></i> Remove</a></li>';
+			echo '<li><a data-prompt="true" data-stash-type="' . $stashType . '" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $myCollectible['CollectiblesUser']['id'] . '" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>';
 		}
 
 		echo '</ul>';

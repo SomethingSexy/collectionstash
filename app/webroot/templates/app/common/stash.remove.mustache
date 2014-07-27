@@ -1,0 +1,136 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        ×
+        </button>
+        <h4 id="myModalLabel">Remove Collectible from Stash</h4>
+    </div>
+    <div class="modal-body">
+        {{^active}}
+        <div class="alert alert-danger"><p>{{{Collectible.name}}} is already inactive.  Removing it will permanently remove it from your history.</p></div>
+        {{/active}}
+        {{#active}}
+        <div class="alert alert-info"><p>You are removing {{{Collectible.name}}} from your stash.</p></div>
+        {{/active}}
+        {{#errors}}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+            &times;
+            </button>
+            <h4>Oops! Something went wrong.</h4>
+            <ul>
+                {{#errors}}
+                    {{^inline}}
+                        {{#message}}
+                        <li>
+                            {{.}}
+                        </li>
+                        {{/message}}
+                    {{/inline}}
+                {{/errors}}
+            </ul>
+        </div>
+        {{/errors}}
+        <form>
+            <div class="form-group {{#inlineErrors.collectible_user_remove_reason_id}}has-error{{/inlineErrors.collectible_user_remove_reason_id}}">
+                <label class="control-label" for="CollectiblesUserRemoveReason">Reason</label>
+                {{#changeReason}}
+                    <select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
+                        <option value=""></option>
+                        {{#reasons}}
+                            <option value="{{id}}">{{reason}}</option>
+                        {{/reasons}}
+                    </select>
+                    <span class="help-inline">This is the reason why you are removing this collectible.</span>
+                    {{#inlineErrors.collectible_user_remove_reason_id}}
+                    <span class="help-inline">{.}</span>
+                    {{/inlineErrors.collectible_user_remove_reason_id}}
+                {{/changeReason}}
+                {{^changeReason}}
+                    {{#active}}
+                        <span class="input-xlarge uneditable-input"> {{collectible_user_remove_reason}}</span>
+                    {{/active}}
+                    {{^active}}
+                        <select required id="CollectiblesUserRemoveReason" class="form-control" name="collectible_user_remove_reason_id" >
+                            <option value=""></option>
+                            {{#reasons}}
+                                <option value="{{id}}">{{reason}}</option>
+                            {{/reasons}}
+                        </select>
+                        <span class="help-inline">This is the reason why you are removing this collectible.</span>
+                        {{#inlineErrors.collectible_user_remove_reason_id}}
+                        <span class="help-inline">{.}</span>
+                        {{/inlineErrors.collectible_user_remove_reason_id}}
+                    {{/active}}
+                {{/changeReason}}
+            </div>
+           
+                {{#showSale}}
+                <p>
+                Removing this collectible by indicating you sold, it will keep the collectible in your history.  It will also add a listing and transaction to the collectible.
+                </p>
+                {{/showSale}}
+                {{#showTrade}}
+                <p>
+                Removing this collectible by indicating you traded it, will keep the collectible in your history.
+                </p>
+                {{/showTrade}}
+                {{#showSale}}
+                <div class="form-group {{#inlineErrors.sold_cost}}has-error{{/inlineErrors.sold_cost}}">
+                    <label class="control-label" for="CollectiblesUserRemoveCost">How much did you sell it for?</label>
+                    {{^active}}
+                        <span class="input-xlarge uneditable-input"> {{sold_cost}}</span>
+                    {{/active}}
+                    {{#active}}
+                        <input required type="input" maxlength="23" step="any" id="CollectiblesUserRemoveCost" class="form-control" name="sold_cost" value="{{sold_cost}}" >
+                        {{#inlineErrors.sold_cost}}
+                        <span class="help-inline">{{.}}</span>
+                       {{/inlineErrors.sold_cost}}
+                    {{/active}}
+                </div>
+                {{/showSale}}
+                {{#showTrade}}
+                <div class="form-group {{#inlineErrors.traded_for}}has-error{{/inlineErrors.traded_for}}">
+                    <label class="control-label" for="CollectiblesUserTradedFor">What did you trade this collectible for?</label>
+                    {{^active}}
+                    <span class="input-xlarge uneditable-input"> {{{traded_for}}}</span>
+                    {{/active}}
+                    {{#active}}
+                    <textarea id="CollectiblesUserTradedFor" class="form-control" name="traded_for">{{{traded_for}}}</textarea>
+                    {{#inlineErrors.traded_for}}
+                    <span class="help-inline">{{.}}</span>
+                    {{/inlineErrors.traded_for}}
+                     {{/active}}
+                </div>
+                {{/showTrade}}
+                {{#showDate}}
+                    <div class="form-group {{#inlineErrors.remove_date}}has-error{{/inlineErrors.remove_date}}">
+                    <label class="control-label" for="CollectiblesUserRemoveDate"> 
+                        {{#showSale}}
+                            When did you sell this collectible?
+                        {{/showSale}}
+                        {{#showTrade}}
+                            When did you trade this collectible?
+                        {{/showTrade}}</label>
+                    {{^active}}
+                        <span class="input-xlarge uneditable-input"> {{remove_date}}</span>
+                    {{/active}}
+                    {{#active}}
+                    <input required type="text" id="CollectiblesUserRemoveDate" class="form-control" maxlength="10" name="remove_date" value="{{remove_date}}" style="z-index: 1050;" >
+                    {{#inlineErrors.remove_date}}
+                    <span class="help-inline">{{.}}</span>
+                    {{/inlineErrors.remove_date}}
+                    {{/active}}
+                    </div>
+                {{/showDate}}
+          </form>
+     </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+        Close
+        </button>
+        <button class="btn btn-primary save" data-loading-text="Removing..." autocomplete="off">
+        Remove
+        </button>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<td style="min-width: 100px; max-width: 100px;">
+
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}
+
+</td>
+<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}</a></td>
+{{#Collectible.Manufacture.title}}
+	<td>{{{Collectible.Manufacture.title}}}</td>
+{{/Collectible.Manufacture.title}}
+		
+{{^Collectible.Manufacture.title}}
+	<td>N/A</td>
+{{/Collectible.Manufacture.title}}
+
+<td>{{created}}</td>
+
+{{#permissions.edit_collectible_user}}
+<td class="menu">
+<div class="btn-group">
+<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+<ul class="dropdown-menu">
+<li><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i> Details</a></li>
+<li><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-wishlist" title="Remove" href="#"><i class="fa fa-trash-o"></i> Remove</a></li>
+<li><a class="add-full-to-stash btn" data-type="wishlist" data-collectible-user-id="{{id}}"  href="javascript:void(0)" title="Add to Stash"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>
+</ul>
+</div>
+</td>
+{{/permissions.edit_collectible_user}}

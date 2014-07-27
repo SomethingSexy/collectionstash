@@ -6,10 +6,10 @@ echo $this -> Minify -> script('cs.attribute', array('inline' => false));
 echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
 echo $this -> Minify -> script('models/model.status', array('inline' => false));
 echo $this -> Minify -> script('views/view.status', array('inline' => false));
-echo $this -> Html -> script('views/view.alert', array('inline' => false));
-echo $this -> Html -> script('views/view.collectible.delete', array('inline' => false));
+echo $this -> Minify -> script('views/view.alert', array('inline' => false));
+echo $this -> Minify -> script('views/view.collectible.delete', array('inline' => false));
 echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
-echo $this -> Html -> script('pages/page.collectible.edit', array('inline' => false));
+echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
 echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
 echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
 echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
@@ -34,7 +34,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	</td>
 	<td class="start">{% if (!o.options.autoUpload) { %}
 	<button class="btn btn-primary">
-	<i class="icon-upload icon-white"></i>
+	<i class="fa fa-upload icon-white"></i>
 	<span>{%=locale.fileupload.start%}</span>
 	</button>
 	{% } %}</td>
@@ -43,7 +43,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	{% } %}
 	<td class="cancel">{% if (!i) { %}
 	<button class="btn btn-warning">
-	<i class="icon-ban-circle icon-white"></i>
+	<i class="fa fa-ban icon-white"></i>
 	<span>{%=locale.fileupload.cancel%}</span>
 	</button>
 	{% } %}</td>
@@ -72,7 +72,7 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	<td class="delete">
 	{% if(file.allowDelete){ %}
 	<button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-	<i class="icon-trash icon-white"></i>
+	<i class="fa fa-trash-o icon-white"></i>
 	<span>Delete</span>
 	</button>
 	{% } %}
