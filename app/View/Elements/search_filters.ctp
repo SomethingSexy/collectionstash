@@ -11,7 +11,7 @@ if(isset($saveSearchFilters['search'])){
 echo $this -> Html -> script('thirdparty/select2', array('inline' => false));
 echo $this -> Html -> css('/bower_components/select2/select2');
 echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
-echo $this -> Html -> script('views/view.filters', array('inline' => false)); ?>
+echo $this -> Html -> script('views/app/collectible/search/view.filters', array('inline' => false)); ?>
 <h4>Filter By </h4>
 <div id="fancy-filters">
 	<div class="filter-btn">

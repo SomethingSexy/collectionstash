@@ -2,8 +2,10 @@
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 ?>
+<?php echo $this -> Html -> script('pages/page.collectible.search', array('inline' => true));?>
 
-<div id="collectibles-list-component" class="col-md-12">
+
+<div id="collectibles-list-component">
 <h3><?php echo __('Collectibles Catalog'); ?></h3>
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn) {
