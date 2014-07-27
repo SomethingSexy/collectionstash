@@ -20,7 +20,7 @@
 					foreach ($users as $user) {
 						echo '<tr>';
 						echo '<td>';
-						echo $this -> Html -> link($user['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $user['User']['username']));
+						echo $this -> Html -> link($user['User']['username'], array('admin' => false, 'controller' => 'users', 'action' => 'profile', $user['User']['username']));
 						echo '</td>';
 						echo '<td>';
 						$datetime = strtotime($user['User']['created']);

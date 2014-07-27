@@ -12,7 +12,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="actions btn-group pull-right">
-					<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="icon-info"></i></a>
+					<a class="btn" href="/collectibles/view/<?php echo $collectible['Collectible']['id']; ?>" title="<?php echo __('Details'); ?>"><i class="fa fa-info"></i></a>
 					<?php if(isset($isLoggedIn) && $isLoggedIn && $viewMyCollectible) {
 					
 						$collectibleJSON = json_encode($collectible['Collectible']);
@@ -21,9 +21,9 @@
 						$collectibleUserJSON = json_encode($collectible['CollectiblesUser']);
 						$collectibleUserJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleUserJSON));
 						
-						echo '<a data-remove-redirect="/stash/' . $username .'" data-prompt="true" data-stash-type="Default" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $collectible['CollectiblesUser']['id'] . '" class="btn remove-from-stash" title="Remove" href="#"><i class="icon-trash icon-large"></i></a>';
+						echo '<a data-remove-redirect="/stash/' . $username .'" data-prompt="true" data-stash-type="Default" data-collectible-user=\'' . $collectibleUserJSON . '\' data-collectible=\'' . $collectibleJSON . '\' data-collectible-user-id="' . $collectible['CollectiblesUser']['id'] . '" class="btn remove-from-stash" title="Remove" href="#"><i class="fa fa-trash fa-lg"></i></a>';
 					?>
-					<a class="btn" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><i class="icon-pencil icon-large"></i></a>
+					<a class="btn" href="/collectibles_users/edit/<?php echo $collectible['CollectiblesUser']['id']; ?>" title="<?php echo __('Edit'); ?>"><i class="fa fa-pencil fa-lg"></i></a>
 					<?php } ?>
 				</div>				
 			</div>

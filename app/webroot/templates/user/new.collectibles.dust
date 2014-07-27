@@ -7,6 +7,6 @@
 	</div>
 </div>
 {@gt key="{paginator.currentPage}" value="{paginator.firstPage}" type="number"}
-<a data-slide="prev" href="#myCarousel" class="left previous carousel-control"><span class="icon-prev"></span></a>
+<a data-slide="prev" href="#myCarousel" class="left previous carousel-control"><span class="fa fa-angle-left"></span></a>
 {/gt}
-<a data-slide="next" href="#myCarousel" class="right next carousel-control"><span class="icon-next"></span></a>
+<a data-slide="next" href="#myCarousel" class="right next carousel-control"><span class="fa fa-angle-right"></span></a>

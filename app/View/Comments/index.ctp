@@ -3,7 +3,7 @@
 			?></h2>
 <div id="latest-comments-component" class="widget">
 		<div class="widget-header">
-			<i class="icon-comments"></i><h3>Discussion</h3>
+			<i class="fa fa-comments"></i><h3>Discussion</h3>
 		</div>
 		<div class="widget-content">
 			
@@ -61,5 +61,6 @@
 			}
 		});
 	});
-
+
+
 </script>

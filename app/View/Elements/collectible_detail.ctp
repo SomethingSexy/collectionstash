@@ -51,26 +51,16 @@ if (!isset($allowStatusEdit)) {
 	$allowStatusEdit = false;
 }
 
-echo $this -> Minify -> script('jquery.comments', array('inline' => false));
-echo $this -> Minify -> script('cs.subscribe', array('inline' => false));
-echo $this -> Minify -> script('cs.stash', array('inline' => false));
-echo $this -> Minify -> script('models/model.status', array('inline' => false));
-echo $this -> Minify -> script('views/view.status', array('inline' => false));
-
-echo $this -> Minify -> script('models/model.listing', array('inline' => false));
-echo $this -> Minify -> script('collections/collection.listings', array('inline' => false));
-echo $this -> Minify -> script('views/view.transactions', array('inline' => false));
-echo $this -> Minify -> script('views/view.stash.add', array('inline' => false));
-echo $this -> Minify -> script('models/model.collectible.user', array('inline' => false));
-echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
-echo $this -> Minify -> script('pages/page.collectible.view', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/jquery.flot', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/jquery.flot.time', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => false));
+//echo $this -> Minify -> script('models/model.status', array('inline' => false));
+//echo $this -> Minify -> script('views/view.status', array('inline' => false));
+echo $this -> Html -> script('pages/page.collectible.view', array('inline' => false));
 ?>
 
 
-<div id="collectible-container" class="col-md-12 stashable">
+<div id="collectible-container" class="container-fluid">
+<div class="row">
+
+<div class="col-md-12 stashable">
 	<?php
 	if (!isset($isLoggedIn) || !$isLoggedIn && $collectibleDetail['Status']['id'] === '4' ) {
 	?>
@@ -104,9 +94,7 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 						  <div class="navbar-header">
 						    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 						      <span class="sr-only">Toggle navigation</span>
-						      <span class="icon-bar"></span>
-						      <span class="icon-bar"></span>
-						      <span class="icon-bar"></span>
+						      <span class="fa fa-bars"></span>
 						    </button>
 						  </div>
 							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -120,12 +108,12 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 									echo '<li><a title="Add to stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
 								}
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
-									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="icon-star"></i> Add to Wish List</a></li>';
+									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="fa fa-star"></i> Add to Wish List</a></li>';
 								}
 								// no need to show this in admin mode
 								if(!$adminMode) {
 									echo '<li class="dropdown">';
-									echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Share <b class="caret"></b></a>';
+									echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-share"></i> Share <b class="caret"></b></a>';
 									echo '<ul class="dropdown-menu">';
 									echo '<li>';
 									echo '<div class="yamm-content">';
@@ -198,28 +186,25 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 									if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
 										$userSubscribed = 'true';
 									}
-									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="" href="#"><i class="icon-heart"></i> Watch</a></li>';
+									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="" href="#"><i class="fa fa-heart"></i> Watch</a></li>';
 
 								}
 
 								if ($showWho) {
-									echo '<li><a class="" title="Registry" href="/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-group"></i> Registry</a></li>';
+									echo '<li><a class="" title="Registry" href="/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-group"></i> Registry</a></li>';
 								}
 
 								if (isset($isLoggedIn) && $isLoggedIn === true) {
 									if ($adminMode) {
-										echo '<li><a class="" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a></li>';
+										echo '<li><a class="" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-pencil"></i> Edit</a></li>';
 									} else if ($allowEdit) {
-										echo '<li><a class="" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="icon-pencil"></i> Edit</a></li>';
+										echo '<li><a class="" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-pencil"></i> Edit</a></li>';
 									}
 
 								}
 
-								if (isset($showHistory) && $showHistory) {
-									//echo $this -> Html -> link('<i class="icon-briefcase"></i>', '/collectibles/history/' . $collectibleDetail['Collectible']['id'], array('title' => 'History', 'escape' => false, 'class' => 'btn'));
-								}
 								if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn && $allowVariantAdd) {
-									echo '<li><a class="" title="Add a varaint of this collectible." href="/collectibles/quickCreate/' . $collectibleDetail['Collectible']['id'] . '/true"><i class="icon-plus"></i> Add Variant</a></li>';
+									echo '<li><a class="" title="Add a varaint of this collectible." href="/collectibles/quickCreate/' . $collectibleDetail['Collectible']['id'] . '/true"><i class="fa fa-plus"></i> Add Variant</a></li>';
 								}
 								?>	
 					          </ul>
@@ -336,24 +321,6 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 						<?php
 						if ($showAttributes) {
 							echo $this -> element('collectible_detail_attributes', array('collectibleCore' => $collectibleDetail, 'showEdit' => $showEdit, 'adminMode' => $adminMode));?>
-							<script>
-								$(function() {
-									// If we are in admin mode, we need to pass that in to these methods so that they can
-									// do specific things based on that
-
-									$('span.popup', '.attributes-list').popover({
-										placement : 'bottom',
-										html : 'true',
-										template : '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
-									}).click(function(e) {
-										e.preventDefault();
-									}).mouseenter(function(e) {
-										$(this).popover('show');
-									});
-
-								});
-							</script>
-					
 						<?php } ?>								
 						
 				
@@ -383,13 +350,7 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 			<div class="widget">
 				<div class="widget-content">
 					<div id="comments" class="comments-container" data-entity-type-id="<?php echo $collectibleDetail['Collectible']['entity_type_id']; ?>" data-type="collectible" data-typeID="<?php echo $collectibleDetail['Collectible']['id']; ?>"></div>
-					<script>
-						//lazy do doing here
-						$(function() {
-							$('#comments').comments();
-						});
-					</script>
-					</div>
+				</div>
 				</div>
 			</div>
 		</div>
@@ -417,23 +378,12 @@ echo $this -> Minify -> script('thirdparty/ZeroClipboard', array('inline' => fal
 						<button id="deny-button" class="btn btn-default"><?php echo __('Deny'); ?></button>
 					</div>
 				</div>	
-				<script>
-					//Eh move this out of here
-					$('#approval-button').click(function() {
-						$('#approve-input').val('true');
-						$('#approval-form').submit();
-					});
-					$('#deny-button').click(function() {
-						$('#approve-input').val('false');
-						$('#approval-form').submit();
-					});
-
-				</script>
 			</div>
 		</div>
 			<?php } ?>	
 </div>
-
+</div>
+</div>
 
 
 <script>
@@ -468,3 +418,9 @@ if ($showStatus) {
 		echo 'var allowStatusEdit = false;';
 	}
 ?></script>
+<?php
+
+	echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
+
+?>
+<?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>

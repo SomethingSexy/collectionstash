@@ -1,0 +1,72 @@
+<td style="min-width: 100px; max-width: 100px;">
+
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}
+
+</td>
+<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}</a></td>
+{{#condition_id}}
+	<td>{{{Condition.name}}}</td>
+{{/condition_id}}
+		
+{{^condition_id}}
+	<td> - </td>
+{{/condition_id}}
+
+{{^Collectible.edition_size}}
+	<td> - </td>
+{{/Collectible.edition_size}}	
+{{#Collectible.edition_size}}
+	{{^edition_size}}
+		<td>Not Recorded</td>
+	{{/edition_size}}
+	{{#edition_size}}
+		<td>{{edition_size}}/{{Collectible.edition_size}}</td>
+	{{/edition_size}}
+{{/Collectible.edition_size}}	
+
+
+{{#Collectible.CollectiblePriceFact}}
+	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
+{{/Collectible.CollectiblePriceFact}}
+{{^Collectible.CollectiblePriceFact}}
+	<td> - </td>
+{{/Collectible.CollectiblePriceFact}}
+									
+<td class="sold-cost">
+{{! Use the actual listing data here since this is live }}
+{{#Listing.listing_price}}
+	${{Listing.listing_price}}
+{{/Listing.listing_price}}
+{{#Listing.traded_for}}
+	{{{Listing.traded_for}}}
+{{/Listing.traded_for}}
+
+{{^Listing.listing_price}}{{^Listing.traded_for}}
+ - 
+{{/Listing.traded_for}}{{/Listing.listing_price}}
+</td>
+
+
+{{#permissions.edit_collectible_user}}
+<td class="menu">
+<div class="btn-group">
+<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+<ul class="dropdown-menu">
+{{! // this will bring up the remove from stash modal }}
+<li><a href="javascript:void(0);" class="stash-mark-as-sold" title="Mark as Sold"><i class="fa fa-dollar"></i> Mark as Sold</a></li>
+{{! // this will remove the listing completely and mark it as unsold }}
+<li><a href="javascript:void(0);" class="stash-remove-listing" title="Remove Listing"><i class="fa fa-dollar"></i> Remove Listing</a></li>
+<li><a href="javascript:void(0);" class="stash-edit-listing" title="Edit Listing"><i class="fa fa-dollar"></i> Edit Listing</a></li>
+</ul>
+</div>
+</td>
+{{/permissions.edit_collectible_user}}

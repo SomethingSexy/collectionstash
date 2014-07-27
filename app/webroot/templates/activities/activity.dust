@@ -3,7 +3,7 @@
 	<span class="pull-right">
 	{Activity.data.fancyDate}
 	</span>
-	<i class="icon-time"></i>
+	<i class="fa fa-clock"></i>
 	<img alt="" src="/img/icon/avatar.png">
 	<div>
 		{@if cond="( '{Activity.data.actor.objectType}' === 'user' )"}	

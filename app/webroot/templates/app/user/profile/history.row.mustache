@@ -1,0 +1,89 @@
+{{#active}}
+<td class="bought-sold-icon"><i class="fa fa-plus"></i></td>
+{{/active}}
+{{^active}}
+<td><i class="fa fa-minus"></i></td>
+{{/active}}
+	
+
+<td style="min-width: 100px; max-width: 100px;">
+
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}
+
+</td>
+<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}</a></td>
+{{#Collectible.Manufacture.title}}
+	<td>{{{Collectible.Manufacture.title}}}</td>
+{{/Collectible.Manufacture.title}}
+		
+{{^Collectible.Manufacture.title}}
+	<td>N/A</td>
+{{/Collectible.Manufacture.title}}
+
+{{^Collectible.edition_size}}
+	<td> - </td>
+{{/Collectible.edition_size}}	
+{{#Collectible.edition_size}}
+	{{^edition_size}}
+		<td>Not Recorded</td>
+	{{/edition_size}}
+	{{#edition_size}}
+		<td>{{edition_size}}/{{Collectible.edition_size}}</td>
+	{{/edition_size}}
+{{/Collectible.edition_size}}	
+
+{{#cost}}
+	<td>{{cost}}</td>
+{{/cost}}
+{{^cost}}
+	<td>{{Not Recorded}}</td>
+{{/cost}}
+
+{{#Collectible.CollectiblePriceFact}}
+	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
+{{/Collectible.CollectiblePriceFact}}
+{{^Collectible.CollectiblePriceFact}}
+	<td> - </td>
+{{/Collectible.CollectiblePriceFact}}
+
+{{#purchase_date}}
+	<td>{{purchase_date}}</td>
+{{/purchase_date}}
+{{^purchase_date}}
+	<td>{{Not Recorded}}</td>
+{{/purchase_date}}
+
+<td>{{created_formatted}}</td>
+	
+{{#active}}
+<td> - </td>
+<td> - </td>
+{{/active}}
+{{^active}}
+	{{#sold_cost}}
+		<td>{{sold_cost}}</td>
+	{{/sold_cost}}
+	{{^sold_cost}}
+		<td> - </td>
+	{{/sold_cost}}
+<td>{{remove_date_formatted}}</td>
+{{/active}}
+{{#permissions.edit_collectible_user}}
+<td class="menu">
+	<div class="btn-group">
+		<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			<li><a href="/collectibles_users/edit/{{id}}" title="Edit"><i class="fa fa-edit"></i>  Edit</a></li>
+		</ul>
+	</div>
+</td>
+{{/permissions.edit_collectible_user}}

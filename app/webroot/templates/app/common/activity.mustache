@@ -1,0 +1,31 @@
+
+<!--For the title, we need to construct: User verb object target-->
+<span class="pull-right">
+{{data.fancyDate}}
+</span>
+<i class="fa fa-clock-o"></i>
+<img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="...">
+<div>
+	{{#data.actor.url}}	
+		<span class="actor"><a href="/stash/{{actor.url}}">{{{data.actor.displayName}}} </a></span>
+	{{/data.actor.url}}	
+	{{^data.actor.url}}
+		<span class="actor">{{{data.actor.displayName}}} </span>
+	{{/data.actor.url}}	
+	<!-- verb -->
+	<span class="verb">{{data.verb_displayName}}</span>
+	<!-- Object -->
+	{{#data.isObject}}
+		{{#data.object.url}}
+			<a target="_blank" href="{{data.object.url}}"> {{{data.object.object_displayName}}}</a>
+		{{/data.object.url}}
+
+	{{/data.isObject}}
+
+	<!-- target -->
+	{{#data.isTarget}}
+		{{#data.pre_target}}{{data.pre_target}}{{/data.pre_target}}<a href="{{data.target.url}}"> {{data.target.displayName}}</a>
+
+	{{/data.isTarget}}
+</div>
+

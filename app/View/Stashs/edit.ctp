@@ -1,12 +1,6 @@
-<h2><?php
-	echo __('Edit Your Stash');
-?></h2>
-<div id="my-stashes-component" class="widget">
-	<div class="widget-header">
-		<h3><?php echo __('Sort Stash', true)
-		?></h3>		
-	</div>
-	<div class="widget-content">
+<div id="my-stashes-component" class="panel panel-default">
+	<div class="panel-heading"><?php echo __('Sort Your Stash', true)?></div>
+	<div class="panel-body">
 		<?php echo $this -> element('flash'); ?>
 		<p><?php echo __('To sort your collectibles, drag and drop the collectibles in the order you wish.  Once you have your stash looking just how you want, click save!'); ?></p>
 		<button class="btn btn-primary" id="submit-sort"><?php echo __('Save'); ?> </button>

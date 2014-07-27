@@ -124,7 +124,7 @@ class AttributesUploadsController extends AppController {
 		 * If it is pending, we will look up the edit, check to see if it was done by that person
 		 * if so then we will delete it
 		 */
-		if ($pending === 'true' || $pending === '1') {
+		if ($pending || $pending === 'true') {
 			$edit = $this -> AttributesUpload -> findEdit($id);
 			$this -> loadModel('Edit');
 			//TODO Check to make sure the person deleting it is the owner
@@ -222,7 +222,9 @@ class AttributesUploadsController extends AppController {
 			$data['errors'] = array('message', __('Invalid request.'));
 			$this -> set('returnData', $data);
 			return;
-		}	}
+		}
+
+	}
 
 	public function uploads($collectibleId) {
 		$returnData = array();

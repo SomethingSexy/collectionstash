@@ -43,25 +43,24 @@ Router::connect('/user/home/activity', array('controller' => 'users', 'action' =
 Router::connect('/user/home/history', array('controller' => 'users', 'action' => 'history'));
 // Logged in user home
 Router::connect('/user/home/notifications', array('controller' => 'users', 'action' => 'notifications'));
-//public user profile, right now this routes to stash but this might route to a profile eventually
-Router::connect('/user/:id', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
-// public user stash
-Router::connect('/user/:id/stash', array('controller' => 'stashs', 'action' => 'view'), array('pass' => array('id')));
-//public user profile
-Router::connect('/user/:id/wishlist', array('controller' => 'wish_lists', 'action' => 'view'), array('pass' => array('id')));
-// public sale
-Router::connect('/user/:id/sale', array('controller' => 'collectibles_users', 'action' => 'sale'), array('pass' => array('id')));
-//public photos
-Router::connect('/user/:id/photos', array('controller' => 'user_uploads', 'action' => 'view'), array('pass' => array('id')));
-//public stash comments
-Router::connect('/user/:id/comments', array('controller' => 'stashs', 'action' => 'comments'), array('pass' => array('id')));
-//public history
-Router::connect('/user/:id/history', array('controller' => 'stashs', 'action' => 'history'), array('pass' => array('id')));
 
-Router::connect('/stash/*', array('controller' => 'stashs', 'action' => 'view'));
+//public user profile, right now this routes to stash but this might route to a profile eventually
+Router::connect('/user/:id', array('controller' => 'users', 'action' => 'view'), array('pass' => array('id')));
+// public user stash
+Router::connect('/user/:id/stash', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+//public user profile
+Router::connect('/user/:id/wishlist', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+// public sale
+Router::connect('/user/:id/sale', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+//public photos
+Router::connect('/user/:id/photos', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+//public stash comments
+Router::connect('/user/:id/comments', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+//public history
+Router::connect('/user/:id/history', array('controller' => 'users', 'action' => 'profile'), array('pass' => array('id')));
+
+Router::connect('/stash/*', array('controller' => 'users', 'action' => 'profile'));
 Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
-//TODO: not sure why this one is here
-Router::connect('/collectibles_user/view/*', array('controller' => 'collectibles_users', 'action' => 'view'));
 
 //old replaced by public
 Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' => 'comments'));
@@ -79,7 +78,11 @@ Router::connect('/manufacturer/*', array('controller' => 'manufactures', 'action
 
 Router::connect('/artist/*', array('controller' => 'artists', 'action' => 'index'));
 // logged in user profile
-Router::connect('/profile/*', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/settings', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/settings/profile', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/settings/stash', array('controller' => 'profiles', 'action' => 'index'));
+Router::connect('/profile/*', array('controller' => 'users', 'action' => 'profile'));
+
 
 
 /**

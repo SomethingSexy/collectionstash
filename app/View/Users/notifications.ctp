@@ -1,18 +1,15 @@
-<div class="col-md-8">
-	<div class="row spacer">
-		<div class="panel panel-default widget-messages">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="icon-warning-sign"></i> Notifications</h3>
-			</div>
-			<div class="panel-body">
+<div class="panel panel-default widget-messages">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-exclamation-triangle"></i> Notifications</h3>
+	</div>
+	<div class="panel-body">
 
-			</div>
-			<div class="panel-footer">
-				
-			</div>
-		</div>
+	</div>
+	<div class="panel-footer">
+		
 	</div>
 </div>
+
 
 <script>
 var totalNotifications = <?php echo $totalNotifications; ?>;

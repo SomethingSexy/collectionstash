@@ -1,0 +1,31 @@
+<div class="profile">
+	<div class="panel">
+        <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="...">
+        <div class="name"><small>{{username}}</small></div>
+        <div class="info">
+        	<span>Name: {{#display_name}}{{.}}{{/display_name}}{{^display_name}}{{first_name}}{{/display_name}}</span><span>Member since {{member_since}}</span>{{#location}}<span>{{.}}</span>{{/location}}
+        </div>
+    </div>
+    <div>
+		<ul class="profile-tabs pull-right">
+		    <li class="followers">
+			    <a href="javascript:void(0)"><span class="count">{{owned}}</span><span class="meta">Stashed</span></a>
+			</li>
+		    <li class="following">
+			    <a href="javascript:void(0)"><span class="count">{{collectibles_user_count}}</span><span class="meta">Owned</span></a>
+			</li>
+		    <li class="listed">
+			    <a href="javascript:void(0)"><span class="count">{{collectibles_wish_list_count}}</span><span class="meta">Wished</span></a>
+			</li>
+		    <li class="listed">
+			    <a href="javascript:void(0)"><span class="count">{{sale}}</span><span class="meta">Selling</span></a>
+			</li>
+		    <li class="listed">
+			    <a href="javascript:void(0)"><span class="count">{{user_upload_count}}</span><span class="meta">Photos</span></a>
+			</li>
+		    <li class="listed">
+			    <a href="javascript:void(0)"><span class="count">{{points}}</span><span class="meta">Nuts</span></a>
+			</li>
+		</ul>
+    </div>
+</div>

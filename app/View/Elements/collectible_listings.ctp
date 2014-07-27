@@ -2,7 +2,7 @@
 
 <div class="panel panel-default stacked">
 	<div class="panel-heading">
-		<h3 class="panel-title"><i class="icon-dollar"></i> Price Guide</h3>
+		<h3 class="panel-title"><i class="fa fa-dollar"></i> Price Guide</h3>
 	</div>
 	<div class="panel-body">
 		<div class="price-guide">
@@ -29,7 +29,7 @@
 			</div>
 			<div class="average">
 				<span class="average-value">$<?php echo $collectibleDetail['CollectiblePriceFact']['average_price_external']; ?></span>
-				Average eBay price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions_external']; ?><?php
+				Average external listing price <?php echo $collectibleDetail['CollectiblePriceFact']['total_transactions_external']; ?><?php
 				if ($collectibleDetail['CollectiblePriceFact']['total_transactions_external'] == 1) {
 					echo __(' transaction');
 				} else {
@@ -102,7 +102,7 @@
 			<div class="all-transactions" <?php if(empty($collectibleDetail['Listing'])){ echo 'style="display: none"';} ?>>
 		 	<h4>Active Listings (<span class="active-listings-count"><?php echo $activeListingCount;?></span>)</h4>
 		 	<button type="button" class="btn btn-default btn-collapser collapsed btn-active-listings" <?php if(!$activeListings){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".active-listings">
-				<i class="icon-expand"></i>
+				<i class="fa fa-caret-square-o-right"></i>
 			</button>	
 		 	<div class="table-responsive active-listings collapse spacer">
 				<table class="table table-striped table-bordered">
@@ -181,12 +181,12 @@
 													echo __('Flag if you think there is an error.');
 												}
 
-												echo '"><i class=" icon-exclamation-sign"></i></a>';
+												echo '"><i class="fa fa-exclamation-circle"></i></a>';
 											}
 										?>
 										<?php if($allowDeleteListing){?>
 											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
-												<i class="icon-remove"></i>
+												<i class="fa fa-times-circle"></i>
 											</a>
 										<?php } ?>
 										</div>
@@ -203,7 +203,7 @@
 		 	
 		 	<h4>Unsold Listings (<span class="unsold-listings-count"><?php echo $unsoldListingsCount;?></span>)</h4>	 
 			<button type="button" class="btn btn-default btn-collapser collapsed btn-unsold-listings" <?php if(!$unsoldListings){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".unsold-listings">
-				<i class="icon-expand"></i>
+				<i class="fa fa-caret-square-o-right"></i>
 			</button>	
 		 	<div class="table-responsive unsold-listings collapse spacer">
 				<table class="table table-striped table-bordered">
@@ -253,12 +253,12 @@
 													echo __('Flag if you think there is an error.');
 												}
 
-												echo '"><i class=" icon-exclamation-sign"></i></a>';
+												echo '"><i class=" fa fa-exclamation-circle"></i></a>';
 											}
 										?>
 										<?php if($allowDeleteListing){?>
 											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
-												<i class="icon-remove"></i>
+												<i class="fa fa-times-circle"></i>
 											</a>
 										<?php } ?>
 										</div>
@@ -276,7 +276,7 @@
 			
 			<h4>Completed Listings (<span class="completed-listings-count"><?php echo $completedTransactionsCount;?></span>)</h4>
 			<button type="button" class="btn btn-default btn-collapser collapsed btn-completed-listings" <?php if(!$completedTransactions){ echo 'style="display:none"';} ?> data-toggle="collapse" data-target=".completed-listings">
-				<i class="icon-expand"></i>
+				<i class="fa fa-caret-square-o-right"></i>
 			</button>
 			<div class="table-responsive completed-listings collapse spacer">
 				<table class="table table-striped table-bordered">
@@ -360,12 +360,12 @@
 												echo __('Flag if you think there is an error.');
 											}
 
-											echo '"><i class=" icon-exclamation-sign"></i></a>';
+											echo '"><i class=" fa fa-exclamation"></i></a>';
 										}
 										?>
 										<?php if($allowDeleteListing){?>
 											<a data-id="<?php echo $value['id']; ?>" class="btn btn-default delete" href="#" title="Delete">
-												<i class="icon-remove"></i>
+												<i class="fa fa-times-circle"></i>
 											</a>
 										<?php } ?>
 									</div>

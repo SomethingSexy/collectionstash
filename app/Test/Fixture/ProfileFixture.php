@@ -6,7 +6,8 @@ class ProfileFixture extends CakeTestFixture {
 	public $useDbConfig = 'test';
 	public $import = 'Profile';
 	public $records = array(
-	// base collectible, no variant
-	array('id' => 1, 'user_id' => 1, 'created' => '2007-03-18 10:39:23', 'modified' => '2007-03-18 10:41:31'));
+	array('id' => 1, 'user_id' => 1, 'created' => '2007-03-18 10:39:23', 'modified' => '2007-03-18 10:41:31'),
+	array('id' => 2, 'user_id' => 2, 'created' => '2007-03-18 10:39:23', 'modified' => '2007-03-18 10:41:31')
+	);
 }
 ?>

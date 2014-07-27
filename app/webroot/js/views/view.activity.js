@@ -36,7 +36,7 @@ var ActivityView = Backbone.View.extend({
 		} else {
 			data.Activity.data.isTarget = true;
 		}
-		// old api we need to account for
+		// old api we need to account for, TODO: this should be moved to the after find method on the server
 		if (data.Activity.data.object && data.Activity.data.object.objectType === 'collectible' && (data.Activity.activity_type_id === '6' || data.Activity.activity_type_id === '8'  )) {
 			if (data.Activity.data.object.data.type) {
 				data.Activity.data.object.data.Collectible = {
