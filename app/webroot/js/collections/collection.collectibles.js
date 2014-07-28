@@ -16,7 +16,8 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible'], function(B
                 return this.state.query;
             },
             "sortKey": "sort",
-            "order": "direction"
+            "order": "direction",
+            "pageSize" : "limit"
         },
         setQuery: function(query, page_size) {
             var state = this.state;

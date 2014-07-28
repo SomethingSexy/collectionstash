@@ -18,6 +18,9 @@ define(['marionette', 'collections/collection.collectibles'], function(Marionett
         state: {
             pageSize: 4,
             totalRecords: totalNew
+        },
+        queryParams: {
+            'status': 4
         }
     });
     MyApp.pendingCollectibles = new CollectiblesCollection(rawPending, {
@@ -25,6 +28,9 @@ define(['marionette', 'collections/collection.collectibles'], function(Marionett
         state: {
             pageSize: 4,
             totalRecords: totalPending
+        },
+        queryParams: {
+            'status': 2
         }
     });
 

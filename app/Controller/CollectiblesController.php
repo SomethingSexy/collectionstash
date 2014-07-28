@@ -163,10 +163,8 @@ class CollectiblesController extends AppController
     // This is the new API for returning collectibles, should support search, filter and sort
     public function collectibles() {
         
-        $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
+        $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false), 'querystring');
         //Make sure the user is logged in
-        $this->paginate = array('conditions' => array('Collectible.status_id' => 4), 'order' => array('Collectible.modified' => 'desc'), 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status', 'CollectiblesUpload' => array('Upload')), 'limit' => 4);
-        $collectibles = $this->paginate('Collectible');
         $this->set(compact('collectibles'));
     }
     

@@ -8,32 +8,25 @@ class CollectibleSearchComponent extends Component
         $this->controller = $controller;
         $this->controller->loadModel('Collectible');
         $this->controller->filters = array(
-            //
-            'm' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'manufacture_id', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
-            
-            //
-            'ct' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'collectibletype_id', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
-            
-            //
-            'l' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'license_id', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
-            
-            //
-            's' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'scale_id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
-            
-            //
-            'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
-            
-            //
-            'status' => array('custom' => true, 'multiple' => false, 'model' => 'Collectible', 'id' => 'status_id', 'user_selectable' => true, 'label' => 'Status', 'values' => array('2' => 'Pending', '4' => 'Active')),
-            
-            //
-            't' => array('model' => 'Tag', 'id' => 'id'),
-            
-            //
-            'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending')));
+        //
+        'm' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'manufacture_id', 'user_selectable' => true, 'label' => 'Manufacturer', 'key' => 'title'),
+        //
+        'ct' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'collectibletype_id', 'user_selectable' => true, 'label' => 'Platform', 'key' => 'name'),
+        //
+        'l' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'license_id', 'user_selectable' => true, 'label' => 'Brand', 'key' => 'name'),
+        //
+        's' => array('model' => 'Collectible', 'multiple' => true, 'id' => 'scale_id', 'user_selectable' => true, 'label' => 'Scale', 'key' => 'scale'),
+        //
+        'v' => array('model' => 'Collectible', 'multiple' => false, 'id' => 'variant', 'user_selectable' => true, 'label' => 'Variant', 'values' => array(1 => 'Yes', 0 => 'No')),
+        //
+        'status' => array('custom' => true, 'multiple' => false, 'model' => 'Collectible', 'id' => 'status_id', 'user_selectable' => true, 'label' => 'Status', 'values' => array('2' => 'Pending', '4' => 'Active')),
+        //
+        't' => array('model' => 'Tag', 'id' => 'id'),
+        //
+        'o' => array('custom' => true, 'multiple' => false, 'id' => 'order', 'user_selectable' => true, 'label' => 'Order by', 'values' => array('n' => 'Newest', 'o' => 'Oldest', 'a' => 'Ascending', 'd' => 'Descending')));
     }
     
-    public function search($conditions = null) {
+    public function search($conditions = null, $paramType = null) {
         $saveSearchFilters = $this->Search->getFiltersFromQuery();
         //If nothing is set, use alphabetical order as the default
         $order = array();
@@ -41,7 +34,6 @@ class CollectibleSearchComponent extends Component
         $status = array();
         $status['Collectible.status_id'] = '4';
         $tableFilters = array();
-        debug($saveSearchFilters);
         foreach ($saveSearchFilters as $filterKey => $filterGroup) {
             // if the one we are looking at is a custom
             if (!isset($this->controller->filters[$filterKey]['custom']) || !$this->controller->filters[$filterKey]['custom']) {
@@ -67,15 +59,19 @@ class CollectibleSearchComponent extends Component
                     case "n":
                         $order['Collectible.modified'] = 'desc';
                         break;
+
                     case "o":
                         $order['Collectible.created'] = 'ASC';
                         break;
+
                     case "a":
                         $order['Collectible.name'] = 'ASC';
                         break;
+
                     case "d":
                         $order['Collectible.name'] = 'desc';
                         break;
+
                     default:
                         $order['Collectible.name'] = 'ASC';
                 }
@@ -86,9 +82,11 @@ class CollectibleSearchComponent extends Component
                     case 2:
                         $status['Collectible.status_id'] = 2;
                         break;
+
                     case 4:
                         $status['Collectible.status_id'] = 4;
                         break;
+
                     default:
                         $status['Collectible.status_id'] = 4;
                 }
@@ -113,35 +111,34 @@ class CollectibleSearchComponent extends Component
         $listSize = Configure::read('Settings.Search.list-size');
         // set status here, this one is a litte special because we need a default
         array_push($conditions, $status);
+        
+        $query = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'maxLimit' => 25);
+        if (!is_null($paramType)) {
+            $query['paramType'] = $paramType;
+        }
         //See if a search was set
-        if (isset($saveSearchFilters['search'])) {
-            //Is the search an empty string?
-            if ($saveSearchFilters['search'] == '') {
-                $this->controller->paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
-            } else {
-                //Using like for now because switch to InnoDB
-                $test = array();
-                array_push($test, array('AND' => array()));
-                array_push($test[0]['AND'], array('OR' => array()));
-                //array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
-                
-                $names = explode(' ', $saveSearchFilters['search']);
-                $regSearch = array();
-                foreach ($names as $key => $value) {
-                    // in case any weird characters get in there that this will trim
-                    $name = trim($value);
-                    array_push($regSearch, array('Collectible.name REGEXP' => '[[:<:]]' . $name . '[[:>:]]'));
-                }
-                array_push($test[0]['AND'][0]['OR'], $regSearch);
-                // keep this one a standard like
-                array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $saveSearchFilters['search'] . '%'));
-                
-                array_push($conditions, $test);
-                $this->controller->paginate = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'limit' => $listSize);
+        if (isset($saveSearchFilters['search']) && $saveSearchFilters['search'] !== '') {
+            //Using like for now because switch to InnoDB
+            $test = array();
+            array_push($test, array('AND' => array()));
+            array_push($test[0]['AND'], array('OR' => array()));
+            //array_push($test[0]['AND'][0]['OR'], array('Collectible.name LIKE' => '%' . $search . '%'));
+            
+            $names = explode(' ', $saveSearchFilters['search']);
+            $regSearch = array();
+            foreach ($names as $key => $value) {
+                // in case any weird characters get in there that this will trim
+                $name = trim($value);
+                array_push($regSearch, array('Collectible.name REGEXP' => '[[:<:]]' . $name . '[[:>:]]'));
             }
+            array_push($test[0]['AND'][0]['OR'], $regSearch);
+            // keep this one a standard like
+            array_push($test[0]['AND'][0]['OR'], array('License.name LIKE' => '%' . $saveSearchFilters['search'] . '%'));
+            
+            array_push($query['conditions'], $test);
+            $this->controller->paginate = $query;
         } else {
-            //This a search based on filters, not a search string
-            $this->controller->paginate = array("joins" => $joins, 'order' => $order, "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'conditions' => array($conditions, $tableFilters), 'limit' => $listSize);
+            $this->controller->paginate = $query;
         }
         
         $data = $this->controller->paginate('Collectible');
