@@ -32,10 +32,14 @@ define(['require', 'marionette', 'text!templates/app/common/carousel.mustache', 
             this.listenTo(this.collection, "sync", this.render);
         },
         events: {
-            'click .next': 'next'
+            'click .next': 'next',
+            'click .previous': 'previous'
         },
         next: function(event) {
             this.collection.getNextPage();
+        },
+        previous: function(event) {
+            this.collection.getPreviousPage();
         },
         onRender: function() {
             var self = this;
