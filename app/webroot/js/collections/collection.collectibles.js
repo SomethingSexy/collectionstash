@@ -7,8 +7,6 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible'], function(B
         mode: "infinite",
         state: {
             pageSize: 25,
-            sortKey: "updated",
-            order: 1,
             query: {}
         },
         queryParams: {
@@ -16,7 +14,6 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible'], function(B
                 return this.state.query;
             },
             "sortKey": "sort",
-            "order": "direction",
             "pageSize" : "limit"
         },
         setQuery: function(query, page_size) {

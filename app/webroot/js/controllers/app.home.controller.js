@@ -23,6 +23,11 @@ define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layou
                 App.layout.pending.show(new CollectiblesView({
                     collection: App.pendingCollectibles
                 }));
+                
+                App.layout.newCollectibles.show(new CollectiblesView({
+                    collection: App.newCollectibles
+                }));
+
             }
         });
     });
