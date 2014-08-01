@@ -177,6 +177,12 @@ class Comment extends AppModel
                     $comment['permissions'] = $commentPermissions['permissions'];
                 }
             }
+        } else {
+            foreach ($comments as $key => & $comment) {
+                $commentPermissions['permissions']['edit'] = false;
+                $commentPermissions['permissions']['remove'] = false;
+                $comment['permissions'] = $commentPermissions['permissions'];
+            }
         }
         
         $commentMetaData['comments'] = $comments;

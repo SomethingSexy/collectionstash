@@ -1,48 +1,51 @@
 body {
-	padding-top: 0;
+    padding-top: 0;
 }
 #wrap {
-	padding-left: 0;
-	padding-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 .masthead:after {
-	bottom: 0;
-	content: "";
-	display: block;
-	left: 0;
-	opacity: 0.4;
-	position: absolute;
-	right: 0;
-	top: 0;
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    opacity: 0.4;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
-
 .masthead {
-	background: url("/img/tile.png") repeat scroll 0 0 #444444;
-	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
-	color: #FFFFFF;
-	padding: 40px 0;
-	position: relative;
-	text-align: center;
-	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
+    background: url("/img/tile.png") repeat scroll 0 0 #444444;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+    color: #FFFFFF;
+    padding: 40px 0;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
 }
 .masthead .container {
-	position: relative;
-	z-index: 2;
+    position: relative;
+    z-index: 2;
 }
-
 .masthead {
-	color: #FFFFFF;
-	margin-bottom: 0;
-	padding: 70px 0 80px;
-	min-height: 700px;
+    color: #FFFFFF;
+    margin-bottom: 0;
+    padding: 70px 0 80px;
+    min-height: 700px;
 }
-
 .masthead h1 {
-	color: #FFFFFF;
-	letter-spacing: -2px;
-	line-height: 1;
-	font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: -2px;
+    line-height: 1;
+    font-weight: bold;
+    font-size: 50px;
 }
-
-
-
+.masthead .sub-heading {
+    font-size: 20px;
+}
+@media (min-width: 1200px) {
+    .container.home {
+        width: 1300px;
+   }
+}

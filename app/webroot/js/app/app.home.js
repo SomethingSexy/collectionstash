@@ -1,4 +1,4 @@
-define(['marionette', 'collections/collection.collectibles'], function(Marionette, CollectiblesCollection) {
+define(['marionette', 'collections/collection.collectibles', 'collections/collection.activity'], function(Marionette, CollectiblesCollection, ActivityCollection) {
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -33,6 +33,14 @@ define(['marionette', 'collections/collection.collectibles'], function(Marionett
         queryParams: {
             'status': 2,
             'o': 'o'
+        }
+    });
+
+    MyApp.activities = new ActivityCollection(rawActivity, {
+        mode: 'server',
+        state: {
+            pageSize: 10,
+            totalRecords: totalActivity
         }
     });
 

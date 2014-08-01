@@ -1,4 +1,4 @@
-define(['marionette', 'text!templates/app/common/activity.mustache', 'mustache', 'marionette.mustache'], function(Marionette, template) {
+define(['marionette', 'text!templates/app/common/activity.mustache', 'blockies', 'mustache', 'marionette.mustache'], function(Marionette, template, blockies) {
 
     function timeDifference(current, previous) {
 
@@ -69,6 +69,14 @@ define(['marionette', 'text!templates/app/common/activity.mustache', 'mustache',
 
             $(this.el).attr('data-id', this.model.get('id'));
 
+            var icon = blockies.create({ // All options are optional
+                seed: this.model.get('data').actor.displayName, // seed used to generate icon data, default: random
+                // color: '#dfe', // to manually specify the icon color, default: random
+                size: 10, // width/height of the icon in blocks, default: 10
+                scale: 5 // width/height of each block in pixels, default: 5
+            });
+
+            $('.blockie', this.el).html(icon);
             return this;
         }
     });

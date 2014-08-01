@@ -164,8 +164,13 @@ class CollectiblesController extends AppController
     public function collectibles() {
         
         $collectibles = $this->CollectibleSearch->search(array(), 'querystring');
-        //Make sure the user is logged in
-        $this->set(compact('collectibles'));
+        $extractCollectibles = Set::extract('/Collectible/.', $collectibles);
+        
+        foreach ($extractCollectibles as $key => $value) {
+            $extractCollectibles[$key]['CollectiblesUpload'] = $collectibles[$key]['CollectiblesUpload'];
+        }
+
+        $this->set('collectibles', $extractCollectibles);
     }
     
     public function status($id) {

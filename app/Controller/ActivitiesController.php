@@ -10,10 +10,5 @@ class ActivitiesController extends AppController {
 		$activities = $this -> paginate('Activity');
 		$this -> set(compact('activities'));
 	}
-
-	public function view() {
-
-	}
-
 }
 ?>

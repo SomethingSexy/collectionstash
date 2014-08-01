@@ -5,14 +5,15 @@
 <?php echo $this -> Html -> scriptBlock('var rawNewCollectibles = ' .  json_encode($newCollectibles) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var totalNew = ' .  json_encode($totalNew) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var uploadDirectory = "' .  $this -> FileUpload -> getUploadDirectory() . '";', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var rawActivity = ' .  json_encode($activity) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var serverTime = "' .  date('Y-m-d H:i:s') . '";', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var totalActivity= ' .  $totalActivity . ';', array('inline' => false));?>
+
 
 <div class="masthead">
     <div class="container">
         <h1>Collection Stash</h1>
-        <p>A collector platform for building and sharing your collection.</p>
-        <p>
-        <a class="btn btn-primary btn-large" href="/users/register">Join</a> <a class="btn btn-primary btn-large" href="/pages/collection_stash_documentation">Learn more</a>
-        </p>
+        <p class="sub-heading">A platform for building and sharing your collection.</p>
         <div class="row">
             <div class="col-lg-3">
                 <img class="img" src="/img/logo/cslogo_build.png" alt="Generic placeholder image" style="width: 140px; height: 140px;">
@@ -33,9 +34,11 @@
                 <img class="img" src="/img/logo/cscustoms.png" alt="Generic placeholder image" style="width: 140px; height: 140px;">
                 <h2>Customize with Collection Stash</h2>
                 <p>Create, maintain, and share your custom toys and collectibles.  Use the Collection Stash platform to show-off your custom made accessories, allowing other members to add them to their own customs!</p>
-                <p><a class="btn btn-default" href="/pages/collection_stash_documentation" role="button">View details »</a></p>
             </div>
         </div>
+        <p>
+        <a class="btn btn-primary btn-large" href="/users/register">Join</a> <a class="btn btn-primary btn-large" href="/pages/collection_stash_documentation">Learn more</a>
+        </p>        
     </div>
 </div>
 <div class="home-sub-heading">
@@ -44,6 +47,6 @@
     </div>
 
 </div>
-<div class="container _home">
+<div class="container _home home">
 
 </div>

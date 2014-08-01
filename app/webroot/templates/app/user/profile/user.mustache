@@ -1,6 +1,7 @@
 <div class="profile">
 	<div class="panel">
-        <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="...">
+        {{! <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="..."> }}
+        <div class="blockie pic"></div>
         <div class="name"><small>{{username}}</small></div>
         <div class="info">
         	<span>Name: {{#display_name}}{{.}}{{/display_name}}{{^display_name}}{{first_name}}{{/display_name}}</span><span>Member since {{member_since}}</span>{{#location}}<span>{{.}}</span>{{/location}}
