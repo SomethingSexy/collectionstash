@@ -40,7 +40,8 @@ requirejs.config({
         'jquery.blockui': '../bower_components/blockui/jquery.blockUI',
         'd3': '../bower_components/d3/d3.min',
         'rickshaw': '../bower_components/rickshaw/rickshaw.min',
-        'jquery-ui' : '../bower_components/jquery-ui/ui'
+        'jquery-ui': '../bower_components/jquery-ui/ui',
+        'blockies': '../bower_components/blockies/blockies'
     },
     shim: {
         'dust': {
@@ -73,6 +74,9 @@ requirejs.config({
         },
         'jquery.flot.time': {
             deps: ['jquery.flot']
+        },
+        'blockies': {
+            exports: 'blockies'
         }
     }
 });

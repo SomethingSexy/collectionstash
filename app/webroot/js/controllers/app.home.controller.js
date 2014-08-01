@@ -1,10 +1,11 @@
-define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/home/view.collectibles', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, layout, CollectiblesView, mustache) {
+define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/home/view.collectibles', 'views/common/view.activities', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, layout, CollectiblesView, ActivitiesView, mustache) {
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
             template: layout,
             regions: {
                 pending: "._pending",
-                newCollectibles: "._new"
+                newCollectibles: "._new",
+                activities: "._activites"
             }
         });
 
@@ -23,9 +24,15 @@ define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layou
                 App.layout.pending.show(new CollectiblesView({
                     collection: App.pendingCollectibles
                 }));
-                
+
                 App.layout.newCollectibles.show(new CollectiblesView({
                     collection: App.newCollectibles
+                }));
+
+
+                App.layout.activities.show(new ActivitiesView({
+                    collection: App.activities,
+                    showMore: true
                 }));
 
             }

@@ -1,4 +1,5 @@
 <?php echo $this -> Minify -> script('jquery.infinitescroll', array('inline' => false)); ?>
+<?php echo $this -> Html -> script('/bower_components/blockies/blockies', array('inline' => false)); ?>
 			<h2><?php echo __('See what is being discussed...')
 			?></h2>
 <div id="latest-comments-component" class="widget">
@@ -18,7 +19,8 @@
 					<?php
 					foreach ($comments as $key => $comment) {
 						echo '<div class="comment">';
-						echo '<img src="/img/icon/avatar.png" alt="">';
+						// echo '<img src="/img/icon/avatar.png" alt="">';
+						echo '<div class="blockie" data-seed="' . $comment['User']['username']. '"></div>';
 
 						echo '<div class="content">';
 						echo '<span class="commented-by">';
@@ -51,6 +53,20 @@
 
 <script>
 	$(function() {
+		$('.comment').each(function(){
+			var $this = $(this),
+			$blockies = $this.children('.blockie');
+	        var icon = blockies.create({ // All options are optional
+	            seed: $blockies.data('seed'), // seed used to generate icon data, default: random
+	            // color: '#dfe', // to manually specify the icon color, default: random
+	            size: 10, // width/height of the icon in blocks, default: 10
+	            scale: 5 // width/height of each block in pixels, default: 5
+	        });
+
+	        $blockies.html(icon);	
+		});
+	
+		
 		$('.comments').infinitescroll({
 			nextSelector : "#titles-nav a",
 			navSelector : "#titles-nav",
@@ -59,6 +75,20 @@
 				finishedMsg : "<em>All comments have been loaded!</em>",
 				msgText : "<em>Loading the next set of comments.</em>",
 			}
+		}, function(newElements){
+			$(newElements).each(function(){
+				var $this = $(this),
+				$blockies = $this.children('.blockie');
+		        var icon = blockies.create({ // All options are optional
+		            seed: $blockies.data('seed'), // seed used to generate icon data, default: random
+		            // color: '#dfe', // to manually specify the icon color, default: random
+		            size: 10, // width/height of the icon in blocks, default: 10
+		            scale: 5 // width/height of each block in pixels, default: 5
+		        });
+
+		        $blockies.html(icon);	
+			});
+	
 		});
 	});
 

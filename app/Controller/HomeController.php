@@ -41,6 +41,11 @@ class HomeController extends AppController
             $this->set('newCollectibles', $extractNewCollectibles);
             $this->set(compact('totalNew'));
             
+            $this->loadModel('Activity');
+            $activity = $this->Activity->find('all', array('limit' => 10, 'order' => array('Activity.created' => 'desc')));
+            $this->set('activity', Set::extract('/Activity/.', $activity));
+            $totalActivity = $this->Activity->find('count');
+            $this->set(compact('totalActivity'));
             $this->layout = 'require';
         }
     }

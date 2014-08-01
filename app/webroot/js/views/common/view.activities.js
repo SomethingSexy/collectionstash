@@ -9,15 +9,24 @@ define(['marionette', 'text!templates/app/common/activities.mustache', 'views/co
         itemView: ActivityView,
         itemViewContainer: "._activities",
         emptyView: NoItemsView,
+        events: {
+            'click ._next': 'next'
+        },
+        initialize: function(options) {
+            this.showMore = (typeof options.showMore === 'undefined') ? false : options.showMore;
+        },
         itemEvents: {
             "filter:selected": function(event, view, type, values) {
                 this.trigger('filter:selected', type, values);
             }
         },
-        onRender: function() {
-
-
-            return this;
+        serializeData: function() {
+            return {
+                showMore: this.showMore
+            };
+        },
+        next: function() {
+            this.collection.getNextPage();
         }
     });
 });
