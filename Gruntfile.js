@@ -39,6 +39,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks("grunt-bower-install-simple");
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // Default task(s).
     grunt.registerTask('default', ['bower-install-simple']);
