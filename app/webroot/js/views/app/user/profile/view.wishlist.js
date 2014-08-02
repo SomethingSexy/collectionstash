@@ -1,5 +1,5 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.mustache','text!templates/app/user/profile/wishlist.empty.mustache', 'views/app/user/profile/view.wishlist.collectible', 'mustache', 'imagesloaded', 'wookmark',
-    'marionette.mustache'
+define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.mustache', 'text!templates/app/user/profile/wishlist.empty.mustache', 'views/app/user/profile/view.wishlist.collectible', 'mustache', 'imagesloaded', 'wookmark',
+    'marionette.mustache', 'jquery.blueimp-gallery', 'bootstrap'
 ], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
 
 
@@ -88,10 +88,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
             // Update the layout.
             self.handler.wookmark();
             // })
-            if(!this.collection.hasNextPage()){
+            if (!this.collection.hasNextPage()) {
                 $('._more', this.el).hide();
             } else {
-                 $('._more', this.el).show();
+                $('._more', this.el).show();
             }
         }
     });

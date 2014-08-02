@@ -63,13 +63,14 @@ Router::connect('/stash/*', array('controller' => 'users', 'action' => 'profile'
 Router::connect('/collectibles/catalog/*', array('controller' => 'collectibles', 'action' => 'search'));
 
 //old replaced by public
-Router::connect('/stash/comments/*', array('controller' => 'stashs', 'action' => 'comments'));
+Router::connect('/stash/comments/*', array('controller' => 'users', 'action' => 'profile'));
 //old replaced by public
-Router::connect('/wishlist/*', array('controller' => 'wish_lists', 'action' => 'view'));
+Router::connect('/wishlist/*', array('controller' => 'users', 'action' => 'profile'));
 //old replaced by public
-Router::connect('/stashes/view/*', array('controller' => 'stashs', 'action' => 'view'));
+Router::connect('/stashes/view/*', array('controller' => 'users', 'action' => 'profile'));
+Router::connect('/stashs/view/*', array('controller' => 'users', 'action' => 'profile'));
 //old replaced by public
-Router::connect('/sale/*', array('controller' => 'collectibles_users', 'action' => 'sale'));
+Router::connect('/sale/*', array('controller' => 'users', 'action' => 'profile'));
 
 // maintaining ths old manufactures since I can't spell
 Router::connect('/manufactures/view/*', array('controller' => 'manufactures', 'action' => 'index'));
@@ -82,6 +83,8 @@ Router::connect('/settings', array('controller' => 'profiles', 'action' => 'inde
 Router::connect('/settings/profile', array('controller' => 'profiles', 'action' => 'index'));
 Router::connect('/settings/stash', array('controller' => 'profiles', 'action' => 'index'));
 Router::connect('/profile/*', array('controller' => 'users', 'action' => 'profile'));
+
+
 
 
 

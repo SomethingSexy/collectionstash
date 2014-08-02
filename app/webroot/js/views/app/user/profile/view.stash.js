@@ -1,5 +1,5 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'text!templates/app/user/profile/stash.empty.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'imagesloaded', 'wookmark',
-    'marionette.mustache'
+    'marionette.mustache', 'jquery.blueimp-gallery', 'bootstrap'
 ], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({

@@ -1,4 +1,4 @@
-define(['require', 'marionette', 'text!templates/app/user/profile/history.mustache', 'views/app/user/profile/view.history.row', 'text!templates/app/user/profile/history.empty.mustache', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, template, CollectibleView, emptyTemplate, mustache) {
+define(['require', 'marionette', 'text!templates/app/user/profile/history.mustache', 'views/app/user/profile/view.history.row', 'text!templates/app/user/profile/history.empty.mustache', 'mustache', 'marionette.mustache', 'simplePagination', 'jquery.blueimp-gallery', 'bootstrap'], function(require, Marionette, template, CollectibleView, emptyTemplate, mustache) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate,

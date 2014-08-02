@@ -5,7 +5,7 @@ foreach ($comments as $key => $comment) {
 
 	echo '<div class="content">';
 	echo '<span class="commented-by">';
-	echo '<a href="/stashs/view/' . $comment['User']['username'] . ' ">' . $comment['User']['username'] . '</a>';
+	echo '<a href="/profile/' . $comment['User']['username'] . ' ">' . $comment['User']['username'] . '</a>';
 	echo ' commented on ';
 	if ($comment['EntityType']['type'] === 'stash') {
 		echo $this -> Html -> link($comment['EntityType']['Stash']['User']['username'] . '\'s ' . 'Stash', array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $comment['EntityType']['Stash']['User']['username']));
