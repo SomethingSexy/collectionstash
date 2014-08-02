@@ -105,7 +105,6 @@ class UsersController extends AppController
         }
         
         $this->set('comments', $extractComments);
-       
         // grab the latest activity for this user
         $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions' => array('Activity.user_id' => $user['User']['id']), 'order' => array('Activity.created' => 'desc')));
         $this->set('activity', Set::extract('/Activity/.', $activity));
@@ -123,66 +122,15 @@ class UsersController extends AppController
         $this->set('works', $extractWorks);
     }
     /**
-     * This is old and going away
-     * User home dashboard
-     *
-     * TODO: Update this method so the JSON stuff is done in the view file
+     * This was the old route that went to the user dasboard, if this route somehow still exists, send
+     * them to their page, if they are logged in
      */
     public function home() {
-        $this->checkLogIn();
-        // user
-        $user = $this->getUser();
-        
-        $this->set(compact('user'));
-        //stashes, grab StashFact if it has one
-        $stashes = $this->User->Stash->find('all', array('conditions' => array('Stash.user_id' => $this->getUserId()), 'contain' => array('StashFact')));
-        
-        $this->set(compact('stashes'));
-        
-        $wishList = $this->User->WishList->find('first', array('conditions' => array('WishList.user_id' => $this->getUserId()), 'contain' => false));
-        
-        $this->set(compact('wishList'));
-        // user_point_facts
-        $pointsYear = $this->User->UserPointFact->getUserTotalPointsCurrentYear($this->getUserId());
-        $pointsMonth = $this->User->UserPointFact->getUserTotalPointsCurrentMonth($this->getUserId());
-        $this->set(compact('pointsYear'));
-        $this->set(compact('pointsMonth'));
-        // Previous
-        $previousPointsMonth = $this->User->UserPointFact->getUserTotalPointsPreivousMonth($this->getUserId());
-        $this->set(compact('previousPointsMonth'));
-        
-        $monthlyLeaders = $this->User->UserPointFact->getCurrentMonthlyLeaders();
-        
-        $this->set(compact('monthlyLeaders'));
-        
-        $previousMonthlyLeaders = $this->User->UserPointFact->getPreviousMonthyLeaders();
-        
-        $this->set(compact('previousMonthlyLeaders'));
-        
-        $yearlyLeaders = $this->User->UserPointYearFact->getYearlyLeaders();
-        $this->set(compact('yearlyLeaders'));
-        // this is all collectible in draft space
-        $totalWorks = $this->User->Collectible->find('count', array('conditions' => array('OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3')), 'Collectible.user_id' => $this->getUserId())));
-        $works = $this->User->Collectible->find('all', array('conditions' => array('Collectible.user_id' => $this->getUserId(), 'OR' => array('Collectible.status_id' => 1, 'Collectible.custom_status_id' => array('1', '2', '3'))), 'contain' => array('Collectibletype', 'Manufacture', 'Status', 'User'), 'limit' => 10));
-        
-        $works = json_encode($works);
-        
-        $this->set(compact('works'));
-        $this->set(compact('totalWorks'));
-
-        // Load initial activity
-        
-        // not sure how necessary count will be in the long run
-        // maybe this will be more needed when we have user subscribed activity
-        $totalActivity = $this->User->Activity->find('count');
-        $activity = $this->User->Activity->find('all', array('limit' => 10, 'order' => array('Activity.created' => 'desc')));
-        
-        $activity = json_encode($activity);
-        $this->set(compact('activity'));
-        $this->set(compact('totalActivity'));
-        
-        $this->layout = 'home_dashboard';
-        $this->set('dashboard', 'home');
+        if ($this->isLoggedIn()) {
+            $this->redirect('/profile/' . $this->getUsername());
+        } else {
+            $this->redirect('/users/login');
+        }
     }
     
     function notifications() {
@@ -251,7 +199,7 @@ class UsersController extends AppController
                             $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['id']);
                             $this->Session->write('notificationsCount', $totalNotifications);
                             
-                            $this->redirect($this->Auth->redirect());
+                            $this->redirect('/profile/'. $user['username']);
                         } else {
                             $this->Session->setFlash(__('Username or password is incorrect', true), null, null, 'error');
                             $this->request->data['User']['password'] = '';
