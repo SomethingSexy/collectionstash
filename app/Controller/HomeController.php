@@ -7,12 +7,8 @@ class HomeController extends AppController
     public function beforeFilter() {
         parent::beforeFilter();
     }
-    /**
-     * This is going to do nothing for now.  The page has static text, unless the user is logged in then
-     * they will see the catalog page.
-     */
+
     public function index() {
-        
         $this->loadModel('Collectible');
         // Now grab the pending collectible
         $pending = $this->Collectible->getPendingCollectibles(array('limit' => 4, 'order' => array('Collectible.created' => 'desc')));
