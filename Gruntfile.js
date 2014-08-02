@@ -15,7 +15,8 @@ module.exports = function(grunt) {
                     appDir: "app/webroot/",
                     baseUrl: "js/",
                     dir: "app/webroot/dist",
-                    // skipDirOptimize: true,
+                    skipDirOptimize: true,
+                    optimize: "none",
                     modules: [{
                         name: "common",
                         include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter', 'text']
@@ -32,12 +33,20 @@ module.exports = function(grunt) {
                     }, {
                         name: 'app/app.user.settings',
                         exclude: ['common']
+                    }, {
+                        name: 'controllers/app.home.controller',
+                        exclude: ['common']
+                    }, {
+                        name: 'controllers/app.user.profile.controller',
+                        exclude: ['common']
+                    }, {
+                        name: 'controllers/app.user.settings.controller',
+                        exclude: ['common']
                     }]
                 }
             }
         }
     });
-
     grunt.loadNpmTasks("grunt-bower-install-simple");
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
