@@ -21,7 +21,7 @@
 				echo '</div>';
 				echo '<div class="header">';
 				echo '<h2>';
-				echo '<a class="title" href="/user_uploads/view/' . $upload['User']['username'] . '">' . $upload['User']['username'] . '</a>';
+				echo '<a class="title" href="/profile/' . $upload['User']['username'] . '/photos">' . $upload['User']['username'] . '</a>';
 				echo '</h2>';				
 				echo '</div>';
 				echo '</div>';

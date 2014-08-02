@@ -25,7 +25,7 @@ if (!isset($adminMode)) {
 				echo '</dt>';
 				echo '<dd>';
 				if (!$collectibleCore['User']['admin']) {
-					echo $this -> Html -> link($collectibleCore['User']['username'], array('admin' => false, 'controller' => 'stashs', 'action' => 'view', $collectibleCore['User']['username']));
+					echo $this -> Html -> link($collectibleCore['User']['username'], '/profile/'. $collectibleCore['User']['username'],  array('admin' => false));
 				} else {
 					echo $collectibleCore['User']['username'];
 				}

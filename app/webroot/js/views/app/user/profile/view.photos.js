@@ -1,5 +1,5 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/photos.mustache', 'text!templates/app/user/profile/photos.empty.mustache', 'views/app/user/profile/view.photo', 'mustache', 'imagesloaded', 'wookmark',
-    'marionette.mustache'
+    'marionette.mustache', 'jquery.blueimp-gallery', 'bootstrap'
 ], function(require, Marionette, template, emptyTemplate, PhotoView, mustache, Masonry) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
@@ -88,11 +88,11 @@ define(['require', 'marionette', 'text!templates/app/user/profile/photos.mustach
             // Update the layout.
             self.handler.wookmark();
             // });
-            
-            if(!this.collection.hasNextPage()){
+
+            if (!this.collection.hasNextPage()) {
                 $('._more', this.el).hide();
             } else {
-                 $('._more', this.el).show();
+                $('._more', this.el).show();
             }
         }
     });
