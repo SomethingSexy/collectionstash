@@ -9,6 +9,11 @@ define(['marionette', 'text!templates/app/common/activities.mustache', 'views/co
         itemView: ActivityView,
         itemViewContainer: "._activities",
         emptyView: NoItemsView,
+        _initialEvents: function() {
+            if (this.collection) {
+                this.listenTo(this.collection, "sync", this.renderMore)
+            }
+        },
         events: {
             'click ._next': 'next'
         },
@@ -27,6 +32,25 @@ define(['marionette', 'text!templates/app/common/activities.mustache', 'views/co
         },
         next: function() {
             this.collection.getNextPage();
+        },
+        renderMore: function() {
+            var self = this;
+            var ItemView;
+            if (this.collection.state.currentPage === 1) {
+                $(this.itemViewContainer, this.el).empty();
+            }
+            this.startBuffering();
+            this.collection.each(function(item, index) {
+                ItemView = this.getItemView(item);
+                this.addItemView(item, ItemView, index);
+            }, this);
+            this.endBuffering();
+            if (!this.collection.hasNextPage()) {
+                $('._next', this.el).hide();
+            } else {
+                $('._next', this.el).show();
+            }
         }
+
     });
 });

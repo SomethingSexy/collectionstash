@@ -4,6 +4,8 @@ define(['backbone', 'backbone.pageable', ], function(Backbone, pageable) {
         mode: "infinite",
         state: {
             pageSize: 25,
+            sortKey: "updated",
+            order: 1
         }
     });
 });
