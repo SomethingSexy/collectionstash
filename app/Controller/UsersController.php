@@ -95,7 +95,7 @@ class UsersController extends AppController
         
         $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
         // retrieve all comments
-        $comments = $this->User->Comment->getComments($stash['Stash']['entity_type_id'], $user['User']['id']);
+        $comments = $this->User->Comment->getComments($stash['Stash']['entity_type_id'], $loggedInUser['User']['id']);
         
         $extractComments = Set::extract('/Comment/.', $comments['comments']);
         
@@ -105,6 +105,7 @@ class UsersController extends AppController
         }
         
         $this->set('comments', $extractComments);
+       
         // grab the latest activity for this user
         $activity = $this->User->Activity->find('all', array('limit' => 10, 'conditions' => array('Activity.user_id' => $user['User']['id']), 'order' => array('Activity.created' => 'desc')));
         $this->set('activity', Set::extract('/Activity/.', $activity));
