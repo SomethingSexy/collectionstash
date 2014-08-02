@@ -12,9 +12,9 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     mainConfigFile: "app/webroot/js/common.js",
-                    // appDir: "target/exemplar/build-prep/",
-                    // baseUrl: "scripts/",
-                    // dir: "target/exemplar/build/",
+                    appDir: "app/webroot/",
+                    baseUrl: "js/",
+                    dir: "app/webroot/dist",
                     // skipDirOptimize: true,
                     modules: [{
                         name: "common",
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                         name: 'app/app.user.profile',
                         exclude: ['common']
                     }, {
-                        name: 'app/app.user.setting',
+                        name: 'app/app.user.settings',
                         exclude: ['common']
                     }]
                 }
