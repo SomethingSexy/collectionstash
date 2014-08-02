@@ -33,7 +33,7 @@
         "blockui" : "v2.65",
         "rickshaw" : "https://github.com/shutterstock/rickshaw.git#1.5.0",
         "d3" : "3.4.8",
-        "blockies" : "https://github.com/download13/blockies.git#master"
+        "blockies" : "https://github.com/download13/blockies.git#v0.1.0"
     },
     "devDependencies": {}
 }
