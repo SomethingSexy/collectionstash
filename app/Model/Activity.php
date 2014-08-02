@@ -8,6 +8,10 @@ class Activity extends AppModel
      * Right now, I am doing all activity processing server
      * side, so we are decoding here...if this becomes a performance
      * issue we will offload this to the client side
+     *
+     * TODO: WE should have this run through an activity type filter or something
+     * so each activity type can process the data itself, instead of having this giant
+     * logic loop
      */
     public function afterFind($results, $primary = false) {
         foreach ($results as $key => $val) {
@@ -19,7 +23,7 @@ class Activity extends AppModel
                 }
                 // edit doesen't have much so process this one separately
                 if ($val['Activity']['activity_type_id'] === '12') {
-                    $data->verb_displayName = __('editied');
+                    $data->verb_displayName = __('edited');
                     $data->isObject = false;
                     if ($data->target->displayName === null) {
                         $data->target->displayName = __('Collectible');
@@ -83,7 +87,7 @@ class Activity extends AppModel
                         $data->pre_target = __('submitted by');
                     } else if ($data->verb === 'remove') {
                         $data->pre_target = __('from');
-                    } else {
+                    } else if ($val['Activity']['activity_type_id'] !== '12') { // don't do this for edits
                         $data->pre_target = __('to');
                     }
                     

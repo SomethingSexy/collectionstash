@@ -19,7 +19,10 @@
 		{{#data.object.url}}
 			<a target="_blank" href="{{data.object.url}}"> {{{data.object.object_displayName}}}</a>
 		{{/data.object.url}}
-
+		{{^data.object.url}}
+		{{! If I don't have a URL, internal sale..going to target for now }}
+			<a target="_blank" href="{{data.target.url}}"> {{{data.object.object_displayName}}}</a>
+		{{/data.object.url}}
 	{{/data.isObject}}
 
 	<!-- target -->
