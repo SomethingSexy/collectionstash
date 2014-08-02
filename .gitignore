@@ -16,3 +16,4 @@
 /app/Vendor/Text
 /app/webroot/bower_components
 /node_modules
+/app/webroot/dist
