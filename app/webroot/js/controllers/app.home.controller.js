@@ -1,11 +1,12 @@
-define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/home/view.collectibles', 'views/common/view.activities', 'mustache', 'marionette.mustache'],
-    function(App, Backbone, Marionette, layout, CollectiblesView, ActivitiesView, mustache) {
+define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layout.mustache', 'views/app/home/view.collectibles', 'views/common/view.activities', 'views/app/home/view.points', 'mustache', 'marionette.mustache'],
+    function(App, Backbone, Marionette, layout, CollectiblesView, ActivitiesView, PointsView, mustache) {
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
             template: layout,
             regions: {
                 pending: "._pending",
                 newCollectibles: "._new",
-                activities: "._activites"
+                activities: "._activites",
+                points : '._points'
             }
         });
 
@@ -35,6 +36,11 @@ define(['app/app.home', 'backbone', 'marionette', 'text!templates/app/home/layou
                     showMore: true
                 }));
 
+                App.layout.points.show(new PointsView({
+                    model : App.points
+                }));
+
+                
             }
         });
     });

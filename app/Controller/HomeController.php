@@ -7,7 +7,7 @@ class HomeController extends AppController
     public function beforeFilter() {
         parent::beforeFilter();
     }
-
+    
     public function index() {
         $this->loadModel('Collectible');
         // Now grab the pending collectible
@@ -40,6 +40,31 @@ class HomeController extends AppController
         $this->set('activity', Set::extract('/Activity/.', $activity));
         $totalActivity = $this->Activity->find('count');
         $this->set(compact('totalActivity'));
+        
+        $this->loadModel('UserPointFact');
+        $this->loadModel('UserPointYearFact');
+        
+        $monthlyLeaders = $this->UserPointFact->getCurrentMonthlyLeaders();
+        $extractMonthlyLeaders =  Set::extract('/UserPointFact/.', $monthlyLeaders);
+        foreach ($extractMonthlyLeaders as $key => $value) {
+            $extractMonthlyLeaders[$key]['User'] = $monthlyLeaders[$key]['User'];
+        }        
+        $this->set('monthlyLeaders', $extractMonthlyLeaders);
+        
+        $previousMonthlyLeaders = $this->UserPointFact->getPreviousMonthyLeaders();
+        $extractPreviousMonthlyLeaders =  Set::extract('/UserPointFact/.', $previousMonthlyLeaders);
+        foreach ($extractPreviousMonthlyLeaders as $key => $value) {
+            $extractPreviousMonthlyLeaders[$key]['User'] = $previousMonthlyLeaders[$key]['User'];
+        }        
+        $this->set('previousMonthlyLeaders', $extractPreviousMonthlyLeaders);
+        
+        $yearlyLeaders = $this->UserPointYearFact->getYearlyLeaders();
+        $extractYearlyLeaders =  Set::extract('/UserPointYearFact/.', $yearlyLeaders);
+        foreach ($extractYearlyLeaders as $key => $value) {
+            $extractYearlyLeaders[$key]['User'] = $yearlyLeaders[$key]['User'];
+        }        
+        $this->set('yearlyLeaders', $extractYearlyLeaders);
+        
         $this->layout = 'require';
     }
 }

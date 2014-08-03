@@ -44,6 +44,12 @@ define(['marionette', 'collections/collection.collectibles', 'collections/collec
         }
     });
 
+    MyApp.points = new Backbone.Model({
+        previousMonthlyLeaders: previousMonthlyLeaders,
+        monthlyLeaders: monthlyLeaders,
+        yearlyLeaders: yearlyLeaders
+    });
+
     // export the app from this module
     return MyApp;
 });
