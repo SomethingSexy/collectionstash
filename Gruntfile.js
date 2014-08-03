@@ -89,14 +89,20 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+        clean: {
+            finish: {
+                src: ["app/webroot/dist-prep"]
+            }
         }
     });
     grunt.loadNpmTasks("grunt-bower-install-simple");
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Default task(s).
     grunt.registerTask('default', ['bower-install-simple']);
     grunt.registerTask('install', ['bower-install-simple', 'requirejs']);
-    grunt.registerTask('install:production', ['bower-install-simple', 'copy:prep', 'requirejs', 'copy:clean']);
+    grunt.registerTask('install:production', ['bower-install-simple', 'copy:prep', 'requirejs', 'copy:clean', 'clean:finish']);
 };
