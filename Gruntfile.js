@@ -23,25 +23,25 @@ module.exports = function(grunt) {
                     }, {
                         // module names are relative to baseUrl/paths config
                         name: 'app/app.collectible.detail',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'app/app.home',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'app/app.user.profile',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'app/app.user.settings',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'controllers/app.home.controller',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'controllers/app.user.profile.controller',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }, {
                         name: 'controllers/app.user.settings.controller',
-                        exclude: ['common']
+                        exclude: ['common', 'rickshaw']
                     }]
                 }
             }
