@@ -53,7 +53,6 @@ class CollectiblesWishListsController extends AppController
     }
     
     public function collectibles($username = null) {
-        $this->autoRender = false;
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->CollectiblesWishList->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
@@ -67,7 +66,7 @@ class CollectiblesWishListsController extends AppController
             }
             
             $this->set('collectibles', $extractUserCollectibles);
-            $this->response->body(json_encode($extractUserCollectibles));
+            // $this->response->body(json_encode($extractUserCollectibles));
         }
     }
 }
