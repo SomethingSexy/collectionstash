@@ -56,7 +56,7 @@ class CollectiblesWishListsController extends AppController
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->CollectiblesWishList->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
-            $this->paginate = array('limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesWishList.user_id' => $user['User']['id']), 'contain' => array('Collectible' => array('User' => array('fields' => array('username')), 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype')));
+            $this->paginate = array('paramType' => 'querystring', 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesWishList.user_id' => $user['User']['id']), 'contain' => array('Collectible' => array('User' => array('fields' => array('username')), 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype')));
             $collectibles = $this->paginate('CollectiblesWishList');
             
             $extractUserCollectibles = Set::extract('/CollectiblesWishList/.', $collectibles);
@@ -67,6 +67,7 @@ class CollectiblesWishListsController extends AppController
             
             $this->set('collectibles', $extractUserCollectibles);
             // $this->response->body(json_encode($extractUserCollectibles));
+            
         }
     }
 }
