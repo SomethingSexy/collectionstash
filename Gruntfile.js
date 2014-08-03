@@ -16,16 +16,14 @@ module.exports = function(grunt) {
                     baseUrl: "js/",
                     dir: "app/webroot/dist/",
                     skipDirOptimize: true,
-                    optimize: "none",
-                    stubModules: ['text'],
+                    // optimize: "none",
                     modules: [{
                         name: "common",
-                        include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter'],
-                        exclude: ['text']
+                        include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter', 'text']
                     }, {
                         // module names are relative to baseUrl/paths config
                         name: 'app/app.collectible.detail',
-                        exclude: ['common', 'text']
+                        exclude: ['common']
                     }, {
                         name: 'app/app.home',
                         exclude: ['common']

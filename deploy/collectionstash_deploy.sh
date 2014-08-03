@@ -1,6 +1,7 @@
 #!/bin/bash
 cd /usr/src/collectionstash;
-git pull;
+git fetch;
+git checkout master;
 # because this script runs as root :(
 npm install --unsafe-perm ;
 grunt install:production;
