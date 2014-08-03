@@ -2,7 +2,7 @@
 cd /usr/src/collectionstash;
 git pull;
 npm install;
-grunt install;
+grunt install:production;
 # copy over source
 cp  -r /usr/src/collectionstash/app/* /var/www/collectionstash/app;
 cp  -r /usr/src/collectionstash/plugins/* /var/www/collectionstash/plugins;
