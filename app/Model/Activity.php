@@ -19,7 +19,7 @@ class Activity extends AppModel
                 $data = json_decode($results[$key]['Activity']['data']);
                 
                 if ($data->actor->objectType === 'user') {
-                    $data->actor->url = '/stash/' . $data->actor->displayName;
+                    $data->actor->url = '/profile/' . $data->actor->displayName;
                 }
                 // edit doesen't have much so process this one separately
                 if ($val['Activity']['activity_type_id'] === '12') {
