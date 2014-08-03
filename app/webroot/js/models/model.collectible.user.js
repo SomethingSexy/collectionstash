@@ -1,12 +1,12 @@
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['backbone', 'underscore', 'backbone.trackit'], factory);
+        define(['backbone', 'underscore', 'models/model.listing', 'backbone.trackit'], factory);
     } else {
         // Browser globals
-        root.CollectibleUserModel = factory(root.Backbone, root._);
+        root.CollectibleUserModel = factory(root.Backbone, root._, root.ListingModel);
     }
-}(this, function(Backbone, _) {
+}(this, function(Backbone, _, ListingModel) {
     return Backbone.Model.extend({
         url: function(method, data) {
 
