@@ -162,8 +162,8 @@ class CollectiblesUsersController extends AppController
             $response = $this->CollectiblesUser->update($collectible, $this->getUser());
             if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
                 $this->response->statusCode(401);
-            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
-                $this->response->statusCode(500);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
                 $this->set('returnData', $response['response']['data']);
             }
         } else if ($this->request->isPost()) {
@@ -173,8 +173,8 @@ class CollectiblesUsersController extends AppController
             $response = $this->CollectiblesUser->add($collectible, $this->getUser());
             if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
                 $this->response->statusCode(401);
-            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
-                $this->response->statusCode(500);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
                 $this->set('returnData', $response['response']['data']);
             }
         } else if ($this->request->isDelete()) {
@@ -192,8 +192,8 @@ class CollectiblesUsersController extends AppController
             $response = $this->CollectiblesUser->remove($collectible, $this->getUser());
             if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
                 $this->response->statusCode(401);
-            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 500) {
-                $this->response->statusCode(500);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
                 $this->set('returnData', $response['response']['data']);
             }
         } else if ($this->request->isGet()) {

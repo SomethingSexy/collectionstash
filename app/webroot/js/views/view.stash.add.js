@@ -27,13 +27,6 @@ var StashAddView = Backbone.View.extend({
         var self = this;
         var data = this.collectible.toJSON();
         data.model = this.model.toJSON();
-        data.errors = this.errors;
-        data.inlineErrors = {};
-        _.each(this.errors, function(error) {
-            if (error.inline) {
-                data.inlineErrors[error.name] = error.message;
-            }
-        });
         dust.render(this.template, data, function(error, output) {
             $(self.el).html(output);
         });
@@ -54,7 +47,6 @@ var StashAddView = Backbone.View.extend({
             displayKey: 'value',
             source: this.merchantHound.ttAdapter()
         });
-        this.errors = [];
         return this;
     },
     selectionChanged: function(e) {
@@ -80,6 +72,34 @@ var StashAddView = Backbone.View.extend({
         }
         this.model.set(data, {
             forceUpdate: true
+        });
+    },
+    removeErrors: function() {
+        $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty();
+        $('._globalError', this.el).empty();
+    },
+    onError: function() {
+        $('.btn-primary', this.el).button('reset');
+        this.removeErrors();
+        var self = this;
+        _.each(this.errors, function(error, attr) {
+            $('[name="' + attr + '"]', self.el).addClass('invalid').attr('data-error', true);
+            $('[name="' + attr + '"]', self.el).closest('.form-group').addClass('has-error');
+            $('[name="' + attr + '"]', self.el).parent().find('._error').remove();
+            var errorHtml = '';
+            if (_.isArray(error)) {
+                if (error.length === 1) {
+                    errorHtml = error[0];
+                } else {
+                    _.each(error, function(message) {
+                        errorHtml += '<p>' + message + '</p>';
+                    });
+                }
+            } else {
+                errorHtml = error;
+            }
+
+            $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
         });
     }
 });
