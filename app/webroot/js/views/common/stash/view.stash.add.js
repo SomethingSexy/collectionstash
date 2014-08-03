@@ -1,6 +1,6 @@
-define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, _, Backbone, Marionnette, template) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
 
-    return Marionnette.ItemView.extend({
+    var StashAddView = Marionnette.ItemView.extend({
         template: template,
         events: {
             // TODO Add event for change of reason
@@ -32,33 +32,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 self.model.resetAttributes();
                 self.model.stopTracking()
             });
-        },
-        onError: function() {
-            $('.btn-primary', this.el).button('reset');
-            this.removeErrors();
-            var self = this;
-            _.each(this.errors, function(error, attr) {
-                $('[name="' + attr + '"]', self.el).addClass('invalid').attr('data-error', true);
-                $('[name="' + attr + '"]', self.el).closest('.form-group').addClass('has-error');
-                $('[name="' + attr + '"]', self.el).parent().find('._error').remove();
-                var errorHtml = '';
-                if (_.isArray(error)) {
-                    if (error.length === 1) {
-                        errorHtml = error[0];
-                    } else {
-                        _.each(error, function(message) {
-                            errorHtml += '<p>' + message + '</p>';
-                        });
-                    }
-                } else {
-                    errorHtml = error;
-                }
-
-                $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
-            });
-        },
-        removeErrors: function() {
-            $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty();
         },
         // TODO: update this to do what we did for the profile
         // only set the fields when we do the save...taht way if they
@@ -98,13 +71,13 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                     $('.btn-primary', self.el).button('reset');
                 },
                 error: function(model, response, options) {
-                    $('.btn-primary', self.el).button('reset');
-                    self.errors = response.responseJSON;
-                    self.onError();
+                    self.onModelError(model, response, options);
                 }
             });
         }
     });
 
-    return StashRemoveView;
+    _.extend(StashAddView.prototype, ErrorMixin);
+
+    return StashAddView;
 });

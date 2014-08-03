@@ -1,4 +1,12 @@
-define(['require', 'backbone', 'underscore', 'models/model.listing', 'backbone.trackit'], function(require, backbone, _, ListingModel) {
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['backbone', 'underscore', 'backbone.trackit'], factory);
+    } else {
+        // Browser globals
+        root.CollectibleUserModel = factory(root.Backbone, root._);
+    }
+}(this, function(Backbone, _) {
     return Backbone.Model.extend({
         url: function(method, data) {
 
@@ -30,4 +38,4 @@ define(['require', 'backbone', 'underscore', 'models/model.listing', 'backbone.t
             return response;
         }
     });
-});
+}));

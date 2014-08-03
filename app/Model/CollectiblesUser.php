@@ -264,7 +264,7 @@ class CollectiblesUser extends AppModel
                 // This is old school event, will be replaced by activity stuff later TODO
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Stash.Collectible.add', $this, array('collectibleUserId' => $this->id, 'stashId' => $stash['Stash']['id'])));
             } else {
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 $retVal['response']['isSuccess'] = false;
                 $retVal['response']['data'] = $this->validationErrors;
             }
@@ -341,7 +341,7 @@ class CollectiblesUser extends AppModel
             $this->set($data['CollectiblesUser']);
             // this is here to validate remove date
             if (!$this->validates()) {
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 $retVal['response']['isSuccess'] = false;
                 $retVal['response']['data'] = $this->validationErrors;
                 return $retVal;
@@ -362,7 +362,7 @@ class CollectiblesUser extends AppModel
             
             if (!$listing['response']['isSuccess']) {
                 $dataSource->rollback();
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 $retVal['response']['data'] = $listing['response']['data'];
                 return $retVal;
             }
@@ -372,7 +372,7 @@ class CollectiblesUser extends AppModel
             
             if (!$response['response']['isSuccess']) {
                 $dataSource->rollback();
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 return $retVal;
             }
         } else if ($removeListing) {
@@ -381,7 +381,7 @@ class CollectiblesUser extends AppModel
             $response = $this->Listing->remove($collectiblesUser['Listing']['id']);
             if (!$response['response']['isSuccess']) {
                 $dataSource->rollback();
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 return $retVal;
             }
         }
@@ -432,7 +432,7 @@ class CollectiblesUser extends AppModel
         // we NEED a reason here
         if (!$this->validates()) {
             $retVal['response']['isSuccess'] = false;
-            $retVal['response']['code'] = 500;
+            $retVal['response']['code'] = 400;
             $retVal['response']['data'] = $this->validationErrors;
             return $retVal;
         }
@@ -460,7 +460,7 @@ class CollectiblesUser extends AppModel
             
             if (!$this->validates()) {
                 $retVal['response']['isSuccess'] = false;
-                $retVal['response']['code'] = 500;
+                $retVal['response']['code'] = 400;
                 $retVal['response']['data'] = $this->validationErrors;
                 return $retVal;
             }
@@ -478,7 +478,7 @@ class CollectiblesUser extends AppModel
                 $data['CollectiblesUser']['listing_id'] = null;
                 if (!$this->Listing->delete($collectiblesUser['Listing']['id'])) {
                     $dataSource->rollback();
-                    $retVal['response']['code'] = 500;
+                    $retVal['response']['code'] = 400;
                     return $retVal;
                 }
             }
@@ -506,7 +506,7 @@ class CollectiblesUser extends AppModel
                 
                 if (!$listing['response']['isSuccess']) {
                     $dataSource->rollback();
-                    $retVal['response']['code'] = 500;
+                    $retVal['response']['code'] = 400;
                     $retVal['response']['data'] = $listing['response']['data'];
                     return $retVal;
                 }

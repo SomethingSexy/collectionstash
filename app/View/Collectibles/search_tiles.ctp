@@ -1,6 +1,7 @@
 <?php
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
+echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));
 ?>
 <div class="col-md-12">
 <h3><?php echo __('Collectibles Catalog'); ?></h3>
