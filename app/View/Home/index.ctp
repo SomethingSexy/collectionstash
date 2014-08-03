@@ -9,6 +9,9 @@
 <?php echo $this -> Html -> scriptBlock('var serverTime = "' .  date('Y-m-d H:i:s') . '";', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var totalActivity= ' .  $totalActivity . ';', array('inline' => false));?>
 
+<?php echo $this -> Html -> scriptBlock('var previousMonthlyLeaders= ' .  json_encode($previousMonthlyLeaders) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var monthlyLeaders= ' .  json_encode($monthlyLeaders) . ';', array('inline' => false));?>
+<?php echo $this -> Html -> scriptBlock('var yearlyLeaders= ' . json_encode($yearlyLeaders) . ';', array('inline' => false));?>
 
 <div class="masthead">
     <div class="container">

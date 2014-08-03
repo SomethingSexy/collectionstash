@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="icon-trophy"></i> Nut Leaders <a href="/pages/nuts" class="pull-right"><i class="icon-question-sign"></i></a></h3>
+	</div>
+	<div class="panel-body">
+		<h4>Current Month Leaders</h4>
+		<ol>
+			{{#monthlyLeaders}}
+				<li>{{User.username}} with {{points}} nuts</li>
+			{{/monthlyLeaders}}
+		</ol>
+		<h4>Previous Month Leaders</h4>
+		<ol>
+			{{#previousMonthlyLeaders}}
+				<li>{{User.username}} with {{points}} nuts</li>
+			{{/previousMonthlyLeaders}}
+		</ol>	
+		<h4><?php echo date('Y')?> Leaders</h4>				
+		<ol>
+			{{#yearlyLeaders}}
+				<li>{{User.username}} with {{points}} nuts</li>
+			{{/yearlyLeaders}}
+		</ol>	
+	</div>
+</div>
