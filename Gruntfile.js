@@ -19,7 +19,7 @@ module.exports = function(grunt) {
                     optimize: "none",
                     modules: [{
                         name: "common",
-                        include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter', 'text']
+                        include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter']
                     }, {
                         // module names are relative to baseUrl/paths config
                         name: 'app/app.collectible.detail',
