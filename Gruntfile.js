@@ -12,9 +12,9 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     mainConfigFile: "app/webroot/js/common.js",
-                    appDir: "app/webroot/",
+                    appDir: "app/webroot/dist-prep/",
                     baseUrl: "js/",
-                    dir: "app/webroot/dist",
+                    dir: "app/webroot/dist/",
                     skipDirOptimize: true,
                     // optimize: "none",
                     modules: [{
@@ -54,17 +54,17 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'app/webroot/templates/',
                         src: ['**'],
-                        dest: 'app/webroot/dist/templates/'
+                        dest: 'app/webroot/dist-prep/templates/'
                     }, {
                         expand: true,
                         cwd: 'app/webroot/js/',
                         src: ['**'],
-                        dest: 'app/webroot/dist/js/'
+                        dest: 'app/webroot/dist-prep/js/'
                     }, {
                         expand: true,
                         cwd: 'app/webroot/bower_components/',
                         src: ['**'],
-                        dest: 'app/webroot/dist/bower_components/'
+                        dest: 'app/webroot/dist-prep/bower_components/'
                     }
                 ]
             },

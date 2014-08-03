@@ -17,3 +17,4 @@
 /app/webroot/bower_components
 /node_modules
 /app/webroot/dist
+/app/webroot/dist-prep
