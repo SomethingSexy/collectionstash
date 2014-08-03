@@ -1,7 +1,8 @@
 #!/bin/bash
 cd /usr/src/collectionstash;
 git pull;
-npm install;
+# because this script runs as root :(
+npm install --unsafe-perm ;
 grunt install:production;
 # copy over source
 cp  -r /usr/src/collectionstash/app/* /var/www/collectionstash/app;

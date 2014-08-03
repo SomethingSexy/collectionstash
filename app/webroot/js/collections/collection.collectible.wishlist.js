@@ -2,7 +2,8 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible.wishlist'], f
     return Backbone.PageableCollection.extend({
         model: CollectibleUserModel,
         initialize: function(models, props) {
-            this.url = "/collectibles_wishlists/collectibles/" + props.username;
+            // some reason locally collectibles_wishlists works fine but on linux it needs to be wish_lists
+            this.url = "/collectibles_wish_lists/collectibles/" + props.username;
         },
         mode: "infinite",
         state: {
