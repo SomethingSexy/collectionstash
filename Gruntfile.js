@@ -17,6 +17,7 @@ module.exports = function(grunt) {
                     dir: "app/webroot/dist/",
                     skipDirOptimize: true,
                     optimize: "none",
+                    stubModules: ['text'],
                     modules: [{
                         name: "common",
                         include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter'],
