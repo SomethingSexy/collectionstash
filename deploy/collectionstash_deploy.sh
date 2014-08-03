@@ -1,9 +1,9 @@
 #!/bin/bash
 cd /usr/src/collectionstash;
-git fetch;
-git checkout master;
+git fetch --all;
+git reset --hard  origin/master;
 # because this script runs as root :(
-npm install --unsafe-perm ;
+npm install --unsafe-perm;
 grunt install:production;
 # copy over source
 cp  -r /usr/src/collectionstash/app/* /var/www/collectionstash/app;
