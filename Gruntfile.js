@@ -16,7 +16,7 @@ module.exports = function(grunt) {
                     baseUrl: "js/",
                     dir: "app/webroot/dist/",
                     skipDirOptimize: true,
-                    // optimize: "none",
+                    optimize: "none",
                     modules: [{
                         name: "common",
                         include: ['jquery', 'bootstrap', 'backbone', 'underscore', 'marionette', 'marionette.mustache', 'mustache', 'backbone.wreqr', 'backbone.babysitter', 'text']
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
         },
         clean: {
             finish: {
-                src: ["app/webroot/dist-prep"]
+                src: ["app/webroot/dist-prep", "app/webroot/dist"]
             }
         }
     });
