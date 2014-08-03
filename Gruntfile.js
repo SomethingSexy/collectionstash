@@ -45,12 +45,27 @@ module.exports = function(grunt) {
                     }]
                 }
             }
+        },
+        copy: {
+            clean: {
+                files: [
+                    // includes files within path and its sub-directories
+                    {
+                        expand: true,
+                        cwd: 'app/webroot/dist',
+                        src: ['**'],
+                        dest: 'app/webroot'
+                    }
+                ]
+            }
         }
     });
     grunt.loadNpmTasks("grunt-bower-install-simple");
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     // Default task(s).
     grunt.registerTask('default', ['bower-install-simple']);
     grunt.registerTask('install', ['bower-install-simple', 'requirejs']);
+    grunt.registerTask('install:production', ['bower-install-simple', 'requirejs', 'copy:clean']);
 };
