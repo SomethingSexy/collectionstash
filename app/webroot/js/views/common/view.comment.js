@@ -8,6 +8,11 @@ define(['require', 'marionette', 'text!templates/app/common/comment.mustache', '
             this.permissions = options.permissions;
             this.listenTo(this.model, 'change', this.render);
         },
+        serializeData: function(){
+            var data = this.model.toJSON();
+            data.comment = data.comment.replace(/(?:\\[rn]|[\r\n]+)+/g, '<br />');
+            return data;
+        },
         events: {
             'click ._edit': 'edit',
             'click ._remove': 'removeComment'
