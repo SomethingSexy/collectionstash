@@ -1,5 +1,12 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+
+<h3>Release Notes for v3.0.1</h3>
+- Fixed issue where you could not remove collectibles from wishlist. (#98)
+- Fixed issue where you could not add collectibles to your wishlist. (#97)
+
+<h3>Release Notes for v3.0.0</h3>
+
 <h3>Release Notes for v2.18</h3>
 <ul>
 	<li>Added filters to the user stash page.</li>

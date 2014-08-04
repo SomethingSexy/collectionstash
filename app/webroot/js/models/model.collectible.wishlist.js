@@ -2,7 +2,7 @@ define(['require', 'backbone', 'underscore', 'backbone.trackit'], function(requi
     return Backbone.Model.extend({
         url: function(method, data) {
 
-            var url = '/collectibles_wishlists/collectible';
+            var url = '/collectibles_wish_lists/collectible';
 
             if (!this.isNew()) {
                 url = url + '/' + this.id;
