@@ -42,7 +42,7 @@ class Collectible extends AppModel
     //series field
     'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
     //description field
-    'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Description must be less than 1000 characters.'), 'allowedCharacters' => array('rule' => "/^[a-z0-9\s\r\n &$%#@!*()+_#:.,'\"\\-\\/]+$/i", 'message' => 'Description has invalid characters')),
+    'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Description must be less than 1000 characters.'), 'allowedCharacters' => array('rule' => "/^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'\"\/-]+$/i", 'message' => 'Description has invalid characters')),
     //msrp
     'msrp' => array('rule' => array('money', 'left'), 'required' => false, 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
     //edition_size

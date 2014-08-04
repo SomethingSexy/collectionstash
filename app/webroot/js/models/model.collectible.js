@@ -22,17 +22,19 @@ if (!adminMode) {
                 msg: 'Must be a valid amount.'
             }, {
                 required: false
-            }, {
-                pattern: /^[a-z0-9 &$%#@!*()+_#:.,'"\\-\\/]+$/i,
-                msg: 'Invalid characters'
-            }],
+            }
+            // , {
+            //     pattern: /^[a-z0-9- &$%#@!*()+_#:.,'"\\/]+$/i,
+            //     msg: 'Invalid characters'
+            // }
+            ],
             description: [{
                 rangeLength: [0, 1000],
                 msg: 'Invalid length.'
             }, {
                 required: false
             }, {
-                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_#:.,'"\\-\\/]+$/i,
+                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'"\/-]+$/i,
                 msg: 'Invalid characters'
             }],
             'edition_size': [{
