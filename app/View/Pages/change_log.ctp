@@ -2,6 +2,9 @@
 <h2>Change Log</h2>
 
 <h3>Release Notes for v3.0.1</h3>
+- Fixed issue where you could not submit a new collectible because description kept being invalid. (#101)
+
+<h3>Release Notes for v3.0.1</h3>
 - Fixed issue where you could not remove collectibles from wishlist. (#98)
 - Fixed issue where you could not add collectibles to your wishlist. (#97)
 
