@@ -30,7 +30,7 @@ class Collectible extends AppModel
     //name field
     //'name' => array('rule' =>),
     //Opening this up because I don't see it being a big deal.
-    'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Invalid length.')),
+    'name' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Name is required.'), 'maxLength' => array('rule' => array('maxLength', 200), 'message' => 'Name is too long.')),
     //manufacture field
     //manufacturer is now not required for any types.  This is for customs and pieces that might not have a manufacturer
     'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Must be a valid manufacture.'),
@@ -42,7 +42,7 @@ class Collectible extends AppModel
     //series field
     'series_id' => array('rule' => array('validateSeriesId'), 'message' => 'Please select a valid category.'),
     //description field
-    'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Description must be less than 1000 characters.'), 'allowedCharacters' => array('rule' => "/^[A-Za-z0-9\s&()+_#:.-'\"]+\z/", 'message' => 'Invalid characters')),
+    'description' => array('minLength' => array('rule' => 'notEmpty', 'message' => 'Description is required.'), 'maxLength' => array('rule' => array('maxLength', 1000), 'message' => 'Description must be less than 1000 characters.'), 'allowedCharacters' => array('rule' => "/^[a-z0-9\s\r\n &$%#@!*()+_#:.,'\"\\-\\/]+$/i", 'message' => 'Description has invalid characters')),
     //msrp
     'msrp' => array('rule' => array('money', 'left'), 'required' => false, 'allowEmpty' => true, 'message' => 'Please supply a valid monetary amount.'),
     //edition_size
