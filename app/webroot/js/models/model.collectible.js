@@ -23,7 +23,7 @@ if (!adminMode) {
             }, {
                 required: false
             }, {
-                pattern: /^[a-z0-9 &$%#@!*()+_#:.,'"\\-]+$/i,
+                pattern: /^[a-z0-9 &$%#@!*()+_#:.,'"\\-\\/]+$/i,
                 msg: 'Invalid characters'
             }],
             description: [{
@@ -32,7 +32,7 @@ if (!adminMode) {
             }, {
                 required: false
             }, {
-                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_#:.,'"\\-]+$/i,
+                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_#:.,'"\\-\\/]+$/i,
                 msg: 'Invalid characters'
             }],
             'edition_size': [{
