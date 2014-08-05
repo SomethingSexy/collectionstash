@@ -1,5 +1,11 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.1.0</h3>
+<ul>
+<li>Fixed an issue where editing comments with new lines would not render correctly. (#104)</li>
+<li>Added a sort for comments. (#100)</li>
+</ul>
+
 <h3>Release Notes for v3.0.3</h3>
 <ul>
 <li>Fixed an issue where - were not allowed in collectible description. (#103)</li>
