@@ -1,7 +1,7 @@
 define(['require', 'marionette', 'views/app/user/profile/view.wishlist', 'text!templates/app/user/profile/wishlist.table.mustache', 'text!templates/app/user/profile/wishlist.table.empty.mustache', 'views/app/user/profile/view.wishlist.collectible.row', 'mustache', 'marionette.mustache', 'simplePagination'], function(require, Marionette, WishlistView, template, emptyTemplate, CollectibleView, mustache) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
-        tagName : 'tr',
+        tagName: 'tr',
         template: emptyTemplate
     });
 
@@ -21,7 +21,7 @@ define(['require', 'marionette', 'views/app/user/profile/view.wishlist', 'text!t
                 showPagination: this.collection.state.totalPages > 1
             };
             return data;
-        },    
+        },
         renderMore: function() {
             var self = this;
             var ItemView;
@@ -36,6 +36,9 @@ define(['require', 'marionette', 'views/app/user/profile/view.wishlist', 'text!t
             this.endBuffering();
 
             $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+        },
+        onItemRemoved: function() {
+
         },
         onRender: function() {
             var self = this;
