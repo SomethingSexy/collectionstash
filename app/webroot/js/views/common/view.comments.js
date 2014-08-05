@@ -18,7 +18,8 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
             }
         },
         events: {
-            'click ._addcomment': 'addComment'
+            'click ._addcomment': 'addComment',
+            'click ._sort': 'sortComments'
         },
         addComment: function(event) {
             this.trigger('comment:add');
@@ -28,6 +29,7 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
             this.listenTo(this.collection, "add", this.addChildView);
+            this.listenTo(this.collection, "sort", this.render);
         },
         initialize: function(options) {
             this.permissions = options.permissions;
@@ -36,6 +38,10 @@ define(['require', 'marionette', 'text!templates/app/common/comments.mustache', 
             var data = {};
             data['permissions'] = this.permissions.toJSON();
             return data;
+        },
+        sortComments: function() {
+            this.collection._sortKey = (this.collection._sortKey === 'desc') ? 'asc' : 'desc';
+            this.collection.sort();
         }
     });
 });
