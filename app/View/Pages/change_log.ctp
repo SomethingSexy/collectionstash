@@ -1,15 +1,21 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
 <h3>Release Notes for v3.0.3</h3>
-- Fixed an issue where - were not allowed in collectible description. #103
-- Fixed an issue where comments were not rendering new lines correctly. #102
+<ul>
+<li>Fixed an issue where - were not allowed in collectible description. (#103)</li>
+<li>Fixed an issue where comments were not rendering new lines correctly. (#102)</li>
+</ul>
 
 <h3>Release Notes for v3.0.2</h3>
-- Fixed issue where you could not submit a new collectible because description kept being invalid. (#101)
+<ul>
+<li>Fixed issue where you could not submit a new collectible because description kept being invalid. (#101)</li>
+</ul>
 
 <h3>Release Notes for v3.0.1</h3>
-- Fixed issue where you could not remove collectibles from wishlist. (#98)
-- Fixed issue where you could not add collectibles to your wishlist. (#97)
+<ul>
+<li>Fixed issue where you could not remove collectibles from wishlist. (#98)</li>
+<li>Fixed issue where you could not add collectibles to your wishlist. (#97)</li>
+</ul>
 
 <h3>Release Notes for v3.0.0</h3>
 

@@ -8,6 +8,11 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         initialize: function(options) {
             this.model.startTracking();
         },
+        serializeData: function(){
+            var data = this.model.toJSON();
+            data.comment = data.comment.replace(/\\n/g, "\n");
+            return data;
+        },        
         onRender: function() {
             var self = this;
             this.errors = [];
