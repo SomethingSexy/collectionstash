@@ -188,7 +188,7 @@ class AutoLoginComponent extends Component {
 		$controller -> request -> data[$this -> model][$this -> password] = $cookie['password'];
 
 		if ($this -> Auth -> login()) {
-			CakeLog::write('info', 'login' . date("Y-m-d H:i:s", time()));
+			CakeLog::write('info', 'auto_login' . date("Y-m-d H:i:s", time()));
 			$this -> debug('login', $this -> Cookie, $this -> Auth -> user());
 
 			if (in_array('_autoLogin', get_class_methods($controller))) {

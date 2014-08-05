@@ -1,5 +1,5 @@
 <?php
-App::import('Core', 'Validation');
+App::uses('Validation', 'Utility');
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUser extends AppModel

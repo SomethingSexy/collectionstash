@@ -256,9 +256,6 @@
 	<script id="template-stash-add" type="text/x-tmpl">
 		<?php echo $this -> element('stash_add'); ?>	
 	</script>
-	<script id="template-stash-listing-edit" type="text/x-tmpl">
-		<?php echo $this -> element('stash_edit_listing'); ?>	
-	</script>
 		<?php
 		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/blueimp-gallery.min');
 		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min');
