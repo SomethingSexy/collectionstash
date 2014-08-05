@@ -304,7 +304,7 @@ $(function() {
 			collection : userUploads
 		}).render().el);
 
-		equalHeight($(".thumbnail"));
+		//equalHeight($(".thumbnail"));
 	});
 
 });
