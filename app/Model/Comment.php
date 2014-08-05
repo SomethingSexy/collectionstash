@@ -14,6 +14,7 @@ class Comment extends AppModel
             if (isset($results[$key]['Comment'])) {
                 if (isset($results[$key]['Comment']['created'])) {
                     $datetime = strtotime($results[$key]['Comment']['created']);
+                    $results[$key]['Comment']['sort_created'] = $datetime;
                     $mysqldate = date("m/d/y g:i A", $datetime);
                     $results[$key]['Comment']['formatted_created'] = $mysqldate;
                 }
