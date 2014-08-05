@@ -60,6 +60,21 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         next: function(event) {
             this.collection.getNextPage();
         },
+        onItemRemoved: function() {
+            if (this.handler.wookmarkInstance) {
+                this.handler.wookmarkInstance.clear();
+            }
+            this.handler = $('._tiles .tile', this.el);
+            // Call the layout function.
+            this.handler.wookmark({
+                autoResize: true, // This will auto-update the layout when the browser window is resized.
+                container: $('._tiles', this.el),
+                verticalOffset: 20,
+                align: 'left'
+            });
+            // Update the layout.
+            this.handler.wookmark();
+        },
         renderMore: function() {
             var self = this;
             var ItemView;

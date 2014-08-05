@@ -22,7 +22,7 @@ define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!temp
                 showPagination: this.collection.state.totalPages > 1
             };
             return data;
-        },        
+        },
         renderMore: function() {
             var self = this;
             var ItemView;
@@ -38,6 +38,9 @@ define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!temp
 
             $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
         },
+        onItemRemoved: function() {
+
+        },
         onRender: function() {
             var self = this;
             $('._pagination', this.el).pagination({
@@ -51,4 +54,3 @@ define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!temp
         }
     });
 });
-
