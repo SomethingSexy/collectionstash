@@ -10,7 +10,7 @@
 
 	<div class="fields">
 		<?php echo $this -> element('flash'); ?>
-		<input id="UserUsername" type="text" value="" placeholder="Username" maxlength="50" name="data[User][username]">
+		<input id="UserUsername" type="text" value="" placeholder="Username or email" maxlength="50" name="data[User][username]">
 		<?php echo $this -> Form -> input('password', array('label' => __('Password'), 'div' => false, 'label' => false, 'placeholder' => 'Password', 'error' => array('attributes' => array('wrap' => 'span', 'class' => 'help-inline')))); ?>
 	</div>
 	<?php echo $this -> Html -> link('Forgot Password?', array('admin' => false, 'action' => 'forgotPassword', 'controller' => 'forgotten_requests'), array('class' => 'forgot-password')); ?>

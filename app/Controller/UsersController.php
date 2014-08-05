@@ -1,4 +1,5 @@
 <?php
+App::uses('Validation', 'Utility');
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
@@ -172,22 +173,31 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $this->request->data = Sanitize::clean($this->request->data, array('encode' => false));
             $this->User->recursive = 0;
+            $results = null;
+            if (isset($this->request->data['User']['username']) && Validation::email($this->request->data['User']['username'])) {
+                $this->request->data['User']['email'] = $this->request->data['User']['username'];
+                $this->Auth->authenticate['Form'] = array('fields' => array('username' => 'email'));
+                $results = $this->User->getUserByEmail($this->request->data);
+            } else {
+                $results = $this->User->getUser($this->request->data['User']['username']);
+            }
             
-            $results = $this->User->getUser($this->request->data['User']['username']);
             if ($results) {
                 if ($results['User']['status'] == 0) {
                     if (!$results['User']['force_password_reset']) {
                         //This seems redundant might make more since to auto login them in because I already have the data
                         if ($this->Auth->login()) {
-                            $autoLogin = isset($this->request->data['User']['auto_login']) ? $this->request->data['User']['auto_login'] : false;
-                            if ($autoLogin) {
-                                $this->AutoLogin->write($this->request->data['User']['username'], $this->request->data['User']['password']);
-                            } else {
-                                $this->AutoLogin->delete();
-                            }
                             $user = $this->Auth->user();
                             $this->User->id = $user['id'];
                             $this->User->saveField('last_login', date("Y-m-d H:i:s", time()));
+
+                            $autoLogin = isset($this->request->data['User']['auto_login']) ? $this->request->data['User']['auto_login'] : false;
+                            if ($autoLogin) {
+                                $this->AutoLogin->write($user['username'], $this->request->data['User']['password']);
+                            } else {
+                                $this->AutoLogin->delete();
+                            }
+                            
                             CakeLog::write('info', $results);
                             $this->Session->write('user', $user);
                             
@@ -199,7 +209,7 @@ class UsersController extends AppController
                             $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['id']);
                             $this->Session->write('notificationsCount', $totalNotifications);
                             
-                            $this->redirect('/profile/'. $user['username']);
+                            $this->redirect('/profile/' . $user['username']);
                         } else {
                             $this->Session->setFlash(__('Username or password is incorrect', true), null, null, 'error');
                             $this->request->data['User']['password'] = '';
