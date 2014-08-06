@@ -1,5 +1,12 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.2.0</h3>
+<ul>
+<li>Fixed an issue with the images on the photo sharing page. (#105).</li>
+<li>Fixed the stash page so when collectibles are removed the tiles realign. (#99).</li>
+<li>Updated the login page so that users can login via email as well.</li>
+</ul>
+
 <h3>Release Notes for v3.1.0</h3>
 <ul>
 <li>Fixed an issue where editing comments with new lines would not render correctly. (#104)</li>
