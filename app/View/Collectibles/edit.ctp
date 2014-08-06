@@ -1,21 +1,21 @@
 <?php
-echo $this -> Minify -> script('jquery.form', array('inline' => false));
-echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
-echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
+// echo $this -> Minify -> script('jquery.form', array('inline' => false));
+// echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
+// echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
 echo $this -> Minify -> script('cs.attribute', array('inline' => false));
-echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
-echo $this -> Minify -> script('models/model.status', array('inline' => false));
-echo $this -> Minify -> script('views/view.status', array('inline' => false));
-echo $this -> Minify -> script('views/view.alert', array('inline' => false));
-echo $this -> Minify -> script('views/view.collectible.delete', array('inline' => false));
-echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
+// echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
+// echo $this -> Minify -> script('models/model.status', array('inline' => false));
+// echo $this -> Minify -> script('views/view.status', array('inline' => false));
+// echo $this -> Minify -> script('views/view.alert', array('inline' => false));
+// echo $this -> Minify -> script('views/view.collectible.delete', array('inline' => false));
+// echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
 echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
-echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
-echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
-echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
+// echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
+// echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
+// echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
+// echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
+// echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
+// echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
 
 echo $this -> Minify -> script('locale', array('inline' => false));
 ?>

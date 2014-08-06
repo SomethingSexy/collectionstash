@@ -1,5 +1,5 @@
 <?php
-echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
+echo $this -> Html -> script('/bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal', array('inline' => false));
 echo $this -> Minify -> script('models/model.userupload', array('inline' => false));
 echo $this -> Minify -> script('collections/collection.useruploads', array('inline' => false));
 echo $this -> Minify -> script('pages/page.useruploads.edit', array('inline' => false));

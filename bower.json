@@ -33,7 +33,12 @@
         "blueimp-gallery": "2.15.0",
         "rickshaw": "https://github.com/shutterstock/rickshaw.git#1.5.0",
         "d3": "3.4.8",
-        "blockies": "https://github.com/download13/blockies.git#v0.1.0"
+        "blockies": "https://github.com/download13/blockies.git#v0.1.0",
+        "jquery-form": "3.50",
+        "jquery.treeview": "https://github.com/jzaefferer/jquery-treeview.git#master",
+        "backbone.bootstrap-modal": "https://github.com/SomethingSexy/backbone.bootstrap-modal.git#master",
+        "blueimp-tmpl" : "2.5.4",
+        "blueimp-load-image" : "1.11.2"
     },
     "devDependencies": {},
     "resolutions": {
