@@ -41,7 +41,12 @@ requirejs.config({
         'd3': '../bower_components/d3/d3.min',
         'rickshaw': '../bower_components/rickshaw/rickshaw.min',
         'jquery-ui': '../bower_components/jquery-ui/ui',
-        'blockies': '../bower_components/blockies/blockies'
+        'blockies': '../bower_components/blockies/blockies',
+        'jquery.form': '../bower_components/jquery-form/jquery.form',
+        "jquery.treeview": "../bower_components/jquery.treeview/jquery.treeview",
+        "backbone.bootstrap-modal": "../bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal",
+        "tmpl" : "../bower_components/blueimp-tmpl/js/tmpl",
+        "load-image" : "../bower_components/blueimp-load-image/js/load-image"
     },
     shim: {
         'dust': {
@@ -77,6 +82,15 @@ requirejs.config({
         },
         'blockies': {
             exports: 'blockies'
+        },
+        'jquery.treeview': {
+            deps: ['jquery']
+        },
+        'cs.core.tree': {
+            deps: ['jquery']
+        },
+        'jquery.getimagedata': {
+            deps: ['jquery']
         }
     }
 });

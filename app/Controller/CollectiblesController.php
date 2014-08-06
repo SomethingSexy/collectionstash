@@ -85,6 +85,7 @@ class CollectiblesController extends AppController
      * New view but not sure what this is going to do yet
      */
     public function edit($id) {
+        $this->layout = 'require';
         // Need to check login
         $this->checkLogIn();
         // Need to get the collectible
@@ -169,7 +170,7 @@ class CollectiblesController extends AppController
         foreach ($extractCollectibles as $key => $value) {
             $extractCollectibles[$key]['CollectiblesUpload'] = $collectibles[$key]['CollectiblesUpload'];
         }
-
+        
         $this->set('collectibles', $extractCollectibles);
     }
     

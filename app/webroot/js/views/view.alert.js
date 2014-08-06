@@ -1,3 +1,4 @@
+// TODO: this has been deprecated and replaced by views/common/view.alert
 var AlertView = Backbone.View.extend({
 	template : 'alert',
 	events : {
