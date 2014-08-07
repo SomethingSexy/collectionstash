@@ -142,6 +142,9 @@ class Collectible extends AppModel
                         return false;
                     }
                 }
+            } else {
+                // if they are not set, set them to null so they save appropariately
+                $returnData['Collectible']['retailer_id'] = null;
             }
         }
         // if it is a custom, also set official to false

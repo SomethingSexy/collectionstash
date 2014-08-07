@@ -1,4 +1,5 @@
 define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbone, $, SeriesModel) {
+    var lastResults = [];
     var CollectibleView = Backbone.View.extend({
         className: "col-md-12",
         events: {
@@ -19,7 +20,7 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
             this.template = options.template;
             this.manufacturers = options.manufacturers;
             this.currencies = options.currencies;
-            this.retailers = options.retailers;
+            // this.retailers = options.retailers;
             this.scales = options.scales;
             this.collectibleType = options.collectibleType;
             this.brands = options.brands;
@@ -225,13 +226,90 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 $(self.el).html(output);
             });
 
-            $('.retailers-typeahead .typeahead', self.el).select2({
-                data: {
-                    results: this.retailers,
-                    // text: 'tag'
+            $('.retailers-typeahead', self.el).select2({
+                placeholder: 'Search or add a new venue/retailer.',
+                minimumInputLength: 1,
+                ajax: {
+                    url: "/retailers/retailers",
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            query: term, // search term
+                            page_limit: 100
+                        };
+                    },
+                    results: function(data, page) {
+                        lastResults = data;
+                        return {
+                            results: data
+                        };
+                    }
                 },
-                // formatSelection: format,
-                // formatResult: format
+                initSelection: function(element, callback) {
+                    // the input tag has a value attribute preloaded that points to a preselected movie's id
+                    // this function resolves that id attribute to an object that select2 can render
+                    // using its formatResult renderer - that way the movie name is shown preselected
+                    var id = $(element).val();
+                    if (id !== "") {
+                        callback({
+                            id: id,
+                            name: self.model.get('retailer')
+                        });
+                    }
+                },
+                formatResult: function(item) {
+                    return item.name;
+                },
+                formatSelection: function(item) {
+                    return item.name;
+                },
+                createSearchChoice: function(term, data) {
+                    if (lastResults.some(function(r) {
+                        return r.name == term
+                    })) {
+                        return {
+                            id: data.id,
+                            name: term,
+                            created: false
+                        };
+                    } else {
+                        return {
+                            id: term,
+                            name: term,
+                            created: true
+                        };
+                    }
+                },
+                allowClear: true,
+                dropdownCssClass: "bigdrop"
+            }).on('change', function(val, added, removed) {
+                var data = $('.retailers-typeahead', self.el).select2('data');
+                if (!data || !data.name) {
+                    self.model.unset('retailer', {
+                        forceUpdate: true
+                    });
+                    self.model.unset('retailer_id', {
+                        forceUpdate: true
+                    });
+
+                    return;
+                }
+
+                if (data.created) {
+                    self.model.set({
+                        retailer: data.name,
+
+                    }, {
+                        forceUpdate: true
+                    });
+                } else {
+                    self.model.set({
+                        retailer: data.name,
+                        retailer_id: data.id
+                    }, {
+                        forceUpdate: true
+                    });
+                }
             });
 
 

@@ -1,4 +1,5 @@
 define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+    var lastResults = [];
     var AddPersonView = Marionette.ItemView.extend({
         template: template,
         events: {
@@ -11,7 +12,7 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
         onRender: function() {
             var self = this;
             $('.artists-typeahead', this.el).select2({
-                placeholder: 'Search for a person',
+                placeholder: 'Search or add a new person.',
                 minimumInputLength: 1,
                 ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                     url: "/artists/persons",
@@ -22,8 +23,8 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                             page_limit: 100
                         };
                     },
-                    results: function(data, page) { // parse the results into the format expected by Select2.
-                        // since we are using custom formatting functions we do not need to alter remote JSON data
+                    results: function(data, page) { 
+                        lastResults = data;
                         return {
                             results: data
                         };
@@ -35,6 +36,22 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                 formatSelection: function(item) {
                     return item.name;
                 },
+                createSearchChoice: function(term, data) {
+                    if (lastResults.some(function(r) {
+                        return r.name == term
+                    })) {
+                        return {
+                            id: data.id,
+                            name: name
+                        };
+                    } else {
+                        return {
+                            id: term,
+                            name: term
+                        };
+                    }
+                },
+                allowClear: true,
                 dropdownCssClass: "bigdrop"
             });
         },

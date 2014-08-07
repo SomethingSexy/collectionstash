@@ -215,8 +215,9 @@
 		<div class="form-group">
 			<label class="col-lg-3 control-label" for="inputRetailer">Venue / Exclusive Retailer</label>
 			<div class="col-lg-6">
-				<div class="retailers-typeahead">
-					<input autocomplete="off" type="text" id="inputRetailer" class="form-control typeahead" name="retailer" value="{collectible.retailer}">
+				<div class="">
+					<!-- <input autocomplete="off" type="text" id="inputRetailer" class="form-control typeahead" name="retailer" value="{collectible.retailer}"> -->
+					<input type="hidden" class="bigdrop select2-offscreen retailers-typeahead" value="{collectible.retailer_id}" style="width: 100%;" tabindex="-1" title="">
 				</div>
 				<span class="help-inline">If this collectible was only released at a certain venue or store enter that here.  Please use the autocomplete list to try and select a venue or store that has already been added.</span>
 			</div>
