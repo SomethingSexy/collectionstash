@@ -61,7 +61,7 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                 }, {
                     wait: true,
                     success: function(model, response) {
-                        var message = "The artist has been successfully added!";
+                        var message = "The person has been successfully added!";
                         if (response.response.data) {
                             if (response.response.data.hasOwnProperty('isEdit')) {
                                 if (response.response.data.isEdit) {
