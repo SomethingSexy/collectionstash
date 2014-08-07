@@ -9,7 +9,7 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
         onRender: function() {
             var self = this;
             $('input.tags-typeahead', this.el).select2({
-                placeholder: 'Search for a tag.',
+                placeholder: 'Search or add a new tag.',
                 minimumInputLength: 1,
                 ajax: {
                     url: "/tags/tags",
