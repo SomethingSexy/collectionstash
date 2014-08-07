@@ -10,8 +10,36 @@ define(['backbone', 'jquery',
     'views/view.status',
     'collections/collection.collectibles',
     'collections/collection.parts',
+    // todo: old templates remove as converted to mustache and individual view files
+    'text!templates/collectibles/collectible.default.dust',
+    'text!templates/collectibles/photo.default.dust',
+    'text!templates/collectibles/attributes.default.dust',
+    'text!templates/collectibles/attributecollectible.default.dust',
+    'text!templates/collectibles/status.dust',
+    'text!templates/collectibles/message.dust',
+    'text!templates/collectibles/message.error.severe.dust',
+    'text!templates/collectibles/message.duplist.dust',
+    'text!templates/collectibles/manufacturer.add.dust',
+    'text!templates/collectibles/manufacturer.edit.dust',
+    'text!templates/collectibles/modal.dust',
+    'text!templates/collectibles/manufacturer.series.add.dust',
+    'text!templates/collectibles/attribute.upload.dust',
+    'text!templates/collectibles/directional.dust',
+    'text!templates/collectibles/attribute.add.existing.dust',
+    'text!templates/collectibles/attribute.add.existing.search.dust',
+    'text!templates/common/paging.dust',
+    'text!templates/collectibles/directional.custom.dust',
+    'text!templates/collectibles/collectible.custom.dust',
+    'text!templates/collectibles/attribute.add.existing.search.part.dust',
+    'text!templates/collectibles/attribute.default.dust',
+    'text!templates/attributes/attributes.remove.duplicate.dust',
+    'text!templates/collectibles/collectible.original.dust',
+    'text!templates/collectibles/directional.original.dust',
+    'text!templates/collectibles/attribute.add.new.dust',
+    'text!templates/collectibles/collectible.delete.dust',
+    'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation', 'cs.attribute'
-], function(Backbone, $, AlertView, CollectibleDeleteView, ManufacturerView, CollectibleView, PersonsView, TagsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart) {
+], function(Backbone, $, AlertView, CollectibleDeleteView, ManufacturerView, CollectibleView, PersonsView, TagsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -20,6 +48,35 @@ define(['backbone', 'jquery',
      * TODO: Enhancements
      *  - Update so that there is a standard modal view to render things too
      */
+
+    dust.loadSource(dust.compile(collectibleTemplate, 'collectible.default.edit'));
+    dust.loadSource(dust.compile(photoTemplate, 'photo.default.edit'));
+    dust.loadSource(dust.compile(attributesTemplate, 'attributes.default.edit'));
+    dust.loadSource(dust.compile(attributeTemplate, 'attributecollectible.default.edit'));
+    dust.loadSource(dust.compile(statusTemplate, 'status.edit'));
+    dust.loadSource(dust.compile(messageTemplate, 'message.edit'));
+    dust.loadSource(dust.compile(messageSevereTemplate, 'message.error.severe'));
+    dust.loadSource(dust.compile(dupListTemplate, 'message.duplist'));
+    dust.loadSource(dust.compile(manufacturerAddTemplate, 'manufacturer.add'));
+    dust.loadSource(dust.compile(manufacturerEditTemplate, 'manufacturer.edit'));
+    dust.loadSource(dust.compile(modalTemplate, 'modal'));
+    dust.loadSource(dust.compile(manufacturerSeriesAddTemplate, 'manufacturer.series.add'));
+    dust.loadSource(dust.compile(attributeUploadTemplate, 'attribute.photo.edit'));
+    dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
+    dust.loadSource(dust.compile(attributeAddExistingTemplate, 'attribute.add.existing'));
+    dust.loadSource(dust.compile(attributeAddExistingSearchTemplate, 'attribute.add.existing.search'));
+    dust.loadSource(dust.compile(directionalCustomTemplate, 'directional.custom'));
+    dust.loadSource(dust.compile(customTemplate, 'collectible.custom.edit'));
+    dust.loadSource(dust.compile(attributeAddExistingSearchPartTemplate, 'attribute.add.existing.search.part'));
+    dust.loadSource(dust.compile(partTemplate, 'attribute.default.edit'));
+    dust.loadSource(dust.compile(attributeRemoveDuplicate, 'attribute.remove.duplicate'));
+    dust.loadSource(dust.compile(pagingTemplate, 'paging'));
+    dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
+    dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
+    dust.loadSource(dust.compile(attributeAddNewTemplate, 'attribute.add.new'));
+    dust.loadSource(dust.compile(collectibleDeleteTemplate, 'collectible.delete'));
+    dust.loadSource(dust.compile(alertTemplate, 'alert'));
+
     var printId = '10';
     var pageEvents = _.extend({}, Backbone.Events);
     var ErrorModel = Backbone.Model.extend({});
@@ -1907,278 +1964,195 @@ define(['backbone', 'jquery',
                     'z-index': 999999
                 }
             });
-            // Get all of the data here
-            $.when(
-                //
-                $.get('/templates/collectibles/collectible.default.dust'),
-                //
-                $.get('/templates/collectibles/photo.default.dust'),
-                //
-                $.get('/templates/collectibles/attributes.default.dust'),
-                //
-                $.get('/templates/collectibles/attributecollectible.default.dust'),
-                //
-                $.get('/templates/collectibles/status.dust'),
-                //
-                $.get('/templates/collectibles/message.dust'),
-                //
-                $.get('/templates/collectibles/message.error.severe.dust'),
-                //
-                $.get('/templates/collectibles/message.duplist.dust'),
-                //
-                $.get('/templates/collectibles/manufacturer.add.dust'),
-                //
-                $.get('/templates/collectibles/manufacturer.edit.dust'),
-                //
-                $.get('/templates/collectibles/modal.dust'),
-                //
-                $.get('/templates/collectibles/manufacturer.series.add.dust'),
-                //
-                $.get('/templates/collectibles/attribute.upload.dust'),
-                //
-                $.get('/templates/collectibles/directional.dust'),
-                //
-                $.get('/templates/collectibles/attribute.add.existing.dust'),
-                //
-                $.get('/templates/collectibles/attribute.add.existing.search.dust'),
-                //
-                $.get('/templates/common/paging.dust'),
-                //
-                $.get('/templates/collectibles/directional.custom.dust'),
-                //
-                $.get('/templates/collectibles/collectible.custom.dust'),
-                //
-                $.get('/templates/collectibles/attribute.add.existing.search.part.dust'),
-                //
-                $.get('/templates/collectibles/attribute.default.dust'),
-                //
-                $.get('/templates/attributes/attributes.remove.duplicate.dust'),
-                //
-                $.get('/templates/collectibles/collectible.original.dust'),
-                //
-                $.get('/templates/collectibles/directional.original.dust'),
-                //
-                $.get('/templates/collectibles/attribute.add.new.dust'),
-                //
-                $.get('/templates/collectibles/collectible.delete.dust'),
-                //
-                $.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
-                dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
-                dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
-                dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
-                dust.loadSource(dust.compile(attributeTemplate[0], 'attributecollectible.default.edit'));
-                dust.loadSource(dust.compile(statusTemplate[0], 'status.edit'));
-                dust.loadSource(dust.compile(messageTemplate[0], 'message.edit'));
-                dust.loadSource(dust.compile(messageSevereTemplate[0], 'message.error.severe'));
-                dust.loadSource(dust.compile(dupListTemplate[0], 'message.duplist'));
-                dust.loadSource(dust.compile(manufacturerAddTemplate[0], 'manufacturer.add'));
-                dust.loadSource(dust.compile(manufacturerEditTemplate[0], 'manufacturer.edit'));
-                dust.loadSource(dust.compile(modalTemplate[0], 'modal'));
-                dust.loadSource(dust.compile(manufacturerSeriesAddTemplate[0], 'manufacturer.series.add'));
-                dust.loadSource(dust.compile(attributeUploadTemplate[0], 'attribute.photo.edit'));
-                dust.loadSource(dust.compile(directionalTemplate[0], 'directional.page'));
-                dust.loadSource(dust.compile(attributeAddExistingTemplate[0], 'attribute.add.existing'));
-                dust.loadSource(dust.compile(attributeAddExistingSearchTemplate[0], 'attribute.add.existing.search'));
-                dust.loadSource(dust.compile(directionalCustomTemplate[0], 'directional.custom'));
-                dust.loadSource(dust.compile(customTemplate[0], 'collectible.custom.edit'));
-                dust.loadSource(dust.compile(attributeAddExistingSearchPartTemplate[0], 'attribute.add.existing.search.part'));
-                dust.loadSource(dust.compile(partTemplate[0], 'attribute.default.edit'));
-                dust.loadSource(dust.compile(attributeRemoveDuplicate[0], 'attribute.remove.duplicate'));
-                dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
-                dust.loadSource(dust.compile(originalTemplate[0], 'collectible.original.edit'));
-                dust.loadSource(dust.compile(directionalOriginalTemplate[0], 'directional.original'));
-                dust.loadSource(dust.compile(attributeAddNewTemplate[0], 'attribute.add.new'));
-                dust.loadSource(dust.compile(collectibleDeleteTemplate[0], 'collectible.delete'));
-                dust.loadSource(dust.compile(alertTemplate[0], 'alert'));
-                // Soooo, I could probably make this call when rendering the edit.ctp
-                $.ajax({
-                    url: "/collectibles/getCollectible/" + collectibleId,
-                    dataType: "json",
-                    cache: false,
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        jqXHR;
-                        textStatus;
-                        errorThrown;
-                    },
-                    complete: function(jqXHR, textStatus) {
-                        jqXHR;
-                        textStatus;
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        $.unblockUI();
-                        // Setup the current model
-                        var collectibleModel = new CollectibleModel(data.response.data.collectible.Collectible);
-                        var collectibleTypeModel = new CollectibleTypeModel(data.response.data.collectible.Collectibletype);
-                        // Setup the manufacturer list, this will contain all data for each manufacturer
-                        var manufacturerList = new ManufacturerList(data.response.data.manufacturers);
-                        var allManufacturerList = new ManufacturerList(data.response.data.manufacturesList);
-                        var currencies = new Currencies(data.response.data.currencies);
-                        var scales = new Scales(data.response.data.scales);
-                        var attributes = new Attributes(data.response.data.collectible.AttributesCollectible);
-                        var uploads = new CollectibleUploads(data.response.data.collectible.CollectiblesUpload, {
-                            'id': data.response.data.collectible.Collectible.id
+
+
+            // Soooo, I could probably make this call when rendering the edit.ctp
+            $.ajax({
+                url: "/collectibles/getCollectible/" + collectibleId,
+                dataType: "json",
+                cache: false,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    jqXHR;
+                    textStatus;
+                    errorThrown;
+                },
+                complete: function(jqXHR, textStatus) {
+                    jqXHR;
+                    textStatus;
+                },
+                success: function(data, textStatus, jqXHR) {
+                    $.unblockUI();
+                    // Setup the current model
+                    var collectibleModel = new CollectibleModel(data.response.data.collectible.Collectible);
+                    var collectibleTypeModel = new CollectibleTypeModel(data.response.data.collectible.Collectibletype);
+                    // Setup the manufacturer list, this will contain all data for each manufacturer
+                    var manufacturerList = new ManufacturerList(data.response.data.manufacturers);
+                    var allManufacturerList = new ManufacturerList(data.response.data.manufacturesList);
+                    var currencies = new Currencies(data.response.data.currencies);
+                    var scales = new Scales(data.response.data.scales);
+                    var attributes = new Attributes(data.response.data.collectible.AttributesCollectible);
+                    var uploads = new CollectibleUploads(data.response.data.collectible.CollectiblesUpload, {
+                        'id': data.response.data.collectible.Collectible.id
+                    });
+                    var brands = new Brands(data.response.data.brands);
+                    var tags = new Tags(data.response.data.collectible.CollectiblesTag);
+                    var artists = new Artists(data.response.data.collectible.ArtistsCollectible);
+                    var variants = new Backbone.Collection(data.response.data.variants);
+                    var status = new Status();
+                    status.set({
+                        id: data.response.data.collectible.Collectible.id,
+                        status: data.response.data.collectible.Status
+                    }, {
+                        silent: true
+                    });
+                    var retailersArray = [];
+                    _.each(data.response.data.retailers, function(retailer) {
+                        retailersArray.push(retailer.Retailer.name);
+                    });
+                    // This could probably go in the init method but works here for now
+                    var selectedManufacturer = null;
+                    _.each(manufacturerList.models, function(manufacturer) {
+                        if (manufacturer.get('id') === collectibleModel.get('manufacture_id')) {
+                            selectedManufacturer = manufacturer;
+                            return;
+                        }
+                    });
+                    // Setup global events
+                    pageEvents.on('status:change:error', function(errors) {
+                        if (messageView) {
+                            messageView.remove();
+                            messageView = null;
+                        }
+                        messageView = new MessageView({
+                            errors: new Errors(errors)
                         });
-                        var brands = new Brands(data.response.data.brands);
-                        var tags = new Tags(data.response.data.collectible.CollectiblesTag);
-                        var artists = new Artists(data.response.data.collectible.ArtistsCollectible);
-                        var variants = new Backbone.Collection(data.response.data.variants);
-                        var status = new Status();
+                        $('#message-container').html(messageView.render().el);
+                    });
+                    pageEvents.on('status:change:error:severe', function() {
+                        if (messageView) {
+                            messageView.remove();
+                            messageView = null;
+                        }
+                        messageView = new SevereMessageView({});
+                        $('#message-container').html(messageView.render().el);
+                    });
+                    pageEvents.on('status:change:dupList', function(collectibles) {
+                        hasDupList = true;
                         status.set({
-                            id: data.response.data.collectible.Collectible.id,
-                            status: data.response.data.collectible.Status
-                        }, {
-                            silent: true
+                            'hasDupList': hasDupList
                         });
-                        var retailersArray = [];
-                        _.each(data.response.data.retailers, function(retailer) {
-                            retailersArray.push(retailer.Retailer.name);
-                        });
-                        // This could probably go in the init method but works here for now
-                        var selectedManufacturer = null;
-                        _.each(manufacturerList.models, function(manufacturer) {
-                            if (manufacturer.get('id') === collectibleModel.get('manufacture_id')) {
-                                selectedManufacturer = manufacturer;
-                                return;
-                            }
-                        });
-                        // Setup global events
-                        pageEvents.on('status:change:error', function(errors) {
-                            if (messageView) {
-                                messageView.remove();
-                                messageView = null;
-                            }
-                            messageView = new MessageView({
-                                errors: new Errors(errors)
-                            });
-                            $('#message-container').html(messageView.render().el);
-                        });
-                        pageEvents.on('status:change:error:severe', function() {
-                            if (messageView) {
-                                messageView.remove();
-                                messageView = null;
-                            }
-                            messageView = new SevereMessageView({});
-                            $('#message-container').html(messageView.render().el);
-                        });
-                        pageEvents.on('status:change:dupList', function(collectibles) {
-                            hasDupList = true;
-                            status.set({
-                                'hasDupList': hasDupList
-                            });
-                            if (messageView) {
-                                messageView.remove();
-                                messageView = null;
-                            }
-                            messageView = new DupListMessageView({
-                                collection: new Collectibles(collectibles)
-                            });
-                            $('#message-container').html(messageView.render().el);
-                        });
-                        pageEvents.on('upload:close', function() {
-                            uploads.fetch();
-                        });
-                        // Setup views
-                        var collectibleViewData = {
-                            model: collectibleModel,
-                            manufacturers: manufacturerList,
-                            manufacturer: selectedManufacturer,
-                            currencies: currencies,
-                            retailers: retailersArray,
-                            scales: scales,
-                            status: status,
-                            collectibleType: collectibleTypeModel,
-                            brands: brands,
-                            template: 'collectible.default.edit',
-                            pageEvents: pageEvents
-                        };
-                        if (collectibleModel.get('custom')) {
-                            collectibleViewData.template = 'collectible.custom.edit';
-                            collectibleViewData.customStatuses = new Backbone.Collection(data.response.data.customStatuses);
-                        } else if (collectibleModel.get('original')) {
-                            collectibleViewData.template = 'collectible.original.edit';
+                        if (messageView) {
+                            messageView.remove();
+                            messageView = null;
                         }
-                        //TODO: At some point it might warrant a whole new view for customs
-                        var collectibleView = new CollectibleView(collectibleViewData);
-                        $('#photo-container').append(new PhotoView({
-                            collection: uploads,
-                            eventManager: pageEvents
-                        }).render().el);
-                        $('#collectible-container').append(new PersonsView({
-                            collection: artists,
-                            collectibleType: collectibleTypeModel
-                        }).render().el);
-                        $('#collectible-container').append(collectibleView.render().el);
-                        $('#attributes-container').append(new AttributesView({
-                            collection: attributes,
-                            status: status,
-                            artists: new Backbone.Collection(data.response.data.artists),
-                            manufacturers: allManufacturerList,
-                            categories: new Backbone.Collection(data.response.data.categories),
-                            collectible: collectibleModel,
-                            scales: scales
-                        }).render().el);
-                        var statusView = new StatusView({
-                            model: status,
-                            collectible: collectibleModel,
-                            // we set allow edit here and then base everything off of status in the template, kind of sucks
-                            allowEdit: true,
-                            allowDelete: allowDelete
+                        messageView = new DupListMessageView({
+                            collection: new Collectibles(collectibles)
                         });
-                        $('#status-container').html(statusView.render().el);
-                        // if there is a delete from the status view that is a prompt
-                        statusView.on('delete:collectible:prompt', function() {
-                            // display modal about delete, this is most likely for cases where this
-                            // collectible is active and we need to delete it
-                            // this will allow the user to enter in an id to replace this collectible with
-                            var collectibleDeleteView = new CollectibleDeleteView({
-                                model: collectibleModel,
-                                variants: variants
-                            });
-                            var modal = new Backbone.BootstrapModal({
-                                content: collectibleDeleteView,
-                                title: 'Delete Collectible',
-                                animate: true,
-                                okCloses: false
-                            }).open();
-                        }, this);
-                        $('#collectible-container').append(new TagsView({
-                            collection: tags
-                        }).render().el);
-
-
-                        // Make sure we only have one
-                        var messageView = null;
-                        // If the status has changed and I am on the view
-                        //page and they change the status and it is a draft
-                        // go to the edit page
-                        status.on('sync', function() {
-                            if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
-                                window.location.href = '/collectibles/view/' + this.id;
-                            }
-                        }, status);
-                        collectibleModel.on('destroy', function() {
-                            window.location.href = '/users/home';
-                        });
-                        if (collectibleModel.get('custom')) {
-                            // view is overkill here
-                            dust.render('directional.custom', {}, function(error, output) {
-                                $('#directional-text-container').html(output);
-                            });
-                        } else if (collectibleModel.get('original')) {
-                            // view is overkill here
-                            dust.render('directional.original', {}, function(error, output) {
-                                $('#directional-text-container').html(output);
-                            });
-                        } else {
-                            // view is overkill here
-                            dust.render('directional.page', {}, function(error, output) {
-                                $('#directional-text-container').html(output);
-                            });
-                        }
+                        $('#message-container').html(messageView.render().el);
+                    });
+                    pageEvents.on('upload:close', function() {
+                        uploads.fetch();
+                    });
+                    // Setup views
+                    var collectibleViewData = {
+                        model: collectibleModel,
+                        manufacturers: manufacturerList,
+                        manufacturer: selectedManufacturer,
+                        currencies: currencies,
+                        retailers: retailersArray,
+                        scales: scales,
+                        status: status,
+                        collectibleType: collectibleTypeModel,
+                        brands: brands,
+                        template: 'collectible.default.edit',
+                        pageEvents: pageEvents
+                    };
+                    if (collectibleModel.get('custom')) {
+                        collectibleViewData.template = 'collectible.custom.edit';
+                        collectibleViewData.customStatuses = new Backbone.Collection(data.response.data.customStatuses);
+                    } else if (collectibleModel.get('original')) {
+                        collectibleViewData.template = 'collectible.original.edit';
                     }
-                });
+                    //TODO: At some point it might warrant a whole new view for customs
+                    var collectibleView = new CollectibleView(collectibleViewData);
+                    $('#photo-container').append(new PhotoView({
+                        collection: uploads,
+                        eventManager: pageEvents
+                    }).render().el);
+                    $('#collectible-container').append(new PersonsView({
+                        collection: artists,
+                        collectibleType: collectibleTypeModel
+                    }).render().el);
+                    $('#collectible-container').append(collectibleView.render().el);
+                    $('#attributes-container').append(new AttributesView({
+                        collection: attributes,
+                        status: status,
+                        artists: new Backbone.Collection(data.response.data.artists),
+                        manufacturers: allManufacturerList,
+                        categories: new Backbone.Collection(data.response.data.categories),
+                        collectible: collectibleModel,
+                        scales: scales
+                    }).render().el);
+                    var statusView = new StatusView({
+                        model: status,
+                        collectible: collectibleModel,
+                        // we set allow edit here and then base everything off of status in the template, kind of sucks
+                        allowEdit: true,
+                        allowDelete: allowDelete
+                    });
+                    $('#status-container').html(statusView.render().el);
+                    // if there is a delete from the status view that is a prompt
+                    statusView.on('delete:collectible:prompt', function() {
+                        // display modal about delete, this is most likely for cases where this
+                        // collectible is active and we need to delete it
+                        // this will allow the user to enter in an id to replace this collectible with
+                        var collectibleDeleteView = new CollectibleDeleteView({
+                            model: collectibleModel,
+                            variants: variants
+                        });
+                        var modal = new Backbone.BootstrapModal({
+                            content: collectibleDeleteView,
+                            title: 'Delete Collectible',
+                            animate: true,
+                            okCloses: false
+                        }).open();
+                    }, this);
+                    $('#collectible-container').append(new TagsView({
+                        collection: tags
+                    }).render().el);
+
+
+                    // Make sure we only have one
+                    var messageView = null;
+                    // If the status has changed and I am on the view
+                    //page and they change the status and it is a draft
+                    // go to the edit page
+                    status.on('sync', function() {
+                        if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
+                            window.location.href = '/collectibles/view/' + this.id;
+                        }
+                    }, status);
+                    collectibleModel.on('destroy', function() {
+                        window.location.href = '/users/home';
+                    });
+                    if (collectibleModel.get('custom')) {
+                        // view is overkill here
+                        dust.render('directional.custom', {}, function(error, output) {
+                            $('#directional-text-container').html(output);
+                        });
+                    } else if (collectibleModel.get('original')) {
+                        // view is overkill here
+                        dust.render('directional.original', {}, function(error, output) {
+                            $('#directional-text-container').html(output);
+                        });
+                    } else {
+                        // view is overkill here
+                        dust.render('directional.page', {}, function(error, output) {
+                            $('#directional-text-container').html(output);
+                        });
+                    }
+                }
             });
         }
     }
-
 });
