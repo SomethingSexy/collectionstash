@@ -290,8 +290,8 @@ class CollectiblesController extends AppController
         $scales = $this->Collectible->Scale->find("all", array('contain' => false, 'fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
         $returnData['response']['data']['scales'] = $scales;
         //Grab all retailers.
-        $retailers = $this->Collectible->Retailer->find('all', array('contain' => false));
-        $returnData['response']['data']['retailers'] = $retailers;
+        // $retailers = $this->Collectible->Retailer->find('all', array('contain' => false));
+        // $returnData['response']['data']['retailers'] = $retailers;
         //Grab all currencies
         $currencies = $this->Collectible->Currency->find("all", array('contain' => false, 'fields' => array('Currency.id', 'Currency.iso_code')));
         $returnData['response']['data']['currencies'] = $currencies;

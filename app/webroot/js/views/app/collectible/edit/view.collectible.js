@@ -319,7 +319,7 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
             this.series.fetch();
         },
         save: function(event) {
-        	var self = this;
+            var self = this;
             event.preventDefault();
             $(event.currentTarget).button('loading');
             //TODO: validate
@@ -503,5 +503,5 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
         }
     });
 
-return CollectibleView;
+    return CollectibleView;
 });

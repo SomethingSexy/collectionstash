@@ -9,6 +9,20 @@ define(['marionette', 'text!templates/app/collectible/edit/tags.mustache', 'view
         events: {
             'click .save': 'save',
         },
+        initialize: function() {
+
+        },
+        _initialEvents: function() {
+            // Bind only after composite view is rendered to avoid adding child views
+            // to nonexistent itemViewContainer
+            this.once('render', function() {
+                if (this.collection) {
+                    this.listenTo(this.collection, 'remove', this.render);
+                    this.listenTo(this.collection, 'add', this.render);
+                    this.listenTo(this.collection, "reset", this._renderChildren);
+                }
+            });
+        },
         serializeData: function() {
             return {
                 total: this.collection.length,

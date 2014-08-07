@@ -1,4 +1,5 @@
 define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+    var lastResults = [];
     var AddTagView = Marionette.ItemView.extend({
         template: template,
         events: {
@@ -7,10 +8,10 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
         },
         onRender: function() {
             var self = this;
-            $('.tags-typeahead', this.el).select2({
-                placeholder: 'Search for a person',
+            $('input.tags-typeahead', this.el).select2({
+                placeholder: 'Search for a tag.',
                 minimumInputLength: 1,
-                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                ajax: {
                     url: "/tags/tags",
                     dataType: 'json',
                     data: function(term, page) {
@@ -19,8 +20,8 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
                             page_limit: 100
                         };
                     },
-                    results: function(data, page) { // parse the results into the format expected by Select2.
-                        // since we are using custom formatting functions we do not need to alter remote JSON data
+                    results: function(data, page) {
+                        lastResults = data;
                         return {
                             results: data
                         };
@@ -32,6 +33,22 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
                 formatSelection: function(item) {
                     return item.tag;
                 },
+                createSearchChoice: function(term, data) {
+                    if (lastResults.some(function(r) {
+                        return r.tag == term
+                    })) {
+                        return {
+                            id: data.id,
+                            tag: term
+                        };
+                    } else {
+                        return {
+                            id: term,
+                            tag: term
+                        };
+                    }
+                },
+                allowClear: true,
                 dropdownCssClass: "bigdrop"
             });
             return this;
