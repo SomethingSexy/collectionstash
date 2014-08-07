@@ -2107,8 +2107,6 @@ define(['backbone', 'jquery',
                 //
                 $.get('/templates/collectibles/artist.default.dust'),
                 //
-                $.get('/templates/collectibles/artist.add.default.dust'),
-                //
                 $.get('/templates/collectibles/manufacturer.add.dust'),
                 //
                 $.get('/templates/collectibles/manufacturer.edit.dust'),
@@ -2145,7 +2143,7 @@ define(['backbone', 'jquery',
                 //
                 $.get('/templates/collectibles/collectible.delete.dust'),
                 //
-                $.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, addArtistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
+                $.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, artistsTemplate, artistTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
                 dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
                 dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
                 dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -2159,7 +2157,6 @@ define(['backbone', 'jquery',
                 dust.loadSource(dust.compile(dupListTemplate[0], 'message.duplist'));
                 dust.loadSource(dust.compile(artistsTemplate[0], 'artists.edit'));
                 dust.loadSource(dust.compile(artistTemplate[0], 'artist.edit'));
-                dust.loadSource(dust.compile(addArtistTemplate[0], 'artist.add'));
                 dust.loadSource(dust.compile(manufacturerAddTemplate[0], 'manufacturer.add'));
                 dust.loadSource(dust.compile(manufacturerEditTemplate[0], 'manufacturer.edit'));
                 dust.loadSource(dust.compile(modalTemplate[0], 'modal'));

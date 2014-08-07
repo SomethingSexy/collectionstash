@@ -1,41 +1,43 @@
-define(['backbone', 'select2'], function(Backbone) {
-    var AddPersonView = Backbone.View.extend({
-        template: 'artist.add',
+define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+    var AddPersonView = Marionette.ItemView.extend({
+        template: template,
         events: {
             'click .add-artist': 'addArtist',
             'keypress #inputArtist': 'inputChange'
         },
         initialize: function(options) {
-            // this.artistsHound = new Bloodhound({
-            //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-            //     remote: {
-            //         url: '/artists/getArtistList?query=%QUERY',
-            //         filter: function(list) {
-            //             return $.map(list, function(artist) {
-            //                 return {
-            //                     value: artist
-            //                 };
-            //             });
-            //         }
-            //     }
-            // });
-            // this.artistsHound.initialize();
+
         },
-        render: function() {
+        onRender: function() {
             var self = this;
-            dust.render(this.template, {}, function(error, output) {
-                $(self.el).html(output);
+            $('.artists-typeahead', this.el).select2({
+                placeholder: 'Search for a person',
+                minimumInputLength: 1,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: "/artists/persons",
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            query: term, // search term
+                            page_limit: 100
+                        };
+                    },
+                    results: function(data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter remote JSON data
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                formatResult: function(item) {
+                    return item.name;
+                },
+                formatSelection: function(item) {
+                    return item.name;
+                },
+                dropdownCssClass: "bigdrop"
             });
-            // $('.artists-typeahead .typeahead', this.el).typeahead({
-            //     hint: true,
-            //     highlight: true,
-            //     minLength: 1
-            // }, {
-            //     name: 'artists',
-            //     displayKey: 'value',
-            //     source: this.artistsHound.ttAdapter()
-            // });
+
             return this;
         },
         inputChange: function() {
@@ -43,8 +45,10 @@ define(['backbone', 'select2'], function(Backbone) {
             $('.input-group', this.el).removeClass('has-error');
         },
         addArtist: function() {
-            var self = this;
-            var name = $('#inputArtist', self.el).val();
+            var self = this,
+                valObj = $('.artists-typeahead', this.el).select2('data');
+
+            var name = valObj && valObj.name ? valObj.name : '';
             name = $.trim(name);
             $('.inline-error', self.el).text('');
             $('.input-group', self.el).removeClass('has-error');

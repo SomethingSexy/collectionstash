@@ -3,12 +3,13 @@ class ArtistsController extends AppController {
 
 	public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js', 'Time');
 
-	public function getArtistList() {
+	public function persons() {
+		$this->autoRender = false;
 		$query = $this -> request -> query['query'];
-		$tags = $this -> Artist -> find('list', array('fields' => array('Artist.id', 'Artist.name'), 'conditions' => array('LOWER(Artist.name) LIKE' => strtolower($query) . '%')));
-		$keys = array_keys($tags);
-		$values = array_values($tags);
-		$this -> set('returnData', $values);
+		$persons = $this -> Artist -> find('all', array('fields' => array('Artist.id', 'Artist.name'), 'conditions' => array('LOWER(Artist.name) LIKE' => strtolower($query) . '%')));
+
+
+		$this->response->body(json_encode(Set::extract('/Artist/.', $persons)));
 	}
 
 	public function index($id = null) {
