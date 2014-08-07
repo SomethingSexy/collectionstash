@@ -323,8 +323,10 @@ padding: 20px 15px 15px;
 .stash-layout .profile .pic {
     margin-top: 50px;
     /*width: 120px;*/
-    /*margin-left: 50px;*/
-    margin-bottom: -60px;
+
+/*margin-left: 50px;*/
+
+margin-bottom: -60px;
 }
 .stash-layout .profile .name {
     padding-left: 200px;
@@ -407,11 +409,13 @@ ul.profile-tabs li span.meta {
 .activities .activity > .blockie, .activities .activity > i {
     display: inline-block;
     /*height: 35px;*/
-    /*width: 35px;*/
+
+/*width: 35px;*/
 }
 /*.activities .activity > .blockie {
     border-radius: 3px 3px 3px 3px;
 }*/
+
 .activities .activity > i {
     color: #AAAAAA;
     font-size: 21px;
@@ -425,7 +429,8 @@ ul.profile-tabs li span.meta {
     background: none repeat scroll 0 0 #E7E7E7;
     border-radius: 20px 20px 20px 20px;
     /*content: "";*/
-    display: block;
+
+display: block;
     height: 6px;
     left: 30px;
     position: relative;
@@ -1024,12 +1029,16 @@ margin: 15px auto 30px;
     display: block;
     float: left;
     /*height: 30px;*/
-    margin-top: 5px;
+
+margin-top: 5px;
     margin-right: 5px;
     /*width: 30px;*/
-    /*-webkit-border-radius: 3px;*/
-    /*-moz-border-radius: 3px;*/
-    /*border-radius: 3px;*/
+
+/*-webkit-border-radius: 3px;*/
+
+/*-moz-border-radius: 3px;*/
+
+/*border-radius: 3px;*/
 }
 .messages .message .comment .content, .comments-container .comments .comment .content {
     margin-left: 45px;
@@ -1219,6 +1228,12 @@ background-color: none !important;
 }
 .form-control.selectable {
     cursor: pointer;
+}
+.typehead-add.select2-container .select2-choice {
+    height: 34px;
+}
+.typehead-add.select2-container .select2-choice .select2-chosen {
+    margin-top: 2px;
 }
 .marked-for-sale a {
     color: green;
