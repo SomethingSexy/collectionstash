@@ -2,7 +2,7 @@
 // echo $this -> Minify -> script('jquery.form', array('inline' => false));
 // echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
 // echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
-echo $this -> Minify -> script('cs.attribute', array('inline' => false));
+// echo $this -> Html -> script('cs.attribute', array('inline' => false));
 // echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
 // echo $this -> Minify -> script('models/model.status', array('inline' => false));
 // echo $this -> Minify -> script('views/view.status', array('inline' => false));

@@ -45,10 +45,10 @@ requirejs.config({
         'jquery.form': '../bower_components/jquery-form/jquery.form',
         "jquery.treeview": "../bower_components/jquery.treeview/jquery.treeview",
         "backbone.bootstrap-modal": "../bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal",
-        "tmpl" : "../bower_components/blueimp-tmpl/js/tmpl",
-        "load-image" : "../bower_components/blueimp-load-image/js/load-image",
-        "canvas-to-blob" : "../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob",
-        "jquery.ui.widget" : "../bower_components/jquery-ui/ui/widget"
+        "tmpl": "../bower_components/blueimp-tmpl/js/tmpl",
+        "load-image": "../bower_components/blueimp-load-image/js/load-image",
+        "canvas-to-blob": "../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob",
+        "jquery.ui.widget": "../bower_components/jquery-ui/ui/widget"
     },
     shim: {
         'dust': {
@@ -93,6 +93,9 @@ requirejs.config({
         },
         'jquery.getimagedata': {
             deps: ['jquery']
+        },
+        'cs.attribute': {
+            deps: ['jquery', 'bootstrap']
         }
     }
 });
