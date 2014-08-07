@@ -56,7 +56,7 @@
 	// Replace this with dust eventually
 	echo $this -> Html -> script('/bower_components/blueimp-tmpl/js/tmpl.min');
 	echo $this -> Html -> script('/bower_components/blueimp-load-image/js/load-image.min');
-	echo $this -> Minify -> script('thirdparty/canvas-to-blob');
+	echo $this -> Html -> script('/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min');
 
 	echo $this -> Minify -> script('thirdparty/dust-full-1.1.1');
 	echo $this -> Minify -> script('thirdparty/dust-helpers-1.1.0');
