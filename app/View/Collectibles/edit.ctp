@@ -1,23 +1,19 @@
 <?php
-// echo $this -> Minify -> script('jquery.form', array('inline' => false));
-// echo $this -> Minify -> script('jquery.treeview', array('inline' => false));
-// echo $this -> Minify -> script('cs.core.tree', array('inline' => false));
-// echo $this -> Html -> script('cs.attribute', array('inline' => false));
-// echo $this -> Minify -> script('models/model.collectible', array('inline' => false));
-// echo $this -> Minify -> script('models/model.status', array('inline' => false));
-// echo $this -> Minify -> script('views/view.status', array('inline' => false));
-// echo $this -> Minify -> script('views/view.alert', array('inline' => false));
-// echo $this -> Minify -> script('views/view.collectible.delete', array('inline' => false));
-// echo $this -> Minify -> script('thirdparty/backbone.bootstrap-modal', array('inline' => false));
 echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
-// echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
-// echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
-// echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
-// echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
-// echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
-// echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
-
 echo $this -> Minify -> script('locale', array('inline' => false));
+
+echo $this -> Html -> scriptBlock('var collectibleId =' . $collectibleId.';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var uploadDirectory ="' . $this -> FileUpload -> getUploadDirectory().'";', array('inline' => false));
+if (isset($adminMode) && $adminMode) {
+	echo $this -> Html -> scriptBlock('var adminMode = true;', array('inline' => false));
+} else {
+	echo $this -> Html -> scriptBlock('var adminMode = false;', array('inline' => false));
+}
+if(isset($allowDelete) && $allowDelete){
+	echo $this -> Html -> scriptBlock('var allowDelete = true;', array('inline' => false));
+} else {
+	echo $this -> Html -> scriptBlock('var allowDelete = false;', array('inline' => false));
+}
 ?>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
@@ -80,22 +76,6 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 	</tr>
 	{% } %}
 </script>
-<script>
-	var collectibleId =<?php echo $collectibleId; ?>;
-	var uploadDirectory =  "<?php echo $this -> FileUpload -> getUploadDirectory(); ?>";
-	<?php
-	if (isset($adminMode) && $adminMode) {
-		echo 'var adminMode = true;';
-	} else {
-		echo 'var adminMode = false;';
-	}
-	if(isset($allowDelete) && $allowDelete){
-		echo 'var allowDelete = true;';
-	} else {
-		echo 'var allowDelete = false;';
-	}
-?></script>
-
 <!-- Each view will get a span -->
 <div id="status-container" class="row spacer">
 
