@@ -4,14 +4,14 @@ define(['backbone', 'jquery',
     'views/app/collectible/edit/view.manufacturer',
     'views/app/collectible/edit/view.collectible',
     'views/app/collectible/edit/view.persons',
-    'views/app/collectible/edit/view.tag.add',
+    'views/app/collectible/edit/view.tags',
     'models/model.collectible',
     'models/model.status',
     'views/view.status',
     'collections/collection.collectibles',
     'collections/collection.parts',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation', 'cs.attribute'
-], function(Backbone, $, AlertView, CollectibleDeleteView, ManufacturerView, CollectibleView, PersonsView, AddTagView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart) {
+], function(Backbone, $, AlertView, CollectibleDeleteView, ManufacturerView, CollectibleView, PersonsView, TagsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -1215,92 +1215,7 @@ define(['backbone', 'jquery',
             return this;
         }
     });
-    var TagsView = Backbone.View.extend({
-        template: 'tags.edit',
-        className: "col-md-12",
-        events: {
-            'click .save': 'save',
-        },
-        initialize: function(options) {
-            this.collection.on('add', this.render, this);
-            this.collection.on('remove', this.render, this);
-        },
-        render: function() {
-            var self = this;
-            dust.render(this.template, {
-                total: this.collection.length
-            }, function(error, output) {
-                $(self.el).html(output);
-            });
-            this.collection.each(function(tag) {
-                $('ul.tags', self.el).append(new TagView({
-                    model: tag
-                }).render().el);
-            });
-            if (this.collection.length < 5) {
-                if (this.addTagView) {
-                    this.addTagView.remove();
-                }
-                this.addTagView = new AddTagView({
-                    collection: this.collection
-                });
-                $('.add-container', self.el).html(this.addTagView.render().el);
-            }
-            return this;
-        },
-        save: function() {
-            this.collection.sync();
-        }
-    });
-    var TagView = Backbone.View.extend({
-        template: 'tag.edit',
-        className: "list-group-item",
-        tagName: 'li',
-        events: {
-            'click .remove-tag': 'removeTag'
-        },
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            var tag = this.model.toJSON();
-            dust.render(this.template, tag, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        },
-        removeTag: function() {
-            this.model.destroy({
-                wait: true,
-                success: function(model, response) {
-                    var message = "The tag has been successfully deleted!";
-                    if (response.response.data) {
-                        if (response.response.data.hasOwnProperty('isEdit')) {
-                            if (response.response.data.isEdit) {
-                                message = "Your edit has been successfully submitted!";
-                            }
-                        }
-                    }
-                    $.blockUI({
-                        message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                        showOverlay: false,
-                        css: {
-                            top: '100px',
-                            'background-color': '#DDFADE',
-                            border: '1px solid #93C49F',
-                            'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                            'border-radius': '4px 4px 4px 4px',
-                            color: '#333333',
-                            'margin-bottom': '20px',
-                            padding: '8px 35px 8px 14px',
-                            'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                            'z-index': 999999
-                        },
-                        timeout: 2000
-                    });
-                },
-            });
-        }
-    });
+
 
 
     /**
@@ -2009,12 +1924,6 @@ define(['backbone', 'jquery',
                 //
                 $.get('/templates/collectibles/message.error.severe.dust'),
                 //
-                $.get('/templates/collectibles/tags.default.dust'),
-                //
-                $.get('/templates/collectibles/tag.default.dust'),
-                //
-                $.get('/templates/collectibles/tag.add.default.dust'),
-                //
                 $.get('/templates/collectibles/message.duplist.dust'),
                 //
                 $.get('/templates/collectibles/manufacturer.add.dust'),
@@ -2053,7 +1962,7 @@ define(['backbone', 'jquery',
                 //
                 $.get('/templates/collectibles/collectible.delete.dust'),
                 //
-                $.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, tagsTemplate, tagTemplate, addTagTemplate, dupListTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
+                $.get('/templates/common/alert.dust')).done(function(collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
                 dust.loadSource(dust.compile(collectibleTemplate[0], 'collectible.default.edit'));
                 dust.loadSource(dust.compile(photoTemplate[0], 'photo.default.edit'));
                 dust.loadSource(dust.compile(attributesTemplate[0], 'attributes.default.edit'));
@@ -2061,9 +1970,6 @@ define(['backbone', 'jquery',
                 dust.loadSource(dust.compile(statusTemplate[0], 'status.edit'));
                 dust.loadSource(dust.compile(messageTemplate[0], 'message.edit'));
                 dust.loadSource(dust.compile(messageSevereTemplate[0], 'message.error.severe'));
-                dust.loadSource(dust.compile(tagsTemplate[0], 'tags.edit'));
-                dust.loadSource(dust.compile(tagTemplate[0], 'tag.edit'));
-                dust.loadSource(dust.compile(addTagTemplate[0], 'tag.add'));
                 dust.loadSource(dust.compile(dupListTemplate[0], 'message.duplist'));
                 dust.loadSource(dust.compile(manufacturerAddTemplate[0], 'manufacturer.add'));
                 dust.loadSource(dust.compile(manufacturerEditTemplate[0], 'manufacturer.edit'));
@@ -2238,9 +2144,8 @@ define(['backbone', 'jquery',
                         $('#collectible-container').append(new TagsView({
                             collection: tags
                         }).render().el);
-                        // $('#artists-container').append(new ArtistsView({
-                        // collection : artists
-                        // }).render().el);
+
+
                         // Make sure we only have one
                         var messageView = null;
                         // If the status has changed and I am on the view

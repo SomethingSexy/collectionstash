@@ -37,8 +37,6 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                 },
                 dropdownCssClass: "bigdrop"
             });
-
-            return this;
         },
         inputChange: function() {
             $('.inline-error', this.el).text('');

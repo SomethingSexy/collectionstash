@@ -1,41 +1,39 @@
-define(['backbone', 'select2'], function(Backbone) {
-    var AddTagView = Backbone.View.extend({
-        template: 'tag.add',
+define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+    var AddTagView = Marionette.ItemView.extend({
+        template: template,
         events: {
             'click .add-tag': 'addTag',
             'keypress #inputTag': 'inputChange'
         },
-        initialize: function(options) {
-            // this.tagsHound = new Bloodhound({
-            //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-            //     remote: {
-            //         url: '/tags/getTagList?query=%QUERY',
-            //         filter: function(list) {
-            //             return $.map(list, function(tag) {
-            //                 return {
-            //                     value: tag
-            //                 };
-            //             });
-            //         }
-            //     }
-            // });
-            // this.tagsHound.initialize();
-        },
-        render: function() {
+        onRender: function() {
             var self = this;
-            dust.render(this.template, {}, function(error, output) {
-                $(self.el).html(output);
+            $('.tags-typeahead', this.el).select2({
+                placeholder: 'Search for a person',
+                minimumInputLength: 1,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: "/tags/tags",
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            query: term, // search term
+                            page_limit: 100
+                        };
+                    },
+                    results: function(data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter remote JSON data
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                formatResult: function(item) {
+                    return item.tag;
+                },
+                formatSelection: function(item) {
+                    return item.tag;
+                },
+                dropdownCssClass: "bigdrop"
             });
-            // $('.tags-typeahead .typeahead', self.el).typeahead({
-            //     hint: true,
-            //     highlight: true,
-            //     minLength: 1
-            // }, {
-            //     name: 'tags',
-            //     displayKey: 'value',
-            //     source: this.tagsHound.ttAdapter()
-            // });
             return this;
         },
         inputChange: function() {
@@ -43,8 +41,9 @@ define(['backbone', 'select2'], function(Backbone) {
             $('.input-group', this.el).removeClass('has-error');
         },
         addTag: function() {
-            var self = this;
-            var tag = $('#inputTag', self.el).val();
+            var self = this,
+                valObj = $('.tags-typeahead', this.el).select2('data');
+            var tag = valObj && valObj.tag ? valObj.tag : '';
             tag = $.trim(tag);
             $('.inline-error', self.el).text('');
             $('.input-group', self.el).removeClass('has-error');

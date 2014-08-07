@@ -7,8 +7,6 @@ class ArtistsController extends AppController {
 		$this->autoRender = false;
 		$query = $this -> request -> query['query'];
 		$persons = $this -> Artist -> find('all', array('fields' => array('Artist.id', 'Artist.name'), 'conditions' => array('LOWER(Artist.name) LIKE' => strtolower($query) . '%')));
-
-
 		$this->response->body(json_encode(Set::extract('/Artist/.', $persons)));
 	}
 
