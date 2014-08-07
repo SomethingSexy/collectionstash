@@ -38,7 +38,9 @@
         "jquery.treeview": "https://github.com/jzaefferer/jquery-treeview.git#master",
         "backbone.bootstrap-modal": "https://github.com/SomethingSexy/backbone.bootstrap-modal.git#master",
         "blueimp-tmpl" : "2.5.4",
-        "blueimp-load-image" : "1.11.2"
+        "blueimp-load-image" : "1.11.2",
+        "blueimp-canvas-to-blob" : "2.1.0",
+        "jquery-ui" : "1.11.0"
     },
     "devDependencies": {},
     "resolutions": {
