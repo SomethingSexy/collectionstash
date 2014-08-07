@@ -2005,10 +2005,6 @@ define(['backbone', 'jquery',
                     }, {
                         silent: true
                     });
-                    var retailersArray = [];
-                    _.each(data.response.data.retailers, function(retailer) {
-                        retailersArray.push(retailer.Retailer.name);
-                    });
                     // This could probably go in the init method but works here for now
                     var selectedManufacturer = null;
                     _.each(manufacturerList.models, function(manufacturer) {
@@ -2059,7 +2055,6 @@ define(['backbone', 'jquery',
                         manufacturers: manufacturerList,
                         manufacturer: selectedManufacturer,
                         currencies: currencies,
-                        retailers: retailersArray,
                         scales: scales,
                         status: status,
                         collectibleType: collectibleTypeModel,
