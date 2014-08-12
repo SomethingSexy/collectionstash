@@ -1,7 +1,6 @@
-define(['backbone', 'jquery',
+define(['backbone', 'jquery', 'dust',
     'views/common/view.alert',
     'views/app/collectible/edit/view.collectible.delete',
-    'views/app/collectible/edit/view.manufacturer',
     'views/app/collectible/edit/view.collectible',
     'views/app/collectible/edit/view.persons',
     'views/app/collectible/edit/view.tags',
@@ -10,6 +9,8 @@ define(['backbone', 'jquery',
     'views/view.status',
     'collections/collection.collectibles',
     'collections/collection.parts',
+    'models/model.company',
+    'collections/collection.brands',
     // todo: old templates remove as converted to mustache and individual view files
     'text!templates/collectibles/collectible.default.dust',
     'text!templates/collectibles/photo.default.dust',
@@ -19,10 +20,10 @@ define(['backbone', 'jquery',
     'text!templates/collectibles/message.dust',
     'text!templates/collectibles/message.error.severe.dust',
     'text!templates/collectibles/message.duplist.dust',
-    'text!templates/collectibles/manufacturer.add.dust',
-    'text!templates/collectibles/manufacturer.edit.dust',
+
+
     'text!templates/collectibles/modal.dust',
-    'text!templates/collectibles/manufacturer.series.add.dust',
+   
     'text!templates/collectibles/attribute.upload.dust',
     'text!templates/collectibles/directional.dust',
     'text!templates/collectibles/attribute.add.existing.dust',
@@ -36,10 +37,9 @@ define(['backbone', 'jquery',
     'text!templates/collectibles/collectible.original.dust',
     'text!templates/collectibles/directional.original.dust',
     'text!templates/collectibles/attribute.add.new.dust',
-    'text!templates/collectibles/collectible.delete.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation', 'cs.attribute'
-], function(Backbone, $, AlertView, CollectibleDeleteView, ManufacturerView, CollectibleView, PersonsView, TagsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, manufacturerAddTemplate, manufacturerEditTemplate, modalTemplate, manufacturerSeriesAddTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, collectibleDeleteTemplate, alertTemplate) {
+], function(Backbone, $, dust, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CompanyModel, Brands, collectibleTemplate, photoTemplate, attributesTemplate, attributeTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -57,10 +57,9 @@ define(['backbone', 'jquery',
     dust.loadSource(dust.compile(messageTemplate, 'message.edit'));
     dust.loadSource(dust.compile(messageSevereTemplate, 'message.error.severe'));
     dust.loadSource(dust.compile(dupListTemplate, 'message.duplist'));
-    dust.loadSource(dust.compile(manufacturerAddTemplate, 'manufacturer.add'));
-    dust.loadSource(dust.compile(manufacturerEditTemplate, 'manufacturer.edit'));
+
     dust.loadSource(dust.compile(modalTemplate, 'modal'));
-    dust.loadSource(dust.compile(manufacturerSeriesAddTemplate, 'manufacturer.series.add'));
+
     dust.loadSource(dust.compile(attributeUploadTemplate, 'attribute.photo.edit'));
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(attributeAddExistingTemplate, 'attribute.add.existing'));
@@ -74,7 +73,6 @@ define(['backbone', 'jquery',
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
     dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
     dust.loadSource(dust.compile(attributeAddNewTemplate, 'attribute.add.new'));
-    dust.loadSource(dust.compile(collectibleDeleteTemplate, 'collectible.delete'));
     dust.loadSource(dust.compile(alertTemplate, 'alert'));
 
     var printId = '10';
@@ -142,13 +140,7 @@ define(['backbone', 'jquery',
     var Collectibles = Backbone.Collection.extend({
         model: CollectibleModel
     });
-    var Brand = Backbone.Model.extend({});
-    var Brands = Backbone.Collection.extend({
-        model: Brand,
-        comparator: function(brand) {
-            return brand.get("License").name.toLowerCase();
-        }
-    });
+
     var CollectibleTagModel = Backbone.Model.extend({});
     var CollectibleTypeModel = Backbone.Model.extend({});
     var CollectibleUploadModel = Backbone.Model.extend({});
@@ -184,23 +176,7 @@ define(['backbone', 'jquery',
             return resp.response.data.files;
         }
     });
-    var ManufacturerModel = Backbone.Model.extend({
-        urlRoot: '/manufactures/manufacturer',
-        validation: {
-            title: [{
-                pattern: /^[A-Za-z0-9 _]*$/,
-                msg: 'Invalid characters'
-            }, {
-                required: true
-            }],
-            url: [{
-                pattern: 'url',
-                msg: 'Must be a valid url.'
-            }, {
-                required: false
-            }]
-        }
-    });
+
     var CurrencyModel = Backbone.Model.extend({});
     var Currencies = Backbone.Collection.extend({
         model: CurrencyModel
@@ -211,7 +187,7 @@ define(['backbone', 'jquery',
     });
 
     var ManufacturerList = Backbone.Collection.extend({
-        model: ManufacturerModel,
+        model: CompanyModel,
         initialize: function(models) {
             for (var i = 0; i < models.length; i++) {
                 if (models[i].Manufacture) {
@@ -1071,149 +1047,6 @@ define(['backbone', 'jquery',
             return this;
         }
     });
-    var SeriesView = Backbone.View.extend({
-        events: {
-            'click span.item': 'selectSeries'
-        },
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            $(self.el).html(this.model.toJSON().response.data);
-            return this;
-        },
-        selectSeries: function(event) {
-            var name = $(event.currentTarget).attr('data-path');
-            var id = $(event.currentTarget).attr('data-id');
-            pageEvents.trigger('series:select', id, name);
-        }
-    });
-    var ManufacturerSeriesView = Backbone.View.extend({
-        template: 'manufacturer.series.add',
-        modal: 'modal',
-        events: {
-            'click .add-series': 'showAdd',
-            'click .add.submit': 'addSeries'
-        },
-        initialize: function(options) {
-            var self = this;
-            Backbone.Validation.bind(this, {
-                valid: function(view, attr, selector) {
-                    view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
-                    view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-                    view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').removeClass('has-error');
-                    // do something
-                },
-                invalid: function(view, attr, error, selector) {
-                    view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-                    view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').addClass('has-error');
-                    view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-                    view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
-                    // do something
-                }
-            });
-            this.manufacturer = options.manufacturer;
-        },
-        remove: function() {
-            //this.model.off('change');
-            Backbone.View.prototype.remove.call(this);
-        },
-        renderBody: function() {
-            var self = this;
-            var data = {
-                manufacturer: this.manufacturer.toJSON()
-            };
-            dust.render(this.template, data, function(error, output) {
-                $('.modal-body', self.el).html(output);
-            });
-            $('.modal-body', self.el).append(this.model.toJSON().response.data);
-        },
-        render: function() {
-            var self = this;
-            dust.render(this.modal, {
-                modalId: 'manufacturerSeriesModal',
-                modalTitle: 'Manufacturer Categories'
-            }, function(error, output) {
-                $(self.el).html(output);
-            });
-            $(self.el).find('.btn-primary.save').remove();
-            this.renderBody();
-            return this;
-        },
-        showAdd: function(event) {
-            this.hideMessage();
-            var $target = $(event.currentTarget);
-            var $inputWrapper = $('<div></div>').addClass('item').addClass('input');
-            var $input = $('<input />').attr('type', 'input').attr('maxlength', '100');
-            var $submit = $('<button></button>').text('Submit').addClass('add').addClass('submit');
-            var $cancel = $('<button></button>').text('Cancel').addClass('add').addClass('cancel');
-            $inputWrapper.append($input);
-            $inputWrapper.append($submit);
-            $inputWrapper.append($cancel);
-            $target.parent('span.actions').after($inputWrapper);
-        },
-        closeAdd: function(event) {
-            var $target = $(event.currentTarget);
-            $target.parent('div.input').remove();
-        },
-        addSeries: function(event) {
-            var self = this;
-            var seriesId = $(event.currentTarget).parent('div.input').parent('li').children('span.name').attr('data-id');
-            var name = $(event.currentTarget).parent('div.input').children('input').val();
-            $.ajax({
-                url: '/series/add.json',
-                dataType: 'json',
-                data: 'data[Series][parent_id]=' + seriesId + '&data[Series][name]=' + name,
-                type: 'post',
-                beforeSend: function(xhr) {},
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var $messageContainer = $('.message-container', self.el);
-                    $('h4', $messageContainer).text('');
-                    $('ul', $messageContainer).empty();
-                    if (jqXHR.status === 401) {
-                        $('h4', $messageContainer).text('You must be logged in to do that!');
-                    } else if (jqXHR.status === 400) {
-                        var response = JSON.parse(jqXHR.responseText);
-                        $('h4', $messageContainer).text('Oops! Something wasn\'t filled out correctly.');
-                        if (response && response.response && response.response.errors) {
-                            _.each(response.response.errors, function(error) {
-                                _.each(error.message, function(message) {
-                                    $('ul', $messageContainer).append($('<li></li>').text(message));
-                                });
-                            });
-                        }
-                    } else {
-                        $('h4', $messageContainer).text('Something really bad happened.');
-                    }
-                    $messageContainer.show();
-                },
-                success: function(data) {
-                    self.hideMessage();
-                    if (data.response.isSuccess) {
-                        //TODO: Once this part is more backboney then we can just add
-                        // render
-                        // let's try and add it to the current list
-                        var $parentLi = $(event.currentTarget).parent('div.input').parent('li');
-                        var $ul = $('ul', $parentLi);
-                        if ($ul.length === 0) {
-                            $parentLi.append($('<ul></ul>'));
-                            $ul = $('ul', $parentLi);
-                        }
-                        var $series = $('<li></li>');
-                        $series.append('<span class="item name" data-id=" ' + data.response.data.id + '" data-path="' + data.response.data.name + '">' + data.response.data.name + '</span>');
-                        $series.append('<span class="item actions"> <a class="action add-series"> Add</a></span>');
-                        $ul.append($series);
-                        self.closeAdd(event);
-                        // first check to see if
-                    } else {
-                        //data.errors[0][name];
-                    }
-                }
-            });
-        },
-        hideMessage: function() {
-            $('.message-container', this.el).hide();
-        }
-    });
 
     var MessageView = Backbone.View.extend({
         template: 'message.edit',
@@ -1951,20 +1784,6 @@ define(['backbone', 'jquery',
 
     return {
         start: function() {
-            //TODO Loading usless stuff depending on type.
-            // load data from server, populate objects then determine
-            // what templates to load from there
-            $.blockUI({
-                message: '<img src="/img/ajax-loader-circle.gif" />',
-                showOverlay: false,
-                css: {
-                    top: '100px',
-                    border: 'none',
-                    'background-color': 'transparent',
-                    'z-index': 999999
-                }
-            });
-
             // Setup the current model
             var collectibleModel = new CollectibleModel(rawCollectible);
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
@@ -2129,8 +1948,6 @@ define(['backbone', 'jquery',
                     $('#directional-text-container').html(output);
                 });
             }
-
-            $.unblockUI();
         }
     }
 });
