@@ -244,32 +244,21 @@ class CollectiblesController extends AppController
         }
     }
     // This will handle the updating of tags
-    public function tag($adminMode = false, $id = null) {
-        // WE are handling one tag at a time here
-        // if it is a put, then we are adding
-        // if it is a delete then we are removing
-        if ($adminMode === true || $adminMode === 'true') {
-            if (!$this->isUserAdmin()) {
-                $this->response->statusCode(401);
-                return;
-            }
-        }
-        
+    public function tag($id = null) {
+
         if ($this->request->isPost()) {
             $collectible['CollectiblesTag'] = $this->request->input('json_decode', true);
-            $response = $this->Collectible->CollectiblesTag->add($collectible, $this->getUser(), $adminMode);
+            $response = $this->Collectible->CollectiblesTag->add($collectible, $this->getUser());
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
             }
             
             $this->set('returnData', $response);
             // we need to check the response here
-            
-            
         } else if ($this->request->isDelete()) {
             $collectible['CollectiblesTag'] = array();
             $collectible['CollectiblesTag']['id'] = $id;
-            $response = $this->Collectible->CollectiblesTag->remove($collectible, $this->getUser(), $adminMode);
+            $response = $this->Collectible->CollectiblesTag->remove($collectible, $this->getUser());
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
             }
@@ -278,32 +267,21 @@ class CollectiblesController extends AppController
         }
     }
     // This will handle the updating of artists
-    public function artist($adminMode = false, $id = null) {
-        // WE are handling one tag at a time here
-        // if it is a put, then we are adding
-        // if it is a delete then we are removing
-        if ($adminMode === true || $adminMode === 'true') {
-            if (!$this->isUserAdmin()) {
-                $this->response->statusCode(401);
-                return;
-            }
-        }
-        
+    public function artist($id = null) {
+
         if ($this->request->isPost()) {
             $collectible['ArtistsCollectible'] = $this->request->input('json_decode', true);
-            $response = $this->Collectible->ArtistsCollectible->add($collectible, $this->getUser(), $adminMode);
+            $response = $this->Collectible->ArtistsCollectible->add($collectible, $this->getUser());
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
             }
             
             $this->set('returnData', $response);
             // we need to check the response here
-            
-            
         } else if ($this->request->isDelete()) {
             $collectible['ArtistsCollectible'] = array();
             $collectible['ArtistsCollectible']['id'] = $id;
-            $response = $this->Collectible->ArtistsCollectible->remove($collectible, $this->getUser(), $adminMode);
+            $response = $this->Collectible->ArtistsCollectible->remove($collectible, $this->getUser());
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
             }

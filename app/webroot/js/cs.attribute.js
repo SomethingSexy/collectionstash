@@ -24,7 +24,6 @@ var AttributesBase = function(options) {
 		allowRemove : true,
 		allowUpdate : true,
 		singleView : false,
-		adminPage : false,
 		$element : ''
 	}, options);
 }
@@ -290,10 +289,6 @@ RemoveAttributeLinks.prototype.submit = function() {
 	var self = this;
 	var id = this.attribute.getAttributeCollectible().id;
 	var url = '/attributes_collectibles/remove.json';
-	// If we are passing in an override admin or the options are set to admin mode
-	if (self.options.adminPage) {
-		url = '/admin/attributes_collectibles/remove.json'
-	}
 
 	$('#AttributeCollectibleRemoveForm').ajaxSubmit({
 		// dataType identifies the expected content type of the server response
@@ -415,10 +410,6 @@ UpdateCollectibleAttributes.prototype.submit = function() {
 	var id = this.attribute.getAttributeCollectible().id;
 
 	var url = '/attributes_collectibles/update.json';
-	// If we are passing in an override admin or the options are set to admin mode
-	if (self.options.adminPage) {
-		url = '/admin/attributes_collectibles/update.json'
-	}
 
 	this.$dialog.find('form').ajaxSubmit({
 		// dataType identifies the expected content type of the server response
@@ -442,7 +433,7 @@ UpdateCollectibleAttributes.prototype.submit = function() {
 			if (responseText.response.isSuccess) {
 				self.$dialog.modal('hide');
 				var message = 'Update has been submitted!';
-				if (self.options.adminPage || !responseText.response.data.isEdit) {
+				if (!responseText.response.data.isEdit) {
 					message = 'The part was successfully updated!';
 				}
 				$.blockUI({

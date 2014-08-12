@@ -104,38 +104,38 @@ class AttributesCollectiblesController extends AppController {
 		}
 	}
 
-	public function admin_add() {
-		$data = array();
-		//must be logged and be an admin
-		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
-			$data['response'] = array();
-			$data['response']['isSuccess'] = false;
-			$error = array('message' => __('You must be logged in to add an item.'));
-			$error['inline'] = false;
-			$data['response']['errors'] = array();
-			array_push($data['response']['errors'], $error);
-			$this -> set('returnData', $data);
-			return;
-		}
-		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$this -> request -> data = Sanitize::clean($this -> request -> data);
+	// public function admin_add() {
+	// 	$data = array();
+	// 	//must be logged and be an admin
+	// 	if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+	// 		$data['response'] = array();
+	// 		$data['response']['isSuccess'] = false;
+	// 		$error = array('message' => __('You must be logged in to add an item.'));
+	// 		$error['inline'] = false;
+	// 		$data['response']['errors'] = array();
+	// 		array_push($data['response']['errors'], $error);
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// 	if ($this -> request -> is('post') || $this -> request -> is('put')) {
+	// 		$this -> request -> data = Sanitize::clean($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUser(), true);
-			if ($response) {
-				$this -> set('returnData', $response);
-			} else {
-				//Something really fucked up
-				$data['isSuccess'] = false;
-				$data['errors'] = array('message', __('Invalid request.'));
-				$this -> set('returnData', $data);
-			}
-		} else {
-			$data['isSuccess'] = false;
-			$data['errors'] = array('message', __('Invalid request.'));
-			$this -> set('returnData', $data);
-			return;
-		}
-	}
+	// 		$response = $this -> AttributesCollectible -> add($this -> request -> data, $this -> getUser(), true);
+	// 		if ($response) {
+	// 			$this -> set('returnData', $response);
+	// 		} else {
+	// 			//Something really fucked up
+	// 			$data['isSuccess'] = false;
+	// 			$data['errors'] = array('message', __('Invalid request.'));
+	// 			$this -> set('returnData', $data);
+	// 		}
+	// 	} else {
+	// 		$data['isSuccess'] = false;
+	// 		$data['errors'] = array('message', __('Invalid request.'));
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// }
 
 	/**
 	 * This will submit a removal.
@@ -174,39 +174,39 @@ class AttributesCollectiblesController extends AppController {
 		}
 	}
 
-	public function admin_remove() {
-		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
-			$data['response'] = array();
-			$data['response']['isSuccess'] = false;
-			$error = array('message' => __('You must be logged in to remove this item.'));
-			$error['inline'] = false;
-			$data['response']['errors'] = array();
-			array_push($data['response']['errors'], $error);
-			$this -> set('returnData', $data);
-			return;
-		}
-		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$this -> request -> data = Sanitize::clean($this -> request -> data);
-			debug($this -> request -> data);
+	// public function admin_remove() {
+	// 	if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+	// 		$data['response'] = array();
+	// 		$data['response']['isSuccess'] = false;
+	// 		$error = array('message' => __('You must be logged in to remove this item.'));
+	// 		$error['inline'] = false;
+	// 		$data['response']['errors'] = array();
+	// 		array_push($data['response']['errors'], $error);
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// 	if ($this -> request -> is('post') || $this -> request -> is('put')) {
+	// 		$this -> request -> data = Sanitize::clean($this -> request -> data);
+	// 		debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUser(), true);
+	// 		$response = $this -> AttributesCollectible -> remove($this -> request -> data, $this -> getUser(), true);
 
-			if ($response) {
-				$this -> set('returnData', $response);
-			} else {
-				//Something really fucked up
-				$data['isSuccess'] = false;
-				$data['errors'] = array('message', __('Invalid request.'));
-				$this -> set('returnData', $data);
-			}
+	// 		if ($response) {
+	// 			$this -> set('returnData', $response);
+	// 		} else {
+	// 			//Something really fucked up
+	// 			$data['isSuccess'] = false;
+	// 			$data['errors'] = array('message', __('Invalid request.'));
+	// 			$this -> set('returnData', $data);
+	// 		}
 
-		} else {
-			$data['isSuccess'] = false;
-			$data['errors'] = array('message', __('Invalid request.'));
-			$this -> set('returnData', $data);
-			return;
-		}
-	}
+	// 	} else {
+	// 		$data['isSuccess'] = false;
+	// 		$data['errors'] = array('message', __('Invalid request.'));
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// }
 
 	/**
 	 *
@@ -245,38 +245,38 @@ class AttributesCollectiblesController extends AppController {
 		}
 	}
 
-	public function admin_update() {
-		if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
-			$data['response'] = array();
-			$data['response']['isSuccess'] = false;
-			$error = array('message' => __('You must be logged in to update this item.'));
-			$error['inline'] = false;
-			$data['response']['errors'] = array();
-			array_push($data['response']['errors'], $error);
-			$this -> set('returnData', $data);
-			return;
-		}
-		if ($this -> request -> is('post') || $this -> request -> is('put')) {
-			$this -> request -> data = Sanitize::clean($this -> request -> data);
-			debug($this -> request -> data);
+	// public function admin_update() {
+	// 	if (!$this -> isLoggedIn() || !$this -> isUserAdmin()) {
+	// 		$data['response'] = array();
+	// 		$data['response']['isSuccess'] = false;
+	// 		$error = array('message' => __('You must be logged in to update this item.'));
+	// 		$error['inline'] = false;
+	// 		$data['response']['errors'] = array();
+	// 		array_push($data['response']['errors'], $error);
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// 	if ($this -> request -> is('post') || $this -> request -> is('put')) {
+	// 		$this -> request -> data = Sanitize::clean($this -> request -> data);
+	// 		debug($this -> request -> data);
 
-			$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUser(), true);
+	// 		$response = $this -> AttributesCollectible -> update($this -> request -> data, $this -> getUser(), true);
 
-			if ($response) {
-				$this -> set('returnData', $response);
-			} else {
-				//Something really fucked up
-				$data['isSuccess'] = false;
-				$data['errors'] = array('message', __('Invalid request.'));
-				$this -> set('returnData', $data);
-			}
-		} else {
-			$data['isSuccess'] = false;
-			$data['errors'] = array('message', __('Invalid request.'));
-			$this -> set('returnData', $data);
-			return;
-		}
-	}
+	// 		if ($response) {
+	// 			$this -> set('returnData', $response);
+	// 		} else {
+	// 			//Something really fucked up
+	// 			$data['isSuccess'] = false;
+	// 			$data['errors'] = array('message', __('Invalid request.'));
+	// 			$this -> set('returnData', $data);
+	// 		}
+	// 	} else {
+	// 		$data['isSuccess'] = false;
+	// 		$data['errors'] = array('message', __('Invalid request.'));
+	// 		$this -> set('returnData', $data);
+	// 		return;
+	// 	}
+	// }
 
 	/**
 	 *

@@ -23,7 +23,7 @@ define(['backbone', 'jquery', 'dust',
 
 
     'text!templates/collectibles/modal.dust',
-   
+
     'text!templates/collectibles/attribute.upload.dust',
     'text!templates/collectibles/directional.dust',
     'text!templates/collectibles/attribute.add.existing.dust',
@@ -222,7 +222,7 @@ define(['backbone', 'jquery', 'dust',
     });
     var TagModel = Backbone.Model.extend({
         urlRoot: function() {
-            return '/collectibles/tag/' + adminMode + '/';
+            return '/collectibles/tag/';
         }
     });
     var Tags = Backbone.Collection.extend({
@@ -231,7 +231,7 @@ define(['backbone', 'jquery', 'dust',
     });
     var ArtistModel = Backbone.Model.extend({
         urlRoot: function() {
-            return '/collectibles/artist/' + adminMode + '/';
+            return '/collectibles/artist/';
         }
     });
     var Artists = Backbone.Collection.extend({
@@ -271,10 +271,6 @@ define(['backbone', 'jquery', 'dust',
             });
             $('.modal-footer .save', '#attribute-collectible-add-new-dialog').click(function() {
                 var url = '/attributes_collectibles/add.json';
-                // If we are passing in an override admin or the options are set to admin mode
-                if (adminMode) {
-                    url = '/admin/attributes_collectibles/add.json';
-                }
                 $('#attribute-collectible-add-new-dialog').find('form').ajaxSubmit({
                     // dataType identifies the expected content type of the server response
                     dataType: 'json',
@@ -350,9 +346,6 @@ define(['backbone', 'jquery', 'dust',
             $('.modal-footer .save', '#attribute-collectible-add-existing-dialog').click(function() {
                 var url = '/attributes_collectibles/add.json';
                 // If we are passing in an override admin or the options are set to admin mode
-                if (adminMode) {
-                    url = '/admin/attributes_collectibles/add.json';
-                }
                 $('#attribute-collectible-add-existing-dialog').find('form').ajaxSubmit({
                     // dataType identifies the expected content type of the server response
                     dataType: 'json',
@@ -501,7 +494,6 @@ define(['backbone', 'jquery', 'dust',
                 });
             });
             this.updateCollectibleAttributes = new UpdateCollectibleAttributes({
-                'adminPage': adminMode,
                 $element: $('.attributes.collectible', self.el),
                 $context: self.el,
                 success: function(data) {
@@ -523,7 +515,6 @@ define(['backbone', 'jquery', 'dust',
                 }
             });
             this.removeCollectibleAttributes = new RemoveAttributeLinks({
-                'adminPage': adminMode,
                 $element: $('.attributes.collectible', self.el),
                 $context: self.el,
                 success: function(data) {
@@ -1849,7 +1840,9 @@ define(['backbone', 'jquery', 'dust',
                 $('#message-container').html(messageView.render().el);
             });
             pageEvents.on('upload:close', function() {
-                uploads.fetch();
+                uploads.fetch({
+                    reset: true
+                });
             });
             // Setup views
             var collectibleViewData = {
