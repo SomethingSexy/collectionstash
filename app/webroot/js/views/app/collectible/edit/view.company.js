@@ -1,4 +1,8 @@
-define(['backbone', 'jquery', 'select2', 'backbone.validation'], function(Backbone, $) {
+define(['backbone', 'jquery', 'dust', 'text!templates/collectibles/manufacturer.add.dust', 'text!templates/collectibles/manufacturer.edit.dust', 'select2', 'backbone.validation'], function(Backbone, $, dust, template, editTemplate) {
+    
+    dust.loadSource(dust.compile(template, 'manufacturer.add'));
+    dust.loadSource(dust.compile(editTemplate, 'manufacturer.edit'));
+    
     var ManufacturerView = Backbone.View.extend({
         template: 'manufacturer.add',
         modal: 'modal',

@@ -1,4 +1,5 @@
-define(['backbone'], function(Backbone) {
+define(['backbone', 'text!templates/collectibles/collectible.delete.dust', 'dust'], function(Backbone, collectibleDeleteTemplate, dust) {
+    dust.loadSource(dust.compile(collectibleDeleteTemplate, 'collectible.delete'));
     var CollectibleDeleteView = Backbone.View.extend({
         template: 'collectible.delete',
         className: "col-md-12",
@@ -59,6 +60,6 @@ define(['backbone'], function(Backbone) {
             });
         }
     });
-	
-	return CollectibleDeleteView;
+
+    return CollectibleDeleteView;
 });

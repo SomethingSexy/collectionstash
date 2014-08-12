@@ -1,4 +1,4 @@
-define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbone, $, SeriesModel) {
+define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'views/app/collectible/edit/view.company', 'collections/collection.brands', 'views/app/collectible/edit/view.series', 'views/app/collectible/edit/view.company.series', 'select2'], function(Backbone, $, SeriesModel, CompanyModel, CompanyView, Brands, SeriesView, CompanySeriesView) {
     var lastResults = [];
     var CollectibleView = Backbone.View.extend({
         className: "col-md-12",
@@ -82,6 +82,19 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 this.seriesView = new SeriesView({
                     model: this.series
                 });
+
+                this.seriesView.on('series:select', function(id, name) {
+                    // After bootstrap 3 upgrade, setting this to silent and
+                    // using the hide event call back to rerender
+                    this.model.set({
+                        seriesPath: name,
+                        'series_id': id
+                    }, {
+                        silent: true
+                    });
+                    $('#seriesModal').modal('hide');
+                }, this);
+
                 $.unblockUI();
                 $('.modal-body', '#seriesModal').html(this.seriesView.render().el);
                 $('#seriesModal').modal();
@@ -91,12 +104,13 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                     self.render();
                 });
             }, this);
+
             this.seriesEdit.on('change', function() {
                 var self = this;
                 if (this.manufacturerSeriesView) {
                     this.manufacturerSeriesView.remove();
                 }
-                this.manufacturerSeriesView = new ManufacturerSeriesView({
+                this.manufacturerSeriesView = new CompanySeriesView({
                     model: this.seriesEdit,
                     manufacturer: this.manufacturer
                 });
@@ -108,19 +122,6 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 $('#manufacturerSeriesModal', 'body').on('hidden.bs.modal', function() {
                     self.manufacturerSeriesView.remove();
                 });
-            }, this);
-
-            // TODO: REMOVE PAGE EVENTS
-            this.pageEvents.on('series:select', function(id, name) {
-                // After bootstrap 3 upgrade, setting this to silent and
-                // using the hide event call back to rerender
-                this.model.set({
-                    seriesPath: name,
-                    'series_id': id
-                }, {
-                    silent: true
-                });
-                $('#seriesModal').modal('hide');
             }, this);
 
             this.model.on('sync', this.onModelSaved, this);
@@ -312,30 +313,6 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 }
             });
 
-
-            // $('.retailers-typeahead .typeahead', self.el).typeahead({
-            //     hint: true,
-            //     highlight: true,
-            //     minLength: 1
-            // }, {
-            //     name: 'retailers',
-            //     displayKey: 'value',
-            //     source: this.retailersHound.ttAdapter()
-            // }).on('typeahead:selected', function(event, suggested, name) {
-            //     // since we are validating, we need to handle the case when 
-            //     // they select it
-            //     var data = {};
-            //     data[$(event.currentTarget).attr('name')] = suggested.value;
-            //     self.model.set(data, {
-            //         forceUpdate: true
-            //     });
-            // }).on('typeahead:autocompleted', function(event, suggested, name) {
-            //     var data = {};
-            //     data[$(event.currentTarget).attr('name')] = suggested.value;
-            //     self.model.set(data, {
-            //         forceUpdate: true
-            //     });
-            // });
             return this;
         },
         changeManufacturer: function(event) {
@@ -445,7 +422,7 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
             if (this.manufacturerView) {
                 this.manufacturerView.remove();
             }
-            var manufacturer = new ManufacturerModel();
+            var manufacturer = new CompanyModel();
             manufacturer.set({
                 'CollectibletypesManufacture': {
                     collectibletype_id: this.collectibleType.toJSON().id
@@ -476,7 +453,7 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 this.manufacturers.add(manufacturer);
                 $('#manufacturerModal', 'body').modal('hide');
             }, this);
-            this.manufacturerView = new ManufacturerView({
+            this.manufacturerView = new CompanyView({
                 model: manufacturer,
                 brands: this.brands,
                 mode: 'add'
@@ -517,7 +494,7 @@ define(['backbone', 'jquery', 'models/model.series', 'select2'], function(Backbo
                 this.manufacturer.off();
                 $('#manufacturerModal', 'body').modal('hide');
             }, this);
-            this.manufacturerView = new ManufacturerView({
+            this.manufacturerView = new CompanyView({
                 model: this.manufacturer,
                 brands: this.brands,
                 mode: 'edit'
