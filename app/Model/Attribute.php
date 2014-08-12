@@ -97,15 +97,15 @@ class Attribute extends AppModel {
 	/**
 	 * This method will be used when we are updating an attribute
 	 */
-	public function update($attribute, $user, $autoUpdate = false) {
+	public function update($attribute, $user) {
 		$retVal = $this -> buildDefaultResponse();
 		$this -> set($attribute);
 		$validCollectible = true;
 
 		// If we are automatically approving it, then save it directly
-		if ($autoUpdate === 'false' || $autoUpdate === false) {
+		// if ($autoUpdate === 'false' || $autoUpdate === false) {
 			$autoUpdate = $this -> allowAutoUpdate($attribute['Attribute']['id'], $user);
-		}
+		// }
 
 		if ($this -> isEditPermission($attribute['Attribute']['id'], $user)) {
 			if ($this -> validates()) {
@@ -163,7 +163,7 @@ class Attribute extends AppModel {
 	/**
 	 * This method will be used when we are trying to remove an attribute
 	 */
-	public function remove($attribute, $user, $autoUpdate = false) {
+	public function remove($attribute, $user) {
 		$retVal = $this -> buildDefaultResponse();
 		// There will be an ['Attribute']['reason'] - input field
 		// if this attribute is tied to a collectible, are we replacing
@@ -185,10 +185,10 @@ class Attribute extends AppModel {
 			$currentVersion['Attribute']['replace_attribute_id'] = $attribute['Attribute']['replace_attribute_id'];
 		}
 
-		if ($autoUpdate === 'false' || $autoUpdate === false) {
+		// if ($autoUpdate === 'false' || $autoUpdate === false) {
 			// Because we set the attributes add to submitted, check both
 			$autoUpdate = $this -> allowAutoUpdate($attribute['Attribute']['id'], $user);
-		}
+		// }
 		if ($this -> isEditPermission($attribute['Attribute']['id'], $user)) {
 			if ($autoUpdate === true || $autoUpdate === 'true') {
 				$proceed = true;
