@@ -1965,189 +1965,172 @@ define(['backbone', 'jquery',
                 }
             });
 
-
-            // Soooo, I could probably make this call when rendering the edit.ctp
-            $.ajax({
-                url: "/collectibles/getCollectible/" + collectibleId,
-                dataType: "json",
-                cache: false,
-                error: function(jqXHR, textStatus, errorThrown) {
-                    jqXHR;
-                    textStatus;
-                    errorThrown;
-                },
-                complete: function(jqXHR, textStatus) {
-                    jqXHR;
-                    textStatus;
-                },
-                success: function(data, textStatus, jqXHR) {
-                    $.unblockUI();
-                    // Setup the current model
-                    var collectibleModel = new CollectibleModel(data.response.data.collectible.Collectible);
-                    var collectibleTypeModel = new CollectibleTypeModel(data.response.data.collectible.Collectibletype);
-                    // Setup the manufacturer list, this will contain all data for each manufacturer
-                    var manufacturerList = new ManufacturerList(data.response.data.manufacturers);
-                    var allManufacturerList = new ManufacturerList(data.response.data.manufacturesList);
-                    var currencies = new Currencies(data.response.data.currencies);
-                    var scales = new Scales(data.response.data.scales);
-                    var attributes = new Attributes(data.response.data.collectible.AttributesCollectible);
-                    var uploads = new CollectibleUploads(data.response.data.collectible.CollectiblesUpload, {
-                        'id': data.response.data.collectible.Collectible.id
-                    });
-                    var brands = new Brands(data.response.data.brands);
-                    var tags = new Tags(data.response.data.collectible.CollectiblesTag);
-                    var artists = new Artists(data.response.data.collectible.ArtistsCollectible);
-                    var variants = new Backbone.Collection(data.response.data.variants);
-                    var status = new Status();
-                    status.set({
-                        id: data.response.data.collectible.Collectible.id,
-                        status: data.response.data.collectible.Status
-                    }, {
-                        silent: true
-                    });
-                    // This could probably go in the init method but works here for now
-                    var selectedManufacturer = null;
-                    _.each(manufacturerList.models, function(manufacturer) {
-                        if (manufacturer.get('id') === collectibleModel.get('manufacture_id')) {
-                            selectedManufacturer = manufacturer;
-                            return;
-                        }
-                    });
-                    // Setup global events
-                    pageEvents.on('status:change:error', function(errors) {
-                        if (messageView) {
-                            messageView.remove();
-                            messageView = null;
-                        }
-                        messageView = new MessageView({
-                            errors: new Errors(errors)
-                        });
-                        $('#message-container').html(messageView.render().el);
-                    });
-                    pageEvents.on('status:change:error:severe', function() {
-                        if (messageView) {
-                            messageView.remove();
-                            messageView = null;
-                        }
-                        messageView = new SevereMessageView({});
-                        $('#message-container').html(messageView.render().el);
-                    });
-                    pageEvents.on('status:change:dupList', function(collectibles) {
-                        hasDupList = true;
-                        status.set({
-                            'hasDupList': hasDupList
-                        });
-                        if (messageView) {
-                            messageView.remove();
-                            messageView = null;
-                        }
-                        messageView = new DupListMessageView({
-                            collection: new Collectibles(collectibles)
-                        });
-                        $('#message-container').html(messageView.render().el);
-                    });
-                    pageEvents.on('upload:close', function() {
-                        uploads.fetch();
-                    });
-                    // Setup views
-                    var collectibleViewData = {
-                        model: collectibleModel,
-                        manufacturers: manufacturerList,
-                        manufacturer: selectedManufacturer,
-                        currencies: currencies,
-                        scales: scales,
-                        status: status,
-                        collectibleType: collectibleTypeModel,
-                        brands: brands,
-                        template: 'collectible.default.edit',
-                        pageEvents: pageEvents
-                    };
-                    if (collectibleModel.get('custom')) {
-                        collectibleViewData.template = 'collectible.custom.edit';
-                        collectibleViewData.customStatuses = new Backbone.Collection(data.response.data.customStatuses);
-                    } else if (collectibleModel.get('original')) {
-                        collectibleViewData.template = 'collectible.original.edit';
-                    }
-                    //TODO: At some point it might warrant a whole new view for customs
-                    var collectibleView = new CollectibleView(collectibleViewData);
-                    $('#photo-container').append(new PhotoView({
-                        collection: uploads,
-                        eventManager: pageEvents
-                    }).render().el);
-                    $('#collectible-container').append(new PersonsView({
-                        collection: artists,
-                        collectibleType: collectibleTypeModel
-                    }).render().el);
-                    $('#collectible-container').append(collectibleView.render().el);
-                    $('#attributes-container').append(new AttributesView({
-                        collection: attributes,
-                        status: status,
-                        artists: new Backbone.Collection(data.response.data.artists),
-                        manufacturers: allManufacturerList,
-                        categories: new Backbone.Collection(data.response.data.categories),
-                        collectible: collectibleModel,
-                        scales: scales
-                    }).render().el);
-                    var statusView = new StatusView({
-                        model: status,
-                        collectible: collectibleModel,
-                        // we set allow edit here and then base everything off of status in the template, kind of sucks
-                        allowEdit: true,
-                        allowDelete: allowDelete
-                    });
-                    $('#status-container').html(statusView.render().el);
-                    // if there is a delete from the status view that is a prompt
-                    statusView.on('delete:collectible:prompt', function() {
-                        // display modal about delete, this is most likely for cases where this
-                        // collectible is active and we need to delete it
-                        // this will allow the user to enter in an id to replace this collectible with
-                        var collectibleDeleteView = new CollectibleDeleteView({
-                            model: collectibleModel,
-                            variants: variants
-                        });
-                        var modal = new Backbone.BootstrapModal({
-                            content: collectibleDeleteView,
-                            title: 'Delete Collectible',
-                            animate: true,
-                            okCloses: false
-                        }).open();
-                    }, this);
-                    $('#collectible-container').append(new TagsView({
-                        collection: tags
-                    }).render().el);
-
-
-                    // Make sure we only have one
-                    var messageView = null;
-                    // If the status has changed and I am on the view
-                    //page and they change the status and it is a draft
-                    // go to the edit page
-                    status.on('sync', function() {
-                        if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
-                            window.location.href = '/collectibles/view/' + this.id;
-                        }
-                    }, status);
-                    collectibleModel.on('destroy', function() {
-                        window.location.href = '/users/home';
-                    });
-                    if (collectibleModel.get('custom')) {
-                        // view is overkill here
-                        dust.render('directional.custom', {}, function(error, output) {
-                            $('#directional-text-container').html(output);
-                        });
-                    } else if (collectibleModel.get('original')) {
-                        // view is overkill here
-                        dust.render('directional.original', {}, function(error, output) {
-                            $('#directional-text-container').html(output);
-                        });
-                    } else {
-                        // view is overkill here
-                        dust.render('directional.page', {}, function(error, output) {
-                            $('#directional-text-container').html(output);
-                        });
-                    }
+            // Setup the current model
+            var collectibleModel = new CollectibleModel(rawCollectible);
+            var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
+            // Setup the manufacturer list, this will contain all data for each manufacturer
+            var manufacturerList = new ManufacturerList(rawManufacturers);
+            var allManufacturerList = new ManufacturerList(rawManufacturesList);
+            var currencies = new Currencies(rawCurrencies);
+            var scales = new Scales(rawScales);
+            var attributes = new Attributes(rawCollectible.AttributesCollectible);
+            var uploads = new CollectibleUploads(rawCollectible.CollectiblesUpload, {
+                'id': collectibleId
+            });
+            var brands = new Brands(rawBrands);
+            var tags = new Tags(rawCollectible.CollectiblesTag);
+            var artists = new Artists(rawCollectible.ArtistsCollectible);
+            var variants = new Backbone.Collection(rawVariants);
+            var status = new Status();
+            status.set({
+                id: collectibleId,
+                status: rawCollectible.Status
+            }, {
+                silent: true
+            });
+            // This could probably go in the init method but works here for now
+            var selectedManufacturer = null;
+            _.each(manufacturerList.models, function(manufacturer) {
+                if (manufacturer.get('id') === collectibleModel.get('manufacture_id')) {
+                    selectedManufacturer = manufacturer;
+                    return;
                 }
             });
+            // Setup global events
+            pageEvents.on('status:change:error', function(errors) {
+                if (messageView) {
+                    messageView.remove();
+                    messageView = null;
+                }
+                messageView = new MessageView({
+                    errors: new Errors(errors)
+                });
+                $('#message-container').html(messageView.render().el);
+            });
+            pageEvents.on('status:change:error:severe', function() {
+                if (messageView) {
+                    messageView.remove();
+                    messageView = null;
+                }
+                messageView = new SevereMessageView({});
+                $('#message-container').html(messageView.render().el);
+            });
+            pageEvents.on('status:change:dupList', function(collectibles) {
+                hasDupList = true;
+                status.set({
+                    'hasDupList': hasDupList
+                });
+                if (messageView) {
+                    messageView.remove();
+                    messageView = null;
+                }
+                messageView = new DupListMessageView({
+                    collection: new Collectibles(collectibles)
+                });
+                $('#message-container').html(messageView.render().el);
+            });
+            pageEvents.on('upload:close', function() {
+                uploads.fetch();
+            });
+            // Setup views
+            var collectibleViewData = {
+                model: collectibleModel,
+                manufacturers: manufacturerList,
+                manufacturer: selectedManufacturer,
+                currencies: currencies,
+                scales: scales,
+                status: status,
+                collectibleType: collectibleTypeModel,
+                brands: brands,
+                template: 'collectible.default.edit',
+                pageEvents: pageEvents
+            };
+            if (collectibleModel.get('custom')) {
+                collectibleViewData.template = 'collectible.custom.edit';
+                collectibleViewData.customStatuses = new Backbone.Collection(rawCustomStatuses);
+            } else if (collectibleModel.get('original')) {
+                collectibleViewData.template = 'collectible.original.edit';
+            }
+            //TODO: At some point it might warrant a whole new view for customs
+            var collectibleView = new CollectibleView(collectibleViewData);
+            $('#photo-container').append(new PhotoView({
+                collection: uploads,
+                eventManager: pageEvents
+            }).render().el);
+            $('#collectible-container').append(new PersonsView({
+                collection: artists,
+                collectibleType: collectibleTypeModel
+            }).render().el);
+            $('#collectible-container').append(collectibleView.render().el);
+            $('#attributes-container').append(new AttributesView({
+                collection: attributes,
+                status: status,
+                artists: new Backbone.Collection(rawArtists),
+                manufacturers: allManufacturerList,
+                categories: new Backbone.Collection(rawCategories),
+                collectible: collectibleModel,
+                scales: scales
+            }).render().el);
+            var statusView = new StatusView({
+                model: status,
+                collectible: collectibleModel,
+                // we set allow edit here and then base everything off of status in the template, kind of sucks
+                allowEdit: true,
+                allowDelete: allowDelete
+            });
+            $('#status-container').html(statusView.render().el);
+            // if there is a delete from the status view that is a prompt
+            statusView.on('delete:collectible:prompt', function() {
+                // display modal about delete, this is most likely for cases where this
+                // collectible is active and we need to delete it
+                // this will allow the user to enter in an id to replace this collectible with
+                var collectibleDeleteView = new CollectibleDeleteView({
+                    model: collectibleModel,
+                    variants: variants
+                });
+                var modal = new Backbone.BootstrapModal({
+                    content: collectibleDeleteView,
+                    title: 'Delete Collectible',
+                    animate: true,
+                    okCloses: false
+                }).open();
+            }, this);
+            $('#collectible-container').append(new TagsView({
+                collection: tags
+            }).render().el);
+
+
+            // Make sure we only have one
+            var messageView = null;
+            // If the status has changed and I am on the view
+            //page and they change the status and it is a draft
+            // go to the edit page
+            status.on('sync', function() {
+                if (this.toJSON().status.id === '2' || this.toJSON().status.id === '4') {
+                    window.location.href = '/collectibles/view/' + this.id;
+                }
+            }, status);
+            collectibleModel.on('destroy', function() {
+                window.location.href = '/users/home';
+            });
+            if (collectibleModel.get('custom')) {
+                // view is overkill here
+                dust.render('directional.custom', {}, function(error, output) {
+                    $('#directional-text-container').html(output);
+                });
+            } else if (collectibleModel.get('original')) {
+                // view is overkill here
+                dust.render('directional.original', {}, function(error, output) {
+                    $('#directional-text-container').html(output);
+                });
+            } else {
+                // view is overkill here
+                dust.render('directional.page', {}, function(error, output) {
+                    $('#directional-text-container').html(output);
+                });
+            }
+
+            $.unblockUI();
         }
     }
 });

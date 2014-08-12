@@ -4,6 +4,18 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 
 echo $this -> Html -> scriptBlock('var collectibleId =' . $collectibleId.';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var uploadDirectory ="' . $this -> FileUpload -> getUploadDirectory().'";', array('inline' => false));
+
+echo $this -> Html -> scriptBlock('var rawCollectible =' . json_encode($collectible) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawBrands =' . json_encode($brands) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawManufacturers =' . json_encode($manufacturers) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawScales =' . json_encode($scales) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawCurrencies =' . json_encode($currencies) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawArtists =' . json_encode($artists) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawCategories =' . json_encode($categories) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawManufacturesList =' . json_encode($manufacturesList) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawCustomStatuses =' . json_encode($customStatuses) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawVariants =' . json_encode($variants) .';', array('inline' => false));
+
 if (isset($adminMode) && $adminMode) {
 	echo $this -> Html -> scriptBlock('var adminMode = true;', array('inline' => false));
 } else {
@@ -96,7 +108,7 @@ if(isset($allowDelete) && $allowDelete){
 	</div>
 </div>
 
-<div id="attributes-container" class="row well"></div>
+<div id="attributes-container" class="row"></div>
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
