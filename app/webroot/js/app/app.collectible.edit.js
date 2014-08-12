@@ -20,10 +20,7 @@ define(['backbone', 'jquery', 'dust',
     'text!templates/collectibles/message.dust',
     'text!templates/collectibles/message.error.severe.dust',
     'text!templates/collectibles/message.duplist.dust',
-
-
     'text!templates/collectibles/modal.dust',
-
     'text!templates/collectibles/attribute.upload.dust',
     'text!templates/collectibles/directional.dust',
     'text!templates/collectibles/attribute.add.existing.dust',
@@ -57,9 +54,7 @@ define(['backbone', 'jquery', 'dust',
     dust.loadSource(dust.compile(messageTemplate, 'message.edit'));
     dust.loadSource(dust.compile(messageSevereTemplate, 'message.error.severe'));
     dust.loadSource(dust.compile(dupListTemplate, 'message.duplist'));
-
     dust.loadSource(dust.compile(modalTemplate, 'modal'));
-
     dust.loadSource(dust.compile(attributeUploadTemplate, 'attribute.photo.edit'));
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(attributeAddExistingTemplate, 'attribute.add.existing'));
@@ -1776,7 +1771,7 @@ define(['backbone', 'jquery', 'dust',
     return {
         start: function() {
             // Setup the current model
-            var collectibleModel = new CollectibleModel(rawCollectible);
+            var collectibleModel = new CollectibleModel(rawCollectible.Collectible);
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
             // Setup the manufacturer list, this will contain all data for each manufacturer
             var manufacturerList = new ManufacturerList(rawManufacturers);
