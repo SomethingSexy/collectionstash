@@ -23,7 +23,6 @@
             options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
             this.collectible = options.collectible ? options.collectible : {};
             this.allowDelete = (options.allowDelete && options.allowDelete === true) ? true : false;
-            //this.model.on("change", this.render, this);
         },
         render: function() {
             var self = this;
@@ -47,14 +46,14 @@
                     $(event.currentTarget).button('reset');
 
                     if (response.status === 500) {
-                        pageEvents.trigger('status:change:error:severe');
+                        model.trigger('status:change:error:severe');
                     } else {
 
                         var responseObj = $.parseJSON(response.responseText);
                         if (responseObj.response.data.hasOwnProperty('dupList')) {
-                            pageEvents.trigger('status:change:dupList', responseObj.response.data.dupList);
+                            model.trigger('status:change:dupList', responseObj.response.data.dupList);
                         } else {
-                            pageEvents.trigger('status:change:error', responseObj.response.errors);
+                            model.trigger('status:change:error', responseObj.response.errors);
                         }
                     }
                 }
@@ -70,7 +69,7 @@
 
                         var responseObj = $.parseJSON(response.responseText);
 
-                        pageEvents.trigger('status:change:error', responseObj.response.errors);
+                        model.trigger('status:change:error', responseObj.response.errors);
 
                     }
                 });

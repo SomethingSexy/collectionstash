@@ -55,7 +55,7 @@ define(['backbone', 'text!templates/collectibles/collectible.delete.dust', 'dust
                     self.errors = new Backbone.Collection(responseObj.response.errors);
                     self.render();
 
-                    //pageEvents.trigger('status:change:error', responseObj.response.errors);
+                    // pageEvents.trigger('status:change:error', responseObj.response.errors);
                 }
             });
         }
