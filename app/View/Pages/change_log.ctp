@@ -1,5 +1,10 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.2.1</h3>
+<ul>
+<li>Fixed an issue where users could not edit comments on a collectible page. (#109).</li>
+</ul>
+
 <h3>Release Notes for v3.2.0</h3>
 <ul>
 <li>Fixed an issue with the images on the photo sharing page. (#105).</li>
