@@ -1,0 +1,46 @@
+<form class="form-horizontal">
+	<fieldset>
+		<legend>
+			Details
+		</legend>
+		<div class="form-group">
+			<label class="col-lg-2 control-label" for="inputManName">Name</label>
+			 <div class="col-lg-10">
+				<input type="text" id="inputManName" class="form-control" name="title" value="{{{manufacturer.title}}}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label" for="inputManUrl">URL</label>
+			 <div class="col-lg-10">
+				<input type="text" id="inputManUrl" class="form-control" name="url" value="{{{{manufacturer.url}}}">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Brands
+		</legend>
+		<div class="form-group">
+			<label class="control-label col-lg-2 " for="inputManBrand">Brand</label>
+			<div class="input-group col-lg-10">
+				<div class="">
+					<input type="hidden" class="bigdrop select2-offscreen company-typeahead typehead-add" value="" style="width: 100%;" name="name" tabindex="-1" title="">
+					{{! <input id="inputManBrand" class="form-control typeahead" type="text" value="" name="brand" maxlength="200" autocomplete="off"> }}
+				</div>
+				<span class="input-group-btn">
+					<button class="btn btn-primary manufacturer-brand-add" type="button">
+						Add
+					</button>
+				</span>
+				<span class="help-block input-man-brand-error"></span>
+			</div>
+		</div>
+		<ul class="manufacturer-brands list-group spacer">
+			{{#manufacturer.LicensesManufacture}}
+			<li class="list-group-item">
+				{{License.name}}
+			</li>
+			{{/manufacturer.LicensesManufacture}}
+		</ul>
+	</fieldset>
+</form>
