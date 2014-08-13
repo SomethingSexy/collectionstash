@@ -1,10 +1,6 @@
-define(['backbone', 'jquery', 'dust', 'text!templates/collectibles/manufacturer.add.dust', 'text!templates/collectibles/manufacturer.edit.dust', 'select2', 'backbone.validation'], function(Backbone, $, dust, template, editTemplate) {
-    
-    dust.loadSource(dust.compile(template, 'manufacturer.add'));
-    dust.loadSource(dust.compile(editTemplate, 'manufacturer.edit'));
-    
+define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectible/edit/company.add.mustache', 'text!templates/app/collectible/edit/company.edit.mustache', 'select2', 'backbone.validation'], function(Backbone, $, Mustache, dust, addTemplate, editTemplate) {
+
     var ManufacturerView = Backbone.View.extend({
-        template: 'manufacturer.add',
         modal: 'modal',
         events: {
             "change #inputManName": "fieldChanged",
@@ -17,9 +13,9 @@ define(['backbone', 'jquery', 'dust', 'text!templates/collectibles/manufacturer.
             var self = this;
             this.mode = options.mode;
             if (options.mode === 'edit') {
-                this.template = 'manufacturer.edit';
+                this.template = editTemplate;
             } else if (options.mode === 'add') {
-                this.template = 'manufacturer.add';
+                this.template = addTemplate;
             }
             if (this.mode === 'add') {
                 Backbone.Validation.bind(this, {
@@ -41,37 +37,25 @@ define(['backbone', 'jquery', 'dust', 'text!templates/collectibles/manufacturer.
             this.brands = options.brands;
             this.brandArray = [];
             options.brands.each(function(brand) {
-                self.brandArray.push(brand.get('License').name);
+                self.brandArray.push({
+                    id: brand.get('License').id,
+                    text: brand.get('License').name
+                });
             });
             this.listenTo(this.model, 'change:LicensesManufacture', this.renderBody);
-            // this.manufacturerBrands = new Bloodhound({
-            //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-            //     // `states` is an array of state names defined in "The Basics"
-            //     local: $.map(this.brandArray, function(state) {
-            //         return {
-            //             value: state
-            //         };
-            //     })
-            // });
-            // // kicks off the loading/processing of `local` and `prefetch`
-            // this.manufacturerBrands.initialize();
         },
         renderBody: function() {
             var self = this;
             var data = {
                 manufacturer: this.model.toJSON()
             };
-            dust.render(this.template, data, function(error, output) {
-                $('.modal-body', self.el).html(output);
-            });
-            $('.manufacturer-brand .typeahead', self.el).select2({
+
+            $('.modal-body', self.el).html(Mustache.render(this.template, data));
+
+            $('.company-typeahead', self.el).select2({
                 data: {
                     results: this.brandArray,
-                    // text: 'tag'
                 },
-                // formatSelection: format,
-                // formatResult: format
             });
         },
         render: function() {
@@ -122,10 +106,13 @@ define(['backbone', 'jquery', 'dust', 'text!templates/collectibles/manufacturer.
             }
         },
         addBrand: function() {
-            var self = this;
-            $('.input-man-brand-error', self.el).text('');
-            var brand = $('#inputManBrand', self.el).val();
+            var self = this,
+                valObj = $('.company-typeahead', this.el).select2('data');
+            var brand = valObj && valObj.text ? valObj.text : '';
             brand = $.trim(brand);
+
+            $('.input-man-brand-error', self.el).text('');
+
             $('.inline-error', self.el).text('');
             $('.form-group ', self.el).removeClass('has-error');
             if (brand !== '') {
