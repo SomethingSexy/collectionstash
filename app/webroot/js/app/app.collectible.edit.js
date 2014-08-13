@@ -1802,7 +1802,7 @@ define(['backbone', 'jquery', 'dust',
                 }
             });
             // Setup global events
-            pageEvents.on('status:change:error', function(errors) {
+            status.on('status:change:error', function(errors) {
                 if (messageView) {
                     messageView.remove();
                     messageView = null;
@@ -1812,7 +1812,7 @@ define(['backbone', 'jquery', 'dust',
                 });
                 $('#message-container').html(messageView.render().el);
             });
-            pageEvents.on('status:change:error:severe', function() {
+            status.on('status:change:error:severe', function() {
                 if (messageView) {
                     messageView.remove();
                     messageView = null;
@@ -1820,7 +1820,7 @@ define(['backbone', 'jquery', 'dust',
                 messageView = new SevereMessageView({});
                 $('#message-container').html(messageView.render().el);
             });
-            pageEvents.on('status:change:dupList', function(collectibles) {
+            status.on('status:change:dupList', function(collectibles) {
                 hasDupList = true;
                 status.set({
                     'hasDupList': hasDupList
