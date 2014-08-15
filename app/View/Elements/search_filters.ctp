@@ -8,7 +8,7 @@ if(isset($saveSearchFilters['search'])){
 
 ?></script>
 <?php 
-echo $this -> Html -> script('thirdparty/select2', array('inline' => false));
+echo $this -> Html -> script('/bower_components/select2/select2', array('inline' => false));
 echo $this -> Html -> css('/bower_components/select2/select2');
 echo $this -> Html -> script('thirdparty/uri', array('inline' => false));
 echo $this -> Html -> script('views/app/collectible/search/view.filters', array('inline' => false)); ?>
