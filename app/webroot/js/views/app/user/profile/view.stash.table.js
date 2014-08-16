@@ -35,8 +35,9 @@ define(['require', 'marionette', 'views/app/user/profile/view.stash', 'text!temp
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
-
-            $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+            if (this.collection.state.totalPages > 1) {
+                $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+            }
         },
         onItemRemoved: function() {
 
