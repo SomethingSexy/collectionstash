@@ -116,7 +116,7 @@ class CollectibleSearchComponent extends Component
         if (!is_null($paramType)) {
             $query['paramType'] = $paramType;
         }
-        debug($query);
+
         //See if a search was set
         if (isset($saveSearchFilters['search']) && $saveSearchFilters['search'] !== '') {
             //Using like for now because switch to InnoDB
