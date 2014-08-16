@@ -32,13 +32,14 @@ define(['app/app.user.profile',
         'views/common/view.filters',
         'views/common/growl',
         'models/model.collectible.user',
+        'collections/collection.collectible.user',
         'views/common/view.comments',
         'views/common/view.comment.add',
         'text!templates/app/user/profile/layout.wishlist.mustache',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CollectiblesCollection, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -577,43 +578,59 @@ define(['app/app.user.profile',
             },
             stash: function() {
                 renderHeader('stash');
-                // closing here because there is an issue with paginated collections that are 
-                // less than 25 in size and switching between infinite and server...
-                App.layout.main.close();
-                if (App.collectibles.mode !== 'infinite') {
-                    App.collectibles.switchMode('infinite').done(function() {
-                        renderStash('tiles');
-                    });
-                } else {
-                    // for now we want to reset everytime we come to this page
-                    // in case data has changed.  This is the best way I have found
-                    // to handle that for now
-                    App.collectibles.reset();
-                    App.collectibles.fullCollection.reset();
-                    App.collectibles.getFirstPage().done(function() {
-                        renderStash('tiles');
-                    });
-                }
+
+                // This is kind of dumb but a decent fix for #113.
+                // if the size of the collection is less than 25 
+                // when you go from the list to the tiles, backone.paginator
+                // is triggering a reset event, before finishing so
+                // it is re-rendering the table list and that is blowing up
+                // because it doesnt have pagination
+
+                // SO create a new collection here, since we were resetting and
+                // reloading anyway this will stop events from being triggered
+                // on the current view before it gets blown away.
+
+                // Another solution would be to destroy the current
+                // view and show a loading view
+                App.collectibles = new CollectiblesCollection([], {
+                    username: App.profile.get('username')
+                });
+
+                // if (App.collectibles.mode !== 'infinite') {
+                //     App.collectibles.switchMode('infinite').done(function() {
+                //         renderStash('tiles');
+                //     });
+                // } else {
+                //     // for now we want to reset everytime we come to this page
+                //     // in case data has changed.  This is the best way I have found
+                //     // to handle that for now
+                //     App.collectibles.reset();
+                //     App.collectibles.fullCollection.reset();
+                App.collectibles.getFirstPage().done(function() {
+                    renderStash('tiles');
+                });
+                // }
             },
             stashList: function() {
                 renderHeader('stash');
-                if (App.collectibles.mode !== 'server') {
-                    App.collectibles.switchMode('server').done(function() {
-                        renderStash('list');
-                    });
-                } else if (App.collectibles.isEmpty()) {
-                    App.collectibles.getFirstPage().done(function() {
-                        renderStash('list');
-                    });
-                } else {
+                // see above for reasoning
+                App.collectibles = new CollectiblesCollection([], {
+                    username: App.profile.get('username')
+                });
+                // if (App.collectibles.mode !== 'server') {
+                //     App.collectibles.switchMode('server').done(function() {
+                //         renderStash('list');
+                //     });
+                // } else if (App.collectibles.isEmpty()) {
+                App.collectibles.getFirstPage().done(function() {
                     renderStash('list');
-                }
+                });
+                // } else {
+                //     renderStash('list');
+                // }
             },
             wishlist: function() {
                 renderHeader('wishlist');
-                // closing here because there is an issue with paginated collections that are 
-                // less than 25 in size and switching between infinite and server...
-                App.layout.main.close();
                 if (App.wishlist.mode !== 'infinite') {
                     App.wishlist.switchMode('infinite').done(function() {
                         renderWishlist('tiles');
