@@ -577,7 +577,9 @@ define(['app/app.user.profile',
             },
             stash: function() {
                 renderHeader('stash');
-
+                // closing here because there is an issue with paginated collections that are 
+                // less than 25 in size and switching between infinite and server...
+                App.layout.main.close();
                 if (App.collectibles.mode !== 'infinite') {
                     App.collectibles.switchMode('infinite').done(function() {
                         renderStash('tiles');
@@ -609,7 +611,9 @@ define(['app/app.user.profile',
             },
             wishlist: function() {
                 renderHeader('wishlist');
-
+                // closing here because there is an issue with paginated collections that are 
+                // less than 25 in size and switching between infinite and server...
+                App.layout.main.close();
                 if (App.wishlist.mode !== 'infinite') {
                     App.wishlist.switchMode('infinite').done(function() {
                         renderWishlist('tiles');
