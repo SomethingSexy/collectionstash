@@ -615,7 +615,8 @@ define(['app/app.user.profile',
                 renderHeader('stash');
                 // see above for reasoning
                 App.collectibles = new CollectiblesCollection([], {
-                    username: App.profile.get('username')
+                    username: App.profile.get('username'),
+                    mode: 'server'
                 });
                 // if (App.collectibles.mode !== 'server') {
                 //     App.collectibles.switchMode('server').done(function() {
