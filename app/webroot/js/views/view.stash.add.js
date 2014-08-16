@@ -1,27 +1,28 @@
 var StashAddView = Backbone.View.extend({
     template: 'stash.add',
     events: {
-        "change input": "fieldChanged",
-        "change select": "selectionChanged",
-        'change textarea': 'fieldChanged',
+        "change input[name]": "fieldChanged",
+        "change select[name]": "selectionChanged",
+        'change textarea[name]': 'fieldChanged',
     },
     initialize: function(options) {
         this.collectible = options.collectible;
-        this.merchantHound = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/merchants/getMerchantList?query=%QUERY',
-                filter: function(list) {
-                    return $.map(list, function(country) {
-                        return {
-                            value: country
-                        };
-                    });
-                }
-            }
-        });
-        this.merchantHound.initialize();
+        // this.merchantHound = new Bloodhound({
+        //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        //     queryTokenizer: Bloodhound.tokenizers.whitespace,
+        //     remote: {
+        //         url: '/merchants/getMerchantList?query=%QUERY',
+        //         filter: function(list) {
+        //             return $.map(list, function(country) {
+        //                 return {
+        //                     value: country
+        //                 };
+        //             });
+        //         }
+        //     }
+        // });
+        // this.merchantHound.initialize();
+        this.lastResults = [];
     },
     render: function() {
         var self = this;
@@ -38,15 +39,82 @@ var StashAddView = Backbone.View.extend({
                 forceUpdate: true
             });
         });
-        $('.merchants .typeahead', this.el).typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        }, {
-            name: 'merchants',
-            displayKey: 'value',
-            source: this.merchantHound.ttAdapter()
+
+        $('.merchants-typeahead', this.el).select2({
+            placeholder: 'Search or add a new merchant.',
+            minimumInputLength: 1,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "/merchants/merchants",
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term, // search term
+                        page_limit: 100
+                    };
+                },
+                results: function(data, page) {
+                    self.lastResults = data;
+                    return {
+                        results: data
+                    };
+                }
+            },
+            formatResult: function(item) {
+                return item.name;
+            },
+            formatSelection: function(item) {
+                return item.name;
+            },
+            createSearchChoice: function(term, data) {
+                if (self.lastResults.some(function(r) {
+                    return r.name == term
+                })) {
+                    return {
+                        id: data.id,
+                        name: term,
+                        created: false
+                    };
+                } else {
+                    return {
+                        id: term,
+                        name: term,
+                        created: true
+                    };
+                }
+            },
+            allowClear: true,
+            dropdownCssClass: "bigdrop"
+        }).on('change', function(val, added, removed) {
+            var data = $('.merchants-typeahead', self.el).select2('data');
+            if (!data || !data.name) {
+                self.model.unset('merchant', {
+                    forceUpdate: true
+                });
+                return;
+            }
+            if (data.created) {
+                self.model.set({
+                    merchant: data.name,
+                }, {
+                    forceUpdate: true
+                });
+            } else {
+                self.model.set({
+                    merchant: data.name,
+                }, {
+                    forceUpdate: true
+                });
+            }
         });
+        // $('.merchants .typeahead', this.el).typeahead({
+        //     hint: true,
+        //     highlight: true,
+        //     minLength: 1
+        // }, {
+        //     name: 'merchants',
+        //     displayKey: 'value',
+        //     source: this.merchantHound.ttAdapter()
+        // });
         return this;
     },
     selectionChanged: function(e) {
