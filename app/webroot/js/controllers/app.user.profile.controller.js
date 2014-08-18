@@ -633,7 +633,7 @@ define(['app/app.user.profile',
             },
             wishlist: function() {
                 renderHeader('wishlist');
-
+                 // see above for reasoning
                 App.wishlist = new WishlistCollection([], {
                     username: App.profile.get('username')
                 });
@@ -655,6 +655,7 @@ define(['app/app.user.profile',
             },
             wishlistList: function() {
                 renderHeader('wishlist');
+                 // see above for reasoning
                 App.wishlist = new WishlistCollection([], {
                     username: App.profile.get('username'),
                     mode: 'server'
