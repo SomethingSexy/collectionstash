@@ -33,13 +33,14 @@ define(['app/app.user.profile',
         'views/common/growl',
         'models/model.collectible.user',
         'collections/collection.collectible.user',
+        'collections/collection.collectible.wishlist',
         'views/common/view.comments',
         'views/common/view.comment.add',
         'text!templates/app/user/profile/layout.wishlist.mustache',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CollectiblesCollection, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CollectiblesCollection, WishlistCollection, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -632,31 +633,46 @@ define(['app/app.user.profile',
             },
             wishlist: function() {
                 renderHeader('wishlist');
-                if (App.wishlist.mode !== 'infinite') {
-                    App.wishlist.switchMode('infinite').done(function() {
-                        renderWishlist('tiles');
-                    });
-                } else if (App.wishlist.isEmpty()) {
-                    App.wishlist.getFirstPage().done(function() {
-                        renderWishlist('tiles');
-                    });
-                } else {
+
+                App.wishlist = new WishlistCollection([], {
+                    username: App.profile.get('username')
+                });
+                App.wishlist.getFirstPage().done(function() {
                     renderWishlist('tiles');
-                }
+                });
+
+                // if (App.wishlist.mode !== 'infinite') {
+                //     App.wishlist.switchMode('infinite').done(function() {
+                //         renderWishlist('tiles');
+                //     });
+                // } else if (App.wishlist.isEmpty()) {
+                //     App.wishlist.getFirstPage().done(function() {
+                //         renderWishlist('tiles');
+                //     });
+                // } else {
+                //     renderWishlist('tiles');
+                // }
             },
             wishlistList: function() {
                 renderHeader('wishlist');
-                if (App.wishlist.mode !== 'server') {
-                    App.wishlist.switchMode('server').done(function() {
-                        renderWishlist('list');
-                    });
-                } else if (App.wishlist.isEmpty()) {
-                    App.wishlist.getFirstPage().done(function() {
-                        renderWishlist('list');
-                    });
-                } else {
+                App.wishlist = new WishlistCollection([], {
+                    username: App.profile.get('username'),
+                    mode: 'server'
+                });
+                App.wishlist.getFirstPage().done(function() {
                     renderWishlist('list');
-                }
+                });
+                // if (App.wishlist.mode !== 'server') {
+                //     App.wishlist.switchMode('server').done(function() {
+                //         renderWishlist('list');
+                //     });
+                // } else if (App.wishlist.isEmpty()) {
+                //     App.wishlist.getFirstPage().done(function() {
+                //         renderWishlist('list');
+                //     });
+                // } else {
+                //     renderWishlist('list');
+                // }
             },
             sale: function() {
                 renderHeader('sale');
