@@ -7,21 +7,6 @@ var StashAddView = Backbone.View.extend({
     },
     initialize: function(options) {
         this.collectible = options.collectible;
-        // this.merchantHound = new Bloodhound({
-        //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //     remote: {
-        //         url: '/merchants/getMerchantList?query=%QUERY',
-        //         filter: function(list) {
-        //             return $.map(list, function(country) {
-        //                 return {
-        //                     value: country
-        //                 };
-        //             });
-        //         }
-        //     }
-        // });
-        // this.merchantHound.initialize();
         this.lastResults = [];
     },
     render: function() {
@@ -106,15 +91,6 @@ var StashAddView = Backbone.View.extend({
                 });
             }
         });
-        // $('.merchants .typeahead', this.el).typeahead({
-        //     hint: true,
-        //     highlight: true,
-        //     minLength: 1
-        // }, {
-        //     name: 'merchants',
-        //     displayKey: 'value',
-        //     source: this.merchantHound.ttAdapter()
-        // });
         return this;
     },
     selectionChanged: function(e) {
