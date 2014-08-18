@@ -121,8 +121,6 @@ class CollectiblesUsersController extends AppController
             // Be very careful when changing this contains, it is tied to the type
             $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderAveragePrice', 'limit' => 25, 'order' => array('sort_number' => 'desc'), 'conditions' => array('CollectiblesUser.active' => true, 'CollectiblesUser.sale' => true, 'CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User' => array('fields' => array('id', 'username')), 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
             $collectibles = $this->paginate('CollectiblesUser');
-            
-
             // I am sure there is as better way to do this, I don't feel smart right now
             //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
             

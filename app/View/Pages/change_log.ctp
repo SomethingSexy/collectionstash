@@ -1,5 +1,11 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.2.2</h3>
+<ul>
+<li>Fixed an issue where users could not edit the merchant field for collectibles in their stash. (#112).</li>
+<li>Fixed an issue where switching between the tile and list view was broken on the stash page if your stash had less than 25 collectibles. (#113)</li>
+</ul>
+
 <h3>Release Notes for v3.2.1</h3>
 <ul>
 <li>Fixed an issue where users could not edit comments on a collectible page. (#109).</li>

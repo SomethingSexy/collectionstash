@@ -1,4 +1,6 @@
 <?php
+echo $this -> Html -> script('/bower_components/select2/select2', array('inline' => false));
+echo $this -> Html -> css('/bower_components/select2/select2', array('inline' => false));
 echo $this -> Html -> script('views/view.stash.add', array('inline' => false));
 echo $this -> Html -> script('cs.stash', array('inline' => false));
 echo $this -> Html -> script('models/model.collectible.user', array('inline' => false));

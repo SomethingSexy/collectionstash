@@ -75,7 +75,8 @@
 	<div class="form-group {#inlineErrors.merchant}has-error{/inlineErrors.merchant}">
 		<label class="control-label" for="CollectiblesUserMerchantId">Where did you purchase the collectible?</label>
 			<div class="merchants">
-				<input type="text" id="CollectiblesUserMerchantId" class="form-control typeahead" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}">
+				<input type="hidden" class="bigdrop select2-offscreen merchants-typeahead typehead-add" value="" style="width: 100%;" tabindex="-1" title="">
+				<!-- <input type="text" id="CollectiblesUserMerchantId" class="form-control typeahead" maxlength="150" name="merchant" autocomplete="off" value="{model.merchant}"> -->
 			</div>
 			{#inlineErrors.merchant}
 				<span class="help-inline">{.}</span>

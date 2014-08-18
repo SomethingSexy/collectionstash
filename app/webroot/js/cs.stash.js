@@ -1,5 +1,3 @@
-// TODO: Lot's of duplicate code in here
-
 function csStashSuccessMessage(message) {
     $.blockUI({
         message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
