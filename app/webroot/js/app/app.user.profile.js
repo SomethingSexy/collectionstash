@@ -44,10 +44,6 @@ define(['marionette',
         MyApp.stashFacts = new Backbone.Model(rawStashFacts);
     }
 
-    MyApp.wishlist = new WishlistCollection([], {
-        username: MyApp.profile.get('username')
-    });
-
     MyApp.photos = new PhotosCollection([], {
         username: MyApp.profile.get('username')
     });
