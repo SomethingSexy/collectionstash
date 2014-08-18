@@ -36,7 +36,6 @@
             dust.render(this.template, model, function(error, output) {
                 $(self.el).html(output);
             });
-
             return this;
         },
         changeStatus: function(event) {

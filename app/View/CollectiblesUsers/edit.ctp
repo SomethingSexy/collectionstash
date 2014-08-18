@@ -1,4 +1,7 @@
-<?php echo $this -> Html -> script('collection-edit', array('inline' => false)); ?>
+<?php 
+echo $this -> Html -> script('/bower_components/select2/select2', array('inline' => false));
+echo $this -> Html -> css('/bower_components/select2/select2');
+echo $this -> Html -> script('collection-edit', array('inline' => false)); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h1 class="panel-title"><?php echo __('Edit Your Collectible'); ?></h1>
@@ -59,9 +62,9 @@
 			</div>
 		</div>
 		<div class="form-group">
-	          <label class="control-label col-lg-3" for="CollectiblesUserMerchantId"><?php echo __('Where did you purchase the collectible?') ?></label>
+	          <label class="control-label col-lg-3" for=""><?php echo __('Where did you purchase the collectible?') ?></label>
 	        <div class="col-lg-6">
-	        <?php echo $this -> Form -> input('merchant', array('class' => 'form-control', 'type' => 'text', 'div' => false, 'label' => false, 'maxLength' => 150)); ?>
+	        	<input type="hidden" class="bigdrop select2-offscreen merchants-typeahead" value="<?php echo $this -> data['CollectiblesUser']['merchant_id']; ?>" style="width: 100%;" name="" tabindex="-1" title="">
 			</div>
 		</div> 
 		<div class="form-group">
@@ -132,9 +135,9 @@
 				<input type="hidden" name="data[CollectiblesUser][remove_date]" value="<?php echo $collectible['CollectiblesUser']['remove_date'] ?>" />  
 			<?php }?>					
 		<?php } ?> 
-		<input type="hidden" name="data[CollectiblesUser][sale]" value="<?php echo $collectible['CollectiblesUser']['sale'] ?>" />  
-		<input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id'] ?>" />
-	
+		<input type="hidden" name="data[CollectiblesUser][sale]" value="<?php echo $collectible['CollectiblesUser']['sale']; ?>" />  
+		<input type="hidden" name="data[CollectiblesUser][id]" value="<?php echo $collectible['CollectiblesUser']['id']; ?>" />
+		<input type="hidden" name="data[CollectiblesUser][merchant] "id="CollectiblesUserMerchantValue" value="<?php if(isset($this -> data['CollectiblesUser']['merchant'])) {echo $this -> data['CollectiblesUser']['merchant'];} ?>" />
 	</fieldset>
 	<div class="form-group">
 		<div class="col-lg-offset-3 col-lg-9">
@@ -144,16 +147,3 @@
 	<?php echo $this -> Form -> end(); ?>
 	</div>
 </div>
-<script>
-	$(function() {
-		$("#CollectiblesUserPurchaseDate").datepicker();
-		$("#CollectiblesUserRemoveDate").datepicker();
-
-		$('#CollectiblesUserMerchant', this.el).typeahead({
-			name : 'merchants',
-			remote : '/merchants/getMerchantList?query=%QUERY',
-		});
-
-	});
-
-</script>
