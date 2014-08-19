@@ -418,10 +418,6 @@ define(['backbone', 'jquery', 'dust',
             // Putting this at this level for now
             $('.modal-footer .save', '#attribute-update-dialog').click(function() {
                 var url = '/attributes/update.json';
-                // If we are passing in an override admin or the options are set to admin mode
-                if (self.options.adminPage) {
-                    url = '/admin/attributes/update.json';
-                }
                 $('#attribute-update-dialog').find('form').ajaxSubmit({
                     // dataType identifies the expected content type of the server response
                     dataType: 'json',
@@ -440,7 +436,7 @@ define(['backbone', 'jquery', 'dust',
                         if (responseText.response.isSuccess) {
                             $('#attribute-update-dialog').modal('hide');
                             var message = 'Update has been submitted!';
-                            if (self.options.adminPage || !responseText.response.data.isEdit) {
+                            if (!responseText.response.data.isEdit) {
                                 message = 'The part was successfully updated!';
                             }
                             $.blockUI({
@@ -1869,7 +1865,10 @@ define(['backbone', 'jquery', 'dust',
                 collectibleType: collectibleTypeModel
             }).render().el);
             $('#collectible-container').append(collectibleView.render().el);
-            $('#attributes-container').append(new AttributesView({
+            $('#collectible-container').append(new TagsView({
+                collection: tags
+            }).render().el);
+            $('#collectible-container').append(new AttributesView({
                 collection: attributes,
                 status: status,
                 artists: new Backbone.Collection(rawArtists),
@@ -1902,9 +1901,6 @@ define(['backbone', 'jquery', 'dust',
                     okCloses: false
                 }).open();
             }, this);
-            $('#collectible-container').append(new TagsView({
-                collection: tags
-            }).render().el);
 
 
             // Make sure we only have one
