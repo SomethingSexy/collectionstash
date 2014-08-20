@@ -32,34 +32,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             }
 
             data.part = this.model.part.toJSON();
-            // we need to build out some stuff for editing and removing
-            // var attribute = {};
-            // attribute.categoryId = data.Attribute.AttributeCategory.id;
-            // attribute.categoryName = data.Attribute.AttributeCategory.path_name;
-            // attribute.name = data.Attribute.name;
-            // attribute.description = data.Attribute.description;
-            // if (data.Part.scale_id) {
-            //     attribute.scaleId = data.Attribute['scale_id'];
-            // } else {
-            //     attribute.scaleId = null;
-            // }
-            // if (data.Attribute['manufacture_id']) {
-            //     attribute.manufacturerId = data.Attribute['manufacture_id'];
-            // } else {
-            //     attribute.manufacturerId = null;
-            // }
-            // if (data.Attribute['artist_id']) {
-            //     attribute.artistId = data.Attribute['artist_id'];
-            // } else {
-            //     attribute.artistId = null;
-            // }
-            // attribute.id = data.Attribute.id;
-            // var attributeCollectible = {};
-            // attributeCollectible.id = data.id;
-            // attributeCollectible.attributeId = data['attribute_id'];
-            // attributeCollectible.categoryName = data.Attribute.AttributeCategory['path_name'];
-            // attributeCollectible.count = data.count;
-            // attributeCollectible.attributeCollectibleTypeId = data['attribute_collectible_type_id'];
             data.uploadDirectory = uploadDirectory;
             data.collectible = this.collectible.toJSON();
 
@@ -73,6 +45,20 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                 } else {
                     attribute_collectible_type_label = '';
                 }
+            }
+
+            if (data.part.type === 'mass' || data.part.type === 'original') {
+                if (data.part.manufacture_id) {
+                    data.part._label = data.part.Manufacture.title;
+                } else if (data.part.artist_id) {
+                    data.part._label = data.part.Artist.name;
+                } else {
+                    data.part._label = 'Unknown';
+                }
+            } else if (data.part.type === 'custom') {
+                data.part._label = data.part.User.username;
+            } else if (data.part.type === 'generic') {
+                data.part._label = 'Generic';
             }
 
             return data;
