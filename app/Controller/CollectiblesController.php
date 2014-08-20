@@ -108,6 +108,11 @@ class CollectiblesController extends AppController
             $this->render('viewMissing');
             return;
         }
+        
+        $parts = Set::extract('/AttributesCollectible/.', $collectible);
+
+        unset($collectible['AttributesCollectible']);
+        $this->set('parts', $parts);
         // This is the basic stuff to get for edit attributes
         // This one will always be required
         $attributeCategories = $this->Collectible->AttributesCollectible->Attribute->AttributeCategory->find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
@@ -216,6 +221,10 @@ class CollectiblesController extends AppController
         
         foreach ($extractCollectibles as $key => $value) {
             $extractCollectibles[$key]['CollectiblesUpload'] = $collectibles[$key]['CollectiblesUpload'];
+            $extractCollectibles[$key]['Collectibletype'] = $collectibles[$key]['Collectibletype'];
+            $extractCollectibles[$key]['Manufacture'] = $collectibles[$key]['Manufacture'];
+            $extractCollectibles[$key]['License'] = $collectibles[$key]['License'];
+            $extractCollectibles[$key]['AttributesCollectible'] = $collectibles[$key]['AttributesCollectible'];
         }
         
         $this->set('collectibles', $extractCollectibles);
@@ -245,7 +254,7 @@ class CollectiblesController extends AppController
     }
     // This will handle the updating of tags
     public function tag($id = null) {
-
+        
         if ($this->request->isPost()) {
             $collectible['CollectiblesTag'] = $this->request->input('json_decode', true);
             $response = $this->Collectible->CollectiblesTag->add($collectible, $this->getUser());
@@ -255,6 +264,8 @@ class CollectiblesController extends AppController
             
             $this->set('returnData', $response);
             // we need to check the response here
+            
+            
         } else if ($this->request->isDelete()) {
             $collectible['CollectiblesTag'] = array();
             $collectible['CollectiblesTag']['id'] = $id;
@@ -268,7 +279,7 @@ class CollectiblesController extends AppController
     }
     // This will handle the updating of artists
     public function artist($id = null) {
-
+        
         if ($this->request->isPost()) {
             $collectible['ArtistsCollectible'] = $this->request->input('json_decode', true);
             $response = $this->Collectible->ArtistsCollectible->add($collectible, $this->getUser());
@@ -278,6 +289,8 @@ class CollectiblesController extends AppController
             
             $this->set('returnData', $response);
             // we need to check the response here
+            
+            
         } else if ($this->request->isDelete()) {
             $collectible['ArtistsCollectible'] = array();
             $collectible['ArtistsCollectible']['id'] = $id;
@@ -295,49 +308,6 @@ class CollectiblesController extends AppController
     public function delete($id) {
         $this->Collectible->remove($id, $this->getUser());
     }
-    // public function getCollectible($id) {
-    //     $returnData = $this->Collectible->getCollectible($id);
-    //     $collectibleTypeId = $returnData['response']['data']['collectible']['Collectible']['collectibletype_id'];
-    //     // We will also want to get the manufacturers and their licenses right away
-    //     $manufacturerCollectibletypes = $this->Collectible->Manufacture->CollectibletypesManufacture->find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
-    //     // Get and return all brands, this is for adding new manufacturers
-    //     // and also used for types that might allow not having a manufacturer
-    //     $brands = $this->Collectible->License->find('all', array('contain' => false));
-    //     $returnData['response']['data']['brands'] = $brands;
-    
-    //     $manList = array();
-    //     foreach ($manufacturerCollectibletypes as $key => $value) {
-    //         array_push($manList, $value['Manufacture']);
-    //     }
-    //     $returnData['response']['data']['manufacturers'] = $manList;
-    //     //Grab all scales
-    //     $scales = $this->Collectible->Scale->find("all", array('contain' => false, 'fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-    //     $returnData['response']['data']['scales'] = $scales;
-    //     //Grab all retailers.
-    //     // $retailers = $this->Collectible->Retailer->find('all', array('contain' => false));
-    //     // $returnData['response']['data']['retailers'] = $retailers;
-    //     //Grab all currencies
-    //     $currencies = $this->Collectible->Currency->find("all", array('contain' => false, 'fields' => array('Currency.id', 'Currency.iso_code')));
-    //     $returnData['response']['data']['currencies'] = $currencies;
-    
-    //     $artists = $this->Collectible->ArtistsCollectible->Artist->find("all", array('order' => array('Artist.name' => 'ASC'), 'contain' => false));
-    //     $returnData['response']['data']['artists'] = $artists;
-    
-    //     $categories = $this->Collectible->AttributesCollectible->Attribute->AttributeCategory->find("all", array('contain' => false));
-    //     $returnData['response']['data']['categories'] = $categories;
-    
-    //     $manufactures = $this->Collectible->Manufacture->find('all', array('contain' => false));
-    //     $this->set(compact('manufactures'));
-    //     $returnData['response']['data']['manufacturesList'] = $manufactures;
-    //     // If it is a custom, we need to get some other information as well
-    //     if ($returnData['response']['data']['collectible']['Collectible']['custom']) {
-    //         $customStatuses = $this->Collectible->CustomStatus->find('all', array('contain' => false));
-    //         $returnData['response']['data']['customStatuses'] = $customStatuses;
-    //     }
-    
-    //     $this->set(compact('returnData'));
-    // }
-    
     
     /**
      * This will process cache clearing requests
