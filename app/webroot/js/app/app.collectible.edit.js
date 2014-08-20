@@ -1279,6 +1279,10 @@ define(['backbone', 'jquery', 'dust',
             $('#collectible-container').append(new TagsView({
                 collection: tags
             }).render().el);
+
+            // TODO: make this it's own region so we can utilize the modal stuff
+            // and it will handle rendering and destroying views since we will be 
+            // utilizing this space when we add existing
             $('#collectible-container').append(new PartsView({
                 collection: parts,
                 status: status,

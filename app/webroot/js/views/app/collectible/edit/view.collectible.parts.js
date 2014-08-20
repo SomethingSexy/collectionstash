@@ -6,6 +6,11 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
         itemViewContainer: "._parts-list",
         // emptyView: NoItemsView,
         itemView: PartView,
+        itemEvents: {
+            'edit:collectible:part': function() {
+                console.log('The show:message event bubbled up to the parent.');
+            }
+        },
         events: {
             'click #add-existing-item-link': 'addExisting',
             'click #add-new-item-link': 'addNew'
