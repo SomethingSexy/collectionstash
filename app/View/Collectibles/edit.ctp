@@ -15,7 +15,7 @@ echo $this -> Html -> scriptBlock('var rawCategories =' . json_encode($categorie
 echo $this -> Html -> scriptBlock('var rawManufacturesList =' . json_encode($manufacturesList) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawCustomStatuses =' . json_encode($customStatuses) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawVariants =' . json_encode($variants) .';', array('inline' => false));
-
+echo $this -> Html -> scriptBlock('var rawParts =' . json_encode($parts) .';', array('inline' => false));
 if (isset($adminMode) && $adminMode) {
 	echo $this -> Html -> scriptBlock('var adminMode = true;', array('inline' => false));
 } else {
