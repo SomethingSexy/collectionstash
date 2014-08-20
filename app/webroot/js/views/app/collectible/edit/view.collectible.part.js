@@ -6,7 +6,8 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         events: {
             'click .edit-attribute-photo-link': 'addPhoto',
             'click .edit-attribute-link': 'edit',
-            'click .remove-duplicate-attribute': 'duplicate'
+            'click .remove-duplicate-attribute': 'duplicate',
+            'click ._edit-part-collectible': 'editCollectiblePart'
         },
         initialize: function(options) {
             this.status = options.status;
@@ -84,6 +85,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             // $(self.el).attr('data-attribute', JSON.stringify(attribute));
             // $(self.el).attr('data-attribute-collectible', JSON.stringify(attributeCollectible));
             return this;
+        },
+        editCollectiblePart: function() {
+            this.trigger('edit:collectible:part');
         },
         addPhoto: function() {
             var self = this;
