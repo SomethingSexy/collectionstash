@@ -17,7 +17,9 @@ define(['require', 'marionette', 'bootstrap'], function(Marionette) {
         },
         showModal: function(view) {
             //view.on("close", this.hideModal, this);
-            $(this.el).find('.modal').modal();
+            $(this.el).find('.modal').modal().on('shown.bs.modal', function() {
+                view.trigger('shown');
+            });
         },
         hideModal: function() {
             $(this.el).find('.modal').modal('hide');

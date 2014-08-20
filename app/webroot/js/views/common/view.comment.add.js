@@ -6,7 +6,11 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             'click .save': 'save'
         },
         initialize: function(options) {
+            var self = this;
             this.model.startTracking();
+            this.on('shown', function() {
+                $('textarea', self.el).focus();
+            });
         },
         serializeData: function() {
             var data = this.model.toJSON();
