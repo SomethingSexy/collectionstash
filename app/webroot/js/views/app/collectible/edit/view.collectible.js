@@ -1,7 +1,7 @@
 define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'views/app/collectible/edit/view.company', 'collections/collection.brands', 'views/app/collectible/edit/view.series', 'views/app/collectible/edit/view.company.series', 'select2'], function(Backbone, $, SeriesModel, CompanyModel, CompanyView, Brands, SeriesView, CompanySeriesView) {
     var lastResults = [];
     var CollectibleView = Backbone.View.extend({
-        className: "col-md-12",
+        className: "row",
         events: {
             'change #inputManufacturer': 'changeManufacturer',
             'click #buttonSeries': 'changeSeries',
@@ -25,6 +25,7 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             this.collectibleType = options.collectibleType;
             this.brands = options.brands;
             this.status = options.status;
+            this.customStatuses = options.customStatuses;
             // this is information on the selected manufacturer
             if (options.manufacturer) {
                 this.manufacturer = options.manufacturer;
@@ -198,7 +199,7 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             if (collectible.custom) {
                 data.renderManList = false;
                 data.renderBrandList = true;
-                data.customStatuses = this.options.customStatuses.toJSON();
+                data.customStatuses = this.customStatuses.toJSON();
             } else if (this.manufacturer) {
                 data.renderManList = true;
                 data.manufacturer = this.manufacturer.toJSON();

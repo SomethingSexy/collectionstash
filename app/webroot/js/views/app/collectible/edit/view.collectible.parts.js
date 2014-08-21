@@ -2,13 +2,13 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
 
     return Marionette.CompositeView.extend({
         template: template,
-        className: "col-md-12",
+        className: "",
         itemViewContainer: "._parts-list",
         // emptyView: NoItemsView,
         itemView: PartView,
         itemEvents: {
-            'edit:collectible:part': function() {
-                console.log('The show:message event bubbled up to the parent.');
+            'edit:collectible:part': function(event, view, model) {
+                this.trigger('edit:collectible:part', model);
             }
         },
         events: {

@@ -2,7 +2,7 @@ define(['marionette', 'text!templates/app/collectible/edit/persons.mustache', 'v
 
     return Marionette.CompositeView.extend({
         template: template,
-        className: "col-md-12",
+        className: "row",
         itemViewContainer: ".artists",
         // emptyView: NoItemsView,
         itemView: PersonView,

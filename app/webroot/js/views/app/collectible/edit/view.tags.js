@@ -2,7 +2,7 @@ define(['marionette', 'text!templates/app/collectible/edit/tags.mustache', 'view
 
     return Marionette.CompositeView.extend({
         template: template,
-        className: "col-md-12",
+        className: "row",
         itemViewContainer: ".tags",
         // emptyView: NoItemsView,
         itemView: TagView,

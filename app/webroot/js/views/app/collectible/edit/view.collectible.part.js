@@ -87,7 +87,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             return this;
         },
         editCollectiblePart: function() {
-            this.trigger('edit:collectible:part');
+            this.trigger('edit:collectible:part', this.model);
         },
         addPhoto: function() {
             var self = this;

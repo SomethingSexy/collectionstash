@@ -102,16 +102,21 @@ if(isset($allowDelete) && $allowDelete){
 	<div id="photo-container" class="col-md-4">
 
 	</div>
-	<div id="collectible-container" class="col-md-8">
+	<div class="col-md-8">
+		<div id="collectible-container">
 		
 
+		</div>
+		<div id="parts-container">
+		
+
+		</div>
 	</div>
 </div>
 
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
 <?php echo $this -> element('attribute_remove_link_dialog'); ?>
-<?php echo $this -> element('attribute_collectible_update_dialog'); ?>
 <!-- TODO Update this so we only have one modal -->
 <div id="attribute-collectible-add-existing-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">

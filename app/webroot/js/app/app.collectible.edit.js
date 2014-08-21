@@ -1,10 +1,12 @@
-define(['backbone', 'jquery', 'dust',
+define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.mustache',
     'views/common/view.alert',
     'views/app/collectible/edit/view.collectible.delete',
     'views/app/collectible/edit/view.collectible',
     'views/app/collectible/edit/view.persons',
     'views/app/collectible/edit/view.tags',
     'views/app/collectible/edit/view.collectible.parts',
+    'views/app/collectible/edit/view.collectible.part.edit',
+    'views/common/modal.region',
     'models/model.collectible',
     'models/model.status',
     'views/view.status',
@@ -13,6 +15,7 @@ define(['backbone', 'jquery', 'dust',
     'collections/collection.collectible.parts',
     'models/model.company',
     'collections/collection.brands',
+    'text!templates/app/collectible/edit/layout.parts.mustache',
     // todo: old templates remove as converted to mustache and individual view files
     'text!templates/collectibles/collectible.default.dust',
     'text!templates/collectibles/photo.default.dust',
@@ -36,7 +39,7 @@ define(['backbone', 'jquery', 'dust',
     'text!templates/collectibles/attribute.add.new.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, $, dust, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectibleEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -1173,6 +1176,30 @@ define(['backbone', 'jquery', 'dust',
 
     var hasDupList = false;
 
+    // doing this until everything is converted over to a
+    // marionette app
+    function renderPartsView(layout, options) {
+        var partsView = new PartsView(options);
+
+        partsView.on('edit:collectible:part', function(model) {
+            layout.modal.show(new CollectibleEditView({
+                model: model,
+                // later this will come from the app
+                collectible: options.model
+            }));
+
+            model.once('sync', function(model, response, options) {
+                if (_.isArray(response)) {
+                    // App.comments.add(response);
+                }
+
+                layout.modal.hideModal();
+            });
+        });
+        layout.parts.show(partsView);
+    }
+
+
     return {
         start: function() {
             // Setup the current model
@@ -1283,7 +1310,22 @@ define(['backbone', 'jquery', 'dust',
             // TODO: make this it's own region so we can utilize the modal stuff
             // and it will handle rendering and destroying views since we will be 
             // utilizing this space when we add existing
-            $('#collectible-container').append(new PartsView({
+
+            var PartsLayout = Backbone.Marionette.Layout.extend({
+                template: partsLayoutTemplate,
+                className: 'row',
+                regions: {
+                    actions: '._actions',
+                    parts: '._parts',
+                    // main: '._main',
+                    modal: ModalRegion
+                }
+            });
+
+            var partsLayout = new PartsLayout();
+            $('#parts-container').html(partsLayout.render().el);
+
+            renderPartsView(partsLayout, {
                 collection: parts,
                 status: status,
                 artists: new Backbone.Collection(rawArtists),
@@ -1291,7 +1333,8 @@ define(['backbone', 'jquery', 'dust',
                 categories: new Backbone.Collection(rawCategories),
                 model: collectibleModel,
                 scales: scales
-            }).render().el);
+            });
+
             var statusView = new StatusView({
                 model: status,
                 collectible: collectibleModel,
