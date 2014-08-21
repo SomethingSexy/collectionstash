@@ -1,3 +1,4 @@
+<div class="col-md-12">
 <div class="well">
 <h3>{collectibleType.name}</h3>
 
@@ -244,6 +245,7 @@
 		</div>
 	</div>
 </form>
+</div>
 </div>
 <div id="seriesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">

@@ -103,7 +103,7 @@ class AttributesCollectible extends AppModel
         return $retVal;
     }
     
-    public function update($attributesCollectible, $user, $autoUpdate = false) {
+    public function update($attributesCollectible, $user) {
         $retVal = array();
         $retVal['response'] = array();
         $retVal['response']['isSuccess'] = false;
@@ -120,10 +120,8 @@ class AttributesCollectible extends AppModel
             // on collectible status
             // If we are already auto updating, no need to check
             
-            // if ($autoUpdate === 'false' || $autoUpdate === false) {
             $currentVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attributesCollectible['AttributesCollectible']['id'])));
             $autoUpdate = $this->Collectible->allowAutoUpdate($currentVersion['AttributesCollectible']['collectible_id'], $user);
-            // }
             
             // If we are automatically approving it, then save it directly
             if ($autoUpdate === true || $autoUpdate === 'true') {
@@ -150,8 +148,8 @@ class AttributesCollectible extends AppModel
             }
         } else {
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'AttributesCollectible');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
+            $retVal['response']['code'] = 400;
         }
         
         return $retVal;

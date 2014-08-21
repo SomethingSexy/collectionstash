@@ -1,7 +1,7 @@
-define(['backbone', 'models/model.part'], function(Backbone, PartModel) {
+define(['backbone', 'models/model.part', 'backbone.trackit'], function(Backbone, PartModel) {
 
     return Backbone.Model.extend({
-        url: 'attributes_collectibles/part',
+        urlRoot: '/attributes_collectibles/part',
         parse: function(response) {
             if (!this.part) {
                 this.part = new PartModel(response.Attribute);
