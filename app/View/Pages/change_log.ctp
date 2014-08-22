@@ -1,5 +1,10 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.2.3</h3>
+<ul>
+<li>Fixed an issue with our new SPA pages and IE9. (#119).</li>
+</ul>
+
 <h3>Release Notes for v3.2.2</h3>
 <ul>
 <li>Fixed an issue where users could not edit the merchant field for collectibles in their stash. (#112).</li>
