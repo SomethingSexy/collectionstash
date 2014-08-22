@@ -5,7 +5,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         className: 'row spacer attribute',
         events: {
             'click .edit-attribute-photo-link': 'addPhoto',
-            'click .edit-attribute-link': 'edit',
+            'click ._edit-part': 'edit',
             'click .remove-duplicate-attribute': 'duplicate',
             'click ._edit-part-collectible': 'editCollectiblePart'
         },
@@ -16,7 +16,10 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             this.categories = options.categories;
             this.collectible = options.collectible;
             this.scales = options.scales;
-            // this.model.on('change', this.render, this);
+
+            // if the collectible part has changed or the actual part has changed, re-render
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model.part, 'change', this.render);
         },
         serializeData: function() {
             var data = this.model.toJSON();
@@ -67,12 +70,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         onRender: function() {
             var self = this;
 
-
-            // dust.render(this.template, attributeModel, function(error, output) {
-            //     $(self.el).html(output);
-            // });
-            // $(self.el).attr('data-id', this.model.toJSON().Attribute.id).attr('data-attribute-collectible-id', this.model.toJSON().id).attr('data-attached', true);
-
             $('span.popup', self.el).popover({
                 placement: 'bottom',
                 html: 'true',
@@ -82,13 +79,14 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             }).mouseenter(function(e) {
                 $(this).popover('show');
             });
-            // $(self.el).attr('data-attribute', JSON.stringify(attribute));
-            // $(self.el).attr('data-attribute-collectible', JSON.stringify(attributeCollectible));
             return this;
         },
         editCollectiblePart: function() {
             this.trigger('edit:collectible:part', this.model);
         },
+        edit: function() {
+            this.trigger('edit:part', this.model.part);
+        },        
         addPhoto: function() {
             var self = this;
             var attribute = self.model.toJSON();
@@ -135,41 +133,33 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                 }
             });
         },
-        edit: function() {
-            var self = this;
-            this.renderEditView();
-            $('#attribute-update-dialog').modal();
-            $('#attribute-update-dialog', 'body').on('hidden.bs.modal', function() {
-                self.addEditView.remove();
-            });
-        },
-        renderEditView: function(attribute) {
-            var self = this;
-            if (this.addEditView) {
-                this.addEditView.remove();
-            }
-            this.addEditView = new AddAttributeView({
-                model: this.model,
-                manufacturers: this.manufacturers,
-                artists: this.artists,
-                scales: this.scales,
-                collectible: this.collectible,
-                type: 'edit'
-            });
-            this.addEditView.on('view:category:select', function() {
-                this.addEditView.remove();
-                this.addEditView = new AttributeCategoryView({
-                    model: this.model
-                });
-                this.addEditView.on('change:attribute_category_id', function() {
-                    this.renderEditView();
-                }, this);
-                $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
-                $('.modal-footer .save', '#attribute-update-dialog').hide();
-            }, this);
-            $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
-            $('.modal-footer .save', '#attribute-update-dialog').show();
-        },
+        // renderEditView: function(attribute) {
+        //     var self = this;
+        //     if (this.addEditView) {
+        //         this.addEditView.remove();
+        //     }
+        //     this.addEditView = new AddAttributeView({
+        //         model: this.model,
+        //         manufacturers: this.manufacturers,
+        //         artists: this.artists,
+        //         scales: this.scales,
+        //         collectible: this.collectible,
+        //         type: 'edit'
+        //     });
+        //     this.addEditView.on('view:category:select', function() {
+        //         this.addEditView.remove();
+        //         this.addEditView = new AttributeCategoryView({
+        //             model: this.model
+        //         });
+        //         this.addEditView.on('change:attribute_category_id', function() {
+        //             this.renderEditView();
+        //         }, this);
+        //         $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
+        //         $('.modal-footer .save', '#attribute-update-dialog').hide();
+        //     }, this);
+        //     $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
+        //     $('.modal-footer .save', '#attribute-update-dialog').show();
+        // },
         duplicate: function() {
             var self = this;
             if (this.duplicateView) {

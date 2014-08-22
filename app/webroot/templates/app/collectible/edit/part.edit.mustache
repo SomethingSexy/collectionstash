@@ -1,0 +1,114 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h4 id="myModalLabel">Edit the Collectible's Part</h4>
+	</div>
+	<div class="modal-body">
+		<div class='component-message error'>
+			<span></span>
+		</div>
+		<form>
+			<fieldset class="attribute-inputs">
+				<legend>
+					Part Details
+				</legend>
+				{{#collectible.custom}}{{^isMass}}
+					<div class="radio">
+						<label>
+						<input type="radio" class="attribute-type" name="type" id="optionsRadios1" value="custom" {@eq key="{Attribute.type}" value="custom"}checked{/eq}>
+						I made this part.</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" class="attribute-type" name="type" id="optionsRadios2" value="original"  {@eq key="{Attribute.type}" value="original"}checked{/eq}>
+							This is an original part, commissioned by someone else.</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" class="attribute-type" name="type" id="optionsRadios3" value="generic"  {@eq key="{Attribute.type}" value="generic"}checked{/eq}>
+							This is a generic part.  I do not know where it came from.</label>
+					</div>
+				{{/isMass}}{{/collectible.custom}}
+				{{#collectible.original}}{{^isMass}}
+					<input type="hidden" name="type" value="{{type}}">
+				{{/isMass}}{{/collectible.original}}
+				
+				<div class="form-group">
+					<div class="btn-group">
+						<button  class="btn btn-default submit select-category" type="button">
+							{{#attribute_category_id }}
+								{{AttributeCategory.path_name}}
+							{:else}
+								Category
+							{{/attribute_category_id}}
+						</button>
+					</div>
+					<input type="hidden" id="AttributeAttributeCategoryId" name="attribute_category_id" value="{{attribute_category_id}}">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="AttributeName">Name</label>
+					<input type="text" required="required" id="AttributeName" class="form-control" maxlength="200" name="name" value="{{name}}">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="AttributeDescription">Description</label>
+					<textarea required="required" id="AttributeDescription" class="form-control" rows="6" cols="30" name="description">{{description}}</textarea>
+				</div>
+				{{#showManufacturer}}
+				<div class="form-group">
+					<label class="control-label" for="AttributeManufactureId">Manufacturer</label>
+					<select id="AttributeManufactureId" class="form-control" data-type="Attribute" data-name="manufacture_id" name="data[Attribute][manufacture_id]">
+						<option value=""></option>
+						{{#manufacturers}}
+							<option value="{{id}}">{{title}}</option>
+						{{/manufacturers}}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label" for="AttributeArtistId">Artist</label>
+					<select id="AttributeArtistId" class="form-control" data-type="Attribute" data-name="artist_id" name="data[Attribute][artist_id]">
+						<option value=""></option>
+						{#artists artistId=Attribute.artist_id}
+						<option value="{Artist.id}" {@eq key="{Artist.id}" value="{artistId}"}selected{/eq}>{Artist.name}</option>
+						{/artists}
+					</select>
+				</div>
+				{{/showManufacturer}}
+
+				<div class="form-group">
+					<label class="control-label" for="AttributeArtistId">Scale</label>
+					<select id="AttributeScaleId" class="form-control" data-type="Attribute" data-name="scale_id" name="data[Attribute][scale_id]">
+						<option value=""></option>
+						{#scales scaleId=Attribute.scale_id}
+						<option value="{Scale.id}" {@eq key="{Scale.id}" value="{scaleId}"}selected{/eq}>{Scale.scale}</option>
+						{/scales}
+					</select>
+				</div>
+
+			</fieldset>
+			{#showCount}
+			<fieldset class="attribute-collectible-inputs">
+				<legend>
+					Collectible Part Details
+				</legend>
+				<div class="form-group">
+					<label class="control-label" for="AttributesCollectibleCount">Count</label>
+					<input type="number" name="data[AttributesCollectible][count]" data-name="count" id="AttributesCollectibleCount" class="form-control" value="{count}"/>
+				</div>
+			</fieldset>	
+			{/showCount}
+
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary save" autocomplete="off">
+			Submit
+		</button>
+	</div>
+</div>

@@ -9,6 +9,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
         itemEvents: {
             'edit:collectible:part': function(event, view, model) {
                 this.trigger('edit:collectible:part', model);
+            },
+            'edit:part': function(event, view, model) {
+                this.trigger('edit:part', model);
             }
         },
         events: {
@@ -187,74 +190,74 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
                 });
             });
             // Putting this at this level for now
-            $('.modal-footer .save', '#attribute-update-dialog').click(function() {
-                var url = '/attributes/update.json';
-                $('#attribute-update-dialog').find('form').ajaxSubmit({
-                    // dataType identifies the expected content type of the server response
-                    dataType: 'json',
-                    url: url,
-                    beforeSubmit: function(formData, jqForm, options) {
-                        $('#attribute-update-dialog').find('form').find('.error-message').remove();
-                        formData.push({
-                            name: '_method',
-                            type: 'text',
-                            value: 'POST'
-                        });
-                    },
-                    // success identifies the function to invoke when the server response
-                    // has been received
-                    success: function(responseText, statusText, xhr, $form) {
-                        if (responseText.response.isSuccess) {
-                            $('#attribute-update-dialog').modal('hide');
-                            var message = 'Update has been submitted!';
-                            if (!responseText.response.data.isEdit) {
-                                message = 'The part was successfully updated!';
-                            }
-                            $.blockUI({
-                                message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                                showOverlay: false,
-                                css: {
-                                    top: '100px',
-                                    'background-color': '#DDFADE',
-                                    border: '1px solid #93C49F',
-                                    'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                    'border-radius': '4px 4px 4px 4px',
-                                    color: '#333333',
-                                    'margin-bottom': '20px',
-                                    padding: '8px 35px 8px 14px',
-                                    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                    'z-index': 999999
-                                },
-                                timeout: 2000
-                            });
-                            var data = responseText.response.data;
-                            if (data.isEdit === false) {
-                                // This will return the updated attribute data...we need
-                                // to find the model and then update it
-                                self.collection.each(function(attribute) {
-                                    if (attribute.toJSON().Attribute.id === data.Attribute.id) {
-                                        attribute.set({
-                                            Attribute: data.Attribute
-                                        });
-                                    }
-                                });
-                            } else {
-                                // do nothing
-                            }
-                        } else {
-                            if (responseText.response.errors) {
-                                $.each(responseText.response.errors, function(index, value) {
-                                    if (value.inline) {
-                                        $(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-update-dialog')).after('<div class="error-message">' + value.message + '</div>');
-                                    } else {
-                                        $('#attribute-update-dialog').find('.component-message.error').children('span').text(value.message);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            });
+            // $('.modal-footer .save', '#attribute-update-dialog').click(function() {
+            //     var url = '/attributes/update.json';
+            //     $('#attribute-update-dialog').find('form').ajaxSubmit({
+            //         // dataType identifies the expected content type of the server response
+            //         dataType: 'json',
+            //         url: url,
+            //         beforeSubmit: function(formData, jqForm, options) {
+            //             $('#attribute-update-dialog').find('form').find('.error-message').remove();
+            //             formData.push({
+            //                 name: '_method',
+            //                 type: 'text',
+            //                 value: 'POST'
+            //             });
+            //         },
+            //         // success identifies the function to invoke when the server response
+            //         // has been received
+            //         success: function(responseText, statusText, xhr, $form) {
+            //             if (responseText.response.isSuccess) {
+            //                 $('#attribute-update-dialog').modal('hide');
+            //                 var message = 'Update has been submitted!';
+            //                 if (!responseText.response.data.isEdit) {
+            //                     message = 'The part was successfully updated!';
+            //                 }
+            //                 $.blockUI({
+            //                     message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+            //                     showOverlay: false,
+            //                     css: {
+            //                         top: '100px',
+            //                         'background-color': '#DDFADE',
+            //                         border: '1px solid #93C49F',
+            //                         'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
+            //                         'border-radius': '4px 4px 4px 4px',
+            //                         color: '#333333',
+            //                         'margin-bottom': '20px',
+            //                         padding: '8px 35px 8px 14px',
+            //                         'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+            //                         'z-index': 999999
+            //                     },
+            //                     timeout: 2000
+            //                 });
+            //                 var data = responseText.response.data;
+            //                 if (data.isEdit === false) {
+            //                     // This will return the updated attribute data...we need
+            //                     // to find the model and then update it
+            //                     self.collection.each(function(attribute) {
+            //                         if (attribute.toJSON().Attribute.id === data.Attribute.id) {
+            //                             attribute.set({
+            //                                 Attribute: data.Attribute
+            //                             });
+            //                         }
+            //                     });
+            //                 } else {
+            //                     // do nothing
+            //                 }
+            //             } else {
+            //                 if (responseText.response.errors) {
+            //                     $.each(responseText.response.errors, function(index, value) {
+            //                         if (value.inline) {
+            //                             $(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-update-dialog')).after('<div class="error-message">' + value.message + '</div>');
+            //                         } else {
+            //                             $('#attribute-update-dialog').find('.component-message.error').children('span').text(value.message);
+            //                         }
+            //                     });
+            //                 }
+            //             }
+            //         }
+            //     });
+            // });
             // this.updateCollectibleAttributes = new UpdateCollectibleAttributes({
             //     $element: $('.attributes.collectible', self.el),
             //     $context: self.el,
