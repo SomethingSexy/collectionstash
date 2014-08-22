@@ -96,7 +96,10 @@ class CollectiblesController extends AppController
         // If the status is active, then anyone can edit it
         $collectible = $this->Collectible->getCollectible($id);
         $collectible = $collectible['response']['data']['collectible'];
-        $variants = $collectible['response']['data']['variants'];
+        $variants = array();
+        if (isset($collectible['response']['data']['variants'])) {
+            $variants = $collectible['response']['data']['variants'];
+        }
         $this->set('variants', $variants);
         
         if (!empty($collectible)) {
@@ -110,7 +113,7 @@ class CollectiblesController extends AppController
         }
         
         $parts = Set::extract('/AttributesCollectible/.', $collectible);
-
+        
         unset($collectible['AttributesCollectible']);
         $this->set('parts', $parts);
         // This is the basic stuff to get for edit attributes
@@ -308,7 +311,6 @@ class CollectiblesController extends AppController
     public function delete($id) {
         $this->Collectible->remove($id, $this->getUser());
     }
-    
     /**
      * This will process cache clearing requests
      */

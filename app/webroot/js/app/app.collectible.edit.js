@@ -6,6 +6,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'views/app/collectible/edit/view.tags',
     'views/app/collectible/edit/view.collectible.parts',
     'views/app/collectible/edit/view.collectible.part.edit',
+    'views/app/collectible/edit/view.part.edit',
     'views/common/modal.region',
     'models/model.collectible',
     'models/model.status',
@@ -36,10 +37,9 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/attributes/attributes.remove.duplicate.dust',
     'text!templates/collectibles/collectible.original.dust',
     'text!templates/collectibles/directional.original.dust',
-    'text!templates/collectibles/attribute.add.new.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectibleEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, attributeAddNewTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -68,7 +68,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(pagingTemplate, 'paging'));
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
     dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
-    dust.loadSource(dust.compile(attributeAddNewTemplate, 'attribute.add.new'));
     dust.loadSource(dust.compile(alertTemplate, 'alert'));
 
     var printId = '10';
@@ -502,140 +501,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
 
 
-    /**
-     * This should be able to handle but adding an update
-     *
-     * If a model is added with an id, then it will be an update
-     * otherwise it will be an add
-     *
-     * TODO: Once this gets updated to use proper models, we can
-     * update the automatic field stuff, using data-name for
-     * now because we want to maintain the name attribute
-     */
-    var AddAttributeView = Backbone.View.extend({
-        template: 'attribute.add.new',
-        events: {
-            'click .select-category': 'selectCategory',
-            "change input": "fieldChanged",
-            "change select": "selectionChanged",
-            'change textarea': 'fieldChanged',
-            'click .attribute-type': 'toggleType'
-        },
-        initialize: function(options) {
-            this.manufacturers = options.manufacturers;
-            this.artists = options.artists;
-            this.scales = options.scales;
-            this.collectible = options.collectible;
-            // edit vs new
-            this.type = options.type;
-            var hasType = this.model.has('Attribute');
-            // default the attribute to be a custom one
-            if (this.collectible.get('custom') && !hasType) {
-                this.model.set({
-                    'Attribute': {
-                        type: 'custom'
-                    }
-                });
-            } else if (this.collectible.get('original') && !hasType) {
-                this.model.set({
-                    'Attribute': {
-                        type: 'original'
-                    }
-                });
-            } else if (!hasType) {
-                this.model.set({
-                    'Attribute': {
-                        type: 'mass'
-                    }
-                });
-            }
-        },
-        render: function() {
-            var self = this;
-            var data = this.model.toJSON();
-            data.manufacturers = this.manufacturers.toJSON();
-            data.artists = this.artists.toJSON();
-            data.scales = this.scales.toJSON();
-            // we need this to determine how to render the view
-            data.collectible = this.collectible.toJSON();
-            if (this.type === 'new') {
-                data.showCount = true;
-                data.showId = false;
-            } else {
-                data.showCount = false;
-                data.showId = true;
-            }
-            data['uploadDirectory'] = uploadDirectory;
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            $(self.el).animate({
-                scrollTop: 0
-            });
-            return this;
-        },
-        selectCategory: function() {
-            this.trigger('view:category:select');
-        },
-        selectionChanged: function(e) {
-            var field = $(e.currentTarget);
-            var value = $("option:selected", field).val();
-            var type = field.attr('data-type');
-            var data = {};
-            if (type) {
-                // else we need to get the type
-                // set the new one
-                data = this.model.get(type);
-            }
-            data[field.attr('data-name')] = value;
-            // silent because we don't want to trigger a change
-            // if this is an edit
-            this.model.set(data, {
-                silent: true
-            });
-        },
-        fieldChanged: function(e) {
-            var field = $(e.currentTarget);
-            var type = field.attr('data-type');
-            var data = {};
-            if (type) {
-                // else we need to get the type
-                // set the new one
-                data = this.model.get(type);
-            }
-            if (field.attr('type') === 'checkbox') {
-                if (field.is(':checked')) {
-                    data[field.attr('data-name')] = true;
-                } else {
-                    data[field.attr('data-name')] = false;
-                }
-            } else {
-                data[field.attr('data-name')] = field.val();
-            }
-            // silent because we don't want to trigger a change
-            // if this is an edit
-            this.model.set(data, {
-                silent: true
-            });
-        },
-        toggleType: function(event) {
-            var field = $(event.currentTarget);
-            var type = field.attr('data-type');
-            var data = {};
-            if (type) {
-                // else we need to get the type
-                // set the new one
-                data = this.model.get(type);
-            }
-            data[field.attr('data-name')] = field.val();
-            // silent because we don't want to trigger a change
-            // if this is an edit
-            this.model.set(data, {
-                silent: true
-            });
-            this.render();
-        }
-    });
     var AttributeCategoryView = Backbone.View.extend({
         //template : $('#attributes-category-tree').clone().html(),
         events: {
@@ -1182,7 +1047,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         var partsView = new PartsView(options);
 
         partsView.on('edit:collectible:part', function(model) {
-            layout.modal.show(new CollectibleEditView({
+            layout.modal.show(new CollectiblePartEditView({
                 model: model,
                 // later this will come from the app
                 collectible: options.model
@@ -1196,6 +1061,26 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                 layout.modal.hideModal();
             });
         });
+
+        partsView.on('edit:part', function(model) {
+            layout.modal.show(new PartEditView({
+                model: model,
+                // later this will come from the app
+                collectible: options.model,
+                manufacturers: options.manufacturers,
+                artists: options.artists,
+                scales: options.scales
+            }));
+
+            model.once('sync', function(model, response, options) {
+                if (_.isArray(response)) {
+                    // App.comments.add(response);
+                }
+
+                layout.modal.hideModal();
+            });
+        });
+
         layout.parts.show(partsView);
     }
 
