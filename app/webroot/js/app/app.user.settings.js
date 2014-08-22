@@ -9,10 +9,13 @@ define(['marionette', 'models/model.profile', 'models/model.stash.settings'], fu
         main: '#main',
         //footer: '#footer'
     });
+    var enablePushState = true;
 
+    // Disable for older browsers
+    var pushState = !! (enablePushState && window.history && window.history.pushState);
     MyApp.on('initialize:after', function() {
         Backbone.history.start({
-            pushState: true,
+            pushState: pushState,
             root: "/settings/"
         });
     });

@@ -25,9 +25,14 @@ define(['marionette',
         //footer: '#footer'
     });
 
+    var enablePushState = true;
+
+    // Disable for older browsers
+    var pushState = !! (enablePushState && window.history && window.history.pushState);
+
     MyApp.on('initialize:after', function() {
         Backbone.history.start({
-            pushState: true,
+            pushState: pushState,
             root: "/profile/"
         });
     });
