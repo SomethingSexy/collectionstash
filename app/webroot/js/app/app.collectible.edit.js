@@ -1,4 +1,4 @@
-define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.mustache',
+define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.mustache', 'underscore',
     'views/common/view.alert',
     'views/app/collectible/edit/view.collectible.delete',
     'views/app/collectible/edit/view.collectible',
@@ -39,7 +39,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -499,44 +499,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         }
     });
 
-
-
-    var AttributeCategoryView = Backbone.View.extend({
-        //template : $('#attributes-category-tree').clone().html(),
-        events: {
-            'click .item': 'selectCategory'
-        },
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            $(self.el).html($('#attributes-category-tree').clone().html());
-            $(self.el).animate({
-                scrollTop: 0
-            });
-            return this;
-        },
-        selectCategory: function(event) {
-            var categoryId = $(event.currentTarget).attr('data-id');
-            var categoryPath = $(event.currentTarget).attr('data-path-name');
-            var attribute = {
-                Attribute: {
-                    AttributeCategory: {}
-                }
-            };
-            if (this.model.has('Attribute')) {
-                attribute.Attribute = this.model.get('Attribute');
-                if (!attribute.Attribute.hasOwnProperty('AttributeCategory')) {
-                    attribute.Attribute.AttributeCategory = {};
-                }
-            }
-            attribute.Attribute.attribute_category_id = categoryId;
-            attribute.Attribute.AttributeCategory.path_name = categoryPath;
-            this.model.set(attribute, {
-                silent: true
-            });
-            this.trigger('change:attribute_category_id');
-        }
-    });
     /**
      * Main view when adding an existing attribute
      */
@@ -1046,43 +1008,53 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     function renderPartsView(layout, options) {
         var partsView = new PartsView(options);
 
-        partsView.on('edit:collectible:part', function(model) {
-            layout.modal.show(new CollectiblePartEditView({
-                model: model,
-                // later this will come from the app
-                collectible: options.model
-            }));
+        partsView.on('edit:collectible:part', _.partial(renderCollectiblePartEdit, _, layout, options));
 
-            model.once('sync', function(model, response, options) {
-                if (_.isArray(response)) {
-                    // App.comments.add(response);
-                }
-
-                layout.modal.hideModal();
-            });
-        });
-
-        partsView.on('edit:part', function(model) {
-            layout.modal.show(new PartEditView({
-                model: model,
-                // later this will come from the app
-                collectible: options.model,
-                manufacturers: options.manufacturers,
-                artists: options.artists,
-                scales: options.scales
-            }));
-
-            model.once('sync', function(model, response, options) {
-                if (_.isArray(response)) {
-                    // App.comments.add(response);
-                }
-
-                layout.modal.hideModal();
-            });
-        });
+        partsView.on('edit:part', _.partial(renderEditPart, _, layout, options));
 
         layout.parts.show(partsView);
     }
+
+    function renderCollectiblePartEdit(model, layout, options) {
+        layout.modal.show(new CollectiblePartEditView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model
+        }));
+
+        model.once('sync', function(model, response, options) {
+            if (_.isArray(response)) {
+                // App.comments.add(response);
+            }
+
+            layout.modal.hideModal();
+        });
+    }
+
+    function renderEditPart(model, layout, options) {
+        var editPartView = new PartEditView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model,
+            manufacturers: options.manufacturers,
+            artists: options.artists,
+            scales: options.scales
+        });
+
+        editPartView.on('view:category', function() {
+
+        });
+
+        layout.modal.show(editPartView);
+
+        model.once('sync', function(model, response, options) {
+            if (_.isArray(response)) {
+                // App.comments.add(response);
+            }
+
+            layout.modal.hideModal();
+        });
+    };
 
 
     return {

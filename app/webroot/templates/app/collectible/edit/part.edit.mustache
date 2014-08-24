@@ -40,12 +40,17 @@
 						<button  class="btn btn-default submit select-category" type="button">
 							{{#attribute_category_id }}
 								{{AttributeCategory.path_name}}
-							{:else}
+							
+							{{/attribute_category_id}}
+							{{^attribute_category_id }}
 								Category
 							{{/attribute_category_id}}
 						</button>
 					</div>
 					<input type="hidden" id="AttributeAttributeCategoryId" name="attribute_category_id" value="{{attribute_category_id}}">
+				</div>
+				<div class="category-container">
+
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="AttributeName">Name</label>
@@ -58,7 +63,7 @@
 				{{#showManufacturer}}
 				<div class="form-group">
 					<label class="control-label" for="AttributeManufactureId">Manufacturer</label>
-					<select id="AttributeManufactureId" class="form-control" data-type="Attribute" data-name="manufacture_id" name="data[Attribute][manufacture_id]">
+					<select id="AttributeManufactureId" class="form-control" name="manufacture_id">
 						<option value=""></option>
 						{{#manufacturers}}
 							<option value="{{id}}">{{title}}</option>
@@ -68,37 +73,37 @@
 
 				<div class="form-group">
 					<label class="control-label" for="AttributeArtistId">Artist</label>
-					<select id="AttributeArtistId" class="form-control" data-type="Attribute" data-name="artist_id" name="data[Attribute][artist_id]">
+					<select id="AttributeArtistId" class="form-control" name="artist_id">
 						<option value=""></option>
-						{#artists artistId=Attribute.artist_id}
-						<option value="{Artist.id}" {@eq key="{Artist.id}" value="{artistId}"}selected{/eq}>{Artist.name}</option>
-						{/artists}
+						{{#artists}}
+						<option value="{{Artist.id}}">{{Artist.name}}</option>
+						{{/artists}}
 					</select>
 				</div>
 				{{/showManufacturer}}
 
 				<div class="form-group">
 					<label class="control-label" for="AttributeArtistId">Scale</label>
-					<select id="AttributeScaleId" class="form-control" data-type="Attribute" data-name="scale_id" name="data[Attribute][scale_id]">
+					<select id="AttributeScaleId" class="form-control" name="scale_id">
 						<option value=""></option>
-						{#scales scaleId=Attribute.scale_id}
-						<option value="{Scale.id}" {@eq key="{Scale.id}" value="{scaleId}"}selected{/eq}>{Scale.scale}</option>
-						{/scales}
+						{{#scales}}
+						<option value="{{Scale.id}}">{{Scale.scale}}</option>
+						{{/scales}}
 					</select>
 				</div>
 
 			</fieldset>
-			{#showCount}
+			{{#showCount}}
 			<fieldset class="attribute-collectible-inputs">
 				<legend>
 					Collectible Part Details
 				</legend>
 				<div class="form-group">
 					<label class="control-label" for="AttributesCollectibleCount">Count</label>
-					<input type="number" name="data[AttributesCollectible][count]" data-name="count" id="AttributesCollectibleCount" class="form-control" value="{count}"/>
+					<input type="number" name="count" data-name="count" id="AttributesCollectibleCount" class="form-control" value="{{count}}"/>
 				</div>
 			</fieldset>	
-			{/showCount}
+			{{/showCount}}
 
 		</form>
 	</div>
