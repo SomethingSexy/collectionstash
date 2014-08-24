@@ -3,7 +3,9 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         template: template,
         events: {
             'click .save': 'save',
-            'click .attribute-type': 'toggleType'
+            'click .attribute-type': 'toggleType',
+            'click .select-category': 'changeCategory',
+            'click .category-container .item.name': 'selectCategory'
         },
         initialize: function(options) {
             this.model.startTracking();
@@ -16,8 +18,14 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.type = options.type;
         },
         onRender: function() {
-            if (this.model.get('listing_type_id')) {
-                $('[name=listing_type_id][value=' + this.model.get('listing_type_id') + ']', this.el).attr('checked', 'checked');
+            if (this.model.get('manufacture_id')) {
+                $('[name=manufacture_id] option[value=' + this.model.get('manufacture_id') + ']', this.el).attr('selected', 'selected');
+            }
+            if (this.model.get('artist_id')) {
+                $('[name=artist_id] option[value=' + this.model.get('artist_id') + ']', this.el).attr('selected', 'selected');
+            }
+            if (this.model.get('scale_id')) {
+                $('[name=scale_id] option[value=' + this.model.get('scale_id') + ']', this.el).attr('selected', 'selected');
             }
             this.errors = [];
 
@@ -58,6 +66,29 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 self.model.stopTracking()
             });
         },
+        changeCategory: function() {
+            var $container = $('.category-container', this.el),
+                isOpen = $('.category-container', this.el).data('open');
+
+            if (isOpen) {
+                $container.empty().data('open', false);
+            } else {
+                $container.html($('#attributes-category-tree').clone().html()).data('open', true);
+            }
+        },
+        selectCategory: function(event) {
+            var categoryId = $(event.currentTarget).attr('data-id');
+            var categoryPath = $(event.currentTarget).attr('data-path-name');
+
+            // eh just set to thie hidden field, since the save will handle
+            // setting to the model
+            $('[name=attribute_category_id]').val(categoryId);
+            $('.select-category').text(categoryPath);
+
+
+            $('.category-container', this.el).empty().data('open', false);
+        },
+        // This is for custom stuff, we will need to test this out still
         toggleType: function(event) {
             var field = $(event.currentTarget);
             var type = field.attr('data-type');
