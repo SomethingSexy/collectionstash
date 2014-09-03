@@ -39,14 +39,17 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
 
             var series = [];
             if (soldData.length > 0) {
+                soldData = _.sortBy(soldData, 'x');
+
                 series.push({
                     data: soldData,
                     color: '#30c020',
-                    name : 'Sold'
+                    name: 'Sold'
                 });
             }
 
             if (boughtData.length > 0) {
+                boughtData = _.sortBy(boughtData, 'x');
                 series.push({
                     data: boughtData,
                     color: 'steelblue',
