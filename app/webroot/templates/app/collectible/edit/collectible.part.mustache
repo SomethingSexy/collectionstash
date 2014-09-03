@@ -1,26 +1,28 @@
 <div class="col-md-12">
 	<div class="row">
 		<div class="col-md-10">
-			{@if cond="( {Attribute.status_id} == 2 )"}
+			{{#isNew}}
 			<span><i class="fa fa-plus"></i></span>
-			{:else}
+			{{/isNew}}
+
+			{{^isNew}}
 			<span title="Part Information" data-content="
 
 			<ul>
-			{#Attribute.AttributesCollectible}
-			{@if cond="('{Collectible.name}' !== '')"}
+			{{#part.AttributesCollectible}}
+			{{#Collectible.name}}
 			<li>
 			<a href='/collectibles/view/{Collectible.id}'>{Collectible.name}</a>
 			</li>
-			{/if}
-			{:else}
+			{{/Collectible.name}}
+			{{/part.AttributesCollectible}}
+			{{^part.AttributesCollectible}}
 			<li>Not attached to any collectibles</li>
-			{/Attribute.AttributesCollectible}
+			{{/part.AttributesCollectible}}
 			</ul>
-
 			" class="popup"><i class="fa fa-info-circle"></i></span>
-			{/if}
-			<span class="path">{Attribute.AttributeCategory.path_name}</span>
+			{{/isNew}}
+			<span class="path">{{part.AttributeCategory.path_name}}</span>
 		</div>
 		<div class="col-md-2 count">
 			{{#collectible.custom}}

@@ -35,6 +35,10 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                 data.allowRemoveAttribute = true;
             }
 
+            if (data.status_id === '2') {
+                data.isNew = true;
+            }
+
             data.part = this.model.part.toJSON();
             data.uploadDirectory = uploadDirectory;
             data.collectible = this.collectible.toJSON();
@@ -86,7 +90,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         },
         edit: function() {
             this.trigger('edit:part', this.model.part);
-        },        
+        },
         addPhoto: function() {
             var self = this;
             var attribute = self.model.toJSON();

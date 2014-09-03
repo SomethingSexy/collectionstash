@@ -499,6 +499,8 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         }
     });
 
+
+
     /**
      * Main view when adding an existing attribute
      */
@@ -1041,10 +1043,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             scales: options.scales
         });
 
-        editPartView.on('view:category', function() {
-
-        });
-
         layout.modal.show(editPartView);
 
         model.once('sync', function(model, response, options) {
@@ -1056,7 +1054,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         });
     };
 
-
+    // mock app until we fully convert to marionette
     return {
         start: function() {
             // Setup the current model
@@ -1151,15 +1149,19 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             }
             //TODO: At some point it might warrant a whole new view for customs
             var collectibleView = new CollectibleView(collectibleViewData);
+
             $('#photo-container').append(new PhotoView({
                 collection: uploads,
                 eventManager: pageEvents
             }).render().el);
+
             $('#collectible-container').append(new PersonsView({
                 collection: artists,
                 collectibleType: collectibleTypeModel
             }).render().el);
+
             $('#collectible-container').append(collectibleView.render().el);
+            
             $('#collectible-container').append(new TagsView({
                 collection: tags
             }).render().el);
