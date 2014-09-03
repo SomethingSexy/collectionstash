@@ -14,8 +14,22 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.scales = options.scales;
             this.collectible = options.collectible;
 
-            // edit vs new
-            this.type = options.type;
+            if (this.model.isNew()) {
+                // default the attribute to be a custom one
+                if (this.collectible.get('custom')) {
+                    this.model.set({
+                        type: 'custom'
+                    });
+                } else if (this.collectible.get('original')) {
+                    this.model.set({
+                        type: 'original'
+                    });
+                } else {
+                    this.model.set({
+                        type: 'mass'
+                    });
+                }
+            }
         },
         onRender: function() {
             if (this.model.get('manufacture_id')) {
@@ -40,7 +54,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             data.scales = this.scales.toJSON();
             // we need this to determine how to render the view
             data.collectible = this.collectible.toJSON();
-            if (this.type === 'new') {
+            if (this.model.isNew() === 'new') {
                 data.showCount = true;
                 data.showId = false;
             } else {
@@ -85,7 +99,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             $('[name=attribute_category_id]').val(categoryId);
             $('.select-category').text(categoryPath);
 
-
             $('.category-container', this.el).empty().data('open', false);
         },
         // This is for custom stuff, we will need to test this out still
@@ -111,28 +124,17 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             var $button = $(event.currentTarget);
             $button.button('loading');
             var data = {
-                'count': parseInt($('[name=count]', this.el).val())
+                type: $('[name=type]', this.el).val(),
+                attribute_category_id: $('[name=attribute_category_id]', this.el).val(),
+                name: $('[name=name]', this.el).val(),
+                description: $('[name=description]', this.el).val(),
+                manufacture_id: $('[name=manufacture_id]', this.el).val(),
+                artist_id: $('[name=artist_id]', this.el).val(),
+                scale_id: $('[name=scale_id]', this.el).val()
             };
 
-            // TODO: we might need to do this above for new stuff
-            var hasType = (this.type === 'edit');
-            // default the attribute to be a custom one
-            if (this.collectible.get('custom') && !hasType) {
-                this.model.set({
-                    type: 'custom'
-                });
-            } else if (this.collectible.get('original') && !hasType) {
-                this.model.set({
-
-                    type: 'original'
-
-                });
-            } else if (!hasType) {
-                this.model.set({
-
-                    type: 'mass'
-
-                });
+            if (this.model.isNew()) {
+                data.count = parseInt($('[name=count]', this.el).val());
             }
 
             this.model.save(data, {
