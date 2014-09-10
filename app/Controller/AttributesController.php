@@ -101,8 +101,7 @@ class AttributesController extends AppController
                 $this->response->statusCode(400);
                 $this->response->body(json_encode($response['response']['data']));
             } else {
-                //TODO: Add edit stuff
-                $this->response->body('{}');
+                $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
             }
         } else {
             //assume GET?
@@ -221,9 +220,9 @@ class AttributesController extends AppController
     //     }
     //     if ($this->request->is('post') || $this->request->is('put')) {
     //         $this->request->data = Sanitize::clean($this->request->data);
-            
+    
     //         $response = $this->Attribute->update($this->request->data, $this->getUser());
-            
+    
     //         if ($response) {
     //             $this->set('returnData', $response);
     //         } else {
@@ -274,10 +273,10 @@ class AttributesController extends AppController
     }
     /**
      * Attributes can be added at two places
-     * 	- Stand alone
-     * 	- Or when being added new when adding a collectible
+     *  - Stand alone
+     *  - Or when being added new when adding a collectible
      *
-     * 	- When they are being directly attached to a collectible, if the attribute is denied then we will want to automatically delete the link
+     *  - When they are being directly attached to a collectible, if the attribute is denied then we will want to automatically delete the link
      */
     function admin_approve($id = null) {
         $this->checkLogIn();
