@@ -137,33 +137,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                 }
             });
         },
-        // renderEditView: function(attribute) {
-        //     var self = this;
-        //     if (this.addEditView) {
-        //         this.addEditView.remove();
-        //     }
-        //     this.addEditView = new AddAttributeView({
-        //         model: this.model,
-        //         manufacturers: this.manufacturers,
-        //         artists: this.artists,
-        //         scales: this.scales,
-        //         collectible: this.collectible,
-        //         type: 'edit'
-        //     });
-        //     this.addEditView.on('view:category:select', function() {
-        //         this.addEditView.remove();
-        //         this.addEditView = new AttributeCategoryView({
-        //             model: this.model
-        //         });
-        //         this.addEditView.on('change:attribute_category_id', function() {
-        //             this.renderEditView();
-        //         }, this);
-        //         $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
-        //         $('.modal-footer .save', '#attribute-update-dialog').hide();
-        //     }, this);
-        //     $('.modal-body', '#attribute-update-dialog').html(this.addEditView.render().el);
-        //     $('.modal-footer .save', '#attribute-update-dialog').show();
-        // },
         duplicate: function() {
             var self = this;
             if (this.duplicateView) {

@@ -1,4 +1,4 @@
-define(['require', 'jquery', 'jquery.blockui'], function(require, $) {
+define(['require', 'jquery', 'blockui'], function(require, $) {
 
     return {
         onError: function(message) {

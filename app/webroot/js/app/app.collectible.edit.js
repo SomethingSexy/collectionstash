@@ -25,7 +25,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/message.error.severe.dust',
     'text!templates/collectibles/message.duplist.dust',
     'text!templates/collectibles/modal.dust',
-    'text!templates/collectibles/attribute.upload.dust',
     'text!templates/collectibles/directional.dust',
     'text!templates/collectibles/attribute.add.existing.dust',
     'text!templates/collectibles/attribute.add.existing.search.dust',
@@ -39,7 +38,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, attributeUploadTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -56,7 +55,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(messageSevereTemplate, 'message.error.severe'));
     dust.loadSource(dust.compile(dupListTemplate, 'message.duplist'));
     dust.loadSource(dust.compile(modalTemplate, 'modal'));
-    dust.loadSource(dust.compile(attributeUploadTemplate, 'attribute.photo.edit'));
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(attributeAddExistingTemplate, 'attribute.add.existing'));
     dust.loadSource(dust.compile(attributeAddExistingSearchTemplate, 'attribute.add.existing.search'));
@@ -235,95 +233,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     });
 
 
-    var AttributePhotoView = Backbone.View.extend({
-        template: 'attribute.photo.edit',
-        className: "col-md-4",
-        events: {},
-        initialize: function(options) {
-            this.eventManager = options.eventManager;
-            // this.collection.on('reset', function() {
-            // var self = this;
-            // var data = {
-            // uploads : this.collection.toJSON(),
-            // uploadDirectory : uploadDirectory
-            // };
-            // dust.render(this.template, data, function(error, output) {
-            // $(self.el).html(output);
-            // });
-            // }, this);
-        },
-        render: function() {
-            var self = this;
-            var data = {
-                uploadDirectory: uploadDirectory,
-                attribute: this.model.toJSON()
-            };
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            $('.fileupload', self.el).fileupload({
-                //dropZone : $('#dropzone')
-            });
-            $('.fileupload', self.el).fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
-            $('.fileupload', self.el).fileupload('option', {
-                url: '/attributes_uploads/upload',
-                maxFileSize: 2097152,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                process: [{
-                    action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 2097152 // 2MB
-                }, {
-                    action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
-                }, {
-                    action: 'save'
-                }]
-            });
-            $('.fileupload', self.el).on('hidden.bs.modal', function() {
-                $('#fileupload table tbody tr.template-download').remove();
-                pageEvents.trigger('upload:close');
-            });
-            $('.upload-url', self.el).on('click', function() {
-                var url = $.trim($('.url-upload-input', self.el).val());
-                if (url !== '') {
-                    $.ajax({
-                        dataType: 'json',
-                        type: 'post',
-                        data: $('.fileupload', self.el).serialize(),
-                        url: '/attributes_uploads/upload/',
-                        beforeSend: function(formData, jqForm, options) {
-                            $('.fileupload-progress', self.el).removeClass('fade').addClass('active');
-                            $('.fileupload-progress .progress .bar', self.el).css('width', '100%');
-                        },
-                        success: function(data, textStatus, jqXHR) {
-                            if (data && data.files.length) {
-                                var that = $('.fileupload', self.el);
-                                that.fileupload('option', 'done').call(that, null, {
-                                    result: data
-                                });
-                            } else if (data.response && !data.response.isSuccess) {
-                                // most like an error
-                                $('span', '.component-message.error').text(data.response.errors[0].message);
-                            }
-                        },
-                        complete: function() {
-                            $('.fileupload-progress', self.el).removeClass('active').addClass('fade');
-                            $('.fileupload-progress .progress .bar', self.el).css('width', '0%');
-                        }
-                    });
-                }
-            });
-            var that = $('.fileupload', self.el);
-            that.fileupload('option', 'done').call(that, null, {
-                result: {
-                    files: self.collection.toJSON()
-                }
-            });
-            return this;
-        }
-    });
     var PhotoView = Backbone.View.extend({
         template: 'photo.default.edit',
         className: "",
