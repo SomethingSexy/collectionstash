@@ -124,7 +124,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             var $button = $(event.currentTarget);
             $button.button('loading');
             var data = {
-                type: $('[name=type]', this.el).val(),
                 attribute_category_id: $('[name=attribute_category_id]', this.el).val(),
                 name: $('[name=name]', this.el).val(),
                 description: $('[name=description]', this.el).val(),
@@ -132,6 +131,10 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 artist_id: $('[name=artist_id]', this.el).val(),
                 scale_id: $('[name=scale_id]', this.el).val()
             };
+
+            if (this.collectible.get('custom') && this.model.get('type') !== 'mass') {
+                data.type = $('[name=type]', this.el).val();
+            }
 
             if (this.model.isNew()) {
                 data.count = parseInt($('[name=count]', this.el).val());
