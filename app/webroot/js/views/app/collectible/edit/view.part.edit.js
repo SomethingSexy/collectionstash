@@ -1,4 +1,4 @@
-define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/part.edit.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/part.edit.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin, growl) {
     var EditListing = Marionnette.ItemView.extend({
         template: template,
         events: {
@@ -131,11 +131,12 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 artist_id: $('[name=artist_id]', this.el).val(),
                 scale_id: $('[name=scale_id]', this.el).val()
             };
-
+            // if this is a custom and not mass produced, then we have a type the user can select
             if (this.collectible.get('custom') && this.model.get('type') !== 'mass') {
                 data.type = $('[name=type]', this.el).val();
             }
 
+            // if this is a new model, then we also need to grab the count
             if (this.model.isNew()) {
                 data.count = parseInt($('[name=count]', this.el).val());
             }
@@ -143,6 +144,11 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.model.save(data, {
                 wait: true,
                 success: function(model, response, options) {
+                    if (response.isEdit) {
+                        growl.onSuccess('Your edit to the part has been successfully submitted!');
+                    } else {
+                        growl.onSuccess('Your edit has been successfully saved!');
+                    }
                     $button.button('reset');
                 },
                 error: function(model, response, options) {
