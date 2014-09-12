@@ -7,7 +7,8 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             'click .edit-attribute-photo-link': 'addPhoto',
             'click ._edit-part': 'edit',
             'click .remove-duplicate-attribute': 'duplicate',
-            'click ._edit-part-collectible': 'editCollectiblePart'
+            'click ._edit-part-collectible': 'editCollectiblePart',
+            'click ._remove-part': 'removePart'
         },
         initialize: function(options) {
             this.status = options.status;
@@ -29,7 +30,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             // comes in update to allow if admin
             // Remove Collectible Attribute will remove the attribute
             // if it is the only one, so we don't need remove really
-            if (status.status.id === '1' || status.status.id === '2' && !adminMode) {
+            if (status.status.id === '1' || status.status.id === '2') {
                 data.allowRemoveAttribute = false;
             } else {
                 data.allowRemoveAttribute = true;
@@ -90,6 +91,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         },
         edit: function() {
             this.trigger('edit:part', this.model.part);
+        },
+        removePart: function() {
+            this.trigger('remove:part', this.model);
         },
         addPhoto: function() {
             var self = this;

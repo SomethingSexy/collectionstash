@@ -95,6 +95,7 @@ class CollectiblesController extends AppController
         // If the status is submitted, then the only person who can edit it is the persno who submitted it and an admin
         // If the status is active, then anyone can edit it
         $collectible = $this->Collectible->getCollectible($id);
+        
         $collectible = $collectible['response']['data']['collectible'];
         $variants = array();
         if (isset($collectible['response']['data']['variants'])) {
@@ -111,11 +112,15 @@ class CollectiblesController extends AppController
             $this->render('viewMissing');
             return;
         }
-        
-        $parts = Set::extract('/AttributesCollectible/.', $collectible);
-        
+        $parts = array();
+        // only do an extract if not empty, otherwise it seems to return
+        // an array with one empty element 
+        if (!empty($collectible['AttributesCollectible'])) {
+            $parts = Set::extract('/AttributesCollectible/.', $collectible);
+        }
         unset($collectible['AttributesCollectible']);
         $this->set('parts', $parts);
+
         // This is the basic stuff to get for edit attributes
         // This one will always be required
         $attributeCategories = $this->Collectible->AttributesCollectible->Attribute->AttributeCategory->find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));

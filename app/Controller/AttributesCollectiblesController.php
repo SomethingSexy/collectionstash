@@ -9,12 +9,12 @@
  * however, this will have to handle...adding brand new attributes which will have to
  * add a new Attribute (for approval) and add a new attribute collectible which will be an edit
  * - If the attribute collectible is approved then we will automatically approve the attributr
- * 	- If the attribute collectible is denied then we will automatically delete the attribute as well
+ *  - If the attribute collectible is denied then we will automatically delete the attribute as well
  *
  * - Update will be standard, just updating the count for now
  *
  * - Removing
- * 		- Will indicate if we are just remove the link or removing the link and deleting the attribute
+ *      - Will indicate if we are just remove the link or removing the link and deleting the attribute
  *
  *  To handle duplicates through this UI,  you would delete the link and the attribute and then add the new one
  *
@@ -66,8 +66,21 @@ class AttributesCollectiblesController extends AppController
                 $this->response->statusCode(400);
                 $this->response->body(json_encode($response['response']['data']));
             } else {
-            	//TODO: Add edit stuff
-            	$this->response->body('{}');
+                $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
+            }
+        } else if ($this->request->isDelete()) {
+            $part['AttributesCollectible'] = $this->request->input('json_decode', true);
+            $part['AttributesCollectible'] = Sanitize::clean($part['AttributesCollectible']);
+            $part['AttributesCollectible']['id'] = $id;
+            $response = $this->AttributesCollectible->remove($part, $this->getUser());
+            
+            if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+                $this->response->statusCode(401);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
+            } else {
+                $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
             }
         } else {
             //assume GET?
@@ -136,47 +149,11 @@ class AttributesCollectiblesController extends AppController
     /**
      * This will submit a removal.
      */
-    public function remove() {
-        if (!$this->isLoggedIn()) {
-            $data['response'] = array();
-            $data['response']['isSuccess'] = false;
-            $error = array('message' => __('You must be logged in to remove this item.'));
-            $error['inline'] = false;
-            $data['response']['errors'] = array();
-            array_push($data['response']['errors'], $error);
-            $this->set('returnData', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            debug($this->request->data);
-            
-            $response = $this->AttributesCollectible->remove($this->request->data, $this->getUser(), false);
-            
-            if ($response) {
-                $this->set('returnData', $response);
-            } else {
-                //Something really fucked up
-                $data['isSuccess'] = false;
-                $data['errors'] = array('message', __('Invalid request.'));
-                $this->set('returnData', $data);
-            }
-        } else {
-            $data['isSuccess'] = false;
-            $data['errors'] = array('message', __('Invalid request.'));
-            $this->set('returnData', $data);
-            return;
-        }
-    }
-    /**
-     *
-     */
-    // public function update() {
-    //     debug($this->isLoggedIn());
+    // public function remove() {
     //     if (!$this->isLoggedIn()) {
     //         $data['response'] = array();
     //         $data['response']['isSuccess'] = false;
-    //         $error = array('message' => __('You must be logged in to update this item.'));
+    //         $error = array('message' => __('You must be logged in to remove this item.'));
     //         $error['inline'] = false;
     //         $data['response']['errors'] = array();
     //         array_push($data['response']['errors'], $error);
@@ -187,7 +164,7 @@ class AttributesCollectiblesController extends AppController
     //         $this->request->data = Sanitize::clean($this->request->data);
     //         debug($this->request->data);
     
-    //         $response = $this->AttributesCollectible->update($this->request->data, $this->getUser(), false);
+    //         $response = $this->AttributesCollectible->remove($this->request->data, $this->getUser(), false);
     
     //         if ($response) {
     //             $this->set('returnData', $response);

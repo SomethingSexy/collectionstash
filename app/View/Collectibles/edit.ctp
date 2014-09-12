@@ -116,7 +116,6 @@ if(isset($allowDelete) && $allowDelete){
 
 
 <?php echo $this -> element('upload_dialog', array('uploadName' => 'data[CollectiblesUpload][collectible_id]', 'uploadId' => $collectibleId)); ?>
-<?php echo $this -> element('attribute_remove_link_dialog'); ?>
 <!-- TODO Update this so we only have one modal -->
 <div id="attribute-collectible-add-existing-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -137,55 +136,6 @@ if(isset($allowDelete) && $allowDelete){
 				</button>
 				<button class="btn btn-primary save" autocomplete="off">
 					Add
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="attribute-collectible-add-new-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-					×
-				</button>
-				<h4 id="myModalLabel">Add New Collectible Part</h4>
-			</div>
-			<div class="modal-body">
-		
-			</div>
-		
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
-					Close
-				</button>
-				<button class="btn btn-primary save" autocomplete="off">
-					Add
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="attribute-update-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-					×
-				</button>
-				<h4 id="myModalLabel">Edit Part</h4>
-			</div>
-			<div class="modal-body">
-		
-			</div>
-		
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
-					Close
-				</button>
-				<button class="btn btn-primary save" autocomplete="off">
-					Submit
 				</button>
 			</div>
 		</div>

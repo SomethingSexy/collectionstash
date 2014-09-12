@@ -157,7 +157,7 @@ class AttributesCollectible extends AppModel
     /**
      * This method will be used when we are trying to remove an attribute
      */
-    public function remove($attribute, $user, $autoUpdate = false) {
+    public function remove($attribute, $user) {
         $retVal = array();
         $retVal['response'] = array();
         $retVal['response']['isSuccess'] = false;
@@ -175,10 +175,9 @@ class AttributesCollectible extends AppModel
         
         unset($attribute['AttributesCollectible']['reason']);
         $currentVersion = $this->findById($attribute['AttributesCollectible']['id']);
-        // if ($autoUpdate === 'false' || $autoUpdate === false) {
+
         $currentVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attribute['AttributesCollectible']['id'])));
         $autoUpdate = $this->Collectible->allowAutoUpdate($currentVersion['AttributesCollectible']['collectible_id'], $user);
-        // }
         
         if ($autoUpdate === true || $autoUpdate === 'true') {
             
