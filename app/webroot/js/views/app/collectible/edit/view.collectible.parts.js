@@ -12,6 +12,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             },
             'edit:part': function(event, view, model) {
                 this.trigger('edit:part', model);
+            },
+            'remove:part': function(event, view, model) {
+                this.trigger('remove:part', model);
             }
         },
         events: {
@@ -38,79 +41,79 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
         },
         onRender: function() {
             var self = this;
-            $('.modal-footer .save', '#attribute-collectible-add-new-dialog').click(function() {
-                var url = '/attributes_collectibles/add.json';
-                $('#attribute-collectible-add-new-dialog').find('form').ajaxSubmit({
-                    // dataType identifies the expected content type of the server response
-                    dataType: 'json',
-                    url: url,
-                    beforeSubmit: function(formData, jqForm, options) {
-                        formData.push({
-                            name: '_method',
-                            type: 'text',
-                            value: 'POST'
-                        });
-                        formData.push({
-                            name: 'data[AttributesCollectible][collectible_id]',
-                            type: 'text',
-                            value: collectibleId
-                        });
-                        $('#attribute-collectible-add-new-dialog').find('form').find('.error-message').remove();
-                    },
-                    // success identifies the function to invoke when the server response
-                    // has been received
-                    success: function(responseText, statusText, xhr, $form) {
-                        if (responseText.response.isSuccess) {
-                            $('#attribute-collectible-add-new-dialog').modal('hide');
-                            var message = 'Part has been submitted!';
-                            if (!responseText.response.data.isEdit) {
-                                message = 'Part has been added!';
-                            }
-                            $.blockUI({
-                                message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                                showOverlay: false,
-                                css: {
-                                    top: '100px',
-                                    'background-color': '#DDFADE',
-                                    border: '1px solid #93C49F',
-                                    'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                    'border-radius': '4px 4px 4px 4px',
-                                    color: '#333333',
-                                    'margin-bottom': '20px',
-                                    padding: '8px 35px 8px 14px',
-                                    'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                    'z-index': 999999
-                                },
-                                timeout: 2000
-                            });
-                            var data = responseText.response.data;
-                            if (data.isEdit === false) {
-                                var attribute = new AttributesCollectibleModel(data);
-                                self.collection.add(attribute);
-                                $('.attributes-list', self.el).append(new AttributeView({
-                                    model: attribute,
-                                    status: self.status,
-                                    artists: self.artists,
-                                    manufacturers: self.manufacturers,
-                                    categories: self.categories,
-                                    collectible: self.collectible,
-                                    scales: self.scales
-                                }).render().el);
-                            }
-                        } else {
-                            if (responseText.response.errors) {
-                                $.each(responseText.response.errors, function(index, value) {
-                                    if (value.inline) {
-                                        $(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-collectible-add-new-dialog').find('form')).after('<div class="error-message">' + value.message + '</div>');
-                                    } else {
-                                        $('#attribute-collectible-add-new-dialog').find('.component-message.error').children('span').text(value.message);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            });
+            // $('.modal-footer .save', '#attribute-collectible-add-new-dialog').click(function() {
+            //     var url = '/attributes_collectibles/add.json';
+            //     $('#attribute-collectible-add-new-dialog').find('form').ajaxSubmit({
+            //         // dataType identifies the expected content type of the server response
+            //         dataType: 'json',
+            //         url: url,
+            //         beforeSubmit: function(formData, jqForm, options) {
+            //             formData.push({
+            //                 name: '_method',
+            //                 type: 'text',
+            //                 value: 'POST'
+            //             });
+            //             formData.push({
+            //                 name: 'data[AttributesCollectible][collectible_id]',
+            //                 type: 'text',
+            //                 value: collectibleId
+            //             });
+            //             $('#attribute-collectible-add-new-dialog').find('form').find('.error-message').remove();
+            //         },
+            //         // success identifies the function to invoke when the server response
+            //         // has been received
+            //         success: function(responseText, statusText, xhr, $form) {
+            //             if (responseText.response.isSuccess) {
+            //                 $('#attribute-collectible-add-new-dialog').modal('hide');
+            //                 var message = 'Part has been submitted!';
+            //                 if (!responseText.response.data.isEdit) {
+            //                     message = 'Part has been added!';
+            //                 }
+            //                 $.blockUI({
+            //                     message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
+            //                     showOverlay: false,
+            //                     css: {
+            //                         top: '100px',
+            //                         'background-color': '#DDFADE',
+            //                         border: '1px solid #93C49F',
+            //                         'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
+            //                         'border-radius': '4px 4px 4px 4px',
+            //                         color: '#333333',
+            //                         'margin-bottom': '20px',
+            //                         padding: '8px 35px 8px 14px',
+            //                         'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+            //                         'z-index': 999999
+            //                     },
+            //                     timeout: 2000
+            //                 });
+            //                 var data = responseText.response.data;
+            //                 if (data.isEdit === false) {
+            //                     var attribute = new AttributesCollectibleModel(data);
+            //                     self.collection.add(attribute);
+            //                     $('.attributes-list', self.el).append(new AttributeView({
+            //                         model: attribute,
+            //                         status: self.status,
+            //                         artists: self.artists,
+            //                         manufacturers: self.manufacturers,
+            //                         categories: self.categories,
+            //                         collectible: self.collectible,
+            //                         scales: self.scales
+            //                     }).render().el);
+            //                 }
+            //             } else {
+            //                 if (responseText.response.errors) {
+            //                     $.each(responseText.response.errors, function(index, value) {
+            //                         if (value.inline) {
+            //                             $(':input[name="data[' + value.model + '][' + value.name + ']"]', $('#attribute-collectible-add-new-dialog').find('form')).after('<div class="error-message">' + value.message + '</div>');
+            //                         } else {
+            //                             $('#attribute-collectible-add-new-dialog').find('.component-message.error').children('span').text(value.message);
+            //                         }
+            //                     });
+            //                 }
+            //             }
+            //         }
+            //     });
+            // });
             //TODO: this should be in a modal view for this guy
             $('.modal-footer .save', '#attribute-collectible-add-existing-dialog').click(function() {
                 var url = '/attributes_collectibles/add.json';
@@ -189,36 +192,18 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
                     }
                 });
             });
-            // Putting this at this level for now
-            // this.removeCollectibleAttributes = new RemoveAttributeLinks({
-            //     $element: $('.attributes.collectible', self.el),
-            //     $context: self.el,
-            //     success: function(data) {
-            //         if (data.isEdit === false) {
-            //             // This will contain the id of the Attribute we
-            //             // removed.  We will use that to find
-            //             self.collection.each(function(attribute) {
-            //                 if (attribute.toJSON().id === data.id) {
-            //                     self.collection.remove(attribute);
-            //                 }
-            //             });
-            //         } else {
-            //             // do nothing
-            //         }
-            //     }
-            // });
-            // this.updateCollectibleAttributes.init();
-            // this.removeCollectibleAttributes.init();
+
             return this;
         },
         addNew: function() {
-            var self = this;
-            var attribute = new AttributesCollectibleModel();
-            this.renderAddNewView(attribute);
-            $('#attribute-collectible-add-new-dialog').modal();
-            $('#attribute-collectible-add-new-dialog', 'body').on('hidden.bs.modal', function() {
-                self.addNewView.remove();
-            });
+            // var self = this;
+            // var attribute = new AttributesCollectibleModel();
+            // this.renderAddNewView(attribute);
+            // $('#attribute-collectible-add-new-dialog').modal();
+            // $('#attribute-collectible-add-new-dialog', 'body').on('hidden.bs.modal', function() {
+            //     self.addNewView.remove();
+            // });
+            this.trigger('add:part', model);
         },
         renderAddNewView: function(attribute) {
             if (this.addNewView) {

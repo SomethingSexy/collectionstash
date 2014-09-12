@@ -7,6 +7,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'views/app/collectible/edit/view.collectible.parts',
     'views/app/collectible/edit/view.collectible.part.edit',
     'views/app/collectible/edit/view.part.edit',
+    'views/app/collectible/edit/view.collectible.part.remove',
     'views/common/modal.region',
     'models/model.collectible',
     'models/model.status',
@@ -38,7 +39,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -923,6 +924,11 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         partsView.on('edit:part', _.partial(renderEditPart, _, layout, options));
 
+        partsView.on('remove:part', _.partial(renderRemovePart, _, layout, options));
+
+        // TODO: this won't work here, needs to come from the layout
+        partsView.on('add:part', _.bind(renderAddPart, layout, options));
+
         layout.parts.show(partsView);
     }
 
@@ -962,6 +968,48 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             layout.modal.hideModal();
         });
     };
+
+    function renderAddPart(layout, options) {
+
+        var parts = options.collection,
+            model = new options.collection.model()
+
+            var addPartView = new PartEditView({
+                model: model,
+                // later this will come from the app
+                collectible: options.model,
+                manufacturers: options.manufacturers,
+                artists: options.artists,
+                scales: options.scales
+            });
+
+        layout.modal.show(addPartView);
+
+        model.once('sync', function(model, response, options) {
+            parts.add(model);
+            layout.modal.hideModal();
+        });
+    };
+
+
+    function renderRemovePart(model, layout, options) {
+        var removePartView = new PartRemoveView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model,
+        });
+
+        layout.modal.show(removePartView);
+
+        model.once('sync', function(model, response, options) {
+            if (_.isArray(response)) {
+                // App.comments.add(response);
+            }
+
+            layout.modal.hideModal();
+        });
+    };
+
 
     // mock app until we fully convert to marionette
     return {
@@ -1070,7 +1118,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             }).render().el);
 
             $('#collectible-container').append(collectibleView.render().el);
-            
+
             $('#collectible-container').append(new TagsView({
                 collection: tags
             }).render().el);
