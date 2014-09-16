@@ -122,7 +122,6 @@ class AttributesCollectible extends AppModel
             
             $currentVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attributesCollectible['AttributesCollectible']['id'])));
             $autoUpdate = $this->Collectible->allowAutoUpdate($currentVersion['AttributesCollectible']['collectible_id'], $user);
-            
             // If we are automatically approving it, then save it directly
             if ($autoUpdate === true || $autoUpdate === 'true') {
                 $revision = $this->Revision->buildRevision($user['User']['id'], $this->Revision->EDIT, null);
@@ -175,7 +174,7 @@ class AttributesCollectible extends AppModel
         
         unset($attribute['AttributesCollectible']['reason']);
         $currentVersion = $this->findById($attribute['AttributesCollectible']['id']);
-
+        
         $currentVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attribute['AttributesCollectible']['id'])));
         $autoUpdate = $this->Collectible->allowAutoUpdate($currentVersion['AttributesCollectible']['collectible_id'], $user);
         
@@ -224,7 +223,7 @@ class AttributesCollectible extends AppModel
      *
      * 1) Adding an existing attribute to a collectible
      * 2) Adding a new attribute and linking that to a collectible
-     * 		This one will have to both add a new attribute and a new attribute collectible
+     *      This one will have to both add a new attribute and a new attribute collectible
      *
      */
     public function add($data, $user, $autoUpdate = false) {
@@ -251,35 +250,44 @@ class AttributesCollectible extends AppModel
         // we are saving a collectible attribute and creating a new
         // attribute at the same time, we don't have to validate
         // the attribute id because it does not exist yet
-        if (isset($data['Attribute'])) {
+        $part = array();
+        $part['AttributesCollectible']['collectible_id'] = $data['collectible_id'];
+        $part['AttributesCollectible']['count'] = $data['count'];
+        if (isset($data['attribute_id'])) {
+            $part['AttributesCollectible']['attribute_id'] = $data['attribute_id'];
+        } else {
             unset($this->validate['attribute_id']);
+            // else we are adding a new part as well
+            $part['Attribute']['attribute_category_id'] = $data['attribute_category_id'];
+            $part['Attribute']['name'] = $data['name'];
+            $part['Attribute']['description'] = $data['description'];
+            $part['Attribute']['manufacture_id'] = $data['manufacture_id'];
+            $part['Attribute']['artist_id'] = $data['artist_id'];
+            $part['Attribute']['scale_id'] = $data['scale_id'];
         }
         
         if ($this->validates()) {
             // Now let's check to see if we need to update this based
             // on collectible status
-            // If we are already auto updating, no need to check
-            // if ($autoUpdate === 'false' || $autoUpdate === false) {
-            $autoUpdate = $this->Collectible->allowAutoUpdate($data['AttributesCollectible']['collectible_id'], $user);
-            // }
-            
+            $autoUpdate = $this->Collectible->allowAutoUpdate($part['AttributesCollectible']['collectible_id'], $user);
+
             $dataSource = $this->getDataSource();
             $dataSource->begin();
             // If we hve an attribute we need to make sure
             // that that validates as well.
-            if (isset($data['Attribute'])) {
-                $this->Attribute->set($data);
+            if (isset($part['Attribute'])) {
+                $this->Attribute->set($part);
                 // If it doesn't validate return failz
                 if (!$this->Attribute->validates()) {
                     // Just in case
                     $dataSource->rollback();
                     $retVal['response']['isSuccess'] = false;
-                    $errors = $this->convertErrorsJSON($this->Attribute->validationErrors, 'Attribute');
-                    $retVal['response']['errors'] = $errors;
+                    $retVal['response']['data'] = $this->Attribute->validationErrors;
+                    $retVal['response']['code'] = 400;
                     return $retVal;
                 }
                 $attribute = array();
-                $attribute['Attribute'] = $data['Attribute'];
+                $attribute['Attribute'] = $part['Attribute'];
                 // Now we need to kick off a save of the attribute
                 // This one doesn't matter if it is auto update or not because
                 // these new ones will get approved based on approving of the collectible
@@ -287,11 +295,11 @@ class AttributesCollectible extends AppModel
                 // We can't use the standard collectible autoupdate because if it is a mass-produced
                 // collectible, I want it to go to status 2 regardless
                 
-                $attributeAddResponse = $this->Attribute->addAttribute($attribute, $user, $this->Collectible->allowAutoAddAttribute($data['AttributesCollectible']['collectible_id'], $user));
+                $attributeAddResponse = $this->Attribute->addAttribute($attribute, $user, $this->Collectible->allowAutoAddAttribute($part['AttributesCollectible']['collectible_id'], $user));
                 
                 if ($attributeAddResponse && $attributeAddResponse['response']['isSuccess']) {
                     $attributeId = $attributeAddResponse['response']['data']['Attribute']['id'];
-                    $data['AttributesCollectible']['attribute_id'] = $attributeId;
+                    $part['AttributesCollectible']['attribute_id'] = $attributeId;
                 } else {
                     $dataSource->rollback();
                     // return that response, should be universal
@@ -300,10 +308,10 @@ class AttributesCollectible extends AppModel
             }
             
             if ($autoUpdate === true || $autoUpdate === 'true') {
-                unset($data['Attribute']);
+                unset($part['Attribute']);
                 $revision = $this->Revision->buildRevision($user['User']['id'], $this->Revision->ADD, null);
-                $data = array_merge($data, $revision);
-                if ($this->saveAll($data, array('validate' => false))) {
+                $part = array_merge($part, $revision);
+                if ($this->saveAll($part, array('validate' => false))) {
                     $dataSource->commit();
                     // Return what we just added
                     $attributesCollectibleId = $this->id;
@@ -316,7 +324,7 @@ class AttributesCollectible extends AppModel
                     $retVal['response']['data']['Revision'] = $attributesCollectible['Revision'];
                     $retVal['response']['data']['isEdit'] = false;
                     // However, we only want to trigger this activity on collectibles that have been APPROVED already
-                    if ($this->Collectible->triggerActivity($data['AttributesCollectible']['collectible_id'], $user)) {
+                    if ($this->Collectible->triggerActivity($part['AttributesCollectible']['collectible_id'], $user)) {
                         $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $attributesCollectible, 'type' => 'AttributesCollectible')));
                     }
                 } else {
@@ -326,7 +334,7 @@ class AttributesCollectible extends AppModel
                 $action = array();
                 $action['Action']['action_type_id'] = 1;
                 
-                if ($this->saveEdit($data, null, $user['User']['id'], $action)) {
+                if ($this->saveEdit($part, null, $user['User']['id'], $action)) {
                     // Only commit when the save edit is successful
                     $dataSource->commit();
                     // I am not sure we ever need to return what we just
@@ -339,8 +347,8 @@ class AttributesCollectible extends AppModel
             }
         } else {
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'AttributesCollectible');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
+            $retVal['response']['code'] = 400;
         }
         
         return $retVal;

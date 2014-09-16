@@ -54,7 +54,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             data.scales = this.scales.toJSON();
             // we need this to determine how to render the view
             data.collectible = this.collectible.toJSON();
-            if (this.model.isNew() === 'new') {
+            if (this.model.isNew()) {
                 data.showCount = true;
                 data.showId = false;
             } else {
