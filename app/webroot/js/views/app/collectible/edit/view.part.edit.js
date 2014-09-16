@@ -136,9 +136,12 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 data.type = $('[name=type]', this.el).val();
             }
 
-            // if this is a new model, then we also need to grab the count
+            // if this is a new model, then we also need to grab the count 
+            var isNew = false;
             if (this.model.isNew()) {
+                isNew = true;
                 data.count = parseInt($('[name=count]', this.el).val());
+                data.collectible_id = this.collectible.get('id');
             }
 
             this.model.save(data, {
