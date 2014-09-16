@@ -17,10 +17,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
                 this.trigger('remove:part', model);
             }
         },
-        events: {
-            'click #add-existing-item-link': 'addExisting',
-            'click #add-new-item-link': 'addNew'
-        },
         itemViewOptions: function(model, index) {
             return {
                 status: this.status,
@@ -194,16 +190,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             });
 
             return this;
-        },
-        addNew: function() {
-            // var self = this;
-            // var attribute = new AttributesCollectibleModel();
-            // this.renderAddNewView(attribute);
-            // $('#attribute-collectible-add-new-dialog').modal();
-            // $('#attribute-collectible-add-new-dialog', 'body').on('hidden.bs.modal', function() {
-            //     self.addNewView.remove();
-            // });
-            this.trigger('add:part', model);
         },
         renderAddNewView: function(attribute) {
             if (this.addNewView) {

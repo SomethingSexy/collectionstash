@@ -53,8 +53,18 @@ class AttributesCollectiblesController extends AppController
         }
         
         if ($this->request->isPost()) { // create
-            $this->response->statusCode(401);
-            return;
+            $part = $this->request->input('json_decode', true);
+            
+            $response = $this->AttributesCollectible->add($part, $this->getUser());
+            if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+                $this->response->statusCode(401);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
+            } else {
+                // return the data which should be the full part
+                $this->response->body(json_encode($response['response']['data']));
+            }
         } else if ($this->request->isPut()) { //update
             $part['AttributesCollectible'] = $this->request->input('json_decode', true);
             $part['AttributesCollectible'] = Sanitize::clean($part['AttributesCollectible']);
@@ -114,38 +124,40 @@ class AttributesCollectiblesController extends AppController
     /**
      *
      */
-    public function add() {
-        $data = array();
-        //must be logged in to post comment
-        if (!$this->isLoggedIn()) {
-            $data['response'] = array();
-            $data['response']['isSuccess'] = false;
-            $error = array('message' => __('You must be logged in to add an item.'));
-            $error['inline'] = false;
-            $data['response']['errors'] = array();
-            array_push($data['response']['errors'], $error);
-            $this->set('returnData', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            
-            $response = $this->AttributesCollectible->add($this->request->data, $this->getUser());
-            if ($response) {
-                $this->set('returnData', $response);
-            } else {
-                //Something really fucked up
-                $data['isSuccess'] = false;
-                $data['errors'] = array('message', __('Invalid request.'));
-                $this->set('returnData', $data);
-            }
-        } else {
-            $data['isSuccess'] = false;
-            $data['errors'] = array('message', __('Invalid request.'));
-            $this->set('returnData', $data);
-            return;
-        }
-    }
+    // public function add() {
+    //     $data = array();
+    //     //must be logged in to post comment
+    //     if (!$this->isLoggedIn()) {
+    //         $data['response'] = array();
+    //         $data['response']['isSuccess'] = false;
+    //         $error = array('message' => __('You must be logged in to add an item.'));
+    //         $error['inline'] = false;
+    //         $data['response']['errors'] = array();
+    //         array_push($data['response']['errors'], $error);
+    //         $this->set('returnData', $data);
+    //         return;
+    //     }
+    //     if ($this->request->is('post') || $this->request->is('put')) {
+    //         $this->request->data = Sanitize::clean($this->request->data);
+    
+    //         $response = $this->AttributesCollectible->add($this->request->data, $this->getUser());
+    //         if ($response) {
+    //             $this->set('returnData', $response);
+    //         } else {
+    //             //Something really fucked up
+    //             $data['isSuccess'] = false;
+    //             $data['errors'] = array('message', __('Invalid request.'));
+    //             $this->set('returnData', $data);
+    //         }
+    //     } else {
+    //         $data['isSuccess'] = false;
+    //         $data['errors'] = array('message', __('Invalid request.'));
+    //         $this->set('returnData', $data);
+    //         return;
+    //     }
+    // }
+    
+    
     /**
      * This will submit a removal.
      */

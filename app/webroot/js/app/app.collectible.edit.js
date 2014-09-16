@@ -927,7 +927,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         partsView.on('remove:part', _.partial(renderRemovePart, _, layout, options));
 
         // TODO: this won't work here, needs to come from the layout
-        partsView.on('add:part', _.bind(renderAddPart, layout, options));
+        layout.on('add:part', _.partial(renderAddPart, layout, options));
 
         layout.parts.show(partsView);
     }
@@ -1130,11 +1130,32 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             var PartsLayout = Backbone.Marionette.Layout.extend({
                 template: partsLayoutTemplate,
                 className: 'row',
+                events: {
+                    'click #add-existing-item-link': 'addExisting',
+                    'click #add-new-item-link': 'addNew'
+                },
                 regions: {
                     actions: '._actions',
                     parts: '._parts',
                     // main: '._main',
                     modal: ModalRegion
+                },
+                addNew: function() {
+                    this.trigger('add:part');
+                },
+                addExisting: function() {
+                    var self = this;
+                    var attribute = new AttributesCollectibleModel();
+                    // when the attribute gets selected
+                    // remove the view and then show the add
+                    attribute.on('change', function() {
+                        this.renderAddExistingView(attribute);
+                    }, this);
+                    this.renderAddExistingView(attribute);
+                    $('#attribute-collectible-add-existing-dialog').modal();
+                    $('#attribute-collectible-add-existing-dialog', 'body').on('hidden.bs.modal', function() {
+                        self.addExistingView.remove();
+                    });
                 }
             });
 
