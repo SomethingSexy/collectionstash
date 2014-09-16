@@ -986,7 +986,10 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         layout.modal.show(addPartView);
 
         model.once('sync', function(model, response, options) {
-            parts.add(model);
+            if (!response.isEdit) {
+                parts.add(model);
+            }
+
             layout.modal.hideModal();
         });
     };

@@ -1,4 +1,4 @@
-define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/collectible.part.remove.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/collectible.part.remove.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin, growl) {
 
     var RmoveCollectiblePart = Marionnette.ItemView.extend({
         template: template,
@@ -35,12 +35,14 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.model.destroy({
                 data: data,
                 processData: true,
+                wait: true,
                 success: function(model, response, options) {
                     if (response.isEdit) {
                         growl.onSuccess('Your edit to the part has been successfully submitted!');
                     } else {
                         growl.onSuccess('Your edit has been successfully saved!');
                     }
+                    $button.button('reset');
                 },
                 error: function(model, response, options) {
                     self.onModelError(model, response, options);

@@ -82,6 +82,7 @@ class AttributesCollectiblesController extends AppController
             $part['AttributesCollectible'] = $this->request->input('json_decode', true);
             $part['AttributesCollectible'] = Sanitize::clean($part['AttributesCollectible']);
             $part['AttributesCollectible']['id'] = $id;
+            
             $response = $this->AttributesCollectible->remove($part, $this->getUser());
             
             if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
