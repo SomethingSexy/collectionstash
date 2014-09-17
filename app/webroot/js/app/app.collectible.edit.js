@@ -8,6 +8,8 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'views/app/collectible/edit/view.collectible.part.edit',
     'views/app/collectible/edit/view.part.edit',
     'views/app/collectible/edit/view.collectible.part.remove',
+    'views/app/collectible/edit/view.part.add.existing',
+    'views/app/collectible/edit/view.collectible.search',
     'views/common/modal.region',
     'models/model.collectible',
     'models/model.status',
@@ -27,8 +29,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/message.duplist.dust',
     'text!templates/collectibles/modal.dust',
     'text!templates/collectibles/directional.dust',
-    'text!templates/collectibles/attribute.add.existing.dust',
-    'text!templates/collectibles/attribute.add.existing.search.dust',
     'text!templates/common/paging.dust',
     'text!templates/collectibles/directional.custom.dust',
     'text!templates/collectibles/collectible.custom.dust',
@@ -39,7 +39,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, attributeAddExistingTemplate, attributeAddExistingSearchTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -57,8 +57,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(dupListTemplate, 'message.duplist'));
     dust.loadSource(dust.compile(modalTemplate, 'modal'));
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
-    dust.loadSource(dust.compile(attributeAddExistingTemplate, 'attribute.add.existing'));
-    dust.loadSource(dust.compile(attributeAddExistingSearchTemplate, 'attribute.add.existing.search'));
     dust.loadSource(dust.compile(directionalCustomTemplate, 'directional.custom'));
     dust.loadSource(dust.compile(customTemplate, 'collectible.custom.edit'));
     dust.loadSource(dust.compile(attributeAddExistingSearchPartTemplate, 'attribute.add.existing.search.part'));
@@ -410,47 +408,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     });
 
 
-
-    /**
-     * Main view when adding an existing attribute
-     */
-    var AddExistingAttributeView = Backbone.View.extend({
-        template: 'attribute.add.existing',
-        events: {
-            'click #select-attribute-link': 'searchCollectible',
-            'click #select-attribute-link-by-part': 'searchPart'
-        },
-        initialize: function(options) {
-            // pssing in the collectible model, used to determine collectible type
-            this.collectible = options.collectible;
-        },
-        render: function() {
-            var self = this;
-            var data = this.model.toJSON();
-            if (data.hasOwnProperty('id')) {
-                data['hasAttribute'] = true;
-            } else {
-                data['hasAttribute'] = false;
-            }
-            data['uploadDirectory'] = uploadDirectory;
-            // if the collectible is a custom, then we will display
-            // the type field
-            data['collectible'] = this.collectible.toJSON();
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            $(self.el).animate({
-                scrollTop: 0
-            });
-            return this;
-        },
-        searchCollectible: function() {
-            this.trigger('view:search:collectible');
-        },
-        searchPart: function() {
-            this.trigger('view:search:part');
-        }
-    });
     var AddExistingAttributePartSearchView = Backbone.View.extend({
         template: 'attribute.add.existing.search.part',
         events: {
@@ -550,96 +507,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             this.model.set(attribute);
         }
     });
-    var AddExistingAttributeCollectibleSearchView = Backbone.View.extend({
-        template: 'attribute.add.existing.search',
-        events: {
-            'click button.search': 'searchCollectible',
-            'click a.page': 'gotoPage',
-            'click a.next': 'next',
-            'click a.previous': 'previous',
-            'click li.attribute': 'selectAttribute'
-        },
-        initialize: function(options) {
-            var self = this;
-            this.collection.on('reset', function() {
-                $('table', self.el).empty();
-                _.each(this.collection.models, function(collectible) {
-                    // This renders the collectible
-                    $('table.collectibles', self.el).append(new AttributeSearchCollectibleView({
-                        model: collectible
-                    }).render().el);
-                    // This renders the parts
-                    $('table.collectibles', self.el).append(new AttributeSearchCollectibleAttrView({
-                        model: collectible
-                    }).render().el);
-                });
-                var pagesArray = [];
-                // ya fuck you dust
-                for (var i = 1; i <= this.collection.state.totalPages; i++) {
-                    pagesArray.push(i);
-                }
-                var data = {
-                    pages: pagesArray
-                };
-                if (this.collection.currentPage) {
-                    data['paginator'] = {
-                        currentPage: this.collection.state.currentPage,
-                        firstPage: this.collection.state.firstPage,
-                        perPage: this.collection.state.perPage,
-                        totalPages: this.collection.state.totalPages,
-                        total: this.collection.state.total
-                    };
-                } else {
-                    data['paginator'] = this.collection.state;
-                }
-                dust.render('paging', data, function(error, output) {
-                    $('.paging', self.el).html(output);
-                });
-                $(self.el).animate({
-                    scrollTop: 0
-                });
-            }, this);
-        },
-        render: function() {
-            var self = this;
-            dust.render(this.template, {}, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        },
-        searchCollectible: function(event) {
-            // TODO: Update to not allow searching
-            // unless something was entered
-            event.preventDefault();
-            var query = $('.search-query', this.el).val();
-            this.collection.searchQuery = query;
-            this.collection.fetch();
-        },
-        gotoPage: function(e) {
-            e.preventDefault();
-            var page = $(e.target).text();
-            this.collection.goTo(page);
-        },
-        next: function(e) {
-            e.preventDefault();
-            if (typeof this.collection.currentPage === 'undefined') {
-                this.collection.currentPage = 1;
-            }
-            this.collection.requestNextPage();
-        },
-        previous: function(e) {
-            e.preventDefault();
-            this.collection.requestPreviousPage();
-        },
-        selectAttribute: function(event) {
-            event.preventDefault();
-            var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
-            this.model.clear({
-                silent: true
-            });
-            this.model.set(attribute);
-        }
-    });
+
     var AttributeSearchCollectibleAttrView = Backbone.View.extend({
         tagName: 'tr',
         events: {},
@@ -928,6 +796,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         // TODO: this won't work here, needs to come from the layout
         layout.on('add:part', _.partial(renderAddPart, layout, options));
+        layout.on('add:existing:part', _.partial(renderAddExistingPart, layout, options));
 
         layout.parts.show(partsView);
     }
@@ -969,6 +838,22 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         });
     };
 
+    function renderAddExistingPart(layout, options) {
+        var parts = options.collection,
+            model = new options.collection.model();
+
+        //  this won't be a modal, isntead it will render where the list of parts is
+        var addPartView = new PartAddExistingView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model
+        });
+
+        CollectibleSearchView
+
+        layout.parts.show(addPartView);
+    }
+
     function renderAddPart(layout, options) {
 
         var parts = options.collection,
@@ -986,6 +871,8 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         layout.modal.show(addPartView);
 
         model.once('sync', function(model, response, options) {
+            // if it isn't an edit, then add it to the collection
+            // otherwise, do nothing with it
             if (!response.isEdit) {
                 parts.add(model);
             }
@@ -1147,18 +1034,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                     this.trigger('add:part');
                 },
                 addExisting: function() {
-                    var self = this;
-                    var attribute = new AttributesCollectibleModel();
-                    // when the attribute gets selected
-                    // remove the view and then show the add
-                    attribute.on('change', function() {
-                        this.renderAddExistingView(attribute);
-                    }, this);
-                    this.renderAddExistingView(attribute);
-                    $('#attribute-collectible-add-existing-dialog').modal();
-                    $('#attribute-collectible-add-existing-dialog', 'body').on('hidden.bs.modal', function() {
-                        self.addExistingView.remove();
-                    });
+                    this.trigger('add:existing:part');
                 }
             });
 
