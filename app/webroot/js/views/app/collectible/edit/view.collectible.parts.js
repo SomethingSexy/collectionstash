@@ -118,32 +118,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
 
             return this;
         },
-        renderAddNewView: function(attribute) {
-            if (this.addNewView) {
-                this.addNewView.remove();
-            }
-            this.addNewView = new AddAttributeView({
-                model: attribute,
-                manufacturers: this.manufacturers,
-                artists: this.artists,
-                scales: this.scales,
-                collectible: this.collectible,
-                type: 'new'
-            });
-            this.addNewView.on('view:category:select', function() {
-                this.addNewView.remove();
-                this.addNewView = new AttributeCategoryView({
-                    model: attribute
-                });
-                this.addNewView.on('change:attribute_category_id', function() {
-                    this.renderAddNewView(attribute);
-                }, this);
-                $('.modal-body', '#attribute-collectible-add-new-dialog').html(this.addNewView.render().el);
-                $('.modal-footer .save', '#attribute-collectible-add-new-dialog').hide();
-            }, this);
-            $('.modal-body', '#attribute-collectible-add-new-dialog').html(this.addNewView.render().el);
-            $('.modal-footer .save', '#attribute-collectible-add-new-dialog').show();
-        },
         addExisting: function() {
             var self = this;
             var attribute = new AttributesCollectibleModel();
