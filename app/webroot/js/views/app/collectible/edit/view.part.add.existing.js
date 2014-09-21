@@ -31,7 +31,7 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
             //TODO: close any potential open views
         },
         searchCollectible: function() {
-
+            this.trigger('search:collectible');
         },
         searchPart: function() {
 

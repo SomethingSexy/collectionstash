@@ -10,11 +10,11 @@ define(['backbone', 'backbone.pageable', 'models/model.collectible'], function(B
             query: {}
         },
         queryParams: {
-            query: function() {
+            q: function() {
                 return this.state.query;
             },
             "sortKey": "sort",
-            "pageSize" : "limit"
+            "pageSize": "limit",
         },
         setQuery: function(query, page_size) {
             var state = this.state;
