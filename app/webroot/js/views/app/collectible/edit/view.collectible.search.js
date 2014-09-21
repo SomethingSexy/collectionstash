@@ -5,15 +5,15 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
     });
 
     var CollectibleView = Marionette.ItemView.extend({
-        className: 'stash-item',
-        template: templateItem,
-        tagName: 'tr'
+        className: 'spacer',
+        template: templateItem
     });
 
     return Marionette.CompositeView.extend({
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._collectibles",
+
         emptyView: NoItemsView,
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this._renderChildren);
