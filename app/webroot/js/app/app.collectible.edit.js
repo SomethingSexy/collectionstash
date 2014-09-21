@@ -519,41 +519,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             return this;
         },
     });
-    var AttributeSearchCollectibleView = Backbone.View.extend({
-        tagName: 'tr',
-        events: {},
-        initialize: function(options) {},
-        render: function() {
-            // Update this to be a thumb nail, then the name and the manufacturer or artist, and then collectible type
-            // Then underneath a list of all parts
-            var self = this;
-            var collectible = this.model.toJSON();
-            var row = '<td rowspan="2">' + collectible.name;
-            if (collectible.exclusive) {
-                row += ' | Exclusive';
-            }
-            if (collectible.variant) {
-                row += ' | Variant';
-            }
-            row += '</td>';
-            row += '<td style="min-width: 100px; max-width: 100px;">';
-            if (collectible.CollectiblesUpload && !_.isEmpty(collectible.CollectiblesUpload)) {
-                _.each(collectible.CollectiblesUpload, function(collectibleUpload) {
-                    if (collectibleUpload.primary) {
-                        row += '<a class="thumbnail col-md-12" data-gallery="gallery" href="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '"><img src="/' + uploadDirectory + '/' + collectibleUpload.Upload.name + '" alt=""></a>';
-                    }
-                });
-            } else {
-                row += '<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>';
-            }
-            row += '</td>';
-            row += '<td>' + collectible.Collectibletype.name + '</td>';
-            row += '<td>' + collectible.Manufacture.title + '</td>';
-            row += '<td>' + collectible.License.name + '</td>';
-            var $listItem = $(self.el).html(row);
-            return this;
-        },
-    });
     /**
      * This view is for setting duplicates, this is a modal.
      *

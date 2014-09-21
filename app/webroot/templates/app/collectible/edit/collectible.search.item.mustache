@@ -1,38 +1,46 @@
-<td style="min-width: 100px; max-width: 100px;">
+<div class="col-md-12 collectible">
+    <div class="row">
+        <div class="col-md-2">
+            {{#CollectiblesUpload}}
+                {{#primary}}
+                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+                    </a>
+                {{/primary}}
+            {{/CollectiblesUpload}}
+            {{^CollectiblesUpload}}
+                <a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+            {{/CollectiblesUpload}}
+        </div>
 
-    {{#CollectiblesUpload}}
-        {{#primary}}
-            <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
-                <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
-            </a>
-        {{/primary}}
-    {{/CollectiblesUpload}}
-    {{^CollectiblesUpload}}
-        <a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
-    {{/CollectiblesUpload}}
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="name"><a class="title" target="_blank" href="/collectibles/view/{{id}}">{{{name}}}{{#exclusive}} | Exclusive{{/exclusive}}{{#variant}} | Variant{{/variant}}</a></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="description">{{{description}}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="labels">
+                        <span class="label label-default">{{{Collectibletype.name}}}</span>
+                        {{#License.name}}
+                            <span class="label label-default">{{{License.name}}}</span>
+                        {{/License.name}}
 
-</td>
-<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}{{#exclusive}} | Exclusive{{/exclusive}}{{#variant}} | Variant{{/variant}}</a></td>
-{{#Collectibletype.name}}
-    <td>{{{Collectibletype.name}}}</td>
-{{/Collectibletype.name}}
-        
-{{^Collectibletype.name}}
-    <td>N/A</td>
-{{/Collectibletype.name}}
-
-{{#Manufacture.title}}
-    <td>{{{Manufacture.title}}}</td>
-{{/Manufacture.title}}
-        
-{{^Manufacture.title}}
-    <td>N/A</td>
-{{/Manufacture.title}}
-
-{{#License.name}}
-    <td>{{{License.name}}}</td>
-{{/License.name}}
-        
-{{^License.name}}
-    <td>N/A</td>
-{{/License.name}}
+                        {{#Manufacture.title}}
+                            <span class="label label-default">{{{Manufacture.title}}}</span>
+                        {{/Manufacture.title}}
+                        {{#Scale.scale}}
+                            <span class="label label-default">{{{Scale.scale}}}</span>
+                        {{/Scale.scale}}
+                    </span>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>
