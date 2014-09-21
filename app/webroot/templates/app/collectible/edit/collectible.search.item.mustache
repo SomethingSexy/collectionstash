@@ -1,0 +1,38 @@
+<td style="min-width: 100px; max-width: 100px;">
+
+    {{#CollectiblesUpload}}
+        {{#primary}}
+            <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+            </a>
+        {{/primary}}
+    {{/CollectiblesUpload}}
+    {{^CollectiblesUpload}}
+        <a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+    {{/CollectiblesUpload}}
+
+</td>
+<td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}{{#exclusive}} | Exclusive{{/exclusive}}{{#variant}} | Variant{{/variant}}</a></td>
+{{#Collectibletype.name}}
+    <td>{{{Collectibletype.name}}}</td>
+{{/Collectibletype.name}}
+        
+{{^Collectibletype.name}}
+    <td>N/A</td>
+{{/Collectibletype.name}}
+
+{{#Manufacture.title}}
+    <td>{{{Manufacture.title}}}</td>
+{{/Manufacture.title}}
+        
+{{^Manufacture.title}}
+    <td>N/A</td>
+{{/Manufacture.title}}
+
+{{#License.name}}
+    <td>{{{License.name}}}</td>
+{{/License.name}}
+        
+{{^License.name}}
+    <td>N/A</td>
+{{/License.name}}

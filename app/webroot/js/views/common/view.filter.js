@@ -10,9 +10,6 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/filter
             var self = this;
             // setup popovers
             $('.filter', this.el).popover();
-
-            // setup hounds
-
             var type = $(this).data('type');
             var selectProps = {
                 width: '250px',
@@ -28,7 +25,6 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/filter
                     $('select option[value=' + value + ']', self.el).prop('selected', 'selected');
                 });
             }
-
 
             $('select', this.el).select2(selectProps);
         },

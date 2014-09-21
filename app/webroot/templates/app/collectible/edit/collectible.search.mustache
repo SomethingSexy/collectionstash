@@ -6,14 +6,16 @@
 		<div class="input-group">
 			<input type="text" name="q" class="search-query form-control">
 			<span class="input-group-btn">
-				<button type="submit" class="btn btn-primary search">
+				<button type="submit" class="btn btn-primary _search">
 					Search
 				</button>
 			</span>
 		</div>
 	</form>
 	<div class="items">
-		<table class="table collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></table>
+		<table class="table collectibles _collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></table>
 	</div>
-	<div class="paging"></div>
+	{{#showPagination}}
+	<ul class="_pagination"></ul>
+	{{/showPagination}}
 </div>
