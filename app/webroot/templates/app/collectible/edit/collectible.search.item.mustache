@@ -40,7 +40,47 @@
                         {{/Scale.scale}}
                     </span>
                 </div>
-            </div>        
+            </div>  
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Parts</h4>
+                    {{#AttributesCollectible}}
+                        {{#active}}
+                             <div class="row _part">
+                                <div class="col-md-2">
+                                    {{#Attribute.AttributesUpload}}
+                                        {{#primary}}
+                                            <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                                                <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Attribute.name}}">
+                                            </a>
+                                        {{/primary}}
+                                    {{/Attribute.AttributesUpload}}
+                                    {{^Attribute.AttributesUpload}}
+                                        <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+                                    {{/Attribute.AttributesUpload}}
+                                </div>
+                                <div class="col-md-7 spacer">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="name">{{{Attribute.name}}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="description">{{{Attribute.description}}}</span>
+                                        </div>
+                                    </div>      
+                                </div>                      
+                            </div>
+                        {{/active}}
+                    {{/AttributesCollectible}} 
+                    {{^AttributesCollectible}}
+                        <p>This collectible has no parts.</p>
+                    {{/AttributesCollectible}} 
+
+                </div>
+            </div>      
         </div>
     </div>
+
 </div>
