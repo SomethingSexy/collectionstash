@@ -13,7 +13,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         template: template,
         itemView: CollectibleView,
         itemViewContainer: "._collectibles",
-
         emptyView: NoItemsView,
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this._renderChildren);
@@ -41,9 +40,16 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         },
         onRender: function() {
             var self = this;
+
         },
         onCompositeCollectionRendered: function() {
-        	var self = this;
+            var self = this;
+            if (this.collection.length > 0) {
+                $('._pagination', this.el).css('display', 'inline-block');
+            } else {
+                $('._pagination', this.el).css('display', 'none');
+            }
+
             if (this.firstSearch) {
                 $('._pagination', this.el).pagination({
                     items: this.collection.state.totalRecords,

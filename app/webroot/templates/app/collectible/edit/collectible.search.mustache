@@ -2,18 +2,20 @@
 	<div class="directional-text">
 		Search for a collectible that has the part you want to select. Use the search box to narrow your results.  If a collectible has parts, they will be listed below the collectible detail.
 	</div>
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" name="q" class="search-query form-control">
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-primary _search">
-					Search
-				</button>
-			</span>
+	<form>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" name="q" class="search-query form-control">
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-primary _search">
+						Search
+					</button>
+				</span>
+			</div>
 		</div>
 	</form>
 	<div class="items">
-		<div class="row collectibles _collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></div>
+		<div class="collectibles _collectibles" data-toggle="modal-gallery" data-target="#modal-gallery"></div>
 	</div>
 	<ul class="_pagination"></ul>
 </div>
