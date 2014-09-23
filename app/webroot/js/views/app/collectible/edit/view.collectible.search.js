@@ -18,6 +18,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this._renderChildren);
         },
+        initialize: function() {
+            this.firstSearch = true;
+        },
         events: {
             'click button._search': 'searchCollectible',
             'click li.attribute': 'selectAttribute'
@@ -38,14 +41,22 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         },
         onRender: function() {
             var self = this;
-            $('._pagination', this.el).pagination({
-                items: this.collection.state.totalRecords,
-                itemsOnPage: this.collection.state.pageSize,
-                cssStyle: 'pagination',
-                onPageClick: function(pageNumber, event) {
-                    self.collection.getPage(pageNumber);
-                }
-            });
+        },
+        onCompositeCollectionRendered: function() {
+        	var self = this;
+            if (this.firstSearch) {
+                $('._pagination', this.el).pagination({
+                    items: this.collection.state.totalRecords,
+                    itemsOnPage: this.collection.state.pageSize,
+                    cssStyle: 'pagination',
+                    onPageClick: function(pageNumber, event) {
+                        self.collection.getPage(pageNumber);
+                    }
+                });
+                this.firstSearch = false;
+            } else {
+                $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+            }
         },
         selectAttribute: function(event) {
             event.preventDefault();
