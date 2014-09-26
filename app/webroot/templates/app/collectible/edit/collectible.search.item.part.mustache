@@ -1,0 +1,33 @@
+{{#active}}
+     <div class="row _part" data-id={{id}}>
+        <div class="col-md-2">
+            {{#part.AttributesUpload}}
+                {{#primary}}
+                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Attribute.name}}">
+                    </a>
+                {{/primary}}
+            {{/part.AttributesUpload}}
+            {{^part.AttributesUpload}}
+                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+            {{/part.AttributesUpload}}
+        </div>
+        <div class="col-md-7 spacer">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="name">{{{part.name}}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="description">{{{part.description}}}</span>
+                </div>
+            </div>      
+        </div>  
+        <div class="col-md-3 spacer">
+            <div class="row">
+                <button class="btn btn-default">Select</button>
+            </div>
+        </div>                    
+    </div>
+{{/active}}

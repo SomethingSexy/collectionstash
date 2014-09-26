@@ -5,28 +5,41 @@ if (!adminMode) {
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['backbone'], factory);
+        define(['backbone', 'collections/collection.collectible.parts'], factory);
     } else {
         // Browser globals
-        root.CollectibleModel = factory(root.Backbone);
+        root.CollectibleModel = factory(root.Backbone, root.PartsCollection);
     }
-}(this, function(backbone) {
+}(this, function(backbone, PartsCollection) {
 
     return Backbone.Model.extend({
         urlRoot: function() {
-            return '/collectibles/collectible/' + adminMode + '/';
+            return '/collectibles/collectible';
+        },
+        parse: function(response) {
+            if (!this.parts) {
+                this.parts = new PartsCollection(response.AttributesCollectible, {
+                    parse: true
+                });
+            } else {
+                this.parts.reset(response.AttributesCollectible);
+            }
+
+            delete response.AttributesCollectible;
+
+            return response;
         },
         validation: {
             msrp: [{
-                pattern: 'number',
-                msg: 'Must be a valid amount.'
-            }, {
-                required: false
-            }
-            // , {
-            //     pattern: /^[a-z0-9- &$%#@!*()+_#:.,'"\\/]+$/i,
-            //     msg: 'Invalid characters'
-            // }
+                    pattern: 'number',
+                    msg: 'Must be a valid amount.'
+                }, {
+                    required: false
+                }
+                // , {
+                //     pattern: /^[a-z0-9- &$%#@!*()+_#:.,'"\\/]+$/i,
+                //     msg: 'Invalid characters'
+                // }
             ],
             description: [{
                 rangeLength: [0, 1000],

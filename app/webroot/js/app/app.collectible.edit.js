@@ -32,14 +32,12 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/common/paging.dust',
     'text!templates/collectibles/directional.custom.dust',
     'text!templates/collectibles/collectible.custom.dust',
-    'text!templates/collectibles/attribute.add.existing.search.part.dust',
-    'text!templates/collectibles/attribute.default.dust',
     'text!templates/attributes/attributes.remove.duplicate.dust',
     'text!templates/collectibles/collectible.original.dust',
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeAddExistingSearchPartTemplate, partTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -59,8 +57,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(directionalCustomTemplate, 'directional.custom'));
     dust.loadSource(dust.compile(customTemplate, 'collectible.custom.edit'));
-    dust.loadSource(dust.compile(attributeAddExistingSearchPartTemplate, 'attribute.add.existing.search.part'));
-    dust.loadSource(dust.compile(partTemplate, 'attribute.default.edit'));
     dust.loadSource(dust.compile(attributeRemoveDuplicate, 'attribute.remove.duplicate'));
     dust.loadSource(dust.compile(pagingTemplate, 'paging'));
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
@@ -352,173 +348,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         }
     });
 
-
-    var AddExistingAttributePartSearchView = Backbone.View.extend({
-        template: 'attribute.add.existing.search.part',
-        events: {
-            'click #filters .filter-links': 'selectFilter',
-            'click a.page': 'gotoPage',
-            'click a.next': 'next',
-            'click a.previous': 'previous',
-            'click tr.attribute': 'selectAttribute'
-        },
-        initialize: function(options) {
-            var self = this;
-            this.artists = options.artists;
-            this.manufacturers = options.manufacturers;
-            this.categories = options.categories;
-            this.collection.filters = {};
-            this.collection.on('reset', function() {
-                $('table', self.el).empty();
-                _.each(this.collection.models, function(collectible) {
-                    $('table', self.el).append(new AttributeSearchPartAttrView({
-                        model: collectible
-                    }).render().el);
-                });
-                var pagesArray = [];
-                // ya fuck you dust
-                for (var i = 1; i <= this.collection.paginator_ui.totalPages; i++) {
-                    pagesArray.push(i);
-                }
-                var data = {
-                    pages: pagesArray
-                };
-                if (this.collection.currentPage) {
-                    data['paginator'] = {
-                        currentPage: this.collection.currentPage,
-                        firstPage: this.collection.firstPage,
-                        perPage: this.collection.perPage,
-                        totalPages: this.collection.totalPages,
-                        total: this.collection.paginator_ui.total
-                    };
-                } else {
-                    data['paginator'] = this.collection.paginator_ui;
-                }
-                dust.render('paging', data, function(error, output) {
-                    $('.paging', self.el).html(output);
-                });
-                $(self.el).animate({
-                    scrollTop: 0
-                });
-            }, this);
-        },
-        render: function() {
-            var self = this;
-            dust.render(this.template, {
-                artists: this.artists.toJSON(),
-                manufacturers: this.manufacturers.toJSON(),
-                categories: this.categories.toJSON()
-            }, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        },
-        selectFilter: function(event) {
-            var selectedType = $(event.currentTarget).closest('.filter').attr('data-type');
-            var selectedFilter = $(event.currentTarget).attr('data-filter');
-            if (!this.collection.filters.hasOwnProperty(selectedType)) {
-                this.collection.filters[selectedType] = [];
-            }
-            if ($(event.currentTarget).is(':checked')) {
-                this.collection.filters[selectedType].push(selectedFilter);
-            } else {
-                // remove it
-                this.collection.filters[selectedType].splice($.inArray(selectedFilter, this.collection.filters[selectedType]), 1);
-            }
-            this.collection.fetch();
-        },
-        gotoPage: function(e) {
-            e.preventDefault();
-            var page = $(e.target).text();
-            this.collection.goTo(page);
-        },
-        next: function(e) {
-            e.preventDefault();
-            if (typeof this.collection.currentPage === 'undefined') {
-                this.collection.currentPage = 1;
-            }
-            this.collection.requestNextPage();
-        },
-        previous: function(e) {
-            e.preventDefault();
-            this.collection.requestPreviousPage();
-        },
-        selectAttribute: function(event) {
-            event.preventDefault();
-            var attribute = JSON.parse($(event.currentTarget).attr('data-attribute'));
-            this.model.clear({
-                silent: true
-            });
-            this.model.set(attribute);
-        }
-    });
-
-    var AttributeSearchCollectibleAttrView = Backbone.View.extend({
-        tagName: 'tr',
-        events: {},
-        initialize: function(options) {},
-        render: function() {
-            // Update this to be a thumb nail, then the name and the manufacturer or artist, and then collectible type
-            // Then underneath a list of all parts
-            var self = this;
-            var collectible = this.model.toJSON();
-            var row = '<td colspan="4">';
-            if ($.isArray(collectible.AttributesCollectible) && collectible.AttributesCollectible.length > 0) {
-                row += '<ul class="list-unstyled">';
-                $.each(collectible.AttributesCollectible, function(index, attribute) {
-                    // If there is no category then don't show it, I think this is a problem
-                    // right now because we have some attributes that are still in the features list
-                    if (typeof attribute.Attribute.AttributeCategory !== 'undefined') {
-                        var pathName = attribute.Attribute.AttributeCategory.path_name;
-                        var name = attribute.Attribute.name;
-                        if (name === '') {
-                            name = attribute.Attribute.description;
-                        }
-                        row += '<li class="attribute" data-id="attribute.Attribute.id" data-attribute=\'' + JSON.stringify(attribute.Attribute) + '\'>';
-                        row += '<table>';
-                        var attribute = attribute;
-                        attribute.AttributesUpload = attribute.Attribute.AttributesUpload;
-                        attribute.uploadDirectory = uploadDirectory;
-                        dust.render('attribute.default.edit', attribute, function(error, output) {
-                            row += output;
-                        });
-                        row += '</table>';
-                        row += '</li>';
-                    }
-                });
-                row += '</ul>';
-            } else {
-                row += 'No Parts';
-            }
-            row += '</td>';
-            $(self.el).html(row);
-            return this;
-        },
-        buildRow: function() {}
-    });
-    /**
-     *This view is for when we are searching for attributes by part/artist
-     * and then displaying those parts
-     */
-    var AttributeSearchPartAttrView = Backbone.View.extend({
-        tagName: 'tr',
-        className: 'attribute',
-        template: 'attribute.default.edit',
-        events: {},
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            var attribute = this.model.toJSON();
-            attribute.uploadDirectory = uploadDirectory;
-            dust.render(this.template, attribute, function(error, output) {
-                $(self.el).html(output);
-            });
-            var attrData = attribute.Attribute;
-            attrData.AttributesUpload = attribute.AttributesUpload;
-            $(self.el).attr('data-attribute', JSON.stringify(attrData));
-            return this;
-        },
-    });
     /**
      * This view is for setting duplicates, this is a modal.
      *
@@ -761,13 +590,23 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         addPartView.on('search:collectible', function() {
 
-            layout.parts.show(new CollectibleSearchView({
+            var searchView = new CollectibleSearchView({
                 // although we might want to keep this cached?
                 collection: new PaginatedCollection([], {
                     mode: 'server'
                 })
-            }));
+            });
+
+
+            searchView.on('part:selected', function(model){
+
+            });
+            searchView.on('cancel', _.partial(renderPartsView, layout, options));
+
+            layout.parts.show(searchView);
         });
+
+        addPartView.on('cancel', _.partial(renderPartsView, layout, options));
 
         layout.parts.show(addPartView);
     }
