@@ -577,13 +577,12 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         });
     };
 
-    function renderAddExistingPart(layout, options) {
-        var parts = options.collection,
-            model = new options.collection.model();
+    function renderAddExistingPart(layout, options, part) {
+        var parts = options.collection;
 
         //  this won't be a modal, isntead it will render where the list of parts is
         var addPartView = new PartAddExistingView({
-            model: model,
+            model: part,
             // later this will come from the app
             collectible: options.model
         });
@@ -598,9 +597,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             });
 
 
-            searchView.on('part:selected', function(model){
-
-            });
+            searchView.on('part:selected', _.partial(renderAddExistingPart, layout, options));
             searchView.on('cancel', _.partial(renderPartsView, layout, options));
 
             layout.parts.show(searchView);

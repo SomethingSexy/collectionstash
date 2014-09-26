@@ -6,7 +6,7 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         template: template,
         events: {
             'click #select-attribute-link': 'searchCollectible',
-            'click ._cancel' : 'cancelAdd'
+            'click ._cancel': 'cancelAdd'
         },
         initialize: function(options) {
             // pssing in the collectible model, used to determine collectible type
@@ -14,7 +14,11 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         },
         serializeData: function() {
             var self = this;
-            var data = this.model.toJSON();
+            var data = {};
+            if (this.model) {
+                data = this.model.toJSON();
+            }
+
             if (data.hasOwnProperty('id')) {
                 data['hasAttribute'] = true;
             } else {
@@ -33,7 +37,7 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         searchCollectible: function() {
             this.trigger('search:collectible');
         },
-        cancelAdd: function(){
+        cancelAdd: function() {
             this.trigger('cancel');
         }
     });

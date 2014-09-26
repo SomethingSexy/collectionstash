@@ -26,8 +26,8 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         template: templateItem,
         itemView: PartView,
         itemViewContainer: "._parts",
-        childEvents: {
-            'part:selected': function(model) {
+        itemEvents: {
+            'part:selected': function(event, view, model) {
                 this.trigger('part:selected', model);
             }
         },
@@ -44,8 +44,8 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this._renderChildren);
         },
-        childEvents: {
-            'part:selected': function(model) {
+        itemEvents: {
+            'part:selected': function(event, view, model) {
                 this.trigger('part:selected', model);
             }
         },
