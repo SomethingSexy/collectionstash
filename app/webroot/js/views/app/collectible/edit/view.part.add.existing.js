@@ -17,13 +17,12 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
             var data = {};
             if (this.model) {
                 data = this.model.toJSON();
+                data.part = this.model.part.toJSON();
+                data.hasPart = true;
+            } else {
+                data.hasPart = false;
             }
 
-            if (data.hasOwnProperty('id')) {
-                data['hasAttribute'] = true;
-            } else {
-                data['hasAttribute'] = false;
-            }
             data['uploadDirectory'] = uploadDirectory;
             // if the collectible is a custom, then we will display
             // the type field

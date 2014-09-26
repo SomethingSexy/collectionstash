@@ -3,19 +3,22 @@
 <table class="table table-borderless">
 	<tr>
 		<td style="min-width: 100px; max-width: 100px;">
-			{#AttributesUpload uploadDirectory=uploadDirectory}
-			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-			{/primary}
-			{:else}
-			<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
-			{/AttributesUpload}
+            {{#part.AttributesUpload}}
+                {{#primary}}
+                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Attribute.name}}">
+                    </a>
+                {{/primary}}
+            {{/part.AttributesUpload}}
+            {{^part.AttributesUpload}}
+                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+            {{/part.AttributesUpload}}
 		</td>
-		<td>{path_name}</td>
-		<td>{name}</td>
-		<td>{description}</td>
-		<td>{Manufacture.title}</td>
-		<td>{Scale.scale}</td>
+		<td>{{part.path_name}}</td>
+		<td>{{{part.name}}}</td>
+		<td>{{{part.description}}}</td>
+		<td>{{part.Manufacture.title}}</td>
+		<td>{{part.Scale.scale}}</td>
 	</tr>
 
 </table>
