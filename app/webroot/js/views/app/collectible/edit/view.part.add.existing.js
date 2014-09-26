@@ -6,7 +6,7 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         template: template,
         events: {
             'click #select-attribute-link': 'searchCollectible',
-            'click #select-attribute-link-by-part': 'searchPart'
+            'click ._cancel' : 'cancelAdd'
         },
         initialize: function(options) {
             // pssing in the collectible model, used to determine collectible type
@@ -33,8 +33,8 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         searchCollectible: function() {
             this.trigger('search:collectible');
         },
-        searchPart: function() {
-
+        cancelAdd: function(){
+            this.trigger('cancel');
         }
     });
 });

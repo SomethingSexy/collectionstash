@@ -1,12 +1,39 @@
-define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mustache', 'text!templates/app/collectible/edit/collectible.search.item.mustache', 'text!templates/app/collectible/edit/collectible.search.empty.mustache', 'mustache', 'marionette.mustache', 'simplePagination'], function(Marionette, template, templateItem, emptyTemplate) {
+define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mustache', 'text!templates/app/collectible/edit/collectible.search.item.mustache', 'text!templates/app/collectible/edit/collectible.search.item.part.mustache', 'text!templates/app/collectible/edit/collectible.search.empty.mustache', 'mustache', 'marionette.mustache', 'simplePagination'], function(Marionette, template, templateItem, templatePart, emptyTemplate) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate
     });
 
-    var CollectibleView = Marionette.ItemView.extend({
+
+    var PartView = Marionette.ItemView.extend({
         className: 'spacer',
-        template: templateItem
+        template: templatePart,
+        events: {
+            'click ._part': 'selectPart'
+        },
+        serializeData: function() {
+            var data = this.model.toJSON();
+            data.part = this.model.part.toJSON();
+            return data;
+        },
+        selectPart: function() {
+            this.trigger('part:selected', this.model);
+        }
+    });
+
+    var CollectibleView = Marionette.CompositeView.extend({
+        className: 'spacer',
+        template: templateItem,
+        itemView: PartView,
+        itemViewContainer: "._parts",
+        childEvents: {
+            'part:selected': function(model) {
+                this.trigger('part:selected', model);
+            }
+        },
+        initialize: function() {
+            this.collection = this.model.parts;
+        }
     });
 
     return Marionette.CompositeView.extend({
@@ -17,20 +44,17 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         _initialEvents: function() {
             this.listenTo(this.collection, "sync", this._renderChildren);
         },
+        childEvents: {
+            'part:selected': function(model) {
+                this.trigger('part:selected', model);
+            }
+        },
         initialize: function() {
             this.firstSearch = true;
         },
         events: {
             'click button._search': 'searchCollectible',
-            'click li.attribute': 'selectAttribute'
-        },
-        searchCollectible: function(event) {
-            // TODO: Update to not allow searching
-            // unless something was entered
-            event.preventDefault();
-            var query = $('.search-query', this.el).val();
-            this.collection.setQuery(query);
-            this.collection.fetch();
+            'click ._cancel': 'cancelAdd'
         },
         serializeData: function() {
             var data = {
@@ -41,6 +65,17 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.search.mu
         onRender: function() {
             var self = this;
 
+        },
+        searchCollectible: function(event) {
+            // TODO: Update to not allow searching
+            // unless something was entered
+            event.preventDefault();
+            var query = $('.search-query', this.el).val();
+            this.collection.setQuery(query);
+            this.collection.fetch();
+        },
+        cancelAdd: function() {
+            this.trigger('cancel');
         },
         onCompositeCollectionRendered: function() {
             var self = this;
