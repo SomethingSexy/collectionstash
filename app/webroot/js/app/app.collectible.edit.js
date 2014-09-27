@@ -42,9 +42,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
      *  exist in there
-     *
-     * TODO: Enhancements
-     *  - Update so that there is a standard modal view to render things too
      */
 
     dust.loadSource(dust.compile(collectibleTemplate, 'collectible.default.edit'));
@@ -606,7 +603,11 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         addPartView.on('cancel', _.partial(renderPartsView, layout, options));
 
         addPartView.on('part:added', function(model) {
-            options.collection.add(model);
+            // if it is an edit, there won't be a model
+            // passed in right now
+            if (model) {
+                options.collection.add(model);
+            }
 
             renderPartsView(layout, options);
         });
