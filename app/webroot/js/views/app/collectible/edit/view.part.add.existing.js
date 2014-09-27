@@ -1,8 +1,8 @@
-define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mustache', 'mustache', 'marionette.mustache'], function(Mariontte, template, CollectibleSearchView) {
+define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(Mariontte, template, CollectibleSearchView, ErrorMixin, growl) {
     /**
      * Main view when adding an existing attribute
      */
-    return Mariontte.ItemView.extend({
+    var AddPartView = Mariontte.ItemView.extend({
         template: template,
         events: {
             'click #select-attribute-link': 'searchCollectible',
@@ -51,10 +51,23 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
 
             model.save({}, {
                 success: function(model) {
-                    self.trigger('part:added', model);
+                    if (response.isEdit) {
+                        growl.onSuccess('Your new part has been successfully submitted!');
+                        self.trigger('part:added');
+                    } else {
+                        growl.onSuccess('Your part has been successfully added!');
+                        self.trigger('part:added', model);
+                    }
+                },
+                error: function(model, response, options) {
+                    self.onModelError(model, response, options);
                 }
             });
 
         }
     });
+
+    _.extend(AddPartView.prototype, ErrorMixin);
+
+    return AddPartView;
 });
