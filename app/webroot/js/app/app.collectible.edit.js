@@ -605,6 +605,12 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         addPartView.on('cancel', _.partial(renderPartsView, layout, options));
 
+        addPartView.on('part:added', function(model) {
+            options.collection.add(model);
+
+            renderPartsView(layout, options);
+        });
+
         layout.parts.show(addPartView);
     }
 

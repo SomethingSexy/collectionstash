@@ -6,7 +6,8 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         template: template,
         events: {
             'click #select-attribute-link': 'searchCollectible',
-            'click ._cancel': 'cancelAdd'
+            'click ._cancel': 'cancelAdd',
+            'click ._add': 'addPart'
         },
         initialize: function(options) {
             // pssing in the collectible model, used to determine collectible type
@@ -38,6 +39,22 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
         },
         cancelAdd: function() {
             this.trigger('cancel');
+        },
+        addPart: function() {
+            var self = this;
+            var model = new this.model.constructor({
+                attribute_collectible_type_id: this.model.get('attribute_collectible_type_id'),
+                attribute_id: this.model.get('attribute_id'),
+                collectible_id: this.collectible.get('id'),
+                count: $('[name=count]', this.el).val()
+            });
+
+            model.save({}, {
+                success: function(model) {
+                    self.trigger('part:added', model);
+                }
+            });
+
         }
     });
 });
