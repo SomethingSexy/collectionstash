@@ -6,7 +6,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         events: {
             'click .edit-attribute-photo-link': 'addPhoto',
             'click ._edit-part': 'edit',
-            'click .remove-duplicate-attribute': 'duplicate',
+            'click ._remove-part-duplicate': 'duplicate',
             'click ._edit-part-collectible': 'editCollectiblePart',
             'click ._remove-part': 'removePart'
         },
@@ -142,33 +142,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             });
         },
         duplicate: function() {
-            var self = this;
-            if (this.duplicateView) {
-                this.duplicateView.remove();
-            }
-            this.duplicateView = new AttributeDuplicateView({
-                artists: this.artists,
-                manufacturers: this.manufacturers,
-                categories: this.categories,
-                // this will be the attribute that is being replaced
-                model: this.model
-            });
-            // I already have a change event that will rerender this
-            // guy when the attribute changes so I don't need anything else
-            // I just need to trigger a hidden event on the modal
-            // which will then delete the view, I think that is all I need to do
-            $('body').append(this.duplicateView.render().el);
-            // the view that is being rendered, shouldn't know it is a
-            // modal
-            $('#attributeDuplicateModal', 'body').modal({
-                backdrop: 'static'
-            });
-            $('#attributeDuplicateModal', 'body').on('hidden.bs.modal', function() {
-                self.duplicateView.remove();
-            });
-            this.duplicateView.on('modal:close', function() {
-                $('#attributeDuplicateModal', 'body').modal('hide');
-            }, this);
+            this.trigger('remove:part:duplicate', this.model);
         }
     });
 });

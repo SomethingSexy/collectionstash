@@ -32,12 +32,11 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/common/paging.dust',
     'text!templates/collectibles/directional.custom.dust',
     'text!templates/collectibles/collectible.custom.dust',
-    'text!templates/attributes/attributes.remove.duplicate.dust',
     'text!templates/collectibles/collectible.original.dust',
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, attributeRemoveDuplicate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -54,7 +53,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(directionalCustomTemplate, 'directional.custom'));
     dust.loadSource(dust.compile(customTemplate, 'collectible.custom.edit'));
-    dust.loadSource(dust.compile(attributeRemoveDuplicate, 'attribute.remove.duplicate'));
     dust.loadSource(dust.compile(pagingTemplate, 'paging'));
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
     dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
@@ -530,6 +528,8 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         partsView.on('remove:part', _.partial(renderRemovePart, _, layout, options));
 
+        partsView.on('remove:part:duplicate', _.partial(renderRemovePartDuplicate, _, layout, options));
+
         // TODO: this won't work here, needs to come from the layout
         layout.on('add:part', _.partial(renderAddPart, layout, options));
         layout.on('add:existing:part', _.partial(renderAddExistingPart, layout, options));
@@ -661,6 +661,23 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         });
     };
 
+    function renderRemovePartDuplicate(model, layout, options) {
+        var removePartView = new PartRemoveView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model,
+        });
+
+        layout.modal.show(removePartView);
+
+        model.once('sync', function(model, response, options) {
+            if (_.isArray(response)) {
+                // App.comments.add(response);
+            }
+
+            layout.modal.hideModal();
+        });
+    };
 
     // mock app until we fully convert to marionette
     return {

@@ -101,7 +101,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 					if (isset($attribute['Attribute']['manufacture_id'])) {
 						$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Manufacture']['title'] . '</span>';
 					}
-					if (isset($attribute['Attribute']['artist_id'])) {
+					if (isset($attribute['Attribute']['artist_id']) && $attribute['Attribute']['artist_id'] !== '0') {
 						$outputAttribtes .= '<span class="label">' . $attribute['Attribute']['Artist']['name'] . '</span>';
 					}
 				} else {
