@@ -37,33 +37,11 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         cancelAdd: function() {
             this.trigger('cancel');
         },
-        removePart: function(event) {
-            var self = this;
-            var $button = $(event.currentTarget);
-            $button.button('loading');
-            var data = {
-                'reason': parseInt($('[name=reason]', this.el).val())
-            };
+        removePart: function() {
 
-            this.model.destroy({
-                data: data,
-                processData: true,
-                wait: true,
-                success: function(model, response, options) {
-                    if (response.isEdit) {
-                        growl.onSuccess('Your edit to the part has been successfully submitted!');
-                    } else {
-                        growl.onSuccess('Your edit has been successfully saved!');
-                    }
-                    $button.button('reset');
-                },
-                error: function(model, response, options) {
-                    self.onModelError(model, response, options);
-                }
-            });
-        },
-        // Old method
-        save: function() {
+            // we want to remove the duplicate and then we want to update the attributes_collectible from the client-side
+
+
             var self = this;
             // need to pass Attribute.id (which is the model one), Attribute.link = true, Attribute.replace_attribute_id (which is the new one)
             // upon success, we will then update the attribute passed in with the new information and trigger an update
@@ -71,19 +49,18 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             // an attributes collectible model and we need a subset of that
             // to update the attribute
             $('.save', this.el).button('loading');
-            var saveModel = new AttributeModel({
-                Attribute: {
-                    id: this.model.get('Attribute').id,
-                    link: true,
-                    'replace_attribute_id': this.replacementAttribute.get('id'),
-                    // not sure a reason is necessary for this one
-                    reason: 'Duplicate'
-                }
-            });
+            var data = {
+                id: this.model.get('Attribute').id,
+                link: true,
+                'replace_attribute_id': this.replacementAttribute.get('id'),
+                // not sure a reason is necessary for this one
+                reason: 'Duplicate'
+            };
             // since this is not a 100% delete we will do a post here
             // instead of a destroy
-            saveModel.save({}, {
-                url: '/attributes/remove',
+            saveModel.destroy({
+                data: data,
+                processData: true,
                 success: function(model, response) {
                     $('.save', this.el).button('reset');
                     if (response.response.isSuccess) {
