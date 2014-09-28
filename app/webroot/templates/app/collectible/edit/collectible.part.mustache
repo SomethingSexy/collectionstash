@@ -12,7 +12,7 @@
 			{{#part.AttributesCollectible}}
 			{{#Collectible.name}}
 			<li>
-			<a href='/collectibles/view/{Collectible.id}'>{Collectible.name}</a>
+			<a target='_blank' href='/collectibles/view/{{Collectible.id}}'>{{Collectible.name}}</a>
 			</li>
 			{{/Collectible.name}}
 			{{/part.AttributesCollectible}}
@@ -85,7 +85,7 @@
 					</li>
 					{{#allowRemoveAttribute}}
 					<li>
-						<a class="link remove-duplicate-attribute" title='Duplicate Part'>Duplicate</a>
+						<a class="link _remove-part-duplicate" title='Duplicate Part'>Duplicate</a>
 					</li>
 					{{/allowRemoveAttribute}}
 				</ul>
