@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-<p><strong> is duplicate by </strong></p>
+<p><strong> is duplicated by </strong></p>
 
 {{#replacementPart}}
 <div class="row details">
@@ -93,18 +93,16 @@
 			<div class="controls">
 				<div class="btn-group">
 					<button id="select-attribute-link" class="btn btn-default submit" type="button">
-						Search for part
+						{{#replacementPart}}Change part{{/replacementPart}}{{^replacementPart}}Search for part{{/replacementPart}}
 					</button>
 				</div>
 				<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
 			</div>
 		</div>
-		<input type="hidden" value="0" id="AttributeLink_" name="data[Attribute][link]">
-		<input type="hidden" id="AttributeReplaceAttributeId" name="data[Attribute][replace_attribute_id]" value="">
 	</fieldset>
 </form>
 
-<div class="btn-group">
-	<button type="button" class="btn btn-primary _remove">Remove</button>
+<div class="btn-group spacer">
+	<button type="button" class="btn btn-primary _remove" {{^replacementPart}}disabled="disabled"{{/replacementPart}}>Remove</button>
 	<button type="button" class="btn btn-default _cancel">Cancel</button>
 </div>
