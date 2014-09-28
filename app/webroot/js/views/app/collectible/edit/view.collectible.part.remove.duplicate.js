@@ -38,21 +38,17 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.trigger('cancel');
         },
         removePart: function() {
-
-            // we want to remove the duplicate and then we want to update the attributes_collectible from the client-side
-
-
             var self = this;
             // need to pass Attribute.id (which is the model one), Attribute.link = true, Attribute.replace_attribute_id (which is the new one)
             // upon success, we will then update the attribute passed in with the new information and trigger an update
             // create a temp model to act on here because the this.model is
             // an attributes collectible model and we need a subset of that
             // to update the attribute
-            $('.save', this.el).button('loading');
+            $('._remove', this.el).button('loading');
             var data = {
                 id: this.model.get('Attribute').id,
                 link: true,
-                'replace_attribute_id': this.replacementAttribute.get('id'),
+                'replace_attribute_id': this.replacementPart.get('id'),
                 // not sure a reason is necessary for this one
                 reason: 'Duplicate'
             };
@@ -62,49 +58,28 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 data: data,
                 processData: true,
                 success: function(model, response) {
-                    $('.save', this.el).button('reset');
-                    if (response.response.isSuccess) {
-                        var message = "";
-                        // upon success of us switching out the model,
-                        // we need to first check to see if is an edit
-                        // or not.
-                        if (model.get('isEdit')) {
-                            message = 'Replacement has been submitted for approval.';
-                            self.trigger('modal:close');
-                        } else {
-                            message = 'Part has been replaced.';
-                            var data = {};
-                            data.Attribute = model.get('Attribute');
-                            data.Attribute.Scale = model.get('Scale');
-                            data.Attribute.Manufacture = model.get('Manufacture');
-                            data.Attribute.Artist = model.get('Artist');
-                            data.Attribute.AttributeCategory = model.get('AttributeCategory');
-                            data.Attribute.AttributesUpload = model.get('AttributesUpload');
-                            self.model.set(data);
-                            self.trigger('modal:close');
-                        }
-                        $.blockUI({
-                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                            showOverlay: false,
-                            css: {
-                                top: '100px',
-                                'background-color': '#DDFADE',
-                                border: '1px solid #93C49F',
-                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                'border-radius': '4px 4px 4px 4px',
-                                color: '#333333',
-                                'margin-bottom': '20px',
-                                padding: '8px 35px 8px 14px',
-                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                'z-index': 999999
-                            },
-                            timeout: 2000
-                        });
-                        // if it is an edit we flash the message and close
-                        // without updating the this.model.
-                        // if we did update it, when we modify this.model
-                        // and we be done
+                    $('._remove', this.el).button('reset');
+                    // upon success of us switching out the model,
+                    // we need to first check to see if is an edit
+                    // or not.
+                    if (model.get('isEdit')) {
+                        // message = 'Replacement has been submitted for approval.';
+                        // self.trigger('modal:close');
+                    } else {
+                        // message = 'Part has been replaced.';
+                        // var data = {};
+                        // data.Attribute = model.get('Attribute');
+                        // data.Attribute.Scale = model.get('Scale');
+                        // data.Attribute.Manufacture = model.get('Manufacture');
+                        // data.Attribute.Artist = model.get('Artist');
+                        // data.Attribute.AttributeCategory = model.get('AttributeCategory');
+                        // data.Attribute.AttributesUpload = model.get('AttributesUpload');
+                        // self.model.set(data);
+                        // self.trigger('modal:close');
                     }
+                },
+                error: function() {
+
                 }
             });
         }

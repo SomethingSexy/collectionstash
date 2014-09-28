@@ -115,8 +115,7 @@ class AttributesController extends AppController
                 $this->response->statusCode(400);
                 $this->response->body(json_encode($response['response']['data']));
             } else {
-                // TODO: we migth have to put the data on the response as well for the updated attribute?
-                $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
+                $this->response->body(json_encode($response['response']['data']));
             }
         } else {
             //assume GET?
