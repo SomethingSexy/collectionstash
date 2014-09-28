@@ -1,51 +1,59 @@
-<p>Is this part duplicated by another part?  Use either method below to find the part that it is duplicated by.  This part will be will be replaced by the one you select.  The part will maintain its count and still be linked to this collectible.</p>
+<p>Is this part duplicated by another part?  Find the part that it is duplicated by.  This part will be will be replaced by the one you select.  The part will maintain its count and still be linked to this collectible.</p>
 
 
 <p><strong>This part</strong></p>
 <table class="table table-borderless">
 	<tr>
 		<td style="min-width: 100px; max-width: 100px;">
-			{#attribute.Attribute.AttributesUpload uploadDirectory=uploadDirectory}
-			{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-			<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-			{/primary}
-			{:else}
-			<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
-			{/attribute.Attribute.AttributesUpload}
+            {{#part.AttributesUpload}}
+                {{#primary}}
+                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{replacementPart.name}}">
+                    </a>
+                {{/primary}}
+            {{/part.AttributesUpload}}
+            {{^part.AttributesUpload}}
+                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+            {{/part.AttributesUpload}}
 		</td>
-		<td>{attribute.Attribute.path_name}</td>
-		<td>{attribute.Attribute.name}</td>
-		<td>{attribute.Attribute.description}</td>
-		<td>{attribute.Attribute.Manufacture.title}</td>
-		<td>{attribute.Attribute.Scale.scale}</td>
+		<td>{{part.path_name}}</td>
+		<td>{{{part.name}}}</td>
+		<td>{{{part.description}}}</td>
+		<td>{{part.Manufacture.title}}</td>
+		<td>{{part.Scale.scale}}</td>
 	</tr>
 
 </table>
 
 <p><strong> is duplicate by </strong></p>
-{#replacementAttribute uploadDirectory=uploadDirectory}
-	<table class="table table-borderless">
-		<tr>
-			<td style="min-width: 100px; max-width: 100px;">
-				{#Attribute.AttributesUpload uploadDirectory=uploadDirectory}
-				{#primary uploadDirectory=uploadDirectory fileName=Upload.name}
-				<a class="thumbnail col-md-12" data-gallery="gallery" href="/{uploadDirectory}/{fileName}"><img src="/{uploadDirectory}/{fileName}" alt=""></a>
-				{/primary}
-				{:else}
-				<a class="thumbnail col-md-12" href="#"><img src="/img/no-photo.png" alt=""></a>
-				{/Attribute.AttributesUpload}
-			</td>
-			<td>{Attribute.path_name}</td>
-			<td>{Attribute.name}</td>
-			<td>{Attribute.description}</td>
-			<td>{Attribute.Manufacture.title}</td>
-			<td>{Attribute.Scale.scale}</td>
-		</tr>
-	
-	</table>
-{:else}
+
+{{#replacementPart}}
+<table class="table table-borderless">
+	<tr>
+		<td style="min-width: 100px; max-width: 100px;">
+            {{#replacementPart.AttributesUpload}}
+                {{#primary}}
+                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
+                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{replacementPart.name}}">
+                    </a>
+                {{/primary}}
+            {{/replacementPart.AttributesUpload}}
+            {{^replacementPart.AttributesUpload}}
+                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+            {{/replacementPart.AttributesUpload}}
+		</td>
+		<td>{{replacementPart.path_name}}</td>
+		<td>{{{replacementPart.name}}}</td>
+		<td>{{{replacementPart.description}}}</td>
+		<td>{{replacementPart.Manufacture.title}}</td>
+		<td>{{replacementPart.Scale.scale}}</td>
+	</tr>
+
+</table>
+{{/replacementPart}}
+{{^replacementPart}}
 <p>No replacement selected.</p>
-{/replacementAttribute}
+{{/replacementPart}}
 
 <div class='component-message error'>
 	<span></span>
@@ -57,10 +65,7 @@
 			<div class="controls">
 				<div class="btn-group">
 					<button id="select-attribute-link" class="btn btn-default submit" type="button">
-						Find By Collectible
-					</button>
-					<button id="select-attribute-link-by-part" class="btn btn-default delete" type="button">
-						Find By Part
+						Search for part
 					</button>
 				</div>
 				<input id="AttributesCollectibleAttributeId" type="hidden" value="{id}" name="data[AttributesCollectible][attribute_id]">
@@ -71,3 +76,7 @@
 	</fieldset>
 </form>
 
+<div class="btn-group">
+	<button type="button" class="btn btn-primary _remove">Remove</button>
+	<button type="button" class="btn btn-default _cancel">Cancel</button>
+</div>
