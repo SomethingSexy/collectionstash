@@ -173,10 +173,9 @@ class Attribute extends AppModel
         } else {
             $currentVersion['Attribute']['replace_attribute_id'] = $attribute['Attribute']['replace_attribute_id'];
         }
-        // if ($autoUpdate === 'false' || $autoUpdate === false) {
-        // Because we set the attributes add to submitted, check both
+
         $autoUpdate = $this->allowAutoUpdate($attribute['Attribute']['id'], $user);
-        // }
+
         if ($this->isEditPermission($attribute['Attribute']['id'], $user)) {
             if ($autoUpdate === true || $autoUpdate === 'true') {
                 $proceed = true;

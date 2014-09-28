@@ -103,6 +103,21 @@ class AttributesController extends AppController
             } else {
                 $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
             }
+        } else if ($this->request->isDelete()) {
+            $part['Attribute'] = $this->request->input('json_decode', true);
+            $part['Attribute'] = Sanitize::clean($part['Attribute']);
+            
+            $response = $this->Attribute->remove($part, $this->getUser());
+            
+            if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+                $this->response->statusCode(401);
+            } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
+            } else {
+                // TODO: we migth have to put the data on the response as well for the updated attribute?
+                $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
+            }
         } else {
             //assume GET?
             // not bothering with the response stuff here for just a get
@@ -128,117 +143,7 @@ class AttributesController extends AppController
             $this->render('viewMissing');
         }
     }
-    /**
-     *
-     */
-    public function add() {
-        $data = array();
-        //must be logged in to post comment
-        if (!$this->isLoggedIn()) {
-            $data['response'] = array();
-            $data['response']['isSuccess'] = false;
-            $error = array('message' => __('You must be logged in to post a comment.'));
-            $error['inline'] = false;
-            $data['response']['errors'] = array();
-            array_push($data['response']['errors'], $error);
-            $this->set('returnData', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = Sanitize::clean($this->request->data);
-            
-            $response = $this->Attribute->addAttribute($this->request->data, $this->getUser());
-            if ($response) {
-                $this->set('returnData', $response);
-            } else {
-                //Something really fucked up
-                $data['isSuccess'] = false;
-                $data['errors'] = array('message', __('Invalid request.'));
-                $this->set('returnData', $data);
-            }
-        } else {
-            $data['isSuccess'] = false;
-            $data['errors'] = array('message', __('Invalid request.'));
-            $this->set('returnData', $data);
-            return;
-        }
-    }
-    /**
-     * This will submit a removal.
-     *
-     * This can only be used with JSON for now :)
-     *
-     * TODO: Update this so that if they are removing a pending one that they
-     * added, it automatically gets deleted
-     */
-    public function remove() {
-        if (!$this->isLoggedIn()) {
-            $data['response'] = array();
-            $data['response']['isSuccess'] = false;
-            $error = array('message' => __('You must be logged in to update this item.'));
-            $error['inline'] = false;
-            $data['response']['errors'] = array();
-            array_push($data['response']['errors'], $error);
-            $this->set('returnData', $data);
-            return;
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->request->data = $this->request->input('json_decode', true);
-            $this->request->data = Sanitize::clean($this->request->data);
-            debug($this->request->data);
-            
-            $response = $this->Attribute->remove($this->request->data, $this->getUser());
-            
-            if ($response) {
-                $this->set('returnData', $response);
-            } else {
-                //Something really fucked up
-                $data['isSuccess'] = false;
-                $data['errors'] = array('message', __('Invalid request.'));
-                $this->set('returnData', $data);
-            }
-        } else {
-            $data['isSuccess'] = false;
-            $data['errors'] = array('message', __('Invalid request.'));
-            $this->set('returnData', $data);
-            return;
-        }
-    }
-    /**
-     *
-     */
-    // public function update() {
-    //     if (!$this->isLoggedIn()) {
-    //         $data['response'] = array();
-    //         $data['response']['isSuccess'] = false;
-    //         $error = array('message' => __('You must be logged in to update this item.'));
-    //         $error['inline'] = false;
-    //         $data['response']['errors'] = array();
-    //         array_push($data['response']['errors'], $error);
-    //         $this->set('returnData', $data);
-    //         return;
-    //     }
-    //     if ($this->request->is('post') || $this->request->is('put')) {
-    //         $this->request->data = Sanitize::clean($this->request->data);
-    
-    //         $response = $this->Attribute->update($this->request->data, $this->getUser());
-    
-    //         if ($response) {
-    //             $this->set('returnData', $response);
-    //         } else {
-    //             //Something really fucked up
-    //             $data['isSuccess'] = false;
-    //             $data['errors'] = array('message', __('Invalid request.'));
-    //             $this->set('returnData', $data);
-    //         }
-    //     } else {
-    //         $data['isSuccess'] = false;
-    //         $data['errors'] = array('message', __('Invalid request.'));
-    //         $this->set('returnData', $data);
-    //         return;
-    //     }
-    // }
-    
+
     function admin_index($standalone = false) {
         $this->checkLogIn();
         $this->checkAdmin();
