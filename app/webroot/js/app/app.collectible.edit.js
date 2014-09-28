@@ -8,6 +8,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'views/app/collectible/edit/view.collectible.part.edit',
     'views/app/collectible/edit/view.part.edit',
     'views/app/collectible/edit/view.collectible.part.remove',
+    'views/app/collectible/edit/view.collectible.part.remove.duplicate',
     'views/app/collectible/edit/view.part.add.existing',
     'views/app/collectible/edit/view.collectible.search',
     'views/common/modal.region',
@@ -36,7 +37,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
     'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartRemoveDuplicateView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
@@ -343,177 +344,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         }
     });
 
-    /**
-     * This view is for setting duplicates, this is a modal.
-     *
-     * This is how I should do all modals going forward
-     */
-    var AttributeDuplicateView = Backbone.View.extend({
-        template: 'attribute.remove.duplicate',
-        modal: 'modal',
-        events: {
-            'click #select-attribute-link': 'searchCollectible',
-            'click #select-attribute-link-by-part': 'searchPart',
-            'click .save': 'save'
-        },
-        initialize: function(options) {
-            var self = this;
-            this.artists = options.artists;
-            this.manufacturers = options.manufacturers;
-            this.categories = options.categories;
-        },
-        remove: function() {
-            if (this.currentView) {
-                this.currentView.remove();
-            }
-            Backbone.View.prototype.remove.call(this);
-        },
-        renderBody: function() {
-            var self = this;
-            var data = {
-                attribute: this.model.toJSON(),
-                uploadDirectory: uploadDirectory
-            };
-            if (this.replacementAttribute) {
-                data.replacementAttribute = {
-                    Attribute: this.replacementAttribute.toJSON()
-                };
-                $(self.el).find('.btn-primary.save').show();
-            }
-            dust.render(this.template, data, function(error, output) {
-                $('.modal-body', self.el).html(output);
-            });
-        },
-        render: function() {
-            var self = this;
-            dust.render(this.modal, {
-                modalId: 'attributeDuplicateModal',
-                modalTitle: 'Replace Duplicate Part'
-            }, function(error, output) {
-                $(self.el).html(output);
-            });
-            $(self.el).find('.btn-primary.save').text('Replace').hide();
-            this.renderBody();
-            return this;
-        },
-        hideMessage: function() {
-            $('.message-container', this.el).hide();
-        },
-        searchCollectible: function() {
-            var self = this;
-            if (this.replacementAttribute) {
-                this.replacementAttribute.off();
-                delete this.replacementAttribute;
-            }
-            // since I don't offer a cancel button :), just
-            // create a new one
-            this.replacementAttribute = new Backbone.Model();
-            if (this.currentView) {
-                this.currentView.remove();
-            }
-            this.replacementAttribute.on('change', function() {
-                self.renderBody();
-            }, this);
-            this.currentView = new AddExistingAttributeCollectibleSearchView({
-                collection: new PaginatedCollection(),
-                model: this.replacementAttribute
-            });
-            $('.modal-body', self.el).html(this.currentView.render().el);
-            $('.modal-footer .save', self.el).hide();
-        },
-        searchPart: function() {
-            var self = this;
-            if (this.replacementAttribute) {
-                this.replacementAttribute.off();
-                delete this.replacementAttribute;
-            }
-            this.replacementAttribute = new Backbone.Model();
-            this.replacementAttribute = new Backbone.Model();
-            if (this.currentView) {
-                this.currentView.remove();
-            }
-            this.replacementAttribute.on('change', function() {
-                self.renderBody();
-            }, this);
-            this.currentView = new AddExistingAttributePartSearchView({
-                collection: new PaginatedPart(),
-                model: this.replacementAttribute,
-                artists: this.artists,
-                manufacturers: this.manufacturers,
-                categories: this.categories
-            });
-            $('.modal-body', self.el).html(this.currentView.render().el);
-            $('.modal-footer .save', self.el).hide();
-        },
-        save: function() {
-            var self = this;
-            // need to pass Attribute.id (which is the model one), Attribute.link = true, Attribute.replace_attribute_id (which is the new one)
-            // upon success, we will then update the attribute passed in with the new information and trigger an update
-            // create a temp model to act on here because the this.model is
-            // an attributes collectible model and we need a subset of that
-            // to update the attribute
-            $('.save', this.el).button('loading');
-            var saveModel = new AttributeModel({
-                Attribute: {
-                    id: this.model.get('Attribute').id,
-                    link: true,
-                    'replace_attribute_id': this.replacementAttribute.get('id'),
-                    // not sure a reason is necessary for this one
-                    reason: 'Duplicate'
-                }
-            });
-            // since this is not a 100% delete we will do a post here
-            // instead of a destroy
-            saveModel.save({}, {
-                url: '/attributes/remove',
-                success: function(model, response) {
-                    $('.save', this.el).button('reset');
-                    if (response.response.isSuccess) {
-                        var message = "";
-                        // upon success of us switching out the model,
-                        // we need to first check to see if is an edit
-                        // or not.
-                        if (model.get('isEdit')) {
-                            message = 'Replacement has been submitted for approval.';
-                            self.trigger('modal:close');
-                        } else {
-                            message = 'Part has been replaced.';
-                            var data = {};
-                            data.Attribute = model.get('Attribute');
-                            data.Attribute.Scale = model.get('Scale');
-                            data.Attribute.Manufacture = model.get('Manufacture');
-                            data.Attribute.Artist = model.get('Artist');
-                            data.Attribute.AttributeCategory = model.get('AttributeCategory');
-                            data.Attribute.AttributesUpload = model.get('AttributesUpload');
-                            self.model.set(data);
-                            self.trigger('modal:close');
-                        }
-                        $.blockUI({
-                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                            showOverlay: false,
-                            css: {
-                                top: '100px',
-                                'background-color': '#DDFADE',
-                                border: '1px solid #93C49F',
-                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                'border-radius': '4px 4px 4px 4px',
-                                color: '#333333',
-                                'margin-bottom': '20px',
-                                padding: '8px 35px 8px 14px',
-                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                'z-index': 999999
-                            },
-                            timeout: 2000
-                        });
-                        // if it is an edit we flash the message and close
-                        // without updating the this.model.
-                        // if we did update it, when we modify this.model
-                        // and we be done
-                    }
-                }
-            });
-        }
-    });
 
     var hasDupList = false;
 
@@ -528,7 +358,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
         partsView.on('remove:part', _.partial(renderRemovePart, _, layout, options));
 
-        partsView.on('remove:part:duplicate', _.partial(renderRemovePartDuplicate, _, layout, options));
+        partsView.on('remove:part:duplicate', _.partial(renderRemovePartDuplicate, layout, options));
 
         // TODO: this won't work here, needs to come from the layout
         layout.on('add:part', _.partial(renderAddPart, layout, options));
@@ -572,7 +402,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
             layout.modal.hideModal();
         });
-    };
+    }
 
     function renderAddExistingPart(layout, options, part) {
         var parts = options.collection;
@@ -640,7 +470,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
             layout.modal.hideModal();
         });
-    };
+    }
 
 
     function renderRemovePart(model, layout, options) {
@@ -659,24 +489,49 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
 
             layout.modal.hideModal();
         });
-    };
+    }
 
-    function renderRemovePartDuplicate(model, layout, options) {
-        var removePartView = new PartRemoveView({
-            model: model,
+
+    function renderRemovePartDuplicate(layout, options, part, replacement) {
+        var parts = options.collection;
+
+        //  this won't be a modal, isntead it will render where the list of parts is
+        var addPartView = new PartRemoveDuplicateView({
+            model: part,
+            replacement: replacement,
             // later this will come from the app
-            collectible: options.model,
+            collectible: options.model
         });
 
-        layout.modal.show(removePartView);
+        addPartView.on('search:collectible', function() {
 
-        model.once('sync', function(model, response, options) {
-            if (_.isArray(response)) {
-                // App.comments.add(response);
+            var searchView = new CollectibleSearchView({
+                // although we might want to keep this cached?
+                collection: new PaginatedCollection([], {
+                    mode: 'server'
+                })
+            });
+
+
+            searchView.on('part:selected', _.partial(renderRemovePartDuplicate, layout, options, part));
+            searchView.on('cancel', _.partial(renderPartsView, layout, options));
+
+            layout.parts.show(searchView);
+        });
+
+        addPartView.on('cancel', _.partial(renderPartsView, layout, options));
+
+        addPartView.on('part:added', function(model) {
+            // if it is an edit, there won't be a model
+            // passed in right now
+            if (model) {
+                options.collection.add(model);
             }
 
-            layout.modal.hideModal();
+            renderPartsView(layout, options);
         });
+
+        layout.parts.show(addPartView);
     };
 
     // mock app until we fully convert to marionette

@@ -15,6 +15,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             },
             'remove:part': function(event, view, model) {
                 this.trigger('remove:part', model);
+            },
+            'remove:part:duplicate': function(event, view, model) {
+                this.trigger('remove:part:duplicate', model);
             }
         },
         itemViewOptions: function(model, index) {
