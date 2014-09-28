@@ -2,54 +2,82 @@
 
 
 <p><strong>This part</strong></p>
-<table class="table table-borderless">
-	<tr>
-		<td style="min-width: 100px; max-width: 100px;">
-            {{#part.AttributesUpload}}
-                {{#primary}}
-                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
-                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{replacementPart.name}}">
-                    </a>
-                {{/primary}}
-            {{/part.AttributesUpload}}
-            {{^part.AttributesUpload}}
-                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
-            {{/part.AttributesUpload}}
-		</td>
-		<td>{{part.path_name}}</td>
-		<td>{{{part.name}}}</td>
-		<td>{{{part.description}}}</td>
-		<td>{{part.Manufacture.title}}</td>
-		<td>{{part.Scale.scale}}</td>
-	</tr>
-
-</table>
+<div class="row details">
+	<div class="col-md-1">
+		{{#part.AttributesUpload}}
+			{{#primary}}
+				<a data-gallery="gallery" href="/{{uploadDirectory}}/{{Upload.name}}" class="thumbnail">
+					<img class="img-responsive" src="/{{uploadDirectory}}/{{Upload.name}}" resizetype="strict" alt="">
+				</a>
+			{{/primary}}
+		{{/part.AttributesUpload}}
+		{{^part.AttributesUpload}}
+			<a target="_blank" href="" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+		{{/part.AttributesUpload}}			
+	</div>
+	<div class="col-md-9">
+		<div class="row">
+			<div class="col-md-12">
+				<span class="name">{{part.name}}</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{part.Scale.scale}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{part.description}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<span class="label label-default">{{part._label}}</span>
+			</div>
+		</div>
+	</div>
+</div>
 
 <p><strong> is duplicate by </strong></p>
 
 {{#replacementPart}}
-<table class="table table-borderless">
-	<tr>
-		<td style="min-width: 100px; max-width: 100px;">
-            {{#replacementPart.AttributesUpload}}
-                {{#primary}}
-                    <a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
-                        <img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{replacementPart.name}}">
-                    </a>
-                {{/primary}}
-            {{/replacementPart.AttributesUpload}}
-            {{^replacementPart.AttributesUpload}}
-                <a target="_blank" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
-            {{/replacementPart.AttributesUpload}}
-		</td>
-		<td>{{replacementPart.path_name}}</td>
-		<td>{{{replacementPart.name}}}</td>
-		<td>{{{replacementPart.description}}}</td>
-		<td>{{replacementPart.Manufacture.title}}</td>
-		<td>{{replacementPart.Scale.scale}}</td>
-	</tr>
-
-</table>
+<div class="row details">
+	<div class="col-md-1">
+		{{#replacementPart.AttributesUpload}}
+			{{#primary}}
+				<a data-gallery="gallery" href="/{{uploadDirectory}}/{{Upload.name}}" class="thumbnail">
+					<img class="img-responsive" src="/{{uploadDirectory}}/{{Upload.name}}" resizetype="strict" alt="">
+				</a>
+			{{/primary}}
+		{{/replacementPart.AttributesUpload}}
+		{{^replacementPart.AttributesUpload}}
+			<a target="_blank" href="" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+		{{/replacementPart.AttributesUpload}}			
+	</div>
+	<div class="col-md-9">
+		<div class="row">
+			<div class="col-md-12">
+				<span class="name">{{replacementPart.name}}</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{replacementPart.Scale.scale}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{replacementPart.description}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<span class="label label-default">{{replacementPart._label}}</span>
+			</div>
+		</div>
+	</div>
+</div>
 {{/replacementPart}}
 {{^replacementPart}}
 <p>No replacement selected.</p>
