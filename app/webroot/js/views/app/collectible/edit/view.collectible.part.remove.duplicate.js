@@ -46,15 +46,14 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             // to update the attribute
             $('._remove', this.el).button('loading');
             var data = {
-                id: this.model.get('Attribute').id,
+                id: this.model.part.get('id'),
                 link: true,
-                'replace_attribute_id': this.replacementPart.get('id'),
+                'replace_attribute_id': this.replacement.get('id'),
                 // not sure a reason is necessary for this one
                 reason: 'Duplicate'
             };
-            // since this is not a 100% delete we will do a post here
-            // instead of a destroy
-            saveModel.destroy({
+
+            this.model.part.destroy({
                 data: data,
                 processData: true,
                 success: function(model, response) {
@@ -66,16 +65,10 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                         // message = 'Replacement has been submitted for approval.';
                         // self.trigger('modal:close');
                     } else {
-                        // message = 'Part has been replaced.';
-                        // var data = {};
-                        // data.Attribute = model.get('Attribute');
-                        // data.Attribute.Scale = model.get('Scale');
-                        // data.Attribute.Manufacture = model.get('Manufacture');
-                        // data.Attribute.Artist = model.get('Artist');
-                        // data.Attribute.AttributeCategory = model.get('AttributeCategory');
-                        // data.Attribute.AttributesUpload = model.get('AttributesUpload');
-                        // self.model.set(data);
-                        // self.trigger('modal:close');
+                        // success should return the new collectible-part and part
+                        // then we can destroy the old collectible-part and add the new
+                        // one.  I think that will make the most sense, instead of trying to
+                        // dick around with an existing one
                     }
                 },
                 error: function() {
