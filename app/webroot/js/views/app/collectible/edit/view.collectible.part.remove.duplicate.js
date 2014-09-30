@@ -48,7 +48,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             var data = {
                 id: this.model.part.get('id'),
                 link: true,
-                'replace_attribute_id': this.replacement.get('id'),
+                'replace_attribute_id': this.replacement.part.get('id'),
                 // not sure a reason is necessary for this one
                 reason: 'Duplicate'
             };
