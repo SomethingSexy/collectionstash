@@ -80,7 +80,7 @@ class AttributesController extends AppController
         }
     }
     
-    function part($id) {
+    function part($id = null) {
         $this->autoRender = false;
         if (!$this->isLoggedIn()) {
             $this->response->statusCode(401);
@@ -100,13 +100,14 @@ class AttributesController extends AppController
             } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
                 $this->response->statusCode(400);
                 $this->response->body(json_encode($response['response']['data']));
+            } else if (!$response['response']['isSuccess']) {
+                $this->response->statusCode(500);
             } else {
                 $this->response->body(json_encode(array('isEdit' => $response['response']['data']['isEdit'])));
             }
         } else if ($this->request->isDelete()) {
-            $part['Attribute'] = $this->request->input('json_decode', true);
-            $part['Attribute'] = Sanitize::clean($part['Attribute']);
-            
+            // on the delete, data is coming from data
+            $part['Attribute'] = Sanitize::clean($this->request->data);
             $response = $this->Attribute->remove($part, $this->getUser());
             
             if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
@@ -142,7 +143,7 @@ class AttributesController extends AppController
             $this->render('viewMissing');
         }
     }
-
+    
     function admin_index($standalone = false) {
         $this->checkLogIn();
         $this->checkAdmin();
