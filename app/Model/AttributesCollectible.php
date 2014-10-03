@@ -93,7 +93,7 @@ class AttributesCollectible extends AppModel
     
     public function get($id) {
         $retVal = array();
-        $retVal = $this->find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('AttributeCategory', 'Manufacture', 'Scale', 'Artist', 'AttributesUpload' => array('Upload')))));
+        $retVal = $this->find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')))));
         // so let's do this manually and try that out
         $retVal['Attribute']['AttributesCollectible'] = array();
         if (!empty($retVal['AttributesCollectible']) && !empty($retVal['AttributesCollectible']['attribute_id'])) {

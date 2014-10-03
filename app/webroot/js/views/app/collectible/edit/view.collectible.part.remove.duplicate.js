@@ -1,5 +1,4 @@
 define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/collectible.part.remove.duplicate.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin, growl) {
-
     var RmoveCollectiblePart = Marionnette.ItemView.extend({
         template: template,
         events: {
@@ -52,7 +51,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 // not sure a reason is necessary for this one
                 reason: 'Duplicate'
             };
-
             this.model.part.destroy({
                 data: data,
                 processData: true,
@@ -63,22 +61,20 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                     // or not.
                     if (model.get('isEdit')) {
                         // message = 'Replacement has been submitted for approval.';
-                        // self.trigger('modal:close');
+                        self.trigger('part:added');
                     } else {
-                        // success should return the new collectible-part and part
-                        // then we can destroy the old collectible-part and add the new
-                        // one.  I think that will make the most sense, instead of trying to
-                        // dick around with an existing one
+                        // now update the model that was changed
+                        self.model.fetch({
+                            success: function() {
+                                self.trigger('part:added');
+                            }
+                        });
                     }
                 },
-                error: function() {
-
-                }
+                error: function() {}
             });
         }
     });
-
     _.extend(RmoveCollectiblePart.prototype, ErrorMixin);
-
     return RmoveCollectiblePart;
 });

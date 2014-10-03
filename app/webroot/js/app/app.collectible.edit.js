@@ -524,9 +524,9 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         addPartView.on('part:added', function(model) {
             // if it is an edit, there won't be a model
             // passed in right now
-            if (model) {
-                options.collection.add(model);
-            }
+            // if (model) {
+            //     options.collection.add(model);
+            // }
 
             renderPartsView(layout, options);
         });
