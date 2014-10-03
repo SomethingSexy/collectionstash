@@ -36,7 +36,7 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     'text!templates/collectibles/collectible.original.dust',
     'text!templates/collectibles/directional.original.dust',
     'text!templates/common/alert.dust',
-    'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation'
+    'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation', 'backbone.bootstrap-modal'
 ], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartRemoveDuplicateView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
     /**
      * TODO: Known Issues:
