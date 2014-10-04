@@ -4,7 +4,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         tagName: "div",
         className: 'row spacer attribute',
         events: {
-            'click .edit-attribute-photo-link': 'addPhoto',
+            'click ._edit-part-photo': 'addPhoto',
             'click ._edit-part': 'edit',
             'click ._remove-part-duplicate': 'duplicate',
             'click ._edit-part-collectible': 'editCollectiblePart',
@@ -17,7 +17,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             this.categories = options.categories;
             this.collectible = options.collectible;
             this.scales = options.scales;
-
             // if the collectible part has changed or the actual part has changed, re-render
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model.part, 'change', this.render);
@@ -35,15 +34,12 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             } else {
                 data.allowRemoveAttribute = true;
             }
-
             if (data.status_id === '2') {
                 data.isNew = true;
             }
-
             data.part = this.model.part.toJSON();
             data.uploadDirectory = uploadDirectory;
             data.collectible = this.collectible.toJSON();
-
             if (data.collectible.custom) {
                 if (data.attribute_collectible_type === 'added') {
                     data.attribute_collectible_type_label = 'Owned';
@@ -55,7 +51,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                     attribute_collectible_type_label = '';
                 }
             }
-
             if (data.part.type === 'mass' || data.part.type === 'original') {
                 if (data.part.manufacture_id) {
                     data.part._label = data.part.Manufacture.title;
@@ -69,12 +64,10 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             } else if (data.part.type === 'generic') {
                 data.part._label = 'Generic';
             }
-
             return data;
         },
         onRender: function() {
             var self = this;
-
             $('span.popup', self.el).popover({
                 placement: 'bottom',
                 html: 'true',
@@ -96,50 +89,51 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             this.trigger('remove:part', this.model);
         },
         addPhoto: function() {
-            var self = this;
-            var attribute = self.model.toJSON();
-            // Hmmm, well, it might make sense at some point
-            // to merge the upload stuff, directly into the attribute
-            // model data but the plugin requires it's data in a special
-            //format, so for now we are going to fetch each time we
-            // need it, oh well.
-            $.blockUI({
-                message: 'Loading...',
-                css: {
-                    border: 'none',
-                    padding: '15px',
-                    backgroundColor: ' #F1F1F1',
-                    '-webkit-border-radius': '10px',
-                    '-moz-border-radius': '10px',
-                    color: '#222',
-                    background: 'none repeat scroll 0 0 #F1F1F',
-                    'border-radius': '5px 5px 5px 5px',
-                    'box-shadow': '0 0 10px rgba(0, 0, 0, 0.5)'
-                }
-            });
-            var uploads = new AttributeUploads([], {
-                'id': attribute.Attribute.id
-            });
-            uploads.fetch({
-                success: function() {
-                    if (self.photoEditView) {
-                        self.photoEditView.remove();
-                    }
-                    self.photoEditView = new AttributePhotoView({
-                        collection: uploads,
-                        model: self.model
-                    });
-                    $.unblockUI();
-                    $('body').append(self.photoEditView.render().el);
-                    $('#attribute-upload-dialog', 'body').modal({
-                        backdrop: 'static'
-                    });
-                    $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
-                        self.photoEditView.remove();
-                        self.model.fetch();
-                    });
-                }
-            });
+            this.trigger('edit:part:photo', this.model);
+            // var self = this;
+            // var attribute = self.model.toJSON();
+            // // Hmmm, well, it might make sense at some point
+            // // to merge the upload stuff, directly into the attribute
+            // // model data but the plugin requires it's data in a special
+            // //format, so for now we are going to fetch each time we
+            // // need it, oh well.
+            // $.blockUI({
+            //     message: 'Loading...',
+            //     css: {
+            //         border: 'none',
+            //         padding: '15px',
+            //         backgroundColor: ' #F1F1F1',
+            //         '-webkit-border-radius': '10px',
+            //         '-moz-border-radius': '10px',
+            //         color: '#222',
+            //         background: 'none repeat scroll 0 0 #F1F1F',
+            //         'border-radius': '5px 5px 5px 5px',
+            //         'box-shadow': '0 0 10px rgba(0, 0, 0, 0.5)'
+            //     }
+            // });
+            // var uploads = new AttributeUploads([], {
+            //     'id': attribute.Attribute.id
+            // });
+            // uploads.fetch({
+            //     success: function() {
+            //         if (self.photoEditView) {
+            //             self.photoEditView.remove();
+            //         }
+            //         self.photoEditView = new AttributePhotoView({
+            //             collection: uploads,
+            //             model: self.model
+            //         });
+            //         $.unblockUI();
+            //         $('body').append(self.photoEditView.render().el);
+            //         $('#attribute-upload-dialog', 'body').modal({
+            //             backdrop: 'static'
+            //         });
+            //         $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
+            //             self.photoEditView.remove();
+            //             self.model.fetch();
+            //         });
+            //     }
+            // });
         },
         duplicate: function() {
             this.trigger('remove:part:duplicate', this.model);

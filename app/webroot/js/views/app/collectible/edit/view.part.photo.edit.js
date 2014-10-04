@@ -1,19 +1,14 @@
-    var AttributePhotoView = Backbone.View.extend({
-        template: 'attribute.photo.edit',
+define(function(require) {
+    var Backbone = require('backbone'),
+        Marionette = require('marionette'),
+        template = require('text!templates/app/collectible/edit/part.photo.edit.mustache');
+
+    return Marionette.ItemView.extend({
+        template: template,
         className: "col-md-4",
         events: {},
         initialize: function(options) {
             this.eventManager = options.eventManager;
-            // this.collection.on('reset', function() {
-            // var self = this;
-            // var data = {
-            // uploads : this.collection.toJSON(),
-            // uploadDirectory : uploadDirectory
-            // };
-            // dust.render(this.template, data, function(error, output) {
-            // $(self.el).html(output);
-            // });
-            // }, this);
         },
         render: function() {
             var self = this;
@@ -87,3 +82,4 @@
             return this;
         }
     });
+});

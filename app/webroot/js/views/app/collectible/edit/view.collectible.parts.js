@@ -1,5 +1,4 @@
 define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mustache', 'views/app/collectible/edit/view.collectible.part', 'mustache', 'underscore', 'marionette.mustache', 'bootstrap'], function(Marionette, template, PartView, mustache, _) {
-
     return Marionette.CompositeView.extend({
         template: template,
         className: "",
@@ -12,6 +11,9 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             },
             'edit:part': function(event, view, model) {
                 this.trigger('edit:part', model);
+            },
+            'edit:part:photo': function(event, view, model) {
+                this.trigger('edit:part:photo', model);
             },
             'remove:part': function(event, view, model) {
                 this.trigger('remove:part', model);
@@ -38,9 +40,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             this.collectible = options.collectible;
             this.scales = options.scales;
         },
-        onRender: function() {
-   
-        }
+        onRender: function() {}
     });
-
 });
