@@ -14,6 +14,7 @@ define(function(require) {
         PartsView = require('views/app/collectible/edit/view.collectible.parts'),
         CollectiblePartEditView = require('views/app/collectible/edit/view.collectible.part.edit'),
         PartEditView = require('views/app/collectible/edit/view.part.edit'),
+        PartPhotoEditView = require('views/app/collectible/edit/view.part.photo.edit'),
         PartRemoveView = require('views/app/collectible/edit/view.collectible.part.remove'),
         PartRemoveDuplicateView = require('views/app/collectible/edit/view.collectible.part.remove.duplicate'),
         PartAddExistingView = require('views/app/collectible/edit/view.part.add.existing'),
@@ -400,13 +401,9 @@ define(function(require) {
     }
 
     function renderEditPartPhoto(model, layout, options) {
-        var editPartView = new PartEditView({
+        var editPartView = new PartPhotoEditView({
             model: model,
-            // later this will come from the app
-            collectible: options.model,
-            manufacturers: options.manufacturers,
-            artists: options.artists,
-            scales: options.scales
+            collection: model.part.photos
         });
         layout.modal.show(editPartView);
         model.once('sync', function(model, response, options) {
