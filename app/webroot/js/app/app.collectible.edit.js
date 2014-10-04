@@ -1,49 +1,65 @@
-define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.mustache', 'underscore',
-    'views/common/view.alert',
-    'views/app/collectible/edit/view.collectible.delete',
-    'views/app/collectible/edit/view.collectible',
-    'views/app/collectible/edit/view.persons',
-    'views/app/collectible/edit/view.tags',
-    'views/app/collectible/edit/view.collectible.parts',
-    'views/app/collectible/edit/view.collectible.part.edit',
-    'views/app/collectible/edit/view.part.edit',
-    'views/app/collectible/edit/view.collectible.part.remove',
-    'views/app/collectible/edit/view.collectible.part.remove.duplicate',
-    'views/app/collectible/edit/view.part.add.existing',
-    'views/app/collectible/edit/view.collectible.search',
-    'views/common/modal.region',
-    'models/model.collectible',
-    'models/model.status',
-    'views/view.status',
-    'collections/collection.collectibles',
-    'collections/collection.parts',
-    'collections/collection.collectible.parts',
-    'models/model.company',
-    'collections/collection.brands',
-    'text!templates/app/collectible/edit/layout.parts.mustache',
-    // todo: old templates remove as converted to mustache and individual view files
-    'text!templates/collectibles/collectible.default.dust',
-    'text!templates/collectibles/photo.default.dust',
-    'text!templates/collectibles/status.dust',
-    'text!templates/collectibles/message.dust',
-    'text!templates/collectibles/message.error.severe.dust',
-    'text!templates/collectibles/message.duplist.dust',
-    'text!templates/collectibles/modal.dust',
-    'text!templates/collectibles/directional.dust',
-    'text!templates/common/paging.dust',
-    'text!templates/collectibles/directional.custom.dust',
-    'text!templates/collectibles/collectible.custom.dust',
-    'text!templates/collectibles/collectible.original.dust',
-    'text!templates/collectibles/directional.original.dust',
-    'text!templates/common/alert.dust',
-    'jquery.form', 'jquery.treeview', 'cs.core.tree', 'jquery.getimagedata', 'jquery.iframe-transport', 'cors/jquery.postmessage-transport', 'jquery.fileupload', 'jquery.fileupload-fp', 'jquery.fileupload-ui', "jquery.ui.widget", 'blockui', 'backbone.validation', 'backbone.bootstrap-modal'
-], function(Backbone, Marionette, $, dust, mustache, marionetteMustache, _, AlertView, CollectibleDeleteView, CollectibleView, PersonsView, TagsView, PartsView, CollectiblePartEditView, PartEditView, PartRemoveView, PartRemoveDuplicateView, PartAddExistingView, CollectibleSearchView, ModalRegion, CollectibleModel, Status, StatusView, PaginatedCollection, PaginatedPart, CollectibleParts, CompanyModel, Brands, partsLayoutTemplate, collectibleTemplate, photoTemplate, statusTemplate, messageTemplate, messageSevereTemplate, dupListTemplate, modalTemplate, directionalTemplate, pagingTemplate, directionalCustomTemplate, customTemplate, originalTemplate, directionalOriginalTemplate, alertTemplate) {
+define(function(require) {
+    var Backbone = require('backbone'),
+        Marionette = require('marionette'),
+        $ = require('jquery'),
+        dust = require('dust'),
+        mustache = require('mustache'),
+        marionetteMustache = require('marionette.mustache'),
+        _ = require('underscore'),
+        AlertView = require('views/common/view.alert'),
+        CollectibleDeleteView = require('views/app/collectible/edit/view.collectible.delete'),
+        CollectibleView = require('views/app/collectible/edit/view.collectible'),
+        PersonsView = require('views/app/collectible/edit/view.persons'),
+        TagsView = require('views/app/collectible/edit/view.tags'),
+        PartsView = require('views/app/collectible/edit/view.collectible.parts'),
+        CollectiblePartEditView = require('views/app/collectible/edit/view.collectible.part.edit'),
+        PartEditView = require('views/app/collectible/edit/view.part.edit'),
+        PartRemoveView = require('views/app/collectible/edit/view.collectible.part.remove'),
+        PartRemoveDuplicateView = require('views/app/collectible/edit/view.collectible.part.remove.duplicate'),
+        PartAddExistingView = require('views/app/collectible/edit/view.part.add.existing'),
+        CollectibleSearchView = require('views/app/collectible/edit/view.collectible.search'),
+        ModalRegion = require('views/common/modal.region'),
+        CollectibleModel = require('models/model.collectible'),
+        Status = require('models/model.status'),
+        StatusView = require('views/view.status'),
+        PaginatedCollection = require('collections/collection.collectibles'),
+        PaginatedPart = require('collections/collection.parts'),
+        CollectibleParts = require('collections/collection.collectible.parts'),
+        CompanyModel = require('models/model.company'),
+        Brands = require('collections/collection.brands'),
+        partsLayoutTemplate = require('text!templates/app/collectible/edit/layout.parts.mustache'),
+        collectibleTemplate = require('text!templates/collectibles/collectible.default.dust'),
+        photoTemplate = require('text!templates/collectibles/photo.default.dust'),
+        statusTemplate = require('text!templates/collectibles/status.dust'),
+        messageTemplate = require('text!templates/collectibles/message.dust'),
+        messageSevereTemplate = require('text!templates/collectibles/message.error.severe.dust'),
+        dupListTemplate = require('text!templates/collectibles/message.duplist.dust'),
+        modalTemplate = require('text!templates/collectibles/modal.dust'),
+        directionalTemplate = require('text!templates/collectibles/directional.dust'),
+        pagingTemplate = require('text!templates/common/paging.dust'),
+        directionalCustomTemplate = require('text!templates/collectibles/directional.custom.dust'),
+        customTemplate = require('text!templates/collectibles/collectible.custom.dust'),
+        originalTemplate = require('text!templates/collectibles/collectible.original.dust'),
+        directionalOriginalTemplate = require('text!templates/collectibles/directional.original.dust'),
+        alertTemplate = require('text!templates/common/alert.dust');
+    require('jquery.form');
+    require('jquery.treeview');
+    require('cs.core.tree');
+    require('jquery.getimagedata');
+    require('jquery.iframe-transport');
+    require('cors/jquery.postmessage-transport');
+    require('jquery.fileupload');
+    require('jquery.fileupload-fp');
+    require('jquery.fileupload-ui');
+    require("jquery.ui.widget");
+    require('blockui');
+    require('backbone.validation');
+    require('backbone.bootstrap-modal');
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
      *  exist in there
      */
-
     dust.loadSource(dust.compile(collectibleTemplate, 'collectible.default.edit'));
     dust.loadSource(dust.compile(photoTemplate, 'photo.default.edit'));
     dust.loadSource(dust.compile(statusTemplate, 'status.edit'));
@@ -58,18 +74,15 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
     dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
     dust.loadSource(dust.compile(alertTemplate, 'alert'));
-
     var printId = '10';
     var pageEvents = _.extend({}, Backbone.Events);
     var ErrorModel = Backbone.Model.extend({});
     var Errors = Backbone.Collection.extend({
         model: ErrorModel
     });
-
     var Collectibles = Backbone.Collection.extend({
         model: CollectibleModel
     });
-
     var CollectibleTagModel = Backbone.Model.extend({});
     var CollectibleTypeModel = Backbone.Model.extend({});
     var CollectibleUploadModel = Backbone.Model.extend({});
@@ -105,7 +118,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             return resp.response.data.files;
         }
     });
-
     var CurrencyModel = Backbone.Model.extend({});
     var Currencies = Backbone.Collection.extend({
         model: CurrencyModel
@@ -114,7 +126,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
     var Scales = Backbone.Collection.extend({
         model: Scale
     });
-
     var ManufacturerList = Backbone.Collection.extend({
         model: CompanyModel,
         initialize: function(models) {
@@ -167,8 +178,63 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
         model: ArtistModel,
         urlRoot: '/collectibles/artists'
     });
-
-
+    var MessageView = Backbone.View.extend({
+        template: 'message.edit',
+        className: "col-md-12",
+        events: {},
+        initialize: function(options) {
+            if (options.errors && _.size(options.errors) > 0) {
+                this.hasErrors = true;
+                this.errors = options.errors;
+            } else {
+                this.hasErrors = false;
+            }
+        },
+        render: function() {
+            var self = this;
+            var data = {
+                hasErrors: this.hasErrors,
+            };
+            if (this.hasErrors) {
+                data.errors = this.errors.toJSON();
+            }
+            dust.render(this.template, data, function(error, output) {
+                $(self.el).html(output);
+            });
+            return this;
+        }
+    });
+    var SevereMessageView = Backbone.View.extend({
+        template: 'message.error.severe',
+        className: "col-md-12",
+        events: {},
+        initialize: function(options) {},
+        render: function() {
+            var self = this;
+            var data = {};
+            dust.render(this.template, data, function(error, output) {
+                $(self.el).html(output);
+            });
+            return this;
+        }
+    });
+    var DupListMessageView = Backbone.View.extend({
+        template: 'message.duplist',
+        className: "col-md-12",
+        events: {},
+        initialize: function(options) {},
+        render: function() {
+            var self = this;
+            var data = {
+                collectibles: this.collection.toJSON(),
+                uploadDirectory: uploadDirectory
+            };
+            dust.render(this.template, data, function(error, output) {
+                $(self.el).html(output);
+            });
+            return this;
+        }
+    });
     var PhotoView = Backbone.View.extend({
         template: 'photo.default.edit',
         className: "",
@@ -285,85 +351,19 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             return this;
         }
     });
-
-    var MessageView = Backbone.View.extend({
-        template: 'message.edit',
-        className: "col-md-12",
-        events: {},
-        initialize: function(options) {
-            if (options.errors && _.size(options.errors) > 0) {
-                this.hasErrors = true;
-                this.errors = options.errors;
-            } else {
-                this.hasErrors = false;
-            }
-        },
-        render: function() {
-            var self = this;
-            var data = {
-                hasErrors: this.hasErrors,
-            };
-            if (this.hasErrors) {
-                data.errors = this.errors.toJSON();
-            }
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        }
-    });
-    var SevereMessageView = Backbone.View.extend({
-        template: 'message.error.severe',
-        className: "col-md-12",
-        events: {},
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            var data = {};
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        }
-    });
-    var DupListMessageView = Backbone.View.extend({
-        template: 'message.duplist',
-        className: "col-md-12",
-        events: {},
-        initialize: function(options) {},
-        render: function() {
-            var self = this;
-            var data = {
-                collectibles: this.collection.toJSON(),
-                uploadDirectory: uploadDirectory
-            };
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
-            return this;
-        }
-    });
-
-
     var hasDupList = false;
-
     // doing this until everything is converted over to a
     // marionette app
     function renderPartsView(layout, options) {
         var partsView = new PartsView(options);
-
         partsView.on('edit:collectible:part', _.partial(renderCollectiblePartEdit, _, layout, options));
-
         partsView.on('edit:part', _.partial(renderEditPart, _, layout, options));
-
+        partsView.on('edit:part:photo', _.partial(renderEditPartPhoto, _, layout, options));
         partsView.on('remove:part', _.partial(renderRemovePart, _, layout, options));
-
         partsView.on('remove:part:duplicate', _.partial(renderRemovePartDuplicate, layout, options));
-
         // TODO: this won't work here, needs to come from the layout
         layout.on('add:part', _.partial(renderAddPart, layout, options));
         layout.on('add:existing:part', _.partial(renderAddExistingPart, layout, options));
-
         layout.parts.show(partsView);
     }
 
@@ -373,12 +373,10 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             // later this will come from the app
             collectible: options.model
         }));
-
         model.once('sync', function(model, response, options) {
             if (_.isArray(response)) {
                 // App.comments.add(response);
             }
-
             layout.modal.hideModal();
         });
     }
@@ -392,64 +390,67 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             artists: options.artists,
             scales: options.scales
         });
-
         layout.modal.show(editPartView);
-
         model.once('sync', function(model, response, options) {
             if (_.isArray(response)) {
                 // App.comments.add(response);
             }
+            layout.modal.hideModal();
+        });
+    }
 
+    function renderEditPartPhoto(model, layout, options) {
+        var editPartView = new PartEditView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model,
+            manufacturers: options.manufacturers,
+            artists: options.artists,
+            scales: options.scales
+        });
+        layout.modal.show(editPartView);
+        model.once('sync', function(model, response, options) {
+            if (_.isArray(response)) {
+                // App.comments.add(response);
+            }
             layout.modal.hideModal();
         });
     }
 
     function renderAddExistingPart(layout, options, part) {
         var parts = options.collection;
-
         //  this won't be a modal, isntead it will render where the list of parts is
         var addPartView = new PartAddExistingView({
             model: part,
             // later this will come from the app
             collectible: options.model
         });
-
         addPartView.on('search:collectible', function() {
-
             var searchView = new CollectibleSearchView({
                 // although we might want to keep this cached?
                 collection: new PaginatedCollection([], {
                     mode: 'server'
                 })
             });
-
-
             searchView.on('part:selected', _.partial(renderAddExistingPart, layout, options));
             searchView.on('cancel', _.partial(renderPartsView, layout, options));
-
             layout.parts.show(searchView);
         });
-
         addPartView.on('cancel', _.partial(renderPartsView, layout, options));
-
         addPartView.on('part:added', function(model) {
             // if it is an edit, there won't be a model
             // passed in right now
             if (model) {
                 options.collection.add(model);
             }
-
             renderPartsView(layout, options);
         });
-
         layout.parts.show(addPartView);
     }
 
     function renderAddPart(layout, options) {
-
         var parts = options.collection,
             model = new options.collection.model()
-
             var addPartView = new PartEditView({
                 model: model,
                 // later this will come from the app
@@ -458,20 +459,16 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                 artists: options.artists,
                 scales: options.scales
             });
-
         layout.modal.show(addPartView);
-
         model.once('sync', function(model, response, options) {
             // if it isn't an edit, then add it to the collection
             // otherwise, do nothing with it
             if (!response.isEdit) {
                 parts.add(model);
             }
-
             layout.modal.hideModal();
         });
     }
-
 
     function renderRemovePart(model, layout, options) {
         var removePartView = new PartRemoveView({
@@ -479,22 +476,17 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             // later this will come from the app
             collectible: options.model,
         });
-
         layout.modal.show(removePartView);
-
         model.once('sync', function(model, response, options) {
             if (_.isArray(response)) {
                 // App.comments.add(response);
             }
-
             layout.modal.hideModal();
         });
     }
 
-
     function renderRemovePartDuplicate(layout, options, part, replacement) {
         var parts = options.collection;
-
         //  this won't be a modal, isntead it will render where the list of parts is
         var addPartView = new PartRemoveDuplicateView({
             model: part,
@@ -502,38 +494,23 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             // later this will come from the app
             collectible: options.model
         });
-
         addPartView.on('search:collectible', function() {
-
             var searchView = new CollectibleSearchView({
                 // although we might want to keep this cached?
                 collection: new PaginatedCollection([], {
                     mode: 'server'
                 })
             });
-
-
             searchView.on('part:selected', _.partial(renderRemovePartDuplicate, layout, options, part));
             searchView.on('cancel', _.partial(renderPartsView, layout, options));
-
             layout.parts.show(searchView);
         });
-
         addPartView.on('cancel', _.partial(renderPartsView, layout, options));
-
         addPartView.on('part:added', function(model) {
-            // if it is an edit, there won't be a model
-            // passed in right now
-            // if (model) {
-            //     options.collection.add(model);
-            // }
-
             renderPartsView(layout, options);
         });
-
         layout.parts.show(addPartView);
     };
-
     // mock app until we fully convert to marionette
     return {
         start: function() {
@@ -629,27 +606,21 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
             }
             //TODO: At some point it might warrant a whole new view for customs
             var collectibleView = new CollectibleView(collectibleViewData);
-
             $('#photo-container').append(new PhotoView({
                 collection: uploads,
                 eventManager: pageEvents
             }).render().el);
-
             $('#collectible-container').append(new PersonsView({
                 collection: artists,
                 collectibleType: collectibleTypeModel
             }).render().el);
-
             $('#collectible-container').append(collectibleView.render().el);
-
             $('#collectible-container').append(new TagsView({
                 collection: tags
             }).render().el);
-
             // TODO: make this it's own region so we can utilize the modal stuff
             // and it will handle rendering and destroying views since we will be 
             // utilizing this space when we add existing
-
             var PartsLayout = Backbone.Marionette.Layout.extend({
                 template: partsLayoutTemplate,
                 className: 'row',
@@ -670,10 +641,8 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                     this.trigger('add:existing:part');
                 }
             });
-
             var partsLayout = new PartsLayout();
             $('#parts-container').html(partsLayout.render().el);
-
             renderPartsView(partsLayout, {
                 collection: parts,
                 status: status,
@@ -683,7 +652,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                 model: collectibleModel,
                 scales: scales
             });
-
             var statusView = new StatusView({
                 model: status,
                 collectible: collectibleModel,
@@ -708,8 +676,6 @@ define(['backbone', 'marionette', 'jquery', 'dust', 'mustache', 'marionette.must
                     okCloses: false
                 }).open();
             }, this);
-
-
             // Make sure we only have one
             var messageView = null;
             // If the status has changed and I am on the view
