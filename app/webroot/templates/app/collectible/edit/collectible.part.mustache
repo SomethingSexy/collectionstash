@@ -34,16 +34,16 @@
 
 	<div class="row details">
 		<div class="col-md-1">
-			{{#part.AttributesUpload}}
+			{{#part.photos}}
 				{{#primary}}
 					<a data-gallery="gallery" href="/{{uploadDirectory}}/{{Upload.name}}" class="thumbnail">
 						<img class="img-responsive" src="/{{uploadDirectory}}/{{Upload.name}}" resizetype="strict" alt="">
 					</a>
 				{{/primary}}
-			{{/part.AttributesUpload}}
-			{{^part.AttributesUpload}}
+			{{/part.photos}}
+			{{^part.photos}}
 				<a target="_blank" href="" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
-			{{/part.AttributesUpload}}			
+			{{/part.photos}}			
 		</div>
 		<div class="col-md-9">
 			<div class="row">

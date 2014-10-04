@@ -2,7 +2,6 @@ define(function(require) {
     var Backbone = require('backbone'),
         Marionette = require('marionette'),
         template = require('text!templates/app/collectible/edit/part.photo.edit.mustache');
-
     return Marionette.ItemView.extend({
         template: template,
         className: "col-md-4",
@@ -10,15 +9,15 @@ define(function(require) {
         initialize: function(options) {
             this.eventManager = options.eventManager;
         },
-        render: function() {
-            var self = this;
+        serializeData: function() {
             var data = {
                 uploadDirectory: uploadDirectory,
                 attribute: this.model.toJSON()
             };
-            dust.render(this.template, data, function(error, output) {
-                $(self.el).html(output);
-            });
+            return data;
+        },
+        onRender: function() {
+            var self = this;
             $('.fileupload', self.el).fileupload({
                 //dropZone : $('#dropzone')
             });

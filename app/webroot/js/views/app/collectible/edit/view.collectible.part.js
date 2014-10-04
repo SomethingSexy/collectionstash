@@ -38,6 +38,7 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
                 data.isNew = true;
             }
             data.part = this.model.part.toJSON();
+            data.part.photos = this.model.part.photos.toJSON();
             data.uploadDirectory = uploadDirectory;
             data.collectible = this.collectible.toJSON();
             if (data.collectible.custom) {
