@@ -3,13 +3,13 @@ define(['backbone', 'collections/collection.part.photos'], function(Backbone, Co
         url: '/attributes/part',
         parse: function(response) {
             if (!this.photos) {
-                this.photos = new CollectionPartPhotos(response.AttributeUploads, {
+                this.photos = new CollectionPartPhotos(response.AttributesUpload, {
                     parse: true
                 });
             } else {
-                this.photos.set(response.AttributeUploads);
+                this.photos.set(response.AttributesUpload);
             }
-            delete response.AttributeUploads;
+            delete response.AttributesUpload;
             return response;
         }
     });

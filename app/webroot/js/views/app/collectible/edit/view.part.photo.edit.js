@@ -4,7 +4,6 @@ define(function(require) {
         template = require('text!templates/app/collectible/edit/part.photo.edit.mustache');
     return Marionette.ItemView.extend({
         template: template,
-        className: "col-md-4",
         events: {},
         initialize: function(options) {
             this.eventManager = options.eventManager;
@@ -12,7 +11,7 @@ define(function(require) {
         serializeData: function() {
             var data = {
                 uploadDirectory: uploadDirectory,
-                attribute: this.model.toJSON()
+                part: this.model.part.toJSON()
             };
             return data;
         },
