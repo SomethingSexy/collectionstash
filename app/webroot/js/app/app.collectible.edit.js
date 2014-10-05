@@ -460,9 +460,9 @@ define(function(require) {
         model.once('sync', function(model, response, options) {
             // if it isn't an edit, then add it to the collection
             // otherwise, do nothing with it
-            if (!response.isEdit) {
+            // if (!response.isEdit) {
                 parts.add(model);
-            }
+            // }
             layout.modal.hideModal();
         });
     }

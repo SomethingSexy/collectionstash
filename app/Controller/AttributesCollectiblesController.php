@@ -59,9 +59,8 @@ class AttributesCollectiblesController extends AppController
             return;
         }
         
+        // create
         if ($this->request->isPost()) {
-            
-            // create
             $part = $this->request->input('json_decode', true);
             
             $response = $this->AttributesCollectible->add($part, $this->getUser());

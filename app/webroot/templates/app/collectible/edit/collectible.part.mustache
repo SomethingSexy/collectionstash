@@ -68,6 +68,7 @@
 			</div>
 		</div>
 		<div class="col-md-2">
+			{{^isEdit}}
 			<div class="btn-group actions pull-right">
 				<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
@@ -90,11 +91,14 @@
 					{{/allowRemoveAttribute}}
 				</ul>
 			</div>
-
+			{{/isEdit}}
+			{{#isEdit}}
+				<span class="label label-default">This part has been submitted for approval.</span>
+			{{/isEdit}}
 		</div>
 
 	</div>
-
+	{{#isEdit}}
 	<div class="row">
 		<div class="col-md-12">
 			<div class="pull-right">
@@ -102,4 +106,5 @@
 			</div>
 		</div>
 	</div>
+	{{/isEdit}}
 </div>
