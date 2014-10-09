@@ -18,7 +18,15 @@ define(function(require) {
         onRender: function() {
             var self = this;
             $('.fileupload', self.el).fileupload({
-                //dropZone : $('#dropzone')
+                add: function(e, data) {
+                    var jqXHR = data.submit().success(function(result, textStatus, jqXHR) {
+                        result;
+                    }).error(function(jqXHR, textStatus, errorThrown) {}).complete(function(result, textStatus, jqXHR) {});
+                },
+                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+                imageMaxWidth: 800,
+                imageMaxHeight: 800,
+                imageCrop: true // Force cropped image
             });
             $('.fileupload', self.el).fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
             $('.fileupload', self.el).fileupload('option', {
@@ -72,9 +80,10 @@ define(function(require) {
                 }
             });
             var that = $('.fileupload', self.el);
+            var uploads = self.collection.pluck('Upload');
             that.fileupload('option', 'done').call(that, null, {
                 result: {
-                    files: self.collection.toJSON()
+                    files: uploads
                 }
             });
             return this;
