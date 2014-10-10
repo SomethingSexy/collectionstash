@@ -137,8 +137,8 @@ class Attribute extends AppModel
                 }
             } else {
                 $retVal['response']['isSuccess'] = false;
-           		$retVal['response']['data'] = $this->validationErrors;
-            	$retVal['response']['code'] = 400;
+                $retVal['response']['data'] = $this->validationErrors;
+                $retVal['response']['code'] = 400;
             }
         } else {
             $retVal['response']['isSuccess'] = false;
@@ -173,9 +173,9 @@ class Attribute extends AppModel
         } else {
             $currentVersion['Attribute']['replace_attribute_id'] = $attribute['Attribute']['replace_attribute_id'];
         }
-
+        
         $autoUpdate = $this->allowAutoUpdate($attribute['Attribute']['id'], $user);
-
+        
         if ($this->isEditPermission($attribute['Attribute']['id'], $user)) {
             if ($autoUpdate === true || $autoUpdate === 'true') {
                 $proceed = true;
@@ -275,6 +275,7 @@ class Attribute extends AppModel
             // since we can only add attributes through collectibles right
             // now, do not do any event stuff here
             
+            
         } else {
             $retVal['response']['isSuccess'] = false;
             $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
@@ -287,10 +288,10 @@ class Attribute extends AppModel
      * This method is used when we are approving new attributes
      *
      * Return Codes:
-     * 		1: Successly Approved
-     * 		2: Successly Denied
-     * 		4: Error saving
-     * 		5: Attribute has been approved already
+     *      1: Successly Approved
+     *      2: Successly Denied
+     *      4: Error saving
+     *      5: Attribute has been approved already
      */
     public function approve($id, $approval, $userId) {
         $retVal = $this->buildDefaultResponse();
@@ -349,15 +350,18 @@ class Attribute extends AppModel
         $attributeEditVersion = $this->findEdit($editId);
         debug($attributeEditVersion);
         // Right now we can really only add or edit
-        if ($attributeEditVersion['Action']['action_type_id'] === '1') { //Add
+        if ($attributeEditVersion['Action']['action_type_id'] === '1') {
+            //Add
             //TODO: Add does not go through here yet so it should not happen
             
             
-        } else if ($attributeEditVersion['Action']['action_type_id'] === '2') { // Edit
+        } else if ($attributeEditVersion['Action']['action_type_id'] === '2') {
+            // Edit
             if ($this->deleteEdit($attributeEditVersion)) {
                 $retVal = true;
             }
-        } else if ($attributeEditVersion['Action']['action_type_id'] === '4') { // Delete
+        } else if ($attributeEditVersion['Action']['action_type_id'] === '4') {
+            // Delete
             // If we are deny a delete, then we are keeping it out there
             // so just delete the edit
             if ($this->deleteEdit($attributeEditVersion)) {
@@ -494,10 +498,12 @@ class Attribute extends AppModel
                 if (!empty($edits)) {
                     // do nothing
                     
+                    
                 } else {
                     // If it doesn't have any edits see if
                     if (!empty($value['AttributesCollectible'])) {
                         // do nothing
+                        
                         
                     } else {
                         unset($results[$key]);
@@ -575,14 +581,44 @@ class Attribute extends AppModel
         
         return $retVal;
     }
+    
+    public function allowAutoUpdateUpload($attributeId, $user) {
+        $retVal = false;
+        // If they are an admin then they can always update
+        if ($user['User']['admin']) {
+            $retVal = true;
+            return $retVal;
+        }
+        
+        $attribute = $this->find('first', array('conditions' => array('Attribute.id' => $attributeId), 'contain' => array('Status', 'User')));
+        // if it is approved, then anyone can add it
+        if ($attribute['Status']['id'] === '4') {
+            $retVal = true;
+        } else if ($attribute['Status']['id'] === '1' || $attribute['Status']['id'] === '2') {
+            // if the user performing the action is the owner of the collectible or it is an admin
+            // auto update
+            if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+                $retVal = true;
+            }
+        } else {
+            // now check type, if it custom or original then it can be updated at any point if permission is there
+            if ($attribute['Attribute']['type'] === 'custom' || $attribute['Attribute']['type'] === 'original' || $attribute['Attribute']['type'] === 'generic') {
+                if ($attribute['Attribute']['user_id'] === $user['User']['id']) {
+                    $retVal = true;
+                }
+            }
+        }
+        
+        return $retVal;
+    }
     /**
      * This method will determine if the user has permissions to
      * update.
      *
      * TODO: WE might have to expand this eventually to say,
-     * 		 if the user does not have permsission, then an
-     * 		 edit it submitted and the ownwer of the collectible
-     * 		 approves the eidt
+     *       if the user does not have permsission, then an
+     *       edit it submitted and the ownwer of the collectible
+     *       approves the eidt
      */
     public function isEditPermission($check, $user) {
         $retVal = false;
@@ -596,6 +632,7 @@ class Attribute extends AppModel
         if (is_numeric($check) || is_string($check)) {
             $attribute = $this->find('first', array('conditions' => array('Attribute.id' => $check), 'contain' => array('Status', 'User')));
             //lol
+            
             
         } else {
             // assume object
@@ -631,6 +668,7 @@ class Attribute extends AppModel
         if (is_numeric($check) || is_string($check)) {
             $attribute = $this->find('first', array('conditions' => array('Attribute.id' => $check), 'contain' => array('Status', 'User')));
             //lol
+            
             
         } else {
             // assume object
