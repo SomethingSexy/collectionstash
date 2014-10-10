@@ -142,7 +142,6 @@ class CollectiblesController extends AppController
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_type'] = 'POST';
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = false;
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = true;
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['primary'] = $part['primary'];
             }
         }
         

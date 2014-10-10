@@ -18,11 +18,11 @@ define(function(require) {
         onRender: function() {
             var self = this;
             $('.fileupload', self.el).fileupload({
-                add: function(e, data) {
-                    var jqXHR = data.submit().success(function(result, textStatus, jqXHR) {
-                        result;
-                    }).error(function(jqXHR, textStatus, errorThrown) {}).complete(function(result, textStatus, jqXHR) {});
-                },
+                // add: function(e, data) {
+                //     var jqXHR = data.submit().success(function(result, textStatus, jqXHR) {
+                //         result;
+                //     }).error(function(jqXHR, textStatus, errorThrown) {}).complete(function(result, textStatus, jqXHR) {});
+                // },
                 disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
                 imageMaxWidth: 800,
                 imageMaxHeight: 800,

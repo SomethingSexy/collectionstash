@@ -153,7 +153,7 @@ class AttributesUploadsController extends AppController {
 	}
 
 	/**
-	 *
+	 * TODO: this needs to return an AttributesUpload -> Upload object
 	 */
 	public function upload() {
 		$this -> layout = 'ajax';
@@ -187,21 +187,21 @@ class AttributesUploadsController extends AppController {
 					$uploadResponse['size'] = intval($upload['Upload']['size']);
 					$uploadResponse['name'] = $upload['Upload']['name'];
 					// this should be the id of the new pending collectible
+					$uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $upload['AttributesUpload']['id'] . '/' . $uploadResponse['pending'];
 
 					$uploadResponse['delete_type'] = 'POST';
 					$uploadResponse['id'] = $this -> request -> data['AttributesUpload']['attribute_id'];
 
-					if ($upload['isEdit']) {
-						$uploadResponse['pending'] = true;
-						$uploadResponse['pendingText'] = __('Pending Approval');
-					} else {
-						$uploadResponse['pending'] = false;
-					}
+					// if ($upload['isEdit']) {
+					// 	$uploadResponse['pending'] = true;
+					// 	$uploadResponse['pendingText'] = __('Pending Approval');
+					// } else {
+					// 	$uploadResponse['pending'] = false;
+					// }
 
-					$uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $upload['AttributesUpload']['id'] . '/' . $uploadResponse['pending'];
-
-					//TODO: Need to figure these two properties out
-					$uploadResponse['owner'] = true;
+					
+					// //TODO: Need to figure these two properties out
+					// $uploadResponse['owner'] = true;
 					$uploadResponse['allowDelete'] = true;
 
 					array_push($retunData['files'], $uploadResponse);
