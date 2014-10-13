@@ -36,7 +36,7 @@ class AttributesUpload extends AppModel
     /**
      * TODO: This method should probably also have an edit permission check
      */
-    public function remove($upload, $user, $autoUpdate = false) {
+    public function remove($upload, $user) {
         $retVal = array();
         $retVal['response'] = array();
         $retVal['response']['isSuccess'] = false;
@@ -60,9 +60,8 @@ class AttributesUpload extends AppModel
         // Now let's check to see if we need to update this based
         // on attribute status
         // If we are already auto updating, no need to check
-        if ($autoUpdate === 'false' || $autoUpdate === false) {
-            $autoUpdate = $this->Attribute->allowAutoUpdate($currentVersion['AttributesUpload']['attribute_upload'], $user);
-        }
+        
+        $autoUpdate = $this->Attribute->allowAutoUpdate($currentVersion['AttributesUpload']['attribute_upload'], $user);
         
         if ($autoUpdate === true || $autoUpdate === 'true') {
             if ($this->delete($currentVersion['AttributesUpload']['id'])) {
@@ -243,6 +242,7 @@ class AttributesUpload extends AppModel
             }
         } else if ($collectiblesUploadEditVersion['Action']['action_type_id'] === '2') { // Edit
             // Can't edit right now
+            
             
         }
         
