@@ -138,7 +138,7 @@ class CollectiblesController extends AppController
             foreach ($part['Attribute']['AttributesUpload'] as $key => $value) {
                 $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $part['id'] . '/false';
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_type'] = 'POST';
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = false;
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = true;
