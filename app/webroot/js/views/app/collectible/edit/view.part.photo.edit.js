@@ -7,6 +7,7 @@ define(function(require) {
         events: {},
         initialize: function(options) {
             this.eventManager = options.eventManager;
+            this.collectible = options.collectible;
         },
         serializeData: function() {
             var data = {
@@ -15,8 +16,11 @@ define(function(require) {
             };
             return data;
         },
-        onClose: function(){
-            this.collection.fetch();
+        onClose: function() {
+            // update the url to include the collectible id
+            this.collection.fetch({
+                url: this.collection.url + '/' + this.model.part.get('id')
+            });
         },
         onRender: function() {
             var self = this;

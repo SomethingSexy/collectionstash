@@ -403,15 +403,14 @@ define(function(require) {
     function renderEditPartPhoto(model, layout, options) {
         var editPartView = new PartPhotoEditView({
             model: model,
+            collectible: options.model,
             collection: model.part.photos
         });
         layout.modal.show(editPartView);
-
- $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
-self.photoEditView.remove();
-self.model.fetch();
-});
-        
+        $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
+            self.photoEditView.remove();
+            self.model.fetch();
+        });
         model.once('sync', function(model, response, options) {
             if (_.isArray(response)) {
                 // App.comments.add(response);
@@ -467,7 +466,7 @@ self.model.fetch();
             // if it isn't an edit, then add it to the collection
             // otherwise, do nothing with it
             // if (!response.isEdit) {
-                parts.add(model);
+            parts.add(model);
             // }
             layout.modal.hideModal();
         });
