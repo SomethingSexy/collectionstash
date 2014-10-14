@@ -15,6 +15,9 @@ define(function(require) {
             };
             return data;
         },
+        onClose: function(){
+            this.collection.fetch();
+        },
         onRender: function() {
             var self = this;
             $('.fileupload', self.el).fileupload({
