@@ -406,6 +406,12 @@ define(function(require) {
             collection: model.part.photos
         });
         layout.modal.show(editPartView);
+
+ $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
+self.photoEditView.remove();
+self.model.fetch();
+});
+        
         model.once('sync', function(model, response, options) {
             if (_.isArray(response)) {
                 // App.comments.add(response);
