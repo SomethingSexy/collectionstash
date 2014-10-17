@@ -220,20 +220,16 @@ class AttributesUploadsController extends AppController
             $part = $this->AttributesUpload->Attribute->find('first', array('contain' => array('AttributesUpload' => array('Upload')), 'conditions' => array('Attribute.id' => $partId)));
             
             $part = $part['AttributesUpload'];
-            // unset($collectible['AttributesCollectible']);
             // // we have to do some processing on the part uploads, kind of lame
-            // foreach ($parts as $partKey => $part) {
-            //     foreach ($part['Attribute']['AttributesUpload'] as $key => $value) {
-            //         $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
-            //         $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
-            //         $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
-            //         $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_type'] = 'POST';
-            //         $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = false;
-            //         $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = true;
-            //     }
-            // }
             
-            
+            foreach ($part as $key => $value) {
+                $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                $part[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
+                $part[$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
+                $part[$key]['Upload']['delete_type'] = 'POST';
+                $part[$key]['Upload']['pending'] = false;
+                $part[$key]['Upload']['allowDelete'] = true;
+            }
         }
         
         $this->response->body(json_encode($part));
