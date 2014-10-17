@@ -145,8 +145,6 @@ class CollectiblesController extends AppController
             }
         }
         
-        debug($parts);
-        
         $this->set('parts', $parts);
         
         // This is the basic stuff to get for edit attributes
