@@ -20,6 +20,8 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             // if the collectible part has changed or the actual part has changed, re-render
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model.part, 'change', this.render);
+            this.listenTo(this.model.part.photos, 'add', this.render);
+            this.listenTo(this.model.part.photos, 'remove', this.render);
         },
         serializeData: function() {
             var data = this.model.toJSON();
