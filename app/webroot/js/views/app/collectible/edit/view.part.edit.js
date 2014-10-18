@@ -3,7 +3,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         template: template,
         events: {
             'click .save': 'save',
-            'click .attribute-type': 'toggleType',
             'click .select-category': 'changeCategory',
             'click .category-container .item.name': 'selectCategory'
         },
@@ -13,7 +12,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.artists = options.artists;
             this.scales = options.scales;
             this.collectible = options.collectible;
-
             if (this.model.isNew()) {
                 // default the attribute to be a custom one
                 if (this.collectible.get('custom')) {
@@ -41,8 +39,10 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             if (this.model.get('scale_id')) {
                 $('[name=scale_id] option[value=' + this.model.get('scale_id') + ']', this.el).attr('selected', 'selected');
             }
+            if (this.model.get('type')) {
+                $('[name=type][value=' + this.model.get('type') + ']', this.el).attr('checked', 'checked');
+            }
             this.errors = [];
-
             $(self.el).animate({
                 scrollTop: 0
             });
@@ -61,7 +61,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 data.showCount = false;
                 data.showId = true;
             }
-
             if (data.type === 'mass') {
                 data.isMass = true;
                 data.showManufacturer = true;
@@ -69,7 +68,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 data.isOriginal = true;
                 data.showManufacturer = true;
             }
-
             data['uploadDirectory'] = uploadDirectory;
             return data;
         },
@@ -83,7 +81,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         changeCategory: function() {
             var $container = $('.category-container', this.el),
                 isOpen = $('.category-container', this.el).data('open');
-
             if (isOpen) {
                 $container.empty().data('open', false);
             } else {
@@ -93,12 +90,10 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         selectCategory: function(event) {
             var categoryId = $(event.currentTarget).attr('data-id');
             var categoryPath = $(event.currentTarget).attr('data-path-name');
-
             // eh just set to thie hidden field, since the save will handle
             // setting to the model
             $('[name=attribute_category_id]').val(categoryId);
             $('.select-category').text(categoryPath);
-
             $('.category-container', this.el).empty().data('open', false);
         },
         // This is for custom stuff, we will need to test this out still
@@ -135,7 +130,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             if (this.collectible.get('custom') && this.model.get('type') !== 'mass') {
                 data.type = $('[name=type]', this.el).val();
             }
-
             // if this is a new model, then we also need to grab the count 
             var isNew = false;
             if (this.model.isNew()) {
@@ -143,7 +137,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 data.count = parseInt($('[name=count]', this.el).val());
                 data.collectible_id = this.collectible.get('id');
             }
-
             this.model.save(data, {
                 wait: true,
                 success: function(model, response, options) {
@@ -160,8 +153,6 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             });
         }
     });
-
     _.extend(EditListing.prototype, ErrorMixin);
-
     return EditListing;
 });
