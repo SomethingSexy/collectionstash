@@ -218,23 +218,14 @@ class CollectiblesController extends AppController
         $this->set(compact('collectible'));
     }
     
-    public function collectible($adminMode = false, $id = null, $replacementId = null) {
-        
-        // check login
-        // check to make sure they can make this change
-        if ($adminMode === true) {
-            if (!$this->isUserAdmin()) {
-                $this->response->statusCode(401);
-                return;
-            }
-        }
+    public function collectible($id = null, $replacementId = null) {
         
         if ($this->request->isPut()) {
             $collectible['Collectible'] = $this->request->input('json_decode', true);
             
             //$collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
             
-            $response = $this->Collectible->saveCollectible($collectible, $this->getUser(), $adminMode);
+            $response = $this->Collectible->saveCollectible($collectible, $this->getUser());
             
             $request = $this->request->input('json_decode');
             

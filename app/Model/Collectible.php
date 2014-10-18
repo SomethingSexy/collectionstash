@@ -458,8 +458,10 @@ class Collectible extends AppModel
                 // return $isInt;
                 // It's a number, but not an integer, so we fail
                 
+                
             }
             // Not a number
+            
             
         }
         
@@ -877,6 +879,7 @@ class Collectible extends AppModel
             // $defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
             // $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
             
+            
         }
         $this->set($collectible);
         // Only field we need to validate
@@ -1017,9 +1020,7 @@ class Collectible extends AppModel
         
         // other make it an edit
         $hasPermission = false;
-        if ($autoUpdate === 'false' || $autoUpdate === false) {
-            $autoUpdate = $this->allowAutoUpdate($collectible['Collectible']['id'], $user);
-        }
+        $autoUpdate = $this->allowAutoUpdate($collectible['Collectible']['id'], $user);
         // make sure no hackers :)
         unset($collectible['Collectible']['user_id']);
         // Make sure they have the aibility to do anything
@@ -1214,6 +1215,7 @@ class Collectible extends AppModel
             } else {
                 // should never happen
                 
+                
             }
             // also always ignore dup check for customs
             $ignoreDupCheck = true;
@@ -1348,6 +1350,7 @@ class Collectible extends AppModel
             // when the mass-produced collectible is approved
             // it will change them to status 4
             
+            
         }
         
         return $retVal;
@@ -1357,9 +1360,9 @@ class Collectible extends AppModel
      * update.
      *
      * TODO: WE might have to expand this eventually to say,
-     * 		 if the user does not have permsission, then an
-     * 		 edit it submitted and the ownwer of the collectible
-     * 		 approves the eidt
+     *       if the user does not have permsission, then an
+     *       edit it submitted and the ownwer of the collectible
+     *       approves the eidt
      */
     public function isEditPermission($check, $user) {
         $retVal = false;
@@ -1373,6 +1376,7 @@ class Collectible extends AppModel
         if (is_numeric($check) || is_string($check)) {
             $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
             //lol
+            
             
         } else {
             // assume object
@@ -1409,6 +1413,7 @@ class Collectible extends AppModel
             $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
             //lol
             
+            
         } else {
             // assume object
             $collectible = $check;
@@ -1433,6 +1438,7 @@ class Collectible extends AppModel
             $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $check), 'contain' => array('Status', 'User')));
             //lol
             
+            
         } else {
             // assume object
             $collectible = $check;
@@ -1441,6 +1447,7 @@ class Collectible extends AppModel
         if ($collectible['Status']['id'] === '1' || $collectible['Status']['id'] === '2') {
             // right now you can't
             
+            
         } else {
             // if it is an active status
             // right now for originals or customs you cannot add
@@ -1448,6 +1455,7 @@ class Collectible extends AppModel
                 // if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                 // $retVal = true;
                 // }
+                
                 
             } else {
                 // otherwise if it is a mass produced collectible then just
