@@ -452,15 +452,15 @@ define(function(require) {
 
     function renderAddPart(layout, options) {
         var parts = options.collection,
-            model = new options.collection.model()
-            var addPartView = new PartEditView({
-                model: model,
-                // later this will come from the app
-                collectible: options.model,
-                manufacturers: options.manufacturers,
-                artists: options.artists,
-                scales: options.scales
-            });
+            model = new options.collection.model();
+        var addPartView = new PartEditView({
+            model: model,
+            // later this will come from the app
+            collectible: options.model,
+            manufacturers: options.manufacturers,
+            artists: options.artists,
+            scales: options.scales
+        });
         layout.modal.show(addPartView);
         model.once('sync', function(model, response, options) {
             // if it isn't an edit, then add it to the collection
