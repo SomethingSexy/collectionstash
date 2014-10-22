@@ -1,12 +1,15 @@
+{{#custom}}
+	<p>When you are adding parts please try and add existing parts whenever possible.  If you do have to add a new part to the system and you purchased it from someone please add it as a <strong>new collectible</strong>, attaching that new part to the collectible.  Once it is approved you can add the existing part to your custom.</p>
+	<p>You will only be able to add new custom or commissioned parts directly to this collectible. These parts will not be able to be shared.</p>
+{{/custom}}
+{{#original}}
+	<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
+{{/original}}
 
+{{^custom}}{{^original}}
+<p></p>
+<p>When adding parts, please add each unique piece of the collectible as it's own part.</p>
+{{/original}}{{/custom}}
+<div class="attributes-list _parts-list" data-toggle="modal-gallery" data-target="#modal-gallery">
 
-	{{#collectible.custom}}
-		<p>When you are adding parts please try and add existing parts whenever possible.  If you do have to add a new part to the system and you purhaseed it from someone please add it as a <strong>new collectible</strong>, attaching that new part to the collectible.  Once it is approved you can add the existing part to your custom.</p>
-		<p>You will only be able to add new custom or commissioned parts directly to this collectible. These parts will not be able to be shared.</p>
-	{{/collectible.custom}}
-	{{#collectible.original}}
-		<p>Since this is an original collectible, new parts added to this collectible will not be able to be shared.</p>
-	{{/collectible.original}}
-	<div class="attributes-list _parts-list" data-toggle="modal-gallery" data-target="#modal-gallery">
-
-	</div>
+</div>
