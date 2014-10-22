@@ -39,7 +39,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.parts.mus
             this.categories = options.categories;
             this.collectible = options.collectible;
             this.scales = options.scales;
-        },
-        onRender: function() {}
+        }
     });
 });
