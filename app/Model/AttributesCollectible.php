@@ -4,16 +4,13 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class AttributesCollectible extends AppModel
 {
     public $name = 'AttributesCollectible';
-    
     //var $useTable = 'accessories_collectibles';
     public $belongsTo = array('Attribute', 'Collectible', 'Revision');
     public $actsAs = array('Revision', 'Containable', 'Editable' => array('modelAssociations' => array('belongsTo' => array('Attribute')), 'type' => 'attribute', 'model' => 'AttributesCollectiblesEdit', 'compare' => array('count')));
     
     public $validate = array(
-    
     //name field
     'count' => array('rule' => 'numeric', 'required' => true, 'message' => 'Must be numeric'),
-    
     //manufacture field
     'attribute_id' => array('rule' => array('validateAttributeId'), 'required' => true, 'message' => 'Must be a valid item.'));
     
@@ -28,7 +25,6 @@ class AttributesCollectible extends AppModel
     
     function afterFind($results, $primary = false) {
         if ($results) {
-            
             // If it is primary handle all of these things
             if ($primary) {
                 foreach ($results as $key => $val) {
@@ -78,15 +74,12 @@ class AttributesCollectible extends AppModel
     
     public function findByCollectibleId($id) {
         $attributes = $this->find('all', array('conditions' => array('AttributesCollectible.collectible_id' => $id, 'AttributesCollectible.active' => 1), 'contain' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')))));
-        
         // pulling out manually so run faster
         // this will grab any other collectibles that an attribute tied to this collectible are
         if (!empty($attributes)) {
-            
             // ok if we have some of these
             // loop through each one
             foreach ($attributes as $key => $attributesCollectible) {
-                
                 //'AttributesCollectible' => array('Collectible' )
                 if (!empty($attributesCollectible['Attribute'])) {
                     $existingAttributeCollectibles = $this->find('all', array('joins' => array(array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $attributesCollectible['Attribute']['id']), 'contain' => array('Collectible' => array('fields' => array('id', 'name')))));
@@ -101,7 +94,6 @@ class AttributesCollectible extends AppModel
     public function get($id) {
         $retVal = array();
         $retVal = $this->find('first', array('conditions' => array('AttributesCollectible.id' => $id), 'contain' => array('Revision' => array('User'), 'Attribute' => array('User', 'AttributeCategory', 'Manufacture', 'Artist', 'Scale', 'AttributesUpload' => array('Upload')))));
-        
         // so let's do this manually and try that out
         $retVal['Attribute']['AttributesCollectible'] = array();
         if (!empty($retVal['AttributesCollectible']) && !empty($retVal['AttributesCollectible']['attribute_id'])) {
@@ -117,28 +109,23 @@ class AttributesCollectible extends AppModel
         $retVal['response']['isSuccess'] = false;
         $retVal['response']['message'] = '';
         $retVal['response']['code'] = 0;
-        
         //Maybe this should be an error code
         $retVal['response']['errors'] = array();
         $this->set($attributesCollectible);
         $validCollectible = true;
-        
         // We can only update the count
         unset($this->validate['attribute_id']);
         if ($this->validates()) {
-            
             // Now let's check to see if we need to update this based
             // on collectible status
             // If we are already auto updating, no need to check
             
             $currentVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attributesCollectible['AttributesCollectible']['id'])));
             $autoUpdate = $this->Collectible->allowAutoUpdate($currentVersion['AttributesCollectible']['collectible_id'], $user);
-            
             // If we are automatically approving it, then save it directly
             if ($autoUpdate === true || $autoUpdate === 'true') {
                 $revision = $this->Revision->buildRevision($user['User']['id'], $this->Revision->EDIT, null);
                 $attributesCollectible = array_merge($attributesCollectible, $revision);
-                
                 //$this -> id = $attribute['Attribute']['id'];
                 if ($this->saveAll($attributesCollectible, array('validate' => false))) {
                     $updatedVersion = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $this->id)));
@@ -150,7 +137,6 @@ class AttributesCollectible extends AppModel
                 $action = array();
                 $action['Action']['action_type_id'] = 2;
                 $attribute = $this->find('first', array('contain' => false, 'conditions' => array('AttributesCollectible.id' => $attributesCollectible['AttributesCollectible']['id'])));
-                
                 // TODO: We need to copy over the other details
                 $attributesCollectible['AttributesCollectible']['collectible_id'] = $attribute['AttributesCollectible']['collectible_id'];
                 $attributesCollectible['AttributesCollectible']['attribute_id'] = $attribute['AttributesCollectible']['attribute_id'];
@@ -167,7 +153,6 @@ class AttributesCollectible extends AppModel
         
         return $retVal;
     }
-    
     /**
      * This method will be used when we are trying to remove an attribute
      */
@@ -177,10 +162,8 @@ class AttributesCollectible extends AppModel
         $retVal['response']['isSuccess'] = false;
         $retVal['response']['message'] = '';
         $retVal['response']['code'] = 0;
-        
         //Maybe this should be an error code
         $retVal['response']['errors'] = array();
-        
         // There will be an ['Attribute']['reason'] - input field
         // if this attribute is tied to a collectible, are we replacing
         // with an existing attriute? Or removing completely, which will
@@ -202,10 +185,8 @@ class AttributesCollectible extends AppModel
             
             if ($this->delete($attribute['AttributesCollectible']['id'])) {
                 $attributeCollectibles = $this->Attribute->find('first', array('contain' => array('AttributesCollectible'), 'conditions' => array('Attribute.id' => $currentVersion['AttributesCollectible']['attribute_id'])));
-                
                 // If there are none left linked, then remove
                 if (count($attributeCollectibles['AttributesCollectible']) === 0) {
-                    
                     // if this fails return false
                     if ($this->Attribute->delete($currentVersion['AttributesCollectible']['attribute_id'])) {
                         $retVal['response']['isSuccess'] = true;
@@ -225,7 +206,6 @@ class AttributesCollectible extends AppModel
             
             $retVal['response']['data']['isEdit'] = false;
         } else {
-            
             // Doing this so that we have a record of the current version
             
             if ($this->saveEdit($currentVersion, $attribute['AttributesCollectible']['id'], $user['User']['id'], $action)) {
@@ -237,7 +217,6 @@ class AttributesCollectible extends AppModel
         }
         return $retVal;
     }
-    
     /**
      * This will add an attribute to a collectible.  It will need to
      * handle a couple different scenarions.
@@ -248,7 +227,6 @@ class AttributesCollectible extends AppModel
      *
      */
     public function add($data, $user, $autoUpdate = false) {
-        
         // Check to see if there is an attribute id, if so then we are adding
         // from a previously selected attribute.  We can sumbit an edit for
         // this with the type of add
@@ -264,12 +242,10 @@ class AttributesCollectible extends AppModel
         $retVal['response']['isSuccess'] = false;
         $retVal['response']['message'] = '';
         $retVal['response']['code'] = 0;
-        
         //Maybe this should be an error code
         $retVal['response']['errors'] = array();
         $this->set($data);
         $validCollectible = true;
-        
         // If we have an attribute, that means
         // we are saving a collectible attribute and creating a new
         // attribute at the same time, we don't have to validate
@@ -281,7 +257,6 @@ class AttributesCollectible extends AppModel
             $part['AttributesCollectible']['attribute_id'] = $data['attribute_id'];
         } else {
             unset($this->validate['attribute_id']);
-            
             // else we are adding a new part as well
             $part['Attribute']['attribute_category_id'] = $data['attribute_category_id'];
             $part['Attribute']['name'] = $data['name'];
@@ -289,25 +264,25 @@ class AttributesCollectible extends AppModel
             $part['Attribute']['manufacture_id'] = $data['manufacture_id'];
             $part['Attribute']['artist_id'] = $data['artist_id'];
             $part['Attribute']['scale_id'] = $data['scale_id'];
+            // if it is not set the default on the DB is 'mass'
+            if (isset($data['type'])) {
+                $part['Attribute']['type'] = $data['type'];
+            }
         }
         
         if ($this->validates()) {
-            
             // Now let's check to see if we need to update this based
             // on collectible status
             $autoUpdate = $this->Collectible->allowAutoUpdate($part['AttributesCollectible']['collectible_id'], $user);
             
             $dataSource = $this->getDataSource();
             $dataSource->begin();
-            
             // If we hve an attribute we need to make sure
             // that that validates as well.
             if (isset($part['Attribute'])) {
                 $this->Attribute->set($part);
-                
                 // If it doesn't validate return failz
                 if (!$this->Attribute->validates()) {
-                    
                     // Just in case
                     $dataSource->rollback();
                     $retVal['response']['isSuccess'] = false;
@@ -317,7 +292,6 @@ class AttributesCollectible extends AppModel
                 }
                 $attribute = array();
                 $attribute['Attribute'] = $part['Attribute'];
-                
                 // Now we need to kick off a save of the attribute
                 // This one doesn't matter if it is auto update or not because
                 // these new ones will get approved based on approving of the collectible
@@ -332,7 +306,6 @@ class AttributesCollectible extends AppModel
                     $part['AttributesCollectible']['attribute_id'] = $attributeId;
                 } else {
                     $dataSource->rollback();
-                    
                     // return that response, should be universal
                     return $attributeAddResponse;
                 }
@@ -344,10 +317,8 @@ class AttributesCollectible extends AppModel
                 $part = array_merge($part, $revision);
                 if ($this->saveAll($part, array('validate' => false))) {
                     $dataSource->commit();
-                    
                     // Return what we just added
                     $attributesCollectibleId = $this->id;
-                    
                     // Hopefully this won't be a performance issue at this level
                     $attributesCollectible = $this->find('first', array('conditions' => array('AttributesCollectible.id' => $attributesCollectibleId), 'contain' => array('Collectible', 'Revision' => array('User'), 'Attribute' => array('Artist', 'User', 'AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))))));
                     
@@ -356,7 +327,6 @@ class AttributesCollectible extends AppModel
                     $retVal['response']['data']['Attribute'] = $attributesCollectible['Attribute'];
                     $retVal['response']['data']['Revision'] = $attributesCollectible['Revision'];
                     $retVal['response']['data']['isEdit'] = false;
-                    
                     // However, we only want to trigger this activity on collectibles that have been APPROVED already
                     if ($this->Collectible->triggerActivity($part['AttributesCollectible']['collectible_id'], $user)) {
                         $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_ADD_NEW, 'user' => $user, 'object' => $attributesCollectible, 'type' => 'AttributesCollectible')));
@@ -369,14 +339,11 @@ class AttributesCollectible extends AppModel
                 $action['Action']['action_type_id'] = 1;
                 
                 if ($this->saveEdit($part, null, $user['User']['id'], $action)) {
-                    
                     // Only commit when the save edit is successful
                     $dataSource->commit();
-                    
                     // we want to return the attribute that was added here
                     $retVal['response']['isSuccess'] = true;
                     $addedAttribute = $this->Attribute->find('first', array('contain' => array('Artist', 'User', 'AttributesUpload' => array('Upload'), 'AttributeCategory', 'Manufacture', 'Scale', 'AttributesCollectible' => array('Collectible' => array('fields' => array('id', 'name')))), 'conditions' => array('Attribute.id' => $part['AttributesCollectible']['attribute_id'])));
-                    
                     // everything should be under attribute
                     $retVal['response']['data']['Attribute'] = $addedAttribute;
                     $retVal['response']['data']['Attribute'] = array_merge($retVal['response']['data']['Attribute'], $addedAttribute['Attribute']);
@@ -394,20 +361,16 @@ class AttributesCollectible extends AppModel
         
         return $retVal;
     }
-    
     /**
      * Ok should this method handle approving an attribute if it
      */
     public function publishEdit($editId, $approvalUserId) {
         $retVal = false;
-        
         // Grab the fields that will need to updated
         $attributeEditVersion = $this->findEdit($editId);
         debug($attributeEditVersion);
-        
         // Add
         if ($attributeEditVersion['Action']['action_type_id'] === '1') {
-            
             // As of now all attributes are added to the main attribute table
             // when they are new, I cannot route it through the edit process
             // without some changes, this is easier for now
@@ -417,7 +380,6 @@ class AttributesCollectible extends AppModel
                     $approval['Approval'] = array();
                     $approval['Approval']['approve'] = 'true';
                     $response = $this->Attribute->approve($attributeEditVersion['Attribute']['id'], $approval, $approvalUserId);
-                    
                     // if this is false, then return false so that we won't be committing shit
                     // otherwise carry on
                     if (!$response['response']['isSuccess']) {
@@ -430,7 +392,6 @@ class AttributesCollectible extends AppModel
             $attributeCollectible['AttributesCollectible']['count'] = $attributeEditVersion['AttributesCollectibleEdit']['count'];
             $attributeCollectible['AttributesCollectible']['attribute_id'] = $attributeEditVersion['AttributesCollectibleEdit']['attribute_id'];
             $attributeCollectible['AttributesCollectible']['collectible_id'] = $attributeEditVersion['AttributesCollectibleEdit']['collectible_id'];
-            
             // Setting this as an add because it was added to the new table..not sure this is right
             $attributeCollectible['Revision']['action'] = 'A';
             $attributeCollectible['Revision']['user_id'] = $attributeEditVersion['AttributesCollectibleEdit']['edit_user_id'];
@@ -438,7 +399,6 @@ class AttributesCollectible extends AppModel
                 $retVal = true;
             }
         } else if ($attributeEditVersion['Action']['action_type_id'] === '4') {
-            
             // Delete
             // If this attribute is only attached to one collectible, then delete the item too
             // At this point, you can't remove a pending one, so these have to be approved
@@ -452,10 +412,8 @@ class AttributesCollectible extends AppModel
             if (!$this->delete($attributeEditVersion['AttributesCollectibleEdit']['base_id'])) {
                 return false;
             }
-            
             // If there is only one, then delete the attribute as well
             if (count($attributeCollectibles) === 1) {
-                
                 // if this fails return false
                 if (!$this->Attribute->delete($attributeId)) {
                     return false;
@@ -464,7 +422,6 @@ class AttributesCollectible extends AppModel
             
             $retVal = true;
         } else if ($attributeEditVersion['Action']['action_type_id'] === '2') {
-            
             // Edit
             
             $attributeCollectible = array();
@@ -486,21 +443,17 @@ class AttributesCollectible extends AppModel
         
         return $retVal;
     }
-    
     /**
      * This method will deny the edit, in which case we will be deleting it
      */
     public function denyEdit($editId) {
         $retVal = false;
         debug($editId);
-        
         // Grab the fields that will need to updated
         $attributesCollectibleEdit = $this->findEdit($editId);
         debug($attributesCollectibleEdit);
-        
         // Right now we can really only add or edit
         if ($attributesCollectibleEdit['Action']['action_type_id'] === '1') {
-            
             //Add
             // If we are adding, we need to check and see if the attribute is new or
             // existing.
@@ -515,13 +468,11 @@ class AttributesCollectible extends AppModel
                 }
             }
         } else if ($attributesCollectibleEdit['Action']['action_type_id'] === '2') {
-            
             // Edit
             if ($this->deleteEdit($attributesCollectibleEdit)) {
                 $retVal = true;
             }
         } else if ($attributesCollectibleEdit['Action']['action_type_id'] === '4') {
-            
             // Delete
             // If we are deny a delete, then we are keeping it out there
             // so just delete the edit
@@ -539,7 +490,6 @@ class AttributesCollectible extends AppModel
         
         return $retVal;
     }
-    
     /**
      * This method will return any AttributeCollectibles that might have edits
      *  for a given attribute.  Right now this is mainly being used to determine
@@ -555,7 +505,6 @@ class AttributesCollectible extends AppModel
         $retVal['response']['isSuccess'] = false;
         $retVal['response']['message'] = '';
         $retVal['response']['code'] = 0;
-        
         //Maybe this should be an error code
         $retVal['response']['errors'] = array();
         $this->set($attribute);
