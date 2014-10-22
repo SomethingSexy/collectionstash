@@ -4,7 +4,8 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         events: {
             'click .save': 'save',
             'click .select-category': 'changeCategory',
-            'click .category-container .item.name': 'selectCategory'
+            'click .category-container .item.name': 'selectCategory',
+            'click .attribute-type': 'changeType'
         },
         initialize: function(options) {
             this.model.startTracking();
@@ -39,8 +40,16 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             if (this.model.get('scale_id')) {
                 $('[name=scale_id] option[value=' + this.model.get('scale_id') + ']', this.el).attr('selected', 'selected');
             }
-            if (this.model.get('type')) {
+            var type = this.model.get('type');
+            if (type) {
                 $('[name=type][value=' + this.model.get('type') + ']', this.el).attr('checked', 'checked');
+            }
+            if (type === 'mass' || type === 'original') {
+                $('._manufacturer', this.el).show();
+                $('._artist', this.el).show();
+            } else {
+                $('._manufacturer', this.el).hide();
+                $('._artist', this.el).hide();
             }
             this.errors = [];
             $(self.el).animate({
@@ -97,22 +106,17 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             $('.category-container', this.el).empty().data('open', false);
         },
         // This is for custom stuff, we will need to test this out still
-        toggleType: function(event) {
-            var field = $(event.currentTarget);
-            var type = field.attr('data-type');
-            var data = {};
-            if (type) {
-                // else we need to get the type
-                // set the new one
-                data = this.model.get(type);
+        changeType: function(event) {
+            var type = $('[name=type]:checked', this.el).val();
+            if (type === 'mass' || type === 'original') {
+                $('._manufacturer', this.el).show();
+                $('._artist', this.el).show();
+            } else {
+                $('._manufacturer', this.el).hide();
+                $('._artist', this.el).hide();
+                $('[name=manufacture_id]', this.el).val('');
+                $('[name=artist_id]', this.el).val('');
             }
-            data[field.attr('data-name')] = field.val();
-            // silent because we don't want to trigger a change
-            // if this is an edit
-            this.model.set(data, {
-                silent: true
-            });
-            this.render();
         },
         save: function(event) {
             var self = this;

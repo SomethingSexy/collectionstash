@@ -57,8 +57,7 @@
 					<label class="control-label" for="AttributeDescription">Description</label>
 					<textarea required="required" id="AttributeDescription" class="form-control" rows="6" cols="30" name="description">{{description}}</textarea>
 				</div>
-				{{#showManufacturer}}
-				<div class="form-group">
+				<div class="form-group _manufacturer">
 					<label class="control-label" for="AttributeManufactureId">Manufacturer</label>
 					<select id="AttributeManufactureId" class="form-control" name="manufacture_id">
 						<option value=""></option>
@@ -68,7 +67,7 @@
 					</select>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group _artist">
 					<label class="control-label" for="AttributeArtistId">Artist</label>
 					<select id="AttributeArtistId" class="form-control" name="artist_id">
 						<option value=""></option>
@@ -77,9 +76,8 @@
 						{{/artists}}
 					</select>
 				</div>
-				{{/showManufacturer}}
 
-				<div class="form-group">
+				<div class="form-group _scale">
 					<label class="control-label" for="AttributeArtistId">Scale</label>
 					<select id="AttributeScaleId" class="form-control" name="scale_id">
 						<option value=""></option>
