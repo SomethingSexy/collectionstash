@@ -44,11 +44,11 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             data.uploadDirectory = uploadDirectory;
             data.collectible = this.collectible.toJSON();
             if (data.collectible.custom) {
-                if (data.attribute_collectible_type === 'added') {
+                if (data.attribute_collectible_type_id == 1) {
                     data.attribute_collectible_type_label = 'Owned';
-                } else if (data.attribute_collectible_type === 'wanted') {
+                } else if (data.attribute_collectible_type_id == 2) {
                     data.attribute_collectible_type_label = 'Wanted';
-                } else if (data.attribute_collectible_type === 'preorder') {
+                } else if (data.attribute_collectible_type_id == 3) {
                     data.attribute_collectible_type_label = 'Preordered';
                 } else {
                     attribute_collectible_type_label = '';
