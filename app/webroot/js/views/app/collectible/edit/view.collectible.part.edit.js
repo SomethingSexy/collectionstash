@@ -1,5 +1,4 @@
-define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/collectible.part.edit.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
-    
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/collectible/edit/collectible.part.edit.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(require, _, Backbone, Marionnette, template, ErrorMixin, growl) {
     var EditCollectiblePart = Marionnette.ItemView.extend({
         template: template,
         events: {
@@ -11,6 +10,9 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         },
         onRender: function() {
             this.errors = [];
+            if (this.model.get('attribute_collectible_type_id')) {
+                $('[name=attribute_collectible_type_id] option[value=' + this.model.get('attribute_collectible_type_id') + ']', this.el).attr('selected', 'selected');
+            }
         },
         serializeData: function() {
             var data = this.model.toJSON();
@@ -31,7 +33,9 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             var data = {
                 'count': parseInt($('[name=count]', this.el).val())
             };
-
+            if (this.collectible.get('custom')) {
+                data.attribute_collectible_type_id = $('[name=attribute_collectible_type_id]', this.el).val()
+            }
             this.model.save(data, {
                 wait: true,
                 success: function(model, response, options) {
