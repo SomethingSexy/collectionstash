@@ -132,7 +132,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             };
             // if this is a custom and not mass produced, then we have a type the user can select
             if (this.collectible.get('custom') && this.model.get('type') !== 'mass') {
-                data.type = $('[name=type]', this.el).val();
+                data.type = $('[name=type]:checked', this.el).val();
             }
             // if this is a new model, then we also need to grab the count 
             var isNew = false;
