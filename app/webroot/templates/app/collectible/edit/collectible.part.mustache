@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<div class="col-md-2">
-			{{^isEdit}}
+			{{^isNew}}
 			<div class="btn-group actions pull-right">
 				<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
 				<ul class="dropdown-menu">
@@ -91,10 +91,17 @@
 					{{/allowRemoveAttribute}}
 				</ul>
 			</div>
-			{{/isEdit}}
-			{{#isEdit}}
+			{{/isNew}}
+			{{#isNew}}
 				<span class="label label-default">This part has been submitted for approval.</span>
-			{{/isEdit}}
+			{{/isNew}}
+			{{#isEdit}}{{^isNew}}
+				<span class="label label-default">An edit for this part has been submitted.</span>
+			{{/isNew}}{{/isEdit}}
+			{{#part.isEdit}}{{^part.isNew}}
+				<span class="label label-default">An edit for this part has been submitted.</span>
+			{{/part.isNew}}{{/part.isEdit}}
+
 		</div>
 
 	</div>
