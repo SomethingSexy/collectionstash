@@ -103,7 +103,12 @@ class AttributesController extends AppController
             } else if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(500);
             } else {
-                $this->response->body(json_encode($response['response']['data']));
+                $successResponse = $response['response']['data'];
+                if ($successResponse['isEdit']) {
+                    $successResponse['isNew'] = false;
+                }
+                // return the data which should be the full part
+                $this->response->body(json_encode($successResponse));
             }
         } else if ($this->request->isDelete()) {
             // on the delete, data is coming from data
