@@ -95,23 +95,16 @@
 			{{#isNew}}
 				<span class="label label-default">This part has been submitted for approval.</span>
 			{{/isNew}}
-			{{#isEdit}}{{^isNew}}
+			{{#hasEdit}}{{^isNew}}
 				<span class="label label-default">An edit for this part has been submitted.</span>
-			{{/isNew}}{{/isEdit}}
-			{{#part.isEdit}}{{^part.isNew}}
-				<span class="label label-default">An edit for this part has been submitted.</span>
-			{{/part.isNew}}{{/part.isEdit}}
-
+			{{/isNew}}{{/hasEdit}}
 		</div>
 
 	</div>
-	{{#isEdit}}
 	<div class="row">
 		<div class="col-md-12">
 			<div class="pull-right">
 				{{Revision.User.username}} - {{part.modified}}
 			</div>
 		</div>
-	</div>
-	{{/isEdit}}
-</div>
+	</div></div>
