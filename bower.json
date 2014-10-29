@@ -36,7 +36,7 @@
         "blockies": "https://github.com/download13/blockies.git#v0.1.0",
         "jquery-form": "3.50",
         "jquery.treeview": "https://github.com/jzaefferer/jquery-treeview.git#master",
-        "backbone.bootstrap-modal": "https://github.com/SomethingSexy/backbone.bootstrap-modal.git#master",
+        "backbone.bootstrap-modal": "https://github.com/SomethingSexy/backbone.bootstrap-modal.git#v0.9.0.1",
         "blueimp-tmpl" : "2.5.4",
         "blueimp-load-image" : "1.11.2",
         "blueimp-canvas-to-blob" : "2.1.0",

@@ -34,6 +34,9 @@ module.exports = function(grunt) {
                         name: 'app/app.user.settings',
                         exclude: ['common', 'rickshaw']
                     }, {
+                        name: 'app/app.collectible.edit',
+                        exclude: ['common', 'rickshaw']
+                    }, {
                         name: 'controllers/app.home.controller',
                         exclude: ['common', 'rickshaw']
                     }, {
