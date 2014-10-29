@@ -1,5 +1,18 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.3.0</h3>
+<ul>
+	<li>Fixed an issue when registering it would display an error message. (#128)</li>
+	<li>Allowing part photos to be automatically added and removed.  This is start of opening up edits to be automatic. (#126)</li>
+	<li>Users can now see the parts they have added to the collectible if they were submitted for approval. (#125)</li>
+	<li>Updated the comment modal so it focuses the text area. (#118)</li>
+	<li>Refactored collectible part edit. (#111)</li>
+	<li>Refactored collectible submit/edit to support requirejs. (#64)</li>
+	<li>Updated artsits, tags, and retailers to use select2.  This should fix a Mac OS/Safari issue. (#57)</li>
+	<li>Random bug fixes.</li>
+</ul>
+
+
 <h3>Release Notes for v3.2.3</h3>
 <ul>
 <li>Fixed an issue with our new SPA pages and IE9. (#119).</li>
