@@ -1,4 +1,4 @@
-define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(Mariontte, template, CollectibleSearchView, ErrorMixin, growl) {
+define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mustache', 'views/common/mixin.error', 'views/common/growl', 'mustache', 'marionette.mustache'], function(Mariontte, template, ErrorMixin, growl) {
     /**
      * Main view when adding an existing attribute
      */
@@ -50,10 +50,10 @@ define(['marionette', 'text!templates/app/collectible/edit/part.add.existing.mus
             });
 
             model.save({}, {
-                success: function(model) {
+                success: function(model, response, options) {
                     if (response.isEdit) {
                         growl.onSuccess('Your new part has been successfully submitted!');
-                        self.trigger('part:added');
+                        self.trigger('part:added', model);
                     } else {
                         growl.onSuccess('Your part has been successfully added!');
                         self.trigger('part:added', model);

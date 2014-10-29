@@ -36,9 +36,16 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
             } else {
                 data.allowRemoveAttribute = true;
             }
+
+            // don't allow them to edit
             if (data.status_id === '2') {
                 data.isNew = true;
+            } else {
+                if (data.isEdit || this.model.part.get('isEdit')) {
+                    data.hasEdit = true;
+                }
             }
+
             data.part = this.model.part.toJSON();
             data.part.photos = this.model.part.photos.toJSON();
             data.uploadDirectory = uploadDirectory;
