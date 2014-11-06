@@ -57,7 +57,8 @@ class ProcessStashFactShell extends AppShell {
 					$countCollectiblesPaid = $countCollectiblesPaid + 1;
 				}
 				// calculate the total sold cost of the stash
-				if (!is_null($collectibleUser['CollectiblesUser']['listing_id']) && isset($collectibleUser['Listing']) && $this -> isfloat($collectibleUser['Listing']['current_price'])) {
+				// need to make sure it is not active
+				if (!$collectibleUser['CollectiblesUser']['active'] && !is_null($collectibleUser['CollectiblesUser']['listing_id']) && isset($collectibleUser['Listing']) && $this -> isfloat($collectibleUser['Listing']['current_price'])) {
 					$countCollectiblesSold = $countCollectiblesSold + 1;
 					$totalSold = $totalSold + $collectibleUser['Listing']['current_price'];
 				}
