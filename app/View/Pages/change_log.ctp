@@ -1,5 +1,12 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+
+<h3>Release Notes for v3.3.1</h3>
+<ul>
+<li>Fixed an issue where the photo share modal was not displaying (#133).</li>
+<li>Fixed an issue where stash fact information was not accurate (#132).</li>
+</ul>
+
 <h3>Release Notes for v3.3.0</h3>
 <ul>
 	<li>Fixed an issue when registering it would display an error message. (#128)</li>
