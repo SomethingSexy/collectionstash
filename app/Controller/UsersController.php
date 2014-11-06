@@ -75,6 +75,7 @@ class UsersController extends AppController
                 $permissions['edit_photos'] = true;
             }
             // set it here so that it isn't rendered on the page either
+            $stash['StashFact']['collectibles_user_count'] = $stashFacts['Stash']['collectibles_user_count'];
             $this->set('stashFacts', $stash['StashFact']);
             $permissions['edit_work'] = true;
         } else {
@@ -190,7 +191,7 @@ class UsersController extends AppController
                             $user = $this->Auth->user();
                             $this->User->id = $user['id'];
                             $this->User->saveField('last_login', date("Y-m-d H:i:s", time()));
-
+                            
                             $autoLogin = isset($this->request->data['User']['auto_login']) ? $this->request->data['User']['auto_login'] : false;
                             if ($autoLogin) {
                                 $this->AutoLogin->write($user['username'], $this->request->data['User']['password']);
