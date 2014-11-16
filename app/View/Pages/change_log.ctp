@@ -1,6 +1,9 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
-
+<h3>Release Notes for v3.3.2</h3>
+<ul>
+<li>eBay transactions were not working because auth_token was expired.  Generated a new token (#136).</li>
+</ul>
 <h3>Release Notes for v3.3.1</h3>
 <ul>
 <li>Fixed an issue where the photo share modal was not displaying (#133).</li>
