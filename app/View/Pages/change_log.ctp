@@ -1,5 +1,9 @@
 <div class="col-md-12">
 <h2>Change Log</h2>
+<h3>Release Notes for v3.4.0</h3>
+<ul>
+<li>Added loading indicators when switching between tabs that require data fetching on the user stash/profile page. (#134)</li>
+</ul>
 <h3>Release Notes for v3.3.2</h3>
 <ul>
 <li>eBay transactions were not working because auth_token was expired.  Generated a new token (#136).</li>
