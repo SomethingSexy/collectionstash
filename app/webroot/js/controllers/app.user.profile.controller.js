@@ -17,6 +17,7 @@ define(['app/app.user.profile',
         'views/app/user/profile/view.submissions',
         'views/app/user/profile/view.edits',
         'views/common/view.activities',
+        'views/common/view.loader',
         'text!templates/app/user/profile/layout.mustache',
         'text!templates/app/user/profile/layout.profile.mustache',
         'text!templates/app/user/profile/layout.photos.mustache',
@@ -40,7 +41,7 @@ define(['app/app.user.profile',
         'mustache',
         'marionette.mustache'
     ],
-    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CollectiblesCollection, WishlistCollection, CommentsView, CommentAddView, wishlistLayout, mustache) {
+    function(App, Backbone, Marionette, HeaderView, UserView, FactsView, StashFactsView, StashView, StashTableView, WishlistView, PhotosView, WishlistTableView, HistoryView, HistoryChartView, SaleView, WorkView, SubmissionsView, EditsView, ActivitiesView, LoaderView, layout, profileLayout, photosLayout, stashLayout, historyLayout, saleLayout, activityLayout, ModalRegion, StashSellView, StashListingEditView, StashRemoveView, StashAddView, FiltersView, growl, CollectibleUser, CollectiblesCollection, WishlistCollection, CommentsView, CommentAddView, wishlistLayout, mustache) {
 
         // TODO: It might make sense to add the layout in the controller, depending on what the user is looking at
         var UserProfileLayout = Backbone.Marionette.Layout.extend({
@@ -510,6 +511,7 @@ define(['app/app.user.profile',
             },
             index: function() {
                 renderHeader('profile');
+                App.layout.main.show(new LoaderView());
                 var profileLayout = new ProfileLayout();
                 App.layout.main.show(profileLayout);
 
@@ -580,6 +582,8 @@ define(['app/app.user.profile',
             stash: function() {
                 renderHeader('stash');
 
+                App.layout.main.show(new LoaderView());
+
                 // This is kind of dumb but a decent fix for #113.
                 // if the size of the collection is less than 25 
                 // when you go from the list to the tiles, backone.paginator
@@ -614,6 +618,7 @@ define(['app/app.user.profile',
             },
             stashList: function() {
                 renderHeader('stash');
+                App.layout.main.show(new LoaderView());
                 // see above for reasoning
                 App.collectibles = new CollectiblesCollection([], {
                     username: App.profile.get('username'),
@@ -633,7 +638,8 @@ define(['app/app.user.profile',
             },
             wishlist: function() {
                 renderHeader('wishlist');
-                 // see above for reasoning
+                App.layout.main.show(new LoaderView());
+                // see above for reasoning
                 App.wishlist = new WishlistCollection([], {
                     username: App.profile.get('username')
                 });
@@ -655,7 +661,8 @@ define(['app/app.user.profile',
             },
             wishlistList: function() {
                 renderHeader('wishlist');
-                 // see above for reasoning
+                App.layout.main.show(new LoaderView());
+                // see above for reasoning
                 App.wishlist = new WishlistCollection([], {
                     username: App.profile.get('username'),
                     mode: 'server'
@@ -677,11 +684,13 @@ define(['app/app.user.profile',
             },
             sale: function() {
                 renderHeader('sale');
+
                 var layout = new SaleLayout({
                     permissions: App.permissions,
                     model: App.profile
                 });
                 App.layout.main.show(layout);
+                layout.sales.show(new LoaderView());
                 // for now we want to reset everytime we come to this page
                 // in case data has changed.  This is the best way I have found
                 // to handle that for now
@@ -693,6 +702,7 @@ define(['app/app.user.profile',
             },
             photos: function() {
                 renderHeader('photos');
+                App.layout.main.show(new LoaderView());
 
                 if (App.photos.isEmpty()) {
                     App.photos.getFirstPage().done(function() {
@@ -723,6 +733,8 @@ define(['app/app.user.profile',
                 } else {
                     renderHistoryChart(layout);
                 }
+
+                layout.history.show(new LoaderView());
 
                 if (App.history.isEmpty()) {
                     App.history.getFirstPage().done(function() {
