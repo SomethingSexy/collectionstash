@@ -511,7 +511,6 @@ define(['app/app.user.profile',
             },
             index: function() {
                 renderHeader('profile');
-                App.layout.main.show(new LoaderView());
                 var profileLayout = new ProfileLayout();
                 App.layout.main.show(profileLayout);
 
