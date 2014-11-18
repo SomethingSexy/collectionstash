@@ -118,7 +118,7 @@ class CollectiblesUser extends AppModel
                             $results[$key]['CollectiblesUser']['remove_date_formatted'] = date('F jS, Y', $time);
                         } else {
                             $results[$key]['CollectiblesUser']['remove_date'] = '';
-                             $results[$key]['CollectiblesUser']['remove_date_formatted'] = '';
+                            $results[$key]['CollectiblesUser']['remove_date_formatted'] = '';
                         }
                     }
                     // If it has a merchant, add the merchant name to the merchant field for display purposes
@@ -138,8 +138,10 @@ class CollectiblesUser extends AppModel
                             }
                         }
                     }
-                    $datetime = strtotime($val['CollectiblesUser']['created']);
-                    $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
+                    if (isset($val['CollectiblesUser']['created'])) {
+                        $datetime = strtotime($val['CollectiblesUser']['created']);
+                        $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
+                    }
                     // make sure we have a listing, these listings will only have one transaction
                     // TODO, this should go through the Listing/Transaction API to get this data
                     if (isset($val['Listing'])) {
@@ -151,6 +153,7 @@ class CollectiblesUser extends AppModel
                             }
                             // if it is for sale, keep the listing, we also need these fields for updatintg purposes if
                             // it is an active listing we want to know how much or what the user wants for it
+                            
                             
                         } else if ($val['CollectiblesUser']['sale']) {
                             if ($val['Listing']['listing_type_id'] === '2') {
