@@ -142,18 +142,6 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                     // do something
                 }
             });
-            // this.retailersHound = new Bloodhound({
-            //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-            //     // `states` is an array of state names defined in "The Basics"
-            //     local: $.map(this.retailers, function(retailer) {
-            //         return {
-            //             value: retailer
-            //         };
-            //     })
-            // });
-            // // kicks off the loading/processing of `local` and `prefetch`
-            // this.retailersHound.initialize();
         },
         onModelSaved: function(model, response, options) {
             $('.save', this.el).button('reset');

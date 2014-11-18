@@ -12,7 +12,7 @@ echo $this -> Html -> scriptBlock('var rawScales =' . json_encode($scales) .';',
 echo $this -> Html -> scriptBlock('var rawCurrencies =' . json_encode($currencies) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawArtists =' . json_encode($artists) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawCategories =' . json_encode($categories) .';', array('inline' => false));
-echo $this -> Html -> scriptBlock('var rawManufacturesList =' . json_encode($manufacturesList) .';', array('inline' => false));
+// echo $this -> Html -> scriptBlock('var rawManufacturesList =' . json_encode($manufacturesList) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawCustomStatuses =' . json_encode($customStatuses) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawVariants =' . json_encode($variants) .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawParts =' . json_encode($parts) .';', array('inline' => false));
