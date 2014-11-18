@@ -142,9 +142,7 @@ class CollectiblesController extends AppController
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
         
         $collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
-        // We will also want to get the manufacturers and their licenses right away
-        // $manufacturerCollectibletypes = $this->Collectible->Manufacture->CollectibletypesManufacture->find('all', array('conditions' => array('CollectibletypesManufacture.collectibletype_id' => $collectibleTypeId), 'contain' => array('Manufacture' => array('LicensesManufacture' => array('License')))));
-        
+
         // Get and return all brands, this is for adding new manufacturers
         // and also used for types that might allow not having a manufacturer
         $brands = $this->Collectible->License->find('all', array('contain' => false));

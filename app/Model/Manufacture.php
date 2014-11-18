@@ -2,7 +2,7 @@
 class Manufacture extends AppModel {
 	public $name = 'Manufacture';
 	public $belongsTo = array('Series');
-	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id', 'dependent' => true), 'LicensesManufacture' => array('dependent' => true), 'CollectibletypesManufacture' => array('dependent' => true));
+	public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id', 'dependent' => true), 'LicensesManufacture' => array('dependent' => true));
 	public $actsAs = array('Containable');
 
 	public $validate = array(
@@ -50,13 +50,6 @@ class Manufacture extends AppModel {
 			$data['LicensesManufacture'] = $brandMans['LicensesManufacture'];
 		}
 
-		if (isset($data['Manufacture']['CollectibletypesManufacture']) && !empty($data['Manufacture']['CollectibletypesManufacture'])) {
-			$data['CollectibletypesManufacture'] = array();
-
-			array_push($data['CollectibletypesManufacture'], $data['Manufacture']['CollectibletypesManufacture']);
-		}
-
-		unset($data['Manufacture']['CollectibletypesManufacture']);
 		unset($data['Manufacture']['LicensesManufacture']);
 
 		// Also by default let's add a series
@@ -95,13 +88,6 @@ class Manufacture extends AppModel {
 			$data['LicensesManufacture'] = $brandMans['LicensesManufacture'];
 		}
 
-		if (isset($data['Manufacture']['CollectibletypesManufacture']) && !empty($data['Manufacture']['CollectibletypesManufacture'])) {
-			$data['CollectibletypesManufacture'] = array();
-
-			array_push($data['CollectibletypesManufacture'], $data['Manufacture']['CollectibletypesManufacture']);
-		}
-
-		unset($data['Manufacture']['CollectibletypesManufacture']);
 		unset($data['Manufacture']['LicensesManufacture']);
 
 		if ($this -> saveAll($data, array('deep' => true))) {

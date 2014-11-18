@@ -519,18 +519,8 @@ class Collectible extends AppModel
     }
     
     function validateCollectibleType($check) {
-        // if we don't have a valid manufacturer yet, then we can't validate
-        // this so return true for now
-        if (is_null($this->data['Collectible']['manufacture_id'])) {
-            return true;
-        }
-        
-        $result = $this->Manufacture->CollectibletypesManufacture->find('first', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'], 'CollectibletypesManufacture.collectibletype_id' => $check['collectibletype_id']), 'contain' => false));
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+        $result = $this->Collectibletype->find('count', array('id' => $check['collectibletype_id']));
+        return $result > 0;
     }
     /*
      * This is going to validate the series based on the manufacturer.  If the manufacturer does not
