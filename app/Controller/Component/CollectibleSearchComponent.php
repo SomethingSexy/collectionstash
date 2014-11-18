@@ -112,7 +112,7 @@ class CollectibleSearchComponent extends Component
         // set status here, this one is a litte special because we need a default
         array_push($conditions, $status);
         
-        $query = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'maxLimit' => 25);
+        $query = array("joins" => $joins, 'order' => $order, "conditions" => array($conditions, $tableFilters), "contain" => array('Scale', 'ArtistsCollectible' => array('Artist'), 'AttributesCollectible' => array('Attribute' => array('AttributeCategory', 'Scale', 'Manufacture', 'AttributesUpload' => array('Upload'))), 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'CollectiblesTag' => array('Tag')), 'maxLimit' => 25);
         if (!is_null($paramType)) {
             $query['paramType'] = $paramType;
         }

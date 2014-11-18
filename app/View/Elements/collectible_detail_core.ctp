@@ -69,8 +69,6 @@ if (!isset($adminMode)) {
 		
 			echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectibletype', 'Field' => 'name'), __('Platform', true), array('compare' => $showCompareFields));
 		
-			echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'SpecializedType', 'Field' => 'name'), __('Manufacturer Platform', true), array('compare' => $showCompareFields));
-		
 			if (isset($collectibleCore['Collectible']['variant']) && $collectibleCore['Collectible']['variant']) {
 				echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'variant'), __('Variant', true), array('compare' => $showCompareFields, 'value' => '<a href="/collectibles/view/' . $collectibleCore['Collectible']['variant_collectible_id'] . '">Yes</a>'));
 			}

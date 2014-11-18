@@ -101,26 +101,6 @@
 								echo '</dd>';
 							}
 
-							if (isset($collectible['Collectible']['specialized_type_id']) && !empty($collectible['Collectible']['specialized_type_id']) || (isset($collectible['Collectible']['specialized_type_id_changed']) && $collectible['Collectible']['specialized_type_id_changed'])) {
-								echo '<dt>';
-								echo __('Manufacturer Platform');
-								echo '</dt>';
-
-								//Check if it is changed first
-								if (isset($collectible['Collectible']['specialized_type_id_changed']) && $collectible['Collectible']['specialized_type_id_changed']) {
-									echo '<dd class="changed">';
-								} else {
-									echo '<dd>';
-								}
-
-								if (!empty($collectible['Collectible']['specialized_type_id'])) {
-									echo $collectible['SpecializedType']['name'];
-								} else {
-									echo __('Removed');
-								}
-								echo '</dd>';
-							}
-
 							if (isset($collectible['Collectible']['name']) && !empty($collectible['Collectible']['name']) || (isset($collectible['Collectible']['name_changed']) && $collectible['Collectible']['name_changed'])) {
 								echo '<dt>';
 								echo __('Name');

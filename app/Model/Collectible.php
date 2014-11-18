@@ -9,9 +9,9 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class Collectible extends AppModel
 {
     public $name = 'Collectible';
-    public $belongsTo = array('CollectiblePriceFact', 'CustomStatus', 'Status', 'EntityType', 'SpecializedType' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
+    public $belongsTo = array('CollectiblePriceFact', 'CustomStatus', 'Status', 'EntityType', 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
     public $hasMany = array('Transaction', 'Listing' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'CollectiblesWishList' => array('dependent' => true), 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true), 'ArtistsCollectible' => array('dependent' => true));
-    public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('SpecializedType', 'Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('official', 'signed', 'name', 'manufacture_id', 'specialized_type_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
+    public $actsAs = array('Editable' => array('type' => 'collectible', 'model' => 'CollectibleEdit', 'modelAssociations' => array('belongsTo' => array('Manufacture', 'Collectibletype', 'License', 'Scale', 'Series', 'Retailer', 'Currency')), 'compare' => array('official', 'signed', 'name', 'manufacture_id', 'collectibletype_id', 'description', 'msrp', 'edition_size', 'numbered', 'upc', 'product_width', 'product_depth', 'license_id', 'series_id', 'variant', 'url', 'exclusive', 'retailer_id', 'variant_collectible_id', 'product_length', 'product_weight', 'scale_id', 'release', 'limited', 'code', 'pieces', 'currency_id')), 'Revision' => array('model' => 'CollectibleRev', 'ignore' => array('collectibles_user_count', 'entity_type_id', 'status_id')), 'Containable', 'Sluggable' => array(
     /**
      * Ok so I want to build slugs on the fly instead of a database field, cause then I would
      * have to worry about updates and shit...
@@ -684,7 +684,7 @@ class Collectible extends AppModel
             // Since collectibles are added from the beginning, make sure to exclude this one
             array_push($conditions, array('NOT' => array('Collectible.id' => array($collectible['Collectible']['id']))));
             
-            $returnList = $this->find("all", array("conditions" => array($conditions), "contain" => array('SpecializedType', 'Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'))));
+            $returnList = $this->find("all", array("conditions" => array($conditions), "contain" => array('Manufacture', 'License', 'Collectibletype', 'CollectiblesUpload' => array('Upload'))));
         }
         
         return $returnList;
@@ -907,7 +907,7 @@ class Collectible extends AppModel
         $collectible = Cache::read($this->collectibleCacheKey . $id, 'collectible');
         // if it isn't in the cache, add it to the cache
         if (!$collectible) {
-            $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'SpecializedType', 'User' => array('fields' => array('User.username', 'User.admin', 'User.id')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
+            $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('CustomStatus', 'Status', 'Currency', 'User' => array('fields' => array('User.username', 'User.admin', 'User.id')), 'Collectibletype', 'Series', 'Scale', 'Retailer')));
             Cache::write($this->collectibleCacheKey . $id, $collectible, 'collectible');
         }
         
