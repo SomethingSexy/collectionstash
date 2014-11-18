@@ -50,57 +50,31 @@
 				<li>
 					<a data-toggle="tab" href="#tabs-2"><?php echo __('Brands'); ?></a>
 				</li>
-				<li>
-					<a data-toggle="tab" href="#tabs-3"><?php echo __('Collectible Platforms'); ?></a>
-				</li>
 			</ul>
 			<div id="myTabContent" class="tab-content">
-			<div id="tabs-2" class="tab-pane">
-				<div class="licenses">
-				    <div class="title">
-                        <h3><?php echo __('Brands'); ?></h3>
-                        <div class="btn-group actions">
-                            <?php echo $this -> Html -> link('<i class="fa fa-pencil fa-lg"></i>', array('action' => 'add_license', $manufacture['Manufacture']['id']), array("class" => 'btn', 'escape' => false)); ?> 
-                        </div>						        
-				    </div>
-					<div class="standard-list">
-						<ul>
-							<?php
-							foreach ($licenses as $key => $license) {
-								echo '<li>';
-								echo '<span class="name">';
-								echo $license['License']['name'];
-								echo '</span>';
-								echo '</li>';
-							}
-							?>
-						</ul>
+				<div id="tabs-2" class="tab-pane">
+					<div class="licenses">
+					    <div class="title">
+	                        <h3><?php echo __('Brands'); ?></h3>
+	                        <div class="btn-group actions">
+	                            <?php echo $this -> Html -> link('<i class="fa fa-pencil fa-lg"></i>', array('action' => 'add_license', $manufacture['Manufacture']['id']), array("class" => 'btn', 'escape' => false)); ?> 
+	                        </div>						        
+					    </div>
+						<div class="standard-list">
+							<ul>
+								<?php
+								foreach ($licenses as $key => $license) {
+									echo '<li>';
+									echo '<span class="name">';
+									echo $license['License']['name'];
+									echo '</span>';
+									echo '</li>';
+								}
+								?>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div id="tabs-3" class="tab-pane">
-                <div class="collectibletypes">
-                    <div class="title">
-                        <h3><?php echo __('Collectible Platforms'); ?></h3>
-                        <div class="btn-group actions">
-                        	<?php echo $this -> Html -> link('<i class="fa fa-pencil fa-lg"></i>', array('action' => 'add_collectibletype', $manufacture['Manufacture']['id']), array('class' => 'btn', 'escape' => false)); ?>  
-                        </div>                              
-                    </div>
-                    <div class="standard-list">
-                        <ul>
-                            <?php
-							foreach ($collectibletypes as $key => $collectibletype) {
-								echo '<li>';
-								echo '<span class="name">';
-								echo $collectibletype['Collectibletype']['name'];
-								echo '</span>';
-								echo '</li>';
-							}
-                            ?>
-                        </ul>
-                    </div>
-                </div>					    
-			</div>
 			</div>
 		</div>
 	</div>

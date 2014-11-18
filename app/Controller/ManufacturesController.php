@@ -48,8 +48,7 @@ class ManufacturesController extends AppController
                 //TODO: update this to use counter cache once I can add from the app
                 $licenseCount = $this->Manufacture->LicensesManufacture->getLicenseCount($id);
                 $manufacture['Manufacture']['license_count'] = $licenseCount;
-                $collectibletypeCount = $this->Manufacture->CollectibletypesManufacture->getCollectibletypeCount($id);
-                $manufacture['Manufacture']['collectibletype_count'] = $collectibletypeCount;
+
                 $totalCollectibles = $this->Manufacture->Collectible->getCollectibleCount();
                 
                 if (is_numeric($totalCollectibles) && $totalCollectibles > 0) {
@@ -60,9 +59,7 @@ class ManufacturesController extends AppController
                 
                 $licenses = $this->Manufacture->LicensesManufacture->getLicensesByManufactureId($id);
                 $this->set(compact('licenses'));
-                
-                $manufacturerCollectibletypes = $this->Manufacture->CollectibletypesManufacture->find('all', array('conditions' => array('CollectibletypesManufacture.manufacture_id' => $id)));
-                
+                  
                 $highestPriceCollectible = $this->Manufacture->Collectible->find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'desc'), 'contain' => array('Manufacture')));
                 $lowestPriceCollectible = $this->Manufacture->Collectible->find("first", array('limit' => 1, 'conditions' => array('Collectible.status_id' => '4', 'Manufacture.id' => $id), 'order' => array('Collectible.msrp' => 'asc'), 'contain' => array('Manufacture')));
                 
@@ -137,10 +134,7 @@ class ManufacturesController extends AppController
             if (!empty($manufacture)) {
                 $licenses = $this->Manufacture->LicensesManufacture->getFullLicensesByManufactureId($manufacturer_id);
                 $this->set(compact('licenses'));
-                
-                $collectibletypes = $this->Manufacture->CollectibletypesManufacture->getAllCollectibleTypeByManufactureId($manufacturer_id);
-                $this->set(compact('collectibletypes'));
-                
+                         
                 $this->set(compact('manufacture'));
             } else {
                 $this->redirect("/");
@@ -242,35 +236,6 @@ class ManufacturesController extends AppController
         } else {
             $licenses = $this->Manufacture->LicensesManufacture->getLicensesNotAssMan($manufacturer_id);
             $this->set(compact('licenses'));
-        }
-        
-        $this->layout = 'fluid';
-    }
-    
-    public function admin_add_collectibletype($manufacturer_id = null) {
-        $this->checkLogIn();
-        $this->checkAdmin();
-        $this->set(compact('manufacturer_id'));
-        
-        //at minimum we need a manufacturer id
-        if ($this->request->is('post')) {
-            if (!empty($this->request->data)) {
-                foreach ($this->request->data['CollectibletypesManufacture'] as $key => & $value) {
-                    $value['manufacture_id'] = $manufacturer_id;
-                }
-            }
-            if ($this->Manufacture->CollectibletypesManufacture->saveMany($this->request->data['CollectibletypesManufacture'])) {
-                $this->Session->setFlash(__('The collectible type were successfully associated.', true), null, null, 'success');
-                $this->redirect(array('action' => 'view', $manufacturer_id));
-            } else {
-                $this->Session->setFlash(__('There was a problem associated the collectible type to the manufacturer.', true), null, null, 'error');
-                $collectibletypes = $this->Manufacture->CollectibletypesManufacture->getCollectibleTypesNotAssMan($manufacturer_id);
-                $this->set(compact('collectibletypes'));
-            }
-        } else {
-            $collectibletypes = $this->Manufacture->CollectibletypesManufacture->getCollectibleTypesNotAssMan($manufacturer_id);
-            debug($collectibletypes);
-            $this->set(compact('collectibletypes'));
         }
         
         $this->layout = 'fluid';

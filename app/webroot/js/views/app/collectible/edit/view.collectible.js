@@ -412,13 +412,6 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                 this.manufacturerView.remove();
             }
             var manufacturer = new CompanyModel();
-            manufacturer.set({
-                'CollectibletypesManufacture': {
-                    collectibletype_id: this.collectibleType.toJSON().id
-                }
-            }, {
-                silent: true
-            });
             manufacturer.on('sync', function() {
                 $.blockUI({
                     message: '<button class="close" data-dismiss="alert" type="button">×</button>Your manufacturer has been added!',

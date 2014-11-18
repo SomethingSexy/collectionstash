@@ -23,9 +23,6 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 						<dt><?php echo __('Percentage'); ?></dt><dd><?php echo $manufacture['Manufacture']['percentage_of_total']
 							?></dd>
 				
-						<dt><?php echo __('Total Collectible Platforms'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectibletype_count']
-							?></dd>
-				
 						<dt><?php echo __('Total Brands'); ?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
 							?></dd>
 						<dt><?php echo __('Highest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['highest_price']
