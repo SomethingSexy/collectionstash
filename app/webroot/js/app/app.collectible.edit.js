@@ -129,14 +129,6 @@ define(function(require) {
     });
     var ManufacturerList = Backbone.Collection.extend({
         model: CompanyModel,
-        initialize: function(models) {
-            for (var i = 0; i < models.length; i++) {
-                if (models[i].Manufacture) {
-                    models[i] = models[i].Manufacture;
-                    delete models[i].Manufacture;
-                }
-            };
-        },
         comparator: function(man) {
             return man.get("title").toLowerCase();
         }
@@ -521,7 +513,6 @@ define(function(require) {
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
             // Setup the manufacturer list, this will contain all data for each manufacturer
             var manufacturerList = new ManufacturerList(rawManufacturers);
-            var allManufacturerList = new ManufacturerList(rawManufacturesList);
             var currencies = new Currencies(rawCurrencies);
             var scales = new Scales(rawScales);
             var parts = new CollectibleParts(rawParts, {
@@ -543,7 +534,7 @@ define(function(require) {
             });
             // This could probably go in the init method but works here for now
             var selectedManufacturer = null;
-            _.each(manufacturerList.models, function(manufacturer) {
+            manufacturerList.each(function(manufacturer) {
                 if (manufacturer.get('id') === collectibleModel.get('manufacture_id')) {
                     selectedManufacturer = manufacturer;
                     return;
@@ -649,7 +640,7 @@ define(function(require) {
                 collection: parts,
                 status: status,
                 artists: new Backbone.Collection(rawArtists),
-                manufacturers: allManufacturerList,
+                manufacturers: manufacturerList,
                 categories: new Backbone.Collection(rawCategories),
                 model: collectibleModel,
                 scales: scales
