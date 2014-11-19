@@ -74,11 +74,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
             this.handler.wookmark();
         },
         next: function(event) {
+            $('._more', this.el).button('loading');
             this.collection.getNextPage();
         },
         renderMore: function() {
             var self = this;
             var ItemView;
+            $('._more', this.el).button('reset');
             if (this.collection.state.currentPage === 1) {
                 $('._tiles', this.el).empty();
             }
