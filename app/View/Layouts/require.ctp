@@ -45,6 +45,11 @@
 	echo $this -> Html -> css('/bower_components/rickshaw/rickshaw.min');
 	?>
 	<script type="text/javascript" src="/bower_components/requirejs/require.js"></script>
+	<script>
+ 		requirejs.config({
+        	waitSeconds: 120
+        });
+	</script>
 	<?php echo $scripts_for_layout; ?>
 	
 	<script type="text/javascript">
