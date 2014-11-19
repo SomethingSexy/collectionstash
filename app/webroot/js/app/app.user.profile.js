@@ -22,7 +22,7 @@ define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collect
     MyApp.permissions = new Backbone.Model(rawPermissions);
     MyApp.reasonsCollection = new Backbone.Collection(rawReasons);
     // if activity doesn't exist, default to array
-    var activity = rawActivity ? rawActivity : [];
+    var activity = typeof rawActivity !== 'undefined' ? rawActivity : [];
     MyApp.activity = new Backbone.Collection(activity);
     if (rawComments) {
         MyApp.comments = new CommentCollection(rawComments);
