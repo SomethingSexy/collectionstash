@@ -610,7 +610,9 @@ define(['app/app.user.profile',
                 //     // to handle that for now
                 //     App.collectibles.reset();
                 //     App.collectibles.fullCollection.reset();
-                App.collectibles.getFirstPage().done(function() {
+                App.collectibles.getFirstPage({
+                    silent: true
+                }).done(function() {
                     renderStash('tiles');
                 });
                 // }
@@ -628,7 +630,11 @@ define(['app/app.user.profile',
                 //         renderStash('list');
                 //     });
                 // } else if (App.collectibles.isEmpty()) {
-                App.collectibles.getFirstPage().done(function() {
+
+                // pass in silent true here otherwise it will render twice
+                App.collectibles.getFirstPage({
+                    silent: true
+                }).done(function() {
                     renderStash('list');
                 });
                 // } else {
@@ -642,7 +648,9 @@ define(['app/app.user.profile',
                 App.wishlist = new WishlistCollection([], {
                     username: App.profile.get('username')
                 });
-                App.wishlist.getFirstPage().done(function() {
+                App.wishlist.getFirstPage({
+                    silent: true
+                }).done(function() {
                     renderWishlist('tiles');
                 });
 
@@ -666,7 +674,9 @@ define(['app/app.user.profile',
                     username: App.profile.get('username'),
                     mode: 'server'
                 });
-                App.wishlist.getFirstPage().done(function() {
+                App.wishlist.getFirstPage({
+                    silent: true
+                }).done(function() {
                     renderWishlist('list');
                 });
                 // if (App.wishlist.mode !== 'server') {
@@ -695,7 +705,9 @@ define(['app/app.user.profile',
                 // to handle that for now
                 App.sales.reset();
                 App.sales.fullCollection.reset();
-                App.sales.getFirstPage().done(function() {
+                App.sales.getFirstPage({
+                    silent: true
+                }).done(function() {
                     renderSale(layout);
                 });
             },
@@ -704,7 +716,9 @@ define(['app/app.user.profile',
                 App.layout.main.show(new LoaderView());
 
                 if (App.photos.isEmpty()) {
-                    App.photos.getFirstPage().done(function() {
+                    App.photos.getFirstPage({
+                        silent: true
+                    }).done(function() {
                         renderPhotos();
                     });
                 } else {
@@ -736,7 +750,9 @@ define(['app/app.user.profile',
                 layout.history.show(new LoaderView());
 
                 if (App.history.isEmpty()) {
-                    App.history.getFirstPage().done(function() {
+                    App.history.getFirstPage({
+                        silent: true
+                    }).done(function() {
                         renderHistory(layout);
                     });
                 } else {
@@ -753,7 +769,9 @@ define(['app/app.user.profile',
                 App.layout.main.show(layout);
 
                 if (App.submissions.isEmpty()) {
-                    App.submissions.getFirstPage().done(function() {
+                    App.submissions.getFirstPage({
+                        silent: true
+                    }).done(function() {
                         renderSubmissions(layout);
                     });
                 } else {
@@ -761,7 +779,9 @@ define(['app/app.user.profile',
                 }
 
                 if (App.edits.isEmpty()) {
-                    App.edits.getFirstPage().done(function() {
+                    App.edits.getFirstPage({
+                        silent: true
+                    }).done(function() {
                         renderEdits(layout);
                     });
                 } else {

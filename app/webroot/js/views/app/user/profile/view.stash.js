@@ -58,6 +58,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             self.handler.wookmark();
         },
         next: function(event) {
+            $('._more', this.el).button('loading');
             this.collection.getNextPage();
         },
         onItemRemoved: function() {
@@ -78,6 +79,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         renderMore: function() {
             var self = this;
             var ItemView;
+            $('._more', this.el).button('reset');
+
             if (this.collection.state.currentPage === 1) {
                 $(this.itemViewContainer, this.el).empty();
             }
@@ -103,7 +106,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             // Update the layout.
             self.handler.wookmark();
             // });
-            if (!this.collection.hasNextPage()) {
+            if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
                 $('._more', this.el).hide();
             } else {
                 $('._more', this.el).show();
