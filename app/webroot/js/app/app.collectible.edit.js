@@ -56,6 +56,7 @@ define(function(require) {
     require('blockui');
     require('backbone.validation');
     require('backbone.bootstrap-modal');
+    require('jquery.blueimp-gallery');
     /**
      * TODO: Known Issues:
      * - If you add a brand to a manufacturer, then go back to that list and find a brand, it won't
