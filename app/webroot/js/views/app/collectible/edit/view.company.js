@@ -1,5 +1,5 @@
 define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectible/edit/company.add.mustache', 'text!templates/app/collectible/edit/company.edit.mustache', 'select2', 'backbone.validation'], function(Backbone, $, Mustache, dust, addTemplate, editTemplate) {
-
+    var lastResults = [];
     var ManufacturerView = Backbone.View.extend({
         modal: 'modal',
         events: {
@@ -42,6 +42,7 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
                     text: brand.get('License').name
                 });
             });
+            lastResults = this.brandArray;
             this.listenTo(this.model, 'change:LicensesManufacture', this.renderBody);
         },
         renderBody: function() {
@@ -53,9 +54,29 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
             $('.modal-body', self.el).html(Mustache.render(this.template, data));
 
             $('.company-typeahead', self.el).select2({
+                placeholder: 'Search or add a new brand.',
                 data: {
                     results: this.brandArray,
                 },
+                createSearchChoice: function(term, data) {
+                    if (lastResults.some(function(r) {
+                        return r.text == term
+                    })) {
+                        return {
+                            id: data.id,
+                            text: term
+                        };
+                    } else {
+                        return {
+                            id: term,
+                            text: term
+                        };
+                    }
+                },
+                allowClear: true,
+                dropdownCssClass: "bigdrop"
+            }).on('select2-removed', function() {
+                $('.input-man-brand-error', self.el).text('');
             });
         },
         render: function() {
