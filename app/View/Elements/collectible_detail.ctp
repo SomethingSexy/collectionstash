@@ -392,7 +392,12 @@ var collectibleStatus = {
 	status:<?php echo json_encode($collectibleDetail['Status']); ?>
 };
 var collectible = <?php echo json_encode($collectibleDetail['Collectible']); ?>;
-var transactionsGraphData = <?php echo json_encode($transactionGraphData); ?>;
+
+<?php 
+if(isset($transactionGraphData)){
+	echo 'var transactionsGraphData = ' . json_encode($transactionGraphData) .';';
+}
+?>
  <?php
 if ($isUserAdmin) {
 	echo 'var allowDeleteListing = true;';
