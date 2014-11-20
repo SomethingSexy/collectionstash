@@ -65,7 +65,13 @@ class Activity extends AppModel
                             $data->object->object_displayName = 'collectible';
                         }
                     } else if ($data->object->objectType === 'attribute') {
-                        $data->object->object_displayName = $data->object->data->Attribute->name;
+                        if (isset($data->object->data->Attribute)) {
+                            $data->object->object_displayName = $data->object->data->Attribute->name;
+                        } else if (isset($data->object->data->displayName)) {
+                            $data->object->object_displayName = $data->object->data->displayName;
+                        } else {
+                            $data->object->object_displayName = 'part'
+                        }
                     } else if ($data->object->objectType === 'tag') {
                         $data->object->object_displayName = $data->object->data->Tag->tag;
                         $data->object->url = '/collectibles/search/?t=' . $data->object->data->Tag->id;
