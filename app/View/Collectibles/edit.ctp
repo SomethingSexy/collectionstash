@@ -1,6 +1,5 @@
 <?php
-echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
-echo $this -> Minify -> script('locale', array('inline' => false));
+
 
 echo $this -> Html -> scriptBlock('var collectibleId =' . $collectibleId.';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var uploadDirectory ="' . $this -> FileUpload -> getUploadDirectory().'";', array('inline' => false));
@@ -26,6 +25,9 @@ if(isset($allowDelete) && $allowDelete){
 } else {
 	echo $this -> Html -> scriptBlock('var allowDelete = false;', array('inline' => false));
 }
+// load these last so we the other data is loaded first!
+echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
+echo $this -> Minify -> script('locale', array('inline' => false));
 ?>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
