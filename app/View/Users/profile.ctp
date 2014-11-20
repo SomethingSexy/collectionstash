@@ -1,4 +1,3 @@
-<?php echo $this -> Html -> script('pages/page.user.profile', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawProfile = ' .  json_encode($profile) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawFacts = ' .  json_encode($facts) . ';', array('inline' => false));?>
 <?php echo $this -> Html -> scriptBlock('var rawPermissions = ' .  json_encode($permissions) . ';', array('inline' => false));?>
@@ -17,3 +16,7 @@ if(isset($comments)){
 	echo $this -> Html -> scriptBlock('var rawComments = ' .  json_encode($comments) . ';', array('inline' => false));
 }?>
 <?php echo $this -> Html -> scriptBlock('var rawWork = ' . json_encode($works).';', array('inline' => false));  ?>
+<?php 
+//load this one last so we know the data is there
+echo $this -> Html -> script('pages/page.user.profile', array('inline' => false));
+?>
