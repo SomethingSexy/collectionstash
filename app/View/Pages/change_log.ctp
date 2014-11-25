@@ -1,5 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.5.2</h3>
+    <ul>
+        <li>Fixed an issue where you could not edit a collectible name that contained a ". (#151)</li>
+        <li>Fixed an issue where old or missing eBay transactions were not deleting. (#148)</li>
+    </ul>       
     <h3>Release Notes for v3.5.1</h3>
     <ul>
         <li>Fixed an issue where you could not add new brands to a manufacturer. (#147)</li>
