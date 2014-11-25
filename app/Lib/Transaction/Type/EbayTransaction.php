@@ -31,7 +31,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         
         $listingData = $this->processTransaction($listingData, $user);
         
-        if (!$listingData) {
+        if (!$listingData || isset($listData['error'])) {
             $retVal['response']['isSuccess'] = false;
             $retVal['response']['isSuccess']['message'] = __('There was an error retrieving the listing, either it did not exist or it is too old.');
             $retVal['response']['errors'] = $errors;
@@ -122,7 +122,14 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         // only process if Ack is success
         
         if ($responseObj->Ack !== 'Success') {
-            return false;
+            // else i f error code is 17 that means it is missing or gone, so delete
+            if ($responseObj->Errors->ErrorCode === '17') {
+                // convert to our arbitary code system :)
+                return array('error' => array('code' => '1', 'missing' => true));
+            } else {
+                // we don't handle yet
+                return false;
+            }
         }
         
         $listType = $responseObj->Item->ListingType;
