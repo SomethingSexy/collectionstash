@@ -1,5 +1,9 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.6.0</h3>
+    <ul>
+        <li>Updated part view to show the image and collectibles linked to the part. (#150)</li>
+    </ul> 
     <h3>Release Notes for v3.5.2</h3>
     <ul>
         <li>Fixed an issue where you could not edit a collectible name that contained a ". (#151)</li>
