@@ -78,6 +78,8 @@ linux: ./cake
 ./cake -app /var/www/collectionstash/app process_points
 
 /var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app process_points
+/var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app process_transactions
+
 
 ./cake -app /var/www/collectionstash/app one_time_add_points_fact_table
 
