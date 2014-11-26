@@ -140,7 +140,7 @@ class AttributesController extends AppController
             $this->redirect(array('action' => 'index'));
         }
         
-        $attribute = $this->Attribute->find('first', array('conditions' => array('Attribute.id' => $id), 'contain'=> array('Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Status', 'User', 'AttributesUpload' => array('Upload'), 'AttributesCollectible' => array('Collectible'))));
+        $attribute = $this->Attribute->find('first', array('conditions' => array('Attribute.id' => $id), 'contain' => array('Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Status', 'User', 'AttributesUpload' => array('Upload'), 'AttributesCollectible' => array('Collectible' => array('CollectiblesUpload' => array('Upload'))))));
         
         if (!empty($attribute) && $attribute['Attribute']['status_id'] === '4') {
             $this->set(compact('attribute'));

@@ -87,39 +87,106 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                <dl>
-                    <dt>
-                    <?php echo __('Added By'); ?>
-                    </dt>
-                    <dd>
-                    <?php
-                    if (!empty($attribute['User']['username'])) {
-                    echo $attribute['User']['username'];
-                    } else {
-                    echo '&nbsp;';
-                    }
-                    ?>
-                    </dd>
-                    <dt>
-                    <?php echo __('Date Added'); ?>
-                    </dt>
-                    <dd>
-                    <?php
-					$datetime = strtotime($attribute['Attribute']['created']);
-					$mysqldate = date("m/d/y g:i A", $datetime);
-					echo $mysqldate;
-					?>
-                    </dd>
-                    <?php
-					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'attribute_category_id'), __('Category', true), array('value' =>  $attribute['AttributeCategory']['path_name'], 'compare' => false));
-					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'name'), __('Name', true), array('compare' => false));
-					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'description'), __('Description', true), array('compare' => false));
-					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer', true), array('compare' => false));
-					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Scale', 'Field' => 'scale'), __('Scale', true), array('compare' => false));
-					?>
-                </dl>                
+                    <dl>
+                        <dt>
+                        <?php echo __('Added By'); ?>
+                        </dt>
+                        <dd>
+                        <?php
+                        if (!empty($attribute['User']['username'])) {
+                        echo $attribute['User']['username'];
+                        } else {
+                        echo '&nbsp;';
+                        }
+                        ?>
+                        </dd>
+                        <dt>
+                        <?php echo __('Date Added'); ?>
+                        </dt>
+                        <dd>
+                        <?php
+    					$datetime = strtotime($attribute['Attribute']['created']);
+    					$mysqldate = date("m/d/y g:i A", $datetime);
+    					echo $mysqldate;
+    					?>
+                        </dd>
+                        <?php
+    					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'attribute_category_id'), __('Category', true), array('value' =>  $attribute['AttributeCategory']['path_name'], 'compare' => false));
+    					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'name'), __('Name', true), array('compare' => false));
+    					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Attribute', 'Field' => 'description'), __('Description', true), array('compare' => false));
+    					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Manufacture', 'Field' => 'title'), __('Manufacturer', true), array('compare' => false));
+    					echo $this -> CollectibleDetail -> field($attribute, array('Model' => 'Scale', 'Field' => 'scale'), __('Scale', true), array('compare' => false));
+    					?>
+                    </dl>                
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"> 
+                            <h3 class="panel-title"><?php echo __('Collectibles tied to this part'); ?></h3>
+                        </div>
+                        <div class="panel-body">
+                        <?php
+                        foreach ($attribute['AttributesCollectible'] as $collectible) {
+                            echo '<div class="row spacer">';  
+                            //TODO: the problem is with the thumbnail/span1 in the table
+                            echo '<div class="col-md-1">';
+
+                            if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
+                                foreach ($collectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
+                                    if ($upload['primary']) {
+                                        echo '<a class="thumbnail col-md-12" data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files')) . '</a>';
+                                        break;
+                                    }
+                                }
+
+                            } else {
+                                echo '<a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>';
+                            }
+
+                            echo '</div>';
+
+                            echo '<div class="col-md-7">';
+                            // name
+                            echo '<div class="row">';
+                            echo '<div class="col-md-12">';
+                            echo '<span class="name">';
+                            echo $collectible['Collectible']['name'];
+                            if ($collectible['Collectible']['exclusive']) {
+                                echo __(' | Exclusive');
+                            }
+
+                            if ($collectible['Collectible']['variant']) {
+                                echo ' | <a target="_blank" href="/collectibles/view/' . $collectible['Collectible']['variant_collectible_id'] . '">' . __('Variant') . '</a>';
+                            }
+                            echo '</span>';
+                            echo '</div>';
+                            // span10
+                            echo '</div>';
+
+                            echo '<div class="row">';
+                            echo '<div class="col-md-12">';
+                            echo '<span class="description">';
+                            $description = str_replace('\n', "\n", $collectible['Collectible']['description']);
+                            $description = str_replace('\r', "\r", $description);
+                            $description = nl2br($description);
+                            $description = html_entity_decode($description);
+
+                            echo $description;
+                            echo '</span>';
+                            echo '</div>';
+                            echo '</div>';  
+                            
+                            echo '</div>';                                                        
+
+                            echo '</div>'; // top row spacer
+                        }
+                        ?>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
     </div>
 </div>
