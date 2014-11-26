@@ -21,24 +21,6 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 		$outputAttribtes = '';
 		$added = false;
 		foreach ($collectibleCore['AttributesCollectible'] as $key => $attribute) {
-
-			if (!empty($attribute['Attribute']['AttributesCollectible'])) {
-				$popup = '<ul>';
-				foreach ($attribute['Attribute']['AttributesCollectible'] as $key => $collectible) {
-					if (!empty($collectible['Collectible']['name'])) {
-						$popup .= '<li>';
-						$popup .= "<a href='/collectibles/view/" . $collectible['Collectible']['id'] . "'>" . $collectible['Collectible']['name'] . "</a>";
-						$popup .= '</li>';
-					}
-
-				}
-				$popup .= '</ul>';
-			} else {
-				$popup = "<ul class='list-unstyled'>";
-				$popup .= '<li>' . __('Not attached to any collectibles') . '</li>';
-				$popup .= '</ul>';
-			}
-
 			$outputAttribtes .= '<div class="row spacer"><div class="col-md-12 attribute">';
 
 			$outputAttribtes .= '<div class="row">';
@@ -49,7 +31,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			if ($attribute['Attribute']['status_id'] === '2') {
 				$outputAttribtes .= '<span><i class="fa fa-plus"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
 			} else {
-				$outputAttribtes .= '<span class="popup" data-trigger="manual" data-content="' . $popup . '" data-original-title="Part Information"><i class="fa fa-info"></i></span><span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
+				$outputAttribtes .= '<a target="_blank" title="click to see more information" href="/part/' . $attribute['Attribute']['id'] . '"><i class="fa fa-info-circle"></i></a> <span class="path">' . $attribute['Attribute']['AttributeCategory']['path_name'] . '</span>';
 
 			}
 
@@ -70,7 +52,7 @@ $attributeEmpty = empty($collectibleCore['AttributesCollectible']);
 			$outputAttribtes .= '</div>';
 
 			$outputAttribtes .= '<div class="row">';
-			$outputAttribtes .= '<div class="col-md-2">';
+			$outputAttribtes .= '<div class="col-md-1">';
 
 			if (!empty($attribute['Attribute']['AttributesUpload'])) {
 				foreach ($attribute['Attribute']['AttributesUpload'] as $key => $upload) {
