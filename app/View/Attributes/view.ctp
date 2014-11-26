@@ -152,7 +152,7 @@
                             echo '<div class="row">';
                             echo '<div class="col-md-12">';
                             echo '<span class="name">';
-                            echo $collectible['Collectible']['name'];
+                            echo '<a target="_blank" href="/collectibles/view/' . $collectible['Collectible']['id'] . '">' . $collectible['Collectible']['name'] . '</a>';
                             if ($collectible['Collectible']['exclusive']) {
                                 echo __(' | Exclusive');
                             }

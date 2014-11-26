@@ -75,12 +75,12 @@ class SubmissionActivity extends BaseActivity {
 			$objectJSON = $this -> buildObject($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'] . '/' . $this -> object['Collectible']['slugField'], 'collectible', $this -> object);
 			$retVal = array_merge($retVal, $objectJSON);
 		} else if ($this -> type === 'Attribute') {
-			$objectJSON = $this -> buildObject($this -> object['id'], '/attributes/view/' . $this -> object['id'], 'attribute', array('type' => 'new', 'displayName' => $this -> object['name']));
+			$objectJSON = $this -> buildObject($this -> object['id'], '/part/' . $this -> object['id'], 'attribute', array('type' => 'new', 'displayName' => $this -> object['name']));
 			$retVal = array_merge($retVal, $objectJSON);
 		} else if ($this -> type === 'AttributesCollectible') {
 			// remove this if it has it
 			unset($this -> object['Attribute']['AttributesCollectible']);
-			$objectJSON = $this -> buildObject($this -> object['Attribute']['id'], '/attributes/view/' . $this -> object['Attribute']['id'], 'attribute', $this -> object);
+			$objectJSON = $this -> buildObject($this -> object['Attribute']['id'], '/part/' . $this -> object['Attribute']['id'], 'attribute', $this -> object);
 			$retVal = array_merge($retVal, $objectJSON);
 
 			$targetJSON = $this -> buildTarget($this -> object['Collectible']['id'], '/collectibles/view/' . $this -> object['Collectible']['id'], 'collectible', $this -> object['Collectible']['name']);
@@ -107,7 +107,7 @@ class SubmissionActivity extends BaseActivity {
 			$objectJSON = $this -> buildObject($this -> object['AttributesUpload']['id'], '/files/' . $this -> object['Upload']['name'], 'photo', $this -> object);
 			$retVal = array_merge($retVal, $objectJSON);
 
-			$targetJSON = $this -> buildTarget($this -> object['Attribute']['id'], '/attributes/view/' . $this -> object['Attribute']['id'], 'attribute', $this -> object['Attribute']['name']);
+			$targetJSON = $this -> buildTarget($this -> object['Attribute']['id'], '/part/' . $this -> object['Attribute']['id'], 'attribute', $this -> object['Attribute']['name']);
 			$retVal = array_merge($retVal, $targetJSON);
 		} else if ($this -> type === 'Listing') {
 			$objectJSON = $this -> buildObject($this -> object['Listing']['id'], $this -> object['Listing']['url'], 'listing', $this -> object);

@@ -140,7 +140,10 @@ class AttributesController extends AppController
             $this->redirect(array('action' => 'index'));
         }
         
-        $attribute = $this->Attribute->find('first', array('conditions' => array('Attribute.id' => $id), 'contain' => array('Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Status', 'User', 'AttributesUpload' => array('Upload'), 'AttributesCollectible' => array('Collectible' => array('CollectiblesUpload' => array('Upload'))))));
+        $attribute = $this->Attribute->find('first', array('conditions' => array('Attribute.id' => $id), 'contain' => array('Manufacture', 'Scale', 'Artist', 'AttributeCategory', 'Status', 'User', 'AttributesUpload' => array('Upload'))));
+        
+        $attributeCollectibles = $this->Attribute->AttributesCollectible->find('all', array('joins' => array(array('alias' => 'Collectible2', 'table' => 'collectibles', 'type' => 'inner', 'conditions' => array('Collectible2.id = AttributesCollectible.collectible_id', 'Collectible2.status_id = "4"'))), 'conditions' => array('AttributesCollectible.attribute_id' => $id), 'contain' => array('Collectible' => array('CollectiblesUpload' => array('Upload')))));
+        $attribute['AttributesCollectible'] = $attributeCollectibles;
         
         if (!empty($attribute) && $attribute['Attribute']['status_id'] === '4') {
             $this->set(compact('attribute'));
