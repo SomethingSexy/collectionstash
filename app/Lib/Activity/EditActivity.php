@@ -131,7 +131,7 @@ class EditActivity extends BaseActivity {
 				$targetJSON = $this -> buildTarget($this -> edit['Collectible']['id'], '/collectibles/view/' . $this -> edit['Collectible']['id'], 'collectible', $this -> edit['Collectible']['name']);
 				$retVal = array_merge($retVal, $targetJSON);
 			} else if ($this -> editType === 'Attribute') {
-				$targetJSON = $this -> buildTarget($this -> edit['Attribute']['id'], '/attributes/view/' . $this -> edit['Attribute']['id'], 'attribute', $this -> edit['Attribute']['name']);
+				$targetJSON = $this -> buildTarget($this -> edit['Attribute']['id'], '/part/' . $this -> edit['Attribute']['id'], 'attribute', $this -> edit['Attribute']['name']);
 				$retVal = array_merge($retVal, $targetJSON);
 			}
 			// right now the only thing we have to support through this
@@ -177,7 +177,7 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditAttributeTarget($edit) {
 		// If they change the name, that will get reflected here but eh not a huge deal right now
-		$targetJSON = $this -> buildTarget($edit['AttributeEdit']['base_id'], '/attributes/view/' . $edit['AttributeEdit']['base_id'], 'attribute', $edit['AttributeEdit']['name']);
+		$targetJSON = $this -> buildTarget($edit['AttributeEdit']['base_id'], '/part/' . $edit['AttributeEdit']['base_id'], 'attribute', $edit['AttributeEdit']['name']);
 
 		return $targetJSON;
 	}
@@ -234,7 +234,7 @@ class EditActivity extends BaseActivity {
 
 	private function buildEditAttributesUploadTarget($edit) {
 		// not sure I will be able to get the collectible name here yet
-		$targetJSON = $this -> buildTarget($edit['AttributesUpload']['attribute_id'], '/attributes/view/' . $edit['AttributesUpload']['attribute_id'], 'attribute', null);
+		$targetJSON = $this -> buildTarget($edit['AttributesUpload']['attribute_id'], '/part/' . $edit['AttributesUpload']['attribute_id'], 'attribute', null);
 
 		return $targetJSON;
 	}
