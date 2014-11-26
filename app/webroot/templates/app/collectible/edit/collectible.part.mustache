@@ -6,21 +6,7 @@
 			{{/isNew}}
 
 			{{^isNew}}
-			<span title="Part Information" data-content="
-
-			<ul>
-			{{#part.AttributesCollectible}}
-			{{#Collectible.name}}
-			<li>
-			<a target='_blank' href='/collectibles/view/{{Collectible.id}}'>{{Collectible.name}}</a>
-			</li>
-			{{/Collectible.name}}
-			{{/part.AttributesCollectible}}
-			{{^part.AttributesCollectible}}
-			<li>Not attached to any collectibles</li>
-			{{/part.AttributesCollectible}}
-			</ul>
-			" class="popup"><i class="fa fa-info-circle"></i></span>
+			<a title="click to see more information" target="_blank" href="/part/{{part.id}}"><i class="fa fa-info-circle"></i></a>
 			{{/isNew}}
 			<span class="path">{{part.AttributeCategory.path_name}}</span>
 		</div>
