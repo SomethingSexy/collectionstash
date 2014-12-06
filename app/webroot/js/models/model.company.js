@@ -14,6 +14,15 @@ define(['backbone'], function(Backbone) {
                 msg: 'Must be a valid url.'
             }, {
                 required: false
+            }],
+            bio: [{
+                rangeLength: [0, 5000],
+                msg: 'Invalid length.'
+            }, {
+                required: false
+            }, {
+                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'"\/-]+$/i,
+                msg: 'Invalid characters'
             }]
         }
     });
