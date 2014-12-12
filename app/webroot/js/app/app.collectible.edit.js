@@ -614,6 +614,7 @@ define(function(require) {
                     if (_.isArray(response)) {
                         // App.comments.add(response);
                     }
+                    manufacturerList.add(model);
                     partsLayout.modal.hideModal();
                 });
             });
