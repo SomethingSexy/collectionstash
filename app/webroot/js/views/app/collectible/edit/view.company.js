@@ -51,7 +51,7 @@ define(function(require) {
 
             this.listenTo(this.model, 'change:LicensesManufacture', this.render);
             this.listenTo(this.model, 'validated:valid', function() {
-                console.log(arguments);
+         
             });
             this.listenTo(this.model, 'validated:invalid', function(model, invalid) {
                 self.onValiationError(invalid);

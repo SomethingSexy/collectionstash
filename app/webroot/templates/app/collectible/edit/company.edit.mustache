@@ -1,43 +1,68 @@
-<dl class="">
-	<dt>
-		Manufacturer
-	</dt>
-	<dd class="data-value">
-		{{{manufacturer.title}}}
-	</dd>
-	<dt>
-		Url
-	</dt>
-	<dd class="data-value">
-		{{{{manufacturer.url}}}
-	</dd>
-</dl>
-<form class="form-horizontal spacer">
-	<fieldset>
-		<legend>
-			Brands
-		</legend>
-		<div class="form-group">
-			<label class="control-label col-lg-2 " for="inputManBrand">Brand</label>
-			<div class="input-group col-lg-10">
-				<div class="">
-					<input type="hidden" class="bigdrop select2-offscreen company-typeahead typehead-add" value="" style="width: 100%;" name="name" tabindex="-1" title="">
-					{{! <input id="inputManBrand" class="form-control typeahead" type="text" value="" name="brand" maxlength="200" autocomplete="off"> }}
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			×
+		</button>
+		<h4 id="myModalLabel">Edit Company</h4>
+	</div>
+	<div class="modal-body">
+		<dl class="">
+			<dt>
+				Manufacturer
+			</dt>
+			<dd class="data-value">
+				{{{title}}}
+			</dd>
+			<dt>
+				Bio
+			</dt>
+			<dd class="data-value">
+				{{{bio}}}
+			</dd>			
+			<dt>
+				Url
+			</dt>
+			<dd class="data-value">
+				{{{{url}}}
+			</dd>
+		</dl>
+		<form class="form-horizontal spacer">
+			<fieldset>
+				<legend>
+					Brands
+				</legend>
+				<div class="form-group">
+					<label class="control-label col-lg-2 " for="inputManBrand">Brand</label>
+					<div class="input-group col-lg-10">
+						<div class="">
+							<input type="hidden" class="bigdrop select2-offscreen company-typeahead typehead-add" value="" style="width: 100%;" name="name" tabindex="-1" title="">
+							{{! <input id="inputManBrand" class="form-control typeahead" type="text" value="" name="brand" maxlength="200" autocomplete="off"> }}
+						</div>
+						<span class="input-group-btn">
+							<button class="btn btn-primary manufacturer-brand-add" type="button">
+								Add
+							</button>
+						</span>
+						<span class="help-block input-man-brand-error"></span>
+					</div>
 				</div>
-				<span class="input-group-btn">
-					<button class="btn btn-primary manufacturer-brand-add" type="button">
-						Add
-					</button>
-				</span>
-				<span class="help-block input-man-brand-error"></span>
-			</div>
-		</div>
-		<ul class="manufacturer-brands list-group spacer">
-			{{#manufacturer.LicensesManufacture}}
-			<li class="list-group-item">
-				{{License.name}}
-			</li>
-			{{/manufacturer.LicensesManufacture}}
-		</ul>
-	</fieldset>
-</form>
+				<ul class="manufacturer-brands list-group spacer">
+					{{#LicensesManufacture}}
+					<li class="list-group-item">
+						{{License.name}}
+					</li>
+					{{/LicensesManufacture}}
+				</ul>
+			</fieldset>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+			Close
+		</button>
+		<button class="btn btn-primary save" autocomplete="off">
+			Add
+		</button>
+	</div>
+</div>

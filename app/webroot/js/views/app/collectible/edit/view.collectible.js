@@ -410,63 +410,64 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             this.trigger('company:add');
         },
         editManufacturer: function() {
-            var self = this;
-            if (this.manufacturerView) {
-                this.manufacturerView.remove();
-            }
-            this.manufacturer.on('sync', function() {
-                $.blockUI({
-                    message: '<button class="close" data-dismiss="alert" type="button">×</button>The manufacturer has been updated!',
-                    showOverlay: false,
-                    css: {
-                        top: '100px',
-                        'background-color': '#DDFADE',
-                        border: '1px solid #93C49F',
-                        'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                        'border-radius': '4px 4px 4px 4px',
-                        color: '#333333',
-                        'margin-bottom': '20px',
-                        padding: '8px 35px 8px 14px',
-                        'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                        'z-index': 999999
-                    },
-                    timeout: 2000
-                });
-                this.render();
-                // unbind all
-                this.manufacturer.off();
-                $('#manufacturerModal', 'body').modal('hide');
-            }, this);
-            this.manufacturerView = new CompanyView({
-                model: this.manufacturer,
-                brands: this.brands,
-                mode: 'edit'
-            });
-            $('body').append(this.manufacturerView.render().el);
-            $('#manufacturerModal', 'body').modal({
-                backdrop: 'static'
-            });
-            $('#manufacturerModal', 'body').on('hidden.bs.modal', function() {
-                self.manufacturerView.remove();
-                // on close I need to make sure we do not have
-                // any brands attached to this manufacturer that are
-                // not officially saved
-                if (self.manufacturer.get('LicensesManufacture')) {
-                    var brands = self.manufacturer.get('LicensesManufacture');
-                    var len = brands.length;
-                    while (len--) {
-                        brand = brands[len];
-                        if (!brand.hasOwnProperty('id')) {
-                            brands.splice(len, 1);
-                        }
-                    }
-                    self.manufacturer.set({
-                        LicensesManufacture: brands
-                    }, {
-                        silent: true
-                    });
-                }
-            });
+            this.trigger('company:edit', this.manufacturer);
+            // var self = this;
+            // if (this.manufacturerView) {
+            //     this.manufacturerView.remove();
+            // }
+            // this.manufacturer.on('sync', function() {
+            //     $.blockUI({
+            //         message: '<button class="close" data-dismiss="alert" type="button">×</button>The manufacturer has been updated!',
+            //         showOverlay: false,
+            //         css: {
+            //             top: '100px',
+            //             'background-color': '#DDFADE',
+            //             border: '1px solid #93C49F',
+            //             'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
+            //             'border-radius': '4px 4px 4px 4px',
+            //             color: '#333333',
+            //             'margin-bottom': '20px',
+            //             padding: '8px 35px 8px 14px',
+            //             'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
+            //             'z-index': 999999
+            //         },
+            //         timeout: 2000
+            //     });
+            //     this.render();
+            //     // unbind all
+            //     this.manufacturer.off();
+            //     $('#manufacturerModal', 'body').modal('hide');
+            // }, this);
+            // this.manufacturerView = new CompanyView({
+            //     model: this.manufacturer,
+            //     brands: this.brands,
+            //     mode: 'edit'
+            // });
+            // $('body').append(this.manufacturerView.render().el);
+            // $('#manufacturerModal', 'body').modal({
+            //     backdrop: 'static'
+            // });
+            // $('#manufacturerModal', 'body').on('hidden.bs.modal', function() {
+            //     self.manufacturerView.remove();
+            //     // on close I need to make sure we do not have
+            //     // any brands attached to this manufacturer that are
+            //     // not officially saved
+            //     if (self.manufacturer.get('LicensesManufacture')) {
+            //         var brands = self.manufacturer.get('LicensesManufacture');
+            //         var len = brands.length;
+            //         while (len--) {
+            //             brand = brands[len];
+            //             if (!brand.hasOwnProperty('id')) {
+            //                 brands.splice(len, 1);
+            //             }
+            //         }
+            //         self.manufacturer.set({
+            //             LicensesManufacture: brands
+            //         }, {
+            //             silent: true
+            //         });
+            //     }
+            // });
         },
         editManufacturerSeries: function() {
             $.blockUI({
