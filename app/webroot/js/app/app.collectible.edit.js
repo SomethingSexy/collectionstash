@@ -19,6 +19,7 @@ define(function(require) {
         PartRemoveDuplicateView = require('views/app/collectible/edit/view.collectible.part.remove.duplicate'),
         PartAddExistingView = require('views/app/collectible/edit/view.part.add.existing'),
         CollectibleSearchView = require('views/app/collectible/edit/view.collectible.search'),
+        CompanyView = require('views/app/collectible/edit/view.company'),
         ModalRegion = require('views/common/modal.region'),
         CollectibleModel = require('models/model.collectible'),
         Status = require('models/model.status'),
@@ -600,6 +601,27 @@ define(function(require) {
             }
             //TODO: At some point it might warrant a whole new view for customs
             var collectibleView = new CollectibleView(collectibleViewData);
+
+            collectibleView.on('company:add', function() {
+                var model = new CompanyModel();
+                var companyView = new CompanyView({
+                    model: model,
+                    brands: brands,
+                    mode: 'add'
+                });
+                partsLayout.modal.show(companyView);
+                model.once('sync', function(model, response, options) {
+                    if (_.isArray(response)) {
+                        // App.comments.add(response);
+                    }
+                    partsLayout.modal.hideModal();
+                });
+            });
+
+            collectibleView.on('company:edit', function() {
+
+            });
+
             $('#photo-container').append(new PhotoView({
                 collection: uploads,
                 eventManager: pageEvents

@@ -1,39 +1,38 @@
-define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectible/edit/company.add.mustache', 'text!templates/app/collectible/edit/company.edit.mustache', 'select2', 'backbone.validation'], function(Backbone, $, Mustache, dust, addTemplate, editTemplate) {
+define(function(require) {
+    var Backbone = require('backbone'),
+        Marionette = require('marionette'),
+        $ = require('jquery'),
+        Mustache = require('mustache'),
+        dust = require('dust'),
+        addTemplate = require('text!templates/app/collectible/edit/company.add.mustache'),
+        editTemplate = require('text!templates/app/collectible/edit/company.edit.mustache'),
+        ErrorMixin = require('views/common/mixin.error'),
+        growl = require('views/common/growl');
+    require('select2');
+    require('marionette.mustache');
+
+
     var lastResults = [];
-    var ManufacturerView = Backbone.View.extend({
-        modal: 'modal',
+    var CompanyView = Marionette.ItemView.extend({
+        getTemplate: function() {
+            if (this.mode === 'edit') {
+                return editTemplate;
+            } else if (this.mode === 'add') {
+                return addTemplate;
+            }
+        },
         events: {
-            "change #inputManName": "fieldChanged",
-            "change #inputManUrl": "fieldChanged",
-            'change textarea': 'fieldChanged',
             'click .save': 'saveManufacturer',
             'click .manufacturer-brand-add': 'addBrand'
         },
         initialize: function(options) {
             var self = this;
             this.mode = options.mode;
-            if (options.mode === 'edit') {
-                this.template = editTemplate;
-            } else if (options.mode === 'add') {
-                this.template = addTemplate;
-            }
+
             if (this.mode === 'add') {
-                Backbone.Validation.bind(this, {
-                    valid: function(view, attr, selector) {
-                        view.$('[' + selector + '~="' + attr + '"]').removeClass('invalid').removeAttr('data-error');
-                        view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-                        view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').removeClass('has-error');
-                        // do something
-                    },
-                    invalid: function(view, attr, error, selector) {
-                        view.$('[' + selector + '~="' + attr + '"]').addClass('invalid').attr('data-error', error);
-                        view.$('[' + selector + '~="' + attr + '"]').closest('.form-group').addClass('has-error');
-                        view.$('[' + selector + '~="' + attr + '"]').parent().find('._error').remove();
-                        view.$('[' + selector + '~="' + attr + '"]').after('<span class="help-block _error">' + error + '</span>');
-                        // do something
-                    }
-                });
+
             }
+
             this.brands = options.brands;
             this.brandArray = [];
             options.brands.each(function(brand) {
@@ -43,15 +42,28 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
                 });
             });
             lastResults = this.brandArray;
-            this.listenTo(this.model, 'change:LicensesManufacture', this.renderBody);
-        },
-        renderBody: function() {
-            var self = this;
-            var data = {
-                manufacturer: this.model.toJSON()
-            };
 
-            $('.modal-body', self.el).html(Mustache.render(this.template, data));
+            if (!this.model.get('LicensesManufacture')) {
+                this.model.LicensesManufacture = [];
+            } else {
+                this.model.LicensesManufacture = this.model.get('LicensesManufacture');
+            }
+
+            this.listenTo(this.model, 'change:LicensesManufacture', this.render);
+            this.listenTo(this.model, 'validated:valid', function() {
+                console.log(arguments);
+            });
+            this.listenTo(this.model, 'validated:invalid', function(model, invalid) {
+                self.onValiationError(invalid);
+            });
+        },
+        serializeData: function() {
+            var data = this.model.toJSON();
+            data.LicensesManufacture = this.model.LicensesManufacture;
+            return data;
+        },
+        onRender: function() {
+            var self = this;
 
             $('.company-typeahead', self.el).select2({
                 placeholder: 'Search or add a new brand.',
@@ -79,52 +91,39 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
                 $('.input-man-brand-error', self.el).text('');
             });
         },
-        render: function() {
+        saveManufacturer: function(event) {
             var self = this;
-            dust.render(this.modal, {
-                modalId: 'manufacturerModal',
-                modalTitle: 'Manufacturer'
-            }, function(error, output) {
-                $(self.el).html(output);
-            });
-            this.renderBody();
-            return this;
-        },
-        selectionChanged: function(e) {
-            var field = $(e.currentTarget);
-            var value = $("option:selected", field).val();
+
             var data = {};
-            data[field.attr('name')] = value;
-            this.model.set(data);
-        },
-        fieldChanged: function(e) {
-            var field = $(e.currentTarget);
-            var data = {};
-            if (field.attr('type') === 'checkbox') {
-                if (field.is(':checked')) {
-                    data[field.attr('name')] = true;
-                } else {
-                    data[field.attr('name')] = false;
-                }
-            } else {
-                data[field.attr('name')] = field.val();
-            }
-            this.model.set(data);
-        },
-        saveManufacturer: function() {
-            var self = this;
-            var isValid = true;
             if (this.mode === 'add') {
-                isValid = this.model.isValid(true);
+                data = {
+                    title: $('[name=title]', this.el).val(),
+                    bio: $('[name=bio]', this.el).val(),
+                    url: $('[name=url]', this.el).val()
+                };
             }
-            if (isValid) {
-                $('.btn-primary', this.el).button('loading');
-                this.model.save({}, {
-                    error: function() {
-                        $('.btn-primary', self.el).button('reset');
+
+
+            var isValid = true;
+
+            var $button = $(event.currentTarget);
+            $button.button('loading');
+
+            this.model.save(data, {
+                wait: true,
+                success: function(model, response, options) {
+                    if (this.mode === 'add') {
+                        growl.onSuccess('Your manufacturer has been added!');
+                    } else {
+                        growl.onSuccess('Your edit has been successfully saved!');
                     }
-                });
-            }
+                    $button.button('reset');
+                },
+                error: function() {
+                    $button.button('reset');
+                }
+            });
+            // }
         },
         addBrand: function() {
             var self = this,
@@ -137,15 +136,8 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
             $('.inline-error', self.el).text('');
             $('.form-group ', self.el).removeClass('has-error');
             if (brand !== '') {
-                if (!this.model.get('LicensesManufacture')) {
-                    this.model.set({
-                        LicensesManufacture: []
-                    }, {
-                        silent: true
-                    });
-                }
                 // Also check first to see if this exists already
-                var brands = this.model.get('LicensesManufacture');
+                var brands = this.model.LicensesManufacture;
                 var add = true;
                 _.each(brands, function(existingBrand) {
                     if (existingBrand.License && existingBrand.License.name) {
@@ -160,11 +152,6 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
                             name: brand
                         }
                     });
-                    this.model.set({
-                        LicensesManufacture: brands
-                    }, {
-                        silent: true
-                    });
                     this.model.trigger("change:LicensesManufacture");
                 } else {
                     $('.input-man-brand-error', self.el).text('That brand has already been added.');
@@ -173,5 +160,7 @@ define(['backbone', 'jquery', 'mustache', 'dust', 'text!templates/app/collectibl
         }
     });
 
-    return ManufacturerView;
+    _.extend(CompanyView.prototype, ErrorMixin);
+
+    return CompanyView;
 });
