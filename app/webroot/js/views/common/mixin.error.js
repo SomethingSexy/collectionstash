@@ -46,6 +46,10 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.
                     this.onGlobalError(response.responseJSON.response.message);
                 }
             }
+        },
+        onValiationError: function(errors) {
+            this.errors = errors;
+            this.onError();
         }
     };
 });

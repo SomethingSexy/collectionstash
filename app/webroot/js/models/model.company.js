@@ -1,10 +1,14 @@
-define(['backbone'], function(Backbone) {
+define(function(require) {
+
+    var Backbone = require('backbone'),
+        _ = require('underscore');
+    require('backbone.validation');
 
     var ManufacturerModel = Backbone.Model.extend({
         urlRoot: '/manufactures/manufacturer',
         validation: {
             title: [{
-                pattern: /^[A-Za-z0-9 _]*$/,
+                pattern: /^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'"\/-]+$/i,
                 msg: 'Invalid characters'
             }, {
                 required: true
@@ -26,6 +30,8 @@ define(['backbone'], function(Backbone) {
             }]
         }
     });
+
+    _.extend(ManufacturerModel.prototype, Backbone.Validation.mixin);
 
     return ManufacturerModel;
 });
