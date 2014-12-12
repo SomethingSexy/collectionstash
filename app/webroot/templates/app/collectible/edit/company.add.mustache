@@ -14,19 +14,19 @@
 				<div class="form-group">
 					<label class="col-lg-2 control-label" for="inputManName">Name</label>
 					 <div class="col-lg-10">
-						<input type="text" id="inputManName" class="form-control" name="title" value="{{{manufacturer.title}}}">
+						<input type="text" id="inputManName" class="form-control" name="title" value="{{{title}}}">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-lg-2 control-label" for="inputBio">Bio</label>
 					<div class="col-lg-10">
-						<textarea id="inputBio" rows="6" class="form-control" name="bio">{{{manufacturer.bio}}}</textarea>
+						<textarea id="inputBio" rows="6" class="form-control" name="bio">{{{bio}}}</textarea>
 					</div>
 				</div>		
 				<div class="form-group">
 					<label class="col-lg-2 control-label" for="inputManUrl">URL</label>
 					 <div class="col-lg-10">
-						<input type="text" id="inputManUrl" class="form-control" name="url" value="{{{{manufacturer.url}}}">
+						<input type="text" id="inputManUrl" class="form-control" name="url" value="{{{{url}}}">
 					</div>
 				</div>
 			</fieldset>
@@ -50,11 +50,11 @@
 					</div>
 				</div>
 				<ul class="manufacturer-brands list-group spacer">
-					{{#manufacturer.LicensesManufacture}}
+					{{#LicensesManufacture}}
 					<li class="list-group-item">
 						{{License.name}}
 					</li>
-					{{/manufacturer.LicensesManufacture}}
+					{{/LicensesManufacture}}
 				</ul>
 			</fieldset>
 		</form>

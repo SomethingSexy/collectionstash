@@ -619,8 +619,20 @@ define(function(require) {
                 });
             });
 
-            collectibleView.on('company:edit', function() {
-
+            collectibleView.on('company:edit', function(model) {
+                var companyView = new CompanyView({
+                    model: model,
+                    brands: brands,
+                    mode: 'edit'
+                });
+                partsLayout.modal.show(companyView);
+                model.once('sync', function(model, response, options) {
+                    if (_.isArray(response)) {
+                        // App.comments.add(response);
+                    }
+                    manufacturerList.add(model);
+                    partsLayout.modal.hideModal();
+                });
             });
 
             $('#photo-container').append(new PhotoView({
