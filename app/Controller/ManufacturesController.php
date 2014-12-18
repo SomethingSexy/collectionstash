@@ -102,9 +102,9 @@ class ManufacturesController extends AppController
         $companies = $this->Manufacture->getManufactures();
         
         $companies = Set::extract('/Manufacture/.', $companies);
-
+        
         $this->set(compact('companies'));
-
+        
         $this->layout = 'require';
     }
     
@@ -114,6 +114,7 @@ class ManufacturesController extends AppController
         $manufacturers = $this->Manufacture->find('all', array('fields' => array('Manufacture.id', 'Manufacture.title'), 'contain' => false, 'conditions' => array('Manufacture.title LIKE' => $query . '%')));
         $this->response->body(json_encode(Set::extract('/Manufacture/.', $manufacturers)));
     }
+
     /*
      * This action will display a list of manufacturers
     */

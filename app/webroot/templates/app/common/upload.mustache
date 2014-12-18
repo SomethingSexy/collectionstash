@@ -1,0 +1,35 @@
+<tr class="template-upload fade">
+    <td class="preview"><span class="fade"></span></td>
+    <td class="name">{{name}}</td>
+    <td class="size">{{fmtFileSize}}</td>
+
+{{#error}}
+    <td class="error" colspan="2">{{error}}</td>
+    <td>
+        <button class="btn btn-warning cancel">
+            <i class="icon-ban-circle icon-white"></i>
+            <span>Cancel</span>
+        </button>
+    </td>    
+{{/error}}
+{{^error}}
+        <td>
+            <div class="progress">
+                <div class="bar" style="width:0%;"></div>
+            </div>
+        </td>
+        <td>
+            <button class="btn btn-primary start">
+                <i class="icon-upload icon-white"></i>
+                <span>Start</span>
+            </button>
+        </td>
+    <td>
+        <button class="btn btn-warning cancel">
+            <i class="icon-ban-circle icon-white"></i>
+            <span>Cancel</span>
+        </button>
+    </td>
+{{/error}}
+
+</tr>
