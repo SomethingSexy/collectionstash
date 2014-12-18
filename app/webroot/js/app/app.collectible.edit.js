@@ -300,7 +300,7 @@ define(function(require) {
                                 });
                             } else if (data.response && !data.response.isSuccess) {
                                 // most like an error
-                                $('span', '.component-message.error').text(data.response.errors[0].message);
+                                $('span', '.component-message.error').text(data.response.data[0].message);
                             }
                         },
                         complete: function() {

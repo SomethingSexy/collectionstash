@@ -1,5 +1,4 @@
 <?php
-
 /**
  * I think this should be indepdent of collectible and attribute and use join tables to link up
  *
@@ -10,12 +9,12 @@
  * Or they could edit a upload independently if they wanted to add a description or name Or in the future an owner if the image
  *
  * Although then we would need a Collectibles_upload_edit table and a attribute_upload_edit table
- * 		- actions would consist of Add and Remove
- * 		- If it is add we would add the appropriate one in upload and link it up
- * 		- then when it is approved at the collectible level it would be approved at the upload level
- * 		- If the link is removed and it is not linked to anything else then it would automatically be deleted, otherwise the link would be removed
- * 		- Same if the approval is denied, it would be automatically deleted
- * 		- This would eventually allow us to link the same image to multiple collectibles....think when we allow more than one image to a collectible...variants can share the same core images
+ *      - actions would consist of Add and Remove
+ *      - If it is add we would add the appropriate one in upload and link it up
+ *      - then when it is approved at the collectible level it would be approved at the upload level
+ *      - If the link is removed and it is not linked to anything else then it would automatically be deleted, otherwise the link would be removed
+ *      - Same if the approval is denied, it would be automatically deleted
+ *      - This would eventually allow us to link the same image to multiple collectibles....think when we allow more than one image to a collectible...variants can share the same core images
  *
  *
  * We would just need to code up a job to convert the old table to thew new table...history would be the same, at the upload level...but how would it work at the collectible level? Storing
@@ -28,7 +27,6 @@ class Upload extends AppModel
     var $actsAs = array('Editable' => array('type' => 'upload', 'model' => 'UploadEdit', 'behaviors' => array('FileUpload.FileUpload' => array('fileModel' => 'UploadEdit'))), 'Revision' => array('dependent' => true), 'FileUpload.FileUpload' => array('maxFileSize' => '2097152'), 'Containable');
     var $belongsTo = array('Revision' => array('dependent' => true), 'User');
     var $hasMany = array('CollectiblesUpload');
-    
     // [Upload] => Array
     //       (
     //           [0] => Array
@@ -46,7 +44,6 @@ class Upload extends AppModel
     
     function afterFind($results, $primary = false) {
         if ($results) {
-            
             // If it is primary handle all of these things
             if ($primary) {
                 foreach ($results as $key => $val) {
@@ -99,39 +96,34 @@ class Upload extends AppModel
         $retVal['response']['isSuccess'] = false;
         $retVal['response']['message'] = '';
         $retVal['response']['code'] = 0;
-        
         //Maybe this should be an error code
         $retVal['response']['errors'] = array();
-        
         // An id of 2 means it is submitted
         $upload['Upload']['status_id'] = 2;
         $upload['Upload']['user_id'] = $userId;
         $upload['EntityType']['type'] = 'upload';
         $revision = $this->Revision->buildRevision($userId, $this->Revision->ADD, null);
         $upload = array_merge($upload, $revision);
+        debug($upload);
         if ($this->saveAssociated($upload)) {
             $uploadId = $this->id;
             $savedUpload = $this->find("first", array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));
-            
             // As of now, we just need to the id but we
             // can expand this later to return more if necessary
             $retVal['response']['data'] = $savedUpload;
             $retVal['response']['isSuccess'] = true;
         } else {
-            debug($this->validationErrors);
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'Upload');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
+            $retVal['response']['code'] = 400;
         }
         
         return $retVal;
     }
     
     function getUpdateFields($uploadEditId, $includeChanges = false, $notes = null) {
-        
         //Grab out edit collectible
         $uploadEditVersion = $this->findEdit($uploadEditId);
-        
         //reformat it for us, unsetting some stuff we do not need
         $uploadFields = array();
         
@@ -142,14 +134,12 @@ class Upload extends AppModel
             unset($uploadFields['Upload']['modified']);
             $uploadFields['Revision']['action'] = 'A';
         } else {
-            
             // $uploadFields['Upload.name'] = '\'' . $uploadEditVersion['UploadEdit']['name'] . '\'';
             // $uploadFields['Upload.edit_user_id'] = '\'' . $uploadEditVersion['UploadEdit']['edit_user_id'] . '\'';
             // $uploadFields['Upload.type'] = '\'' . $uploadEditVersion['UploadEdit']['type'] . '\'';
             // $uploadFields['Upload.size'] = '\'' . $uploadEditVersion['UploadEdit']['size'] . '\'';
             
             $uploadFields['Upload']['name'] = $uploadEditVersion['UploadEdit']['name'];
-            
             // $uploadFields['Upload']['edit_user_id'] = '\'' . $uploadEditVersion['UploadEdit']['edit_user_id'] . '\'';
             $uploadFields['Upload']['type'] = $uploadEditVersion['UploadEdit']['type'];
             $uploadFields['Upload']['size'] = $uploadEditVersion['UploadEdit']['size'];
@@ -160,13 +150,11 @@ class Upload extends AppModel
         if (!is_null($notes)) {
             $uploadFields['Revision']['notes'] = $notes;
         }
-        
         //Make sure I grab the user id that did this edit
         $uploadFields['Revision']['user_id'] = $uploadEditVersion['UploadEdit']['edit_user_id'];
         
         return $uploadFields;
     }
-    
     /**
      * More future use but used when approving collectible uploads
      */
@@ -180,7 +168,6 @@ class Upload extends AppModel
         $upload = $this->find('first', array('conditions' => array('Upload.id' => $id), 'contain' => false));
         
         if ($approval['Approval']['approve'] === 'true') {
-            
             // 2 is the approvel status now
             if (!empty($upload) && $upload['Upload']['status_id'] === '2') {
                 $data = array();
@@ -201,7 +188,6 @@ class Upload extends AppModel
                 $retVal['response']['code'] = 5;
             }
         } else {
-            
             //fuck it, I am deleting it
             if ($this->delete($upload['Upload']['id'], true)) {
                 $retVal['response']['code'] = 2;

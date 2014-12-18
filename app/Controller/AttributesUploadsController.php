@@ -6,7 +6,6 @@ class AttributesUploadsController extends AppController
     public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify', 'CollectibleDetail');
     
     public $components = array('Image');
-    
     /**
      * This will submit a delete edit OR if it is pending and the user logged in
      * is the one deleting it, it will automatically delete it
@@ -87,8 +86,14 @@ class AttributesUploadsController extends AppController
                     array_push($retunData['files'], $uploadResponse);
                     $this->set('returnData', $retunData);
                 } else {
-                    // Need to figure out how the plugin handles errors
-                    $this->set('returnData', $response);
+                    if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
+                        $this->response->statusCode(401);
+                    } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
+                        $this->response->statusCode(400);
+                        $this->response->body(json_encode($response['response']['data']));
+                    } else {
+                        $this->response->body(json_encode($response['response']['data']));
+                    }
                 }
             } else {
                 //Something really fucked up

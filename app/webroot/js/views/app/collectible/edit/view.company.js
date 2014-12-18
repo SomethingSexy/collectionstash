@@ -6,10 +6,15 @@ define(function(require) {
         dust = require('dust'),
         addTemplate = require('text!templates/app/collectible/edit/company.add.mustache'),
         editTemplate = require('text!templates/app/collectible/edit/company.edit.mustache'),
+        uploadTemplate = require('text!templates/app/common/upload.mustache'),
+        downloadTemplate = require('text!templates/app/common/download.mustache'),
         ErrorMixin = require('views/common/mixin.error'),
         growl = require('views/common/growl');
     require('select2');
     require('marionette.mustache');
+    require('jquery.fileupload');
+    require('jquery.fileupload-fp');
+    require('jquery.fileupload-ui');
 
 
     var lastResults = [];
@@ -51,7 +56,7 @@ define(function(require) {
 
             this.listenTo(this.model, 'change:LicensesManufacture', this.render);
             this.listenTo(this.model, 'validated:valid', function() {
-         
+
             });
             this.listenTo(this.model, 'validated:invalid', function(model, invalid) {
                 self.onValiationError(invalid);
@@ -89,6 +94,46 @@ define(function(require) {
                 dropdownCssClass: "bigdrop"
             }).on('select2-removed', function() {
                 $('.input-man-brand-error', self.el).text('');
+            });
+
+            // we will need to process or handle a change button.
+            // The change button would remove the file but not 
+            // delete it.  A new file could be selected, once saved
+            // the manufacturer add/edit would handle removing it
+            $('.fileupload', this.el).fileupload({
+                url: '/uploads/add',
+                maxFileSize: 2097152,
+                maxNumberOfFiles: 1,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+                imageMaxWidth: 800,
+                imageMaxHeight: 800,
+                imageCrop: true, // Force cropped image,
+                autoUpload: true,
+                // sequentialUploads: true,
+                uploadTemplateId: null,
+                downloadTemplateId: null,
+                uploadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        output += Mustache.render(uploadTemplate, file)
+                    });
+
+                    return output;
+
+                },
+                downloadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        output += Mustache.render(downloadTemplate, file)
+                    });
+
+                    return output;
+                }
+            }).bind('fileuploaddone', function(e, data) {
+                data.result;
+                data.textStatus;
+                data.jqXHR;
             });
         },
         saveManufacturer: function(event) {
