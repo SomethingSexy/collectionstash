@@ -133,7 +133,13 @@ define(function(require) {
             }).bind('fileuploaddone', function(e, data) {
                 data.result;
                 data.textStatus;
-                data.jqXHR;
+                // since we are only allowing one, we are fine grabbing the only one that should be returned
+                var files = data.jqXHR.responseJSON.files;
+                if (files && _.isArray(files) && files.length === 1) {
+                    var uploadId = files[0].id;
+                    self.model.set('upload_id', uploadId);
+                }
+
             });
         },
         saveManufacturer: function(event) {
