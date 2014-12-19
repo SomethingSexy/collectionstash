@@ -35,14 +35,15 @@
 				{{! <form class="fileupload" action="server/php/" method="POST" enctype="multipart/form-data"> }}
 					<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 					<div class="row fileupload-buttonbar">
-						<div class="col-md-7">
+						<label class="col-md-2 control-label" for="">Logo</label>
+						<div class="col-md-10">
 							<!-- The fileinput-button span is used to style the file input field as button -->
-							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Add files...</span>
+							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Select image...</span>
 								<input type="file" name="data[Upload][file]">
 							</span>
 						</div>
 						<!-- The global progress information -->
-						<div class="col-md-5 fileupload-progress fade">
+						<div class="col-md-offset-2 col-md-10 fileupload-progress fade">
 							<!-- The global progress bar -->
 							<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
 								<div class="bar" style="width:0%;"></div>
@@ -61,11 +62,16 @@
 					</div>-->
 					<br>
 					<!-- The table listing the files available for upload/download -->
+					<div class="row">
+					<div class="col-md-10 col-md-offset-2">
 					<div class="table-responsive">
 						<table role="presentation" class="table table-striped">
 							<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
 						</table>
 					</div>
+					</div>
+					</div>
+
 				{{! </form> }}
 				</div>
 			</fieldset>

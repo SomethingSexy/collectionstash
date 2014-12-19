@@ -100,10 +100,15 @@ class ManufacturesController extends AppController
     
     public function search() {
         $companies = $this->Manufacture->getManufactures();
+        $extractCompanies = Set::extract('/Manufacture/.', $companies);
         
-        $companies = Set::extract('/Manufacture/.', $companies);
+        foreach ($extractCompanies as $key => $value) {
+            if (isset($companies[$key]['Upload'])) {
+                $extractCompanies[$key]['Upload'] = $companies[$key]['Upload'];
+            }
+        }
         
-        $this->set(compact('companies'));
+        $this->set('companies', $extractCompanies);
         
         $this->layout = 'require';
     }
@@ -114,7 +119,6 @@ class ManufacturesController extends AppController
         $manufacturers = $this->Manufacture->find('all', array('fields' => array('Manufacture.id', 'Manufacture.title'), 'contain' => false, 'conditions' => array('Manufacture.title LIKE' => $query . '%')));
         $this->response->body(json_encode(Set::extract('/Manufacture/.', $manufacturers)));
     }
-
     /*
      * This action will display a list of manufacturers
     */

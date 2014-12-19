@@ -2,7 +2,7 @@
 class Manufacture extends AppModel
 {
     public $name = 'Manufacture';
-    public $belongsTo = array('Series');
+    public $belongsTo = array('Series', 'Upload' => array('counterCache' => true));
     public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id', 'dependent' => true), 'LicensesManufacture' => array('dependent' => true));
     public $actsAs = array('Containable');
     
@@ -16,12 +16,24 @@ class Manufacture extends AppModel
     // bio
     'bio' => array('maxLength' => array('rule' => array('maxLength', 5000), 'allowEmpty' => true, 'message' => 'Company bio must be less than 5000 characters.'), 'allowedCharacters' => array('rule' => "/^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'\"\/-]+$/i", 'message' => 'Company bio has invalid characters')));
     
-    function doAfterFind($results, $primary = false) {
+    function afterFind($results, $primary = false) {
         if ($results) {
-            $name = strtolower($results['title']);
-            $slug = str_replace(' ', '-', $name);
-            $results['slug'] = $slug;
+            // If it is primary handle all of these things
+            if ($primary) {
+                foreach ($results as $key => $val) {
+                    if (isset($val['Manufacture'])) {
+                        if (is_null($val['Manufacture']['upload_id'])) {
+                            unset($results[$key]['Upload']);
+                        }
+                        
+                        $name = strtolower($val['Manufacture']['title']);
+                        $slug = str_replace(' ', '-', $name);
+                        $results[$key]['Manufacture']['slug'] = $slug;
+                    }
+                }
+            }
         }
+        
         return $results;
     }
     
@@ -121,7 +133,7 @@ class Manufacture extends AppModel
      * but no associated data.
      */
     public function getManufactures() {
-        return $this->find('all', array('contain' => false, 'order' => array('Manufacture.title' => 'ASC')));
+        return $this->find('all', array('contain' => array('Upload'), 'order' => array('Manufacture.title' => 'ASC')));
     }
     
     public function getManufactureNameById($manufactureId) {

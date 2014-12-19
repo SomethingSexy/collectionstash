@@ -22,6 +22,7 @@ define(function(require, Marionette, template, mustache) {
         serializeData: function() {
             var data = {};
             data = this.model.toJSON();
+            data.uploadDirectory = uploadDirectory;
             // data.Listing = this.model.listing.toJSON();
             // data.Collectible = this.model.collectible.toJSON();
             // data['permissions'] = this.permissions.toJSON();

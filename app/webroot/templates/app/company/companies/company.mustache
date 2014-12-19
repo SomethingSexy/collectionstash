@@ -1,6 +1,14 @@
 <div class="row spacer">
     <div class="col-md-2">
-        <a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>
+        {{#Upload}}
+            <a data-gallery="gallery" href="/{{uploadDirectory}}/{{Upload.name}}" class="thumbnail">
+                <img class="img-responsive" src="/{{uploadDirectory}}/{{Upload.name}}" resizetype="strict" alt="">
+            </a>
+        {{/Upload}}
+
+        {{^Upload}}
+            <a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>
+        {{/Upload}}       
     </div>
 
     <div class="col-md-7">
