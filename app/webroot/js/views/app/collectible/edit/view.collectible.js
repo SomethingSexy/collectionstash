@@ -143,6 +143,7 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                 }
             });
 
+            // if the model is ever invalid, because we saved...reset the button
             this.listenTo(this.model, 'validated:invalid', function() {
                 $('.save', this.el).button('reset');
             });
@@ -370,7 +371,13 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             var self = this;
             event.preventDefault();
             $(event.currentTarget).button('loading');
-            //TODO: validate
+            var description = this.model.get('description');
+            if (description) {
+                // this fixes all of those douchy curly quotes that aren't standard.
+                this.model.set('description', description.replace(/[\u2018\u2019]/g, "'")
+                    .replace(/[\u201C\u201D]/g, '"'));
+            }
+
             this.model.save({}, {
                 wait: true,
                 error: function(model, response) {
