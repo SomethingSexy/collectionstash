@@ -1,5 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.6.1</h3>
+    <ul>
+        <li>Fixed an issue where saving an invalid collectible would not reset the save button. (#158)</li>
+        <li>Fixed an issue where copy curly quotes from an outside source would make the collectible invalid for the description field. (#159)</li>
+    </ul>     
     <h3>Release Notes for v3.6.0</h3>
     <ul>
         <li>Updated part view to show the image and collectibles linked to the part. (#150)</li>
