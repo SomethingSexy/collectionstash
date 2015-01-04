@@ -142,6 +142,10 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                     // do something
                 }
             });
+
+            this.listenTo(this.model, 'validated:invalid', function() {
+                $('.save', this.el).button('reset');
+            });
         },
         onModelSaved: function(model, response, options) {
             $('.save', this.el).button('reset');
