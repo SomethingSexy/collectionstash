@@ -1,14 +1,15 @@
-<div class="thumbnail">
+	<div class="image">
 	{{#Collectible.CollectiblesUpload}}
 		{{#primary}}
-			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
-				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			<a data-gallery="gallery" href="{{Upload.url}}" class="">
+				<img class="" src="{{Upload.thumbnail_url}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
 			</a>
 		{{/primary}}
 	{{/Collectible.CollectiblesUpload}}
 	{{^Collectible.CollectiblesUpload}}
-		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}
+	</div>
 	<div class="caption">
 		<h3>
 		{{#Collectible.custom}}
@@ -35,4 +36,3 @@
 			{{/permissions.edit_collectible_user}}
 		</div>
 	</div>
-</div>

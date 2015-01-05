@@ -1,6 +1,6 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'text!templates/app/user/profile/stash.empty.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'imagesloaded', 'wookmark',
     'marionette.mustache', 'jquery.blueimp-gallery', 'bootstrap'
-], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
+], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry, imagesloaded) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate
@@ -43,19 +43,23 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         onShow: function() {
             var self = this;
             this.handler = $('._tiles .tile', this.el);
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
+            $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                // Call the layout function.
+                self.handler.wookmark({
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left',
+                    offset: 20
+                });
+                // Update the layout.
+
+                self.handler.wookmark();
             });
-            // Update the layout.
-            self.handler.wookmark();
+
         },
         next: function(event) {
             $('._more', this.el).button('loading');
@@ -71,7 +75,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
                 autoResize: true, // This will auto-update the layout when the browser window is resized.
                 container: $('._tiles', this.el),
                 verticalOffset: 20,
-                align: 'left'
+                align: 'left',
+                offset: 20
             });
             // Update the layout.
             this.handler.wookmark();
@@ -91,21 +96,22 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             }, this);
             this.endBuffering();
 
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            self.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
+            $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                self.handler = $('._tiles .tile', this.el);
+                // Call the layout function.
+                self.handler.wookmark({
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left',
+                    offset: 20
+                });
+                // Update the layout.
+                self.handler.wookmark();
             });
-            // Update the layout.
-            self.handler.wookmark();
-            // });
             if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
                 $('._more', this.el).hide();
             } else {
