@@ -54,7 +54,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
         renderMore: function() {
             var self = this;
             var ItemView;
-            $('._more', this.el).button('reset');
             if (this.collection.state.currentPage === 1) {
                 $('._tiles', this.el).empty();
             }
@@ -64,7 +63,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
-
+            $('._tiles', this.el).imagesLoaded(function() {
+                $('._more', self.el).button('reset');
+            });
             this.wookmark();
 
             if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
