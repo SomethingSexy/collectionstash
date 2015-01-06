@@ -1,5 +1,11 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.7.0</h3>
+    <ul>
+        <li>Updated stash and wishlist images so they scale better for the size. (#131)</li>
+        <li>Fixed an issue with the collectible search gallery images not being the correct size. (#161)</li>
+        <li>Fixed an issue with the name of the collectible on the collectible search tile page not escaping correctly. (#160)</li>
+    </ul>      
     <h3>Release Notes for v3.6.1</h3>
     <ul>
         <li>Fixed an issue where saving an invalid collectible would not reset the save button. (#158)</li>
