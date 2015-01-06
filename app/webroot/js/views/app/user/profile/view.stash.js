@@ -54,7 +54,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         renderMore: function() {
             var self = this;
             var ItemView;
-            $('._more', this.el).button('reset');
 
             if (this.collection.state.currentPage === 1) {
                 $(this.itemViewContainer, this.el).empty();
@@ -65,6 +64,11 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
+
+            // once the images are done loading, reset the button
+            $('._tiles', this.el).imagesLoaded(function() {
+                $('._more', self.el).button('reset');
+            });
 
             this.wookmark();
             if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
