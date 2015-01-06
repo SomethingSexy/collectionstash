@@ -25,6 +25,11 @@ body.login {
     height: 79px;
     margin-right: 2px;
 }
+@media (min-width: 1200px) {
+    .container.stash {
+        width: 1400px;
+   }
+}
 .btn-primary, .nav-button {
     color: #fff;
     -webkit-text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;

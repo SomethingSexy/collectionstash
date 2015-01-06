@@ -42,44 +42,14 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         },
         onShow: function() {
             var self = this;
-            this.handler = $('._tiles .tile', this.el);
-            $('._tiles', this.el).imagesLoaded(function() {
-                if (self.handler.wookmarkInstance) {
-                    self.handler.wookmarkInstance.clear();
-                }
-                // Call the layout function.
-                self.handler.wookmark({
-                    autoResize: true, // This will auto-update the layout when the browser window is resized.
-                    container: $('._tiles', self.el),
-                    verticalOffset: 20,
-                    align: 'left',
-                    offset: 20
-                });
-                // Update the layout.
-
-                self.handler.wookmark();
-            });
-
+            this.wookmark();
         },
         next: function(event) {
             $('._more', this.el).button('loading');
             this.collection.getNextPage();
         },
         onItemRemoved: function() {
-            if (this.handler.wookmarkInstance) {
-                this.handler.wookmarkInstance.clear();
-            }
-            this.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            this.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', this.el),
-                verticalOffset: 20,
-                align: 'left',
-                offset: 20
-            });
-            // Update the layout.
-            this.handler.wookmark();
+            this.wookmark();
         },
         renderMore: function() {
             var self = this;
@@ -96,8 +66,17 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             }, this);
             this.endBuffering();
 
+            this.wookmark();
+            if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
+                $('._more', this.el).hide();
+            } else {
+                $('._more', this.el).show();
+            }
+        },
+        wookmark: function() {
+            var self = this;
             $('._tiles', this.el).imagesLoaded(function() {
-                if (self.handler.wookmarkInstance) {
+                if (self.handler && self.handler.wookmarkInstance) {
                     self.handler.wookmarkInstance.clear();
                 }
                 self.handler = $('._tiles .tile', this.el);
@@ -112,11 +91,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
                 // Update the layout.
                 self.handler.wookmark();
             });
-            if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
-                $('._more', this.el).hide();
-            } else {
-                $('._more', this.el).show();
-            }
         }
     });
 });
