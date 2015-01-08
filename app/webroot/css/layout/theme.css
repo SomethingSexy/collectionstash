@@ -683,6 +683,17 @@ display: block;
 .tiles.boxed-tiles .tile div.image {
     height: 400px;
 }
+.user-uploads.tiles.boxed-tiles .tile {
+    width: 200px;
+    display: inline-block;
+    float: none;
+}
+.user-uploads.tiles.boxed-tiles .tile div.image {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 0;
+}
+
 .tiles .tile .header {
     padding: 0 20px;
 }
@@ -757,6 +768,12 @@ display: block;
 }
 .stash-tiles .stash-item ._actions span a {
     font-size: 16px;
+}
+.stash-add-photo-collectible .tile.photo {
+    margin-bottom: 10px;
+}
+.stash-add-photo-collectible .tile.photo .image {
+    text-align: center;
 }
 .table.table-bordered tbody tr td {
     padding-bottom: 9px;
