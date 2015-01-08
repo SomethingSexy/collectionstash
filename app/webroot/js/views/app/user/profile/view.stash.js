@@ -22,6 +22,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             },
             "stash:sell": function(event, view, id) {
                 this.trigger('stash:sell', id);
+            },
+            "stash:add:photo": function(event, view, id) {
+                this.trigger('stash:add:photo', id);
             }
         },
         events: {
@@ -33,6 +36,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
+            this.listenTo(this.collection, 'change:userUpload', this.wookmark);
         },
         serializeData: function() {
             var data = {
