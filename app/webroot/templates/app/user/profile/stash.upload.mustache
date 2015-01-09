@@ -25,7 +25,14 @@
             </ul>
         </div>
         {{/errors}}
+        {{#selectedUserUpload}}
+            <p>Currently selected photo</p>
+            <div class="image">
+                <a title="{{selectedUserUpload.title}} - {{selectedUserUpload.description}}" href="{{selectedUserUpload.imagePath}}"><img src="{{selectedUserUpload.resizedImagePath}}"></img></a>
+            </div>
+        {{/selectedUserUpload}}
         {{#isLoaded}}
+        <br>
         <p>Select a photo to link to your collectible.</p>
         {{/isLoaded}}
         <div class="_photos stash-add-photo-collectible user-uploads tiles boxed-tiles">

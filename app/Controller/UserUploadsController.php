@@ -197,6 +197,8 @@ class UserUploadsController extends AppController
                 if ($userUpload['UserUpload']['user_id'] === $this->getUserId()) {
                     $this->UserUpload->id = $userUpload['UserUpload']['id'];
                     if ($this->UserUpload->delete($userUpload['UserUpload']['id'])) {
+                        // if removing, update all references to this userupload as well
+                        $this->UserUpload->CollectiblesUser->updateAll(array('CollectiblesUser.user_upload_id' => null), array('CollectiblesUser.user_upload_id' => $userUpload['UserUpload']['id']));
                         $retunData = array();
                         $uploadResponse = array();
                         array_push($retunData, $uploadResponse);
