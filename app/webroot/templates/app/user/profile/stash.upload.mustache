@@ -48,6 +48,11 @@
         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
         Close
         </button>
+        {{#selectedUserUpload}}
+        <button class="btn btn-danger _clear" title="Clear current linked photo" data-loading-text="Saving..." autocomplete="off">
+        Clear
+        </button>  
+        {{/selectedUserUpload}}      
         <button class="btn btn-primary save" data-loading-text="Saving..." autocomplete="off">
         Save
         </button>

@@ -16,7 +16,8 @@ define(function(require) {
         events: {
             'click .save': 'save',
             'click .photo .image a': 'selectPhoto',
-            'click ._more': 'next'
+            'click ._more': 'next',
+            'click ._clear': 'clearPhoto'
         },
         itemViewOptions: function(model, index) {
             return {
@@ -59,7 +60,7 @@ define(function(require) {
             var data = this.model.toJSON();
             data.isLoaded = this.isLoaded;
             data.showMore = this.collection.hasNextPage();
-            if(this.model.userUpload){
+            if (this.model.userUpload) {
                 data.selectedUserUpload = this.model.userUpload.toJSON();
             }
             return data;
@@ -108,6 +109,31 @@ define(function(require) {
             } else {
                 $('._more', this.el).show();
             }
+        },
+        clearPhoto: function(event) {
+            var self = this;
+            event.preventDefault();
+            $('.btn-primary', this.el).button('loading');
+            $('._clear', this.el).button('loading');
+
+            this.model.save({
+                user_upload_id: null
+            }, {
+                wait: true,
+                success: function(model, response, options) {
+                    $('.btn-primary', self.el).button('reset');
+                    $('._clear', self.el).button('reset');
+                    var userUpload = self.collection.get(model.get('user_upload_id'));
+                    if (model.userUpload) {
+                        delete model.userUpload;
+                    }
+
+                    model.trigger('change:userUpload');
+                },
+                error: function(model, response, options) {
+                    self.onModelError(model, response, options);
+                }
+            });
         },
         // TODO: update this to do what we did for the profile
         // only set the fields when we do the save...taht way if they
