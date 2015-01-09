@@ -59,6 +59,9 @@ define(function(require) {
             var data = this.model.toJSON();
             data.isLoaded = this.isLoaded;
             data.showMore = this.collection.hasNextPage();
+            if(this.model.userUpload){
+                data.selectedUserUpload = this.model.userUpload.toJSON();
+            }
             return data;
         },
         onClose: function() {

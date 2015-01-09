@@ -142,9 +142,9 @@ class CollectiblesUser extends AppModel
                         $datetime = strtotime($val['CollectiblesUser']['created']);
                         $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
                     }
-
-                    if(is_null($val['CollectiblesUser']['user_upload_id'])){
-                         unset($results[$key]['UserUpload']);
+                    // if someone how the userupload was deleted but the user_upload_id reference was not updated
+                    if (is_null($val['CollectiblesUser']['user_upload_id']) || (isset($val['UserUpload']) && is_null($val['UserUpload']['id']))) {
+                        unset($results[$key]['UserUpload']);
                     }
                     // make sure we have a listing, these listings will only have one transaction
                     // TODO, this should go through the Listing/Transaction API to get this data
