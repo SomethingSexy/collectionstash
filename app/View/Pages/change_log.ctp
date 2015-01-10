@@ -1,5 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+     <h3>Release Notes for v3.8.2</h3>
+    <ul>
+        <li>Activity was not being generated when a user updated a collectible in their stash. (#13)</li>
+        <li>Linking photos to collectibles in your stash was missing from the stash table view.</li>
+    </ul>      
     <h3>Release Notes for v3.8.1</h3>
     <ul>
         <li>Fixed an issue that would cause the stash photo page to go to the last "page" view if you clicked a different tab and then went back to the photo tab.</li>
