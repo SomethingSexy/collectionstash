@@ -173,6 +173,8 @@ define(function(require) {
         }
     });
 
+    // TODO: Update the renderStashtiles and renderStashList so they run the same code
+    // with different view/collection
     function renderStashTiles(stashLayout) {
         if (App.collectibles.mode !== 'infinite') {
             App.collectibles.switchMode('infinite');
@@ -247,6 +249,19 @@ define(function(require) {
             var model = App.collectibles.get(id);
             App.layout.modal.show(new StashSellView({
                 model: model
+            }));
+
+            model.once('sync', function() {
+                App.layout.modal.hideModal();
+            });
+        });
+
+        stashView.on('stash:add:photo', function(id) {
+            var model = App.collectibles.get(id);
+            App.layout.modal.show(new StashUploadView({
+                model: model,
+                profile: App.profile,
+                permissions: App.permissions
             }));
 
             model.once('sync', function() {
