@@ -730,17 +730,20 @@ define(function(require) {
         photos: function() {
             renderHeader('photos');
             App.layout.main.show(new LoaderView());
-            // just get first page again, for some reason
-            // it renders the last page if you keep clicking more and then go away
-            // if (App.photos.isEmpty()) {
+
+            // this is the correct way to do this if we already pulled the photos done
+            // if it isn't empty, it won't go fetch the first page and it won't return a 
+            // deferred... kind of lame 
+            if (App.photos.isEmpty()) {
                 App.photos.getFirstPage({
                     silent: true
                 }).done(function() {
                     renderPhotos();
                 });
-            // } else {
-            //     renderPhotos();
-            // }
+            } else {
+                App.photos.getFirstPage();
+                renderPhotos();
+            }
         },
         history: function() {
             renderHeader('history');
