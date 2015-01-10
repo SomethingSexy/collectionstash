@@ -1,6 +1,10 @@
 <td style="min-width: 100px; max-width: 100px;">
-
-	{{#Collectible.CollectiblesUpload}}
+	{{#UserUpload}}
+			<a data-gallery="gallery" href="{{UserUpload.imagePath}}" class="thumbnail">
+				<img class="img-responsive" src="{{UserUpload.thumbnail_url}}" resizetype="strict" alt="{{UserUpload.description}}">
+			</a>
+	{{/UserUpload}}
+	{{^UserUpload}}{{#Collectible.CollectiblesUpload}}
 		{{#primary}}
 			<a data-gallery="gallery" href="/files/{{Upload.name}}" class="thumbnail">
 				<img class="img-responsive" src="/files/{{Upload.name}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
@@ -10,6 +14,7 @@
 	{{^Collectible.CollectiblesUpload}}
 		<a target="_blank" href="/collectibles_users/view/{{id}}" class="thumbnail"><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}
+	{{/UserUpload}}
 
 </td>
 <td><a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.name}}}</a></td>
@@ -61,6 +66,7 @@
 <div class="btn-group">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 <ul class="dropdown-menu">
+<li><a href="javascript:void(0);" class="_add-photo"><i class="fa fa-camera"></i> Link Photo</a></li>
 <li><a href="/collectibles_users/edit/{{id}}" title="Edit"><i class="fa fa-edit"></i>  Edit</a></li>
 {{^sale}}
 <li><a href="javascript:void(0);" class="stash-sell" title="Sell"><i class="fa fa-dollar"></i>  Sell</a></li>
