@@ -135,21 +135,18 @@ define(function(require) {
                 }
             });
         },
-        // TODO: update this to do what we did for the profile
-        // only set the fields when we do the save...taht way if they
-        // cancel we won't have to worry about remove values
         save: function(event) {
             var self = this;
             event.preventDefault();
-            // pull values from the forum fields
-            // call save on the model, this should validate
 
             $('.btn-primary', this.el).button('loading');
+            $('._clear', this.el).button('loading');
 
             this.model.save({}, {
                 wait: true,
                 success: function(model, response, options) {
                     $('.btn-primary', self.el).button('reset');
+                    $('._clear', self.el).button('reset');
                     var userUpload = self.collection.get(model.get('user_upload_id'));
                     if (model.userUpload) {
                         model.userUpload.clear({
