@@ -1,6 +1,3 @@
-<?php echo $this -> Html -> script('views/view.stash.remove', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('models/model.collectible.user', array('inline' => false)); ?>
-<?php echo $this -> Html -> script('cs.stash', array('inline' => false)); ?>
 <div class="row stashable">
 	<div class="col-md-12">
 		<div class="panel panel-default">
@@ -203,13 +200,6 @@
 	</div>
 	
 </div>
-    
-<script><?php
-if (isset($reasons)) {
-	echo 'var reasons = \'' . json_encode($reasons) . '\';';
-}
-	?></script>
-
 
 
     

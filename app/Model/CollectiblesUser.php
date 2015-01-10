@@ -143,7 +143,7 @@ class CollectiblesUser extends AppModel
                         $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
                     }
                     // if someone how the userupload was deleted but the user_upload_id reference was not updated
-                    if (is_null($val['CollectiblesUser']['user_upload_id']) || (isset($val['UserUpload']) && is_null($val['UserUpload']['id']))) {
+                    if ((isset($val['CollectiblesUser']['user_upload_id']) && is_null($val['CollectiblesUser']['user_upload_id'])) || (isset($val['UserUpload']) && is_null($val['UserUpload']['id']))) {
                         unset($results[$key]['UserUpload']);
                     }
                     // make sure we have a listing, these listings will only have one transaction
@@ -396,6 +396,7 @@ class CollectiblesUser extends AppModel
         if ($this->save($data, true, $fieldList)) {
             $retVal['response']['isSuccess'] = true;
             $dataSource->commit();
+            $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$EDIT_USER_COLLECTIBLE, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
         } else {
             $dataSource->rollback();
             $retVal['response']['isSuccess'] = false;
