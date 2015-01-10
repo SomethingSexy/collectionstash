@@ -1,5 +1,9 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.8.1</h3>
+    <ul>
+        <li>Fixed an issue that would cause the stash photo page to go to the last "page" view if you clicked a different tab and then went back to the photo tab.</li>
+    </ul>    
     <h3>Release Notes for v3.8.0</h3>
     <ul>
         <li>Added a new feature allowing users the ability to link photos to collectibles in their stash.  When a photo is linked, it will show up as the image in the stash instead of the default. (#162)</li>
