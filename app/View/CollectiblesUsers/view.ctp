@@ -23,16 +23,17 @@
 
     <div class="row">
     	<div class="col-md-4"  data-toggle="modal-gallery" data-target="#modal-gallery">
-   
 			<?php
-			if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
+			if(isset($collectible['UserUpload'])){
+				echo '<a class="thumbnail col-md-12" href="' . $this -> FileUpload -> image($collectible['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectible['UserUpload']['user_id'], 'imagePathOnly' => true)) . '">' . $this -> FileUpload -> image($collectible['UserUpload']['name'], array('imagePathOnly' => false, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectible['UserUpload']['user_id'], 'imagePathOnly' => false)) . '</a>';
+			} else if (!empty($collectible['Collectible']['CollectiblesUpload'])) {
 				foreach ($collectible['Collectible']['CollectiblesUpload'] as $key => $upload) {
 					if ($upload['primary']) {
 						echo '<a class="thumbnail col-md-12" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'width' => 1280, 'height' => 1024)) . '">' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => false)) . '</a>';
 					}
 				}
 			} else {
-				echo '<img src="/img/silhouette_thumb.png"/>';
+				echo '<img src="/img/no-photo.png"/>';
 			}
 			?>	
     	</div>

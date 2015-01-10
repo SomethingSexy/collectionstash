@@ -1,5 +1,9 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.8.0</h3>
+    <ul>
+        <li>Added a new feature allowing users the ability to link photos to collectibles in their stash.  When a photo is linked, it will show up as the image in the stash instead of the default. (#162)</li>
+    </ul>
     <h3>Release Notes for v3.7.0</h3>
     <ul>
         <li>Updated stash and wishlist images so they scale better for the size. (#131)</li>
