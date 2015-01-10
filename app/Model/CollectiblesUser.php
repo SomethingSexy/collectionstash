@@ -222,7 +222,7 @@ class CollectiblesUser extends AppModel
      * Use this to get the CollectiblesUser, this will guarunetee that the correct data gets returned.
      */
     public function getUserCollectible($id) {
-        return $this->find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Listing' => array('Transaction'), 'Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
+        return $this->find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('UserUpload', 'Listing' => array('Transaction'), 'Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
     }
     /**
      * This method will return a list of users who have this collectible
