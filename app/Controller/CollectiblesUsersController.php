@@ -29,7 +29,6 @@ class CollectiblesUsersController extends AppController
             //TODO should be more model behavior but whateves
             //First lets grab the collectible user
             $collectiblesUser = $this->CollectiblesUser->getUserCollectible($id);
-            debug($collectiblesUser);
             if (isset($collectiblesUser) && !empty($collectiblesUser)) {
                 //First see if the person viewing this collectible is logged in
                 $this->set('stashUsername', $collectiblesUser['User']['username']);
