@@ -730,16 +730,17 @@ define(function(require) {
         photos: function() {
             renderHeader('photos');
             App.layout.main.show(new LoaderView());
-
-            if (App.photos.isEmpty()) {
+            // just get first page again, for some reason
+            // it renders the last page if you keep clicking more and then go away
+            // if (App.photos.isEmpty()) {
                 App.photos.getFirstPage({
                     silent: true
                 }).done(function() {
                     renderPhotos();
                 });
-            } else {
-                renderPhotos();
-            }
+            // } else {
+            //     renderPhotos();
+            // }
         },
         history: function() {
             renderHeader('history');
