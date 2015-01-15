@@ -1,7 +1,7 @@
 {
     "name": "collectionstash",
     "description": "",
-    "version": "3.8.2",
+    "version": "3.8.3",
     "private": true,
     "ignore": [
         ".jshintrc",

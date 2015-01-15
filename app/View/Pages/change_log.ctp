@@ -1,14 +1,18 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
-     <h3>Release Notes for v3.8.2</h3>
+    <h3>Release Notes for v3.8.3</h3>
+    <ul>
+        <li>Fixed an escaping issue with collectible description. </li>
+    </ul>
+    <h3>Release Notes for v3.8.2</h3>
     <ul>
         <li>Activity was not being generated when a user updated a collectible in their stash. (#13)</li>
         <li>Linking photos to collectibles in your stash was missing from the stash table view.</li>
-    </ul>      
+    </ul>
     <h3>Release Notes for v3.8.1</h3>
     <ul>
         <li>Fixed an issue that would cause the stash photo page to go to the last "page" view if you clicked a different tab and then went back to the photo tab.</li>
-    </ul>    
+    </ul>
     <h3>Release Notes for v3.8.0</h3>
     <ul>
         <li>Added a new feature allowing users the ability to link photos to collectibles in their stash.  When a photo is linked, it will show up as the image in the stash instead of the default. (#162)</li>
@@ -18,25 +22,25 @@
         <li>Updated stash and wishlist images so they scale better for the size. (#131)</li>
         <li>Fixed an issue with the collectible search gallery images not being the correct size. (#161)</li>
         <li>Fixed an issue with the name of the collectible on the collectible search tile page not escaping correctly. (#160)</li>
-    </ul>      
+    </ul>
     <h3>Release Notes for v3.6.1</h3>
     <ul>
         <li>Fixed an issue where saving an invalid collectible would not reset the save button. (#158)</li>
         <li>Fixed an issue where copy curly quotes from an outside source would make the collectible invalid for the description field. (#159)</li>
-    </ul>     
+    </ul>
     <h3>Release Notes for v3.6.0</h3>
     <ul>
         <li>Updated part view to show the image and collectibles linked to the part. (#150)</li>
-    </ul> 
+    </ul>
     <h3>Release Notes for v3.5.2</h3>
     <ul>
         <li>Fixed an issue where you could not edit a collectible name that contained a ". (#151)</li>
         <li>Fixed an issue where old or missing eBay transactions were not deleting. (#148)</li>
-    </ul>       
+    </ul>
     <h3>Release Notes for v3.5.1</h3>
     <ul>
         <li>Fixed an issue where you could not add new brands to a manufacturer. (#147)</li>
-    </ul>    
+    </ul>
     <h3>Release Notes for v3.5.0</h3>
     <ul>
         <li>Fixed an issue where image gallery was not working for parts on the collectible edit page. (#135)</li>
