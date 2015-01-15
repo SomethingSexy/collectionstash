@@ -371,7 +371,10 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             var self = this;
             event.preventDefault();
             $(event.currentTarget).button('loading');
-            var description = this.model.get('description');
+            // OK, doing this, and this might be alittle hacky but because we have some old data
+            // that is escaped incorrectly in the database, it is failing validation.  The textarea should
+            // be properly escaped, so always pull the description and reset it.
+            var description = $('textarea[name=description]', this.el).val();
             if (description) {
                 // this fixes all of those douchy curly quotes that aren't standard.
                 this.model.set('description', description.replace(/[\u2018\u2019]/g, "'")
