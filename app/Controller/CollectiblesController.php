@@ -440,8 +440,7 @@ class CollectiblesController extends AppController
                 $img = $this->Image->image($value['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['user_id'], 'imagePathOnly' => true));
                 $extractUserUploads[$key]['imagePath'] = $img['path'];
             }
-            
-            debug($extractUserUploads);
+
             $this->set('userUploads', $extractUserUploads);
             $this->layout = 'require';
         } else {
