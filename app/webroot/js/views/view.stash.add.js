@@ -8,11 +8,21 @@ var StashAddView = Backbone.View.extend({
     initialize: function(options) {
         this.collectible = options.collectible;
         this.lastResults = [];
+        this.stashCount = options.stashCount || 0;
+        this.wishlistCount = options.wishlistCount || 0;
     },
     render: function() {
         var self = this;
         var data = this.collectible.toJSON();
         data.model = this.model.toJSON();
+        if (this.stashCount > 0) {
+            data.stashCount = this.stashCount;
+        }
+
+        if (this.wishlistCount > 0) {
+            data.wishlistCount = this.wishlistCount;
+        }
+
         dust.render(this.template, data, function(error, output) {
             $(self.el).html(output);
         });
