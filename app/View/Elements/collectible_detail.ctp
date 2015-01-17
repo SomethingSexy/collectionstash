@@ -80,7 +80,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				<div class="col-md-12">	
 					<?php
 					if ($showImage) {
-						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
+						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail, 'userUploads', $userUploads));
 					}
 					?>
 				</div>
