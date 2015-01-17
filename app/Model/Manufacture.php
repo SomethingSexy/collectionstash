@@ -22,7 +22,7 @@ class Manufacture extends AppModel
             if ($primary) {
                 foreach ($results as $key => $val) {
                     if (isset($val['Manufacture'])) {
-                        if (is_null($val['Manufacture']['upload_id'])) {
+                        if (!isset($val['Manufacture']['upload_id']) || (isset($val['Manufacture']['upload_id']) && is_null($val['Manufacture']['upload_id']))) {
                             unset($results[$key]['Upload']);
                         }
                         

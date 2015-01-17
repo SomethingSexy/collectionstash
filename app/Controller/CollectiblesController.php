@@ -163,12 +163,13 @@ class CollectiblesController extends AppController
         
         $this->set('categories', $categories);
         
-        $manufacturers = $this->Collectible->Manufacture->find('all', array('contain' => array('LicensesManufacture' => array('License'))));
+        $manufacturers = $this->Collectible->Manufacture->find('all', array('contain' => array('Upload', 'LicensesManufacture' => array('License'))));
         
         $extractManufacturers = Set::extract('/Manufacture/.', $manufacturers);
         
         foreach ($extractManufacturers as $key => $value) {
             $extractManufacturers[$key]['LicensesManufacture'] = $manufacturers[$key]['LicensesManufacture'];
+            $extractManufacturers[$key]['Upload'] = $manufacturers[$key]['Upload'];
         }
         
         $this->set('manufacturers', $extractManufacturers);
