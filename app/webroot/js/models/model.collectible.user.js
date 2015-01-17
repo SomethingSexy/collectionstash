@@ -29,6 +29,11 @@
                     delete response.Collectible;
                 }
 
+                if (response.UserUpload) {
+                    this.userUpload = new Backbone.Model(response.UserUpload);
+                    delete response.UserUpload;
+                }
+
                 if (response.Listing) {
                     this.listing = new ListingModel(response.Listing);
                     delete response.Listing;

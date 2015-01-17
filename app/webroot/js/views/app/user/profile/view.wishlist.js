@@ -42,36 +42,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
             return data;
         },
         onShow: function() {
-            var self = this;
-            this.handler = $('._tiles .tile', this.el);
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
-            });
-            // Update the layout.
-            self.handler.wookmark();
+            this.wookmark();
         },
         onItemRemoved: function() {
-            if (this.handler.wookmarkInstance) {
-                this.handler.wookmarkInstance.clear();
-            }
-            this.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            this.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', this.el),
-                verticalOffset: 20,
-                align: 'left'
-            });
-            // Update the layout.
-            this.handler.wookmark();
+            this.wookmark();
         },
         next: function(event) {
             $('._more', this.el).button('loading');
@@ -80,7 +54,6 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
         renderMore: function() {
             var self = this;
             var ItemView;
-            $('._more', this.el).button('reset');
             if (this.collection.state.currentPage === 1) {
                 $('._tiles', this.el).empty();
             }
@@ -90,26 +63,35 @@ define(['require', 'marionette', 'text!templates/app/user/profile/wishlist.musta
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            self.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
+            $('._tiles', this.el).imagesLoaded(function() {
+                $('._more', self.el).button('reset');
             });
-            // Update the layout.
-            self.handler.wookmark();
-            // })
+            this.wookmark();
+
             if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
                 $('._more', this.el).hide();
             } else {
                 $('._more', this.el).show();
             }
+        },
+        wookmark: function() {
+            var self = this;
+            $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler && self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                self.handler = $('._tiles .tile', this.el);
+                // Call the layout function.
+                self.handler.wookmark({
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left',
+                    offset: 20
+                });
+                // Update the layout.
+                self.handler.wookmark();
+            });
         }
     });
 });

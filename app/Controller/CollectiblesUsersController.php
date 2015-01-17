@@ -6,7 +6,7 @@ class CollectiblesUsersController extends AppController
 {
     
     public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
-    public $components = array('StashSearch');
+    public $components = array('StashSearch', 'Image');
     // public function balls() {
     //     $this->autoRender = false;
     //     $joins = array();
@@ -29,7 +29,6 @@ class CollectiblesUsersController extends AppController
             //TODO should be more model behavior but whateves
             //First lets grab the collectible user
             $collectiblesUser = $this->CollectiblesUser->getUserCollectible($id);
-            debug($collectiblesUser);
             if (isset($collectiblesUser) && !empty($collectiblesUser)) {
                 //First see if the person viewing this collectible is logged in
                 $this->set('stashUsername', $collectiblesUser['User']['username']);
@@ -65,13 +64,28 @@ class CollectiblesUsersController extends AppController
         if ($this->request->isGet()) {
             $user = $this->CollectiblesUser->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             $collectibles = $this->StashSearch->search($user);
-            // I am sure there is as better way to do this, I don't feel smart right now
-            //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
-            
             $extractUserCollectibles = Set::extract('/CollectiblesUser/.', $collectibles);
             
             foreach ($extractUserCollectibles as $key => $value) {
                 $extractUserCollectibles[$key]['Collectible'] = $collectibles[$key]['Collectible'];
+                if (isset($collectibles[$key]['UserUpload'])) {
+                    $extractUserCollectibles[$key]['UserUpload'] = $collectibles[$key]['UserUpload'];
+                    $img = $this->Image->image($collectibles[$key]['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectibles[$key]['UserUpload']['user_id'], 'imagePathOnly' => true));
+                    $resizedImg = $this->Image->image($collectibles[$key]['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectibles[$key]['UserUpload']['user_id'], 'width' => 200, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                    $thumbnail = $this->Image->image($collectibles[$key]['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectibles[$key]['UserUpload']['user_id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                    $extractUserCollectibles[$key]['UserUpload']['imagePath'] = $img['path'];
+                    $extractUserCollectibles[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
+                    $extractUserCollectibles[$key]['UserUpload']['thumbnail_url'] = $thumbnail['path'];
+                }
+                
+                if (isset($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'])) {
+                    foreach ($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'] as $uploadKey => $upload) {
+                        if ($upload['primary']) {
+                            $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 400, 'height' => 400, 'imagePathOnly' => true));
+                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnail_url'] = $resizedImg['path'];
+                        }
+                    }
+                }
             }
             
             $this->set('collectibles', $extractUserCollectibles);

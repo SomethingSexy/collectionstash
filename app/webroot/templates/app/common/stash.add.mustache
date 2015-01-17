@@ -8,6 +8,12 @@
     <div class="modal-body">
 		<div class="well">
 			<p>You are adding {{{Collectible.name}}} to your stash.</p>
+			{{#stashCount}}
+			<p>You have {{stashCount}} of this collectible in your stash already.</p>
+			{{/stashCount}}
+			{{#wishlistCount}}
+			<p>You have {{wishlistCount}} of this collectible in your wishlist already.</p>
+			{{/wishlistCount}}					
 		</div>	
         {{#errors}}
         <div class="alert alert-danger">

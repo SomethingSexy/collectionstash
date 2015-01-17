@@ -80,7 +80,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				<div class="col-md-12">	
 					<?php
 					if ($showImage) {
-						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail));
+						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail, 'userUploads', $userUploads));
 					}
 					?>
 				</div>
@@ -105,7 +105,11 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 									$collectibleJSON = json_encode($collectibleDetail['Collectible']);
 									$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-									echo '<li><a title="Add to stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
+
+									$stashCount = isset($collectibleUserCount) ? $collectibleUserCount : 0;
+									$wishlistCount = isset($collectibleWishListCount) ? $collectibleWishListCount : 0;
+
+									echo '<li><a title="Add to stash" class="add-full-to-stash" data-stash-count="' . $stashCount .'" data-wishlist-count="' . $wishlistCount .'" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" href="javascript:void(0)"><img src="/img/icon/add_stash_link_16x16.png"/> Add to Stash</a></li>';
 								}
 								if (isset($showAddStash) && $showAddStash && $isLoggedIn && $isStashable) {
 									echo '<li><a data-collectible-id="' . $collectibleDetail['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="fa fa-star"></i> Add to Wish List</a></li>';

@@ -142,7 +142,6 @@ class CollectiblesController extends AppController
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
         
         $collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
-
         // Get and return all brands, this is for adding new manufacturers
         // and also used for types that might allow not having a manufacturer
         $brands = $this->Collectible->License->find('all', array('contain' => false));
@@ -165,7 +164,7 @@ class CollectiblesController extends AppController
         $this->set('categories', $categories);
         
         $manufacturers = $this->Collectible->Manufacture->find('all', array('contain' => array('LicensesManufacture' => array('License'))));
-
+        
         $extractManufacturers = Set::extract('/Manufacture/.', $manufacturers);
         
         foreach ($extractManufacturers as $key => $value) {
@@ -433,6 +432,16 @@ class CollectiblesController extends AppController
             }
             $this->set(compact('permissions'));
             
+            $userUploads = $this->Collectible->CollectiblesUser->find('all', array('contain' => array('UserUpload'), 'conditions' => array('CollectiblesUser.collectible_id' => $id, "not" => array("CollectiblesUser.user_upload_id" => null))));
+            
+            $extractUserUploads = Set::extract('/UserUpload/.', $userUploads);
+            
+            foreach ($extractUserUploads as $key => $value) {
+                $img = $this->Image->image($value['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['user_id'], 'imagePathOnly' => true));
+                $extractUserUploads[$key]['imagePath'] = $img['path'];
+            }
+
+            $this->set('userUploads', $extractUserUploads);
             $this->layout = 'require';
         } else {
             $this->render('viewMissing');
@@ -481,7 +490,20 @@ class CollectiblesController extends AppController
         /*
          * Call the parent method now, that method handles pretty much everything now
         */
-        $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
+        $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
+        
+        if ($this->isLoggedIn()) {
+            // modify the return data and then set it again
+            foreach ($collectibles as $key => $value) {
+                $collectibleUserCount = $this->Collectible->CollectiblesUser->getCollectibleOwnedCount($value['Collectible']['id'], $this->getUser());
+                $collectibleWishListCount = $this->Collectible->CollectiblesWishList->getCollectibleWishListCount($value['Collectible']['id'], $this->getUser());
+                
+                $collectibles[$key]['Collectible']['userCounts'] = array('stashCount' => $collectibleUserCount, 'wishListCount' => $collectibleWishListCount);
+            }
+            
+            $this->set(compact('collectibles'));
+        }
+        
         $this->set('viewType', 'tiles');
         $this->layout = 'fluid';
         $this->render('searchTiles');

@@ -25,6 +25,11 @@ body.login {
     height: 79px;
     margin-right: 2px;
 }
+@media (min-width: 1200px) {
+    .container.stash {
+        width: 1400px;
+   }
+}
 .btn-primary, .nav-button {
     color: #fff;
     -webkit-text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
@@ -678,6 +683,17 @@ display: block;
 .tiles.boxed-tiles .tile div.image {
     height: 400px;
 }
+.user-uploads.tiles.boxed-tiles .tile {
+    width: 200px;
+    display: inline-block;
+    float: none;
+}
+.user-uploads.tiles.boxed-tiles .tile div.image {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 0;
+}
+
 .tiles .tile .header {
     padding: 0 20px;
 }
@@ -742,6 +758,7 @@ display: block;
 .stash-tiles .stash-item {
     padding-left: 5px;
     padding-right: 5px;
+    width: 410px;
 }
 .stash-tiles .stash-item h3 {
     font-size: 16px;
@@ -751,6 +768,12 @@ display: block;
 }
 .stash-tiles .stash-item ._actions span a {
     font-size: 16px;
+}
+.stash-add-photo-collectible .tile.photo {
+    margin-bottom: 10px;
+}
+.stash-add-photo-collectible .tile.photo .image {
+    text-align: center;
 }
 .table.table-bordered tbody tr td {
     padding-bottom: 9px;

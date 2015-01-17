@@ -32,6 +32,8 @@ class Activity extends AppModel
                     // process some verb display names
                     if ($val['Activity']['activity_type_id'] === '7') {
                         $data->verb_displayName = __('submitted');
+                    } else if ($val['Activity']['activity_type_id'] === '4') {
+                        $data->verb_displayName = __('updated');
                     } else {
                         if ($data->verb === 'add') {
                             $data->verb_displayName = __('added');
@@ -82,6 +84,8 @@ class Activity extends AppModel
                     } else if ($data->object->objectType === 'listing') {
                         $data->object->object_displayName = 'listing';
                         $data->object->url = $data->object->data->Listing->url;
+                    } else if ($data->object->objectType === 'collectibles_user') {
+                        $data->object->object_displayName = $data->object->data->Collectible->displayTitle;
                     } else {
                         $data->object->object_displayName = $data->object->objectType;
                     }
@@ -94,6 +98,8 @@ class Activity extends AppModel
                         $data->pre_target = __('submitted by');
                     } else if ($data->verb === 'remove') {
                         $data->pre_target = __('from');
+                    } else if ($val['Activity']['activity_type_id'] === '4') {
+                        $data->pre_target = __('in');
                     } else if ($val['Activity']['activity_type_id'] !== '12') { // don't do this for edits
                         $data->pre_target = __('to');
                     }

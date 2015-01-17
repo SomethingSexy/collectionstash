@@ -8,7 +8,6 @@ class UserUploadsController extends AppController
     public $helpers = array('Html', 'Form', 'Js', 'FileUpload.FileUpload', 'Minify', 'Time');
     
     public $components = array('Image');
-
     // this will be used to retrieve user images via ajax
     public function index($username = null) {
         $this->set(compact('username'));
@@ -20,9 +19,11 @@ class UserUploadsController extends AppController
             foreach ($userUploads as $key => $value) {
                 debug($value);
                 $img = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'imagePathOnly' => true));
-                $resizedImg = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                $resizedImg = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 200, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                $largeThumbnail = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
                 $userUploads[$key]['UserUpload']['imagePath'] = $img['path'];
                 $userUploads[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
+                $userUploads[$key]['UserUpload']['thumbnail_url'] = $largeThumbnail['path'];
             }
             
             $userUploads = Set::extract('/UserUpload/.', $userUploads);
@@ -196,6 +197,8 @@ class UserUploadsController extends AppController
                 if ($userUpload['UserUpload']['user_id'] === $this->getUserId()) {
                     $this->UserUpload->id = $userUpload['UserUpload']['id'];
                     if ($this->UserUpload->delete($userUpload['UserUpload']['id'])) {
+                        // if removing, update all references to this userupload as well
+                        $this->UserUpload->CollectiblesUser->updateAll(array('CollectiblesUser.user_upload_id' => null), array('CollectiblesUser.user_upload_id' => $userUpload['UserUpload']['id']));
                         $retunData = array();
                         $uploadResponse = array();
                         array_push($retunData, $uploadResponse);
