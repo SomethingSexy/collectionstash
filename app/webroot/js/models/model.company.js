@@ -28,7 +28,21 @@ define(function(require) {
                 pattern: /^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'"\/-]+$/i,
                 msg: 'Invalid characters'
             }]
-        }
+        },
+        parse: function(response) {
+            if (!this.photo) {
+                this.photo = new Backbone.Model(response.Upload);
+            } else {
+                this.photo.clear({
+                    silent: true
+                });
+                this.photo.set(response.Upload);
+            }
+
+            delete response.Upload;
+
+            return response;
+        },
     });
 
     _.extend(ManufacturerModel.prototype, Backbone.Validation.mixin);
