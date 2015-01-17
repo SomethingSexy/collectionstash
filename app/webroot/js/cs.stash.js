@@ -90,7 +90,9 @@ function csStashSuccessMessage(message) {
 
         this.stashAddView = new StashAddView({
             collectible: collectibleModel,
-            model: this.collectibleUser
+            model: this.collectibleUser,
+            stashCount: options.stashCount,
+            wishlistCount: options.wishlistCount
         });
 
         $('.modal-body', '#stash-add-dialog').html(this.stashAddView.render().el);
@@ -148,7 +150,9 @@ function csStashSuccessMessage(message) {
             $anchor.stashfulladd(collectibleModel, removeFromWishList, {
                 tiles: tile,
                 $stashItem: $stashItem,
-                collectibleUserId: collectibleUserId
+                collectibleUserId: collectibleUserId,
+                stashCount: $anchor.data('stash-count'),
+                wishlistCount: $anchor.data('wishlist-count')
             });
             e.preventDefault();
         });

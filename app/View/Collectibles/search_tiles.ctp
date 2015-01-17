@@ -37,6 +37,9 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 							foreach ($collectibles as $collectible) {
 								$collectibleJSON = json_encode($collectible['Collectible']);
 								$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+								$stashCount = isset($collectible['Collectible']['userCounts']['stashCount']) ? $collectible['Collectible']['userCounts']['stashCount'] : 0;
+								$wishlistCount = isset($collectible['Collectible']['userCounts']['wishListCount']) ? $collectible['Collectible']['userCounts']['wishListCount'] : 0;
+								
 								echo '<div class="tile" data-collectible=\'' . $collectibleJSON . '\'>';
 								if (!empty($collectible['CollectiblesUpload'])) {
 									foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
@@ -70,7 +73,7 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 								
 								if ($isLoggedIn && $collectible['Collectible']['status_id'] === '4') {
 									echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="fa fa-star"></i></a></span>';
-									echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+									echo '<span><a class="add-full-to-stash btn" data-stash-count="' . $stashCount .'" data-wishlist-count="' . $wishlistCount .'" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
 									echo '<img src="/img/icon/add_stash_link_25x25.png">';
 									echo '</a></span>';
 								}

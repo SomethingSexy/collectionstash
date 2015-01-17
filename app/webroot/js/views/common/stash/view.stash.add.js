@@ -9,7 +9,8 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         initialize: function(options) {
             this.collectible = options.collectible;
             this.reasons = options.reasons;
-
+            this.stashCount = options.stashCount || 0;
+            this.wishlistCount = options.wishlistCount || 0;
             this.model.startTracking();
         },
         onRender: function() {
@@ -24,6 +25,13 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         serializeData: function() {
             var data = this.model.toJSON();
             data.Collectible = this.model.collectible.toJSON();
+            if (this.stashCount > 0) {
+                data.stashCount = this.stashCount;
+            }
+
+            if (this.wishlistCount > 0) {
+                data.wishlistCount = this.wishlistCount;
+            }
             return data;
         },
         onClose: function() {
