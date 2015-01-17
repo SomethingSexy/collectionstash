@@ -1,0 +1,60 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        ×
+        </button>
+        <h4 id="myModalLabel">Add Photo to Collectible</h4>
+    </div>
+    <div class="modal-body">
+        {{#errors}}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+            &times;
+            </button>
+            <h4>Oops! Something went wrong.</h4>
+            <ul>
+                {{#errors}}
+                    {{^inline}}
+                        {{#message}}
+                        <li>
+                            {{.}}
+                        </li>
+                        {{/message}}
+                    {{/inline}}
+                {{/errors}}
+            </ul>
+        </div>
+        {{/errors}}
+        {{#selectedUserUpload}}
+            <p>Currently selected photo</p>
+            <div class="image">
+                <a title="{{selectedUserUpload.title}} - {{selectedUserUpload.description}}" href="{{selectedUserUpload.imagePath}}"><img src="{{selectedUserUpload.resizedImagePath}}"></img></a>
+            </div>
+        {{/selectedUserUpload}}
+        {{#isLoaded}}
+        <br>
+        <p>Select a photo to link to your collectible.</p>
+        {{/isLoaded}}
+        <div class="_photos stash-add-photo-collectible user-uploads tiles boxed-tiles">
+        {{^isLoaded}}
+            <img class="center-block" src="/img/ajax-loader-circle.gif" />
+            <p style="text-align: center;">loading your photos...</p>
+         {{/isLoaded}}
+         </div>
+         {{#showMore}}<button class="btn btn-default btn-block btn-primary _more">More</button>{{/showMore}}
+     </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+        Close
+        </button>
+        {{#selectedUserUpload}}
+        <button class="btn btn-danger _clear" title="Clear current linked photo" data-loading-text="Saving..." autocomplete="off">
+        Clear
+        </button>  
+        {{/selectedUserUpload}}      
+        <button class="btn btn-primary save" data-loading-text="Saving..." autocomplete="off">
+        Save
+        </button>
+    </div>
+</div>

@@ -47,7 +47,7 @@ class ActivityEventListener implements CakeEventListener {
 			$activityModel -> create();
 			$activityModel -> saveAll($activityData);
 		}
-	}
+	}
 
 	private function getActivity($type, $data) {
 		$retVal = null;
@@ -63,6 +63,7 @@ class ActivityEventListener implements CakeEventListener {
 				$retVal = new StashActivity('remove', $data);
 				break;
 			case 4 :
+				$retVal = new StashActivity('edit', $data);
 				break;
 			case 5 :
 				$retVal = new PhotoActivity('add', $data);

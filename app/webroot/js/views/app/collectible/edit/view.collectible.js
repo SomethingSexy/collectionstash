@@ -142,6 +142,11 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                     // do something
                 }
             });
+
+            // if the model is ever invalid, because we saved...reset the button
+            this.listenTo(this.model, 'validated:invalid', function() {
+                $('.save', this.el).button('reset');
+            });
         },
         onModelSaved: function(model, response, options) {
             $('.save', this.el).button('reset');
@@ -366,7 +371,16 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             var self = this;
             event.preventDefault();
             $(event.currentTarget).button('loading');
-            //TODO: validate
+            // OK, doing this, and this might be alittle hacky but because we have some old data
+            // that is escaped incorrectly in the database, it is failing validation.  The textarea should
+            // be properly escaped, so always pull the description and reset it.
+            var description = $('textarea[name=description]', this.el).val();
+            if (description) {
+                // this fixes all of those douchy curly quotes that aren't standard.
+                this.model.set('description', description.replace(/[\u2018\u2019]/g, "'")
+                    .replace(/[\u201C\u201D]/g, '"'));
+            }
+
             this.model.save({}, {
                 wait: true,
                 error: function(model, response) {

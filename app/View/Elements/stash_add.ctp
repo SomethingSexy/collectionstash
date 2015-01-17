@@ -1,6 +1,12 @@
 <?php // this is actually going to be a dust template but I am loading it via PHP and placing it on the page for quickness ?>
 <div class="well">
 	<p>You are adding {name|s} to your stash.</p>
+	{#stashCount}
+	<p>You have {.} of this collectible in your stash already.</p>
+	{/stashCount}
+	{#wishlistCount}
+	<p>You have {.} of this collectible in your wishlist already.</p>
+	{/wishlistCount}	
 </div>	
 {@if cond=" ('{errors}'.length === 0) "}
 

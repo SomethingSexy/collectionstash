@@ -8,7 +8,7 @@
 <p>If the artist made the work on their own for a specific venue, then leave the manufacturer/producer field blank but add the venue.</p>
 <p>If the artist made the work on their own and printed it and sold it themselves, then leave the manufacturer/producer and the venue fields blank.</p>
 {/eq}
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" role="form" accept-charset="UTF-8">
 	<fieldset>
 		<legend>
 			Product Details

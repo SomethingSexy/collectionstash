@@ -71,6 +71,9 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 						$collectibleJSON = json_encode($collectible['Collectible']);
 						$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
 						echo '<div class="spacer">';
+						// this is still need for the add to stash functionality
+						$stashCount = isset($collectible['Collectible']['userCounts']['stashCount']) ? $collectible['Collectible']['userCounts']['stashCount'] : 0;
+						$wishlistCount = isset($collectible['Collectible']['userCounts']['wishListCount']) ? $collectible['Collectible']['userCounts']['wishListCount'] : 0;
 						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
 						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
@@ -152,7 +155,7 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 						echo '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>';
 						echo '<ul class="dropdown-menu">';
 						if ($isLoggedIn && $collectible['Collectible']['status_id'] === '4') {
-							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
+							echo '<li><a title="Add to Stash" class="add-full-to-stash" data-stash-count="' . $stashCount .'" data-wishlist-count="' . $wishlistCount .'" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)"><img src="/img/icon/add_stash_link_25x25.png"> Add to Stash</a></li>';
 							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-stash" title="Add to Stash without being prompted to enter information" href="#"><img src="/img/icon/add_stash_link_25x25.png"> Quick Add to Stash</a></li>';
 							echo '<li><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist" title="Add to Wish List" href="#"><i class="fa fa-star"></i> Add to Wish List</a></li>';
 						}

@@ -6,6 +6,7 @@ class CollectiblesWishListsController extends AppController
 {
     
     public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js');
+    public $components = array('Image');
     /**
      * This will handle add, update, delete asynchronously
      */
@@ -63,10 +64,19 @@ class CollectiblesWishListsController extends AppController
             
             foreach ($extractUserCollectibles as $key => $value) {
                 $extractUserCollectibles[$key]['Collectible'] = $collectibles[$key]['Collectible'];
+                if (isset($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'])) {
+                    foreach ($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'] as $uploadKey => $upload) {
+                        if ($upload['primary']) {
+                            $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 400, 'height' => 400, 'imagePathOnly' => true));
+                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnail_url'] = $resizedImg['path'];
+                        }
+                    }
+                }
             }
             
             $this->set('collectibles', $extractUserCollectibles);
             // $this->response->body(json_encode($extractUserCollectibles));
+            
             
         }
     }

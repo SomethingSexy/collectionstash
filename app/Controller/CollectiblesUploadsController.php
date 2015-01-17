@@ -176,7 +176,11 @@ class CollectiblesUploadsController extends AppController {
 					$upload = $response['response']['data'];
 					// We need to return the data in a specific format for the upload plugin to handle
 					// it propertly
+					// when uploading, also resize one to 400x400 to use for main thumbnails, that way we don't have to do it when accessing.
+					$this -> Image -> image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 400, 'height' => 400, 'imagePathOnly' => true));
+					// this one is used by the upload dialog
 					$resizedImg = $this -> Image -> image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+					// also return the full image
 					$img = $this -> Image -> image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 					$retunData = array();
 					$retunData['files'] = array();
@@ -222,7 +226,9 @@ class CollectiblesUploadsController extends AppController {
 			$data['errors'] = array('message', __('Invalid request.'));
 			$this -> set('returnData', $data);
 			return;
-		}	}
+		}
+
+	}
 
 	public function uploads($collectibleId) {
 		$returnData = array();

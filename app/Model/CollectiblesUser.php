@@ -10,7 +10,7 @@ class CollectiblesUser extends AppModel
     public $name = 'CollectiblesUser';
     //As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
     //then we have a complete total of collectibles
-    public $belongsTo = array('CollectibleUserRemoveReason', 'Listing', 'Stash' => array('counterCache' => true), 'Collectible' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Condition', 'Merchant' => array('counterCache' => true));
+    public $belongsTo = array('CollectibleUserRemoveReason', 'UserUpload', 'Listing', 'Stash' => array('counterCache' => true), 'Collectible' => array('counterCache' => true), 'User' => array('counterCache' => true), 'Condition', 'Merchant' => array('counterCache' => true));
     public $actsAs = array('Revision' => array('model' => 'CollectiblesUserRev', 'ignore' => array('sort_number')), 'Containable');
     public $validate = array(
     //cost
@@ -142,6 +142,10 @@ class CollectiblesUser extends AppModel
                         $datetime = strtotime($val['CollectiblesUser']['created']);
                         $results[$key]['CollectiblesUser']['created_formatted'] = date('F jS, Y', $datetime);
                     }
+                    // if someone how the userupload was deleted but the user_upload_id reference was not updated
+                    if ((isset($val['CollectiblesUser']['user_upload_id']) && is_null($val['CollectiblesUser']['user_upload_id'])) || (isset($val['UserUpload']) && is_null($val['UserUpload']['id']))) {
+                        unset($results[$key]['UserUpload']);
+                    }
                     // make sure we have a listing, these listings will only have one transaction
                     // TODO, this should go through the Listing/Transaction API to get this data
                     if (isset($val['Listing'])) {
@@ -218,7 +222,7 @@ class CollectiblesUser extends AppModel
      * Use this to get the CollectiblesUser, this will guarunetee that the correct data gets returned.
      */
     public function getUserCollectible($id) {
-        return $this->find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('Listing' => array('Transaction'), 'Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
+        return $this->find("first", array('conditions' => array('CollectiblesUser.id' => $id), 'contain' => array('UserUpload', 'Listing' => array('Transaction'), 'Merchant', 'Stash', 'Condition', 'User', 'Collectible' => array('Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'License', 'Scale'))));
     }
     /**
      * This method will return a list of users who have this collectible
@@ -295,7 +299,7 @@ class CollectiblesUser extends AppModel
             $this->validate['remove_date']['required'] = true;
         }
         // adding sold_cost here for validation but it will not be added to the collectibles_users table
-        $fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date', 'sold_cost', 'listing_id', 'notes', 'notes_private', 'traded_for', 'sale');
+        $fieldList = array('edition_size', 'cost', 'condition_id', 'merchant_id', 'purchase_date', 'artist_proof', 'remove_date', 'sold_cost', 'listing_id', 'notes', 'notes_private', 'traded_for', 'sale', 'user_upload_id');
         $data['CollectiblesUser']['collectible_id'] = $collectiblesUser['CollectiblesUser']['collectible_id'];
         $dataSource = $this->getDataSource();
         $dataSource->begin();
@@ -392,6 +396,7 @@ class CollectiblesUser extends AppModel
         if ($this->save($data, true, $fieldList)) {
             $retVal['response']['isSuccess'] = true;
             $dataSource->commit();
+            $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$EDIT_USER_COLLECTIBLE, 'user' => $user, 'collectible' => $collectiblesUser, 'stash' => $collectiblesUser)));
         } else {
             $dataSource->rollback();
             $retVal['response']['isSuccess'] = false;

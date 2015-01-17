@@ -79,6 +79,7 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
             var detailLayout = new DetailLayout();
 
             $('.add-full-to-stash').on('click', function() {
+                $anchor = $(this);
                 var model = new CollectibleUser({
                     'collectible_id': collectibleModel.get('id')
                 });
@@ -90,7 +91,9 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                 });
 
                 detailLayout.modal.show(new StashAddView({
-                    model: model
+                    model: model,
+                    stashCount: $anchor.data('stash-count'),
+                    wishlistCount: $anchor.data('wishlist-count')
                 }));
             });
 

@@ -1,6 +1,6 @@
 define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache', 'text!templates/app/user/profile/stash.empty.mustache', 'views/app/user/profile/view.stash.collectible', 'mustache', 'imagesloaded', 'wookmark',
     'marionette.mustache', 'jquery.blueimp-gallery', 'bootstrap'
-], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry) {
+], function(require, Marionette, template, emptyTemplate, CollectibleView, mustache, Masonry, imagesloaded) {
 
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate
@@ -22,6 +22,9 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             },
             "stash:sell": function(event, view, id) {
                 this.trigger('stash:sell', id);
+            },
+            "stash:add:photo": function(event, view, id) {
+                this.trigger('stash:add:photo', id);
             }
         },
         events: {
@@ -33,6 +36,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         _initialEvents: function() {
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.renderMore);
+            this.listenTo(this.collection, 'change:userUpload', this.wookmark);
         },
         serializeData: function() {
             var data = {
@@ -42,44 +46,18 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
         },
         onShow: function() {
             var self = this;
-            this.handler = $('._tiles .tile', this.el);
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
-            });
-            // Update the layout.
-            self.handler.wookmark();
+            this.wookmark();
         },
         next: function(event) {
             $('._more', this.el).button('loading');
             this.collection.getNextPage();
         },
         onItemRemoved: function() {
-            if (this.handler.wookmarkInstance) {
-                this.handler.wookmarkInstance.clear();
-            }
-            this.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            this.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', this.el),
-                verticalOffset: 20,
-                align: 'left'
-            });
-            // Update the layout.
-            this.handler.wookmark();
+            this.wookmark();
         },
         renderMore: function() {
             var self = this;
             var ItemView;
-            $('._more', this.el).button('reset');
 
             if (this.collection.state.currentPage === 1) {
                 $(this.itemViewContainer, this.el).empty();
@@ -91,26 +69,36 @@ define(['require', 'marionette', 'text!templates/app/user/profile/stash.mustache
             }, this);
             this.endBuffering();
 
-            // $('._tiles', this.el).imagesLoaded(function() {
-            if (self.handler.wookmarkInstance) {
-                self.handler.wookmarkInstance.clear();
-            }
-            self.handler = $('._tiles .tile', this.el);
-            // Call the layout function.
-            self.handler.wookmark({
-                autoResize: true, // This will auto-update the layout when the browser window is resized.
-                container: $('._tiles', self.el),
-                verticalOffset: 20,
-                align: 'left'
+            // once the images are done loading, reset the button
+            $('._tiles', this.el).imagesLoaded(function() {
+                $('._more', self.el).button('reset');
             });
-            // Update the layout.
-            self.handler.wookmark();
-            // });
+
+            this.wookmark();
             if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
                 $('._more', this.el).hide();
             } else {
                 $('._more', this.el).show();
             }
+        },
+        wookmark: function() {
+            var self = this;
+            $('._tiles', this.el).imagesLoaded(function() {
+                if (self.handler && self.handler.wookmarkInstance) {
+                    self.handler.wookmarkInstance.clear();
+                }
+                self.handler = $('._tiles .tile', this.el);
+                // Call the layout function.
+                self.handler.wookmark({
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('._tiles', self.el),
+                    verticalOffset: 20,
+                    align: 'left',
+                    offset: 20
+                });
+                // Update the layout.
+                self.handler.wookmark();
+            });
         }
     });
 });
