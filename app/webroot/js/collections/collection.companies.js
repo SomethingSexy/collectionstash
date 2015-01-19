@@ -1,6 +1,6 @@
-define(['backbone', 'backbone.pageable', 'models/model.collectible'], function(Backbone, pageable, CollectibleModel) {
+define(['backbone', 'backbone.pageable', 'models/model.company'], function(Backbone, pageable, CompanyModel) {
     return Backbone.PageableCollection.extend({
-        model: CollectibleModel,
+        model: CompanyModel,
         initialize: function(models, props) {
             this.url = "/manufacturers/manufacturers/";
         },
