@@ -514,7 +514,9 @@ define(function(require) {
             var collectibleModel = new CollectibleModel(rawCollectible.Collectible);
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
             // Setup the manufacturer list, this will contain all data for each manufacturer
-            var manufacturerList = new ManufacturerList(rawManufacturers);
+            var manufacturerList = new ManufacturerList(rawManufacturers, {
+                parse: true
+            });
             var currencies = new Currencies(rawCurrencies);
             var scales = new Scales(rawScales);
             var parts = new CollectibleParts(rawParts, {

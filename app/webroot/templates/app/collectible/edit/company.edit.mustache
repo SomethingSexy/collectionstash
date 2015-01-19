@@ -6,30 +6,24 @@
 		<h4 id="myModalLabel">Edit Company</h4>
 	</div>
 	<div class="modal-body">
-		<dl class="">
-			<dt>
-				Manufacturer
-			</dt>
-			<dd class="data-value">
-				{{{title}}}
-			</dd>
-			{{#bio}}
-			<dt>
-				Bio
-			</dt>
-			<dd class="data-value">
-				{{{bio}}}
-			</dd>	
-			{{/bio}}
-			{{#url}}		
-			<dt>
-				Url
-			</dt>
-			<dd class="data-value">
-				{{{{url}}}
-			</dd>
-			{{/url}}
-		</dl>
+		<h2>{{{title}}} 
+		{{#url}}		
+			<small>{{{{url}}}</small>
+		{{/url}}	
+		</h2>	
+		{{#photo}}
+			<div class="row">
+			  <div class="col-xs-6 col-md-3">
+			    <a href="javascript:void(0);" class="thumbnail">
+			      <img src="{{photo.url}}">
+			    </a>
+			  </div>
+			  ...
+			</div>		
+		{{/photo}}
+		{{#bio}}
+		<p>{{{bio}}}</p>
+		{{/bio}}
 		<form class="form-horizontal spacer">
 			<fieldset>
 				<legend>

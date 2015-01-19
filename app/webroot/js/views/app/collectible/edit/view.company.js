@@ -65,6 +65,9 @@ define(function(require) {
         serializeData: function() {
             var data = this.model.toJSON();
             data.LicensesManufacture = this.model.LicensesManufacture;
+            if (this.model.photo) {
+                data.photo = this.model.photo.toJSON();
+            }
             return data;
         },
         onRender: function() {

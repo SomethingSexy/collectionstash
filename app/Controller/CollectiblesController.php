@@ -169,7 +169,9 @@ class CollectiblesController extends AppController
         
         foreach ($extractManufacturers as $key => $value) {
             $extractManufacturers[$key]['LicensesManufacture'] = $manufacturers[$key]['LicensesManufacture'];
-            $extractManufacturers[$key]['Upload'] = $manufacturers[$key]['Upload'];
+            if (isset($manufacturers[$key]['Upload'])) {
+                $extractManufacturers[$key]['Upload'] = $manufacturers[$key]['Upload'];
+            }
         }
         
         $this->set('manufacturers', $extractManufacturers);
@@ -441,7 +443,7 @@ class CollectiblesController extends AppController
                 $img = $this->Image->image($value['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['user_id'], 'imagePathOnly' => true));
                 $extractUserUploads[$key]['imagePath'] = $img['path'];
             }
-
+            
             $this->set('userUploads', $extractUserUploads);
             $this->layout = 'require';
         } else {
