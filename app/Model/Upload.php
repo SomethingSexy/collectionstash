@@ -23,10 +23,11 @@
  */
 class Upload extends AppModel
 {
-    var $name = 'Upload';
-    var $actsAs = array('Editable' => array('type' => 'upload', 'model' => 'UploadEdit', 'behaviors' => array('FileUpload.FileUpload' => array('fileModel' => 'UploadEdit'))), 'Revision' => array('dependent' => true), 'FileUpload.FileUpload' => array('maxFileSize' => '2097152'), 'Containable');
-    var $belongsTo = array('Revision' => array('dependent' => true), 'User');
-    var $hasMany = array('CollectiblesUpload');
+    public $name = 'Upload';
+    public $actsAs = array('Editable' => array('type' => 'upload', 'model' => 'UploadEdit', 'behaviors' => array('FileUpload.FileUpload' => array('fileModel' => 'UploadEdit'))), 'Revision' => array('dependent' => true), 'FileUpload.FileUpload' => array('maxFileSize' => '2097152'), 'Containable');
+    public $belongsTo = array('Revision' => array('dependent' => true), 'User');
+    public $hasMany = array('CollectiblesUpload', 'AttributesUpload');
+    public $hasOne = array('Manufacture');
     // [Upload] => Array
     //       (
     //           [0] => Array

@@ -36,12 +36,12 @@ class UploadsController extends AppController
                     // this should be the id of the new pending collectible
                     $uploadResponse['delete_url'] = '/uploads/remove/' . $upload['Upload']['id'];
                     
-                    $uploadResponse['delete_type'] = 'POST';
+                    $uploadResponse['delete_type'] = 'DELETE';
                     $uploadResponse['id'] = $upload['Upload']['id'];
                     $uploadResponse['allowDelete'] = true;
                     
                     array_push($retunData['files'], $uploadResponse);
-                     $this->response->body(json_encode($retunData));
+                    $this->response->body(json_encode($retunData));
                 } else {
                     if ($response['response']['code'] === 401) {
                         $this->response->statusCode(401);
@@ -61,6 +61,60 @@ class UploadsController extends AppController
             $data['errors'] = array('message', __('Invalid request.'));
             $this->set('returnData', $data);
             return;
+        }
+    }
+    // only allow the upload to be removed, if the user is an admin
+    // and it isn't tied to anything.  Otherwise, collectible photo deletes
+    // and edits go through collectiblesupload
+    public function remove($id) {
+        $this->autoRender = false;
+        // you have to at least be logged in to remove a file
+        if (!$this->isLoggedIn()) {
+            $this->response->statusCode(401);
+            return;
+        }
+        
+        if ($this->request->isDelete()) {
+            $allowDelete = false;
+            if ($this->isUserAdmin()) {
+                $allowDelete = true;
+            } else {
+                // if an entity needs a more fine grain solution
+                // then it show implement its own delete
+                // check to see if it is tied to
+                //AttributesUpload
+                //CollectiblesUpload
+                //Manufacturer
+                //AttributesUploadEdits
+                //CollectiblesUploadEdits
+                
+                if ($this->Upload->AttributesUpload->find('count', array('conditions' => array('AttributesUpload.upload_id' => $id))) > 0) {
+                    $allowDelete = false;
+                } else if ($this->Upload->CollectiblesUpload->find('count', array('conditions' => array('CollectiblesUpload.upload_id' => $id))) > 0) {
+                    $allowDelete = false;
+                } else if ($this->Upload->Manufacturer->find('count', array('conditions' => array('Manufacturer.upload_id' => $id))) > 0) {
+                    $allowDelete = false;
+                } else {
+                    $attrEdits = $this->Upload->AttributesUpload->findEdits(array('conditions' => array('AttributesUploadEdit.upload_id' => $id)));
+                    $colEdits = $this->Upload->CollectiblesUpload->findEdits(array('conditions' => array('CollectiblesUploadEdit.upload_id' => $id)));
+                    
+                    if (!empty($edits) || !empty($colEdits)) {
+                        $allowDelete = false;
+                    } else {
+                        $allowDelete = true;
+                    }
+                }
+            }
+            
+            if ($allowDelete) {
+                if ($this->Upload->delete($id)) {
+                    $this->response->body('{}');
+                } else {
+                    $this->response->statusCode(500);
+                }
+            }
+        } else {
+            $this->response->statusCode(405);
         }
     }
 }

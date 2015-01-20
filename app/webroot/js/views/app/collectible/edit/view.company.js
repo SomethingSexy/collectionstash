@@ -119,6 +119,7 @@ define(function(require) {
                 uploadTemplate: function(o) {
                     var output = '';
                     _.each(o.files, function(file, index) {
+                        file.autoUpload = true;
                         output += Mustache.render(uploadTemplate, file)
                     });
 
