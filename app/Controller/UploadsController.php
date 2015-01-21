@@ -91,11 +91,11 @@ class UploadsController extends AppController
                     $allowDelete = false;
                 } else if ($this->Upload->CollectiblesUpload->find('count', array('conditions' => array('CollectiblesUpload.upload_id' => $id))) > 0) {
                     $allowDelete = false;
-                } else if ($this->Upload->Manufacturer->find('count', array('conditions' => array('Manufacturer.upload_id' => $id))) > 0) {
+                } else if ($this->Upload->Manufacture->find('count', array('conditions' => array('Manufacture.upload_id' => $id))) > 0) {
                     $allowDelete = false;
                 } else {
-                    $attrEdits = $this->Upload->AttributesUpload->findEdits(array('conditions' => array('AttributesUploadEdit.upload_id' => $id)));
-                    $colEdits = $this->Upload->CollectiblesUpload->findEdits(array('conditions' => array('CollectiblesUploadEdit.upload_id' => $id)));
+                    $attrEdits = $this->Upload->AttributesUpload->findEdits(array('AttributesUploadEdit.upload_id' => $id));
+                    $colEdits = $this->Upload->CollectiblesUpload->findEdits(array('CollectiblesUploadEdit.upload_id' => $id));
                     
                     if (!empty($edits) || !empty($colEdits)) {
                         $allowDelete = false;
