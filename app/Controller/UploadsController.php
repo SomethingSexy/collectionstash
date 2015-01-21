@@ -87,7 +87,6 @@ class UploadsController extends AppController
                 //Manufacturer
                 //AttributesUploadEdits
                 //CollectiblesUploadEdits
-                
                 if ($this->Upload->AttributesUpload->find('count', array('conditions' => array('AttributesUpload.upload_id' => $id))) > 0) {
                     $allowDelete = false;
                 } else if ($this->Upload->CollectiblesUpload->find('count', array('conditions' => array('CollectiblesUpload.upload_id' => $id))) > 0) {

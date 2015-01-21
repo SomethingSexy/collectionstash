@@ -105,9 +105,12 @@ class Manufacture extends AppModel
         
         if ($this->saveAll($data, array('deep' => true))) {
             $id = $this->id;
-            $manufacturer = $this->find('first', array('contain' => array('LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
+            $manufacturer = $this->find('first', array('contain' => array('Upload', 'LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
             
             $retVal['response']['data'] = $manufacturer['Manufacture'];
+            if (isset($manufacturer['Upload'])) {
+                $retVal['response']['data']['Upload'] = $manufacturer['Upload'];
+            }
             $retVal['response']['data']['LicensesManufacture'] = $manufacturer['LicensesManufacture'];
             $retVal['response']['isSuccess'] = true;
         } else {

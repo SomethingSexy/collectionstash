@@ -30,19 +30,22 @@ define(function(require) {
             }]
         },
         parse: function(response) {
-            if (!this.photo) {
-                this.photo = new Backbone.Model(response.Upload);
+            if (response.Upload) {
+                if (!this.photo) {
+                    this.photo = new Backbone.Model(response.Upload);
+                } else {
+                    this.photo.clear({
+                        silent: true
+                    });
+                    this.photo.set(response.Upload);
+                }
+                delete response.Upload;
             } else {
-                this.photo.clear({
-                    silent: true
-                });
-                this.photo.set(response.Upload);
+                delete this.photo;
             }
 
-            delete response.Upload;
-
             return response;
-        },
+        }
     });
 
     _.extend(ManufacturerModel.prototype, Backbone.Validation.mixin);

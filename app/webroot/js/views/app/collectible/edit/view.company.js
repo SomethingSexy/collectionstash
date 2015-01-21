@@ -33,6 +33,7 @@ define(function(require) {
         initialize: function(options) {
             var self = this;
             this.mode = options.mode;
+            this.permissions = options.permissions;
 
             if (this.mode === 'add') {
 
@@ -67,6 +68,13 @@ define(function(require) {
             data.LicensesManufacture = this.model.LicensesManufacture;
             if (this.model.photo) {
                 data.photo = this.model.photo.toJSON();
+            }
+            if (this.mode === 'add') {
+                data.permissions = {
+                    edit_manufacturer: true
+                };
+            } else {
+                data.permissions = this.permissions.toJSON();
             }
             return data;
         },
@@ -103,7 +111,8 @@ define(function(require) {
             // The change button would remove the file but not 
             // delete it.  A new file could be selected, once saved
             // the manufacturer add/edit would handle removing it
-            $('.fileupload', this.el).fileupload({
+            var $fileupload = $('.fileupload', this.el);
+            $fileupload.fileupload({
                 url: '/uploads/add',
                 maxFileSize: 2097152,
                 maxNumberOfFiles: 1,
@@ -143,21 +152,28 @@ define(function(require) {
                     var uploadId = files[0].id;
                     self.model.set('upload_id', uploadId);
                 }
-
             });
+
+            if (this.mode === 'edit' && this.permissions.get('edit_manufacturer') === true && this.model.photo) {
+                $fileupload.fileupload('option', 'done').call($fileupload, null, {
+                    result: {
+                        files: [this.model.photo.toJSON()]
+                    }
+                });
+            }
+
         },
         saveManufacturer: function(event) {
             var self = this;
 
             var data = {};
-            if (this.mode === 'add') {
+            if (this.mode === 'add' || this.permissions.get('edit_manufacturer') === true) {
                 data = {
                     title: $('[name=title]', this.el).val(),
                     bio: $('[name=bio]', this.el).val(),
                     url: $('[name=url]', this.el).val()
                 };
             }
-
 
             var isValid = true;
 
@@ -178,7 +194,6 @@ define(function(require) {
                     $button.button('reset');
                 }
             });
-            // }
         },
         addBrand: function() {
             var self = this,

@@ -529,6 +529,7 @@ define(function(require) {
             var tags = new Tags(rawCollectible.CollectiblesTag);
             var artists = new Artists(rawCollectible.ArtistsCollectible);
             var variants = new Backbone.Collection(rawVariants);
+            var permissions = new Backbone.Model(rawPermissions);
             var status = new Status();
             status.set({
                 id: collectibleId,
@@ -609,7 +610,8 @@ define(function(require) {
                 var companyView = new CompanyView({
                     model: model,
                     brands: brands,
-                    mode: 'add'
+                    mode: 'add',
+                    permissions: permissions
                 });
                 partsLayout.modal.show(companyView);
                 model.once('sync', function(model, response, options) {
@@ -625,7 +627,8 @@ define(function(require) {
                 var companyView = new CompanyView({
                     model: model,
                     brands: brands,
-                    mode: 'edit'
+                    mode: 'edit',
+                    permissions: permissions
                 });
                 partsLayout.modal.show(companyView);
                 model.once('sync', function(model, response, options) {
