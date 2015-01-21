@@ -182,6 +182,16 @@ class CollectiblesController extends AppController
         //TODO: This is here temporarily until all of the attribute modals are
         // converted to backbone
         $this->set(compact('collectible'));
+        
+        $permissions = array();
+        
+        if ($this->isUserAdmin()) {
+            $permissions['edit_manufacturer'] = true;
+        } else {
+            $permissions['edit_manufacturer'] = false;
+        }
+        
+        $this->set(compact('permissions'));
     }
     
     public function collectible($id = null, $replacementId = null) {

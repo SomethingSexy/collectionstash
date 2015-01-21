@@ -6,25 +6,97 @@
 		<h4 id="myModalLabel">Edit Company</h4>
 	</div>
 	<div class="modal-body">
-		<h2>{{{title}}} 
-		{{#url}}		
-			<small>{{{{url}}}</small>
-		{{/url}}	
-		</h2>	
-		{{#photo}}
-			<div class="row">
-			  <div class="col-xs-6 col-md-3">
-			    <a href="javascript:void(0);" class="thumbnail">
-			      <img src="{{photo.url}}">
-			    </a>
-			  </div>
-			  ...
-			</div>		
-		{{/photo}}
-		{{#bio}}
-		<p>{{{bio}}}</p>
-		{{/bio}}
 		<form class="form-horizontal spacer">
+		{{#permissions.edit_manufacturer}}
+			<fieldset>
+				<legend>
+					Details
+				</legend>
+				<div class="form-group">
+					<label class="col-lg-2 control-label" for="inputManName">Name</label>
+					 <div class="col-lg-10">
+						<input type="text" id="inputManName" class="form-control" name="title" value="{{{title}}}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label" for="inputBio">Bio</label>
+					<div class="col-lg-10">
+						<textarea id="inputBio" rows="6" class="form-control" name="bio">{{{bio}}}</textarea>
+					</div>
+				</div>		
+				<div class="form-group">
+					<label class="col-lg-2 control-label" for="inputManUrl">URL</label>
+					 <div class="col-lg-10">
+						<input type="text" id="inputManUrl" class="form-control" name="url" value="{{{{url}}}">
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="fileupload">
+				{{! <form class="fileupload" action="server/php/" method="POST" enctype="multipart/form-data"> }}
+					<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+					<div class="row fileupload-buttonbar">
+						<label class="col-md-2 control-label" for="">Logo</label>
+						<div class="col-md-10">
+							<!-- The fileinput-button span is used to style the file input field as button -->
+							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Select image...</span>
+								<input type="file" name="data[Upload][file]">
+							</span>
+						</div>
+						<!-- The global progress information -->
+						<div class="col-md-offset-2 col-md-10 fileupload-progress fade">
+							<!-- The global progress bar -->
+							<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+								<div class="bar" style="width:0%;"></div>
+							</div>
+							<!-- The extended global progress information -->
+							<div class="progress-extended">
+								&nbsp;
+							</div>
+						</div>
+					</div>
+					<!-- The loading indicator is shown during file processing -->
+					<div class="fileupload-loading"></div>
+					<br>
+					<!-- <div id="dropzone" class="fade well">
+						Drop files here
+					</div>-->
+					<br>
+					<!-- The table listing the files available for upload/download -->
+					<div class="row">
+					<div class="col-md-10 col-md-offset-2">
+					<div class="table-responsive">
+						<table role="presentation" class="table table-striped">
+							<tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+						</table>
+					</div>
+					</div>
+					</div>
+
+				{{! </form> }}
+				</div>
+			</fieldset>			
+		{{/permissions.edit_manufacturer}}
+		{{^permissions.edit_manufacturer}}
+			<h2>{{{title}}} 
+			{{#url}}		
+				<small>{{{{url}}}</small>
+			{{/url}}	
+			</h2>	
+			{{#photo}}
+				<div class="row">
+				  <div class="col-xs-6 col-md-3">
+				    <a href="javascript:void(0);" class="thumbnail">
+				      <img src="{{photo.url}}">
+				    </a>
+				  </div>
+				  ...
+				</div>		
+			{{/photo}}
+			{{#bio}}
+			<p>{{{bio}}}</p>
+			{{/bio}}
+		{{/permissions.edit_manufacturer}}
 			<fieldset>
 				<legend>
 					Brands
@@ -60,7 +132,7 @@
 			Close
 		</button>
 		<button class="btn btn-primary save" autocomplete="off">
-			Add
+			Save
 		</button>
 	</div>
 </div>
