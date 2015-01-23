@@ -9,13 +9,13 @@ define(function(require) {
     require('marionette.mustache');
 
     var CompaniesLayout = Backbone.Marionette.Layout.extend({
-        el : '#companies-layout',
+        el: '#companies-layout',
         regions: {
             list: "._list",
             newCollectibles: "._sort",
             activities: "._pagination"
         },
-        render: function(){
+        render: function() {
             // do nothing since we are using existing HTML
         }
     });
@@ -30,6 +30,15 @@ define(function(require) {
             App.layout.list.show(new CompaniesView({
                 collection: App.companies
             }));
+        },
+        page: function(pageNumber) {
+            App.companies.getPage(parseInt(pageNumber));
+            if (!App.layout.list.currentView) {
+                App.layout.list.show(new CompaniesView({
+                    collection: App.companies
+                }));
+            }
+
         }
     });
 });

@@ -70,6 +70,7 @@ define(function(require) {
             this.endBuffering();
 
             $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+            window.scrollTo(0,0);
         },
         onRender: function() {
             var self = this;
@@ -77,9 +78,15 @@ define(function(require) {
                 items: this.collection.state.totalRecords,
                 itemsOnPage: this.collection.state.pageSize,
                 cssStyle: 'pagination',
+                currentPage : this.collection.state.currentPage,
                 onPageClick: function(pageNumber, event) {
-                    self.collection.getPage(pageNumber);
-                }
+                    event.preventDefault();
+                    // self.collection.getPage(pageNumber);
+                    Backbone.history.navigate('page/' + pageNumber, {
+                        trigger: true
+                    });
+                },
+                hrefTextPrefix: 'page/'
             });
         },
         sort: function(event) {

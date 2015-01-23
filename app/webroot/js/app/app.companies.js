@@ -11,13 +11,19 @@ define(function(require) {
         main: '._home'
     });
 
+    var enablePushState = true;
+    // Disable for older browsers
+    var pushState = !! (enablePushState && window.history && window.history.pushState);
     MyApp.on('initialize:after', function() {
-        Backbone.history.start({});
+        Backbone.history.start({
+            pushState: pushState,
+            root: "/companies/"
+        });
     });
 
     // adding initial collection here
     MyApp.companies = new CollectiblesCollection(rawCompanies);
-    
+
     // export the app from this module
     return MyApp;
 });
