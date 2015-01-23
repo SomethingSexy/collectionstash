@@ -84,7 +84,7 @@ Router::connect('/settings/profile', array('controller' => 'profiles', 'action' 
 Router::connect('/settings/stash', array('controller' => 'profiles', 'action' => 'index'));
 Router::connect('/profile/*', array('controller' => 'users', 'action' => 'profile'));
 Router::connect('/part/:id', array('controller' => 'attributes', 'action' => 'view'), array('pass' => array('id')));
-Router::connect('/companies', array('controller' => 'manufactures', 'action' => 'search'));
+Router::connect('/companies/*', array('controller' => 'manufactures', 'action' => 'search'));
 Router::connect('/company/*', array('controller' => 'manufactures', 'action' => 'index'));
 
 
