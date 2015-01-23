@@ -13,23 +13,23 @@ class ListingsController extends AppController
      * they will see the catalog page.
      */
     public function index() {
+        
+        $transaction['Listing'] = array();
+        $transaction['Listing']['listing_type_id'] = 1;
+        $transaction['Listing']['ext_item_id'] = '161571650487';
+        $transaction['Listing']['collectible_id'] = '234';
+        
+        // $response = $this -> Listing -> createListing($transaction, $this -> getUser());
         //
-        // $transaction['Listing'] = array();
-        // $transaction['Listing']['listing_type_id'] = 1;
-        // $transaction['Listing']['ext_item_id'] = '161047990034';
-        // $transaction['Listing']['collectible_id'] = '234';
+        // debug($response);
+        // first we are going to process it
+        $factory = new TransactionFactory();
         
-        // // $response = $this -> Listing -> createListing($transaction, $this -> getUser());
-        // //
-        // // debug($response);
-        // // first we are going to process it
-        // $factory = new TransactionFactory();
+        $transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
         
-        // $transactionable = $factory -> getTransaction($transaction['Listing']['listing_type_id']);
-        
-        // debug($transactionable -> processTransaction($transaction));
-        // $transactions = $this->Listing->find('all', array('contain' => array('Transaction'), 'limit' => 100, 'conditions' => array('Listing.processed' => 0, 'Listing.listing_type_id' => 1, 'Listing.end_date <' => date('Y-m-d H:i:s'))));
-        // debug($transactions);
+        debug($transactionable -> processTransaction($transaction));
+        $transactions = $this->Listing->find('all', array('contain' => array('Transaction'), 'limit' => 100, 'conditions' => array('Listing.processed' => 0, 'Listing.listing_type_id' => 1, 'Listing.end_date <' => date('Y-m-d H:i:s'))));
+        debug($transactions);
     }
     /**
      * This will be used to update and maintain transactions

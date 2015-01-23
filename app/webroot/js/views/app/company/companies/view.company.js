@@ -15,30 +15,18 @@ define(function(require, Marionette, template, mustache) {
             "change": "render"
         },
         events: {
-            'click .stash-remove-listing': 'removeListing',
-            'click .stash-mark-as-sold': 'removeFromStash',
-            'click .stash-edit-listing': 'editListing'
+            'click ._edit-company': 'edit'
         },
         serializeData: function() {
             var data = {};
             data = this.model.toJSON();
             data.uploadDirectory = uploadDirectory;
-            // data.Listing = this.model.listing.toJSON();
-            // data.Collectible = this.model.collectible.toJSON();
-            // data['permissions'] = this.permissions.toJSON();
+            data.permissions = this.permissions.toJSON();
             return data;
         },
-        removeListing: function(event) {
+        edit: function(event) {
             event.preventDefault();
-            this.trigger('stash:remove', this.model.get('id'));
-        },
-        removeFromStash: function(event) {
-            event.preventDefault();
-            this.trigger('stash:mark:sold', this.model.get('id'));
-        },
-        editListing: function(event) {
-            event.preventDefault();
-            this.trigger('stash:listing:edit', this.model.get('id'));
+            this.trigger('edit:company', this.model.get('id'));
         }
     });
 });
