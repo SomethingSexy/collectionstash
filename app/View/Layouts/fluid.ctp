@@ -131,7 +131,8 @@
 							
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
-								<li><?php echo $this -> Html -> link('Collectible Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
+								<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search')); ?></li>
+								<li><?php echo $this -> Html -> link('Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
 							</ul>
 						</li>
 						<li>
