@@ -32,14 +32,8 @@ define(function(require) {
             };
         },
         itemEvents: {
-            "stash:mark:sold": function(event, view, id) {
-                this.trigger('stash:mark:sold', id);
-            },
-            "stash:remove": function(event, view, id) {
-                this.trigger('stash:remove', id);
-            },
-            "stash:listing:edit": function(event, view, id) {
-                this.trigger('stash:listing:edit', id);
+            "edit:company": function(event, view, id) {
+                this.trigger('edit:company', id);
             }
         },
         serializeData: function() {

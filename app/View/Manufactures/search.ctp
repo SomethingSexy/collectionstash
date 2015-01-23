@@ -1,7 +1,12 @@
 <?php
 echo $this -> Html -> scriptBlock('var uploadDirectory ="' . $this -> FileUpload -> getUploadDirectory() .'";', array('inline' => false));
-echo $this -> Html -> scriptBlock('var isLoggedIn =' . $isLoggedIn .';', array('inline' => false));
 echo $this -> Html -> scriptBlock('var rawCompanies =' . json_encode($companies) .';', array('inline' => false));
+echo $this -> Html -> scriptBlock('var rawPermissions =' . json_encode($permissions) .';', array('inline' => false));
+
+if(isset($brands)){
+	echo $this -> Html -> scriptBlock('var rawBrands =' . json_encode($brands) .';', array('inline' => false));	
+}
+
 echo $this -> Html -> script('pages/page.company.list', array('inline' => false));?>
 
 

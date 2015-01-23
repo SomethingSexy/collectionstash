@@ -110,6 +110,18 @@ class ManufacturesController extends AppController
         
         $this->set('companies', $extractCompanies);
         
+        $permissions = array();
+        
+        if ($this->isUserAdmin()) {
+            $permissions['edit_manufacturer'] = true;
+            $brands = $this->Manufacture->Collectible->License->find('all', array('contain' => false));
+            $this->set('brands', $brands);
+        } else {
+            $permissions['edit_manufacturer'] = false;
+        }
+        
+        $this->set(compact('permissions'));
+        
         $this->layout = 'require';
     }
     

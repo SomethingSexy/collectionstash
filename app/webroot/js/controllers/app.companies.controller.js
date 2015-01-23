@@ -5,7 +5,8 @@ define(function(require) {
         Marionette = require('marionette'),
         layout = require('text!templates/app/home/layout.mustache'),
         CompaniesView = require('views/app/company/companies/view.companies'),
-        mustache = require('mustache');
+        mustache = require('mustache'),
+        EditCompany = require('views/app/collectible/edit/view.company');
     require('marionette.mustache');
 
     var CompaniesLayout = Backbone.Marionette.Layout.extend({
@@ -20,6 +21,24 @@ define(function(require) {
         }
     });
 
+    function renderCompaniesView() {
+        var companiesView = new CompaniesView({
+            collection: App.companies,
+            permissions: App.permissions
+        });
+        companiesView.on('edit:company', function(id) {
+            var company = App.companies.get(id);
+
+            App.modal.show(new EditCompany({
+                mode: 'edit',
+                model: company,
+                permissions: App.permissions,
+                brands: App.brands
+            }));
+        });
+        App.layout.list.show(companiesView);
+    }
+
 
     return Backbone.Marionette.Controller.extend({
         initialize: function(options) {
@@ -27,16 +46,12 @@ define(function(require) {
             App.main.show(App.layout);
         },
         index: function() {
-            App.layout.list.show(new CompaniesView({
-                collection: App.companies
-            }));
+            renderCompaniesView();
         },
         page: function(pageNumber) {
             App.companies.getPage(parseInt(pageNumber));
             if (!App.layout.list.currentView) {
-                App.layout.list.show(new CompaniesView({
-                    collection: App.companies
-                }));
+                renderCompaniesView();
             }
 
         }
