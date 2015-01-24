@@ -39,6 +39,9 @@ define(function(require) {
                     });
                     this.photo.set(response.Upload);
                 }
+                // we can't remove this because of an issue in Backbone.PageableCollection 
+                // where it isn't acting on the models backbone creates... I suppose I could create
+                // these models upfront and then pass them in
                 delete response.Upload;
             } else {
                 delete this.photo;
