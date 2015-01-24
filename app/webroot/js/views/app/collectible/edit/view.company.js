@@ -151,10 +151,19 @@ define(function(require) {
                 if (files && _.isArray(files) && files.length === 1) {
                     var uploadId = files[0].id;
                     self.upload_id = uploadId;
+                    self.upload = files[0];
                     // self.model.set('upload_id', uploadId);
                 }
             }).bind('fileuploaddestroyed', function(e, data) {
                 self.upload_id = null;
+                // save the model right away since we are deleting the photo right away we don't want
+                // dummy data out there....in the end it would probably be better if the users checks to delete or replace
+                // and then we save and have the server process it at the same time
+                self.model.save({
+                    upload_id: null
+                }, {
+                    silent: true
+                });
             });
 
             if (this.mode === 'edit' && this.permissions.get('edit_manufacturer') === true && this.model.photo) {
@@ -193,12 +202,13 @@ define(function(require) {
             this.model.save(data, {
                 wait: true,
                 success: function(model, response, options) {
-                    if (this.mode === 'add') {
+                    if (self.mode === 'add') {
                         growl.onSuccess('Your manufacturer has been added!');
                     } else {
                         growl.onSuccess('Your edit has been successfully saved!');
                     }
                     $button.button('reset');
+                    model.trigger('save:done');
                 },
                 error: function() {
                     $button.button('reset');
