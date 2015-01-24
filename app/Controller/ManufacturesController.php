@@ -30,9 +30,19 @@ class ManufacturesController extends AppController
             $response = $this->Manufacture->update($collectible, $this->getUser(), true);
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
+                $this->set('returnData', $response['response']['data']);
+            } else {
+                $data = $response['response']['data'];
+                if ($data['Upload']) {
+                    $thumbnail = $this->Image->image($data['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                    $data['Upload']['thumbnail_url'] = $thumbnail['path'];
+                    $data['Upload']['delete_url'] = '/uploads/remove/' . $data['Upload']['id'] . '/false';
+                    $data['Upload']['delete_type'] = 'DELETE';
+                    $data['Upload']['pending'] = false;
+                    $data['Upload']['allowDelete'] = true;
+                }
+                $this->set('returnData', $data);
             }
-            
-            $this->set('returnData', $response['response']['data']);
         }
     }
     /**
