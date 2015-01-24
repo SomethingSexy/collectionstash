@@ -29,7 +29,7 @@ define(function(require) {
         companiesView.on('edit:company', function(id) {
             var company = App.companies.get(id);
 
-            company.once('sync', function(model, response, options) {
+            company.once('save:done', function(model, response, options) {
                 if (_.isArray(response)) {
                     // App.comments.add(response);
                 }
