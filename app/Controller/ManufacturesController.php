@@ -4,6 +4,7 @@ class ManufacturesController extends AppController
 {
     
     public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify', 'Js', 'Time');
+    public $components = array('Image');
     
     public function manufacturer($id = null) {
         
@@ -105,6 +106,12 @@ class ManufacturesController extends AppController
         foreach ($extractCompanies as $key => $value) {
             if (isset($companies[$key]['Upload'])) {
                 $extractCompanies[$key]['Upload'] = $companies[$key]['Upload'];
+                $thumbnail = $this->Image->image($companies[$key]['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                $extractCompanies[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
+                $extractCompanies[$key]['Upload']['delete_url'] = '/uploads/remove/' . $companies[$key]['Upload']['id'] . '/false';
+                $extractCompanies[$key]['Upload']['delete_type'] = 'DELETE';
+                $extractCompanies[$key]['Upload']['pending'] = false;
+                $extractCompanies[$key]['Upload']['allowDelete'] = true;
             }
         }
         

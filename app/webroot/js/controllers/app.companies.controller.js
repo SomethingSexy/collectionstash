@@ -29,6 +29,14 @@ define(function(require) {
         companiesView.on('edit:company', function(id) {
             var company = App.companies.get(id);
 
+            company.once('sync', function(model, response, options) {
+                if (_.isArray(response)) {
+                    // App.comments.add(response);
+                }
+                App.modal.hideModal();
+            });
+
+
             App.modal.show(new EditCompany({
                 mode: 'edit',
                 model: company,

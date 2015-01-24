@@ -1,14 +1,14 @@
 <div class="row spacer">
     <div class="col-md-2">
-        {{#Upload}}
-            <a data-gallery="gallery" href="/{{uploadDirectory}}/{{Upload.name}}" class="thumbnail">
-                <img class="img-responsive" src="/{{uploadDirectory}}/{{Upload.name}}" resizetype="strict" alt="">
+        {{#photo}}
+            <a data-gallery="gallery" href="/{{uploadDirectory}}/{{photo.name}}" class="thumbnail">
+                <img class="img-responsive" src="/{{uploadDirectory}}/{{photo.name}}" resizetype="strict" alt="">
             </a>
-        {{/Upload}}
+        {{/photo}}
 
-        {{^Upload}}
+        {{^photo}}
             <a class="thumbnail col-md-12"><img alt="" src="/img/no-photo.png"></a>
-        {{/Upload}}       
+        {{/photo}}       
     </div>
 
     <div class="col-md-7">

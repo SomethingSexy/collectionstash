@@ -55,6 +55,8 @@ define(function(require) {
                 this.model.LicensesManufacture = this.model.get('LicensesManufacture');
             }
 
+            this.upload_id = this.model.get('upload_id');
+
             this.listenTo(this.model, 'change:LicensesManufacture', this.render);
             this.listenTo(this.model, 'validated:valid', function() {
 
@@ -144,14 +146,15 @@ define(function(require) {
                     return output;
                 }
             }).bind('fileuploaddone', function(e, data) {
-                data.result;
-                data.textStatus;
                 // since we are only allowing one, we are fine grabbing the only one that should be returned
                 var files = data.jqXHR.responseJSON.files;
                 if (files && _.isArray(files) && files.length === 1) {
                     var uploadId = files[0].id;
-                    self.model.set('upload_id', uploadId);
+                    self.upload_id = uploadId;
+                    // self.model.set('upload_id', uploadId);
                 }
+            }).bind('fileuploaddestroyed', function(e, data) {
+                self.upload_id = null;
             });
 
             if (this.mode === 'edit' && this.permissions.get('edit_manufacturer') === true && this.model.photo) {
@@ -173,6 +176,13 @@ define(function(require) {
                     bio: $('[name=bio]', this.el).val(),
                     url: $('[name=url]', this.el).val()
                 };
+
+                if (this.upload_id) {
+                    data.upload_id = this.upload_id;
+                } else {
+                    // make sure it is null and not undefined or something
+                    data.upload_id = null;
+                }
             }
 
             var isValid = true;

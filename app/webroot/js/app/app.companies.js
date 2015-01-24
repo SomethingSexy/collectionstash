@@ -2,7 +2,9 @@ define(function(require) {
 
     var Marionette = require('marionette'),
         CollectiblesCollection = require('collections/collection.companies'),
-        ModalRegion = require('views/common/modal.region');
+        CompanyModel = require('models/model.company'),
+        ModalRegion = require('views/common/modal.region'),
+        _ = require('underscore');
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -24,7 +26,13 @@ define(function(require) {
     });
 
     // adding initial collection here
-    MyApp.companies = new CollectiblesCollection(rawCompanies);
+    var models = _.map(rawCompanies, function(company) {
+        return new CompanyModel(company, {
+            parse: true
+        });
+    });
+
+    MyApp.companies = new CollectiblesCollection(models);
     MyApp.permissions = new Backbone.Model(rawPermissions);
 
     if (typeof rawBrands !== 'undefined') {

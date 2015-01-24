@@ -171,6 +171,12 @@ class CollectiblesController extends AppController
             $extractManufacturers[$key]['LicensesManufacture'] = $manufacturers[$key]['LicensesManufacture'];
             if (isset($manufacturers[$key]['Upload'])) {
                 $extractManufacturers[$key]['Upload'] = $manufacturers[$key]['Upload'];
+                $thumbnail = $this->Image->image($manufacturers[$key]['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                $extractManufacturers[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
+                $extractManufacturers[$key]['Upload']['delete_url'] = '/uploads/remove/' . $manufacturers[$key]['Upload']['id'] . '/false';
+                $extractManufacturers[$key]['Upload']['delete_type'] = 'DELETE';
+                $extractManufacturers[$key]['Upload']['pending'] = false;
+                $extractManufacturers[$key]['Upload']['allowDelete'] = true;
             }
         }
         
