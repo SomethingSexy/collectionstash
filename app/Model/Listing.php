@@ -49,10 +49,15 @@ class Listing extends AppModel
                         // this should go in the database somewhere but for now add here
                         // a mapping of collectible_user_remove_reason_id
                         if (isset($val['Listing']['listing_type_id'])) {
-                            if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
+                            if ($val['Listing']['listing_type_id'] === '1') {
                                 $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+                                // if it as an ebay tranasction then we need to add our affiliate
+                                //'&campid=5337341146&customid=&toolid=10001'
+                                $results[$key]['Listing']['url'] = $results[$key]['Listing']['url'] . '&campid=' . Configure::read('Settings.TransactionManager.eBay.campid') . '&customid=&toolid=10001';
                             } else if ($val['Listing']['listing_type_id'] === '2') {
-                                $results[$key]['Listing']['collectible_user_remove_reason_id'] = 3;
+                                $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+                            } else if ($val['Listing']['listing_type_id'] === '3') {
+                                $results[$key]['Listing']['collectible_user_remove_reason_id'] = 2;
                             }
                         }
                     }
@@ -72,10 +77,13 @@ class Listing extends AppModel
                     }
                     // this should go in the database somewhere but for now add here
                     // a mapping of collectible_user_remove_reason_id
-                    if ($results['listing_type_id'] === '1' || $results['listing_type_id'] === '2') {
+                    if ($results['listing_type_id'] === '1') {
                         $results['collectible_user_remove_reason_id'] = 1;
+                        $results['url'] = $results['url'] . '&campid=5337341146&customid=&toolid=10001';
                     } else if ($results['listing_type_id'] === '2') {
-                        $results['collectible_user_remove_reason_id'] = 3;
+                        $results['collectible_user_remove_reason_id'] = 1;
+                    } else if ($results['listing_type_id'] === '3') {
+                        $results['collectible_user_remove_reason_id'] = 2;
                     }
                 } else {
                     
@@ -95,7 +103,10 @@ class Listing extends AppModel
                             // this should go in the database somewhere but for now add here
                             // a mapping of collectible_user_remove_reason_id
                             if (isset($val['Listing']['listing_type_id'])) {
-                                if ($val['Listing']['listing_type_id'] === '1' || $val['Listing']['listing_type_id'] === '2') {
+                                if ($val['Listing']['listing_type_id'] === '1') {
+                                    $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+                                    $results[$key]['Listing']['url'] = $results[$key]['Listing']['url'] . '&campid=5337341146&customid=&toolid=10001';
+                                } else if ($val['Listing']['listing_type_id'] === '2') {
                                     $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
                                 } else if ($val['Listing']['listing_type_id'] === '3') {
                                     $results[$key]['Listing']['collectible_user_remove_reason_id'] = 2;

@@ -116,7 +116,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         //261217151509 ended unsold
         
         // setting returnall for now but we will need see performance
-        $params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id'], 'DetailLevel' => 'ReturnAll', 'AffiliateTrackingDetails' => array('TrackingID' => '5337341146', 'TrackingPartnerCode' => 9));
+        $params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id'], 'DetailLevel' => 'ReturnAll');
        
         debug($params);
         // make the API call
@@ -171,7 +171,7 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         $data['Listing']['listing_name'] = $responseObj->Item->Title;
         $data['Listing']['quantity'] = $responseObj->Item->Quantity;
         $data['Listing']['quantity_sold'] = $responseObj->Item->SellingStatus->QuantitySold;
-        $data['Listing']['url'] = $responseObj->Item->ListingDetails->ViewItemURLForNaturalSearch . '&campid=5337341146&customid=&toolid=10001';
+        $data['Listing']['url'] = $responseObj->Item->ListingDetails->ViewItemURLForNaturalSearch;
         
         if (isset($responseObj->Item->ConditionID)) {
             $data['Listing']['condition_ext_id'] = $responseObj->Item->ConditionID;
