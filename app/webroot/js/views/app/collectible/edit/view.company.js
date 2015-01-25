@@ -184,9 +184,14 @@ define(function(require) {
             if (this.mode === 'add' || this.permissions.get('edit_manufacturer') === true) {
                 data = {
                     title: $('[name=title]', this.el).val(),
-                    bio: $('[name=bio]', this.el).val(),
                     url: $('[name=url]', this.el).val()
                 };
+
+                var bio = $('[name=bio]', this.el).val();
+                if (bio) {
+                    // this fixes all of those douchy curly quotes that aren't standard.
+                    data.bio = bio.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+                }
 
                 if (this.upload_id) {
                     data.upload_id = this.upload_id;
