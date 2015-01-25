@@ -27,7 +27,7 @@ class Manufacture extends AppModel
     //url
     'url' => array('rule' => 'url', 'allowEmpty' => true, 'message' => 'Must be a valid url.'),
     // bio
-    'bio' => array('maxLength' => array('rule' => array('maxLength', 5000), 'allowEmpty' => true, 'message' => 'Company bio must be less than 5000 characters.'), 'allowedCharacters' => array('rule' => "/^[a-z0-9\s\r\n &$%#@!*()+_\\\\#:.,'\"\/-]+$/i", 'message' => 'Company bio has invalid characters')));
+    'bio' => array('maxLength' => array('rule' => array('maxLength', 5000), 'allowEmpty' => true, 'message' => 'Company bio must be less than 5000 characters.'), 'allowedCharacters' => array('rule' => '/^[a-z0-9\s\r\n ?&$%#@!*()+_\\\\#\':.,"\/-]+$/i', 'message' => 'Company bio has invalid characters')));
     
     function afterFind($results, $primary = false) {
         if ($results) {
@@ -96,8 +96,7 @@ class Manufacture extends AppModel
             $retVal['response']['isSuccess'] = true;
         } else {
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'Manufacture');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
         }
         
         return $retVal;
@@ -131,8 +130,7 @@ class Manufacture extends AppModel
             $retVal['response']['isSuccess'] = true;
         } else {
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'Manufacture');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
         }
         
         return $retVal;

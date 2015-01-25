@@ -16,7 +16,6 @@ class ManufacturesController extends AppController
         if ($this->request->isPost()) {
             // create
             $collectible['Manufacture'] = $this->request->input('json_decode', true);
-            $collectible['Manufacture'] = Sanitize::clean($collectible['Manufacture']);
             $response = $this->Manufacture->add($collectible, $this->getUser(), true);
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
@@ -31,7 +30,6 @@ class ManufacturesController extends AppController
         } else if ($this->request->isPut()) {
             //update
             $collectible['Manufacture'] = $this->request->input('json_decode', true);
-            $collectible['Manufacture'] = Sanitize::clean($collectible['Manufacture']);
             $response = $this->Manufacture->update($collectible, $this->getUser(), true);
             if (!$response['response']['isSuccess']) {
                 $this->response->statusCode(400);
