@@ -1,5 +1,14 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+
+    <h3>Release Notes for v.3.9.0</h3>
+    <ul>
+        <li>Updated the add to stash modal so it indicatesif you already own the collectible. (#117)</li>
+        <li>Updated the collectible detail page to show photos that users linked from their stash. (#163)</li>
+        <li>Added a company listing page under "Collectibles Catalog". (#154)</li>
+        <li>Added a bio field for a company. (#155)</li>
+        <li>Added a logo field for a company. (#156)</li>
+    </ul>
     <h3>Release Notes for v3.8.3</h3>
     <ul>
         <li>Fixed an escaping issue with collectible description. </li>
