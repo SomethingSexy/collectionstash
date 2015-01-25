@@ -4,7 +4,20 @@ class Manufacture extends AppModel
     public $name = 'Manufacture';
     public $belongsTo = array('Series', 'Upload' => array('counterCache' => true));
     public $hasMany = array('Collectible' => array('className' => 'Collectible', 'foreignKey' => 'manufacture_id', 'dependent' => true), 'LicensesManufacture' => array('dependent' => true));
-    public $actsAs = array('Containable');
+    public $actsAs = array('Containable', 'Sluggable' => array(
+    /**
+     * Ok so I want to build slugs on the fly instead of a database field, cause then I would
+     * have to worry about updates and shit...
+     *
+     * The problem is, the slug I want to build for this one has associations i want to bind,
+     * so I am thinking I set those below like so to grab those associations.  If the first one
+     * in the arry is not "Model", then do it on the model alias
+     */
+    'displayField' => array('field1' => array('Model' => 'Manufacture', 'Field' => 'title')), 'showPrimary' => false,
+    // 'slugField' => 'theNameOfYourSlugVirtualField',
+    'replacement' => '-'
+    //the char to implode the words in entry name...
+    ));
     
     public $validate = array(
     //name field
@@ -73,10 +86,13 @@ class Manufacture extends AppModel
         
         if ($this->saveAll($data, array('deep' => true))) {
             $id = $this->id;
-            $manufacturer = $this->find('first', array('contain' => array('LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
+            $manufacturer = $this->find('first', array('contain' => array('Upload', 'LicensesManufacture' => array('License')), 'conditions' => array('Manufacture.id' => $id)));
             
             $retVal['response']['data'] = $manufacturer['Manufacture'];
             $retVal['response']['data']['LicensesManufacture'] = $manufacturer['LicensesManufacture'];
+            if (isset($manufacturer['Upload'])) {
+                $retVal['response']['data']['Upload'] = $manufacturer['Upload'];
+            }
             $retVal['response']['isSuccess'] = true;
         } else {
             $retVal['response']['isSuccess'] = false;
