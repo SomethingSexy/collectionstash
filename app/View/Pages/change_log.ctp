@@ -1,6 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
-
+    <h3>Release Notes for v.3.9.1</h3>
+    <ul>
+        <li>Fixed an issue where the url was not showing up when editing a company. (#177)</li>
+        <li>Fixed validation issues with the bio field. (#176)</li>
+    </ul>
     <h3>Release Notes for v.3.9.0</h3>
     <ul>
         <li>Updated the add to stash modal so it indicatesif you already own the collectible. (#117)</li>
