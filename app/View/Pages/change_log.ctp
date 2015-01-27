@@ -1,6 +1,11 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
-    <h3>Release Notes for v.3.9.1</h3>
+    <h3>Release Notes for v3.10.0</h3>
+    <ul>
+        <li>Fixed issue with uploading image via url. (#168)</li>
+        <li>Added collectible view tracking. (#171)</li>
+    </ul>
+    <h3>Release Notes for v3.9.1</h3>
     <ul>
         <li>Fixed an issue where the url was not showing up when editing a company. (#177)</li>
         <li>Fixed validation issues with the bio field. (#176)</li>
