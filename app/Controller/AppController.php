@@ -133,7 +133,6 @@ class AppController extends Controller
             $this->handleNotLoggedIn();
         }
     }
-
     
     function my_array_unique($array, $keep_key_assoc = false) {
         $duplicate_keys = array();
@@ -180,6 +179,15 @@ class AppController extends Controller
         }
         
         return $retVal;
+    }
+    
+    protected function getClientIP() {
+        // this is for production
+        if (isset($_SERVER['HTTP_X_REAL_IP'])) {
+            return $_SERVER['HTTP_X_REAL_IP'];
+        } else {
+            return $this->request->clientIp();
+        }
     }
 }
 ?>
