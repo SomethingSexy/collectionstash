@@ -462,6 +462,8 @@ class CollectiblesController extends AppController
             
             $this->set('userUploads', $extractUserUploads);
             $this->layout = 'require';
+            
+            $this->getEventManager()->dispatch(new CakeEvent('Controller.Track.view', $this, array('type' => 'collectible', 'id' => $id, 'ip' => $this->request->clientIp(), 'user_id' => $this->getUserId())));
         } else {
             $this->render('viewMissing');
         }
