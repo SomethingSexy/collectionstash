@@ -258,6 +258,9 @@ define(function(require) {
             });
             $('#fileupload').fileupload({
                 //dropZone : $('#dropzone')
+            }).bind('fileuploadadd', function(e, data) {
+                $('._error', '#upload-dialog').empty();
+                $('.url-upload-input', '#upload-dialog').val('');
             });
             $('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
             $('#fileupload').fileupload('option', {
@@ -291,6 +294,7 @@ define(function(require) {
                         beforeSend: function(formData, jqForm, options) {
                             $('.fileupload-progress').removeClass('fade').addClass('active');
                             $('.fileupload-progress .progress .bar').css('width', '100%');
+                            $('._error', '#upload-dialog').empty();
                         },
                         success: function(data, textStatus, jqXHR) {
                             if (data && data.files.length) {
@@ -298,10 +302,19 @@ define(function(require) {
                                 that.fileupload('option', 'done').call(that, null, {
                                     result: data
                                 });
-                            } else if (data.response && !data.response.isSuccess) {
-                                // most like an error
-                                $('span', '.component-message.error').text(data.response.data[0].message);
+
+                                $('.url-upload-input', '#upload-dialog').val('');
                             }
+                        },
+                        error: function(jqXHR, textStatus, error) {
+                            var message;
+                            if (_.isString(jqXHR.responseJSON)) {
+                                message = jqXHR.responseJSON;
+                            } else if (_.isObject(jqXHR.responseJSON) && jqXHR.responseJSON.file) {
+                                message = jqXHR.responseJSON.file;
+                            }
+
+                            $('._error', '#upload-dialog').html('<div class="alert alert-danger" role="alert">' + message + '</div>');
                         },
                         complete: function() {
                             $('.fileupload-progress').removeClass('active').addClass('fade');
@@ -338,7 +351,7 @@ define(function(require) {
                         }
                         $.unblockUI();
                         $('.url-upload-input', '#upload-dialog').val('');
-                        $('span', '.component-message.error').text('');
+                        $('._error', '#upload-dialog').empty();
                         $('#upload-dialog').modal();
                     }
                 });

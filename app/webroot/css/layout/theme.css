@@ -1516,6 +1516,9 @@ ol.fancy-comments > li {
     background: url("../img/loading.gif") center no-repeat;
     background-size: contain;
 }
+.url-upload input {
+    color: black;
+}
 .files audio, .files video {
     max-width: 300px;
 }

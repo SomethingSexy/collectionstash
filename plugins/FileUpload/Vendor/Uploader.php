@@ -266,7 +266,6 @@ class Uploader {
 	 */
 	function _error($text) {
 		$this -> errors[] = __($text, true);
-		debug($this -> errors);
 	}
 
 	/**
