@@ -74,9 +74,12 @@ App::uses('CakeEventManager', 'Event');
 App::uses('EntityChangeEventListener', 'Event');
 App::uses('NotifyEventListener', 'Event');
 App::uses('ActivityEventListener', 'Event');
+App::uses('TrackingEventListener', 'Event');
 CakeEventManager::instance() -> attach(new EntityChangeEventListener());
 CakeEventManager::instance() -> attach(new NotifyEventListener());
 CakeEventManager::instance() -> attach(new ActivityEventListener());
+CakeEventManager::instance() -> attach(new TrackingEventListener());
+
 
 
 // Enable the Dispatcher filters for plugin assets, and
