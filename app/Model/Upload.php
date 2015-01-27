@@ -74,7 +74,7 @@ class Upload extends AppModel
     
     public function isValidUpload($uploadData) {
         $validUpload = false;
-        debug($uploadData);
+
         if (isset($uploadData['Upload']) && !empty($uploadData['Upload'])) {
             
             if (isset($uploadData['Upload']['file']) && !empty($uploadData['Upload']['file'])) {
@@ -87,7 +87,7 @@ class Upload extends AppModel
                 }
             }
         }
-        debug($validUpload);
+
         return $validUpload;
     }
     
@@ -105,7 +105,7 @@ class Upload extends AppModel
         $upload['EntityType']['type'] = 'upload';
         $revision = $this->Revision->buildRevision($userId, $this->Revision->ADD, null);
         $upload = array_merge($upload, $revision);
-        debug($upload);
+
         if ($this->saveAssociated($upload)) {
             $uploadId = $this->id;
             $savedUpload = $this->find("first", array('conditions' => array('Upload.id' => $uploadId), 'contain' => false));

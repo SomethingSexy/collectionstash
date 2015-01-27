@@ -23,8 +23,8 @@
 					<li><?php echo __('Please try and use a professionally shot photo.'); ?></li>
 				</ul>
 				
-				<div class='component-message error'>
-					<span></span>
+				<div class='_error'>
+					
 				</div>
 				<!-- The file upload form used as target for the file upload widget -->
 				<form id="fileupload" action="server/php/" method="POST" enctype="multipart/form-data">
@@ -38,9 +38,9 @@
 							</span>
 						</div>
 						<div class="col-md-7 url-upload">
-							<span class="btn btn-success fileinput-button"> <i class="fa fa-plus"></i> <span>Upload URL</span>
+							<span class="btn btn-success"> <i class="fa fa-plus"></i> <span>Upload URL</span>
 								<input autocomplete="off" type="text" name="data[Upload][url]" class="url-upload-input" value="">
-									<button id="upload-url" class="btn" type="button">
+									<button id="upload-url" class="btn btn-primary" type="button">
 										Upload
 									</button>
 							</span>
