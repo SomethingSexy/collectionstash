@@ -24,7 +24,7 @@ define(function(require) {
         },
         onRender: function() {
             var self = this;
-            $('.fileupload', self.el).fileupload({
+            this.$('.fileupload').fileupload({
                 // add: function(e, data) {
                 //     var jqXHR = data.submit().success(function(result, textStatus, jqXHR) {
                 //         result;
@@ -34,9 +34,12 @@ define(function(require) {
                 imageMaxWidth: 800,
                 imageMaxHeight: 800,
                 imageCrop: true // Force cropped image
+            }).bind('fileuploadadd', function(e, data) {
+                self.$('._error').empty();
+                self.$('.url-upload-input').val('');
             });
-            $('.fileupload', self.el).fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
-            $('.fileupload', self.el).fileupload('option', {
+            this.$('.fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
+            this.$('.fileupload').fileupload('option', {
                 url: '/attributes_uploads/upload',
                 maxFileSize: 2097152,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -52,11 +55,11 @@ define(function(require) {
                     action: 'save'
                 }]
             });
-            $('.fileupload', self.el).on('hidden.bs.modal', function() {
+            this.$('.fileupload').on('hidden.bs.modal', function() {
                 $('#fileupload table tbody tr.template-download').remove();
                 pageEvents.trigger('upload:close');
             });
-            $('.upload-url', self.el).on('click', function() {
+            this.$('.upload-url').on('click', function() {
                 var url = $.trim($('.url-upload-input', self.el).val());
                 if (url !== '') {
                     $.ajax({
@@ -65,29 +68,39 @@ define(function(require) {
                         data: $('.fileupload', self.el).serialize(),
                         url: '/attributes_uploads/upload/',
                         beforeSend: function(formData, jqForm, options) {
-                            $('.fileupload-progress', self.el).removeClass('fade').addClass('active');
-                            $('.fileupload-progress .progress .bar', self.el).css('width', '100%');
+                            self.$('.fileupload-progress').removeClass('fade').addClass('active');
+                            self.$('.fileupload-progress .progress .bar').css('width', '100%');
+                            self.$('._error').empty();
                         },
                         success: function(data, textStatus, jqXHR) {
                             if (data && data.files.length) {
-                                var that = $('.fileupload', self.el);
+                                var that = self.$('.fileupload');
                                 that.fileupload('option', 'done').call(that, null, {
                                     result: data
                                 });
-                            } else if (data.response && !data.response.isSuccess) {
-                                // most like an error
-                                $('span', '.component-message.error').text(data.response.errors[0].message);
+
+                                self.$('.url-upload-input').val('');
                             }
                         },
+                        error: function(jqXHR, textStatus, error) {
+                            var message;
+                            if (_.isString(jqXHR.responseJSON)) {
+                                message = jqXHR.responseJSON;
+                            } else if (_.isObject(jqXHR.responseJSON) && jqXHR.responseJSON.file) {
+                                message = jqXHR.responseJSON.file;
+                            }
+
+                            self.$('._error').html('<div class="alert alert-danger" role="alert">' + message + '</div>');
+                        },
                         complete: function() {
-                            $('.fileupload-progress', self.el).removeClass('active').addClass('fade');
-                            $('.fileupload-progress .progress .bar', self.el).css('width', '0%');
+                            self.$('.fileupload-progress').removeClass('active').addClass('fade');
+                            self.$('.fileupload-progress .progress .bar').css('width', '0%');
                         }
                     });
                 }
             });
-            var that = $('.fileupload', self.el);
-            var uploads = self.collection.pluck('Upload');
+            var that = this.$('.fileupload');
+            var uploads = this.collection.pluck('Upload');
             that.fileupload('option', 'done').call(that, null, {
                 result: {
                     files: uploads
