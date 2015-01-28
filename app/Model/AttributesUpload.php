@@ -136,8 +136,7 @@ class AttributesUpload extends AppModel
                     // Just in case
                     $dataSource->rollback();
                     $retVal['response']['isSuccess'] = false;
-                    $errors = $this->convertErrorsJSON($this->Upload->validationErrors, 'Upload');
-                    $retVal['response']['errors'] = $errors;
+                    $retVal['response']['data'] = $this->validationErrors;
                     return $retVal;
                 }
                 $upload = array();
@@ -184,9 +183,9 @@ class AttributesUpload extends AppModel
                 $retVal['response']['isSuccess'] = false;
             }
         } else {
+                                debug($this->validationErrors);
             $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'AttributesUpload');
-            $retVal['response']['errors'] = $errors;
+            $retVal['response']['data'] = $this->validationErrors;
         }
         
         return $retVal;

@@ -86,6 +86,7 @@ class AttributesUploadsController extends AppController
                     array_push($retunData['files'], $uploadResponse);
                     $this->set('returnData', $retunData);
                 } else {
+                    $this->autoRender = false;
                     if (!$response['response']['isSuccess'] && $response['response']['code'] === 401) {
                         $this->response->statusCode(401);
                     } else if (!$response['response']['isSuccess'] && $response['response']['code'] === 400) {
@@ -96,15 +97,12 @@ class AttributesUploadsController extends AppController
                     }
                 }
             } else {
-                //Something really fucked up
-                $data['isSuccess'] = false;
-                $data['errors'] = array('message', __('Invalid request.'));
-                $this->set('returnData', $data);
+                $this->response->statusCode(400);
+                $this->set('returnData', __('Invalid request.'));
             }
         } else {
-            $data['isSuccess'] = false;
-            $data['errors'] = array('message', __('Invalid request.'));
-            $this->set('returnData', $data);
+            $this->response->statusCode(400);
+            $this->set('returnData', __('Invalid request.'));
             return;
         }
     }
