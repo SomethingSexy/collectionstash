@@ -153,38 +153,6 @@ class AttributesController extends AppController
         }
     }
     
-    function admin_index($standalone = false) {
-        $this->checkLogIn();
-        $this->checkAdmin();
-        if ($standalone) {
-            // Only return ones that are not tied to a collectible
-            $this->paginate = array('standalone', 'conditions' => array('Attribute.status_id' => 2));
-        } else {
-            // TODO: Only return ones that are tied to something
-            // Might be easier to find all and then filter :)
-            $this->paginate = array('collectible', 'conditions' => array('Attribute.status_id' => 2));
-        }
-        
-        $attributes = $this->paginate('Attribute');
-        
-        $this->set('attributes', $attributes);
-        
-        $this->layout = 'fluid';
-    }
-    
-    function admin_view($id = null) {
-        $this->checkLogIn();
-        $this->checkAdmin();
-        
-        if (!$id) {
-            $this->Session->setFlash(__('Invalid Item', true));
-            $this->redirect(array('action' => 'index'));
-        }
-        
-        $attribute = $this->Attribute->find('first', array('conditions' => array('Attribute.id' => $id)));
-        debug($attribute);
-        $this->set('attribute', $attribute);
-    }
     /**
      * Attributes can be added at two places
      *  - Stand alone

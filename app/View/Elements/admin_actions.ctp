@@ -12,17 +12,6 @@
 			</ul>
 		</li>
 		<li>
-			<h3><?php echo __('Items'); ?></h3>
-			<ul class="unstyled">
-				<li>
-					<?php echo $this -> Html -> link('View Standalone Pending', array('admin' => true, 'controller' => 'attributes', true), array('class' => 'link')); ?>
-				</li>
-				<li>
-					<?php echo $this -> Html -> link('View Collectible Pending', array('admin' => true, 'controller' => 'attributes', false), array('class' => 'link')); ?>
-				</li>
-			</ul>
-		</li>
-		<li>
 			<h3><?php echo __('Edits'); ?></h3>
 			<ul class="unstyled">
 				<li>
