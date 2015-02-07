@@ -83,7 +83,7 @@ class EditsController extends AppController
                     if ($this->Edit->publishEdit($id, $this->getUserId())) {
                         $this->Session->setFlash('The edit has been successfully approved.', null, null, 'success');
                     } else {
-                        $this->Session->setFlash(__('There was a problem submitting the edit.', true), null, null, 'error');
+                        $this->Session->setFlash(__('There was a problem approving the edit.', true), null, null, 'error');
                     }
                 } else {
                     if ($this->Edit->denyEdit($id, $this->getUserId())) {
