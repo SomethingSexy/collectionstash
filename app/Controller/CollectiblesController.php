@@ -123,11 +123,26 @@ class CollectiblesController extends AppController
         foreach ($parts as $partKey => $part) {
             foreach ($part['Attribute']['AttributesUpload'] as $key => $value) {
                 $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                // ugh this might be overkill but I would like for the user to know, when editing if an upload is already pending an edit, such as delete, so there
+                // aren't multiple deletes.
+                $pending = $this->Collectible->AttributesCollectible->Attribute->AttributesUpload->findPendingEdits(array('AttributesUploadEdit.base_id' => $value['id']));
+                debug($pending);
+                // this should only contain action_type === 4, which is a removal
+                $pendingRemoval = false;
+                foreach ($pending as $editKey => $edit) {
+                    if ($edit['Action']['action_type_id'] === '4') {
+                        $pendingRemoval = true;
+                    }
+                }
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_type'] = 'POST';
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = false;
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = true;
+                
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = $pendingRemoval;
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = !$pendingRemoval;
+                if ($pendingRemoval) {
+                    $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pendingText'] = __('Pending Removal');
+                }
             }
         }
         

@@ -119,11 +119,24 @@ class AttributesUploadsController extends AppController
             
             foreach ($part as $key => $value) {
                 $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
+                $pending = $this->AttributesUpload->findPendingEdits(array('AttributesUploadEdit.base_id' => $value['id']));
+                debug($pending);
+                // this should only contain action_type === 4, which is a removal
+                $pendingRemoval = false;
+                foreach ($pending as $editKey => $edit) {
+                    if ($edit['Action']['action_type_id'] === '4') {
+                        $pendingRemoval = true;
+                    }
+                }
+                
                 $part[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
                 $part[$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
                 $part[$key]['Upload']['delete_type'] = 'POST';
-                $part[$key]['Upload']['pending'] = false;
-                $part[$key]['Upload']['allowDelete'] = true;
+                $part[$key]['Upload']['pending'] = $pendingRemoval;
+                $part[$key]['Upload']['allowDelete'] = !$pendingRemoval;
+                if ($pendingRemoval) {
+                    $part[$key]['Upload']['pendingText'] = __('Pending Removal');
+                }
             }
         }
         

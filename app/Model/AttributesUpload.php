@@ -183,7 +183,6 @@ class AttributesUpload extends AppModel
                 $retVal['response']['isSuccess'] = false;
             }
         } else {
-                                debug($this->validationErrors);
             $retVal['response']['isSuccess'] = false;
             $retVal['response']['data'] = $this->validationErrors;
         }
