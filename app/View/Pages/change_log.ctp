@@ -1,5 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.10.1</h3>
+    <ul>
+        <li>Updated the part upload to not allow the user to delete images that are already pending a delete. (#145)</li>
+        <li>Removed unnecessary admin views. (#180)</li>
+    </ul>    
     <h3>Release Notes for v3.10.0</h3>
     <ul>
         <li>Fixed issue with uploading image via url. (#168)</li>
