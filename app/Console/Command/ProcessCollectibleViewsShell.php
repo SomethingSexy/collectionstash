@@ -29,7 +29,7 @@ class ProcessCollectibleViewsShell extends AppShell
             if ($collectible[0]) {
                 $id = $collectible['CollectibleView']['collectible_id'];
                 $count = $collectible[0]['count'];
-                $this->Collectible->updateAll(array('Collectible.viewed' => 'Collectible.viewed+' . $count), array('Collectible.id' => $id));
+                $this->Collectible->updateAll(array('Collectible.viewed' => 'Collectible.viewed+' . $count, 'Collectible.modified' => 'NOW()'), array('Collectible.id' => $id));
             }
         }
     }
