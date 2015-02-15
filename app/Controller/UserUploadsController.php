@@ -70,13 +70,13 @@ class UserUploadsController extends AppController
                 $img = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $value['UserUpload']['user_id'], 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
                 $uploadResponse = array();
                 $uploadResponse['url'] = $img['path'];
-                $uploadResponse['thumbnail_url'] = $resizedImg['path'];
+                $uploadResponse['thumbnailUrl'] = $resizedImg['path'];
                 $uploadResponse['type'] = $value['UserUpload']['type'];
                 $uploadResponse['size'] = intval($value['UserUpload']['size']);
                 $uploadResponse['name'] = $value['UserUpload']['name'];
-                $uploadResponse['delete_url'] = '/user_uploads/remove/' . $value['UserUpload']['id'];
+                $uploadResponse['deleteUrl'] = '/user_uploads/remove/' . $value['UserUpload']['id'];
                 $uploadResponse['edit_url'] = '/user_uploads/upload/' . $value['UserUpload']['id'];
-                $uploadResponse['delete_type'] = 'POST';
+                $uploadResponse['deleteType'] = 'POST';
                 
                 array_push($returnData['files'], $uploadResponse);
             }
@@ -140,12 +140,12 @@ class UserUploadsController extends AppController
                         $retunData['files'] = array();
                         $uploadResponse = array();
                         $uploadResponse['url'] = $img['path'];
-                        $uploadResponse['thumbnail_url'] = $resizedImg['path'];
+                        $uploadResponse['thumbnailUrl'] = $resizedImg['path'];
                         $uploadResponse['type'] = $upload['UserUpload']['type'];
                         $uploadResponse['size'] = intval($upload['UserUpload']['size']);
                         $uploadResponse['name'] = $upload['UserUpload']['name'];
-                        $uploadResponse['delete_url'] = '/user_uploads/remove/' . $upload['UserUpload']['id'];
-                        $uploadResponse['delete_type'] = 'POST';
+                        $uploadResponse['deleteUrl'] = '/user_uploads/remove/' . $upload['UserUpload']['id'];
+                        $uploadResponse['deleteType'] = 'POST';
                         $uploadResponse['edit_url'] = '/user_uploads/upload/' . $upload['UserUpload']['id'];
                         array_push($retunData['files'], $uploadResponse);
                         $this->set('returnData', $retunData);
