@@ -1,4 +1,4 @@
-define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache', 'bootstrap-datepicker'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
+define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/common/stash.add.mustache', 'views/common/mixin.error', 'mustache', 'marionette.mustache', 'bootstrap-datepicker', 'select2'], function(require, _, Backbone, Marionnette, template, ErrorMixin) {
 
     var StashAddView = Marionnette.ItemView.extend({
         template: template,
@@ -12,6 +12,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             this.stashCount = options.stashCount || 0;
             this.wishlistCount = options.wishlistCount || 0;
             this.model.startTracking();
+            this.lastResults = [];
         },
         onRender: function() {
             var self = this;
@@ -21,6 +22,73 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             });
             $('#CollectiblesUserConditionId option[value="' + this.model.get('condition_id') + '"]', this.el).prop('selected', 'selected');
             this.errors = [];
+
+            $('.merchants-typeahead', this.el).select2({
+                placeholder: 'Search or add a new merchant.',
+                minimumInputLength: 1,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: "/merchants/merchants",
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            query: term, // search term
+                            page_limit: 100
+                        };
+                    },
+                    results: function(data, page) {
+                        self.lastResults = data;
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                formatResult: function(item) {
+                    return item.name;
+                },
+                formatSelection: function(item) {
+                    return item.name;
+                },
+                createSearchChoice: function(term, data) {
+                    if (self.lastResults.some(function(r) {
+                        return r.name == term
+                    })) {
+                        return {
+                            id: data.id,
+                            name: term,
+                            created: false
+                        };
+                    } else {
+                        return {
+                            id: term,
+                            name: term,
+                            created: true
+                        };
+                    }
+                },
+                allowClear: true,
+                dropdownCssClass: "bigdrop"
+            }).on('change', function(val, added, removed) {
+                var data = $('.merchants-typeahead', self.el).select2('data');
+                if (!data || !data.name) {
+                    self.model.unset('merchant', {
+                        forceUpdate: true
+                    });
+                    return;
+                }
+                if (data.created) {
+                    self.model.set({
+                        merchant: data.name,
+                    }, {
+                        forceUpdate: true
+                    });
+                } else {
+                    self.model.set({
+                        merchant: data.name,
+                    }, {
+                        forceUpdate: true
+                    });
+                }
+            });
         },
         serializeData: function() {
             var data = this.model.toJSON();
@@ -54,7 +122,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
                 'edition_size': $('[name=edition_size]', this.el).val(),
                 'cost': $('[name=cost]', this.el).val(),
                 'condition_id': $('[name=condition_id]', this.el).val(),
-                'merchant': $('[name=merchant]', this.el).val(),
+                // 'merchant': $('[name=merchant]', this.el).val(),
                 'purchase_date': $('[name=purchase_date]', this.el).val(),
                 'notes': $('[name=notes]', this.el).val(),
             };
