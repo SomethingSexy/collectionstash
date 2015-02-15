@@ -68,7 +68,7 @@ $(function() {
     $fileupload.fileupload({
         url : '/user_uploads/add',
         dataType: 'json',
-        // maxFileSize: 2097152,
+        maxFileSize: 2097152,
         maxNumberOfFiles : <?php echo Configure::read('Settings.User.uploads.total-allowed'); ?>,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
@@ -77,16 +77,10 @@ $(function() {
         previewCrop: true,
         autoUpload: false
     });
-    $('#fileupload').fileupload('option', {
-        maxFileSize: 5000000,
-
-    });    
-
+ 
     $fileupload.fileupload('option', 'done').call($fileupload, $.Event('done'), {
         result: <?php echo $this -> Js -> object($uploads); ?>
     });
-
-
 });
 
 </script>
