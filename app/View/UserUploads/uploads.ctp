@@ -1,11 +1,13 @@
 <?php echo $this -> Minify -> script('jquery.form', array('inline' => false)); ?>
 <?php
-echo $this -> Minify -> script('jquery.iframe-transport', array('inline' => false));
-echo $this -> Minify -> script('cors/jquery.postmessage-transport', array('inline' => false));
-echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload-fp', array('inline' => false));
-echo $this -> Minify -> script('jquery.fileupload-ui', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.iframe-transport', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport', array('inline' => false));
+// echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-process', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-image', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-validate', array('inline' => false));
+echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-ui', array('inline' => false));
 
 echo $this -> Minify -> script('locale', array('inline' => false));
 ?>
@@ -60,49 +62,29 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 		</div>
 </div>
 <script>
-		$(function() {
+$(function() {
 
-	$('#fileupload').fileupload({
-		dropZone : $('#dropzone'),
-		 error: function (jqXHR, textStatus, errorThrown) {
-        // Called for each failed chunk upload
-	    },
-	    success: function (data, textStatus, jqXHR) {
-	        // Called for each successful chunk upload
-	    }
-	});
-	$('#fileupload').bind('fileuploaddone', function (e, data) {
-		console.log(data.result);	
-	});
-	
-	$('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
+    var $fileupload = $('#fileupload', this.el);
+    $fileupload.fileupload({
+        url : '/user_uploads/add',
+        dataType: 'json',
+        // maxFileSize: 2097152,
+        maxNumberOfFiles : <?php echo Configure::read('Settings.User.uploads.total-allowed'); ?>,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        previewCrop: true,
+        autoUpload: false
+    });
+    $('#fileupload').fileupload('option', {
+        maxFileSize: 5000000,
 
-	$('#fileupload').fileupload('option', {
-		url : '/user_uploads/add',
-		maxFileSize : 2097152,
-		maxNumberOfFiles : <?php echo Configure::read('Settings.User.uploads.total-allowed'); ?>,
-		acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
-		process : [{
-				action : 'load',
-				fileTypes : /^image\/(gif|jpeg|png)$/,
-				maxFileSize : 2097152 // 2MB
-			}, {
-				action : 'resize',
-				maxWidth : 1440,
-				maxHeight : 900
-			}, {
-				action : 'save'
-		}]
-	});
+    });    
 
-	var that = $('#fileupload');
-	that.fileupload('option', 'done').call(that, null, {
-		result : <?php echo $this -> Js -> object($uploads); ?>
-	});
-	
-	$('#fileupload').on('fileuploadadd', function (e, data) {
-	
-	});
+    $fileupload.fileupload('option', 'done').call($fileupload, $.Event('done'), {
+        result: <?php echo $this -> Js -> object($uploads); ?>
+    });
 
 
 });
@@ -110,60 +92,75 @@ echo $this -> Minify -> script('locale', array('inline' => false));
 </script>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
-	{% for (var i=0, file; file=o.files[i]; i++) { %}
-	<tr class="template-upload fade">
-	<td class="preview"><span class="fade"></span></td>
-	<td class="name"><span>{%=file.name%}</span></td>
-	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-	{% if (file.error) { %}
-	<td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
-	{% } else if (o.files.valid && !i) { %}
-	<td>
-	<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-	</td>
-	<td class="start">{% if (!o.options.autoUpload) { %}
-	<button class="btn btn-primary">
-	<i class="fa fa-upload"></i>
-	<span>{%=locale.fileupload.start%}</span>
-	</button>
-	{% } %}</td>
-	{% } else { %}
-	<td colspan="2"></td>
-	{% } %}
-	<td class="cancel">{% if (!i) { %}
-	<button class="btn btn-warning">
-	<i class="fa fa-warning"></i>
-	<span>{%=locale.fileupload.cancel%}</span>
-	</button>
-	{% } %}</td>
-	</tr>
-	{% } %}
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-	{% for (var i=0, file; file=o.files[i]; i++) { %}
-	<tr class="template-download fade">
-	{% if (file.error) { %}
-	<td></td>
-	<td class="name"><span>{%=file.name%}</span></td>
-	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-	<td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
-	{% } else { %}
-	<td class="preview">{% if (file.thumbnail_url) { %}
-	<a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
-	{% } %}</td>
-	<td class="name">
-	<a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
-	</td>
-	<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-	<td colspan="2"><span>{% if(file.pending) { %} {%=file.pendingText %} {% } %}</span></td>
-	{% } %}
-	<td class="delete">
-         <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                <i class="fa fa-trash-o"></i>
-                <span>Delete</span>
-            </button>
-	</td>
-	</tr>
-	{% } %}
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                    <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.deleteUrl) { %}
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+            {% } else { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
 </script>
