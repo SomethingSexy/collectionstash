@@ -236,7 +236,7 @@ class UserUploadsController extends AppController
     public function gallery() {
         // TODO: Going to need a privacy setting for uploads, that is separate from the stash
         // because when I allow for more stashes, it won't make sense
-        $this->paginate = array('limit' => 25, 'order' => array('created' => 'desc'), 'contain' => array('User'));
+        $this->paginate = array('limit' => 50, 'order' => array('created' => 'desc'), 'contain' => array('User'));
         $userUploads = $this->paginate('UserUpload');
         $this->set(compact('userUploads'));
         $this->layout = 'fluid';

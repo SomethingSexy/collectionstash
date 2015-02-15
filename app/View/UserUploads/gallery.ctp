@@ -8,7 +8,7 @@
 		echo '<div id="titles-nav" class="hidden">';
 		echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 		echo '</div>';
-		echo '<div class="tiles boxed-tiles" data-toggle="modal-gallery" data-target="#modal-gallery">';
+		echo '<div class="tiles boxed-tiles user-uploads" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 		foreach ($userUploads as $key => $upload) {
 			if (!empty($upload['UserUpload'])) {
@@ -17,7 +17,7 @@
 				$this -> FileUpload -> reset();
 				echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['UserUpload']['name'], array('imagePathOnly' => true, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '">';
 				$this -> FileUpload -> reset();
-				echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 400, 'height' => 400, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
+				echo $this -> FileUpload -> image($upload['UserUpload']['name'], array('resizeType' => 'adaptive', 'imagePathOnly' => false, 'width' => 200, 'height' => 200, 'uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $upload['UserUpload']['user_id'])) . '</a>';
 				echo '</div>';
 				echo '<div class="header">';
 				echo '<h2>';
