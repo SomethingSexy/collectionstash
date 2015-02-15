@@ -45,7 +45,6 @@
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
-	echo $this -> Minify -> script('jquery-ui-1.10.2');
 	echo $this -> Html -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('thirdparty/backbone');
@@ -53,7 +52,6 @@
 	echo $this -> Minify -> script('thirdparty/backbone.validation');
 	echo $this -> Minify -> script('jquery-plugins');
 	echo $this -> Html -> script('/bower_components/blockui/jquery.blockUI');
-	echo $this -> Minify -> script('jquery.autocomplete');
 	// Replace this with dust eventually
 	echo $this -> Html -> script('/bower_components/blueimp-tmpl/js/tmpl.min');
 	echo $this -> Html -> script('/bower_components/blueimp-load-image/js/load-image.min');
@@ -132,7 +130,6 @@
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
 								<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search')); ?></li>
-								<li><?php echo $this -> Html -> link('Parts', array('admin' => false, 'controller' => 'attributes', 'action' => 'index')); ?></li>
 							</ul>
 						</li>
 						<li>
