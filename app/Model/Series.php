@@ -69,7 +69,7 @@ class Series extends AppModel {
 		// $series = $this -> find('threaded', array('conditions' => array('Series.id' => $manufacturer['Manufacture']['id'])));
 
 		$parent = $this -> find('first', array('contain' => false, 'conditions' => array('Series.id' => $manufacturer['Manufacture']['series_id'])));
-		$series = $this -> find('threaded', array('conditions' => array('Series.lft >=' => $parent['Series']['lft'], 'Series.rght <=' => $parent['Series']['rght'])));
+		$series = $this -> find('threaded', array('order' => 'name ASC', 'conditions' => array('Series.lft >=' => $parent['Series']['lft'], 'Series.rght <=' => $parent['Series']['rght'])));
 		// With this one we need to include the parent, otherwise it won't work
 
 		// $series = $this -> children($manufacturer['Manufacture']['id']);
