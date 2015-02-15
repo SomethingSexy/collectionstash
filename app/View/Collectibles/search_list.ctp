@@ -65,16 +65,12 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 					<div class="col-md-12">			
 					<?php
 					foreach ($collectibles as $collectible) {
-						$fullCollectibleJSON = json_encode($collectible);
-						$fullCollectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $fullCollectibleJSON));
-
-						$collectibleJSON = json_encode($collectible['Collectible']);
-						$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+						$collectibleJSON = htmlspecialchars(json_encode($collectible['Collectible']), ENT_QUOTES, 'UTF-8');
 						echo '<div class="spacer">';
 						// this is still need for the add to stash functionality
 						$stashCount = isset($collectible['Collectible']['userCounts']['stashCount']) ? $collectible['Collectible']['userCounts']['stashCount'] : 0;
 						$wishlistCount = isset($collectible['Collectible']['userCounts']['wishListCount']) ? $collectible['Collectible']['userCounts']['wishListCount'] : 0;
-						echo '<div class="col-md-12 collectible" data-collectible=\'' . $fullCollectibleJSON . '\'>';
+						echo '<div class="col-md-12 collectible">';
 						echo '<div class="row">';
 						//TODO: the problem is with the thumbnail/span1 in the table
 						echo '<div class="col-md-2">';
