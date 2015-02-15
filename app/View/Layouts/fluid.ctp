@@ -45,6 +45,7 @@
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
+	echo $this -> Html -> script('/bower_components/jquery-ui/jquery-ui.min');
 	echo $this -> Html -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('thirdparty/backbone');
