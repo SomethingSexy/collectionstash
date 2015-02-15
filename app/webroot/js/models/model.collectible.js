@@ -62,7 +62,7 @@ if (!adminMode) {
                 pattern: 'digits',
                 msg: 'Must be numeric.'
             }, {
-                maxLength: 12,
+                maxLength: 13,
                 msg: 'Must be a valid length.'
             }],
             'product_length': [{
