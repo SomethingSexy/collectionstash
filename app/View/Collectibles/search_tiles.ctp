@@ -35,8 +35,7 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 							echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 							foreach ($collectibles as $collectible) {
-								$collectibleJSON = json_encode($collectible['Collectible']);
-								$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
+								$collectibleJSON = htmlspecialchars(json_encode($collectible['Collectible']), ENT_QUOTES, 'UTF-8');
 								$stashCount = isset($collectible['Collectible']['userCounts']['stashCount']) ? $collectible['Collectible']['userCounts']['stashCount'] : 0;
 								$wishlistCount = isset($collectible['Collectible']['userCounts']['wishListCount']) ? $collectible['Collectible']['userCounts']['wishListCount'] : 0;
 								
