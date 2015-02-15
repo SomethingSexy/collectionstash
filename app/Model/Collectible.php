@@ -50,7 +50,7 @@ class Collectible extends AppModel
     //retailer
     'retailer' => array('minLength' => array('rule' => array('minLength', 4), 'allowEmpty' => true, 'message' => 'Retailer/Venue must be at least 4 characters.'), 'maxLength' => array('rule' => array('maxLength', 150), 'message' => 'Retailer/Venue cannot be more than 150 characters.')),
     //upc
-    'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 12), 'message' => 'Invalid length.')),
+    'upc' => array('numeric' => array('rule' => 'numeric', 'allowEmpty' => true, 'message' => 'Must be numeric.'), 'maxLength' => array('rule' => array('maxLength', 13), 'message' => 'Invalid length.')),
     //product code
     'code' => array('numeric' => array('rule' => '/^[\\w\\s-\/]+$/', 'allowEmpty' => true, 'message' => 'Invalid characters.'), 'maxLength' => array('rule' => array('maxLength', 50), 'message' => 'Invalid length.')),
     //This should be decmial or blank
