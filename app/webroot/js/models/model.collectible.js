@@ -43,7 +43,7 @@ if (!adminMode) {
             ],
             description: [{
                 rangeLength: [0, 1000],
-                msg: 'Invalid length.'
+                msg: 'Maximum allowed length is 1000 characters.'
             }, {
                 required: false
             }, {
