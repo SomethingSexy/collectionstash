@@ -126,7 +126,6 @@ class CollectiblesController extends AppController
                 // ugh this might be overkill but I would like for the user to know, when editing if an upload is already pending an edit, such as delete, so there
                 // aren't multiple deletes.
                 $pending = $this->Collectible->AttributesCollectible->Attribute->AttributesUpload->findPendingEdits(array('AttributesUploadEdit.base_id' => $value['id']));
-                debug($pending);
                 // this should only contain action_type === 4, which is a removal
                 $pendingRemoval = false;
                 foreach ($pending as $editKey => $edit) {

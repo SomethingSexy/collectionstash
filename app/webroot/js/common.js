@@ -47,8 +47,23 @@ requirejs.config({
         "backbone.bootstrap-modal": "../bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal",
         "tmpl": "../bower_components/blueimp-tmpl/js/tmpl",
         "load-image": "../bower_components/blueimp-load-image/js/load-image",
+        "load-image-ios": "../bower_components/blueimp-load-image/js/load-image-ios",
+        "load-image-exif": "../bower_components/blueimp-load-image/js/load-image-exif",
+        "load-image-meta": "../bower_components/blueimp-load-image/js/load-image-meta",
         "canvas-to-blob": "../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob",
-        "jquery.ui.widget": "../bower_components/jquery-ui/ui/widget"
+        "jquery.ui.widget": "../bower_components/jquery-ui/ui/widget",
+        'jquery.fileupload': '../bower_components/blueimp-file-upload/js/jquery.fileupload',
+
+        'jquery.fileupload-audio': '../bower_components/blueimp-file-upload/js/jquery.fileupload-audio',
+        'jquery.fileupload-video': '../bower_components/blueimp-file-upload/js/jquery.fileupload-video',
+
+        'jquery.iframe-transport': '/bower_components/blueimp-file-upload/js/jquery.iframe-transport',
+        'jquery.postmessage-transport': '/bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport',
+
+        'jquery.fileupload-process': '/bower_components/blueimp-file-upload/js/jquery.fileupload-process',
+        'jquery.fileupload-image': '/bower_components/blueimp-file-upload/js/jquery.fileupload-image',
+        'jquery.fileupload-validate': '/bower_components/blueimp-file-upload/js/jquery.fileupload-validate',
+        'jquery.fileupload-ui': '/bower_components/blueimp-file-upload/js/jquery.fileupload-ui'
     },
     shim: {
         'dust': {
@@ -91,9 +106,9 @@ requirejs.config({
         'cs.core.tree': {
             deps: ['jquery']
         },
-        'jquery.getimagedata': {
-            deps: ['jquery']
-        },
+        // 'jquery.getimagedata': {
+        //     deps: ['jquery']
+        // },
         'cs.attribute': {
             deps: ['jquery', 'bootstrap']
         }

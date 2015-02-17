@@ -47,12 +47,14 @@ define(function(require) {
     require('jquery.form');
     require('jquery.treeview');
     require('cs.core.tree');
-    require('jquery.getimagedata');
+    // require('jquery.getimagedata');
     require('jquery.iframe-transport');
-    require('cors/jquery.postmessage-transport');
+    require('jquery.postmessage-transport');
     require('jquery.fileupload');
-    require('jquery.fileupload-fp');
+    require('jquery.fileupload-process');
     require('jquery.fileupload-ui');
+    require('jquery.fileupload-image');
+    require('jquery.fileupload-validate');
     require("jquery.ui.widget");
     require('blockui');
     require('backbone.validation');
