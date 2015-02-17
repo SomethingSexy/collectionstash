@@ -242,7 +242,7 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
             });
 
             var clip = new ZeroClipboard([document.getElementById("copy-to-clipboard-direct"), document.getElementById("copy-to-clipboard-bbcode"), document.getElementById("copy-to-clipboard-bbcodeimage")], {
-                moviePath: "/assets/flash/ZeroClipboard.swf"
+                swfPath: "/assets/flash/ZeroClipboard.swf"
             });
 
             clip.on("load", function(client) {
