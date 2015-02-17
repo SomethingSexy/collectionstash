@@ -2,7 +2,6 @@
 <?php
 echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.iframe-transport', array('inline' => false));
 echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport', array('inline' => false));
-// echo $this -> Minify -> script('jquery.getimagedata', array('inline' => false));
 echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload', array('inline' => false));
 echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-process', array('inline' => false));
 echo $this -> Html -> script('/bower_components/blueimp-file-upload/js/jquery.fileupload-image', array('inline' => false));

@@ -116,7 +116,13 @@ class EbayTransaction extends BaseTransaction implements Transactionable
         //261217151509 ended unsold
         
         // setting returnall for now but we will need see performance
-        $params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id'], 'DetailLevel' => 'ReturnAll');
+        //  <affiliate> Affiliate
+  //   <customId> string </customId>
+  //   <geoTargeting> boolean </geoTargeting>
+  //   <networkId> string </networkId>
+  //   <trackingId> string </trackingId>
+  // </affiliate>
+        $params = array('Version' => 821, 'ItemID' => $data['Listing']['ext_item_id'], 'DetailLevel' => 'ReturnAll', 'affiliate' => array('networkId' => 9, 'trackingId' => Configure::read('Settings.TransactionManager.eBay.campid')));
        
         debug($params);
         // make the API call

@@ -51,9 +51,15 @@ class Listing extends AppModel
                         if (isset($val['Listing']['listing_type_id'])) {
                             if ($val['Listing']['listing_type_id'] === '1') {
                                 $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
+                                //
                                 // if it as an ebay tranasction then we need to add our affiliate
                                 //'&campid=5337341146&customid=&toolid=10001'
-                                $results[$key]['Listing']['url'] = $results[$key]['Listing']['url'] . '&campid=' . Configure::read('Settings.TransactionManager.eBay.campid') . '&customid=&toolid=10001';
+                                // if (isset($results[$key]['Listing']['ext_item_id'])) {
+                                //    $results[$key]['Listing']['url'] = 'http://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=2&pub=5575051333&toolid=10001&campid=' . Configure::read('Settings.TransactionManager.eBay.campid') . '&customid=&icep_item=' +  $results[$key]['Listing']['ext_item_id'] + '&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg'
+                                // } else {
+                                    // no clue if just adding this works
+                                    $results[$key]['Listing']['url'] = $results[$key]['Listing']['url'] . '&campid=' . Configure::read('Settings.TransactionManager.eBay.campid') . '&customid=&toolid=10001';
+                                // }
                             } else if ($val['Listing']['listing_type_id'] === '2') {
                                 $results[$key]['Listing']['collectible_user_remove_reason_id'] = 1;
                             } else if ($val['Listing']['listing_type_id'] === '3') {

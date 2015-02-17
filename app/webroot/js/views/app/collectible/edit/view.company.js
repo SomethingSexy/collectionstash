@@ -13,8 +13,10 @@ define(function(require) {
     require('select2');
     require('marionette.mustache');
     require('jquery.fileupload');
-    require('jquery.fileupload-fp');
+    require('jquery.fileupload-process');
     require('jquery.fileupload-ui');
+    require('jquery.fileupload-image');
+    require('jquery.fileupload-validate');
 
 
     var lastResults = [];
