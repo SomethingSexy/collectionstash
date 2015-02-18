@@ -33,7 +33,7 @@
 	<?php
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
-	echo $this -> Minify -> css('/bower_components/bootstrap-datepicker/css/bootstrap-datepicker');
+	echo $this -> Minify -> css('/bower_components/bootstrap-datepicker/css/datepicker');
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
