@@ -31,7 +31,7 @@
 	<?php
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap');
 	echo $this -> Html -> css('/bower_components/bootstrap/dist/css/bootstrap-theme');
-	echo $this -> Minify -> css('thirdparty/datepicker');
+	echo $this -> Minify -> css('/bower_components/bootstrap-datepicker/css/bootstrap-datepicker');
 	echo $this -> Minify -> css('thirdparty/font-awesome');
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
@@ -45,7 +45,7 @@
 	// there are still a couple old places using this
 	echo $this -> Minify -> script('/bower_components/jquery-ui/jquery-ui.min');
 	echo $this -> Minify -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
-	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
+	echo $this -> Minify -> script('/bower_components/bootstrap-datepicker/js/bootstrap-datepicker');
 	echo $this -> Minify -> script('/bower_components/backbone/backbone');
 	echo $this -> Minify -> script('jquery-plugins');
 	echo $this -> Minify -> script('/bower_components/blockui/jquery.blockUI');
