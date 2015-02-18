@@ -41,7 +41,7 @@
 
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('/bower_components/underscore/underscore');
-	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
+	echo $this -> Minify -> script('/bower_components/jquery/dist/jquery');
 	// there are still a couple old places using this
 	echo $this -> Minify -> script('/bower_components/jquery-ui/jquery-ui.min');
 	echo $this -> Minify -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
