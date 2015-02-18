@@ -48,7 +48,6 @@
 	echo $this -> Minify -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
 	echo $this -> Minify -> script('/bower_components/backbone/backbone');
-	echo $this -> Minify -> script('thirdparty/backbone.validation');
 	echo $this -> Minify -> script('jquery-plugins');
 	echo $this -> Minify -> script('/bower_components/blockui/jquery.blockUI');
 	// Replace this with dust eventually
