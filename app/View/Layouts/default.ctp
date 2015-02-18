@@ -264,7 +264,6 @@ if (isset($bodyClass))
 	<?php
 	echo $this -> Html -> script('/bower_components/blueimp-gallery/js/blueimp-gallery.min');
 	echo $this -> Html -> script('/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min');
-	echo $this -> Minify -> script('thirdparty/placeholder');
 		?>
 	<script>
 			! function(d, s, id) {
