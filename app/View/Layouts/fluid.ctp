@@ -254,7 +254,6 @@
 		<?php
 		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/blueimp-gallery.min');
 		echo $this -> Html -> script('/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min');
-		echo $this -> Minify -> script('thirdparty/placeholder');
 			?>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		<!-- We are using Font Awesome - http://fortawesome.github.com/Font-Awesome It is AWESOME -->
