@@ -39,23 +39,21 @@
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
-	echo $this -> Minify -> script('thirdparty/json2');
 	// There is an issue when I minify this one myself
 	echo $this -> Html -> script('thirdparty/underscore');
 	echo $this -> Minify -> script('thirdparty/jquery-1.10.1');
 	// there are still a couple old places using this
-	echo $this -> Html -> script('/bower_components/jquery-ui/jquery-ui.min');
-	echo $this -> Html -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
+	echo $this -> Minify -> script('/bower_components/jquery-ui/jquery-ui.min');
+	echo $this -> Minify -> script('/bower_components/bootstrap/dist/js/bootstrap.min');
 	echo $this -> Minify -> script('thirdparty/bootstrap-datepicker');
-	echo $this -> Minify -> script('thirdparty/backbone');
-	echo $this -> Minify -> script('thirdparty/backbone.paginator');
+	echo $this -> Minify -> script('/bower_components/backbone/backbone');
 	echo $this -> Minify -> script('thirdparty/backbone.validation');
 	echo $this -> Minify -> script('jquery-plugins');
-	echo $this -> Html -> script('/bower_components/blockui/jquery.blockUI');
+	echo $this -> Minify -> script('/bower_components/blockui/jquery.blockUI');
 	// Replace this with dust eventually
-	echo $this -> Html -> script('/bower_components/blueimp-tmpl/js/tmpl.min');
-	echo $this -> Html -> script('/bower_components/blueimp-load-image/js/load-image.all.min');
-	echo $this -> Html -> script('/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min');
+	echo $this -> Minify -> script('/bower_components/blueimp-tmpl/js/tmpl.min');
+	echo $this -> Minify -> script('/bower_components/blueimp-load-image/js/load-image.all.min');
+	echo $this -> Minify -> script('/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min');
 
 	echo $this -> Minify -> script('thirdparty/dust-full-1.1.1');
 	echo $this -> Minify -> script('thirdparty/dust-helpers-1.1.0');

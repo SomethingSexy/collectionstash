@@ -6,7 +6,7 @@
 
 	</div>
 	<div class="panel-footer">
-		
+		<ul class="_pagination"></ul>
 	</div>
 </div>
 
@@ -15,6 +15,8 @@
 var totalNotifications = <?php echo $totalNotifications; ?>;
 var totalNotificationPages = Math.ceil(totalNotifications / 25);
 </script>
+<?php echo $this -> Minify -> script('/bower_components/simplePagination/jquery.simplePagination', array('inline' => false)); ?>
+<?php echo $this -> Minify -> script('/bower_components/backbone.paginator/lib/backbone.paginator', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('views/view.paging', array('inline' => false)); ?>
 <?php echo $this -> Html -> script('pages/page.user.home.notifications', array('inline' => true)); ?>
 
