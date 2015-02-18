@@ -52,12 +52,12 @@ class CollectiblesUploadsController extends AppController {
 			$img = $this -> Image -> image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 			$uploadResponse = array();
 			$uploadResponse['url'] = $img['path'];
-			$uploadResponse['thumbnail_url'] = $resizedImg['path'];
+			$uploadResponse['thumbnailUrl'] = $resizedImg['path'];
 			$uploadResponse['type'] = $value['Upload']['type'];
 			$uploadResponse['size'] = intval($value['Upload']['size']);
 			$uploadResponse['name'] = $value['Upload']['name'];
-			$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $value['CollectiblesUploadEdit']['id'] . '/true';
-			$uploadResponse['delete_type'] = 'POST';
+			$uploadResponse['deleteUrl'] = '/collectibles_uploads/remove/' . $value['CollectiblesUploadEdit']['id'] . '/true';
+			$uploadResponse['deleteType'] = 'POST';
 			$uploadResponse['id'] = $value['CollectiblesUploadEdit']['collectible_id'];
 
 			// Given the action, detemine what type of pending it is
@@ -88,12 +88,12 @@ class CollectiblesUploadsController extends AppController {
 			$img = $this -> Image -> image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 0, 'height' => 0, 'imagePathOnly' => true));
 			$uploadResponse = array();
 			$uploadResponse['url'] = $img['path'];
-			$uploadResponse['thumbnail_url'] = $resizedImg['path'];
+			$uploadResponse['thumbnailUrl'] = $resizedImg['path'];
 			$uploadResponse['type'] = $value['Upload']['type'];
 			$uploadResponse['size'] = intval($value['Upload']['size']);
 			$uploadResponse['name'] = $value['Upload']['name'];
-			$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $value['CollectiblesUpload']['id'] . '/false';
-			$uploadResponse['delete_type'] = 'POST';
+			$uploadResponse['deleteUrl'] = '/collectibles_uploads/remove/' . $value['CollectiblesUpload']['id'] . '/false';
+			$uploadResponse['deleteType'] = 'POST';
 			$uploadResponse['id'] = $value['CollectiblesUpload']['collectible_id'];
 			$uploadResponse['pending'] = false;
 			$uploadResponse['allowDelete'] = true;
@@ -186,13 +186,13 @@ class CollectiblesUploadsController extends AppController {
 					$retunData['files'] = array();
 					$uploadResponse = array();
 					$uploadResponse['url'] = $img['path'];
-					$uploadResponse['thumbnail_url'] = $resizedImg['path'];
+					$uploadResponse['thumbnailUrl'] = $resizedImg['path'];
 					$uploadResponse['type'] = $upload['Upload']['type'];
 					$uploadResponse['size'] = intval($upload['Upload']['size']);
 					$uploadResponse['name'] = $upload['Upload']['name'];
 					// this should be the id of the new pending collectible
 
-					$uploadResponse['delete_type'] = 'POST';
+					$uploadResponse['deleteType'] = 'POST';
 					$uploadResponse['id'] = $this -> request -> data['CollectiblesUpload']['collectible_id'];
 
 					if ($upload['isEdit']) {
@@ -202,7 +202,7 @@ class CollectiblesUploadsController extends AppController {
 						$uploadResponse['pending'] = false;
 					}
 
-					$uploadResponse['delete_url'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/'. $uploadResponse['pending'];
+					$uploadResponse['deleteUrl'] = '/collectibles_uploads/remove/' . $upload['CollectiblesUpload']['id'] . '/'. $uploadResponse['pending'];
 
 					//TODO: Need to figure these two properties out
 					$uploadResponse['owner'] = true;

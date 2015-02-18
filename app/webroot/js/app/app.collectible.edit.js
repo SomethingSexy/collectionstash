@@ -3,7 +3,7 @@ define(function(require) {
         Marionette = require('marionette'),
         $ = require('jquery'),
         dust = require('dust'),
-        mustache = require('mustache'),
+        Mustache = require('mustache'),
         marionetteMustache = require('marionette.mustache'),
         _ = require('underscore'),
         AlertView = require('views/common/view.alert'),
@@ -43,11 +43,12 @@ define(function(require) {
         customTemplate = require('text!templates/collectibles/collectible.custom.dust'),
         originalTemplate = require('text!templates/collectibles/collectible.original.dust'),
         directionalOriginalTemplate = require('text!templates/collectibles/directional.original.dust'),
-        alertTemplate = require('text!templates/common/alert.dust');
+        alertTemplate = require('text!templates/common/alert.dust'),
+        uploadTemplate = require('text!templates/app/common/upload.mustache'),
+        downloadTemplate = require('text!templates/app/common/download.mustache');
     require('jquery.form');
     require('jquery.treeview');
     require('cs.core.tree');
-    // require('jquery.getimagedata');
     require('jquery.iframe-transport');
     require('jquery.postmessage-transport');
     require('jquery.fileupload');
@@ -258,29 +259,44 @@ define(function(require) {
             dust.render(this.template, data, function(error, output) {
                 $(self.el).html(output);
             });
-            $('#fileupload').fileupload({
-                //dropZone : $('#dropzone')
+
+            var $fileupload = $('#fileupload');
+            $fileupload.fileupload({
+                url: '/collectibles_uploads/upload',
+                dataType: 'json',
+                maxFileSize: 2097152,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+                redirect: window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'),
+                previewMaxWidth: 100,
+                previewMaxHeight: 100,
+                previewCrop: true,
+                autoUpload: false,
+                uploadTemplateId: null,
+                downloadTemplateId: null,
+                uploadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        file.autoUpload = true;
+                        output += Mustache.render(uploadTemplate, file)
+                    });
+
+                    return output;
+
+                },
+                downloadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        output += Mustache.render(downloadTemplate, file)
+                    });
+
+                    return output;
+                }
             }).bind('fileuploadadd', function(e, data) {
                 $('._error', '#upload-dialog').empty();
                 $('.url-upload-input', '#upload-dialog').val('');
             });
-            $('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
-            $('#fileupload').fileupload('option', {
-                url: '/collectibles_uploads/upload',
-                maxFileSize: 2097152,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                process: [{
-                    action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 2097152 // 2MB
-                }, {
-                    action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
-                }, {
-                    action: 'save'
-                }]
-            });
+
             $('#upload-dialog').on('hidden.bs.modal', function() {
                 $('#fileupload table tbody tr.template-download').remove();
                 pageEvents.trigger('upload:close');
@@ -346,8 +362,7 @@ define(function(require) {
                     beforeSend: function(formData, jqForm, options) {},
                     success: function(data, textStatus, jqXHR) {
                         if (data && data.response.data.files.length) {
-                            var that = $('#fileupload');
-                            that.fileupload('option', 'done').call(that, null, {
+                            $fileupload.fileupload('option', 'done').call($fileupload, $.Event('done'), {
                                 result: data.response.data
                             });
                         }

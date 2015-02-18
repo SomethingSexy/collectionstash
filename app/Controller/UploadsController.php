@@ -29,14 +29,14 @@ class UploadsController extends AppController
                     $retunData['files'] = array();
                     $uploadResponse = array();
                     $uploadResponse['url'] = $img['path'];
-                    $uploadResponse['thumbnail_url'] = $resizedImg['path'];
+                    $uploadResponse['thumbnailUrl'] = $resizedImg['path'];
                     $uploadResponse['type'] = $upload['Upload']['type'];
                     $uploadResponse['size'] = intval($upload['Upload']['size']);
                     $uploadResponse['name'] = $upload['Upload']['name'];
                     // this should be the id of the new pending collectible
-                    $uploadResponse['delete_url'] = '/uploads/remove/' . $upload['Upload']['id'];
+                    $uploadResponse['deleteUrl'] = '/uploads/remove/' . $upload['Upload']['id'];
                     
-                    $uploadResponse['delete_type'] = 'DELETE';
+                    $uploadResponse['deleteType'] = 'DELETE';
                     $uploadResponse['id'] = $upload['Upload']['id'];
                     $uploadResponse['allowDelete'] = true;
                     
