@@ -8,6 +8,9 @@ define(function(require) {
     require('marionette.mustache');
     require('simplePagination');
 
+    require('jquery.blueimp-gallery');
+    require('bootstrap');
+
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate
     });
@@ -64,7 +67,7 @@ define(function(require) {
             this.endBuffering();
 
             $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         },
         onRender: function() {
             var self = this;
@@ -72,7 +75,7 @@ define(function(require) {
                 items: this.collection.state.totalRecords,
                 itemsOnPage: this.collection.state.pageSize,
                 cssStyle: 'pagination',
-                currentPage : this.collection.state.currentPage,
+                currentPage: this.collection.state.currentPage,
                 onPageClick: function(pageNumber, event) {
                     event.preventDefault();
                     // self.collection.getPage(pageNumber);
