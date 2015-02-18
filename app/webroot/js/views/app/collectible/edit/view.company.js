@@ -171,7 +171,7 @@ define(function(require) {
             });
 
             if (this.mode === 'edit' && this.permissions.get('edit_manufacturer') === true && this.model.photo) {
-                $fileupload.fileupload('option', 'done').call($fileupload, null, {
+                $fileupload.fileupload('option', 'done').call($fileupload, $.Event('done'), {
                     result: {
                         files: [this.model.photo.toJSON()]
                     }
