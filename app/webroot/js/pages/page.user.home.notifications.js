@@ -71,10 +71,11 @@ var NotificationsView = Backbone.View.extend({
         // this.collection.on('remove', function() {
         //     this.collection.paginator_ui.total = this.collection.paginator_ui.total - 1;
         // }, this);
-        this.collection.on('remove', this.render, this);
+        this.collection.on('remove', this.renderNotifications, this);
 
         this.collection.on('reset', this.renderNotifications, this);
         this.listenTo(this.collection, "sync", this.renderNotifications);
+        this._first = true;
     },
     render: function() {
         var self = this;
@@ -86,10 +87,13 @@ var NotificationsView = Backbone.View.extend({
 
         this.renderNotifications();
 
+        this._first = false;
+
         return this;
     },
     renderNotifications: function() {
         var self = this;
+        $('.messages', this.el).empty();
         if (this.collection.size() > 0) {
             this.collection.each(function(model) {
                 $('.messages', self.el).append(new NotificationView({
@@ -98,6 +102,11 @@ var NotificationsView = Backbone.View.extend({
             });
         } else {
             $('.messages', this.el).html('<p>There are no new notifications.</p>');
+        }
+
+        //accessing this globally because this is outside of the view, fix when it gets switch to marionette
+        if (!this._first) {
+            $('._pagination').pagination('updateItems', this.collection.state.totalRecords);
         }
     }
 });
