@@ -23,7 +23,7 @@ class UserUploadsController extends AppController
                 $largeThumbnail = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
                 $userUploads[$key]['UserUpload']['imagePath'] = $img['path'];
                 $userUploads[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
-                $userUploads[$key]['UserUpload']['thumbnail_url'] = $largeThumbnail['path'];
+                $userUploads[$key]['UserUpload']['thumbnailUrl'] = $largeThumbnail['path'];
             }
             
             $userUploads = Set::extract('/UserUpload/.', $userUploads);

@@ -1,28 +1,39 @@
 <tr class="template-download fade">
-{{#error}}
-  <td></td>
-  <td class="name"><span>{{name}}</span></td>
-  <td class="size"><span></span></td>
-  <td class="error" colspan="2">
-      <span class="label label-warning">{{error}}</span></td>
-{{/error}}
-{{^error}}
-
-      <td class="preview">
-          {{#thumbnail_url}}
-          <a href="{{url}}"><img src="{{thumbnail_url}}"></a>
-          {{/thumbnail_url}}
-      </td>
-      <td class="name">
-          <a href="{{url}}">{{name}}</a>
-      </td>
-      <td class="size"><span>{{fmtFileSize}}</span></td>
-      <td colspan="2"></td>
-{{/error}}
-  <td>
-      <button class="btn btn-danger delete" data-type="{{delete_type}}" data-url="{{delete_url}}">
-          <i class="icon-trash icon-white"></i>
-          <span>Delete</span>
-      </button>
-  </td>
+    <td>
+        <span class="preview">
+            {{#thumbnailUrl}}
+                <a href="{{url}}" title="{{name}}" download="{{name}}" data-gallery><img src="{{thumbnailUrl}}"></a>
+            {{/thumbnailUrl}}
+        </span>
+    </td>
+    <td>
+        <p class="name">
+            {{#url}}
+                <a href="{{url}}" title="{{name}}" download="{{name}}" {{#thumbnailUrl}}data-gallery{{/thumbnailUrl}}>{{name}}</a>
+            {{/url}}
+            {{^url}}
+                <span>{{name}}</span>
+            {{/url}}
+        </p>
+        {{#error}}
+            <div><span class="label label-danger">Error</span> {{error}}</div>
+        {{/error}}
+    </td>
+    <td>
+        <span class="size">{{fmtFileSize}}</span>
+    </td>
+    <td>
+        {{#deleteUrl}}
+            <button class="btn btn-danger delete" data-type="{{deleteType}}" data-url="{{deleteUrl}}">
+                <i class="glyphicon glyphicon-trash"></i>
+                <span>Delete</span>
+            </button>
+        {{/deleteUrl}}    
+        {{^deleteUrl}}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <span>Cancel</span>
+            </button>
+        {{/deleteUrl}} 
+    </td>
 </tr>

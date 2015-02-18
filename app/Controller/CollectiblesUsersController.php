@@ -75,14 +75,14 @@ class CollectiblesUsersController extends AppController
                     $thumbnail = $this->Image->image($collectibles[$key]['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $collectibles[$key]['UserUpload']['user_id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
                     $extractUserCollectibles[$key]['UserUpload']['imagePath'] = $img['path'];
                     $extractUserCollectibles[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
-                    $extractUserCollectibles[$key]['UserUpload']['thumbnail_url'] = $thumbnail['path'];
+                    $extractUserCollectibles[$key]['UserUpload']['thumbnailUrl'] = $thumbnail['path'];
                 }
                 
                 if (isset($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'])) {
                     foreach ($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'] as $uploadKey => $upload) {
                         if ($upload['primary']) {
                             $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 400, 'height' => 400, 'imagePathOnly' => true));
-                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnail_url'] = $resizedImg['path'];
+                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnailUrl'] = $resizedImg['path'];
                         }
                     }
                 }

@@ -68,7 +68,7 @@ class CollectiblesWishListsController extends AppController
                     foreach ($extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'] as $uploadKey => $upload) {
                         if ($upload['primary']) {
                             $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => 'files', 'width' => 400, 'height' => 400, 'imagePathOnly' => true));
-                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnail_url'] = $resizedImg['path'];
+                            $extractUserCollectibles[$key]['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnailUrl'] = $resizedImg['path'];
                         }
                     }
                 }

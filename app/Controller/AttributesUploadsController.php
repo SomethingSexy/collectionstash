@@ -72,14 +72,14 @@ class AttributesUploadsController extends AppController
                     $retunData['files'] = array();
                     $uploadResponse = array();
                     $uploadResponse['url'] = $img['path'];
-                    $uploadResponse['thumbnail_url'] = $resizedImg['path'];
+                    $uploadResponse['thumbnailUrl'] = $resizedImg['path'];
                     $uploadResponse['type'] = $upload['Upload']['type'];
                     $uploadResponse['size'] = intval($upload['Upload']['size']);
                     $uploadResponse['name'] = $upload['Upload']['name'];
                     // this should be the id of the new pending collectible
-                    $uploadResponse['delete_url'] = '/attributes_uploads/remove/' . $upload['AttributesUpload']['id'];
+                    $uploadResponse['deleteUrl'] = '/attributes_uploads/remove/' . $upload['AttributesUpload']['id'];
                     
-                    $uploadResponse['delete_type'] = 'POST';
+                    $uploadResponse['deleteType'] = 'POST';
                     $uploadResponse['id'] = $this->request->data['AttributesUpload']['attribute_id'];
                     $uploadResponse['allowDelete'] = true;
                     
@@ -129,9 +129,9 @@ class AttributesUploadsController extends AppController
                     }
                 }
                 
-                $part[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
-                $part[$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
-                $part[$key]['Upload']['delete_type'] = 'POST';
+                $part[$key]['Upload']['thumbnailUrl'] = $thumbnail['path'];
+                $part[$key]['Upload']['deleteUrl'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
+                $part[$key]['Upload']['deleteType'] = 'POST';
                 $part[$key]['Upload']['pending'] = $pendingRemoval;
                 $part[$key]['Upload']['allowDelete'] = !$pendingRemoval;
                 if ($pendingRemoval) {

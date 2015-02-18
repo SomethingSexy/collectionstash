@@ -273,9 +273,9 @@ class ManufacturesController extends AppController
     
     private function processUpload(&$upload, $data) {
         $thumbnail = $this->Image->image($data['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
-        $upload['Upload']['thumbnail_url'] = $thumbnail['path'];
-        $upload['Upload']['delete_url'] = '/uploads/remove/' . $data['Upload']['id'] . '/false';
-        $upload['Upload']['delete_type'] = 'DELETE';
+        $upload['Upload']['thumbnailUrl'] = $thumbnail['path'];
+        $upload['Upload']['deleteUrl'] = '/uploads/remove/' . $data['Upload']['id'] . '/false';
+        $upload['Upload']['deleteType'] = 'DELETE';
         $upload['Upload']['pending'] = false;
         $upload['Upload']['allowDelete'] = true;
     }

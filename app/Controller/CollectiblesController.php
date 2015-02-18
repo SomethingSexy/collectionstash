@@ -133,9 +133,9 @@ class CollectiblesController extends AppController
                         $pendingRemoval = true;
                     }
                 }
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_url'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
-                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['delete_type'] = 'POST';
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['thumbnailUrl'] = $thumbnail['path'];
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['deleteUrl'] = '/attributes_uploads/remove/' . $value['id'] . '/false';
+                $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['deleteType'] = 'POST';
                 
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['pending'] = $pendingRemoval;
                 $parts[$partKey]['Attribute']['AttributesUpload'][$key]['Upload']['allowDelete'] = !$pendingRemoval;
@@ -186,9 +186,9 @@ class CollectiblesController extends AppController
             if (isset($manufacturers[$key]['Upload'])) {
                 $extractManufacturers[$key]['Upload'] = $manufacturers[$key]['Upload'];
                 $thumbnail = $this->Image->image($manufacturers[$key]['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
-                $extractManufacturers[$key]['Upload']['thumbnail_url'] = $thumbnail['path'];
-                $extractManufacturers[$key]['Upload']['delete_url'] = '/uploads/remove/' . $manufacturers[$key]['Upload']['id'] . '/false';
-                $extractManufacturers[$key]['Upload']['delete_type'] = 'DELETE';
+                $extractManufacturers[$key]['Upload']['thumbnailUrl'] = $thumbnail['path'];
+                $extractManufacturers[$key]['Upload']['deleteUrl'] = '/uploads/remove/' . $manufacturers[$key]['Upload']['id'] . '/false';
+                $extractManufacturers[$key]['Upload']['deleteType'] = 'DELETE';
                 $extractManufacturers[$key]['Upload']['pending'] = false;
                 $extractManufacturers[$key]['Upload']['allowDelete'] = true;
             }

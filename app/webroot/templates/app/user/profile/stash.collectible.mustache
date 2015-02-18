@@ -1,13 +1,13 @@
 	<div class="image">
 	{{#UserUpload}}
 			<a data-gallery="gallery" href="{{UserUpload.imagePath}}" class="">
-				<img class="" src="{{UserUpload.thumbnail_url}}" resizetype="strict" alt="{{UserUpload.description}}">
+				<img class="" src="{{UserUpload.thumbnailUrl}}" resizetype="strict" alt="{{UserUpload.description}}">
 			</a>
 	{{/UserUpload}}
 	{{^UserUpload}}{{#Collectible.CollectiblesUpload}}
 		{{#primary}}
 			<a data-gallery="gallery" href="{{Upload.url}}" class="">
-				<img class="" src="{{Upload.thumbnail_url}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+				<img class="" src="{{Upload.thumbnailUrl}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
 			</a>
 		{{/primary}}
 	{{/Collectible.CollectiblesUpload}}
