@@ -1,7 +1,17 @@
 define(function(require) {
     var Backbone = require('backbone'),
         Marionette = require('marionette'),
-        template = require('text!templates/app/collectible/edit/part.photo.edit.mustache');
+        Mustache = require('mustache'),
+        template = require('text!templates/app/collectible/edit/part.photo.edit.mustache'),
+        uploadTemplate = require('text!templates/app/common/upload.mustache'),
+        downloadTemplate = require('text!templates/app/common/download.mustache');
+    require('jquery.fileupload');
+    require('jquery.fileupload-process');
+    require('jquery.fileupload-ui');
+    require('jquery.fileupload-image');
+    require('jquery.fileupload-validate');
+    require('marionette.mustache');
+
     return Marionette.ItemView.extend({
         template: template,
         events: {},
@@ -24,37 +34,50 @@ define(function(require) {
         },
         onRender: function() {
             var self = this;
-            this.$('.fileupload').fileupload({
-                // add: function(e, data) {
-                //     var jqXHR = data.submit().success(function(result, textStatus, jqXHR) {
-                //         result;
-                //     }).error(function(jqXHR, textStatus, errorThrown) {}).complete(function(result, textStatus, jqXHR) {});
-                // },
+            var uploads = this.collection.pluck('Upload');
+            var $fileupload = $('.fileupload', this.el);
+            $fileupload.fileupload({
+                url: '/attributes_uploads/upload',
+                dataType: 'json',
+                maxFileSize: 2097152,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
-                imageMaxWidth: 800,
-                imageMaxHeight: 800,
-                imageCrop: true // Force cropped image
+                redirect: window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'),
+                previewMaxWidth: 100,
+                previewMaxHeight: 100,
+                previewCrop: true,
+                autoUpload: false,
+                uploadTemplateId: null,
+                downloadTemplateId: null,
+                uploadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        file.autoUpload = true;
+                        output += Mustache.render(uploadTemplate, file)
+                    });
+
+                    return output;
+
+                },
+                downloadTemplate: function(o) {
+                    var output = '';
+                    _.each(o.files, function(file, index) {
+                        output += Mustache.render(downloadTemplate, file)
+                    });
+
+                    return output;
+                }
             }).bind('fileuploadadd', function(e, data) {
                 self.$('._error').empty();
                 self.$('.url-upload-input').val('');
             });
-            this.$('.fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
-            this.$('.fileupload').fileupload('option', {
-                url: '/attributes_uploads/upload',
-                maxFileSize: 2097152,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                process: [{
-                    action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 2097152 // 2MB
-                }, {
-                    action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
-                }, {
-                    action: 'save'
-                }]
+
+            $fileupload.fileupload('option', 'done').call($fileupload, $.Event('done'), {
+                result: {
+                    files: uploads
+                }
             });
+
             this.$('.fileupload').on('hidden.bs.modal', function() {
                 $('#fileupload table tbody tr.template-download').remove();
                 pageEvents.trigger('upload:close');
@@ -75,7 +98,7 @@ define(function(require) {
                         success: function(data, textStatus, jqXHR) {
                             if (data && data.files.length) {
                                 var that = self.$('.fileupload');
-                                that.fileupload('option', 'done').call(that, null, {
+                                that.fileupload('option', 'done').call(that, $.Event('done'), {
                                     result: data
                                 });
 
@@ -99,13 +122,7 @@ define(function(require) {
                     });
                 }
             });
-            var that = this.$('.fileupload');
-            var uploads = this.collection.pluck('Upload');
-            that.fileupload('option', 'done').call(that, null, {
-                result: {
-                    files: uploads
-                }
-            });
+
             return this;
         }
     });

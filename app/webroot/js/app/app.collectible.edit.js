@@ -317,7 +317,7 @@ define(function(require) {
                         success: function(data, textStatus, jqXHR) {
                             if (data && data.files.length) {
                                 var that = $('#fileupload');
-                                that.fileupload('option', 'done').call(that, null, {
+                                that.fileupload('option', 'done').call(that, $.Event('done'), {
                                     result: data
                                 });
 
