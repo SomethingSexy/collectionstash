@@ -48,32 +48,33 @@ var PaginatedNotifications = Backbone.PageableCollection.extend({
             return this.currentPage;
         }
     },
-    parse: function(response) {
-        if (response.results && response.metadata) {
-            // Be sure to change this based on how your results
-            // are structured (e.g d.results is Netflix specific)
-            var tags = response.results;
-            //Normally this.totalPages would equal response.d.__count
-            //but as this particular NetFlix request only returns a
-            //total count of items for the search, we divide.
-            this.totalPages = response.metadata.paging.pageCount;
-            return tags;
-        }
+    // parse: function(response) {
+    //     if (response.results && response.metadata) {
+    //         // Be sure to change this based on how your results
+    //         // are structured (e.g d.results is Netflix specific)
+    //         var tags = response.results;
+    //         //Normally this.totalPages would equal response.d.__count
+    //         //but as this particular NetFlix request only returns a
+    //         //total count of items for the search, we divide.
+    //         this.totalPages = response.metadata.paging.pageCount;
+    //         return tags;
+    //     }
 
-        return response;
-    }
+    //     return response;
+    // }
 });
 
 var NotificationsView = Backbone.View.extend({
     template: 'notifications',
     initialize: function() {
         //this.collection.on('change', this.render, this);
-        this.collection.on('remove', function() {
-            this.collection.paginator_ui.total = this.collection.paginator_ui.total - 1;
-        }, this);
+        // this.collection.on('remove', function() {
+        //     this.collection.paginator_ui.total = this.collection.paginator_ui.total - 1;
+        // }, this);
         this.collection.on('remove', this.render, this);
 
-        this.collection.on('reset', this.render, this);
+        this.collection.on('reset', this.renderNotifications, this);
+        this.listenTo(this.collection, "sync", this.renderNotifications);
     },
     render: function() {
         var self = this;
@@ -153,10 +154,9 @@ var NotificationView = Backbone.View.extend({
 
 $(function() {
 
-    $.when($.get('/templates/notifications/notifications.dust'), $.get('/templates/notifications/notification.dust'), $.get('/templates/common/paging.dust'), $.get('/templates/notifications/types/stash_add.dust'), $.get('/templates/notifications/types/comment_add.dust')).done(function(notificationsTemplate, notificationTemplate, pagingTemplate, stashAddTemplate, commentAddTemplate) {
+    $.when($.get('/templates/notifications/notifications.dust'), $.get('/templates/notifications/notification.dust'), $.get('/templates/notifications/types/stash_add.dust'), $.get('/templates/notifications/types/comment_add.dust')).done(function(notificationsTemplate, notificationTemplate, stashAddTemplate, commentAddTemplate) {
         dust.loadSource(dust.compile(notificationsTemplate[0], 'notifications'));
         dust.loadSource(dust.compile(notificationTemplate[0], 'notification'));
-        dust.loadSource(dust.compile(pagingTemplate[0], 'paging'));
         dust.loadSource(dust.compile(stashAddTemplate[0], 'stash.add'));
         dust.loadSource(dust.compile(commentAddTemplate[0], 'comment.add'));
 
@@ -173,12 +173,7 @@ $(function() {
                 event.preventDefault();
                 notifications.getPage(pageNumber);
             }
-            // hrefTextPrefix: 'page/'
         });
-
-        // $('.panel-footer').append(new PagingView({
-        //     collection: notifications
-        // }).render().el);
     });
 
 });

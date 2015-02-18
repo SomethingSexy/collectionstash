@@ -38,7 +38,6 @@ define(function(require) {
         dupListTemplate = require('text!templates/collectibles/message.duplist.dust'),
         modalTemplate = require('text!templates/collectibles/modal.dust'),
         directionalTemplate = require('text!templates/collectibles/directional.dust'),
-        pagingTemplate = require('text!templates/common/paging.dust'),
         directionalCustomTemplate = require('text!templates/collectibles/directional.custom.dust'),
         customTemplate = require('text!templates/collectibles/collectible.custom.dust'),
         originalTemplate = require('text!templates/collectibles/collectible.original.dust'),
@@ -76,7 +75,6 @@ define(function(require) {
     dust.loadSource(dust.compile(directionalTemplate, 'directional.page'));
     dust.loadSource(dust.compile(directionalCustomTemplate, 'directional.custom'));
     dust.loadSource(dust.compile(customTemplate, 'collectible.custom.edit'));
-    dust.loadSource(dust.compile(pagingTemplate, 'paging'));
     dust.loadSource(dust.compile(originalTemplate, 'collectible.original.edit'));
     dust.loadSource(dust.compile(directionalOriginalTemplate, 'directional.original'));
     dust.loadSource(dust.compile(alertTemplate, 'alert'));
