@@ -116,7 +116,6 @@ class CollectibleSearchComponent extends Component
         if (!is_null($paramType)) {
             $query['paramType'] = $paramType;
         }
-
         //See if a search was set
         if (isset($saveSearchFilters['search']) && $saveSearchFilters['search'] !== '') {
             //Using like for now because switch to InnoDB
@@ -147,6 +146,17 @@ class CollectibleSearchComponent extends Component
         $this->controller->set('collectibles', $data);
         $this->controller->set('filters', $this->getFilters());
         $saveSearchFilters = $this->Search->processFilters($saveSearchFilters);
+        $queryString = '?';
+        
+        foreach ($saveSearchFilters as $key => $value) {
+            $queryString.= $value['type'] . '=' . $value['id'];
+            if (count($saveSearchFilters) !== ($key + 1)) {
+                $queryString.= '&';
+            }
+        }
+        
+        $this->controller->set('searchQueryString', $queryString);
+        
         $this->controller->set(compact('saveSearchFilters'));
         
         return $data;

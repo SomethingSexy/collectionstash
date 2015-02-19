@@ -13,8 +13,8 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 			<div class="row spacer">
 				<div class="col-md-12">
 					<div class="btn-group pull-right">
-						<?php echo '<a class="btn" href="/collectibles/searchTiles"><i class="fa fa-th-large"></i></a>'; ?>
-						<?php echo '<a class="btn" href="/collectibles/search"><i class="fa fa-list"></i></a>'; ?>
+						<?php echo '<a class="btn" href="/collectibles/searchTiles' . $searchQueryString . '"><i class="fa fa-th-large"></i></a>'; ?>
+						<?php echo '<a class="btn" href="/collectibles/search' . $searchQueryString . '"><i class="fa fa-list"></i></a>'; ?>
 					</div>
 				</div>
 			</div>	
