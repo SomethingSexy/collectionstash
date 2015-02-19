@@ -54,8 +54,8 @@
 	echo $this -> Minify -> script('/bower_components/blueimp-load-image/js/load-image.all.min');
 	echo $this -> Minify -> script('/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min');
 
-	echo $this -> Minify -> script('thirdparty/dust-full-1.1.1');
-	echo $this -> Minify -> script('thirdparty/dust-helpers-1.1.0');
+	echo $this -> Minify -> script('/bower_components/dustjs-linkedin/dist/dust-full');
+	echo $this -> Minify -> script('/bower_components/dustjs-linkedin-helpers/dist/dust-helpers');
 	echo $this -> Minify -> script('cs.dust-helpers');
 	?>
 	<?php echo $scripts_for_layout; ?>
