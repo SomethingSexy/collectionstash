@@ -5,7 +5,7 @@ App::uses('ActivityTypes', 'Lib/Activity');
 class CollectiblesUser extends AppModel
 {
     
-    public $findMethods = array('orderAveragePrice' => true);
+    public $findMethods = array('orderCustom' => true);
     
     public $name = 'CollectiblesUser';
     //As of 11/29/11 doing counter cache on both stash and user, this way we have easy access to a total of users collectibles and if we open up more stashes per user
@@ -576,7 +576,7 @@ class CollectiblesUser extends AppModel
         return $retVal;
     }
     
-    protected function _findOrderAveragePrice($state, $query, $results = array()) {
+    protected function _findOrderCustom($state, $query, $results = array()) {
         if ($state === 'before') {
             // check to see what the sort is and then apply it here
             if (!empty($query['operation']) && $query['operation'] === 'count') {
@@ -585,6 +585,10 @@ class CollectiblesUser extends AppModel
             
             if (!empty($query['sort']) && $query['sort'] === 'Collectible.average_price') {
                 $query['order'] = array('Collectible.orderAveragePrice' => $query['direction']);
+                
+                return $query;
+            } else if (!empty($query['sort']) && $query['sort'] === 'Collectible.order_manufacturer') {
+                $query['order'] = array('Collectible.orderManufacturer' => $query['direction']);
                 
                 return $query;
             }

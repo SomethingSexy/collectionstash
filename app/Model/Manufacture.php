@@ -28,7 +28,7 @@ class Manufacture extends AppModel
     'url' => array('rule' => 'url', 'allowEmpty' => true, 'message' => 'Must be a valid url.'),
     // bio
     'bio' => array('maxLength' => array('rule' => array('maxLength', 5000), 'allowEmpty' => true, 'message' => 'Company bio must be less than 5000 characters.'), 'allowedCharacters' => array('rule' => '/^[a-z0-9\s\r\n ?&$%#@!*()+_\\\\#\':.,"\/-]+$/i', 'message' => 'Company bio has invalid characters')));
-    
+
     function afterFind($results, $primary = false) {
         if ($results) {
             // If it is primary handle all of these things
