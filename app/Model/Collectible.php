@@ -71,6 +71,8 @@ class Collectible extends AppModel
     function __construct($id = false, $table = null, $ds = null) {
         // This allows us to easily order collectibles by average price from outside
         $this->virtualFields['orderAveragePrice'] = 'SELECT MIN(CollectiblePriceFact.average_price) FROM collectible_price_facts AS CollectiblePriceFact WHERE CollectiblePriceFact.id = Collectible.collectible_price_fact_id';
+        $this->virtualFields['orderManufacturer'] = 'SELECT MIN(Manufacture.title) FROM manufactures AS Manufacture WHERE Manufacture.id = Collectible.manufacture_id';
+        
         parent::__construct($id, $table, $ds);
     }
     
