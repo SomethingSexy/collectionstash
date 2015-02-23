@@ -41,6 +41,12 @@ if (!adminMode) {
                 //     msg: 'Invalid characters'
                 // }
             ],
+            name: [{
+                rangeLength: [0, 200],
+                msg: 'Maximum allowed length is 200 characters.'
+            }, {
+                required: false
+            }],            
             description: [{
                 rangeLength: [0, 1000],
                 msg: 'Maximum allowed length is 1000 characters.'
