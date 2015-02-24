@@ -36,6 +36,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
             var data = {
                 showPagination: this.collection.state.totalPages > 1
             };
+            data[this.activeSort] = true;
             return data;
         },
         renderMore: function() {
@@ -52,6 +53,19 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
             this.endBuffering();
 
             $('._pagination', this.el).pagination('updateItems', this.collection.state.totalRecords);
+            this.setSort();
+        },
+        setSort: function() {
+            this.$('._sortIcon').remove();
+            if (this.activeSort) {
+                if (this.activeSortDir === 1) {
+                    this.$('[data-sort="' + this.activeSort + '"]').append('<i class="fa fa-sort-desc _sortIcon"></i>');
+
+                } else {
+                    this.$('[data-sort="' + this.activeSort + '"]').append('<i class="fa fa-sort-asc _sortIcon"></i>');
+                }
+            }
+
         },
         onRender: function() {
             var self = this;
@@ -63,10 +77,13 @@ define(['require', 'marionette', 'text!templates/app/user/profile/history.mustac
                     self.collection.getPage(pageNumber);
                 }
             });
+            this.setSort();
         },
         sort: function(event) {
             var sort = $(event.currentTarget).data('sort');
             this.sorts[sort] = this.sorts[sort] === -1 ? 1 : -1;
+            this.activeSort = sort;
+            this.activeSortDir = this.sorts[sort];
             this.collection.setSorting(sort, this.sorts[sort]);
             this.collection.fetch();
         }
