@@ -101,7 +101,7 @@ class CollectiblesUsersController extends AppController
             // $this->set(compact('graphData'));
             // $this->set('stash', $user['Stash'][0]);
             //
-            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderCustom', 'order' => array('sort_number' => 'desc'), 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
+            $this->paginate = array('paramType' => 'querystring', 'findType' => 'orderCustom', 'limit' => 25, 'conditions' => array('CollectiblesUser.user_id' => $user['User']['id']), 'contain' => array('Listing' => array('Transaction'), 'Condition', 'Merchant', 'Collectible' => array('User', 'CollectiblePriceFact', 'CollectiblesUpload' => array('Upload'), 'Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'))));
             $collectibles = $this->paginate('CollectiblesUser');
             // I am sure there is as better way to do this, I don't feel smart right now
             //$extractCollectibles = Set::extract('/Collectible/.', $collectibles);
