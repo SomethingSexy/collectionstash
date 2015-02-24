@@ -57,13 +57,13 @@ requirejs.config({
         'jquery.fileupload-audio': '../bower_components/blueimp-file-upload/js/jquery.fileupload-audio',
         'jquery.fileupload-video': '../bower_components/blueimp-file-upload/js/jquery.fileupload-video',
 
-        'jquery.iframe-transport': '/bower_components/blueimp-file-upload/js/jquery.iframe-transport',
-        'jquery.postmessage-transport': '/bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport',
+        'jquery.iframe-transport': '../bower_components/blueimp-file-upload/js/jquery.iframe-transport',
+        'jquery.postmessage-transport': '../bower_components/blueimp-file-upload/js/cors/jquery.postmessage-transport',
 
-        'jquery.fileupload-process': '/bower_components/blueimp-file-upload/js/jquery.fileupload-process',
-        'jquery.fileupload-image': '/bower_components/blueimp-file-upload/js/jquery.fileupload-image',
-        'jquery.fileupload-validate': '/bower_components/blueimp-file-upload/js/jquery.fileupload-validate',
-        'jquery.fileupload-ui': '/bower_components/blueimp-file-upload/js/jquery.fileupload-ui'
+        'jquery.fileupload-process': '../bower_components/blueimp-file-upload/js/jquery.fileupload-process',
+        'jquery.fileupload-image': '../bower_components/blueimp-file-upload/js/jquery.fileupload-image',
+        'jquery.fileupload-validate': '../bower_components/blueimp-file-upload/js/jquery.fileupload-validate',
+        'jquery.fileupload-ui': '../bower_components/blueimp-file-upload/js/jquery.fileupload-ui'
     },
     shim: {
         'dust': {
