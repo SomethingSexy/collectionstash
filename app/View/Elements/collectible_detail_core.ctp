@@ -87,7 +87,7 @@ if (!isset($adminMode)) {
 		
 			echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'code'), __('Product code', true), array('compare' => $showCompareFields));
 		
-			echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('Product UPC', true), array('compare' => $showCompareFields));
+			echo $this -> CollectibleDetail -> field($collectibleCore, array('Model' => 'Collectible', 'Field' => 'upc'), __('UPC/EAN', true), array('compare' => $showCompareFields));
 			if ($adminMode || $isLoggedIn || $collectibleCore['Collectible']['custom'] || $collectibleCore['Collectible']['original'] || $collectibleCore['Collectible']['official']) {
 		
 				$msrpLabel = __('Original Retail Price', true);

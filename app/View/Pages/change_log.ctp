@@ -1,10 +1,31 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.11.0</h3>
+    <ul>
+        <li>Updated the name field so it propertly validates the length. (#209)</li>
+        <li>Fixed the manufacturer sorting on the stash history page. (#208)</li>
+        <li>Updated the notifications page to utilize Backbone.Pageable. (#207)</li>
+        <li>Now when you click on links on the company search page, it will show an image gallery. (#206)</li>
+        <li>Fixed an issue with ZeroClipboard. (#205)</li>
+        <li>Persisting filters when switching between the search list and search tiles. (#199)</li>
+        <li>Fixed an issue when trying to add a collectible from the search page with a ' in the description. (#198)</li>
+        <li>Updated the sorting on the stash history page to indicate direction. (#196)</li>
+        <li>Added the manufacturer name preceding the collectible name. (#192)</li>
+        <li>Fixed an issue with the 'Why do my values look werid' popup. (#191)</li>
+        <li>On the submit collectible page, updated the length to be labeled height.  This aligns with the collectible detail page. (#190)</li>
+        <li>Removed the drop down menu on the collectible listing page.  Added links right on the page. (#189)</li>
+        <li>Alphabetically sorted the category listing. (#187)</li>
+        <li>Added more descriptive error handling on the collectible edit page. (#186)</li>
+        <li>Updated all scripts to pull from bower. (#185, #184)</li>
+        <li>Updated the user gallery page. (#183)</li>
+        <li>Fixed an issue the merchant field on the add to stash modal. (#120)</li>
+        <li>Updated to support EAN-13 UPC. (#114)</li>
+    </ul>
     <h3>Release Notes for v3.10.1</h3>
     <ul>
         <li>Updated the part upload to not allow the user to delete images that are already pending a delete. (#145)</li>
         <li>Removed unnecessary admin views. (#180)</li>
-    </ul>    
+    </ul>
     <h3>Release Notes for v3.10.0</h3>
     <ul>
         <li>Fixed issue with uploading image via url. (#168)</li>
