@@ -142,7 +142,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-lg-3 control-label" for="inputUpc">Product UPC</label>
+			<label class="col-lg-3 control-label" for="inputUpc">UPC/EAN</label>
 			<div class="col-lg-6">
 				<input type="text" id="inputUpc" class="form-control" name="upc" value="{collectible.upc}">
 			</div>
