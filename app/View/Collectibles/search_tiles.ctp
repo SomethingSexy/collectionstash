@@ -59,7 +59,11 @@ echo $this -> Html -> script('models/model.collectible.user', array('inline' => 
 								}
 
 								echo '<div class="header"><h2>';
-								echo '<a href="/collectibles/view/'.$collectible['Collectible']['id'].'/' . $collectible['Collectible']['slugField'] . '">'. $collectible['Collectible']['displayTitle'] . '</a>';
+								echo '<a href="/collectibles/view/'.$collectible['Collectible']['id'].'/' . $collectible['Collectible']['slugField'] . '">';
+					            if (!empty($collectible['Manufacture']['title'])) {
+                               		echo $collectible['Manufacture']['title'] . ' - ';
+                                }
+								echo $collectible['Collectible']['displayTitle'] . '</a>';
 								echo '</h2></div>';
 								echo '<div class="content">';
 
