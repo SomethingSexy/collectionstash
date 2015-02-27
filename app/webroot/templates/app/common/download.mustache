@@ -18,17 +18,20 @@
         {{#error}}
             <div><span class="label label-danger">Error</span> {{error}}</div>
         {{/error}}
+        {{#pending}}
+            <div><span class="label label-warning">{{pendingText}}</span></div>
+        {{/pending}}
     </td>
     <td>
         <span class="size">{{fmtFileSize}}</span>
     </td>
     <td>
-        {{#deleteUrl}}
+        {{#allowDelete}}{{#deleteUrl}}
             <button class="btn btn-danger delete" data-type="{{deleteType}}" data-url="{{deleteUrl}}">
                 <i class="glyphicon glyphicon-trash"></i>
                 <span>Delete</span>
             </button>
-        {{/deleteUrl}}    
+        {{/deleteUrl}}{{/allowDelete}}    
         {{^deleteUrl}}
             <button class="btn btn-warning cancel">
                 <i class="glyphicon glyphicon-ban-circle"></i>
