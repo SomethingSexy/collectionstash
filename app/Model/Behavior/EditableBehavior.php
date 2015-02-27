@@ -1,6 +1,7 @@
 <?php
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
+
 /**
  * This should also handle the logic for committing the edit to the main model I think
  *
@@ -9,6 +10,7 @@ App::uses('ActivityTypes', 'Lib/Activity');
  */
 class EditableBehavior extends ModelBehavior
 {
+    
     /**
      * Shadow table prefix
      * Only change this value if it causes table name crashes
@@ -17,6 +19,7 @@ class EditableBehavior extends ModelBehavior
      * @var string
      */
     private $edit_suffix = '_edits';
+    
     /**
      * Defaul setting values
      *
@@ -24,6 +27,7 @@ class EditableBehavior extends ModelBehavior
      * @var array
      */
     private $defaults = array('useDbConfig' => null, 'model' => null, 'modelAssociations' => null);
+    
     /**
      * Configure the behavior through the Model::actsAs property
      *
@@ -33,7 +37,8 @@ class EditableBehavior extends ModelBehavior
     public function setup(&$Model, $settings = null) {
         if (is_array($settings)) {
             $this->settings[$Model->alias] = array_merge($this->defaults, $settings);
-        } else {
+        } 
+        else {
             $this->settings[$Model->alias] = $this->defaults;
         }
         $this->createShadowModel($Model);
@@ -44,6 +49,7 @@ class EditableBehavior extends ModelBehavior
             }
         }
     }
+    
     /**
      * Returns a generic model that maps to the current $Model's shadow table.
      *
@@ -54,13 +60,15 @@ class EditableBehavior extends ModelBehavior
         
         if (is_null($this->settings[$Model->alias]['useDbConfig'])) {
             $dbConfig = $Model->useDbConfig;
-        } else {
+        } 
+        else {
             $dbConfig = $this->settings[$Model->alias]['useDbConfig'];
         }
         $db = & ConnectionManager::getDataSource($dbConfig);
         if ($Model->useTable) {
             $shadow_table = $Model->useTable;
-        } else {
+        } 
+        else {
             $shadow_table = Inflector::tableize($Model->name);
         }
         
@@ -79,12 +87,14 @@ class EditableBehavior extends ModelBehavior
         
         if (is_string($useShadowModel) && App::import('model', $useShadowModel)) {
             $Model->EditModel = new $useShadowModel(false, $shadow_table, $dbConfig);
-        } else {
+        } 
+        else {
             $Model->EditModel = new Model(false, $shadow_table, $dbConfig);
         }
         if ($Model->tablePrefix) {
             $Model->EditModel->tablePrefix = $Model->tablePrefix;
         }
+        
         /*
          * Updated 1/7/12 after cakephp 2.0 upgrade, this was done
          * because this shadow model gets added as an associated
@@ -100,12 +110,14 @@ class EditableBehavior extends ModelBehavior
         
         return true;
     }
+    
     /**
      * If successful, it will return the edit data in the main model form
      */
     public function saveEdit($Model, $editData, $editId, $userId, $action = null) {
         $multipleSave = false;
         $Model->EditModel->bindModel(array('belongsTo' => array('Action')));
+        
         /*
          *
         */
@@ -116,20 +128,25 @@ class EditableBehavior extends ModelBehavior
             $editData = $Model->beforeSaveEdit($editData);
             $saveEdit[$Model->EditModel->alias] = $editData[$Model->alias];
             $saveEdit[$Model->EditModel->alias]['base_id'] = $editId;
+            
             // Make sure we are not accidently setting the id
             unset($saveEdit[$Model->EditModel->alias]['id']);
             if (!is_null($action) && isset($action['Action'])) {
                 $saveEdit['Action'] = $action['Action'];
             }
+            
             //If it is a one model save then we can just do the edit here
             $saveEdit['Edit']['user_id'] = $userId;
-        } else {
+        } 
+        else {
+            
             // TODO: I don't think this is being used anymore
             $multipleSave = true;
             $saveEdit = array();
             foreach ($editData as $key => $value) {
                 $editItem = $Model->beforeSaveEdit($value);
                 $editItem['edit_user_id'] = $userId;
+                
                 // $editItem['action'] = $action;
                 array_push($saveEdit, $editItem);
             }
@@ -142,6 +159,7 @@ class EditableBehavior extends ModelBehavior
             $Model->EditModel->create();
             if ($Model->EditModel->saveAll($saveEdit, array('validate' => false, 'deep' => true))) {
                 $id = $Model->EditModel->id;
+                
                 //Grab the one we just submitted
                 $savedEdit = $Model->findEdit($id);
                 $returnEdit = $savedEdit;
@@ -150,10 +168,14 @@ class EditableBehavior extends ModelBehavior
                 unset($returnEdit[$Model->EditModel->alias]);
                 unset($returnEdit[$Model->alias . 'Edit']);
                 $retVal = $returnEdit;
-            } else {
+            } 
+            else {
                 $succesful = false;
             }
-        } else {
+        } 
+        else {
+            $dataSource = $this->getDataSource();
+            $dataSource->begin();
             $edit = array();
             $edit['Edit']['user_id'] = $userId;
             $Model->EditModel->Edit->create();
@@ -163,13 +185,17 @@ class EditableBehavior extends ModelBehavior
                     $value['edit_id'] = $editId;
                 }
                 if ($Model->EditModel->saveAll($saveEdit, array('validate' => false, 'deep' => true))) {
+                    $dataSource->commit();
                     $edit = $Model->findEdit($Model->EditModel->id);
                     $Model->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_EDIT, 'editType' => $Model->alias, 'edit' => $edit, 'user' => $edit, 'type' => 'edit')));
-                } else {
-                    $Model->EditModel->Edit->delete($editId);
+                } 
+                else {
+                    $dataSource->rollback();
                     $succesful = false;
                 }
-            } else {
+            } 
+            else {
+                $dataSource->rollback();
                 $succesful = false;
             }
         }
@@ -177,7 +203,8 @@ class EditableBehavior extends ModelBehavior
         $Model->EditModel->unbindModel(array('belongsTo' => array('Action')));
         if ($succesful) {
             return $retVal;
-        } else {
+        } 
+        else {
             return false;
         }
     }
@@ -192,6 +219,7 @@ class EditableBehavior extends ModelBehavior
             }
         }
         $Model->EditModel->bindModel(array('belongsTo' => array('Action', 'User' => array('foreignKey' => 'edit_user_id'))));
+        
         // TODO: Figure out why this is not returning action type for me already
         return $Model->EditModel->find("first", array('contain' => array('Action' => array('ActionType')), 'conditions' => array($Model->EditModel->alias . '.id' => $id)));
     }
@@ -200,6 +228,7 @@ class EditableBehavior extends ModelBehavior
         $Model->EditModel->bindModel(array('belongsTo' => array('Action')));
         return $Model->EditModel->find("all", array('contain' => array('Action' => array('ActionType')), 'conditions' => array($Model->EditModel->alias . '.edit_id' => $edit_id)));
     }
+    
     /**
      * This function will compare to versions of the collectible, the edit version
      * and the current version of the collectible.
@@ -213,6 +242,7 @@ class EditableBehavior extends ModelBehavior
     public function compareEdit($Model, $edit, $base) {
         $returnCompare = $edit;
         $returnCompare[$Model->alias] = $base[$Model->alias];
+        
         //TODO update this so that the changes are in their own array and not mixed in.
         foreach ($this->settings[$Model->alias]['compare'] as $field) {
             $returnCompare[$Model->alias][$field] = $edit[$Model->EditModel->alias][$field];
@@ -224,28 +254,36 @@ class EditableBehavior extends ModelBehavior
         }
         return $returnCompare;
     }
+    
     /**
      * This could get rolled up into a more generic method with options at some point
      */
     public function getEditForApproval($Model, $editId) {
         $editVersion = $this->findEdit($Model, $editId);
+        
         //So what happens when the associated models have changed because the edit is different?
         $current = $Model->find("first", array('contain' => false, 'conditions' => array($Model->alias . '.id' => $editVersion[$Model->EditModel->alias]['base_id'])));
+        
         // Based on action type I am going to return different things
         if (!empty($editVersion)) {
             if ($editVersion['Action']['action_type_id'] === '2') {
                 $processedCurent = $this->compareEdit($Model, $editVersion, $current);
-            } else {
+            } 
+            else {
+                
                 //copy all
                 $processedCurent = $editVersion;
+                
                 //rename
                 $processedCurent[$Model->alias] = $editVersion[$Model->EditModel->alias];
+                
                 //remove edit
                 unset($processedCurent[$Model->EditModel->alias]);
             }
             
             return $processedCurent;
-        } else {
+        } 
+        else {
             return false;
         }
     }
@@ -256,6 +294,7 @@ class EditableBehavior extends ModelBehavior
     public function beforeSaveEdit($Model, $editData) {
         return $editData;
     }
+    
     /**
      * It will be this methods job to do with the EditsController is
      * It wil grab the ncessary data to publish the edit, then commit it
@@ -277,7 +316,7 @@ class EditableBehavior extends ModelBehavior
      *
      * To handle the transactions between deleting an attribute and then updating existing collectible attributes
      *
-     * 	$dataSource = $this->getDataSource();
+     *  $dataSource = $this->getDataSource();
      * $dataSource->begin($this); //begin transaction
      * if ($User->saveField('balance', $balance - $product['Product']['price'] * $quantity, true)){ //if this query is OK then proceed with the next one
      * if($this->saveField('inventory', $product['Product']['inventory'] - $quantity, true)){ //if this query is OK along with the first one then we can commit all queries
@@ -287,6 +326,7 @@ class EditableBehavior extends ModelBehavior
      * $dataSource->rollback($this);
      *
      */
+    
     /**
      * Handles deleting of the edit
      */
@@ -294,10 +334,12 @@ class EditableBehavior extends ModelBehavior
         $Model->EditModel->bindModel(array('belongsTo' => array('Action' => array('dependent' => true))));
         if ($Model->EditModel->delete($edit[$Model->EditModel->alias]['id'])) {
             return true;
-        } else {
+        } 
+        else {
             return false;
         }
     }
+    
     /**
      * Given some conditions (these have to be determined by the caller), find all pending edits
      */
