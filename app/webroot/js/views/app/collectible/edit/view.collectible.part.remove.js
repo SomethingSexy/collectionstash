@@ -29,7 +29,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
             var $button = $(event.currentTarget);
             $button.button('loading');
             var data = {
-                'reason': parseInt($('[name=reason]', this.el).val())
+                'reason': $('[name=reason]', this.el).val()
             };
 
             this.model.destroy({
