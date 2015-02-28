@@ -199,12 +199,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 								}
 
 								if (isset($isLoggedIn) && $isLoggedIn === true) {
-									if ($adminMode) {
-										echo '<li><a class="" title="Edit mode" href="/admin/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-pencil"></i> Edit</a></li>';
-									} else if ($allowEdit) {
-										echo '<li><a class="" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-pencil"></i> Edit</a></li>';
-									}
-
+									echo '<li><a class="" title="Edit mode" href="/collectibles/edit/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-pencil"></i> Edit</a></li>';
 								}
 
 								if (isset($showQuickAdd) && $showQuickAdd && $isLoggedIn && $allowVariantAdd) {
