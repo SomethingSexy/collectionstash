@@ -23,7 +23,8 @@
  */
 class Subscription extends AppModel {
 	public $name = 'Subscription';
-	public $belongsTo = array('EntityType', 'User' => array('fields' => array('id', 'username', 'email')));
+	public $belongsTo = array('User' => array('fields' => array('id', 'username', 'email')));
+	public $hasOne = array('UserSubscription', 'CollectibleSubscription');
 	public $actsAs = array('Containable');
 
 	/**
@@ -61,3 +62,4 @@ class Subscription extends AppModel {
 	}
 
 }
+?>
