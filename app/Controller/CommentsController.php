@@ -39,6 +39,7 @@ class CommentsController extends AppController
             $postedComment['Comment'] = Sanitize::clean($postedComment);
             $postedComment['Comment']['user_id'] = $this->getUserId();
             
+            // TODO: this should really be in the model :)
             if ($this->Comment->saveAll($postedComment)) {
                 $data = array();
                 $commentId = $this->Comment->id;
