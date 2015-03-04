@@ -1,11 +1,17 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
-     <h3>Release Notes for v3.11.0</h3>
+    <h3>Release Notes for v3.11.2</h3>
+    <ul>
+        <li>Fixed an issue with the show more link not working when trying to link a photo to a collctible in your stash. (#212)</li>
+        <li>Fixed an issue with the brand dropdown not refreshing aftering adding a new one to a company. (#178)</li>
+    </ul>
+
+    <h3>Release Notes for v3.11.0</h3>
     <ul>
         <li>Fixed an issue with empty edits. (#145)</li>
-        <li>Fixed an issue with delete part not working. (#210)<li>
+        <li>Fixed an issue with delete part not working. (#210)</li>
         <li>Fixed an issue the part photo not indicating if a photo is already peneding removal. (#211)</li>
-    </ul>   
+    </ul>
     <h3>Release Notes for v3.11.0</h3>
     <ul>
         <li>Updated the name field so it propertly validates the length. (#209)</li>

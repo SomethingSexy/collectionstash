@@ -8,7 +8,6 @@ define(function(require) {
         PhotoView = require('views/app/user/profile/view.photo');
     require('mustache');
     require('marionette.mustache');
-
     var StashUploadView = Marionnette.CompositeView.extend({
         template: template,
         itemView: PhotoView,
@@ -36,7 +35,6 @@ define(function(require) {
             this.profile = options.profile;
             this.permissions = options.permissions;
             this.isLoaded = false;
-
             // create and load this here, should make the view more portable, can always change later to
             // move it to the controller
             this.collection = new PhotosCollection([], {
@@ -49,9 +47,7 @@ define(function(require) {
                 self.render();
             });
         },
-        onBeforeRender: function() {
-
-        },
+        onBeforeRender: function() {},
         onRender: function() {
             var self = this;
             this.errors = [];
@@ -78,7 +74,6 @@ define(function(require) {
                 id = $photo.data('id');
             $('.tile.photo', this.el).css('border', '1px solid #E5E5E5').css('width', '200px');
             $photo.css('border', '5px solid Chartreuse').css('width', '210px');
-
             this.model.set('user_upload_id', id);
         },
         next: function(event) {
@@ -88,7 +83,6 @@ define(function(require) {
         renderMore: function() {
             var self = this;
             var ItemView;
-
             if (this.collection.state.currentPage === 1) {
                 $(this.itemViewContainer, this.el).empty();
             }
@@ -98,16 +92,14 @@ define(function(require) {
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
-
             // once the images are done loading, reset the button
             $('._tiles', this.el).imagesLoaded(function() {
                 $('._more', self.el).button('reset');
             });
-
-            if (!this.collection.hasNextPage() || this.collection.state.currentPage >= this.collection.state.lastPage) {
-                $('._more', this.el).hide();
-            } else {
+            if (this.collection.hasNextPage() || this.collection.state.currentPage <= this.collection.state.lastPage) {
                 $('._more', this.el).show();
+            } else {
+                $('._more', this.el).hide();
             }
         },
         clearPhoto: function(event) {
@@ -115,7 +107,6 @@ define(function(require) {
             event.preventDefault();
             $('.btn-primary', this.el).button('loading');
             $('._clear', this.el).button('loading');
-
             this.model.save({
                 user_upload_id: null
             }, {
@@ -127,7 +118,6 @@ define(function(require) {
                     if (model.userUpload) {
                         delete model.userUpload;
                     }
-
                     model.trigger('change:userUpload');
                 },
                 error: function(model, response, options) {
@@ -138,10 +128,8 @@ define(function(require) {
         save: function(event) {
             var self = this;
             event.preventDefault();
-
             $('.btn-primary', this.el).button('loading');
             $('._clear', this.el).button('loading');
-
             this.model.save({}, {
                 wait: true,
                 success: function(model, response, options) {
@@ -153,11 +141,9 @@ define(function(require) {
                             silent: true
                         });
                         model.userUpload.set(userUpload.toJSON());
-
                     } else {
                         model.userUpload = new Backbone.Model(userUpload.toJSON());
                     }
-
                     model.trigger('change:userUpload');
                 },
                 error: function(model, response, options) {
@@ -166,8 +152,6 @@ define(function(require) {
             });
         }
     });
-
     _.extend(StashUploadView.prototype, ErrorMixin);
-
     return StashUploadView;
 });

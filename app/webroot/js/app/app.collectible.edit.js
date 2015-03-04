@@ -664,6 +664,8 @@ define(function(require) {
                         // App.comments.add(response);
                     }
                     partsLayout.modal.hideModal();
+                    
+                    collectibleView.render();
                 });
             });
 
