@@ -202,8 +202,8 @@ class UsersController extends AppController
                             CakeLog::write('info', $results);
                             $this->Session->write('user', $user);
                             
-                            $subscriptions = $this->User->Subscription->getSubscriptions($user['id']);
-                            $this->Session->write('subscriptions', $subscriptions);
+                            // $subscriptions = $this->User->Subscription->getSubscriptions($user['id']);
+                            // $this->Session->write('subscriptions', $subscriptions);
                             
                             CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
                             // grab the total number of unread notifications
@@ -241,8 +241,8 @@ class UsersController extends AppController
     function _autoLogin() {
         CakeLog::write('info', '_autoLogin' . date("Y-m-d H:i:s", time()));
         $user = $this->getUser();
-        $subscriptions = $this->User->Subscription->getSubscriptions($user['User']['id']);
-        $this->Session->write('subscriptions', $subscriptions);
+        // $subscriptions = $this->User->Subscription->getSubscriptions($user['User']['id']);
+        // $this->Session->write('subscriptions', $subscriptions);
         
         $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['User']['id']);
         $this->Session->write('notificationsCount', $totalNotifications);

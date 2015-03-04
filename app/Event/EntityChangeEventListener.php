@@ -26,12 +26,13 @@ class EntityChangeEventListener implements CakeEventListener
         //this is the id of the user who posted the comment
         $userId = $event->data['userId'];
         $commentId = $event->data['commentId'];
-        $event->subject->loadModel('Subscription');
+        
+        // $event->subject->loadModel('Subscription');
         
         //This will also return the model that the entity is for
         $EntityType = new EntityType();
         $entityType = $EntityType->getEntityCore($entityTypeId);
-
+        
         // $subscriptions = $event -> subject -> Subscription -> find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => 1, 'Subscription.entity_type_id' => $entityTypeId)));
         // since we know we are adding a comment, get that information
         $comment = $event->subject->Comment->find('first', array('conditions' => array('Comment.id' => $commentId), 'contain' => array('User')));
@@ -75,7 +76,7 @@ class EntityChangeEventListener implements CakeEventListener
             $subscription['Subscription']['subject'] = __('A new coment has been posted.');
             $subscription['Subscription']['notification_type'] = 'comment_add';
             $subscription['Subscription']['notification_json_data'] = $templateData;
-
+            
             CakeEventManager::instance()->dispatch(new CakeEvent('Controller.Subscription.notify', $event->subject, array('subscriptions' => array($subscription))));
         }
     }
@@ -95,38 +96,40 @@ class EntityChangeEventListener implements CakeEventListener
         $collectibleUserId = $event->data['collectibleUserId'];
         
         // Grab the stash
-        $stash = $event->subject->User->Subscription->EntityType->Stash->find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => $stashId)));
+        $stash = $event->subject->User->Stash->find("first", array('contain' => array('User'), 'conditions' => array('Stash.id' => $stashId)));
         
         $collectibleUser = $event->subject->find('first', array('conditions' => array('CollectiblesUser.id' => $collectibleUserId), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'), 'CollectiblesUpload' => array('Upload')))));
         $templateData = json_encode($collectibleUser);
         
+        // TODO: Update with favorite system
         //now grab all of the Subscriptions
-        $subscriptions = $event->subject->User->Subscription->find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $stash['Stash']['entity_type_id'])));
+        // $subscriptions = $event->subject->User->Subscription->find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $stash['Stash']['entity_type_id'])));
         
-        //Build the message
-        $message = $stash['User']['username'];
-        $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
+        // //Build the message
+        // $message = $stash['User']['username'];
+        // $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
         
-        foreach ($subscriptions as $key => $subscription) {
-            
-            //If the subscription is the same as the owner of the stash, unset it
-            if ($subscription['Subscription']['user_id'] === $stash['Stash']['user_id']) {
-                unset($subscriptions[$key]);
-            } 
-            else {
-                $subscriptions[$key]['Subscription']['message'] = $message;
-                $subscriptions[$key]['Subscription']['subject'] = __($stash['User']['username'] . ' updated their stash.');
-                $subscriptions[$key]['Subscription']['notification_type'] = 'stash_add';
-                $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
-            }
-        }
+        // foreach ($subscriptions as $key => $subscription) {
         
-        if (!empty($subscriptions)) {
-            CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
-        } 
-        else {
-            CakeLog::write('info', 'No subscriptions');
-        }
+        //     //If the subscription is the same as the owner of the stash, unset it
+        //     if ($subscription['Subscription']['user_id'] === $stash['Stash']['user_id']) {
+        //         unset($subscriptions[$key]);
+        //     }
+        //     else {
+        //         $subscriptions[$key]['Subscription']['message'] = $message;
+        //         $subscriptions[$key]['Subscription']['subject'] = __($stash['User']['username'] . ' updated their stash.');
+        //         $subscriptions[$key]['Subscription']['notification_type'] = 'stash_add';
+        //         $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
+        //     }
+        // }
+        
+        // if (!empty($subscriptions)) {
+        //     CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
+        // }
+        // else {
+        //     CakeLog::write('info', 'No subscriptions');
+        // }
+        
     }
     
     /**
@@ -149,33 +152,35 @@ class EntityChangeEventListener implements CakeEventListener
         $collectibleUser = $event->subject->find('first', array('conditions' => array('CollectiblesWishList.id' => $collectibleUserId), 'contain' => array('Collectible' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'), 'CollectiblesUpload' => array('Upload')))));
         $templateData = json_encode($collectibleUser);
         
+        // TODO: Update with favorite system
         //now grab all of the Subscriptions
-        $subscriptions = $event->subject->User->Subscription->find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $wishList['Stash']['entity_type_id'])));
+        // $subscriptions = $event->subject->User->Subscription->find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $wishList['Stash']['entity_type_id'])));
         
-        //Build the message
-        $message = $wishList['User']['username'];
-        $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
+        // //Build the message
+        // $message = $wishList['User']['username'];
+        // $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
         
-        foreach ($subscriptions as $key => $subscription) {
-            
-            //If the subscription is the same as the owner of the stash, unset it
-            if ($subscription['Subscription']['user_id'] === $wishList['WishList']['user_id']) {
-                unset($subscriptions[$key]);
-            } 
-            else {
-                $subscriptions[$key]['Subscription']['message'] = $message;
-                $subscriptions[$key]['Subscription']['subject'] = __($wishList['User']['username'] . ' updated their wish list.');
-                $subscriptions[$key]['Subscription']['notification_type'] = 'wishlist_add';
-                $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
-            }
-        }
+        // foreach ($subscriptions as $key => $subscription) {
         
-        if (!empty($subscriptions)) {
-            CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
-        } 
-        else {
-            CakeLog::write('info', 'No subscriptions');
-        }
+        //     //If the subscription is the same as the owner of the stash, unset it
+        //     if ($subscription['Subscription']['user_id'] === $wishList['WishList']['user_id']) {
+        //         unset($subscriptions[$key]);
+        //     }
+        //     else {
+        //         $subscriptions[$key]['Subscription']['message'] = $message;
+        //         $subscriptions[$key]['Subscription']['subject'] = __($wishList['User']['username'] . ' updated their wish list.');
+        //         $subscriptions[$key]['Subscription']['notification_type'] = 'wishlist_add';
+        //         $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
+        //     }
+        // }
+        
+        // if (!empty($subscriptions)) {
+        //     CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
+        // }
+        // else {
+        //     CakeLog::write('info', 'No subscriptions');
+        // }
+        
     }
     
     /**
