@@ -97,7 +97,8 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                 }));
             });
 
-            $('.add-to-wishlist').on('click', function() {
+            $('.add-to-wishlist').on('click', function(event) {
+                event.preventDefault();
                 var model = new CollectibleWishlist({
                     'collectible_id': collectibleModel.get('id')
                 });
