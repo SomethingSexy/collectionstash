@@ -1,5 +1,12 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.11.3</h3>
+    <ul>
+        <li>Fixed an issue with the point system. (#217)</li>
+        <li>Fixed an issue where the add to wish list button on the collectible detail page would an empty history point. (#214)</li>
+        <li>Removed the additional link on the wish list page.  It didn't make sense. (#213)</li>
+    </ul>
+
     <h3>Release Notes for v3.11.2</h3>
     <ul>
         <li>Fixed an issue with the show more link not working when trying to link a photo to a collctible in your stash. (#212)</li>
