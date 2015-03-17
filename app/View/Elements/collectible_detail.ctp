@@ -419,12 +419,18 @@ if ($showStatus) {
 } else {
 	echo 'var showStatus = false;';
 }
-	?><?php
-	if ($allowStatusEdit) {
-		echo 'var allowStatusEdit = true;';
-	} else {
-		echo 'var allowStatusEdit = false;';
-	}
+?><?php
+if ($adminMode) {
+	echo 'var showApproval = true;';
+} else {
+	echo 'var showApproval = false;';
+}
+?><?php
+if ($allowStatusEdit) {
+	echo 'var allowStatusEdit = true;';
+} else {
+	echo 'var allowStatusEdit = false;';
+}
 ?></script>
 <?php
 

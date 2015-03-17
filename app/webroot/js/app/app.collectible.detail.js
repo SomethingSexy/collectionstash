@@ -1,37 +1,75 @@
-define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipboard', 'views/common/stash/view.stash.add', 'backbone', 'marionette', 'views/common/modal.region', 'models/model.collectible.user', 'models/model.collectible.wishlist', 'views/common/growl', 'views/common/view.comments', 'views/common/view.comment.add', 'collections/collection.comments', 'views/common/cs.subscribe', 'models/model.status', 'views/view.status', 'jquery.blueimp-gallery', 'bootstrap', 'jquery.flot', 'jquery.flot.time'], function(require, TransactionsView, ZeroClipboard, StashAddView, Backbone, Marionette, ModalRegion, CollectibleUser, CollectibleWishlist, growl, CommentsView, CommentAddView, CommentsCollection, subscribe, Status, StatusView) {
+define(function(require) {
+    var TransactionsView = require('views/app/collectible/detail/view.transactions'),
+        ApproveView = require('views/app/collectible/detail/view.approve'),
+        DenyView = require('views/app/collectible/detail/view.deny'),
+        ZeroClipboard = require('zeroclipboard'),
+        StashAddView = require('views/common/stash/view.stash.add'),
+        Backbone = require('backbone'),
+        Marionette = require('marionette'),
+        ModalRegion = require('views/common/modal.region'),
+        CollectibleUser = require('models/model.collectible.user'),
+        CollectibleWishlist = require('models/model.collectible.wishlist'),
+        growl = require('views/common/growl'),
+        CommentsView = require('views/common/view.comments'),
+        CommentAddView = require('views/common/view.comment.add'),
+        CommentsCollection = require('collections/collection.comments'),
+        subscribe = require('views/common/cs.subscribe'),
+        Status = require('models/model.status'),
+        StatusView = require('views/view.status');
+    require('jquery.blueimp-gallery');
+    require('bootstrap');
+    require('jquery.flot');
+    require('jquery.flot.time');
 
     //bootstrap this until it is switched over to a Marionette App
     return {
         start: function() {
-            // Get all of the data here
+            var DetailLayout = Backbone.Marionette.Layout.extend({
+                el: '#collectible-container',
+                regions: {
+                    modal: ModalRegion,
+                    comments: '#comments'
+                }
+            });
 
+            var detailLayout = new DetailLayout();
+
+            // Get all of the data here
             // grab the template-stash-add
             var collectibleModel = new Backbone.Model(collectible);
-
             var comments = new CommentsCollection(rawComments || {});
             var permissions = new Backbone.Model(rawPermissions);
-
-
             // global variable that comes from the page, status is only for new collectibles
             if (showStatus) {
-
                 // since I am only loading one, don't need to index
                 // TODO: This page should use a different view template for different text
-
-
                 var status = new Status();
                 status.set(collectibleStatus, {
                     silent: true
                 });
-
-                $('#status-container').html(new StatusView({
+                var statusView = new StatusView({
                     model: status,
                     allowEdit: allowStatusEdit,
                     collectible: collectibleModel,
+                    showApproval: showApproval,
                     // can't global delete from view anyway
                     allowDelete: false
-                }).render().el);
+                });
 
+
+                statusView.on('view:approve', function() {
+                    detailLayout.modal.show(new ApproveView({
+                        model: status
+                    }));
+                });
+
+                statusView.on('view:deny', function() {
+                    detailLayout.modal.show(new DenyView({
+                        model: status
+                    }));
+                });
+
+                $('#status-container').html(statusView.render().el);
                 // If the status has changed and I am on the view
                 //page and they change the status and it is a draft
                 // go to the edit page
@@ -40,7 +78,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                         window.location.href = '/collectibles/edit/' + this.id;
                     }
                 }, status);
-
             } else {
                 $('#status-container').remove();
             }
@@ -60,23 +97,13 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                 $('#approve-input').val('true');
                 $('#approval-form').submit();
             });
+
             $('#deny-button').click(function() {
                 $('#approve-input').val('false');
                 $('#approval-form').submit();
             });
-
             // run the subscribe setup code
             subscribe.run();
-
-            var DetailLayout = Backbone.Marionette.Layout.extend({
-                el: '#collectible-container',
-                regions: {
-                    modal: ModalRegion,
-                    comments: '#comments'
-                }
-            });
-
-            var detailLayout = new DetailLayout();
 
             $('.add-full-to-stash').on('click', function() {
                 $anchor = $(this);
@@ -84,12 +111,10 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                     'collectible_id': collectibleModel.get('id')
                 });
                 model.collectible = collectibleModel;
-
                 model.once('sync', function() {
                     detailLayout.modal.hideModal();
                     growl.onSuccess('You have successfully added the collectible to your stash!');
                 });
-
                 detailLayout.modal.show(new StashAddView({
                     model: model,
                     stashCount: $anchor.data('stash-count'),
@@ -102,7 +127,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                 var model = new CollectibleWishlist({
                     'collectible_id': collectibleModel.get('id')
                 });
-
                 model.save({}, {
                     // apparently I am adding this to the URL? dumb TODO
                     url: model.url() + '/' + collectibleModel.get('id'),
@@ -116,71 +140,56 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                                 errorMessage = value.message;
                             });
                         }
-
                         growl.onError(errorMessage)
                     }
                 })
             });
 
-
             var commentsView = new CommentsView({
                 collection: comments,
                 permissions: permissions
             });
-
             commentsView.on('comment:add', function(id) {
                 var model = new comments.model();
                 model.set('entity_type_id', collectibleModel.get('entity_type_id'));
-
                 // set the last comment created so that this will return any comments
                 // created in the mean time
                 if (!comments.isEmpty()) {
                     model.set('last_comment_created', comments.last().get('created'));
                 }
-
                 detailLayout.modal.show(new CommentAddView({
                     model: model
                 }));
-
                 model.once('sync', function(model, response, options) {
                     if (_.isArray(response)) {
                         comments.add(response);
                     }
-
                     detailLayout.modal.hideModal();
                 });
             });
-
             commentsView.on('comment:edit', function(id) {
                 var model = comments.get(id);
-
                 detailLayout.modal.show(new CommentAddView({
                     model: model
                 }));
-
                 model.once('sync', function(model, response, options) {
                     // this gets called before tracking is finished updating 
                     detailLayout.modal.hideModal();
                 });
             });
-
             detailLayout.comments.show(commentsView);
-
 
             $('#carousel-example-generic').carousel({
                 wrap: true
             });
-
 
             new TransactionsView({
                 collectible: collectibleModel,
                 allowDeleteListing: allowDeleteListing,
                 allowAddListing: allowAddListing
             });
-
             // lol this should probably get moved to the view file
             function showTooltip(x, y, contents) {
-
                 $("<div id='tooltip'>" + contents + "</div>").css({
                     position: "absolute",
                     display: "none",
@@ -192,7 +201,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                     opacity: 0.80
                 }).appendTo("body").fadeIn(200);
             }
-
             if (!_.isEmpty(transactionsGraphData)) {
                 $.plot("#holder", [transactionsGraphData], {
                     xaxis: {
@@ -216,7 +224,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                 });
                 var previousPoint = null;
                 $("#holder").bind("plothover", function(event, pos, item) {
-
                     if (item) {
                         if (previousPoint != item.dataIndex) {
                             previousPoint = item.dataIndex;
@@ -230,7 +237,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                         $("#tooltip").remove();
                         previousPoint = null;
                     }
-
                 });
             }
 
@@ -245,9 +251,7 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
             var clip = new ZeroClipboard([document.getElementById("copy-to-clipboard-direct"), document.getElementById("copy-to-clipboard-bbcode"), document.getElementById("copy-to-clipboard-bbcodeimage")], {
                 swfPath: "/assets/flash/ZeroClipboard.swf"
             });
-
             clip.on("load", function(client) {
-
                 client.on("complete", function(client, args) {
                     var $button = $(this);
                     $button.tooltip('show');
@@ -256,7 +260,6 @@ define(['require', 'views/app/collectible/detail/view.transactions', 'zeroclipbo
                     }, 500);
                 });
             });
-
         }
     };
 });
