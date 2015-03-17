@@ -1,0 +1,25 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        ×
+        </button>
+        <h4 id="myModalLabel">Approve Collectible</h4>
+    </div>
+    <div class="modal-body">
+        <div class="_globalError"></div>
+        <form>
+            <div class="form-group">
+                <label class="control-label" for="Notes">Notes</label>
+                <textarea id="Notes" class="form-control" maxlength="1000" name="notes">{{{notes}}}</textarea>
+            </div>  
+        </form>    
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+        Close
+        </button>
+        <button class="btn btn-primary save" data-loading-text="Saving..." autocomplete="off">
+        Approve
+        </button>
+    </div>
+</div>
