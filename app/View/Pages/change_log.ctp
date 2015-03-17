@@ -13,7 +13,7 @@
         <li>Fixed an issue with the brand dropdown not refreshing aftering adding a new one to a company. (#178)</li>
     </ul>
 
-    <h3>Release Notes for v3.11.0</h3>
+    <h3>Release Notes for v3.11.1</h3>
     <ul>
         <li>Fixed an issue with empty edits. (#145)</li>
         <li>Fixed an issue with delete part not working. (#210)</li>
