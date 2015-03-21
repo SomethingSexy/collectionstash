@@ -1,4 +1,7 @@
 <?php
+if (!isset($adminMode)) {
+	$adminMode = false;
+}
 if (isset($setPageTitle) && $setPageTitle) {
 	$pageTitle = '';
 	if (!empty($collectibleDetail['Manufacture']['title'])) {
