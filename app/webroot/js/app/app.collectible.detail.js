@@ -59,13 +59,15 @@ define(function(require) {
 
                 statusView.on('view:approve', function() {
                     detailLayout.modal.show(new ApproveView({
-                        model: status
+                        model: status,
+                        collectible: collectibleModel,
                     }));
                 });
 
                 statusView.on('view:deny', function() {
                     detailLayout.modal.show(new DenyView({
-                        model: status
+                        model: status,
+                        collectible: collectibleModel,
                     }));
                 });
 

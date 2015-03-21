@@ -1,4 +1,4 @@
-define(function(require, Marionette, template, mustache) {
+define(function(require) {
 
     var Marionette = require('marionette'),
         template = require('text!templates/app/collectible/detail/deny.mustache'),
