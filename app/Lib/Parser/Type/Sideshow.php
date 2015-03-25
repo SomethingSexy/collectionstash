@@ -2,6 +2,7 @@
 require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . '..' . DS . '..' . DS . 'vendor' . DS . 'sunra' . DS . 'php-simple-html-dom-parser' . DS . 'Src' . DS . 'Sunra' . DS . 'PhpSimple' . DS . 'HtmlDomParser.php');
 App::uses('Parsable', 'Lib/Parser');
 App::uses('ParserUtility', 'Lib/Parser');
+App::uses('Collectible', 'Lib');
 class Sideshow implements Parsable
 {
     
@@ -20,20 +21,33 @@ class Sideshow implements Parsable
         
         if ($html = ParserUtility::capture_url($url)) {
             
+            //it seems all products have an id product on there, if that doesn't exist, fail fast
+            if (!$html->find('div[id=product]')) {
+                return false;
+            }
+            
+            $collectible = new Collectible();
+            
             $head = $html->find("head", 0);
             $body = $html->find("body", 0);
             
             //FEATURE IMAGE
             $itemArray['featureimage'] = $head->find("meta[property='og:image']", 0)->getAttribute('content');
             
+            if ($itemArray['featureimage']) {
+                array_push($collectible->photos, $itemArray['featureimage']);
+            }
+            
             //KEYWORDS
-            $itemArray['keywords'] = ParserUtility::htmlentities2utf8($head->find("meta[property='og:keywords']", 0)->getAttribute('content'));
+            // $itemArray['keywords'] = ParserUtility::htmlentities2utf8($head->find("meta[property='og:keywords']", 0)->getAttribute('content'));
             
             //URL
             $itemArray['url'] = $head->find("meta[property='og:url']", 0)->getAttribute('content');
+            $collectible->url = $itemArray['url'];
             
             //NAME
             $itemArray['name'] = ParserUtility::htmlentities2utf8($body->find("h1", 0)->innertext);
+            $collectible->name = $itemArray['name'];
             
             // GALLERY IMAGES
             $tempHTML = $body->find("div[id=gallery]", 0);
@@ -71,17 +85,20 @@ class Sideshow implements Parsable
             $itemArray['description'] = trim(strip_tags($itemArray['description']));
             
             // Description additonal details - WHAT'S IN THE BOX section - quick and dirty
-            $itemArray['description_details'] = $body->find("div[id=in-box]", 0)->innertext;
-            $itemArray['description_details'] = ParserUtility::htmlentities2utf8($itemArray['description_details']);
-            
-            $itemArray['description_details'] = trim(substr($itemArray['description_details'], stripos($itemArray['description_details'], "</h4>") + 5));
-            
-            $itemArray['description_details'] = str_ireplace("<p>", "", $itemArray['description_details']);
-            $itemArray['description_details'] = str_ireplace("</p>", "\r\n", $itemArray['description_details']);
-            
-            $itemArray['description_details'] = str_ireplace("</li>", "\r\n", $itemArray['description_details']);
-            $itemArray['description_details'] = str_ireplace("<li>", "* ", $itemArray['description_details']);
-            $itemArray['description_details'] = trim(strip_tags($itemArray['description_details']));
+            $inBox = $body->find("div[id=in-box]", 0);
+            if ($inBox) {
+                $itemArray['description_details'] = $inBox->innertext;
+                $itemArray['description_details'] = ParserUtility::htmlentities2utf8($itemArray['description_details']);
+                
+                $itemArray['description_details'] = trim(substr($itemArray['description_details'], stripos($itemArray['description_details'], "</h4>") + 5));
+                
+                $itemArray['description_details'] = str_ireplace("<p>", "", $itemArray['description_details']);
+                $itemArray['description_details'] = str_ireplace("</p>", "\r\n", $itemArray['description_details']);
+                
+                $itemArray['description_details'] = str_ireplace("</li>", "\r\n", $itemArray['description_details']);
+                $itemArray['description_details'] = str_ireplace("<li>", "* ", $itemArray['description_details']);
+                $itemArray['description_details'] = trim(strip_tags($itemArray['description_details']));
+            }
             
             // PRICE - easiest/most consistent way to grab price for current and archived products
             $itemArray['price'] = floatval(ParserUtility::get_HTML_SubString($body, 'price: "$', '"'));
@@ -352,11 +369,11 @@ class Sideshow implements Parsable
             }
             
             // EXCLUSIVE
-            if ($body->find("a[class=label-exclusive]", 0)->innertext) {
+            if ($body->find("a[class=label-exclusive]", 0)) {
                 $itemArray['exclusive'] = true;
             }
             
-            return $itemArray;
+            return $collectible;
         } 
         else {
             
