@@ -32,59 +32,68 @@ class Sideshow implements Parsable
             $body = $html->find("body", 0);
             
             //FEATURE IMAGE
-            $itemArray['featureimage'] = $head->find("meta[property='og:image']", 0)->getAttribute('content');
+            $featureimage = $head->find("meta[property='og:image']", 0)->getAttribute('content');
             
-            if ($itemArray['featureimage']) {
-                array_push($collectible->photos, $itemArray['featureimage']);
+            if ($featureimage) {
+                array_push($collectible->photos, $featureimage);
             }
             
             //KEYWORDS
             // $itemArray['keywords'] = ParserUtility::htmlentities2utf8($head->find("meta[property='og:keywords']", 0)->getAttribute('content'));
             
             //URL
-            $itemArray['url'] = $head->find("meta[property='og:url']", 0)->getAttribute('content');
-            $collectible->url = $itemArray['url'];
+            $collectible->url = $head->find("meta[property='og:url']", 0)->getAttribute('content');
             
             //NAME
-            $itemArray['name'] = ParserUtility::htmlentities2utf8($body->find("h1", 0)->innertext);
-            $collectible->name = $itemArray['name'];
+            $collectible->name = ParserUtility::htmlentities2utf8($body->find("h1", 0)->innertext);
             
             // GALLERY IMAGES
-            $tempHTML = $body->find("div[id=gallery]", 0);
-            $itemArray['galleryimages'] = ($tempHTML->find("a"));
-            unset($tempHTML);
+            $images = ($body->find("div[id=gallery]", 0)->find("a"));
             
-            foreach ($itemArray['galleryimages'] as & $value) {
-                if (substr($value->href, 0, 1) == "/") $value = "http://www.sideshowtoy.com" . $value->href;
-                else $value = $value->href;
+            foreach ($images as $value) {
+                if (substr($value->href, 0, 1) == "/") {
+                    array_push($collectible->photos, "http://www.sideshowtoy.com" . $value->href);
+                    
+                    //$value = "http://www.sideshowtoy.com" . $value->href;
+                    
+                    
+                } 
+                else {
+                    array_push($collectible->photos, $value->href);
+                    
+                    // $value = $value->href;
+                    
+                    
+                }
             }
-            unset($value);
             
             //GIANT IMAGE
-            $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($body, "<!-- large, clipped png -->", "<!-- .col -->");
-            $itemArray['giantimage'] = str_get_html($itemArray['giantimage']);
-            $itemArray['giantimage'] = $itemArray['giantimage']->find("img", 0)->src;
-            $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($itemArray['giantimage'], ".com/");
-            $itemArray['giantimage'] = "http://www.sideshowtoy.com/" . $itemArray['giantimage'];
+            // $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($body, "<!-- large, clipped png -->", "<!-- .col -->");
+            // $itemArray['giantimage'] = str_get_html($itemArray['giantimage']);
+            // $itemArray['giantimage'] = $itemArray['giantimage']->find("img", 0)->src;
+            // $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($itemArray['giantimage'], ".com/");
+            // $itemArray['giantimage'] = "http://www.sideshowtoy.com/" . $itemArray['giantimage'];
             
             // DESCRIPTION - Main product description - PRODUCT SUMMARY section - quick and dirty
-            $itemArray['description'] = $body->find("div[id=prod-summary]", 0)->innertext;
-            $itemArray['description'] = ParserUtility::htmlentities2utf8($itemArray['description']);
+            $description = $body->find("div[id=prod-summary]", 0)->innertext;
+            $description = ParserUtility::htmlentities2utf8($description);
             
-            $itemArray['description'] = preg_replace("#<br\s*/?>#i", "\r\n", $itemArray['description']);
+            $description = preg_replace("#<br\s*/?>#i", "\r\n", $description);
             
             // replace html breaks with newline
             
-            $itemArray['description'] = str_ireplace("<p>", "", $itemArray['description']);
-            $itemArray['description'] = str_ireplace("</p>", "\r\n\r\n", $itemArray['description']);
+            $description = str_ireplace("<p>", "", $description);
+            $description = str_ireplace("</p>", "\r\n\r\n", $description);
             
             // replace end paragraphs with double newline
             
-            $itemArray['description'] = str_ireplace("<div>", "", $itemArray['description']);
-            $itemArray['description'] = str_ireplace("</div>", "\r\n", $itemArray['description']);
-            $itemArray['description'] = trim(strip_tags($itemArray['description']));
+            $description = str_ireplace("<div>", "", $description);
+            $description = str_ireplace("</div>", "\r\n", $description);
+            $description = trim(strip_tags($description));
+            $collectible->description = $description;
             
             // Description additonal details - WHAT'S IN THE BOX section - quick and dirty
+            // This will eventually be parts?
             $inBox = $body->find("div[id=in-box]", 0);
             if ($inBox) {
                 $itemArray['description_details'] = $inBox->innertext;
@@ -101,27 +110,26 @@ class Sideshow implements Parsable
             }
             
             // PRICE - easiest/most consistent way to grab price for current and archived products
-            $itemArray['price'] = floatval(ParserUtility::get_HTML_SubString($body, 'price: "$', '"'));
+            $collectilbe->cost = floatval(ParserUtility::get_HTML_SubString($body, 'price: "$', '"'));
             
             // UPC - sanitize a bit - only numbers, only up to 13 digits
-            $itemArray['upc'] = preg_replace("/\D/", "", ParserUtility::sscProductDetails($body, 'upc'));
-            $itemArray['upc'] = substr($itemArray['upc'], 0, 12);
+            $collectilbe->upc = substr(preg_replace("/\D/", "", ParserUtility::sscProductDetails($body, 'upc')), 0, 12);
             
             // DIMENSIONS - Sideshow are very consistent with the format
             // there's some repetition in the code, but not worth replacing with a function
-            $itemArray['size'] = ParserUtility::sscProductDetailsHTML($body, 'size');
+            $size = ParserUtility::sscProductDetailsHTML($body, 'size');
             
             // split into multiple lines if there are dimension sets for more than one part of this product (example: product + stand)
-            $itemArray['size'] = explode("<hr/>", $itemArray['size']);
+            $size = explode("<hr/>", $size);
             
             // scoop up all other dimension sets as plain text
-            for ($i = 1, $len = count($itemArray['size']); $i < $len; ++$i) {
-                $tempExtraDesc = $tempExtraDesc . strip_tags($itemArray['size'][$i]);
+            for ($i = 1, $len = count($size); $i < $len; ++$i) {
+                $tempExtraDesc = $tempExtraDesc . strip_tags($size[$i]);
                 if ($i != $len) $tempExtraDesc = $tempExtraDesc . "\r\n";
             }
             
             // first set of dimensions are for the product itself, so this is what we use
-            $itemArray['size'] = strip_tags($itemArray['size'][0]);
+            $size = strip_tags($size[0]);
             
             // add the exra dimensions to the end of the description details block
             if (isset($tempExtraDesc)) {
@@ -130,56 +138,51 @@ class Sideshow implements Parsable
             }
             
             // split apart main dimensions to populate H, W, L D variables
-            $tempSizeArray = explode("x", $itemArray['size']);
+            $tempSizeArray = explode("x", $size);
             
             foreach ($tempSizeArray as $value) {
                 
-                if (stripos($value, "h") && empty($itemArray['height'])) {
-                    $itemArray['height'] = trim(substr($value, 0, strpos($value, '"')));
-                    $itemArray['height'] = floatval($itemArray['height']);
+                if (stripos($value, "h") && empty($collectible->height)) {
+                    $collectible->height = floatval(trim(substr($value, 0, strpos($value, '"'))));
                 } 
-                elseif (stripos($value, "w") && empty($itemArray['width'])) {
-                    $itemArray['width'] = trim(substr($value, 0, strpos($value, '"')));
-                    $itemArray['width'] = floatval($itemArray['width']);
+                else if (stripos($value, "w") && empty($collectible->width)) {
+                    $collectible->width = floatval(trim(substr($value, 0, strpos($value, '"'))));
                 } 
-                elseif (stripos($value, "l") && empty($itemArray['length'])) {
-                    $itemArray['length'] = trim(substr($value, 0, strpos($value, '"')));
-                    $itemArray['length'] = floatval($itemArray['length']);
+                else if (stripos($value, "l") && empty($collectible->height)) {
+                    $collectible->height = floatval(trim(substr($value, 0, strpos($value, '"'))));
                 } 
-                elseif (stripos($value, "d") && empty($itemArray['depth'])) {
-                    $itemArray['depth'] = trim(substr($value, 0, strpos($value, '"')));
-                    $itemArray['depth'] = floatval($itemArray['depth']);
+                else if (stripos($value, "d") && empty($collectible->depth)) {
+                    $collectible->depth = floatval(trim(substr($value, 0, strpos($value, '"'))));
                 } 
-                elseif (empty($itemArray['height'])) {
-                    $itemArray['height'] = trim(substr($value, 0, strpos($value, '"')));
-                    $itemArray['height'] = floatval($itemArray['height']);
+                else if (empty($collectible->height)) {
+                    $collectible->height = trim(substr($value, 0, strpos($value, '"')));
                 }
             }
-            unset($tempSizeArray);
-            
-            // OEM Scale
-            $itemArray['OEMscale'] = ParserUtility::sscProductDetails($body, 'scale');
             
             // WEIGHT - splits whole line on "lbs" and keeps the first element
-            $itemArray['weight'] = ParserUtility::sscProductDetails($body, 'Product Weight');
-            $itemArray['weight'] = explode("lbs", $itemArray['weight']);
-            $itemArray['weight'] = floatval($itemArray['weight'][0]);
+            $weight = ParserUtility::sscProductDetails($body, 'Product Weight');
+            $weight = explode("lbs", $weight);
+            $weight = floatval($weight[0]);
+            $collectible->weight = $weight;
             
             // MANUFACTURER
-            $itemArray['manufacturer'] = ParserUtility::sscProductDetails($body, 'manufacturer');
+            $collectible->manufacturer = ParserUtility::sscProductDetails($body, 'manufacturer');
             
             // SERIES - header3 content - sometimes used for license name, otherwise used for sub-license/series
-            $itemArray['series'] = trim(ParserUtility::htmlentities2utf8($body->find("h3", 0)->innertext));
+            $collectible->series = trim(ParserUtility::htmlentities2utf8($body->find("h3", 0)->innertext));
             
             // LICENSE - pre-populate license with series content just in case the license is blank
-            $itemArray['license'] = $itemArray['series'];
+            // $itemArray['license'] = $itemArray['series'];
             
             if ($var = ParserUtility::sscProductDetails($body, 'license')) {
-                $itemArray['license'] = $var;
+                $collectible->brand = $var;
+            } 
+            else {
+                $collectible->brand = $collectible->series;
             }
             
             // SKU
-            $itemArray['sku'] = ParserUtility::sscProductDetails($body, 'sku');
+            $collectible->productCode = ParserUtility::sscProductDetails($body, 'sku');
             
             // EDITION
             $itemArray['editionsize'] = ParserUtility::get_HTML_SubString($body, "<!-- .labels -->", "<!-- .col -->");
@@ -266,7 +269,7 @@ class Sideshow implements Parsable
             }
             
             // if all else fails, grab the year from the feature image folder path
-            $imgURLparts = explode('/', $itemArray['featureimage']);
+            $imgURLparts = explode('/', $featureimage);
             
             $imgYear = $imgURLparts[count($imgURLparts) - 3];
             
@@ -278,93 +281,96 @@ class Sideshow implements Parsable
                 $itemArray['orderyear'] = $itemArray['imgyear'];
             }
             
+            // OEM Scale
+            $OEMscale = ParserUtility::sscProductDetails($body, 'scale');
+            
             //PRODUCT TYPE
             // Assign product type and scale as follows - done this way to allow substring matching within scale text
             // This can be compacted by re-organising and not breaking on certain matches - too difficult to maintain that way
             switch (true) {
-                case stristr($itemArray['OEMscale'], "figure stand"):
-                case stristr($itemArray['OEMscale'], "display stage"):
-                case stristr($itemArray['OEMscale'], "display case"):
-                    $itemArray[type] = "action figure accessory";
+                case stristr($OEMscale, "figure stand"):
+                case stristr($OEMscale, "display stage"):
+                case stristr($OEMscale, "display case"):
+                    $collectible->type = "action figure accessory";
                     break;
 
-                case stristr($itemArray['OEMscale'], "sixth scale figure related product"):
-                    $itemArray['scale'] = "1/6";
-                    $itemArray['type'] = "action figure accessory";
+                case stristr($OEMscale, "sixth scale figure related product"):
+                    $collectible->scale = "1/6";
+                    $collectible->type = "action figure accessory";
                     break;
 
-                case stristr($itemArray['OEMscale'], "maquette"):
-                    $itemArray['type'] = "maquette";
+                case stristr($OEMscale, "maquette"):
+                    $collectible->type = "maquette";
                     break;
 
-                case stristr($itemArray['OEMscale'], "sixth scale"):
-                    $itemArray['scale'] = "1/6";
-                    $itemArray['type'] = "action figure";
+                case stristr($OEMscale, "sixth scale"):
+                    $collectible->scale = "1/6";
+                    $collectible->type = "action figure";
                     break;
 
-                case stristr($itemArray['OEMscale'], "quarter scale"):
-                    $itemArray['scale'] = "1/4";
-                    $itemArray['type'] = "action figure";
+                case stristr($OEMscale, "quarter scale"):
+                    $collectible->scale = "1/4";
+                    $collectible->type = "action figure";
                     break;
 
-                case stristr($itemArray['OEMscale'], "premium scale collectible figure"):
-                case stristr($itemArray['OEMscale'], "collectible figure"):
-                case stristr($itemArray['OEMscale'], "collectible set"):
-                    $itemArray[type] = "action figure";
+                case stristr($OEMscale, "premium scale collectible figure"):
+                case stristr($OEMscale, "collectible figure"):
+                case stristr($OEMscale, "collectible set"):
+                    $collectible->type = "action figure";
                     break;
 
-                case stristr($itemArray['OEMscale'], "bust"):
-                    $itemArray['type'] = "bust";
+                case stristr($OEMscale, "bust"):
+                    $collectible->type = "bust";
                     break;
 
-                case stristr($itemArray['OEMscale'], "premium format"):
-                    $itemArray['scale'] = "1/4";
-                    $itemArray['type'] = "statue";
+                case stristr($OEMscale, "premium format"):
+                    $collectible->scale = "1/4";
+                    $collectible->type = "statue";
                     break;
 
-                case stristr($itemArray['OEMscale'], "life-size"):
-                    $itemArray['scale'] = "1/1";
-                    $itemArray['type'] = "statue";
+                case stristr($OEMscale, "life-size"):
+                    $collectible->scale = "1/1";
+                    $collectible->type = "statue";
                     break;
 
-                case stristr($itemArray['OEMscale'], "legendary scale"):
-                case stristr($itemArray['OEMscale'], "statue"):
-                    $itemArray['type'] = "statue";
+                case stristr($OEMscale, "legendary scale"):
+                case stristr($OEMscale, "statue"):
+                    $collectible->type = "statue";
                     break;
 
-                case stristr($itemArray['OEMscale'], "vinyl"):
-                    $itemArray['type'] = "vinyl figure";
+                case stristr($OEMscale, "vinyl"):
+                    $collectible->type = "vinyl figure";
                     break;
 
-                case stristr($itemArray['OEMscale'], "diorama"):
-                    $itemArray['type'] = "diorama";
+                case stristr($OEMscale, "diorama"):
+                    $collectible->type = "diorama";
                     break;
 
-                case stristr($itemArray['OEMscale'], "prop replica"):
-                    $itemArray['scale'] = "1/1";
-                    $itemArray['type'] = "prop replica";
+                case stristr($OEMscale, "prop replica"):
+                    $collectible->scale = "1/1";
+                    $collectible->type = "prop replica";
                     break;
 
-                case stristr($itemArray['OEMscale'], "replica"):
-                    $itemArray['type'] = "replica";
+                case stristr($OEMscale, "replica"):
+                    $collectible->type = "replica";
                     break;
 
-                case stristr($itemArray['OEMscale'], "apparel"):
-                    $itemArray['scale'] = "1/1";
-                    $itemArray['type'] = "apparel";
+                case stristr($OEMscale, "apparel"):
+                    $collectible->scale = "1/1";
+                    $collectible->type = "apparel";
                     break;
 
-                case stristr($itemArray['OEMscale'], "model kit"):
-                    $itemArray['type'] = "model kit";
+                case stristr($OEMscale, "model kit"):
+                    $collectible->type = "model kit";
                     break;
 
-                case stristr($itemArray['OEMscale'], "art print"):
-                    $itemArray['type'] = "print";
+                case stristr($OEMscale, "art print"):
+                    $collectible->type = "print";
                     break;
 
-                case stristr($itemArray['OEMscale'], "book"):
-                    $itemArray['scale'] = "1/1";
-                    $itemArray['type'] = "book";
+                case stristr($OEMscale, "book"):
+                    $collectible->scale = "1/1";
+                    $collectible->type = "book";
                     break;
             }
             
