@@ -4,7 +4,8 @@ class Collectible
     // property declaration
     public $name;
     public $manufacturer;
-    public $collectibleType;
+    public $type;
+    public $series;
     public $description;
     public $msrp;
     public $editionSize;
@@ -26,5 +27,6 @@ class Collectible
     public $signed = false;
     public $official = true;
     public $photos = array();
+    public $cost;
 }
 ?>
