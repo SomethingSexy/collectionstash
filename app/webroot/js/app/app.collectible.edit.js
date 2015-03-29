@@ -20,6 +20,7 @@ define(function(require) {
         PartAddExistingView = require('views/app/collectible/edit/view.part.add.existing'),
         CollectibleSearchView = require('views/app/collectible/edit/view.collectible.search'),
         CompanyView = require('views/app/collectible/edit/view.company'),
+        CollectibleTypeView = require('views/app/collectible/edit/view.collectibletype'),
         ModalRegion = require('views/common/modal.region'),
         CollectibleModel = require('models/model.collectible'),
         Status = require('models/model.status'),
@@ -664,8 +665,29 @@ define(function(require) {
                         // App.comments.add(response);
                     }
                     partsLayout.modal.hideModal();
-                    
+
                     collectibleView.render();
+                });
+            });
+
+            collectibleView.on('collectibletype:select', function() {
+
+                var collectibleTypeView = new CollectibleTypeView({
+                    model: new Backbone.Model(),
+                    collectiblTypeHtml: collectiblTypeHtml
+                });
+                partsLayout.modal.show(collectibleTypeView);
+
+                collectibleTypeView.on('select:type', function(id, label) {
+                    collectibleTypeModel.set({
+                        id: id,
+                        name: label
+                    });
+                    collectibleModel.set({
+                        collectibletype_id: id,
+                        collectibleType: label
+                    });
+                    partsLayout.modal.hideModal();
                 });
             });
 

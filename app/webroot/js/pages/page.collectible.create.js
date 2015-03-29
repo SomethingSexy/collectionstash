@@ -75,39 +75,25 @@ $(function() {
 	});
 
 	// Get all of the data here
-	$.when($.get('/templates/collectibles/create.collectibletype.dust'), $.get('/templates/collectibles/create.type.dust')).done(function(collectibleTypeTemplate, typeTemplate) {
-		dust.loadSource(dust.compile(collectibleTypeTemplate[0], 'create.collectibletype'));
-		dust.loadSource(dust.compile(typeTemplate[0], 'create.type'));
+	$.when($.get('/templates/collectibles/create.type.dust')).done(function(typeTemplate) {
+		dust.loadSource(dust.compile(typeTemplate, 'create.type'));
 		$.unblockUI();
 
 		var collectibleTypeView = new TypeView();
 		$('#create-container').html(collectibleTypeView.render().el);
 
-		// global page events
-
-		// We will cache the type they selected and then
-		// we will show the next view
-		pageEvents.on('view:select:collectibletype', function(collectibleTypeId) {
-			selectedCollectibleType = collectibleTypeId;
-
-			if (type === 'mass') {
-				window.location.href = '/collectibles/create/' + selectedCollectibleType + '/false/false';
-			} else if (type === 'custom') {
-				window.location.href = '/collectibles/create/' + selectedCollectibleType + '/false/true';
-			} else if (type === 'original') {
-				window.location.href = '/collectibles/create/' + selectedCollectibleType + '/true/false';
-			}
-		});
+		// global page event
 
 		pageEvents.on('view:select:type', function(selectedType) {
 			type = selectedType;
-			collectibleTypeView.remove();
 
-			var typeView = new CollectibleTypeView({
-				typesHtml : collectiblTypeHtml
-			});
-
-			$('#create-container').html(typeView.render().el);
+			if (type === 'mass') {
+				window.location.href = '/collectibles/create/false/false';
+			} else if (type === 'custom') {
+				window.location.href = '/collectibles/create/false/true';
+			} else if (type === 'original') {
+				window.location.href = '/collectibles/create/true/false';
+			}
 		});
 	});
 

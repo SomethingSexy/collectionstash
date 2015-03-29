@@ -832,12 +832,11 @@ class Collectible extends AppModel
     /**
      * this method creates the initial collectible, used when adding
      */
-    public function createInitial($collectibleTypeId, $original, $custom, $userId) {
+    public function createInitial($original, $custom, $userId) {
         $retVal = $this->buildDefaultResponse();
         
         $collectible['Collectible'] = array();
         $collectible['Collectible']['user_id'] = $userId;
-        $collectible['Collectible']['collectibletype_id'] = $collectibleTypeId;
         $collectible['Collectible']['status_id'] = 1;
         $revision = $this->Revision->buildRevision($userId, $this->Revision->DRAFT, null);
         $collectible['Revision'] = $revision['Revision'];
@@ -874,8 +873,9 @@ class Collectible extends AppModel
             
         }
         $this->set($collectible);
-        // Only field we need to validate
-        if ($this->User->validates(array('fieldList' => array('collectibletype_id')))) {
+        // Only field we need to validate not requiring collectible type right away anymore
+        // so don't need to really validate anything
+        // if ($this->User->validates(array('fieldList' => array('collectibletype_id')))) {
             // valid
             if ($this->saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
                 $retVal['response']['isSuccess'] = true;
@@ -885,12 +885,12 @@ class Collectible extends AppModel
                 $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
                 $retVal['response']['errors'] = $errors;
             }
-        } else {
-            // invalid
-            $retVal['response']['isSuccess'] = false;
-            $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
-            $retVal['response']['errors'] = $errors;
-        }
+        // } else {
+        //     // invalid
+        //     $retVal['response']['isSuccess'] = false;
+        //     $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
+        //     $retVal['response']['errors'] = $errors;
+        // }
         
         return $retVal;
     }

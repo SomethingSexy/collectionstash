@@ -52,10 +52,10 @@ class CollectiblesController extends AppController
      * This will be used to create a new collectible, with just
      * the type to start as well if they are trying to add a custom, original piece or a standard collectible
      */
-    public function create($collectibleTypeId = null, $original = false, $custom = false) {
+    public function create($original = null, $custom = null) {
         $this->checkLogIn();
-        if ($collectibleTypeId && is_numeric($collectibleTypeId)) {
-            $response = $this->Collectible->createInitial($collectibleTypeId, $original, $custom, $this->getUserId());
+        if (!is_null($original) && !is_null($custom)) {
+            $response = $this->Collectible->createInitial($original, $custom, $this->getUserId());
             if ($response['response']['isSuccess']) {
                 $this->redirect(array('action' => 'edit', $response['response']['data']['id']));
             } 
@@ -179,8 +179,6 @@ class CollectiblesController extends AppController
         // if the user is an admin and the status is 4 then allow deleting
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
         
-        $collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
-        
         // Get and return all brands, this is for adding new manufacturers
         // and also used for types that might allow not having a manufacturer
         $brands = $this->Collectible->License->find('all', array('contain' => false));
@@ -243,6 +241,9 @@ class CollectiblesController extends AppController
         }
         
         $this->set(compact('permissions'));
+
+        $collectibleTypes = $this->Collectible->Collectibletype->find('threaded', array('contain' => false));
+        $this->set(compact('collectibleTypes'));
     }
     
     public function collectible($id = null, $replacementId = null) {
