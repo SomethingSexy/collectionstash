@@ -6,8 +6,7 @@
  */
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
-class Collectible extends AppModel
-{
+class Collectible extends AppModel {
     public $name = 'Collectible';
     public $belongsTo = array('CollectiblePriceFact', 'CustomStatus', 'Status', 'EntityType', 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
     public $hasMany = array('Transaction', 'Listing' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'CollectiblesWishList' => array('dependent' => true), 'CollectiblesUpload' => array('dependent' => true), 'AttributesCollectible' => array('dependent' => true), 'CollectiblesTag' => array('dependent' => true), 'ArtistsCollectible' => array('dependent' => true));
@@ -35,7 +34,7 @@ class Collectible extends AppModel
     //manufacturer is now not required for any types.  This is for customs and pieces that might not have a manufacturer
     'manufacture_id' => array('rule' => array('validateManufactureId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Must be a valid manufacture.'),
     //collectible type field
-    'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid type.'),
+    'collectibletype_id' => array('rule' => array('validateCollectibleType'), 'required' => true, 'message' => 'Must be a valid platform.'),
     //license filed
     // updating so that a brand is now not officially required
     'license_id' => array('rule' => array('validateLicenseId'), 'required' => false, 'allowEmpty' => true, 'message' => 'Brand/License must be valid for Manufacture.'),
@@ -107,7 +106,8 @@ class Collectible extends AppModel
                 if ($returnData['Collectible']['release']['year'] != '0000' && $returnData['Collectible']['release']['year'] !== '') {
                     $year = $returnData['Collectible']['release']['year'];
                     $returnData['Collectible']['release'] = $year;
-                } else {
+                } 
+                else {
                     unset($returnData['Collectible']['release']);
                 }
             }
@@ -134,17 +134,20 @@ class Collectible extends AppModel
                 */
                 if (!empty($existingRetailer)) {
                     $returnData['Collectible']['retailer_id'] = $existingRetailer['Retailer']['id'];
-                } else {
+                } 
+                else {
                     $newRetailer = array();
                     $newRetailer['Retailer']['name'] = $returnData['Collectible']['retailer'];
                     $this->Retailer->create();
                     if ($this->Retailer->saveAll($newRetailer)) {
                         $returnData['Collectible']['retailer_id'] = $this->Retailer->id;
-                    } else {
+                    } 
+                    else {
                         return false;
                     }
                 }
-            } else {
+            } 
+            else {
                 // if they are not set, set them to null so they save appropariately
                 $returnData['Collectible']['retailer_id'] = null;
             }
@@ -155,7 +158,8 @@ class Collectible extends AppModel
             $returnData['Collectible']['official'] = false;
             $returnData['Collectible']['limited'] = true;
             $returnData['Collectible']['edition_size'] = 1;
-        } else if (isset($returnData['Collectible']['original']) && $returnData['Collectible']['original']) {
+        } 
+        else if (isset($returnData['Collectible']['original']) && $returnData['Collectible']['original']) {
             $returnData['Collectible']['limited'] = true;
             $returnData['Collectible']['edition_size'] = 1;
         }
@@ -215,7 +219,8 @@ class Collectible extends AppModel
                         if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
                             $results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
                             $descriptionTitle = $val['Collectible']['name'] . __(' a custom by ') . $val['User']['username'];
-                        } else if ((isset($val['Manufacture']) && !empty($val['Manufacture'])) || (isset($val['ArtistsCollectible']) && !empty($val['ArtistsCollectible']))) {
+                        } 
+                        else if ((isset($val['Manufacture']) && !empty($val['Manufacture'])) || (isset($val['ArtistsCollectible']) && !empty($val['ArtistsCollectible']))) {
                             $itemTitle = $val['Collectible']['name'] . ' By ';
                             
                             $descriptionTitle = $descriptionTitle . ' By ';
@@ -226,15 +231,18 @@ class Collectible extends AppModel
                                     $artist = $val['ArtistsCollectible'][0];
                                     $itemTitle.= $artist['Artist']['name'];
                                     $descriptionTitle.= $artist['Artist']['name'];
-                                } else if (!empty($val['Manufacture'])) {
+                                } 
+                                else if (!empty($val['Manufacture'])) {
                                     // otherwise if there is a manufacturer, use that
                                     $itemTitle.= $val['Manufacture']['title'];
                                     $descriptionTitle.= $val['Manufacture']['title'];
                                 }
-                            } else if (!empty($val['Manufacture']['title'])) {
+                            } 
+                            else if (!empty($val['Manufacture']['title'])) {
                                 $itemTitle.= $val['Manufacture']['title'];
                                 $descriptionTitle.= $val['Manufacture']['title'];
-                            } else if (!empty($val['ArtistsCollectible'])) {
+                            } 
+                            else if (!empty($val['ArtistsCollectible'])) {
                                 // assume the first on is primary for now :)
                                 $artist = $val['ArtistsCollectible'][0];
                                 
@@ -243,11 +251,13 @@ class Collectible extends AppModel
                             }
                             
                             $results[$key]['Collectible']['displayTitle'] = $itemTitle;
-                        } else {
+                        } 
+                        else {
                             // fall back
                             if (isset($val['Collectible']['name'])) {
                                 $results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'];
-                            } else {
+                            } 
+                            else {
                                 $results[$key]['Collectible']['displayTitle'] = '';
                             }
                         }
@@ -263,7 +273,8 @@ class Collectible extends AppModel
                         }
                     }
                 }
-            } else {
+            } 
+            else {
                 if (isset($results[$this->primaryKey])) {
                     $showEditionSize = false;
                     //TODO not sure this is really needed anymore
@@ -300,11 +311,13 @@ class Collectible extends AppModel
                         if (isset($results['User'])) {
                             $results['displayTitle'] = $results['name'] . __(' a custom by ') . $results['User']['username'];
                             $descriptionTitle = $results['name'] . __(' a custom by ') . $results['User']['username'];
-                        } else {
+                        } 
+                        else {
                             $results['displayTitle'] = $results['name'] . __(' a custom');
                             $descriptionTitle = $results['name'] . __(' a custom');
                         }
-                    } else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
+                    } 
+                    else if ((isset($results['Manufacture']) && !empty($results['Manufacture'])) || (isset($results['ArtistsCollectible']) && !empty($results['ArtistsCollectible']))) {
                         $itemTitle = $results['name'] . ' By ';
                         $descriptionTitle = $descriptionTitle . ' By ';
                         
@@ -314,16 +327,19 @@ class Collectible extends AppModel
                                 $artist = $results['ArtistsCollectible'][0];
                                 $itemTitle.= $artist['Artist']['name'];
                                 $descriptionTitle.= $artist['Artist']['name'];
-                            } else if (!empty($results['Manufacture'])) {
+                            } 
+                            else if (!empty($results['Manufacture'])) {
                                 // otherwise if there is a manufacturer, use that
                                 $itemTitle.= $results['Manufacture']['title'];
                                 $descriptionTitle.= $results['Manufacture']['title'];
                             }
-                        } else if (!empty($results['Manufacture']['title'])) {
+                        } 
+                        else if (!empty($results['Manufacture']['title'])) {
                             // otherwise if there is a manufacturer, use that
                             $itemTitle.= $results['Manufacture']['title'];
                             $descriptionTitle.= $results['Manufacture']['title'];
-                        } else if (!empty($results['ArtistsCollectible'])) {
+                        } 
+                        else if (!empty($results['ArtistsCollectible'])) {
                             // assume the first on is primary for now :)
                             $artist = $results['ArtistsCollectible'][0];
                             $itemTitle.= $artist['Artist']['name'];
@@ -331,11 +347,13 @@ class Collectible extends AppModel
                         }
                         
                         $results['displayTitle'] = $itemTitle;
-                    } else {
+                    } 
+                    else {
                         // fall back
                         if (isset($results['name'])) {
                             $results['displayTitle'] = $results['name'];
-                        } else {
+                        } 
+                        else {
                             $results['displayTitle'] = '';
                         }
                     }
@@ -349,7 +367,8 @@ class Collectible extends AppModel
                     if (!isset($results['collectible_price_fact_id']) || is_null($results['collectible_price_fact_id'])) {
                         unset($results['CollectiblePriceFact']);
                     }
-                } else {
+                } 
+                else {
                     
                     foreach ($results as $key => $val) {
                         $showEditionSize = false;
@@ -388,11 +407,13 @@ class Collectible extends AppModel
                         if (isset($val['Collectible']['custom']) && $val['Collectible']['custom']) {
                             $results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'] . __(' a custom');
                             $descriptionTitle = $val['Collectible']['name'] . __(' a custom');
-                        } else {
+                        } 
+                        else {
                             // fall back
                             if (isset($val['Collectible']['name'])) {
                                 $results[$key]['Collectible']['displayTitle'] = $val['Collectible']['name'];
-                            } else {
+                            } 
+                            else {
                                 $results[$key]['Collectible']['displayTitle'] = '';
                             }
                         }
@@ -429,7 +450,8 @@ class Collectible extends AppModel
         
         if ($collectibleTypeId != 1 && empty($check['collectibletype_id'])) {
             return false;
-        } else {
+        } 
+        else {
             return true;
         }
     }
@@ -482,7 +504,8 @@ class Collectible extends AppModel
             $result = $this->Manufacture->LicensesManufacture->find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
             if ($result) {
                 return true;
-            } else {
+            } 
+            else {
                 return false;
             }
         }
@@ -500,17 +523,20 @@ class Collectible extends AppModel
                 $result = $this->Manufacture->LicensesManufacture->find('first', array('conditions' => array('LicensesManufacture.manufacture_id' => $this->data['Collectible']['manufacture_id'], 'LicensesManufacture.license_id' => $check['license_id']), 'contain' => false));
                 if ($result) {
                     return true;
-                } else {
+                } 
+                else {
                     debug($this->data['Collectible']['manufacture_id']);
                     return false;
                 }
-            } else {
+            } 
+            else {
                 // if they do not have a manufacturer and we know we are validating a print then we can
                 // just check to see that what they entered is a valid brand
                 $result = $this->License->find('first', array('contain' => false, 'conditions' => array('License.id' => $check['license_id'])));
                 if ($result) {
                     return true;
-                } else {
+                } 
+                else {
                     debug($this->data['Collectible']['manufacture_id']);
                     return false;
                 }
@@ -521,8 +547,13 @@ class Collectible extends AppModel
     }
     
     function validateCollectibleType($check) {
-        $result = $this->Collectibletype->find('count', array('id' => $check['collectibletype_id']));
-        return $result > 0;
+        if ($check['collectibletype_id'] === '0') {
+            return false;
+        } 
+        else {
+            $result = $this->Collectibletype->find('count', array('Collectibletype.id' => $check['collectibletype_id']));
+            return $result > 0;
+        }
     }
     /*
      * This is going to validate the series based on the manufacturer.  If the manufacturer does not
@@ -550,20 +581,24 @@ class Collectible extends AppModel
                     //Now query to see if this is a valid hierarchy
                     if ($manufacturer['Manufacture']['series_id'] === $parentSeriesId) {
                         return true;
-                    } else {
+                    } 
+                    else {
                         return false;
                     }
-                } else {
+                } 
+                else {
                     return false;
                 }
-            } else {
+            } 
+            else {
                 /*
                  * Returning false because there is a possible series but the series did
                  * not select it is so it is invalid.
                 */
                 return false;
             }
-        } else {
+        } 
+        else {
             //if there is no series id for this manufacturer then make sure we unset
             unset($this->data['Collectible']['series_id']);
             return true;
@@ -586,7 +621,8 @@ class Collectible extends AppModel
     public function getPendingCollectibles($options = array()) {
         if (isset($options['conditions'])) {
             $options = array_merge($options['conditions'], array('Collectible.status_id' => 2));
-        } else {
+        } 
+        else {
             $options['conditions'] = array('Collectible.status_id' => 2);
         }
         
@@ -738,7 +774,8 @@ class Collectible extends AppModel
                 $subject = __('Your edit has been approved.');
                 $this->notifyUser($collectibleEditVersion['CollectibleEdit']['edit_user_id'], $message, $subject, 'edit_approval');
             }
-        } else {
+        } 
+        else {
             $retVal = $this->denyEdit($editId);
         }
         
@@ -754,11 +791,13 @@ class Collectible extends AppModel
             //TODO: Add does not go through here yet so it should not happen
             
             
-        } else if ($collectibleEditVersion['Action']['action_type_id'] === '2') { // Edit
+        } 
+        else if ($collectibleEditVersion['Action']['action_type_id'] === '2') { // Edit
             if ($this->deleteEdit($collectibleEditVersion)) {
                 $retVal = true;
             }
-        } else if ($collectibleEditVersion['Action']['action_type_id'] === '4') { // Delete
+        } 
+        else if ($collectibleEditVersion['Action']['action_type_id'] === '4') { // Delete
             // If we are deny a delete, then we are keeping it out there
             // so just delete the edit
             if ($this->deleteEdit($collectibleEditVersion)) {
@@ -821,7 +860,8 @@ class Collectible extends AppModel
         if ($this->saveAll($collectible, array('validate' => false, 'deep' => true))) {
             $retVal['response']['isSuccess'] = true;
             $retVal['response']['data']['collectible_id'] = $this->id;
-        } else {
+        } 
+        else {
             $retVal['response']['isSuccess'] = false;
             $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
             $retVal['response']['errors'] = $errors;
@@ -855,7 +895,8 @@ class Collectible extends AppModel
             // $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
             // create the initial custom table as well
             $collectible['Collectible']['custom_status_id'] = 1;
-        } else if ($original === true || $original === 'true') {
+        } 
+        else if ($original === true || $original === 'true') {
             // by default make the official false, however it could
             // be true
             $collectible['Collectible']['official'] = false;
@@ -876,15 +917,16 @@ class Collectible extends AppModel
         // Only field we need to validate not requiring collectible type right away anymore
         // so don't need to really validate anything
         // if ($this->User->validates(array('fieldList' => array('collectibletype_id')))) {
-            // valid
-            if ($this->saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
-                $retVal['response']['isSuccess'] = true;
-                $retVal['response']['data']['id'] = $this->id;
-            } else {
-                $retVal['response']['isSuccess'] = false;
-                $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
-                $retVal['response']['errors'] = $errors;
-            }
+        // valid
+        if ($this->saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
+            $retVal['response']['isSuccess'] = true;
+            $retVal['response']['data']['id'] = $this->id;
+        } 
+        else {
+            $retVal['response']['isSuccess'] = false;
+            $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
+            $retVal['response']['errors'] = $errors;
+        }
         // } else {
         //     // invalid
         //     $retVal['response']['isSuccess'] = false;
@@ -1030,7 +1072,8 @@ class Collectible extends AppModel
                 if ($this->triggerActivity($collectible['Collectible']['id'], $user)) {
                     $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_EDIT, 'user' => $user, 'edit' => $collectible, 'editType' => 'Collectible')));
                 }
-            } else {
+            } 
+            else {
                 $action = array();
                 $action['Action']['action_type_id'] = 2;
                 $returnData = $this->saveEdit($collectible, $collectible['Collectible']['id'], $user['User']['id'], $action);
@@ -1039,7 +1082,8 @@ class Collectible extends AppModel
                     $retVal['response']['data']['isEdit'] = true;
                 }
             }
-        } else {
+        } 
+        else {
             $retVal['response']['code'] = 401;
         }
         
@@ -1066,19 +1110,23 @@ class Collectible extends AppModel
                 if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                     $allowDelete = true;
                 }
-            } else if ($collectible['Collectible']['status_id'] === '1') {
+            } 
+            else if ($collectible['Collectible']['status_id'] === '1') {
                 if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                     $allowDelete = true;
                 }
-            } else if ($collectible['Collectible']['status_id'] === '2') {
+            } 
+            else if ($collectible['Collectible']['status_id'] === '2') {
                 if ($user['User']['admin']) {
                     $allowDelete = true;
                 }
-            } else if ($collectible['Collectible']['status_id'] === '4') {
+            } 
+            else if ($collectible['Collectible']['status_id'] === '4') {
                 if ($user['User']['admin']) {
                     $allowDelete = true;
                 }
-            } else {
+            } 
+            else {
                 $retVal['response']['isSuccess'] = false;
                 array_push($retVal['response']['errors'], array('message' => __('You do not have permission to do that.')));
             }
@@ -1170,15 +1218,18 @@ class Collectible extends AppModel
                     if (!is_null($replaceId)) {
                         $this->clearCache($replaceId);
                     }
-                } else {
+                } 
+                else {
                     $retVal['response']['isSuccess'] = false;
                     array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
                 }
-            } else {
+            } 
+            else {
                 $retVal['response']['isSuccess'] = false;
                 array_push($retVal['response']['errors'], array('message' => __('You do not have permission to do that.')));
             }
-        } else {
+        } 
+        else {
             $retVal['response']['isSuccess'] = false;
             array_push($retVal['response']['errors'], array('message' => __('Invalid request.')));
         }
@@ -1204,19 +1255,22 @@ class Collectible extends AppModel
             if ($status === '1') {
                 $status = 4;
                 $addCollectibleUser = true;
-            } else {
+            } 
+            else {
                 // should never happen
                 
                 
             }
             // also always ignore dup check for customs
             $ignoreDupCheck = true;
-        } else {
+        } 
+        else {
             // if the status is 1 change to 2 for a submit
             if ($status === '1') {
                 $status = 2;
                 $triggerActivity = true;
-            } else if ($status === '2') {
+            } 
+            else if ($status === '2') {
                 $status = 1;
             }
         }
@@ -1255,7 +1309,8 @@ class Collectible extends AppModel
                 // TODO/FYI this adds an add to stash event, not an event type 11, so the points earned are a lot lower.
                 $defaultCollectiblesUser = $this->CollectiblesUser->createDefault($user['User']['id'], $collectibleId);
                 $this->CollectiblesUser->add($defaultCollectiblesUser, $user);
-            } else if ($triggerActivity) {
+            } 
+            else if ($triggerActivity) {
                 $collectible = $this->find('first', array('contain' => array('User', 'Manufacture', 'Collectibletype', 'CollectiblesUpload' => array('Upload'), 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $collectibleId)));
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$USER_SUBMIT_NEW, 'user' => $user, 'object' => $collectible, 'type' => 'Collectible')));
             }
@@ -1270,7 +1325,8 @@ class Collectible extends AppModel
         $collectible = $this->find('first', array('conditions' => array('Collectible.id' => $collectibleId), 'contain' => array('Status')));
         if ($collectible && !empty($collectible)) {
             return $collectible['Status'];
-        } else {
+        } 
+        else {
             return null;
         }
     }
@@ -1306,7 +1362,8 @@ class Collectible extends AppModel
             if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                 $retVal = true;
             }
-        } else {
+        } 
+        else {
             // now check type, if it custom or original then it can be updated at any point if permission is there
             if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
                 if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
@@ -1336,7 +1393,8 @@ class Collectible extends AppModel
             if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                 $retVal = true;
             }
-        } else {
+        } 
+        else {
             // if it is mass-produced and they are adding
             // it will always be status 2.  This is because
             // when the mass-produced collectible is approved
@@ -1370,7 +1428,8 @@ class Collectible extends AppModel
             //lol
             
             
-        } else {
+        } 
+        else {
             // assume object
             $collectible = $check;
         }
@@ -1379,14 +1438,16 @@ class Collectible extends AppModel
             if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                 $retVal = true;
             }
-        } else {
+        } 
+        else {
             if ($collectible && !empty($collectible)) {
                 // right now for originals if you have to be the one who submitted it
                 if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
                     if ($collectible['Collectible']['user_id'] === $user['User']['id']) {
                         $retVal = true;
                     }
-                } else {
+                } 
+                else {
                     // otherwise if it is a mass produced collectible then just
                     // return true cause anyone can edit it
                     $retVal = true;
@@ -1406,7 +1467,8 @@ class Collectible extends AppModel
             //lol
             
             
-        } else {
+        } 
+        else {
             // assume object
             $collectible = $check;
         }
@@ -1431,7 +1493,8 @@ class Collectible extends AppModel
             //lol
             
             
-        } else {
+        } 
+        else {
             // assume object
             $collectible = $check;
         }
@@ -1440,7 +1503,8 @@ class Collectible extends AppModel
             // right now you can't
             
             
-        } else {
+        } 
+        else {
             // if it is an active status
             // right now for originals or customs you cannot add
             if ($collectible['Collectible']['custom'] || $collectible['Collectible']['original']) {
@@ -1449,7 +1513,8 @@ class Collectible extends AppModel
                 // }
                 
                 
-            } else {
+            } 
+            else {
                 // otherwise if it is a mass produced collectible then just
                 // return true cause anyone can edit it
                 $retVal = true;
@@ -1478,7 +1543,8 @@ class Collectible extends AppModel
             if (empty($this->data['ArtistsCollectible'])) {
                 $this->validationErrors['arrtist'] = __('At least one artist is required.');
             }
-        } else if ($this->data['Collectible']['custom']) {
+        } 
+        else if ($this->data['Collectible']['custom']) {
             // They don't have to select a manufacturer
             $this->validate['manufacture_id']['allowEmpty'] = true;
             $this->validate['msrp']['allowEmpty'] = true;
@@ -1488,7 +1554,8 @@ class Collectible extends AppModel
             unset($this->validate['license_id']['allowEmpty']);
             // If they do end up having a brand, we need to validate it differently
             $this->validate['license_id']['rule'] = array('validatePrintLicenseId');
-        } else if ($this->data['Collectible']['original']) {
+        } 
+        else if ($this->data['Collectible']['original']) {
             // They don't have to select a manufacturer
             $this->validate['manufacture_id']['allowEmpty'] = true;
             // They don't have to select a brand
