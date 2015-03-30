@@ -1585,7 +1585,6 @@ class Collectible extends AppModel {
         // public $type;
         // public $series;
         // public $description;
-        // public $msrp;
         // public $editionSize;
         // public $upc;
         // public $width;
@@ -1608,11 +1607,21 @@ class Collectible extends AppModel {
         // public $cost;
         
         $retVal['name'] = $collectible->name;
+        $retVal['description'] = $collectible->description;
+        $retVal['edition_size'] = $collectible->editionSize;
+        $retVal['upc'] = $collectible->upc;
         
         if (!empty($collectible->manufacturer)) {
-            $manufacturer = $this->Manufacture->find('first', array('conditions' => array('Manufacture.title' => $collectible->manufacturer), 'contain' => false));
+            $manufacturer = $this->Manufacture->find('first', array('conditions' => array('LOWER(Manufacture.title)' => strtolower($collectible->manufacturer)), 'contain' => false));
             if (!empty($manufacturer)) {
                 $retVal['manufacture_id'] = $manufacturer['Manufacture']['id'];
+            }
+        }
+        
+        if (!empty($collectible->type)) {
+            $type = $this->Collectibletype->find('first', array('conditions' => array('LOWER(Collectibletype.name)' => strtolower($collectible->type)), 'contain' => false));
+            if (!empty($type)) {
+                $retVal['collectibletype_id'] = $type['Collectibletype']['id'];
             }
         }
         
