@@ -1576,6 +1576,49 @@ class Collectible extends AppModel {
         return $retVal;
     }
     /**
+     * This will convert a type Lib/Collectible to an array collectible that can then be saved
+     */
+    public function convertToModel($collectible) {
+        $retVal = array();
+        // public $name;
+        // public $manufacturer;
+        // public $type;
+        // public $series;
+        // public $description;
+        // public $msrp;
+        // public $editionSize;
+        // public $upc;
+        // public $width;
+        // public $height;
+        // public $depth;
+        // public $weight;
+        // public $brand;
+        // public $variant = false;
+        // public $url;
+        // public $exclusive = false;
+        // public $scale;
+        // public $releaseYear;
+        // public $limited = false;
+        // public $productCode;
+        // public $numbered = false;
+        // public $numberOfPieces;
+        // public $signed = false;
+        // public $official = true;
+        // public $photos = array();
+        // public $cost;
+        
+        $retVal['name'] = $collectible->name;
+        
+        if (!empty($collectible->manufacturer)) {
+            $manufacturer = $this->Manufacture->find('first', array('conditions' => array('Manufacture.title' => $collectible->manufacturer), 'contain' => false));
+            if (!empty($manufacturer)) {
+                $retVal['manufacture_id'] = $manufacturer['Manufacture']['id'];
+            }
+        }
+        
+        return $retVal;
+    }
+    /**
      *
      */
     public function clearCache($id, $all = false) {
