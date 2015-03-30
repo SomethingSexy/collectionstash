@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . '..' . DS . '..' . DS . 'vendor' . DS . 'sunra' . DS . 'php-simple-html-dom-parser' . DS . 'Src' . DS . 'Sunra' . DS . 'PhpSimple' . DS . 'HtmlDomParser.php');
 App::uses('Parsable', 'Lib/Parser');
 App::uses('ParserUtility', 'Lib/Parser');
-App::uses('Collectible', 'Lib');
+App::uses('CollectibleType', 'Lib');
 class Sideshow implements Parsable
 {
     
@@ -26,7 +26,7 @@ class Sideshow implements Parsable
                 return false;
             }
             
-            $collectible = new Collectible();
+            $collectible = new CollectibleType();
             
             $head = $html->find("head", 0);
             $body = $html->find("body", 0);
@@ -110,10 +110,12 @@ class Sideshow implements Parsable
             }
             
             // PRICE - easiest/most consistent way to grab price for current and archived products
-            $collectilbe->cost = floatval(ParserUtility::get_HTML_SubString($body, 'price: "$', '"'));
+            // Need to check to see if there is a sale, if so grab MSRP and not the sale price
+            $cost = ParserUtility::get_HTML_SubString($body, 'price: "$', '"');
+            $collectible->cost = floatval($cost);
             
             // UPC - sanitize a bit - only numbers, only up to 13 digits
-            $collectilbe->upc = substr(preg_replace("/\D/", "", ParserUtility::sscProductDetails($body, 'upc')), 0, 12);
+            $collectible->upc = substr(preg_replace("/\D/", "", ParserUtility::sscProductDetails($body, 'upc')), 0, 12);
             
             // DIMENSIONS - Sideshow are very consistent with the format
             // there's some repetition in the code, but not worth replacing with a function

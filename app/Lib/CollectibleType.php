@@ -1,5 +1,6 @@
 <?php
-class Collectible
+// had to name this CollectibleType since it was interferring with the model
+class CollectibleType
 {
     // property declaration
     public $name;
