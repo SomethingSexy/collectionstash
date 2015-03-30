@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__) . DS . '..' . DS . '..' . DS . '..' . DS . '..' . DS . 'vendor' . DS . 'sunra' . DS . 'php-simple-html-dom-parser' . DS . 'Src' . DS . 'Sunra' . DS . 'PhpSimple' . DS . 'HtmlDomParser.php');
 App::uses('Parsable', 'Lib/Parser');
 App::uses('ParserUtility', 'Lib/Parser');
-App::uses('CollectibleType', 'Lib');
+App::uses('CollectibleObj', 'Lib');
 class Sideshow implements Parsable
 {
     
@@ -26,7 +26,7 @@ class Sideshow implements Parsable
                 return false;
             }
             
-            $collectible = new CollectibleType();
+            $collectible = new CollectibleObj();
             
             $head = $html->find("head", 0);
             $body = $html->find("body", 0);
