@@ -28,6 +28,7 @@ class CollectibleObj
     public $signed = false;
     public $official = true;
     public $photos = array();
+    public $artists = array();
     public $cost;
 }
 ?>
