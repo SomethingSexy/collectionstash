@@ -257,7 +257,7 @@ class Sideshow implements Parsable {
                 $collectible->editionsize = trim(strip_tags($collectible->editionsize));
             } 
             else {
-                $collectible->editionsize = "";
+                $collectible->editionsize = null;
             }
             // ARTISTS
             $tempHTML = str_get_html(ParserUtility::get_HTML_SubString($body, "<!-- artists -->", "<!-- authors -->"));
@@ -304,24 +304,24 @@ class Sideshow implements Parsable {
             $collectible->artists = $artists;
             // YEAR
             // pre-populate from copyright date if available
-            $itemArray['copyright'] = ParserUtility::get_HTML_SubString($body, "<!-- legal -->", "<!-- .details -->");
-            $itemArray['copyright'] = ParserUtility::htmlentities2utf8(strip_tags(preg_replace("/\s+/", " ", $itemArray['copyright'])));
+            $copyright = ParserUtility::get_HTML_SubString($body, "<!-- legal -->", "<!-- .details -->");
+            $copyright = ParserUtility::htmlentities2utf8(strip_tags(preg_replace("/\s+/", " ", $copyright)));
             // grab the highest number year from the shipping date for pre-order products
-            if ($itemArray['shipyear'] = ParserUtility::sscProductDetails($body, 'ship')) {
+            if ($shipyear = ParserUtility::sscProductDetails($body, 'ship')) {
                 // grab all years from ship date (in case of range) and use the largest as the initial date of the product
-                preg_match_all('/(\d{4})/', $itemArray['shipyear'], $allYears);
+                preg_match_all('/(\d{4})/', $shipyear, $allYears);
                 
-                $itemArray['shipyear'] = "";
+                $shipyear = "";
                 foreach ($allYears[0] as $value) {
-                    if ($value > $itemArray['shipyear']) $itemArray['shipyear'] = $value;
+                    if ($value > $shipyear) $shipyear = $value;
                 }
             }
             // grab all years from copyright and compare the largest against previous grabbed year numbers
-            preg_match_all('/(\d{4})/', $itemArray['copyright'], $allYears);
+            preg_match_all('/(\d{4})/', $copyright, $allYears);
             
             foreach ($allYears[0] as $value) {
-                if (isset($itemArray['orderyear']) && $value > $itemArray['orderyear']) {
-                    $itemArray['orderyear'] = $value;
+                if (isset($orderyear) && $value > $orderyear) {
+                    $orderyear = $value;
                 }
             }
             // if all else fails, grab the year from the feature image folder path
@@ -329,11 +329,11 @@ class Sideshow implements Parsable {
             
             $imgYear = $imgURLparts[count($imgURLparts) - 3];
             
-            if (strlen($imgYear) == 4 && $imgYear < 2050 && $imgYear > 1990) $itemArray['imgyear'] = $imgYear;
+            if (strlen($imgYear) == 4 && $imgYear < 2050 && $imgYear > 1990) $imgyear = $imgYear;
             // use the img path date as the order year if greater than existing order year (copyright)
             
-            if (!isset($itemArray['orderyear']) || $itemArray['orderyear'] < $itemArray['imgyear']) {
-                $itemArray['orderyear'] = $itemArray['imgyear'];
+            if (!isset($orderyear) || $orderyear < $imgyear) {
+                $collectible->releaseYear = $imgyear;
             }
             // OEM Scale
             $OEMscale = ParserUtility::sscProductDetails($body, 'scale');
@@ -411,7 +411,7 @@ class Sideshow implements Parsable {
             }
             // EXCLUSIVE
             if ($body->find("a[class=label-exclusive]", 0)) {
-                $itemArray['exclusive'] = true;
+                $collectible->exclusive = true;
             }
             
             return $collectible;
