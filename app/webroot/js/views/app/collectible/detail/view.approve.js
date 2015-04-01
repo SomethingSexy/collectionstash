@@ -27,7 +27,7 @@ define(function(require) {
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    notes: $('input[type=notes]', this.el).val()
+                    notes: $('textarea[name=notes]', this.el).val()
                 },
             }).then(function(data, textStatus, jqXHR) {
                 data;
@@ -41,6 +41,8 @@ define(function(require) {
                     self.onGlobalError(jqXHR.responseText);
                 } else if (statusCode === 401) {
                      self.onGlobalError(jqXHR.responseText);
+                } else if(statusCode === 500){
+                    self.onGlobalError(errorThrown);
                 }
                 textStatus;
                 jqXHR;

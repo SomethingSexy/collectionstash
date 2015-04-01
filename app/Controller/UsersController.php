@@ -446,7 +446,7 @@ class UsersController extends AppController
         $email->emailFormat('text');
         $email->template('user_confirm', 'simple');
         $email->to(trim($user['User']['email']));
-        $email->subject(env('SERVER_NAME') . '– Please confirm your email address');
+        $email->subject('Welcome to Collection Stash! Please confirm your email address');
         $email->viewVars(array('activate_url' => 'http://' . env('SERVER_NAME') . '/users/activate/' . $user['User']['id'] . '/' . $this->User->getActivationHash(), 'username' => $this->request->data['User']['username']));
         $email->send();
         
