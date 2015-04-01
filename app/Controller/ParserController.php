@@ -21,7 +21,7 @@ class ParserController extends AppController {
         $this->loadModel('Collectible');
         // TEST: But this is how we will auto upload photos
         $this->loadModel('CollectiblesUpload');
-        $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => 3465), 'Upload' => array('url' => 'http://www.sideshowtoy.com/wp-content/uploads/2013/12/902165-product-feature.jpg')), $this->getUser());
+        // $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => 3465), 'Upload' => array('url' => 'http://www.sideshowtoy.com/wp-content/uploads/2013/12/902165-product-feature.jpg')), $this->getUser());
         // $Collectible = new Collectible( );
         debug($this->Collectible->convertToModel($collectible));
     }
