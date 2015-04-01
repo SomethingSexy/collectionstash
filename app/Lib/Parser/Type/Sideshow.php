@@ -347,18 +347,18 @@ class Sideshow implements Parsable {
                     $collectible->type = "action figure accessory";
                 break;
                 case stristr($OEMscale, "sixth scale figure related product"):
-                    $collectible->scale = "1/6";
+                    $collectible->scale = "1:6";
                     $collectible->type = "action figure accessory";
                 break;
                 case stristr($OEMscale, "maquette"):
                     $collectible->type = "maquette";
                 break;
                 case stristr($OEMscale, "sixth scale"):
-                    $collectible->scale = "1/6";
+                    $collectible->scale = "1:6";
                     $collectible->type = "action figure";
                 break;
                 case stristr($OEMscale, "quarter scale"):
-                    $collectible->scale = "1/4";
+                    $collectible->scale = "1:4";
                     $collectible->type = "action figure";
                 break;
                 case stristr($OEMscale, "premium scale collectible figure"):
@@ -370,15 +370,16 @@ class Sideshow implements Parsable {
                     $collectible->type = "bust";
                 break;
                 case stristr($OEMscale, "premium format"):
-                    $collectible->scale = "1/4";
+                    $collectible->scale = "1:4";
                     $collectible->type = "statue";
                 break;
                 case stristr($OEMscale, "life-size"):
-                    $collectible->scale = "1/1";
+                    $collectible->scale = "1:1";
                     $collectible->type = "statue";
                 break;
                 case stristr($OEMscale, "legendary scale"):
                 case stristr($OEMscale, "statue"):
+                    $collectible->scale = "1:2";
                     $collectible->type = "statue";
                 break;
                 case stristr($OEMscale, "vinyl"):
@@ -388,14 +389,14 @@ class Sideshow implements Parsable {
                     $collectible->type = "diorama";
                 break;
                 case stristr($OEMscale, "prop replica"):
-                    $collectible->scale = "1/1";
+                    $collectible->scale = "1:1";
                     $collectible->type = "prop replica";
                 break;
                 case stristr($OEMscale, "replica"):
                     $collectible->type = "replica";
                 break;
                 case stristr($OEMscale, "apparel"):
-                    $collectible->scale = "1/1";
+                    $collectible->scale = "1:1";
                     $collectible->type = "apparel";
                 break;
                 case stristr($OEMscale, "model kit"):
@@ -405,7 +406,7 @@ class Sideshow implements Parsable {
                     $collectible->type = "print";
                 break;
                 case stristr($OEMscale, "book"):
-                    $collectible->scale = "1/1";
+                    $collectible->scale = "1:1";
                     $collectible->type = "book";
                 break;
             }

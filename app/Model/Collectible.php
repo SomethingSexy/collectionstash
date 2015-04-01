@@ -1610,6 +1610,21 @@ class Collectible extends AppModel {
         $retVal['description'] = $collectible->description;
         $retVal['edition_size'] = $collectible->editionSize;
         $retVal['upc'] = $collectible->upc;
+        $retVal['width'] = $collectible->width;
+        $retVal['length'] = $collectible->height;
+        $retVal['depth'] = $collectible->depth;
+        $retVal['weight'] = $collectible->weight;
+        // $retVal['variant'] = $collectible->variant;
+        $retVal['url'] = $collectible->url;
+        $retVal['exclusive'] = $collectible->exclusive;
+        $retVal['release'] = $collectible->releaseYear;
+        $retVal['limited'] = $collectible->limited;
+        $retVal['code'] = $collectible->productCode;
+        $retVal['numbered'] = $collectible->numbered;
+        $retVal['pieces'] = $collectible->numberOfPieces;
+        $retVal['signed'] = $collectible->signed;
+        $retVal['official'] = $collectible->official;
+        $retVal['msrp'] = $collectible->cost;
         
         if (!empty($collectible->manufacturer)) {
             $manufacturer = $this->Manufacture->find('first', array('conditions' => array('LOWER(Manufacture.title)' => strtolower($collectible->manufacturer)), 'contain' => false));
@@ -1622,6 +1637,35 @@ class Collectible extends AppModel {
             $type = $this->Collectibletype->find('first', array('conditions' => array('LOWER(Collectibletype.name)' => strtolower($collectible->type)), 'contain' => false));
             if (!empty($type)) {
                 $retVal['collectibletype_id'] = $type['Collectibletype']['id'];
+            }
+        }
+        
+        if (!empty($collectible->brand)) {
+            $type = $this->License->find('first', array('conditions' => array('LOWER(License.name)' => strtolower($collectible->brand)), 'contain' => false));
+            if (!empty($type)) {
+                $retVal['license_id'] = $type['License']['id'];
+            }
+        }
+        if (!empty($collectible->scale)) {
+            $scale = $this->Scale->find('first', array('conditions' => array('Scale.scale' => $collectible->scale), 'contain' => false));
+            if (!empty($scale)) {
+                $retVal['scale_id'] = $scale['Scale']['id'];
+            }
+        }
+        if (!empty($collectible->photos)) {
+            $retVal['CollectiblesUpload'] = array();
+            foreach ($collectible->photos as $key => $value) {
+                array_push($retVal['CollectiblesUpload'], array('Upload' => array('url' => $value)));
+            }
+        }
+        
+        if (!empty($collectible->artists)) {
+            $retVal['ArtistsCollectible'] = array();
+            foreach ($collectible->artists as $key => $value) {
+                $artist = $this->ArtistsCollectible->Artist->find('first', array('conditions' => array('Artist.name' => $value), 'contain' => false));
+                if (!empty($artist)) {
+                    array_push($retVal['ArtistsCollectible'], array('artist_id' => $artist['Artist']['id']));
+                }
             }
         }
         
