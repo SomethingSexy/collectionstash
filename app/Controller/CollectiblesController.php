@@ -904,7 +904,7 @@ class CollectiblesController extends AppController
             return;
         }
         
-        if ($id && is_numeric($id)) {
+        if (!$id) {
             $this->response->body(__('Collectible id is invalid.'));
             $this->response->statusCode(400);
             return;
@@ -918,7 +918,7 @@ class CollectiblesController extends AppController
             return;
         }
         
-        $notes = $this->request->data['Approval']['notes'];
+        $notes = $this->request->data['notes'];
         
         if (!empty($collectible) && $collectible['Collectible']['status_id'] === '2') {
             $data = array();
@@ -927,7 +927,7 @@ class CollectiblesController extends AppController
             $data['Collectible']['status_id'] = 4;
             $data['Revision']['action'] = 'P';
             $data['Revision']['user_id'] = $this->getUserId();
-            $data['Revision']['notes'] = $this->request->data['Approval']['notes'];
+            $data['Revision']['notes'] = $notes;
             if ($this->Collectible->saveAll($data, array('validate' => false))) {
                 
                 //Ugh need to get this again so I can get the Revision id
