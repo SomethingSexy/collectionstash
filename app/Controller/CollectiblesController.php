@@ -731,6 +731,27 @@ class CollectiblesController extends AppController {
             $variants = $this->Collectible->getCollectibleVariants($id);
             $this->set('variants', $variants);
             
+            $comments = $this->Collectible->EntityType->Comment->getComments($collectible['Collectible']['entity_type_id'], $this->getUserId());
+            
+            $extractComments = Set::extract('/Comment/.', $comments['comments']);
+            
+            foreach ($extractComments as $key => $value) {
+                $extractComments[$key]['User'] = $comments['comments'][$key]['User'];
+                $extractComments[$key]['permissions'] = $comments['comments'][$key]['permissions'];
+            }
+            
+            $this->set('comments', $extractComments);
+            // permissions
+            $permissions = array();
+            
+            if ($this->isLoggedIn()) {
+                $permissions['add_comment'] = true;
+            } 
+            else {
+                $permissions['add_comment'] = false;
+            }
+            $this->set(compact('permissions'));
+            
             $this->layout = 'require';
         } 
         else {
@@ -916,7 +937,7 @@ class CollectiblesController extends AppController {
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $this->getUser(), 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
                 
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Collectible.approve', $this, array('approve' => $approvedChange, 'userId' => $collectible['User']['id'], 'collectileId' => $collectible['Collectible']['id'], 'notes' => $notes)));
-            
+                
                 $this->response->body('{}');
             } 
             else {
