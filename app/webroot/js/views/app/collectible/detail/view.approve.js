@@ -30,18 +30,15 @@ define(function(require) {
                     notes: $('textarea[name=notes]', this.el).val()
                 },
             }).then(function(data, textStatus, jqXHR) {
-                data;
-                textStatus;
-                jqXHR;
-
+                window.location.href = '/collectibles/view/' + self.collectible.get('id');
             }, function(jqXHR, textStatus, errorThrown) {
                 $(event.currentTarget).button('reset');
                 var statusCode = jqXHR.status;
                 if (statusCode === 400) {
                     self.onGlobalError(jqXHR.responseText);
                 } else if (statusCode === 401) {
-                     self.onGlobalError(jqXHR.responseText);
-                } else if(statusCode === 500){
+                    self.onGlobalError(jqXHR.responseText);
+                } else if (statusCode === 500) {
                     self.onGlobalError(errorThrown);
                 }
                 textStatus;

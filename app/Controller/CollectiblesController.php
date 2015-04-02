@@ -2,12 +2,10 @@
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
-class CollectiblesController extends AppController
-{
+class CollectiblesController extends AppController {
     
     public $helpers = array('Html', 'Form', 'Js' => array('Jquery'), 'FileUpload.FileUpload', 'CollectibleDetail', 'Minify', 'Tree');
     public $components = array('CollectibleSearch', 'Image');
-    
     /**
      * This method will allow us to quick add a collectible from a selected collectible.
      * This method will base the new collectible off the manufacture and type that this collectible is.
@@ -29,7 +27,6 @@ class CollectiblesController extends AppController
         if (!is_null($collectibleId) && is_numeric($collectibleId)) {
             
             if ($variant === 'true') {
-                
                 //If we are adding a variant, copy the collectible completely
                 // setting its parent to this collectible and making it a variant
                 $response = $this->Collectible->createCopy($collectibleId, $this->getUserId(), true);
@@ -47,7 +44,6 @@ class CollectiblesController extends AppController
             $this->redirect($this->referer());
         }
     }
-    
     /**
      * This will be used to create a new collectible, with just
      * the type to start as well if they are trying to add a custom, original piece or a standard collectible
@@ -62,48 +58,39 @@ class CollectiblesController extends AppController
             else {
             }
         }
-        
         // Always do this in case there is an error
         $collectibleTypes = $this->Collectible->Collectibletype->find('threaded', array('contain' => false));
         $this->set(compact('collectibleTypes'));
     }
     
     public function admin_edit($id) {
-        
         // Need to check login
         $this->checkLogIn();
         $this->checkAdmin();
         $collectible = $this->Collectible->find('first', array('contain' => array('Status'), 'conditions' => array('Collectible.id' => $id)));
-        
         // Admin gets allowed access to view and edit everything
         if (empty($collectible)) {
             $this->render('viewMissing');
             return;
         }
-        
         // This is the basic stuff to get for edit attributes
         $attributeCategories = $this->Collectible->AttributesCollectible->Attribute->AttributeCategory->find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
         $this->set(compact('attributeCategories'));
-        
         // Pass the id to the view to use
         $this->set('collectibleId', $id);
         $this->set('adminMode', true);
-        
         // For now, we only need to worrying about deleting if it is status 4, otherwise
         // the admin can just deny an approval if it is status 2
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
         $this->render('edit');
     }
-    
     /**
      * New view but not sure what this is going to do yet
      */
     public function edit($id) {
         $this->layout = 'require';
-        
         // Need to check login
         $this->checkLogIn();
-        
         // Need to get the collectible
         // Based on status and the logged in user, need to determine if we can proceed
         
@@ -130,23 +117,19 @@ class CollectiblesController extends AppController
             return;
         }
         $parts = array();
-        
         // only do an extract if not empty, otherwise it seems to return
         // an array with one empty element
         if (!empty($collectible['AttributesCollectible'])) {
             $parts = Set::extract('/AttributesCollectible/.', $collectible);
         }
         unset($collectible['AttributesCollectible']);
-        
         // we have to do some processing on the part uploads, kind of lame
         foreach ($parts as $partKey => $part) {
             foreach ($part['Attribute']['AttributesUpload'] as $key => $value) {
                 $thumbnail = $this->Image->image($value['Upload']['name'], array('uploadDir' => 'files', 'width' => 100, 'height' => 200, 'imagePathOnly' => true));
-                
                 // ugh this might be overkill but I would like for the user to know, when editing if an upload is already pending an edit, such as delete, so there
                 // aren't multiple deletes.
                 $pending = $this->Collectible->AttributesCollectible->Attribute->AttributesUpload->findPendingEdits(array('AttributesUploadEdit.base_id' => $value['id']));
-                
                 // this should only contain action_type === 4, which is a removal
                 $pendingRemoval = false;
                 foreach ($pending as $editKey => $edit) {
@@ -167,31 +150,24 @@ class CollectiblesController extends AppController
         }
         
         $this->set('parts', $parts);
-        
         // This is the basic stuff to get for edit attributes
         // This one will always be required
         $attributeCategories = $this->Collectible->AttributesCollectible->Attribute->AttributeCategory->find('all', array('contain' => false, 'fields' => array('name', 'lft', 'rght', 'id', 'path_name'), 'order' => 'lft ASC'));
         $this->set(compact('attributeCategories'));
-        
         // Pass the id to the view to use
         $this->set('collectibleId', $id);
-        
         // if the user is an admin and the status is 4 then allow deleting
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
         
         $collectibleTypeId = $collectible['Collectible']['collectibletype_id'];
-        
         // Get and return all brands, this is for adding new manufacturers
         // and also used for types that might allow not having a manufacturer
         $brands = $this->Collectible->License->find('all', array('contain' => false));
         $this->set('brands', $brands);
-        
         //Grab all scales
         $scales = $this->Collectible->Scale->find("all", array('contain' => false, 'fields' => array('Scale.id', 'Scale.scale'), 'order' => array('Scale.scale' => 'ASC')));
-        
         // $returnData['response']['data']['scales'] = $scales;
         $this->set('scales', $scales);
-        
         //Grab all currencies
         $currencies = $this->Collectible->Currency->find("all", array('contain' => false, 'fields' => array('Currency.id', 'Currency.iso_code')));
         
@@ -225,10 +201,8 @@ class CollectiblesController extends AppController
         $this->set('manufacturers', $extractManufacturers);
         
         $customStatuses = $this->Collectible->CustomStatus->find('all', array('contain' => false));
-        
         // $returnData['response']['data']['customStatuses'] = $customStatuses;
         $this->set('customStatuses', $customStatuses);
-        
         //TODO: This is here temporarily until all of the attribute modals are
         // converted to backbone
         $this->set(compact('collectible'));
@@ -249,7 +223,6 @@ class CollectiblesController extends AppController
         
         if ($this->request->isPut()) {
             $collectible['Collectible'] = $this->request->input('json_decode', true);
-            
             //$collectible['Collectible'] = Sanitize::clean($collectible['Collectible']);
             
             $response = $this->Collectible->saveCollectible($collectible, $this->getUser());
@@ -260,7 +233,6 @@ class CollectiblesController extends AppController
                 $this->response->statusCode(401);
             } 
             else {
-                
                 // request becomes an actual object and not an array
                 $request->isEdit = $response['response']['data']['isEdit'];
             }
@@ -268,7 +240,6 @@ class CollectiblesController extends AppController
             $this->set('returnData', $request);
         } 
         else if ($this->request->isDelete()) {
-            
             // I think it makes sense to use rest delete
             // for changing the status to a delete
             // although I am going to physically delete it
@@ -286,7 +257,6 @@ class CollectiblesController extends AppController
             $this->set('returnData', $returnData['response']['data']['collectible']['Collectible']);
         }
     }
-    
     // This is the new API for returning collectibles, should support search, filter and sort
     public function collectibles() {
         
@@ -305,7 +275,6 @@ class CollectiblesController extends AppController
     }
     
     public function status($id) {
-        
         // check login
         // check to make sure they can make this change
         
@@ -322,13 +291,11 @@ class CollectiblesController extends AppController
             }
             
             $this->set('returnData', $response);
-            
             // we need to check the response here
             
             
         }
     }
-    
     // This will handle the updating of tags
     public function tag($id = null) {
         
@@ -340,7 +307,6 @@ class CollectiblesController extends AppController
             }
             
             $this->set('returnData', $response);
-            
             // we need to check the response here
             
             
@@ -356,7 +322,6 @@ class CollectiblesController extends AppController
             $this->set('returnData', $response);
         }
     }
-    
     // This will handle the updating of artists
     public function artist($id = null) {
         
@@ -368,7 +333,6 @@ class CollectiblesController extends AppController
             }
             
             $this->set('returnData', $response);
-            
             // we need to check the response here
             
             
@@ -384,19 +348,16 @@ class CollectiblesController extends AppController
             $this->set('returnData', $response);
         }
     }
-    
     /**
      * this method will be used to allow them to delete a collectible
      */
     public function delete($id) {
         $this->Collectible->remove($id, $this->getUser());
     }
-    
     /**
      * This will process cache clearing requests
      */
     public function cache() {
-        
         // we don't need a view for this one
         $this->autoRender = false;
         if (!$this->isLoggedIn()) {
@@ -413,7 +374,6 @@ class CollectiblesController extends AppController
         
         if (!$this->request->isPost()) {
             $this->response->body(__('Invalid request.'));
-            
             // invalid request
             $this->response->statusCode(400);
             return;
@@ -429,7 +389,6 @@ class CollectiblesController extends AppController
         } 
         else {
             $this->response->body(__('Invalid request.'));
-            
             // invalid request
             $this->response->statusCode(400);
             return;
@@ -452,18 +411,15 @@ class CollectiblesController extends AppController
         }
         
         $collectible = $collectible['response']['data']['collectible'];
-        
         // View should also work for status of submitted and active
         // any other status should redirect to a missing view: daft and deleted
         if (!empty($collectible) && ($collectible['Collectible']['status_id'] === '4' || $collectible['Collectible']['status_id'] === '2')) {
-            
             // Figure out all permissions
             $editPermission = $this->Collectible->isEditPermission($collectible, $this->getUser());
             $this->set('allowEdit', $editPermission);
             
             $stashablePermission = $this->Collectible->isStashable($collectible, $this->getUser());
             $this->set('isStashable', $stashablePermission);
-            
             // if it is submitted and the accesing user is the one who created it
             // then they can edit the status, which means they can make it a draft
             if ($collectible['Collectible']['status_id'] === '2') {
@@ -486,7 +442,6 @@ class CollectiblesController extends AppController
             else {
                 $this->set('allowVariantAdd', true);
             }
-            
             // Set and get all other info needed
             $this->set('collectible', $collectible);
             $count = $this->Collectible->getNumberofCollectiblesInStash($id);
@@ -494,7 +449,6 @@ class CollectiblesController extends AppController
             
             $variants = $this->Collectible->getCollectibleVariants($id);
             $this->set('variants', $variants);
-            
             // This is for the logged in user
             if ($this->isLoggedIn()) {
                 $collectibleUserCount = $this->Collectible->CollectiblesUser->getCollectibleOwnedCount($id, $this->getUser());
@@ -505,7 +459,6 @@ class CollectiblesController extends AppController
             
             $transactionGraphData = $this->Collectible->Listing->Transaction->getTransactionGraphData($id);
             $this->set(compact('transactionGraphData'));
-            
             // retrieve all comments
             $comments = $this->Collectible->EntityType->Comment->getComments($collectible['Collectible']['entity_type_id'], $this->getUserId());
             
@@ -517,7 +470,6 @@ class CollectiblesController extends AppController
             }
             
             $this->set('comments', $extractComments);
-            
             // permissions
             $permissions = array();
             
@@ -549,12 +501,10 @@ class CollectiblesController extends AppController
     }
     
     function search() {
-        
         /*
          *For now update so we do not return originals and customs
         */
         $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
-        
         // I can use this to pull the pagination data off the request and pass it to the view
         // although in the JSON view, I should be able to pull all of the data off the request
         // and build out the JSON object and send that down, with access to the pagination
@@ -564,13 +514,11 @@ class CollectiblesController extends AppController
             $this->render('searchJson');
         } 
         else {
-            
             // for now if it is a standard request we will want to return
             // if the user owns this collectible, obviously only run this check if
             // they are checked in
             
             if ($this->isLoggedIn()) {
-                
                 // modify the return data and then set it again
                 foreach ($collectibles as $key => $value) {
                     $collectibleUserCount = $this->Collectible->CollectiblesUser->getCollectibleOwnedCount($value['Collectible']['id'], $this->getUser());
@@ -587,20 +535,17 @@ class CollectiblesController extends AppController
             $this->render('searchList');
         }
     }
-    
     /**
      * We need to two methods because the tile stuff using the infinite scroll
      * which uses the standard HTML response to parse out the contents
      */
     function searchTiles($type = 'list') {
-        
         /*
          * Call the parent method now, that method handles pretty much everything now
         */
         $collectibles = $this->CollectibleSearch->search(array('Collectible.original' => false, 'Collectible.custom' => false));
         
         if ($this->isLoggedIn()) {
-            
             // modify the return data and then set it again
             foreach ($collectibles as $key => $value) {
                 $collectibleUserCount = $this->Collectible->CollectiblesUser->getCollectibleOwnedCount($value['Collectible']['id'], $this->getUser());
@@ -623,7 +568,6 @@ class CollectiblesController extends AppController
             $this->Collectible->id = $id;
             $history = $this->Collectible->revisions(null, true);
             $this->loadModel('User');
-            
             //TODO the revision behavior needs to get updated so that we can return associated data with it
             //Maybe the revision behavior should also interact with the Revision model
             //Making this by reference so we can modify it, is this proper in php?
@@ -642,19 +586,16 @@ class CollectiblesController extends AppController
             }
             
             $this->set(compact('history'));
-            
             //Grab a list of all attributes associated with this collectible, or were associated with this collectible.  We will display a list of all
             //of these attributes then we can go into further history detail if we need too
             $attributeHistory = $this->Collectible->AttributesCollectible->find("all", array('conditions' => array('AttributesCollectible.collectible_id' => $id)));
             $this->set(compact('attributeHistory'));
-            
             //Update this in the future since we only allow one Upload for now
             $collectibleUpload = $this->Collectible->Upload->find("first", array('contain' => false, 'conditions' => array('Upload.collectible_id' => $id)));
             $uploadHistory = array();
             if (!empty($collectibleUpload)) {
                 $this->Collectible->Upload->id = $collectibleUpload['Upload']['id'];
                 $uploadHistory = $this->Collectible->Upload->revisions(null, true);
-                
                 //This is like the worst thing ever and needs to get cleaned up
                 //Making this by reference so we can modify it, is this proper in php?
                 foreach ($uploadHistory as $key => & $upload) {
@@ -665,7 +606,6 @@ class CollectiblesController extends AppController
                     $editUserDetails = $this->User->findById($uploadRevision['Revision']['user_id'], array('contain' => false));
                     $upload['Upload']['user_name'] = $editUserDetails['User']['username'];
                 }
-                
                 //As of 9/7/11, because of the way we have to add an upload, the first revision is going to be bogus.
                 //Pop it off here until we can update the revision behavior so that we can specific a save to not add a revision.
                 $lastUpload = end($uploadHistory);
@@ -692,24 +632,20 @@ class CollectiblesController extends AppController
             $this->set(compact('collectible'));
         } 
         else {
-            
             //$this -> redirect($this -> referer());
             
             
         }
     }
-    
     /**
      * This will return all user history, this is a public api
      */
     function userHistory($username) {
-        
         //Grab the user id of the person logged in
         $user = $this->Collectible->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
         
         $conditions = array();
         $conditions['Collectible.user_id'] = $user['User']['id'];
-        
         // handle both cases
         $conditions['OR'] = array('Collectible.status_id' => array('1', '2', '3', '4'));
         $this->paginate = array('paramType' => 'querystring', 'conditions' => $conditions, 'contain' => array('User' => array('fields' => array('id', 'username')), 'Collectibletype', 'Manufacture', 'Status'), 'limit' => 10);
@@ -758,17 +694,14 @@ class CollectiblesController extends AppController
         
         $collectible = $this->Collectible->getCollectible($id);
         $collectible = $collectible['response']['data']['collectible'];
-        
         // View should also work for status of submitted and active
         if (!empty($collectible) && ($collectible['Collectible']['status_id'] === '4' || $collectible['Collectible']['status_id'] === '2')) {
-            
             // Figure out all permissions
             $editPermission = $this->Collectible->isEditPermission($collectible, $this->getUser());
             $this->set('allowEdit', $editPermission);
             
             $stashablePermission = $this->Collectible->isStashable($collectible, $this->getUser());
             $this->set('isStashable', $stashablePermission);
-            
             // figure out how to merge this with the rest later
             if ($collectible['Collectible']['status_id'] === '2') {
                 $this->set('showStatus', true);
@@ -790,7 +723,6 @@ class CollectiblesController extends AppController
             else {
                 $this->set('allowVariantAdd', true);
             }
-            
             // Set and get all other info needed
             $this->set('collectible', $collectible);
             $count = $this->Collectible->getNumberofCollectiblesInStash($id);
@@ -805,7 +737,6 @@ class CollectiblesController extends AppController
             $this->render('viewMissing');
         }
     }
-    
     /**
      * This method will display the collectible edit view of what is being approved.
      *
@@ -824,7 +755,6 @@ class CollectiblesController extends AppController
             $this->set('editId', $editId);
             if (empty($this->request->data)) {
                 $collectible = $this->Collectible->getEditForApproval($collectibleEditId);
-                
                 //TODO hack for now
                 if (isset($collectible['Collectible']['series_id']) && !empty($collectible['Collectible']['series_id'])) {
                     $fullSeriesPath = $this->Collectible->Series->buildSeriesPathName($collectible['Collectible']['series_id']);
@@ -834,7 +764,6 @@ class CollectiblesController extends AppController
                     $this->set('collectible', $collectible);
                 } 
                 else {
-                    
                     //uh fuck you
                     $this->redirect('/');
                 }
@@ -859,37 +788,45 @@ class CollectiblesController extends AppController
             return;
         }
         
-        if ($id && is_numeric($id)) {
-            $this->response->body(__('Invalid request.'));
-            
-            // invalid request
+        if (!$id) {
+            $this->response->body(__('Collectible id is invalid.'));
             $this->response->statusCode(400);
+            return;
         }
         
+        $collectible = $this->Collectible->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible', 'Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'))));
+        
+        if (empty($collectible)) {
+            $this->response->body(__('Collectible could not be found.'));
+            $this->response->statusCode(400);
+            return;
+        }
+        
+        if ($collectible['Collectible']['status_id'] !== '2') {
+            $this->response->body(__('The collectible is not in the right status to deny.'));
+            $this->response->statusCode(400);
+            return;
+        }
         //fuck it, I am deleting it
         if ($this->Collectible->delete($collectible['Collectible']['id'], true)) {
-            
+            $notes = $this->request->data['notes'];
             //If this fails oh well
             //TODO: This should be in some callback
             //Have to do this because we have a belongsTo relationship on Collectible, probably should be a hasOne, fix at some point
             $this->Collectible->Revision->delete($collectible['Collectible']['revision_id']);
-            
             //Have to do the same thing with Entity
             $this->Collectible->EntityType->delete($collectible['Collectible']['entity_type_id']);
             
             $this->getEventManager()->dispatch(new CakeEvent('Controller.Collectible.deny', $this, array('approve' => $approvedChange, 'userId' => $collectible['User']['id'], 'collectileId' => $collectible['Collectible']['id'], 'collectible' => $collectible, 'notes' => $notes)));
-            
-            $this->Session->setFlash(__('The collectible was successfully denied.', true), null, null, 'success');
-            $this->redirect(array('admin' => true, 'action' => 'index'), null, true);
+            $this->response->body('{}');
         } 
         else {
-            $this->Session->setFlash(__('There was a problem denying the collectible.', true), null, null, 'error');
-            $this->redirect(array('admin' => true, 'action' => 'view', $id), null, true);
+            $this->response->body(__('There was a problem denying the collectible.'));
+            $this->response->statusCode(500);
         }
     }
     
     public function admin_approve($id = null) {
-        
         // we don't need a view for this one
         $this->autoRender = false;
         if (!$this->isLoggedIn()) {
@@ -929,10 +866,8 @@ class CollectiblesController extends AppController
             $data['Revision']['user_id'] = $this->getUserId();
             $data['Revision']['notes'] = $notes;
             if ($this->Collectible->saveAll($data, array('validate' => false))) {
-                
                 //Ugh need to get this again so I can get the Revision id
                 $collectible = $this->Collectible->find('first', array('conditions' => array('Collectible.id' => $id), 'contain' => array('Manufacture', 'Collectibletype', 'ArtistsCollectible' => array('Artist'), 'User', 'CollectiblesUpload' => array('Upload'), 'AttributesCollectible' => array('Attribute'))));
-                
                 //update with the new revision id
                 // TODO: this should be added to all uploads, and tags, and artists, etc...I am not sure how much this matter anymore.
                 // I am wonder if instead we do an activity based approach on the collectible itself instead of trying to do this revision stuff.
@@ -942,20 +877,17 @@ class CollectiblesController extends AppController
                     
                     $this->Collectible->CollectiblesUpload->id = $collectible['CollectiblesUpload'][0]['id'];
                     if (!$this->Collectible->CollectiblesUpload->saveField('revision_id', $collectible['Collectible']['revision_id'])) {
-                        
                         //If it fails, let it pass but log the problem.
                         $this->log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
                     }
                     
                     $this->Collectible->CollectiblesUpload->Upload->id = $collectible['CollectiblesUpload'][0]['Upload']['id'];
                     if (!$this->Collectible->CollectiblesUpload->Upload->saveField('revision_id', $collectible['Collectible']['revision_id'])) {
-                        
                         //If it fails, let it pass but log the problem.
                         $this->log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
                     }
                     $this->Collectible->CollectiblesUpload->Upload->id = $collectible['CollectiblesUpload'][0]['Upload']['id'];
                     if (!$this->Collectible->CollectiblesUpload->Upload->saveField('status_id', 4)) {
-                        
                         //If it fails, let it pass but log the problem.
                         $this->log('Failed to update the upload with the collectible id and revision id (with approval) for collectible ' . $collectible['Collectible']['id'] . ' and upload id ' . $collectible['Upload']['id'], 'error');
                     }
@@ -965,19 +897,16 @@ class CollectiblesController extends AppController
                     foreach ($collectible['AttributesCollectible'] as $key => $value) {
                         $this->Collectible->AttributesCollectible->id = $value['id'];
                         if (!$this->Collectible->AttributesCollectible->saveField('revision_id', $collectible['Collectible']['revision_id'])) {
-                            
                             //If it fails, let it pass but log the problem.
                             $this->log('Failed to update the AttributesCollectible with the revision id (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
                         }
                         $this->Collectible->AttributesCollectible->Attribute->id = $value['Attribute']['id'];
                         if (!$this->Collectible->AttributesCollectible->Attribute->saveField('status_id', 4)) {
-                            
                             //If it fails, let it pass but log the problem.
                             $this->log('Failed to update the attribute with the status id of 4 (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
                         }
                         $this->Collectible->AttributesCollectible->Attribute->id = $value['Attribute']['id'];
                         if (!$this->Collectible->AttributesCollectible->Attribute->saveField('revision_id', $collectible['Collectible']['revision_id'])) {
-                            
                             //If it fails, let it pass but log the problem.
                             $this->log('Failed to update the attribute with the revision id (with approval) for collectible ' . $collectible['Collectible']['id'], 'error');
                         }
