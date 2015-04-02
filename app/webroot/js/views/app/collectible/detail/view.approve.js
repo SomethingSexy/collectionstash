@@ -30,7 +30,7 @@ define(function(require) {
                     notes: $('textarea[name=notes]', this.el).val()
                 },
             }).then(function(data, textStatus, jqXHR) {
-                window.location.href = '/collectibles/view/' + self.collectible.get('id');
+                window.location.href = '/admin/collectibles';
             }, function(jqXHR, textStatus, errorThrown) {
                 $(event.currentTarget).button('reset');
                 var statusCode = jqXHR.status;
