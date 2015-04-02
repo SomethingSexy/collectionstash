@@ -361,32 +361,6 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 			</div>
 		</div>
 			<?php } ?>
-					<?php
-		if ($adminMode) {
-					?>
-		<div class="row spacer">
-			<div class="col-md-12">		
-				<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form', 'class' => 'form-horizontal')); ?>
-				<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
-				<fieldset class="approval-fields">
-					<div class="form-group">
-						<label class="col-lg-3 control-label" for="ApprovalNotes"><?php echo __('Notes')
-									?></label>
-						<div class="col-lg-6">
-								<textarea id="ApprovalNotes" class="form-control" name="data[Approval][notes]"></textarea>
-						</div>
-					</div>				
-				</fieldset>
-				</form>
-				<div class="form-group">
-					<div class="col-lg-offset-3 col-lg-9">
-						<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
-						<button id="deny-button" class="btn btn-default"><?php echo __('Deny'); ?></button>
-					</div>
-				</div>	
-			</div>
-		</div>
-			<?php } ?>	
 </div>
 </div>
 </div>

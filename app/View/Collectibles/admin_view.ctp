@@ -14,6 +14,7 @@
 		'collectibleDetail' => $collectible,
 		'showAddStash' => false,
 		'adminMode' => true,
-		'showTags' => true
+		'showTags' => true,
+		'showComments' => true
 	));		
 ?>
