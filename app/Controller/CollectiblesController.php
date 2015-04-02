@@ -916,6 +916,8 @@ class CollectiblesController extends AppController {
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Activity.add', $this, array('activityType' => ActivityTypes::$ADMIN_APPROVE_NEW, 'user' => $this->getUser(), 'object' => $collectible, 'target' => $collectible, 'type' => 'Collectible')));
                 
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Collectible.approve', $this, array('approve' => $approvedChange, 'userId' => $collectible['User']['id'], 'collectileId' => $collectible['Collectible']['id'], 'notes' => $notes)));
+            
+                $this->response->body('{}');
             } 
             else {
                 $this->response->body(__('There was a problem approving the collectible.'));
