@@ -1,5 +1,13 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v3.12.0</h3>
+    <ul>
+        <li>Added more links to see pending collectibles. (#218)</li>
+        <li>Updated admin approval UI. (#220)</li>
+        <li>Adding support for composer. (#221)</li>
+        <li>Fixed an issue where users couldn't register. (#223)</li>
+        <li>Fixed an issue with newly registered users not having wishlists. (#224)</li>
+    </ul>
     <h3>Release Notes for v3.11.3</h3>
     <ul>
         <li>Fixed an issue with the point system. (#217)</li>
