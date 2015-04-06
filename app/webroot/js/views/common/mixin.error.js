@@ -6,24 +6,27 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.
             this.removeErrors();
             var self = this;
             _.each(this.errors, function(error, attr) {
-                $('[name="' + attr + '"]', self.el).addClass('invalid').attr('data-error', true);
-                $('[name="' + attr + '"]', self.el).closest('.form-group').addClass('has-error');
-                $('[name="' + attr + '"]', self.el).parent().find('._error').remove();
-                var errorHtml = '';
-                if (_.isArray(error)) {
-                    if (error.length === 1) {
-                        errorHtml = error[0];
-                    } else {
-                        _.each(error, function(message) {
-                            errorHtml += '<p>' + message + '</p>';
-                        });
-                    }
-                } else {
-                    errorHtml = error;
-                }
-
-                $('[name="' + attr + '"]', self.el).after('<span class="help-block _error">' + errorHtml + '</span>');
+                self.addFieldError(attr, error);
             });
+        },
+        addFieldError: function(attr, error) {
+            $('[name="' + attr + '"]', this.el).addClass('invalid').attr('data-error', true);
+            $('[name="' + attr + '"]', this.el).closest('.form-group').addClass('has-error');
+            $('[name="' + attr + '"]', this.el).parent().find('._error').remove();
+            var errorHtml = '';
+            if (_.isArray(error)) {
+                if (error.length === 1) {
+                    errorHtml = error[0];
+                } else {
+                    _.each(error, function(message) {
+                        errorHtml += '<p>' + message + '</p>';
+                    });
+                }
+            } else {
+                errorHtml = error;
+            }
+
+            $('[name="' + attr + '"]', this.el).after('<span class="help-block _error">' + errorHtml + '</span>');
         },
         onGlobalError: function(message) {
             $('._globalError', this.el).html(Marionette.Renderer.render(template, {
