@@ -84,6 +84,10 @@ class Collectible extends AppModel {
         $this->clearCache($this->data['Collectible']['id']);
     }
     
+    function afterDelete() {
+        $this->clearCache($this->id);
+    }
+    
     private function processBeforeSave($data) {
         $returnData = $data;
         //Update Edition Size stuff
@@ -914,6 +918,7 @@ class Collectible extends AppModel {
             
         }
         $this->set($collectible);
+
         // Only field we need to validate not requiring collectible type right away anymore
         // so don't need to really validate anything
         // if ($this->User->validates(array('fieldList' => array('collectibletype_id')))) {

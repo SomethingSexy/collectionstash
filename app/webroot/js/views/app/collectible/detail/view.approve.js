@@ -27,20 +27,19 @@ define(function(require) {
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    notes: $('input[type=notes]', this.el).val()
+                    notes: $('textarea[name=notes]', this.el).val()
                 },
             }).then(function(data, textStatus, jqXHR) {
-                data;
-                textStatus;
-                jqXHR;
-
+                window.location.href = '/admin/collectibles';
             }, function(jqXHR, textStatus, errorThrown) {
                 $(event.currentTarget).button('reset');
                 var statusCode = jqXHR.status;
                 if (statusCode === 400) {
                     self.onGlobalError(jqXHR.responseText);
                 } else if (statusCode === 401) {
-                     self.onGlobalError(jqXHR.responseText);
+                    self.onGlobalError(jqXHR.responseText);
+                } else if (statusCode === 500) {
+                    self.onGlobalError(errorThrown);
                 }
                 textStatus;
                 jqXHR;
