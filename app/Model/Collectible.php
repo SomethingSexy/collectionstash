@@ -918,10 +918,6 @@ class Collectible extends AppModel {
             
         }
         $this->set($collectible);
-
-        // Only field we need to validate not requiring collectible type right away anymore
-        // so don't need to really validate anything
-        // if ($this->User->validates(array('fieldList' => array('collectibletype_id')))) {
         // valid
         if ($this->saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
             $retVal['response']['isSuccess'] = true;
@@ -932,12 +928,6 @@ class Collectible extends AppModel {
             $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
             $retVal['response']['errors'] = $errors;
         }
-        // } else {
-        //     // invalid
-        //     $retVal['response']['isSuccess'] = false;
-        //     $errors = $this->convertErrorsJSON($this->validationErrors, 'Attribute');
-        //     $retVal['response']['errors'] = $errors;
-        // }
         
         return $retVal;
     }
@@ -1070,6 +1060,8 @@ class Collectible extends AppModel {
                 $this->id = $collectible['Collectible']['id'];
                 // TODO: This will have to do a saveAssociated now, because
                 // we will
+
+                debug($collectible);
                 $this->saveAssociated($collectible, array('validate' => false));
                 $retVal['response']['isSuccess'] = true;
                 $retVal['response']['data']['isEdit'] = false;
@@ -1611,50 +1603,50 @@ class Collectible extends AppModel {
         // public $photos = array();
         // public $cost;
         
-        $retVal['name'] = $collectible->name;
-        $retVal['description'] = $collectible->description;
-        $retVal['edition_size'] = $collectible->editionSize;
-        $retVal['upc'] = $collectible->upc;
-        $retVal['width'] = $collectible->width;
-        $retVal['length'] = $collectible->height;
-        $retVal['depth'] = $collectible->depth;
-        $retVal['weight'] = $collectible->weight;
+        $retVal['Collectible']['name'] = $collectible->name;
+        $retVal['Collectible']['description'] = $collectible->description;
+        $retVal['Collectible']['edition_size'] = $collectible->editionSize;
+        $retVal['Collectible']['upc'] = $collectible->upc;
+        $retVal['Collectible']['width'] = $collectible->width;
+        $retVal['Collectible']['length'] = $collectible->height;
+        $retVal['Collectible']['depth'] = $collectible->depth;
+        $retVal['Collectible']['weight'] = $collectible->weight;
         // $retVal['variant'] = $collectible->variant;
-        $retVal['url'] = $collectible->url;
-        $retVal['exclusive'] = $collectible->exclusive;
-        $retVal['release'] = $collectible->releaseYear;
-        $retVal['limited'] = $collectible->limited;
-        $retVal['code'] = $collectible->productCode;
-        $retVal['numbered'] = $collectible->numbered;
-        $retVal['pieces'] = $collectible->numberOfPieces;
-        $retVal['signed'] = $collectible->signed;
-        $retVal['official'] = $collectible->official;
-        $retVal['msrp'] = $collectible->cost;
+        $retVal['Collectible']['url'] = $collectible->url;
+        $retVal['Collectible']['exclusive'] = $collectible->exclusive;
+        $retVal['Collectible']['release'] = $collectible->releaseYear;
+        $retVal['Collectible']['limited'] = $collectible->limited;
+        $retVal['Collectible']['code'] = $collectible->productCode;
+        $retVal['Collectible']['numbered'] = $collectible->numbered;
+        $retVal['Collectible']['pieces'] = $collectible->numberOfPieces;
+        $retVal['Collectible']['signed'] = $collectible->signed;
+        $retVal['Collectible']['official'] = $collectible->official;
+        $retVal['Collectible']['msrp'] = $collectible->cost;
         
         if (!empty($collectible->manufacturer)) {
             $manufacturer = $this->Manufacture->find('first', array('conditions' => array('LOWER(Manufacture.title)' => strtolower($collectible->manufacturer)), 'contain' => false));
             if (!empty($manufacturer)) {
-                $retVal['manufacture_id'] = $manufacturer['Manufacture']['id'];
+                $retVal['Collectible']['manufacture_id'] = $manufacturer['Manufacture']['id'];
             }
         }
         
         if (!empty($collectible->type)) {
             $type = $this->Collectibletype->find('first', array('conditions' => array('LOWER(Collectibletype.name)' => strtolower($collectible->type)), 'contain' => false));
             if (!empty($type)) {
-                $retVal['collectibletype_id'] = $type['Collectibletype']['id'];
+                $retVal['Collectible']['collectibletype_id'] = $type['Collectibletype']['id'];
             }
         }
         
         if (!empty($collectible->brand)) {
             $type = $this->License->find('first', array('conditions' => array('LOWER(License.name)' => strtolower($collectible->brand)), 'contain' => false));
             if (!empty($type)) {
-                $retVal['license_id'] = $type['License']['id'];
+                $retVal['Collectible']['license_id'] = $type['License']['id'];
             }
         }
         if (!empty($collectible->scale)) {
             $scale = $this->Scale->find('first', array('conditions' => array('Scale.scale' => $collectible->scale), 'contain' => false));
             if (!empty($scale)) {
-                $retVal['scale_id'] = $scale['Scale']['id'];
+                $retVal['Collectible']['scale_id'] = $scale['Scale']['id'];
             }
         }
         if (!empty($collectible->photos)) {
