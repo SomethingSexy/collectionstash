@@ -6,6 +6,7 @@
  */
 App::uses('CakeEvent', 'Event');
 App::uses('ActivityTypes', 'Lib/Activity');
+App::uses('ParserFactory', 'Lib/Parser');
 class Collectible extends AppModel {
     public $name = 'Collectible';
     public $belongsTo = array('CollectiblePriceFact', 'CustomStatus', 'Status', 'EntityType', 'Revision', 'Manufacture' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Collectibletype' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'License' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Series', 'Scale' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Retailer' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'User' => array('counterCache' => true, 'counterScope' => array('Collectible.status_id' => 4)), 'Currency');
@@ -876,13 +877,24 @@ class Collectible extends AppModel {
     /**
      * this method creates the initial collectible, used when adding
      */
-    public function createInitial($original, $custom, $userId) {
+    public function createInitial($original, $custom, $user, $url = null) {
         $retVal = $this->buildDefaultResponse();
         
         $collectible['Collectible'] = array();
-        $collectible['Collectible']['user_id'] = $userId;
+        // see if we are going to attempt to create the initial collectible from url
+        if (!is_null($url)) {
+            $factory = new ParserFactory();
+            $parser = $factory->getParser($url);
+            
+            $parsedCollectible = $parser->parse($url);
+            
+            $collectible = $this->convertToModel($parsedCollectible);
+            $collectible['Collectible']['parsed_from_url'] = true;
+        }
+        
+        $collectible['Collectible']['user_id'] = $user['User']['id'];
         $collectible['Collectible']['status_id'] = 1;
-        $revision = $this->Revision->buildRevision($userId, $this->Revision->DRAFT, null);
+        $revision = $this->Revision->buildRevision($user['User']['id'], $this->Revision->DRAFT, null);
         $collectible['Revision'] = $revision['Revision'];
         $collectible['EntityType']['type'] = 'collectible';
         // If it is a custom, indicate that
@@ -892,12 +904,6 @@ class Collectible extends AppModel {
             $collectible['Collectible']['custom'] = $custom;
             $collectible['Collectible']['edition_size'] = 1;
             $collectible['Collectible']['limited'] = true;
-            //TODO: We should update this to not create the CollectibleUser until
-            // they change the status to Active
-            //Get a stubbed collectibles user object
-            // $defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
-            // $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
-            // create the initial custom table as well
             $collectible['Collectible']['custom_status_id'] = 1;
         } 
         else if ($original === true || $original === 'true') {
@@ -909,19 +915,25 @@ class Collectible extends AppModel {
             // do I need a flag for this as well?
             $collectible['Collectible']['edition_size'] = 1;
             $collectible['Collectible']['limited'] = true;
-            //TODO: We should update this to not create the CollectibleUser until
-            // they change the status to Active
-            //Get a stubbed collectibles user object
-            // $defaultCollectiblesUser = $this -> CollectiblesUser -> createDefault($userId);
-            // $collectible['CollectiblesUser'][0] = $defaultCollectiblesUser['CollectiblesUser'];
-            
-            
         }
+        
+        if (isset($collectible['CollectiblesUpload'])) {
+            $uploads = $collectible['CollectiblesUpload'];
+            // unset here, we will add these later
+            unset($collectible['CollectiblesUpload']);
+        }
+        
         $this->set($collectible);
         // valid
         if ($this->saveAssociated($collectible, array('validate' => false, 'deep' => true))) {
             $retVal['response']['isSuccess'] = true;
             $retVal['response']['data']['id'] = $this->id;
+            
+            if ($collectible['parsed_from_url'] && isset($uploads) && !empty($uploads)) {
+                foreach ($uploads as $key => $upload) {
+                    $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => $this->id), 'Upload' => array('url' => $upload['Upload']['url'])), $user);
+                }
+            }
         } 
         else {
             $retVal['response']['isSuccess'] = false;
@@ -1060,7 +1072,7 @@ class Collectible extends AppModel {
                 $this->id = $collectible['Collectible']['id'];
                 // TODO: This will have to do a saveAssociated now, because
                 // we will
-
+                
                 debug($collectible);
                 $this->saveAssociated($collectible, array('validate' => false));
                 $retVal['response']['isSuccess'] = true;

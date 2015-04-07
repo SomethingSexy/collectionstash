@@ -51,7 +51,7 @@ class CollectiblesController extends AppController {
     public function create($original = null, $custom = null) {
         $this->checkLogIn();
         if (!is_null($original) && !is_null($custom)) {
-            $response = $this->Collectible->createInitial($original, $custom, $this->getUserId());
+            $response = $this->Collectible->createInitial($original, $custom, $this->getUser());
             if ($response['response']['isSuccess']) {
                 $this->redirect(array('action' => 'edit', $response['response']['data']['id']));
             } 
