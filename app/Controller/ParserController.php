@@ -24,10 +24,13 @@ class ParserController extends AppController {
         // $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => 3465), 'Upload' => array('url' => 'http://www.sideshowtoy.com/wp-content/uploads/2013/12/902165-product-feature.jpg')), $this->getUser());
         // $Collectible = new Collectible( );
         $collectibleModel = $this->Collectible->convertToModel($parsedCollectible);
-
-        $collectible = $this->Collectible->createInitial(false, false, $this->getUser());
+        debug($collectibleModel);
         
+        $collectible = $this->Collectible->createInitial(false, false, $this->getUserId());
+        debug($collectible);
 
+        $collectibleModel['Collectible']['id'] =  $collectible['response']['data']['id'];
+        $this->Collectible->saveCollectible($collectibleModel, $this->getUser());
     }
 }
 ?>
