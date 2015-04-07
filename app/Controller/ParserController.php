@@ -21,15 +21,23 @@ class ParserController extends AppController {
         $this->loadModel('Collectible');
         // TEST: But this is how we will auto upload photos
         $this->loadModel('CollectiblesUpload');
-        // $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => 3465), 'Upload' => array('url' => 'http://www.sideshowtoy.com/wp-content/uploads/2013/12/902165-product-feature.jpg')), $this->getUser());
         // $Collectible = new Collectible( );
         $collectibleModel = $this->Collectible->convertToModel($parsedCollectible);
         debug($collectibleModel);
         
         $collectible = $this->Collectible->createInitial(false, false, $this->getUserId());
+        $collectibleId = $collectible['response']['data']['id'];
+        // now upload all of the photos
+        if (!empty($collectibleModel['CollectiblesUpload'])) {
+            foreach ($collectibleModel['CollectiblesUpload'] as $key => $upload) {
+                $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => $collectibleId), 'Upload' => array('url' => $upload['Upload']['url'])), $this->getUser());
+            }
+            unset($collectibleModel['CollectiblesUpload']);
+        }
+        
         debug($collectible);
-
-        $collectibleModel['Collectible']['id'] =  $collectible['response']['data']['id'];
+        
+        $collectibleModel['Collectible']['id'] = $collectibleId;
         $this->Collectible->saveCollectible($collectibleModel, $this->getUser());
     }
 }
