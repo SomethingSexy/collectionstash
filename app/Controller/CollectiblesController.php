@@ -44,6 +44,31 @@ class CollectiblesController extends AppController {
             $this->redirect($this->referer());
         }
     }
+    
+    public function import() {
+        // we don't need a view for this one
+        $this->autoRender = false;
+        if (!$this->isLoggedIn()) {
+            $this->response->body(__('You do not have permissions to complete this request.'));
+            $this->response->statusCode(401);
+            return;
+        }
+        
+        if ($this->request->isPost()) {
+            $response = $this->Collectible->createInitial(false, false, $this->getUser(), $this->request->data['url']);
+            if ($response['response']['isSuccess']) {
+                $this->response->body('{"id":' . $response['response']['data']['id'] . '}');
+            } 
+            else {
+                $this->response->statusCode(400);
+            }
+        } 
+        else {
+            $this->response->body(__('Invalid request.'));
+            $this->response->statusCode(400);
+            return;
+        }
+    }
     /**
      * This will be used to create a new collectible, with just
      * the type to start as well if they are trying to add a custom, original piece or a standard collectible
@@ -58,9 +83,6 @@ class CollectiblesController extends AppController {
             else {
             }
         }
-        // Always do this in case there is an error
-        $collectibleTypes = $this->Collectible->Collectibletype->find('threaded', array('contain' => false));
-        $this->set(compact('collectibleTypes'));
         $this->layout = 'require';
     }
     
