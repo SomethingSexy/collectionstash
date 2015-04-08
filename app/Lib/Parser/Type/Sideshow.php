@@ -16,6 +16,7 @@ class Sideshow implements Parsable {
         $itemArray = array();
         // check productScraper function for full list of key names
         
+        
         if ($html = ParserUtility::capture_url($url)) {
             //it seems all products have an id product on there, if that doesn't exist, fail fast
             if (!$html->find('div[id=product]')) {

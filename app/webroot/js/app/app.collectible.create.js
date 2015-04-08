@@ -1,8 +1,6 @@
 define(function(require) {
 
     var Marionette = require('marionette'),
-        CollectiblesCollection = require('collections/collection.companies'),
-        CompanyModel = require('models/model.company'),
         ModalRegion = require('views/common/modal.region'),
         _ = require('underscore');
     // set up the app instance

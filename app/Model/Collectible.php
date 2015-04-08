@@ -929,7 +929,7 @@ class Collectible extends AppModel {
             $retVal['response']['isSuccess'] = true;
             $retVal['response']['data']['id'] = $this->id;
             
-            if ($collectible['parsed_from_url'] && isset($uploads) && !empty($uploads)) {
+            if ($collectible['Collectible']['parsed_from_url'] && isset($uploads) && !empty($uploads)) {
                 foreach ($uploads as $key => $upload) {
                     $this->CollectiblesUpload->add(array('CollectiblesUpload' => array('collectible_id' => $this->id), 'Upload' => array('url' => $upload['Upload']['url'])), $user);
                 }
