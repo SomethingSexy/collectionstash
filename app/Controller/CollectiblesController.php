@@ -61,6 +61,7 @@ class CollectiblesController extends AppController {
         // Always do this in case there is an error
         $collectibleTypes = $this->Collectible->Collectibletype->find('threaded', array('contain' => false));
         $this->set(compact('collectibleTypes'));
+        $this->layout = 'require';
     }
     
     public function admin_edit($id) {
@@ -158,7 +159,6 @@ class CollectiblesController extends AppController {
         $this->set('collectibleId', $id);
         // if the user is an admin and the status is 4 then allow deleting
         $this->set('allowDelete', $this->isUserAdmin() && $collectible['Status']['id'] === '4');
-
         // Get and return all brands, this is for adding new manufacturers
         // and also used for types that might allow not having a manufacturer
         $brands = $this->Collectible->License->find('all', array('contain' => false));
