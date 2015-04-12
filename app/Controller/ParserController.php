@@ -25,7 +25,7 @@ class ParserController extends AppController {
         // $collectibleModel = $this->Collectible->convertToModel($parsedCollectible);
         // debug($collectibleModel);
         
-        $collectible = $this->Collectible->createInitial(false, false, $this->getUser(), 'http://www.sideshowtoy.com/collectibles/marvel-bruce-banner-hot-toys-902165');
+        $collectible = $this->Collectible->createInitial(false, false, $this->getUser(), 'http://www.sideshowtoy.com/collectibles/marvel-bruce-banner-hot-toys-902165/');
         // $collectibleId = $collectible['response']['data']['id'];
         // // now upload all of the photos
         // if (!empty($collectibleModel['CollectiblesUpload'])) {
