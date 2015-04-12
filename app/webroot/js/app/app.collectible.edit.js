@@ -786,7 +786,9 @@ define(function(require) {
                 });
             } else {
                 // view is overkill here
-                dust.render('directional.page', {}, function(error, output) {
+                dust.render('directional.page', {
+                    'parsed_from_url' : collectibleModel.get('parsed_from_url')
+                }, function(error, output) {
                     $('#directional-text-container').html(output);
                 });
             }
