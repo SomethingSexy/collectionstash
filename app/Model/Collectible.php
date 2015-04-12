@@ -887,8 +887,8 @@ class Collectible extends AppModel {
             $parser = $factory->getParser($url);
             
             $parsedCollectible = $parser->parse($url);
-            
             $collectible = $this->convertToModel($parsedCollectible);
+            debug($collectible);
             $collectible['Collectible']['parsed_from_url'] = true;
         }
         
@@ -1666,6 +1666,8 @@ class Collectible extends AppModel {
             foreach ($collectible->photos as $key => $value) {
                 array_push($retVal['CollectiblesUpload'], array('Upload' => array('url' => $value)));
             }
+            // remove the photos once we are done, we don't want to serialize all of this information
+            $collectible->photos = array();
         }
         
         if (!empty($collectible->artists)) {
@@ -1677,6 +1679,8 @@ class Collectible extends AppModel {
                 }
             }
         }
+        
+        $retVal['Collectible']['parsed_data'] = json_encode($collectible);
         
         return $retVal;
     }
