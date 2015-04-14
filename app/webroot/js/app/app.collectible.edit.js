@@ -540,7 +540,9 @@ define(function(require) {
     return {
         start: function() {
             // Setup the current model
-            var collectibleModel = new CollectibleModel(rawCollectible.Collectible);
+            var collectibleModel = new CollectibleModel(rawCollectible.Collectible, {
+                parse: true
+            });
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
             // Setup the manufacturer list, this will contain all data for each manufacturer
             var manufacturerList = new ManufacturerList(rawManufacturers, {
@@ -787,7 +789,7 @@ define(function(require) {
             } else {
                 // view is overkill here
                 dust.render('directional.page', {
-                    'parsed_from_url' : collectibleModel.get('parsed_from_url')
+                    'parsed_from_url': collectibleModel.get('parsed_from_url')
                 }, function(error, output) {
                     $('#directional-text-container').html(output);
                 });

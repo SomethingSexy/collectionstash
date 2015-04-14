@@ -16,7 +16,6 @@ class Sideshow implements Parsable {
         $itemArray = array();
         // check productScraper function for full list of key names
         
-        
         if ($html = ParserUtility::capture_url($url)) {
             //it seems all products have an id product on there, if that doesn't exist, fail fast
             if (!$html->find('div[id=product]')) {
@@ -301,6 +300,11 @@ class Sideshow implements Parsable {
             $artists = array_unique($artists); // remove any duplicates
             $artists = array_filter($artists); // don't keep any blanks (unsets blank keys)
             $artists = array_values($artists); // re-index the array (compacts it)
+            
+            // we don't want this as an artist
+            if (($key = array_search('The Sideshow Collectibles Design and Development Team', $artists)) !== false) {
+                unset($artists[$key]);
+            }
             
             $collectible->artists = $artists;
             // YEAR
