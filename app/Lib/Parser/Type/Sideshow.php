@@ -32,60 +32,6 @@ class Sideshow implements Parsable {
             if ($featureimage) {
                 array_push($collectible->photos, $featureimage);
             }
-            //KEYWORDS
-            $itemArray['keywords'] = ParserUtility::htmlentities2utf8($head->find("meta[property='og:keywords']", 0)->getAttribute('content'));
-            // remove all keywords if they're generic Sideshow website keywords
-            if (stristr($itemArray['keywords'], "movie television and proprietary collectible figures")) $itemArray['keywords'] = "";
-            else if (stristr($itemArray['keywords'], "collectibles, collectible figures, movie collectibles, movie memorabilia, pop culture figures,")) $itemArray['keywords'] = "";
-            
-            if (!empty($itemArray['keywords'])) { // make and clean-up keywords
-                
-                // remove some generic words
-                $invalid_Words = array("sixth scale", "action figures", "action figure", "statues", "statue", "collectibles", "collectible", "figures", "figure", "the ", "items", "item");
-                $itemArray['keywords'] = str_ireplace($invalid_Words, "", $itemArray['keywords']);
-                
-                $itemArray['keywords'] = explode(",", $itemArray['keywords']);
-                foreach ($itemArray['keywords'] as & $value) {
-                    $value = trim($value);
-                }
-                unset($value);
-                
-                $itemArray['keywords'] = array_values(array_unique($itemArray['keywords'])); // remove exact duplicates & re-index the result
-                
-                // remove part of a keyword if it's already self-contained as its own keyword - example: "han solo" and "hoth han solo"
-                foreach ($itemArray['keywords'] as $key => & $value) { // check each keyword to see if it exists within another
-                    // example: "planet" within "big planet" but not "planetarium"
-                    
-                    if (strlen($value) < 2) { // remove any single character keywords
-                        $value = "";
-                        continue;
-                    }
-                    
-                    if ($value == "sideshow") { // remove site from keywords
-                        $value = "";
-                        continue;
-                    }
-                    
-                    for ($i = 0;$i < count($itemArray['keywords']);++$i) { // compare current keyword against all others
-                        
-                        if (($i !== $key) && (ParserUtility::containsPhrase($itemArray['keywords'][$i], $value))) { // don't compare against itself
-                            
-                            // remove the matching keyword from the larger keyword
-                            $itemArray['keywords'][$i] = trim(str_ireplace($value, "", $itemArray['keywords'][$i]));
-                            // replace multiple spaces with a single space
-                            $itemArray['keywords'][$i] = preg_replace('!\s+!', ' ', $itemArray['keywords'][$i]);
-                            // remove non-alphanumerics from start and end of string
-                            $itemArray['keywords'][$i] = preg_replace('/(^[^[:alnum:]]+)|([^[:alnum:]]+\Z)/ui', '', $itemArray['keywords'][$i]);
-                        }
-                    }
-                }
-                
-                $itemArray['keywords'] = array_filter($itemArray['keywords']); // unsets empty values
-                $itemArray['keywords'] = array_values($itemArray['keywords']); // re-index the array (compacts it)
-                
-                
-            } // end if make and clean-up keywords
-            
             //URL
             $collectible->url = $head->find("meta[property='og:url']", 0)->getAttribute('content');
             //NAME
@@ -141,7 +87,17 @@ class Sideshow implements Parsable {
             }
             // PRICE - easiest/most consistent way to grab price for current and archived products
             // Need to check to see if there is a sale, if so grab MSRP and not the sale price
-            $cost = ParserUtility::get_HTML_SubString($body, 'price: "$', '"');
+            
+            //check to see if this is a sale item
+            $cost = ParserUtility::get_HTML_SubString($body, 'MSRP', '</strike>');
+            if ($cost) {
+                $cost = strip_tags(ParserUtility::htmlentities2utf8($cost));
+                // clean the text so we're left with a float
+                $cost = preg_replace("/[^0-9.]/", "", $cost);
+            } 
+            else {
+                $cost = ParserUtility::get_HTML_SubString($body, 'price: "$', '"');
+            }
             $collectible->cost = floatval($cost);
             // UPC - sanitize a bit - only numbers, only up to 13 digits
             $collectible->upc = substr(preg_replace("/\D/", "", ParserUtility::sscProductDetails($body, 'upc')), 0, 12);
@@ -251,10 +207,7 @@ class Sideshow implements Parsable {
             $collectible->editionsize = ParserUtility::get_HTML_SubString($body, "<!-- .labels -->", "<!-- .col -->");
             if (stristr($collectible->editionsize, "limited")) {
                 $collectible->limited = true;
-                $collectible->editionsize = str_ireplace("limited edition:", "", $collectible->editionsize);
-                $collectible->editionsize = str_ireplace("limited edition", "", $collectible->editionsize);
-                $collectible->editionsize = str_ireplace("&nbsp;", "", $collectible->editionsize);
-                $collectible->editionsize = trim(strip_tags($collectible->editionsize));
+                $collectible->editionsize = preg_replace("/\D/", "", $collectible->editionsize);
             } 
             else {
                 $collectible->editionsize = null;
@@ -271,7 +224,7 @@ class Sideshow implements Parsable {
                     // remove HTML and bracketed content from artist names
                     
                     if ($cleaned = ParserUtility::get_HTML_SubString($value, " by ")) {
-                        // trim pre-text if it contains credits (head paintd by artist name)
+                        // trim pre-text if it contains credits (head painted by artist name)
                         $value = $cleaned;
                     }
                 }
@@ -289,6 +242,9 @@ class Sideshow implements Parsable {
                 
                 foreach ($artists as & $value) {
                     $value = trim($value);
+                    if ($cleaned = ParserUtility::get_HTML_SubString($value, " by ")) { // trim pre-text if it contains credits (head painted by artist name)
+                        $value = $cleaned;
+                    }
                 }
                 unset($value);
             }
@@ -419,6 +375,118 @@ class Sideshow implements Parsable {
             if ($body->find("a[class=label-exclusive]", 0)) {
                 $collectible->exclusive = true;
             }
+            //KEYWORDS          // TODO might be a little overzealous to strip colons and slashes and dashes - could have scale info, like 1/2 scale or half-scale
+            // or words like "x-men"
+            
+            $itemArray['keywords'] = strtolower(ParserUtility::htmlentities2utf8($head->find("meta[property='og:keywords']", 0)->getAttribute('content')));
+            //      echo $itemArray[keywords]."<br/>"; // DEBUG
+            
+            // remove all keywords if they're generic Sideshow website keywords
+            if (stristr($itemArray['keywords'], "movie television and proprietary collectible figures")) $itemArray['keywords'] = "";
+            else if (stristr($itemArray['keywords'], "collectibles, collectible figures, movie collectibles, movie memorabilia, pop culture figures,")) $itemArray['keywords'] = "";
+            
+            if (!empty($itemArray['keywords'])) { // make and clean-up keywords
+                
+                // remove redundant keywords (other product fields) and some generic words
+                $invalid_Words = array($collectible->brand, "stuff", "action figures", "action figure", "statues", "statue", "collectables", "collectibles", "collectible", "figures", "figure", "the ", "items", "item", "pieces", "piece");
+                
+                $invalid_Words = array_merge($invalid_Words, $collectible->artists);
+                // temporary array with all words from product name and manufacturer to filter out of keywords
+                $tempNameWords = $collectible->name . " " . $collectible->manufacturer;
+                //          $tempNameWords = preg_replace('/[^[:alpha:],:\/\- ]/u',"",$tempNameWords );  // no longer needed, duplicated below
+                
+                $tempNameWords = explode(" ", $tempNameWords);
+                // remove whole words in product name & manufacturer from keywords
+                foreach ($tempNameWords as $value) {
+                    $pattern = '/\b' . preg_quote($value) . '\b/ui';
+                    $itemArray['keywords'] = preg_replace($pattern, "", $itemArray['keywords']);
+                }
+                
+                $itemArray['keywords'] = preg_replace('/[^[:alnum:],:\/\- ]/u', "", $itemArray['keywords']); //
+                
+                $itemArray['keywords'] = str_ireplace($invalid_Words, "", $itemArray['keywords']);
+                //          echo "<br/>".$itemArray[keywords]."<br/>"; // DEBUG
+                
+                // break keyword string into array of individual words/terms (on comma)
+                $itemArray['keywords'] = explode(",", $itemArray['keywords']);
+                foreach ($itemArray['keywords'] as & $value) {
+                    $value = trim($value);
+                }
+                unset($value);
+                
+                $itemArray['keywords'] = array_values(array_unique($itemArray['keywords'])); // remove exact duplicates & re-index the result
+                
+                $singleInvalidWords = array("sideshow", "exclusive", "limited", "series", "version");
+                // remove part of a keyword if it's already self-contained as its own keyword - example: "han solo" and "hoth han solo"
+                foreach ($itemArray['keywords'] as $key => & $value) { // check each keyword to see if it exists within another
+                    // example: "planet" within "big planet" but not "planetarium"
+                    
+                    // Capture scale keywords if we don't yet have a prodyct scale (into temp array)
+                    if (empty($collectible->scale)) {
+                        if (stristr($value, "scale")) {
+                            $tempScale = $value;
+                            $tempScale = str_ireplace("half", "1/2", $tempScale); // some substitutions
+                            $tempScale = str_ireplace("quarter", "1/4", $tempScale);
+                            $tempScale = str_ireplace("sixth", "1/6", $tempScale);
+                            
+                            $tempScale = preg_replace("/[^\d\":\/.]/", "", trim($tempScale)); // get rid of remaining non-scale text
+                            $tempScale = str_replace(":", "/", $tempScale);
+                            
+                            $tempKeyScale[] = $tempScale;
+                            unset($tempScale);
+                        }
+                    }
+                    
+                    if (strlen($value) < 3) { // remove 1 or 2 character keywords
+                        $value = "";
+                        continue;
+                    }
+                    // get rid of: sideshow, exlusive, limited, series
+                    foreach ($singleInvalidWords as $singleWord) {
+                        if ($value == $singleWord) { // remove site from keywords
+                            $value = "";
+                            break;
+                        }
+                    }
+                    
+                    if ($value == "") continue;
+                    
+                    for ($i = 0;$i < count($itemArray['keywords']);++$i) { // compare current keyword against all others
+                        
+                        if (($i !== $key) && (ParserUtility::containsPhrase($itemArray['keywords'][$i], $value))) { // don't compare against itself
+                            
+                            // remove the matching keyword from the larger keyword
+                            $itemArray['keywords'][$i] = trim(str_ireplace($value, "", $itemArray['keywords'][$i]));
+                            // replace multiple spaces with a single space
+                            $itemArray['keywords'][$i] = preg_replace('!\s+!', ' ', $itemArray['keywords'][$i]);
+                            // remove non-alphanumerics from start and end of string
+                            $itemArray['keywords'][$i] = preg_replace('/(^[^[:alnum:]]+)|([^[:alnum:]]+\Z)/ui', '', $itemArray['keywords'][$i]);
+                            
+                            if (strlen($itemArray['keywords'][$i]) < 3) { // remove 1 or 2 character keywords
+                                $itemArray['keywords'][$i] = "";
+                            }
+                        }
+                    }
+                }
+                unset($value);
+            } // end if make and clean-up keywords
+            
+            // Populate product scale if we pulled scale from the keywords
+            if (!empty($tempKeyScale)) {
+                $tempKeyScale = array_filter($tempKeyScale); // unsets empty values
+                $tempKeyScale = array_values(array_unique($tempKeyScale)); // re-index the array (compacts it)
+                
+                $collectible->scale = $tempKeyScale[0]; // just grab the first derived scale as the scale value - as good as any
+                
+                
+            }
+            // add some derived keywords based on other fields (scale)
+            $itemArray['keywords'] = array_merge($itemArray['keywords'], ParserUtility::scale2Words($collectible->scale));
+            
+            $itemArray['keywords'] = array_filter($itemArray['keywords']); // unsets empty values
+            $itemArray['keywords'] = array_values(array_unique($itemArray['keywords'])); // re-index the array (compacts it)
+            
+            // END KEYWORDS
             
             return $collectible;
         } 

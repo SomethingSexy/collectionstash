@@ -126,6 +126,62 @@ class ParserUtility {
             return false;
         }
     }
+    
+    static public function scale2Words($scale) {
+        $words = array();
+        
+        switch ($scale) {
+            case "1/12":
+            case "1:12":
+                $words[] = "twelfth scale";
+            break;
+            case "1/10":
+            case "1:10":
+                $words[] = "tenth scale";
+            break;
+            case "1/9":
+            case "1:9":
+                $words[] = "ninth scale";
+            break;
+            case "1/8":
+            case "1:8":
+                $words[] = "eighth scale";
+            break;
+            case "1/7":
+            case "1:7":
+                $words[] = "seventh scale";
+            break;
+            case "1/6":
+            case "1:6":
+                $words[] = "sixth scale";
+            break;
+            case "1/5":
+            case "1:5":
+                $words[] = "fifth scale";
+            break;
+            case "1/4":
+            case "1:4":
+                $words[] = "quarter scale";
+                $words[] = "fourth scale";
+            break;
+            case "1/3":
+            case "1:3":
+                $words[] = "third scale";
+            break;
+            case "1/2":
+            case "1:2":
+                $words[] = "half scale";
+                $words[] = "second scale";
+            break;
+            case "1/1":
+            case "1:1":
+                $words[] = "life size";
+                $words[] = "full scale";
+            break;
+        }
+        
+        return $words;
+    }
     // converts a string into title case - this is not HTML aware and will capitalize tag contents
     // input should be plain text without tags
     //
@@ -136,7 +192,7 @@ class ParserUtility {
         // list of words we don't want to capitalize
         $smallWords = array('of', 'a', 'as', 'the', 'and', 'an', 'or', 'nor', 'but', 'is', 'if', 'then', 'else', 'when', 'at', 'from', 'by', 'on', 'off', 'for', 'in', 'out', 'over', 'to', 'into', 'with', 'cm', 'vs');
         // special words that should be written as-is
-        $specialWords = array('3A', 'ThreeA', '2000AD', 'EMGY', 'NYC', 'JDF', 'NOM', 'AP', 'TK', 'TQ', 'WWR', 'JC', 'A-Level', '\'s', 'UK', 'USA', 'HK', 'II', 'III', 'IV', 'V', 'VI', 'VII', '3AGO');
+        $specialWords = array('3A', 'ThreeA', '2000AD', 'EMGY', 'NYC', 'JDF', 'NOM', 'AP', 'TK', 'TQ', 'WWR', 'JC', 'A-Level', '\'s', 'UK','UKTK', 'USA', 'HK', 'II', 'III', 'IV', 'V', 'VI', 'VII', '3AGO');
         // punctuation used to determine that the following letter
         // should be capitalised
         $punctuation = array('.', '-', ':', '!', '\'', '-', '?');
