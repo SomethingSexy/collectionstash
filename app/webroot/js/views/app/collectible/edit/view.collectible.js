@@ -202,6 +202,10 @@ define(function(require) {
                 collectibleType: collectibleType,
                 brands: this.brands.toJSON()
             };
+
+            if (this.model.parsedCollectible) {
+                data.parsedCollectible = this.model.parsedCollectible.toJSON();
+            }
             // If it is a custom, we are not showing
             // the manufacturer list cause it doesn't make sense
             // but we do want to show the brand list

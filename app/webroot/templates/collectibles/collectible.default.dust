@@ -26,6 +26,7 @@
 					</button>
 				</div>
 				<input type="hidden" id="collectibletype_id" name="collectibletype_id" value="{collectible.collectibletype_id}">
+				{#parsedCollectible}{#parsedCollectible.type}<p class="parsed-value">({.})</p>{/parsedCollectible.type}{/parsedCollectible}
 			</div>
 		</div>
 		{@eq key="{renderManList}" value="true" type="boolean"}
@@ -47,6 +48,7 @@
 					<button class="btn btn-default manufacturer-add" type="button">Add</button>
 					{/eq}</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.manufacturer}<p class="parsed-value">({.})</p>{/parsedCollectible.manufacturer}{/parsedCollectible}
 			</div>
 		</div>
 		{/eq}
@@ -65,6 +67,7 @@
 						<button class="btn btn-default manufacturer-add-brand" type="button">Add</button>
 					</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.brand}<p class="parsed-value">({.})</p>{/parsedCollectible.brand}{/parsedCollectible}
 			</div>
 		</div>
 		{#series_id seriesId=seriesId seriesPath=seriesPath}
@@ -82,6 +85,7 @@
 					<button type="button" class="btn btn-default manufacturer-add-category">Edit Categories</button>
 				</div>
 				<input type="hidden" id="seriesId" name="series_id" value="{seriesId}">
+				{#parsedCollectible}{#parsedCollectible.series}<p class="parsed-value">({.})</p>{/parsedCollectible.series}{/parsedCollectible}
 			</div>
 		</div>
 		{/series_id}
@@ -96,6 +100,7 @@
 						<option {@eq key="{License.id}" value="{licenseId}"}selected{/eq} value="{License.id}">{License.name}</option>
 						{/brands}
 					</select>
+					{#parsedCollectible}{#parsedCollectible.brand}<p class="parsed-value">({.})</p>{/parsedCollectible.brand}{/parsedCollectible}
 				</div>
 			</div>
 			
@@ -106,6 +111,7 @@
 			<label class="col-lg-3 control-label" for="inputName">Name</label>
 			<div class="col-lg-6">
 				<input type="text" id="inputName" class="form-control" name="name" value="{collectible.name|s|h}">
+				{#parsedCollectible}{#parsedCollectible.name}<p class="parsed-value">({.})</p>{/parsedCollectible.name}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -122,6 +128,7 @@
 					<span class="input-group-addon">$</span>
 					<input type="text" id="inputMsrp" class="form-control" name="msrp" value="{collectible.msrp}">
 				</div>
+				{#parsedCollectible}{#parsedCollectible.cost}<p class="parsed-value">({.})</p>{/parsedCollectible.cost}{/parsedCollectible}
 			</div>
 		</div>
 
@@ -145,6 +152,7 @@
 					<option {@eq key="{.}" value="{year}"}selected{/eq} value="{.}">{.}</option>
 					{/years}
 				</select>
+				{#parsedCollectible}{#parsedCollectible.releaseYear}<p class="parsed-value">({.})</p>{/parsedCollectible.releaseYear}{/parsedCollectible}
 			</div>
 		</div>
 
@@ -153,6 +161,7 @@
 			<div class="col-lg-6">
 				<input type="text" id="inputCode" class="form-control" name="code" value="{collectible.code}">
 				<span class="help-inline">This is the item code or product code given by the manufacture.</span>
+				{#parsedCollectible}{#parsedCollectible.productCode}<p class="parsed-value">({.})</p>{/parsedCollectible.productCode}{/parsedCollectible}
 			</div>
 		</div>
 
@@ -160,6 +169,7 @@
 			<label class="col-lg-3 control-label" for="inputUpc">UPC/EAN</label>
 			<div class="col-lg-6">
 				<input type="text" id="inputUpc" class="form-control" name="upc" value="{collectible.upc}">
+				{#parsedCollectible}{#parsedCollectible.upc}<p class="parsed-value">({.})</p>{/parsedCollectible.upc}{/parsedCollectible}
 			</div>
 		</div>
 	</fieldset>
@@ -185,6 +195,7 @@
 							<input {#collectible.limited}checked{/collectible.limited} type="checkbox" value="true" name="limited" id="inputLimited">
 							Limited Edition</label>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.limited}<p class="parsed-value">({parsedCollectible.limited})</p>{/parsedCollectible.limited}{/parsedCollectible}
 			</div>
 		</div>
 		{#collectible.limited editionSize=collectible.edition_size numbered=collectible.numbered}
@@ -193,6 +204,7 @@
 			<div class="col-lg-6">
 				<input type="text" id="inputEditionSize" class="form-control" name="edition_size" value="{editionSize}">
 				<span class="help-block">This is the edition size of the collectible.  If it is unknown or it does not have a specific edition size, leave blank.</span>
+				{#parsedCollectible}{#parsedCollectible.editionSize}<p class="parsed-value">({.})</p>{/parsedCollectible.editionSize}{/parsedCollectible}
 			</div>
 		</div>
 		{#editionSize}
@@ -204,6 +216,7 @@
 					Numbered</label>
 				<span class="help-block">A collectible is considered numbered if it has an edition size and is indivudually numbered.</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.numbered}<p class="parsed-value">({parsedCollectible.numbered})</p>{/parsedCollectible.numbered}{/parsedCollectible}
 			</div>
 		</div>
 		{/editionSize}
@@ -216,6 +229,7 @@
 						Signed</label>
 					<span class="help-block">Indicates if this collectible is signed by someone as part of the sold piece.</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.signed}<p class="parsed-value">({parsedCollectible.signed})</p>{/parsedCollectible.signed}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -226,6 +240,7 @@
 						Exclusive</label>
 					<span class="help-block">Indicates if this collectible is exclusive to any one place.</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.exclusive}<p class="parsed-value">({parsedCollectible.exclusive})</p>{/parsedCollectible.exclusive}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -252,6 +267,7 @@
 					<option {@eq key="{Scale.id}" value="{scale}"}selected{/eq} value="{Scale.id}">{Scale.scale}</option>
 					{/scales}
 				</select>
+				{#parsedCollectible}{#parsedCollectible.scale}<p class="parsed-value">({.})</p>{/parsedCollectible.scale}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -259,6 +275,7 @@
 			<div class="col-lg-6">
 				<input type="number" id="inputPieces" class="form-control" name="pieces" value="{collectible.pieces}">
 				<span class="help-inline">This is the number of parts and pieces this collectible has.</span>
+				{#parsedCollectible}{#parsedCollectible.numberOfPieces}<p class="parsed-value">({.})</p>{/parsedCollectible.numberOfPieces}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -268,7 +285,7 @@
 					<input type="number" id="inputWeight" class="form-control" maxlength="23" step="any" name="product_weight" value="{collectible.product_weight}">
 					<span class="input-group-addon">lbs</span>
 				</div>
-
+				{#parsedCollectible}{#parsedCollectible.weight}<p class="parsed-value">({.})</p>{/parsedCollectible.weight}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -278,6 +295,7 @@
 					<input type="number" id="inputLength" class="form-control" maxlength="23" step="any" name="product_length" value="{collectible.product_length}">
 					<span class="input-group-addon">inches</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.height}<p class="parsed-value">({.})</p>{/parsedCollectible.height}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -287,6 +305,7 @@
 					<input type="number" id="inputWidth" class="form-control" maxlength="23" step="any" name="product_width" value="{collectible.product_width}">
 					<span class="input-group-addon">inches</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.width}<p class="parsed-value">({.})</p>{/parsedCollectible.width}{/parsedCollectible}
 			</div>
 		</div>
 		<div class="form-group">
@@ -296,6 +315,7 @@
 					<input type="number" id="inputDepth" class="form-control" maxlength="23" step="any" name="product_depth" value="{collectible.product_depth}">
 					<span class="input-group-addon">inches</span>
 				</div>
+				{#parsedCollectible}{#parsedCollectible.depth}<p class="parsed-value">({.})</p>{/parsedCollectible.depth}{/parsedCollectible}
 			</div>
 		</div>
 	</fieldset>
@@ -308,6 +328,7 @@
 			<div class="col-lg-6">
 				<input type="text" id="inputURL" class="form-control" name="url" value="{collectible.url|s}">			
 			</div>
+			{#parsedCollectible}{#parsedCollectible.url}<p class="parsed-value">({.})</p>{/parsedCollectible.url}{/parsedCollectible}
 		</div>
 	</fieldset>
 	<div class="form-group">
