@@ -8,7 +8,7 @@ define(['require', 'underscore', 'backbone', 'marionette', 'text!templates/app/c
         initialize: function(options) {
             var self = this;
             this.model.startTracking();
-            this.on('shown', function() {
+            this.once('shown', function() {
                 $('textarea', self.el).focus();
             });
         },

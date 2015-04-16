@@ -143,7 +143,9 @@ class Sideshow implements Parsable {
             $weight = ParserUtility::sscProductDetails($body, 'Product Weight');
             $weight = explode("lbs", $weight);
             $weight = floatval($weight[0]);
-            $collectible->weight = $weight;
+            if ($weight !== 0.0) {
+                $collectible->weight = $weight;
+            }
             // MANUFACTURER
             $collectible->manufacturer = ParserUtility::sscProductDetails($body, 'manufacturer');
             // SERIES - header3 content - sometimes used for license name, otherwise used for sub-license/series
