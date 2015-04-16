@@ -1,4 +1,4 @@
-define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.error.mustache', 'mustache', 'marionette.mustache'], function(require, _, Marionette, template, mustache) {
+define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.error.mustache', 'text!templates/app/common/alert.message.mustache', 'mustache', 'marionette.mustache'], function(require, _, Marionette, template, messageTemplate, mustache) {
 
     return {
         onError: function() {
@@ -30,6 +30,11 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.
         },
         onGlobalError: function(message) {
             $('._globalError', this.el).html(Marionette.Renderer.render(template, {
+                message: message
+            }));
+        },
+        onGlobalMessage: function(message){
+            $('._globalMessage', this.el).html(Marionette.Renderer.render(messageTemplate, {
                 message: message
             }));
         },
