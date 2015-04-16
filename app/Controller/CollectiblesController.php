@@ -61,11 +61,12 @@ class CollectiblesController extends AppController {
             } 
             else {
                 $this->response->statusCode(400);
+                $this->response->body(json_encode($response['response']['data']));
             }
         } 
         else {
             $this->response->body(__('Invalid request.'));
-            $this->response->statusCode(400);
+            $this->response->statusCode(500);
             return;
         }
     }

@@ -18,6 +18,7 @@ define(function(require) {
             });
         },
         importCollectible: function(event) {
+            var self = this;
             event.preventDefault();
             $(event.currentTarget).button('loading');
             this.onGlobalMessage('Please be patient while we gather all of the information around this collectible.')
@@ -28,13 +29,13 @@ define(function(require) {
                     url: $('input[name=url]', this.el).val()
                 }
             }).then(function(data, textStatus, jqXHR) {
-                data;
                 window.location.href = '/collectibles/edit/' + data.id;
             }, function(jqXHR, textStatus, errorThrown) {
+                self.removeGlobalMessage();
                 $(event.currentTarget).button('reset');
                 var statusCode = jqXHR.status;
                 if (statusCode === 400) {
-                    self.onGlobalError(jqXHR.responseText);
+                    self.onModelError(self, jqXHR);
                 } else if (statusCode === 401) {
                     self.onGlobalError(jqXHR.responseText);
                 } else if (statusCode === 500) {

@@ -887,6 +887,12 @@ class Collectible extends AppModel {
             $parser = $factory->getParser($url);
             
             $parsedCollectible = $parser->parse($url);
+            if (!$parsedCollectible) {
+                $retVal['response']['isSuccess'] = false;
+                $retVal['response']['data']['url'] = __('The url was invalid or a non-supported manufacturer.');
+                return $retVal;
+            }
+
             $collectible = $this->convertToModel($parsedCollectible);
             debug($collectible);
             $collectible['Collectible']['parsed_from_url'] = true;

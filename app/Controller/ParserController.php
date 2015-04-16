@@ -25,7 +25,7 @@ class ParserController extends AppController {
         // $collectibleModel = $this->Collectible->convertToModel($parsedCollectible);
         // debug($collectibleModel);
         
-        $collectible = $this->Collectible->createInitial(false, false, $this->getUser(), 'http://www.sideshowtoy.com/collectibles/star-wars-geonosis-commander-battle-droid-and-count-dooku-hologram-sideshow-collectibles-1002852/');
+        $collectible = $this->Collectible->createInitial(false, false, $this->getUser(), 'http://www.sideshowtoy.com/collectibles/star-wars-geonosis-commander-battle-droid-and-count-dooku-hologram-sideshow-collectibles-1002852');
         // $collectibleId = $collectible['response']['data']['id'];
         // // now upload all of the photos
         // if (!empty($collectibleModel['CollectiblesUpload'])) {
