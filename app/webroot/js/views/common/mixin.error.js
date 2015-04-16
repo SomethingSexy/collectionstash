@@ -38,6 +38,9 @@ define(['require', 'underscore', 'marionette', 'text!templates/app/common/alert.
                 message: message
             }));
         },
+        removeGlobalMessage: function(){
+            $('._globalMessage', this.el).empty();
+        },
         removeErrors: function() {
             $('input[data-error=true]', this.el).removeClass('invalid').closest('.form-group').removeClass('has-error').children('._error').empty();
             $('._globalError', this.el).empty();
