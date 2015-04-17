@@ -24,7 +24,9 @@
 								Add a standard mass-produced collectible, whether it is officially licensed or a custom made in quantities.
 							</p>
 							<p><a class="btn btn-primary mass" href="#">Select</a>
-							<a title="Import a collectible from a url." class="btn btn-primary _import pull-right" href="javascript:void(0);">Import</a></p>
+							<?php if($allowImport){ ?>
+								<a title="Import a collectible from a url." class="btn btn-primary _import pull-right" href="javascript:void(0);">Import</a></p>
+							<?php } ?>
 						</div>
 					</div>
 

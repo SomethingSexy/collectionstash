@@ -84,6 +84,8 @@ class CollectiblesController extends AppController {
             else {
             }
         }
+
+        $this->set('allowImport', Configure::read('Settings.Collectible.Edit.allow-import'));
         $this->layout = 'require';
     }
     
