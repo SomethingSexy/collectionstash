@@ -18,30 +18,35 @@ define(function(require) {
             });
         },
         importCollectible: function(event) {
+            var url = this.$('input[name=url]').val();
             var self = this;
             event.preventDefault();
-            $(event.currentTarget).button('loading');
-            this.onGlobalMessage('Please be patient while we gather all of the information around this collectible.')
-            Backbone.ajax('/collectibles/import', {
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    url: $('input[name=url]', this.el).val()
-                }
-            }).then(function(data, textStatus, jqXHR) {
-                window.location.href = '/collectibles/edit/' + data.id;
-            }, function(jqXHR, textStatus, errorThrown) {
-                self.removeGlobalMessage();
-                $(event.currentTarget).button('reset');
-                var statusCode = jqXHR.status;
-                if (statusCode === 400) {
-                    self.onModelError(self, jqXHR);
-                } else if (statusCode === 401) {
-                    self.onGlobalError(jqXHR.responseText);
-                } else if (statusCode === 500) {
-                    self.onGlobalError(errorThrown);
-                }
-            });
+            if (url.trim() === '') {
+                this.addFieldError('url', 'A url is required to import.');
+            } else {    
+                $(event.currentTarget).button('loading');
+                this.onGlobalMessage('Please be patient while we gather all of the information around this collectible.');
+                Backbone.ajax('/collectibles/import', {
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        url: url
+                    }
+                }).then(function(data, textStatus, jqXHR) {
+                    window.location.href = '/collectibles/edit/' + data.id;
+                }, function(jqXHR, textStatus, errorThrown) {
+                    self.removeGlobalMessage();
+                    $(event.currentTarget).button('reset');
+                    var statusCode = jqXHR.status;
+                    if (statusCode === 400) {
+                        self.onModelError(self, jqXHR);
+                    } else if (statusCode === 401) {
+                        self.onGlobalError(jqXHR.responseText);
+                    } else if (statusCode === 500) {
+                        self.onGlobalError(errorThrown);
+                    }
+                });
+            }
         }
     });
 
