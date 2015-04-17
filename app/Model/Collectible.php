@@ -888,9 +888,15 @@ class Collectible extends AppModel {
                 $retVal['response']['data']['url'] = __('The url was invalid or a non-supported manufacturer.');
                 return $retVal;
             }
-
+            
             $factory = new ParserFactory();
             $parser = $factory->getParser($url);
+            
+            if (!$parser) {
+                $retVal['response']['isSuccess'] = false;
+                $retVal['response']['data']['url'] = __('The url was invalid or a non-supported manufacturer.');
+                return $retVal;
+            }
             
             $parsedCollectible = $parser->parse($url);
             if (!$parsedCollectible) {

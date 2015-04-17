@@ -18,13 +18,13 @@ class ParserFactory extends Object
                 $retVal = new Sideshow();
                 break;
 
-            case stripos($url, "worldofthreea.com/catalog"):
-                $productArray = scrape_wo3a($url);
-                break;
+            // case stripos($url, "worldofthreea.com/catalog"):
+            //     $productArray = scrape_wo3a($url);
+            //     break;
 
-            case stripos($url, "3dstudio.com"):
-                $productArray = scrape_gentleGiant($url);
-                break;
+            // case stripos($url, "3dstudio.com"):
+            //     $productArray = scrape_gentleGiant($url);
+            //     break;
         }
         
         return $retVal;
