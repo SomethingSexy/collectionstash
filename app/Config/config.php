@@ -26,7 +26,8 @@ $config['Settings'] = Set::merge($config['Settings'], array(
   	'Collectible' => array (
 		'Edit' => array (
 			'allowed' => true,
-			'auto-approve' => false	
+			'auto-approve' => false,
+			'allow-import' => true
 		),
 		'Contribute' => array(
 			'allowed'=> true
