@@ -11,14 +11,21 @@ define(['marionette', 'text!templates/app/collectible/edit/persons.mustache', 'v
         },
         initialize: function(options) {
             this.collectibleType = options.collectibleType;
-            // this.collection.on('add', this.render, this);
-            // this.collection.on('remove', this.render, this);
         },
         serializeData: function() {
-            return {
+            var data = {
                 total: this.collection.length,
                 collectibleType: this.collectibleType.toJSON()
             };
+
+            if (this.model.parsedCollectible) {
+                data.parsedCollectible = this.model.parsedCollectible.toJSON();
+                data.parsedCollectible.missingArtists = _.difference(this.model.parsedCollectible.get('artists'), this.collection.map(function(artist) {
+                    return artist.get('Artist').name;
+                }));
+            }
+
+            return data;
         },
         onRender: function() {
             var self = this;

@@ -5,5 +5,9 @@
 		<p>The artist field is a typeahead field, please try and use any existing entries.  Please make sure that an artist is a single person.</p>
 		<div class="add-container"> </div>
 		<ul class="artists list-group spacer"> </ul>
+		{{#parsedCollectible}}
+			<p>The follow persons are missing from the database.</p>
+			{{#parsedCollectible.missingArtists}}<p class="parsed-value">({{.}})</p>{{/parsedCollectible.missingArtists}}
+		{{/parsedCollectible}}
 	</div>
 </div>
