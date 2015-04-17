@@ -17,5 +17,6 @@ cp  -r /usr/src/collectionstash/vendor/* /var/www/collectionstash/vendor;
 rm -rf /var/www/collectionstash/app/tmp/cache/collectible/*;
 rm -rf /var/www/collectionstash/app/tmp/cache/models/*;
 # restart web servers
+/etc/init.d/memcached restart;
 /etc/init.d/apache2 restart;
 /etc/init.d/nginx restart;
