@@ -1,5 +1,11 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v4.0.0</h3>
+    <ul>
+        <li>Allowing users to import collectible data via manufacturer url.  The first supported manufacturer is Sideshow Collectibles. (#222)</li>
+        <li>Moved the collectible type selection to the collectible edit page.  You can now change type like any other field. (#197)</li>
+        <li>Increased sized of description field for a collectible. </li>
+    </ul>
     <h3>Release Notes for v3.12.0</h3>
     <ul>
         <li>Added more links to see pending collectibles. (#218)</li>
@@ -14,13 +20,11 @@
         <li>Fixed an issue where the add to wish list button on the collectible detail page would an empty history point. (#214)</li>
         <li>Removed the additional link on the wish list page.  It didn't make sense. (#213)</li>
     </ul>
-
     <h3>Release Notes for v3.11.2</h3>
     <ul>
         <li>Fixed an issue with the show more link not working when trying to link a photo to a collctible in your stash. (#212)</li>
         <li>Fixed an issue with the brand dropdown not refreshing aftering adding a new one to a company. (#178)</li>
     </ul>
-
     <h3>Release Notes for v3.11.1</h3>
     <ul>
         <li>Fixed an issue with empty edits. (#145)</li>
