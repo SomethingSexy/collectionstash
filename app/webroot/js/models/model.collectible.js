@@ -56,8 +56,8 @@ if (!adminMode) {
                 required: false
             }],
             description: [{
-                rangeLength: [0, 1000],
-                msg: 'Maximum allowed length is 1000 characters.'
+                rangeLength: [0, 5000],
+                msg: 'Maximum allowed length is 5000 characters.'
             }, {
                 required: false
             }, {
