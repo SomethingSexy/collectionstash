@@ -699,7 +699,8 @@ define(function(require) {
             }).render().el);
             $('#collectible-container').append(new PersonsView({
                 collection: artists,
-                collectibleType: collectibleTypeModel
+                collectibleType: collectibleTypeModel,
+                model: collectibleModel
             }).render().el);
             $('#collectible-container').append(collectibleView.render().el);
             $('#collectible-container').append(new TagsView({
