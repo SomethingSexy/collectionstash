@@ -883,6 +883,12 @@ class Collectible extends AppModel {
         $collectible['Collectible'] = array();
         // see if we are going to attempt to create the initial collectible from url
         if (!is_null($url)) {
+            if (empty($url)) {
+                $retVal['response']['isSuccess'] = false;
+                $retVal['response']['data']['url'] = __('The url was invalid or a non-supported manufacturer.');
+                return $retVal;
+            }
+            
             $factory = new ParserFactory();
             $parser = $factory->getParser($url);
             
@@ -892,7 +898,7 @@ class Collectible extends AppModel {
                 $retVal['response']['data']['url'] = __('The url was invalid or a non-supported manufacturer.');
                 return $retVal;
             }
-
+            
             $collectible = $this->convertToModel($parsedCollectible);
             debug($collectible);
             $collectible['Collectible']['parsed_from_url'] = true;
