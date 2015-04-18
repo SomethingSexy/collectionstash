@@ -86,17 +86,18 @@ class Sideshow implements Parsable {
             // This will eventually be parts?
             $inBox = $body->find("div[id=in-box]", 0);
             if ($inBox) {
-                $itemArray['description_details'] = $inBox->innertext;
-                $itemArray['description_details'] = ParserUtility::htmlentities2utf8($itemArray['description_details']);
+                $descriptionBullets = ParserUtility::htmlentities2utf8($inBox);
                 
-                $itemArray['description_details'] = trim(substr($itemArray['description_details'], stripos($itemArray['description_details'], "</h4>") + 5));
+                $descriptionBullets = trim(substr($descriptionBullets, stripos($descriptionBullets, "</h4>") + 5));
                 
-                $itemArray['description_details'] = str_ireplace("<p>", "", $itemArray['description_details']);
-                $itemArray['description_details'] = str_ireplace("</p>", "\r\n", $itemArray['description_details']);
+                $descriptionBullets = str_ireplace("<p>", "", $descriptionBullets);
+                $descriptionBullets = str_ireplace("</p>", "\r\n", $descriptionBullets);
                 
-                $itemArray['description_details'] = str_ireplace("</li>", "\r\n", $itemArray['description_details']);
-                $itemArray['description_details'] = str_ireplace("<li>", "* ", $itemArray['description_details']);
-                $itemArray['description_details'] = trim(strip_tags($itemArray['description_details']));
+                $descriptionBullets = str_ireplace("</li>", "\r\n", $descriptionBullets);
+                $descriptionBullets = str_ireplace("<li>", "* ", $descriptionBullets);
+                $descriptionBullets = trim(strip_tags($descriptionBullets));
+
+                $collectible->description = $collectible->description . "\r\n\r\n" . $descriptionBullets;
             }
             // PRICE - easiest/most consistent way to grab price for current and archived products
             // Need to check to see if there is a sale, if so grab MSRP and not the sale price
