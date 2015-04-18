@@ -1,5 +1,10 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v4.0.1</h3>
+    <ul>
+        <li>Fixed issue with sideshow parsing images.</li>
+        <li>Fixed issue with sideshow parsing description.</li>
+    </ul>
     <h3>Release Notes for v4.0.0</h3>
     <ul>
         <li>Allowing users to import collectible data via manufacturer url.  The first supported manufacturer is Sideshow Collectibles. (#222)</li>
