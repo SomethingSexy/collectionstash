@@ -43,7 +43,7 @@ define(function(require) {
                     } else if (statusCode === 401) {
                         self.onGlobalError(jqXHR.responseText);
                     } else if (statusCode === 500) {
-                        self.onGlobalError(errorThrown);
+                        self.onGlobalError('There was an issue trying to parser the collectible information.  Please contact an admin.');
                     }
                 });
             }
