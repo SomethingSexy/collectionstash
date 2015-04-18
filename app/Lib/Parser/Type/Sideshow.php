@@ -27,12 +27,6 @@ class Sideshow implements Parsable {
             
             $head = $html->find("head", 0);
             $body = $html->find("body", 0);
-            //FEATURE IMAGE
-            $featureimage = $head->find("meta[property='og:image']", 0)->getAttribute('content');
-            
-            if ($featureimage) {
-                array_push($collectible->photos, $featureimage);
-            }
             //URL
             $collectible->url = $head->find("meta[property='og:url']", 0)->getAttribute('content');
             //NAME
@@ -49,12 +43,30 @@ class Sideshow implements Parsable {
                 }
             }
             //GIANT IMAGE
-            // $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($body, "<!-- large, clipped png -->", "<!-- .col -->");
-            // $itemArray['giantimage'] = str_get_html($itemArray['giantimage']);
-            // $itemArray['giantimage'] = $itemArray['giantimage']->find("img", 0)->src;
-            // $itemArray['giantimage'] = ParserUtility::get_HTML_SubString($itemArray['giantimage'], ".com/");
-            // $itemArray['giantimage'] = "http://www.sideshowtoy.com/" . $itemArray['giantimage'];
+            $giantimage = ParserUtility::get_HTML_SubString($body, "<!-- Product Details -->", "<!-- Product Silo Image -->");
             
+            if (!empty($giantimage)) {
+                $giantimage = str_get_html($giantimage);
+                $giantimage = $giantimage->find("img", 0)->src;
+                
+                if (stristr($giantimage, "sideshowtoy.com")) {
+                    $giantimage = ParserUtility::get_HTML_SubString($giantimage, ".com/");
+                    $giantimage = "http://www.sideshowtoy.com/" . $giantimage;
+                } 
+                else {
+                    $giantimage = "http://www.sideshowtoy.com" . $giantimage;
+                }
+            }
+            
+            if ($giantimage) {
+                array_push($collectible->photos, $giantimage);
+            }
+            //FEATURE IMAGE
+            $featureimage = $head->find("meta[property='og:image']", 0)->getAttribute('content');
+            
+            if ($featureimage) {
+                array_push($collectible->photos, $featureimage);
+            }
             // DESCRIPTION - Main product description - PRODUCT SUMMARY section - quick and dirty
             $description = $body->find("div[id=prod-summary]", 0)->innertext;
             $description = ParserUtility::htmlentities2utf8($description);
