@@ -86,18 +86,13 @@ class Sideshow implements Parsable {
             // This will eventually be parts?
             $inBox = $body->find("div[id=in-box]", 0);
             if ($inBox) {
-                $descriptionBullets = ParserUtility::htmlentities2utf8($inBox);
+                $collectible->description = $collectible->description . strip_tags(ParserUtility::htmlentities2utf8($inBox->find("p", 0)->innertext)) . "\r\n";
                 
-                $descriptionBullets = trim(substr($descriptionBullets, stripos($descriptionBullets, "</h4>") + 5));
-                
-                $descriptionBullets = str_ireplace("<p>", "", $descriptionBullets);
-                $descriptionBullets = str_ireplace("</p>", "\r\n", $descriptionBullets);
-                
-                $descriptionBullets = str_ireplace("</li>", "\r\n", $descriptionBullets);
-                $descriptionBullets = str_ireplace("<li>", "* ", $descriptionBullets);
-                $descriptionBullets = trim(strip_tags($descriptionBullets));
-
-                $collectible->description = $collectible->description . "\r\n\r\n" . $descriptionBullets;
+                $inBox = $inBox->find("li");
+                foreach ($inBox as & $value) {
+                    $value = ParserUtility::htmlentities2utf8($value);
+                    $collectible->description = $collectible->description . "\r\n" . " * " . strip_tags($value);
+                }
             }
             // PRICE - easiest/most consistent way to grab price for current and archived products
             // Need to check to see if there is a sale, if so grab MSRP and not the sale price
@@ -418,7 +413,7 @@ class Sideshow implements Parsable {
                     $itemArray['keywords'] = preg_replace($pattern, "", $itemArray['keywords']);
                 }
                 
-                $itemArray['keywords'] = preg_replace('/[^[:alnum:],:\/\- ]/u', "", $itemArray['keywords']); //
+                $itemArray['keywords'] = preg_replace('/[^[:alnum:],:\/\- ]/u', "", $itemArray['keywords']); // strip characters we don't want, keep alphanumerics, and some other characters
                 
                 $itemArray['keywords'] = str_ireplace($invalid_Words, "", $itemArray['keywords']);
                 //          echo "<br/>".$itemArray[keywords]."<br/>"; // DEBUG
@@ -451,6 +446,10 @@ class Sideshow implements Parsable {
                             $tempKeyScale[] = $tempScale;
                             unset($tempScale);
                         }
+                    } 
+                    else if (str_replace("/", "", $collectible->scale) == str_replace(":", "", $value) || str_replace("/", "", $collectible->scale) == str_replace("/", "", $value)) {
+                        $value = "";
+                        continue;
                     }
                     
                     if (strlen($value) < 3) { // remove 1 or 2 character keywords
