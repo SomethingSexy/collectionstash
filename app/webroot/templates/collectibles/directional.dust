@@ -7,4 +7,12 @@
 		<p>Some collectibles might not have a manufacturer or producer but are made and sold by the artist themselves.  In these cases, you can add just an artist to indicate that.</p>
 		<p>Collection Stash also supports unofficial custom collectibles!  Currently, this includes customs that are made by artists or groups, sold and produced in quantities.  This does <strong>not</strong> include 1 of 1 items or personal customs or bashes.</p>
 	</div>
+	{#parsed_from_url}
+		<div class="alert alert-warning">
+		<button class="close" data-dismiss="alert" type="button">×</button>
+		<h4>Automatically Imported!</h4>
+		<p>The information for this collectible was imported directly from the manufacturer's website. Parsed values will be indicated underneath each field.</p>
+		<p>Please note that while the import feature tries to parse the data as accurately as possible, sometimes it isn't always correct.  Please verify the data before you submit for approval. </p>
+		</div>
+	{/parsed_from_url}
 </div>

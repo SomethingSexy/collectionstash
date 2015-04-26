@@ -1,4 +1,7 @@
 <?php
+if (!isset($adminMode)) {
+	$adminMode = false;
+}
 if (isset($setPageTitle) && $setPageTitle) {
 	$pageTitle = '';
 	if (!empty($collectibleDetail['Manufacture']['title'])) {
@@ -13,9 +16,10 @@ if (isset($setPageTitle) && $setPageTitle) {
 
 	$this -> set("title_for_layout", $pageTitle);
 }
-$this -> set('description_for_layout', 'Information and detail for ' . $collectibleDetail['Collectible']['descriptionTitle']);
-$this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
-
+if (!$adminMode) {
+	$this -> set('description_for_layout', 'Information and detail for ' . $collectibleDetail['Collectible']['descriptionTitle']);
+	$this -> set('keywords_for_layout', $collectibleDetail['Manufacture']['title'] . ' ' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectible']['name'] . ',' . $collectibleDetail['Collectibletype']['name'] . ',' . $collectibleDetail['License']['name']);
+}
 if (!isset($showEdit)) {
 	$showEdit = false;
 }
@@ -80,7 +84,10 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 				<div class="col-md-12">	
 					<?php
 					if ($showImage) {
-						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail, 'userUploads', $userUploads));
+						if(!isset($userUploads)){
+							$userUploads = array();
+						}
+						echo $this -> element('collectible_detail_upload', array('collectibleCore' => $collectibleDetail, 'userUploads' => $userUploads));
 					}
 					?>
 				</div>
@@ -269,16 +276,16 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 
 						// Then regardless of the logic above, mark official vs unofficial
 						if ($collectibleDetail['Collectible']['official']) {
-							echo 'Official';
+							echo ' Official';
 						} else {
-							echo 'Unofficial';
+							echo ' Unofficial';
 						}
 
 						if (isset($collectibleDetail['Collectible']['variant']) && $collectibleDetail['Collectible']['variant']) {
 							echo ' | <a href="/collectibles/view/' . $collectibleDetail['Collectible']['variant_collectible_id'] . '">Variant</a>';
 						}
 
-						if ($isLoggedIn) {
+						if ($isLoggedIn && !$adminMode) {
 							echo ' | <span class="label">' . $collectibleUserCount . ' in your Stash' . '</span>';
 							echo ' | <span class="label">' . $collectibleWishListCount . ' in your Wish List</span>';
 						}
@@ -354,32 +361,6 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 			</div>
 		</div>
 			<?php } ?>
-					<?php
-		if ($adminMode) {
-					?>
-		<div class="row spacer">
-			<div class="col-md-12">		
-				<?php echo $this -> Form -> create('Approval', array('url' => '/admin/collectibles/approve/' . $collectibleDetail['Collectible']['id'], 'id' => 'approval-form', 'class' => 'form-horizontal')); ?>
-				<input id="approve-input" type="hidden" name="data[Approval][approve]" value="" />
-				<fieldset class="approval-fields">
-					<div class="form-group">
-						<label class="col-lg-3 control-label" for="ApprovalNotes"><?php echo __('Notes')
-									?></label>
-						<div class="col-lg-6">
-								<textarea id="ApprovalNotes" class="form-control" name="data[Approval][notes]"></textarea>
-						</div>
-					</div>				
-				</fieldset>
-				</form>
-				<div class="form-group">
-					<div class="col-lg-offset-3 col-lg-9">
-						<button id="approval-button" class="btn btn-primary"><?php echo __('Approve'); ?></button>
-						<button id="deny-button" class="btn btn-default"><?php echo __('Deny'); ?></button>
-					</div>
-				</div>	
-			</div>
-		</div>
-			<?php } ?>	
 </div>
 </div>
 </div>
@@ -415,12 +396,18 @@ if ($showStatus) {
 } else {
 	echo 'var showStatus = false;';
 }
-	?><?php
-	if ($allowStatusEdit) {
-		echo 'var allowStatusEdit = true;';
-	} else {
-		echo 'var allowStatusEdit = false;';
-	}
+?><?php
+if ($adminMode) {
+	echo 'var showApproval = true;';
+} else {
+	echo 'var showApproval = false;';
+}
+?><?php
+if ($allowStatusEdit) {
+	echo 'var allowStatusEdit = true;';
+} else {
+	echo 'var allowStatusEdit = false;';
+}
 ?></script>
 <?php
 

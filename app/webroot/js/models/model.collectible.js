@@ -10,7 +10,7 @@ if (!adminMode) {
         // Browser globals
         root.CollectibleModel = factory(root.Backbone, root.PartsCollection);
     }
-}(this, function(backbone, PartsCollection) {
+}(this, function(Backbone, PartsCollection) {
 
     return Backbone.Model.extend({
         urlRoot: function() {
@@ -26,6 +26,14 @@ if (!adminMode) {
             }
 
             delete response.AttributesCollectible;
+
+            if (response.parsed_from_url && response.parsed_data) {
+                if (!this.parsedCollectible) {
+                    this.parsedCollectible = new Backbone.Model(JSON.parse(response.parsed_data));
+                } else {
+                    this.parsedCollectible.set(JSON.parse(response.parsed_data));
+                }
+            }
 
             return response;
         },
@@ -46,14 +54,14 @@ if (!adminMode) {
                 msg: 'Maximum allowed length is 200 characters.'
             }, {
                 required: false
-            }],            
+            }],
             description: [{
-                rangeLength: [0, 1000],
-                msg: 'Maximum allowed length is 1000 characters.'
+                rangeLength: [0, 5000],
+                msg: 'Maximum allowed length is 5000 characters.'
             }, {
                 required: false
             }, {
-                pattern: /^[a-z0-9\s\r\n ?&$%#@!*()+_\\\\#:.',"\/-]+$/i,
+                pattern: /^[a-z0-9\s\r\n ?&$%#@!*()™+_\\\\#:.',"\/-]+$/i,
                 msg: 'Invalid characters'
             }],
             'edition_size': [{

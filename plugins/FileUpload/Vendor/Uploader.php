@@ -83,7 +83,7 @@ class Uploader {
 				$this -> _error('No filename resulting after parsing. Function: ' . $this -> options['fileNameFunction']);
 			}
 		}
-		debug($fileName);
+
 		return $fileName;
 	}
 
@@ -113,7 +113,7 @@ class Uploader {
 				$this -> _error('No filename resulting after parsing. Function: ' . $this -> options['uploadDirFunction']);
 			}
 		}
-		debug($uploadDirectory);
+
 		return $uploadDirectory;
 	}
 
@@ -127,11 +127,11 @@ class Uploader {
 	function __handleUnique($fileName) {
 		if ($this -> options['unique']) {
 			//If it is set to make unique, now we are create a UUID to make this file unique
-			debug($fileName);
+
 
 			if ($this -> options['randomFileName']) {
 				$fileName = String::uuid() . $this -> _ext();
-				debug($fileName);
+
 			} else {
 				//TODO fix this and put it back in case I want to revert back
 				// $temp_path = substr($fileName, 0, strlen($fileName) - strlen($this -> _ext()));
@@ -166,7 +166,7 @@ class Uploader {
 		//make sure the file doesn't already exist, if it does, add an itteration to it
 		$up_dir = $this -> options['uploadDir'];
 		$up_dir = $this -> __handleUploadDirCallback($up_dir);
-		debug($up_dir);
+
 		if (!is_dir($up_dir)) {
 			mkdir($up_dir, 0777, true);
 		}
@@ -175,7 +175,6 @@ class Uploader {
 			mkdir($up_dir . DS . 'resized', 0777, true);
 		}
 
-		debug($this -> file['name']);
 		//Check for any updates with the file name from a call back
 		$fileName = $this -> __handleFileNameCallback($this -> file['name']);
 
@@ -186,8 +185,7 @@ class Uploader {
 		//Update the file name if it needs to be unique
 		$fileName = $this -> __handleUnique($fileName);
 		$target_path = $up_dir . DS . $fileName;
-		debug($target_path);
-		debug($this -> file['tmp_name']);
+
 		//now move the file.
 		if (move_uploaded_file($this -> file['tmp_name'], $target_path)) {
 			$this -> finalFile = basename($target_path);
@@ -218,8 +216,7 @@ class Uploader {
 		//Update the file name if it needs to be unique
 		$fileName = $this -> __handleUnique($fileName);
 		$target_path = $up_dir . DS . $fileName;
-		debug($target_path);
-		debug($this -> file['tmp_name']);
+
 		//now move the file.
 		if (copy($this -> file['tmp_name'], $target_path)) {
 			unlink($this -> file['tmp_name']);
@@ -253,7 +250,6 @@ class Uploader {
 	 */
 	function _ext($file = null) {
 		$this -> setFile($file);
-		debug($this -> file['name']);
 		return strrchr($this -> file['name'], ".");
 	}
 
@@ -287,8 +283,7 @@ class Uploader {
 
 			$ext = strtolower('.' . str_replace('.', '', $ext));
 			$file_ext = strtolower($this -> _ext());
-			debug($ext);
-			debug($file_ext);
+
 			if ($file_ext == $ext) {
 				if (is_array($types) && !in_array($this -> file['type'], $types)) {
 					$this -> _error("{$this->file['type']} is not an allowed type.");
