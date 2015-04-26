@@ -127,6 +127,7 @@
 							
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 								<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
+								<li><a href="/collectibles/catalog?o=o&status=2">Pending Collectibles</a></li>	
 								<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search')); ?></li>
 							</ul>
 						</li>

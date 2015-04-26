@@ -1,10 +1,20 @@
-define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'views/app/collectible/edit/view.company', 'collections/collection.brands', 'views/app/collectible/edit/view.series', 'views/app/collectible/edit/view.company.series', 'select2'], function(Backbone, $, SeriesModel, CompanyModel, CompanyView, Brands, SeriesView, CompanySeriesView) {
+define(function(require) {
+    var Backone = require('backbone'),
+        $ = require('jquery'),
+        SeriesModel = require('models/model.series'),
+        Brands = require('collections/collection.brands'),
+        SeriesView = require('views/app/collectible/edit/view.series'),
+        CompanySeriesView = require('views/app/collectible/edit/view.company.series');
+    require('select2');
+
+
     var lastResults = [];
     var CollectibleView = Backbone.View.extend({
         className: "row",
         events: {
             'change #inputManufacturer': 'changeManufacturer',
             'click #buttonSeries': 'changeSeries',
+            'click #collectibletype_id': 'changeCollectibleType',
             'click .save': 'save',
             "change input": "fieldChanged",
             "change select": "selectionChanged",
@@ -71,6 +81,7 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                     silent: true
                 });
             }, this);
+            this.model.on("change:collectibletype_id", this.render, this);
             this.model.on("change:limited", this.render, this);
             this.model.on("change:edition_size", this.render, this);
             // this.model.on("change:series_id", this.render, this);
@@ -177,6 +188,11 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
             var collectibleType = this.collectibleType.toJSON();
             var collectible = this.model.toJSON();
             var status = this.status.toJSON();
+            // I think previous this was required by the DB and so it defaulted
+            // to zero.
+            if (collectible.collectibletype_id == '0') {
+                delete collectible.collectibletype_id;
+            }
             var data = {
                 collectible: collectible,
                 manufacturers: this.manufacturers.toJSON(),
@@ -186,6 +202,10 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                 collectibleType: collectibleType,
                 brands: this.brands.toJSON()
             };
+
+            if (this.model.parsedCollectible) {
+                data.parsedCollectible = this.model.parsedCollectible.toJSON();
+            }
             // If it is a custom, we are not showing
             // the manufacturer list cause it doesn't make sense
             // but we do want to show the brand list
@@ -366,6 +386,9 @@ define(['backbone', 'jquery', 'models/model.series', 'models/model.company', 'vi
                 silent: true
             });
             this.series.fetch();
+        },
+        changeCollectibleType: function(event) {
+            this.trigger('collectibletype:select');
         },
         save: function(event) {
             var self = this;

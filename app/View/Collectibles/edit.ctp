@@ -26,6 +26,19 @@ if(isset($allowDelete) && $allowDelete){
 } else {
 	echo $this -> Html -> scriptBlock('var allowDelete = false;', array('inline' => false));
 }
+
+$output = $this -> Tree -> generate($collectibleTypes, array('id' => 'tree', 'model' => 'Collectibletype', 'element' => 'tree_create_collectibletype_node'));
+$output = str_replace(array("\r\n", "\r", "\n"),'' , $output);
+$lines = explode("\n", $output);
+$new_lines = array();
+
+foreach ($lines as $i => $line) {
+    if(!empty($line))
+        $new_lines[] = trim($line);
+}
+
+echo $this -> Html -> scriptBlock('var collectiblTypeHtml = \'' .  implode($new_lines) . '\';', array('inline' => false));
+
 // load these last so we the other data is loaded first!
 echo $this -> Minify -> script('pages/page.collectible.edit', array('inline' => false));
 echo $this -> Minify -> script('locale', array('inline' => false));

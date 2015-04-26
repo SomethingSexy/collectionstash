@@ -20,6 +20,7 @@ define(function(require) {
         PartAddExistingView = require('views/app/collectible/edit/view.part.add.existing'),
         CollectibleSearchView = require('views/app/collectible/edit/view.collectible.search'),
         CompanyView = require('views/app/collectible/edit/view.company'),
+        CollectibleTypeView = require('views/app/collectible/edit/view.collectibletype'),
         ModalRegion = require('views/common/modal.region'),
         CollectibleModel = require('models/model.collectible'),
         Status = require('models/model.status'),
@@ -539,7 +540,9 @@ define(function(require) {
     return {
         start: function() {
             // Setup the current model
-            var collectibleModel = new CollectibleModel(rawCollectible.Collectible);
+            var collectibleModel = new CollectibleModel(rawCollectible.Collectible, {
+                parse: true
+            });
             var collectibleTypeModel = new CollectibleTypeModel(rawCollectible.Collectibletype);
             // Setup the manufacturer list, this will contain all data for each manufacturer
             var manufacturerList = new ManufacturerList(rawManufacturers, {
@@ -664,8 +667,29 @@ define(function(require) {
                         // App.comments.add(response);
                     }
                     partsLayout.modal.hideModal();
-                    
+
                     collectibleView.render();
+                });
+            });
+
+            collectibleView.on('collectibletype:select', function() {
+
+                var collectibleTypeView = new CollectibleTypeView({
+                    model: new Backbone.Model(),
+                    collectiblTypeHtml: collectiblTypeHtml
+                });
+                partsLayout.modal.show(collectibleTypeView);
+
+                collectibleTypeView.on('select:type', function(id, label) {
+                    collectibleTypeModel.set({
+                        id: id,
+                        name: label
+                    });
+                    collectibleModel.set({
+                        collectibletype_id: id,
+                        collectibleType: label
+                    });
+                    partsLayout.modal.hideModal();
                 });
             });
 
@@ -675,7 +699,8 @@ define(function(require) {
             }).render().el);
             $('#collectible-container').append(new PersonsView({
                 collection: artists,
-                collectibleType: collectibleTypeModel
+                collectibleType: collectibleTypeModel,
+                model: collectibleModel
             }).render().el);
             $('#collectible-container').append(collectibleView.render().el);
             $('#collectible-container').append(new TagsView({
@@ -764,7 +789,9 @@ define(function(require) {
                 });
             } else {
                 // view is overkill here
-                dust.render('directional.page', {}, function(error, output) {
+                dust.render('directional.page', {
+                    'parsed_from_url': collectibleModel.get('parsed_from_url')
+                }, function(error, output) {
                     $('#directional-text-container').html(output);
                 });
             }

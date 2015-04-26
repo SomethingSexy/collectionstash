@@ -105,9 +105,15 @@
 			{/eq}
 		{/eq}
 		{@eq key="{status.id}" value="2"}
+			<div class="btn-group">
 			{@eq key="{allowEdit}" value="true" type="boolean"}
-				<button class="btn btn-danger submit" type="button">Make draft</button>
+				<button class="btn btn-warning submit" type="button">Make draft</button>
 			{/eq}
+			{@eq key="{showApproval}" value="true" type="boolean"}
+				<button class="btn btn-success _approve" type="button">Approve</button>
+				<button class="btn btn-danger _deny" type="button">Deny</button>
+			{/eq}	
+			</div>		
 		{/eq}
 		{@eq key="{allowDelete}" value="true" type="boolean"}
 			<div class="btn-group">

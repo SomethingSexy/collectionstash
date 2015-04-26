@@ -7,20 +7,12 @@
 		{{/primary}}
 	{{/Collectible.CollectiblesUpload}}
 	{{^Collectible.CollectiblesUpload}}
-		<a target="_blank" href="/collectibles_users/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
+		<a target="_blank" href="javascript:void(0);" class=""><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}
 	</div>
 	<div class="caption">
 	<h3>
-	{{#Collectible.custom}}
-		<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
-	{{/Collectible.custom}}
-	{{#Collectible.original}}
-		<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
-	{{/Collectible.original}}
-	{{^Collectible.original}}{{^Collectible.custom}}
-		<a class="title" target="_blank" href="/collectibles_users/view/{{id}}">{{{Collectible.displayTitle}}}</a>
-	{{/Collectible.custom}}{{/Collectible.original}}
+		{{{Collectible.displayTitle}}}
 	</h3>
 
 	<div class="_actions  menu tile-links clearfix adjust">

@@ -60,9 +60,13 @@ cake -app D:\Development\wamp\www\app process_collectible_price
 
 cake -app D:\Development\wamp\www\collectionstash\app one_time_convert_to_wish_list
 
+
+
 cake -app D:\Development\wamp\www\collectionstash\app phpunit
 cake -app F:\Development\projects\collectionstash\app one_time_update_collectible_views
 cake -app F:\Development\projects\collectionstash\app process_collectible_views
+cake -app F:\Development\projects\collectionstash\app process_activities
+cake -app F:\Development\projects\collectionstash\app one_time_add_wish_list
 
 linux: ./cake 
 
@@ -78,8 +82,13 @@ linux: ./cake
 
 ./cake -app /var/www/collectionstash/app process_points
 
+
+
+/var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app process_activities
 /var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app process_points
 /var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app process_transactions
+/var/www/collectionstash/lib/Cake/Console/cake -app /var/www/collectionstash/app one_time_add_wish_list
+
 
 
 ./cake -app /var/www/collectionstash/app one_time_add_points_fact_table

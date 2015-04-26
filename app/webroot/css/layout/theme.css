@@ -1261,6 +1261,11 @@ background-color: none !important;
 .marked-for-sale a {
     color: green;
 }
+
+.parsed-value {
+    margin-top: 5px;
+    color: gray;
+}
 /*!
  * Yamm!3
  * Yet another megamenu for Bootstrap 3

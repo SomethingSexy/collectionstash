@@ -18,3 +18,4 @@
 /node_modules
 /app/webroot/dist
 /app/webroot/dist-prep
+/vendor

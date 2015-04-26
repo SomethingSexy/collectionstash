@@ -2,7 +2,7 @@
 $config['Settings'] = Configure::read('Settings');
 
 $config['Settings'] = Set::merge($config['Settings'], array(
-	'version' => '3.11.2',
+	'version' => '4.0.1',
   	'title' => 'My Application',
   	'domain' => 'http://collectionstash.com',
   	'registration' => array(
@@ -26,7 +26,8 @@ $config['Settings'] = Set::merge($config['Settings'], array(
   	'Collectible' => array (
 		'Edit' => array (
 			'allowed' => true,
-			'auto-approve' => false	
+			'auto-approve' => false,
+			'allow-import' => true
 		),
 		'Contribute' => array(
 			'allowed'=> true

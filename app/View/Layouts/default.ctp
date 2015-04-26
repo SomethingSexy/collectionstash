@@ -101,8 +101,6 @@ if (isset($bodyClass))
 			    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
 			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".top-nav">
 				    <span class="fa fa-bars"></span>
-				    <span class="fa fa-bars"></span>
-				    <span class="fa fa-bars"></span>
 			    </button>
 				<a class="navbar-brand" href="#"><img src="/img/icon/add_stash_link_25x25.png"></a>
 			</div>
@@ -133,6 +131,7 @@ if (isset($bodyClass))
 						
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 							<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
+							<li><a href="/collectibles/catalog?o=o&status=2">Pending Collectibles</a></li>							
 							<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search')); ?></li>
 						</ul>
 					</li>

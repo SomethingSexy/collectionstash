@@ -11,25 +11,27 @@
     if (template && dust) {
         dust.loadSource(dust.compile(template, 'status.edit'));
     }
-
     var StatusView = Backbone.View.extend({
         template: 'status.edit',
         className: "col-md-12",
         events: {
             'click .submit': 'changeStatus',
-            'click .delete': 'remove'
+            'click .delete': 'remove',
+            'click ._approve': 'approve',
+            'click ._deny': 'deny'
         },
         initialize: function(options) {
             options.allowEdit ? this.allowEdit = true : this.allowEdit = false;
             this.collectible = options.collectible ? options.collectible : {};
             this.allowDelete = (options.allowDelete && options.allowDelete === true) ? true : false;
+            this.showApproval = options.showApproval;
         },
         render: function() {
             var self = this;
-
             var model = this.model.toJSON();
             model.allowEdit = this.allowEdit;
             model.allowDelete = this.allowDelete;
+            model.showApproval = this.showApproval;
             if (this.collectible) {
                 model.collectible = this.collectible.toJSON();
             }
@@ -38,16 +40,20 @@
             });
             return this;
         },
+        approve: function(event) {
+            this.trigger('view:approve');
+        },
+        deny: function(event) {
+            this.trigger('view:deny');
+        },
         changeStatus: function(event) {
             $(event.currentTarget).button('loading');
             this.model.save({}, {
                 error: function(model, response) {
                     $(event.currentTarget).button('reset');
-
                     if (response.status === 500) {
                         model.trigger('status:change:error:severe');
                     } else {
-
                         var responseObj = $.parseJSON(response.responseText);
                         if (responseObj.response.data.hasOwnProperty('dupList')) {
                             model.trigger('status:change:dupList', responseObj.response.data.dupList);
@@ -65,16 +71,12 @@
                 this.collectible.destroy({
                     wait: true,
                     error: function(model, response) {
-
                         var responseObj = $.parseJSON(response.responseText);
-
                         model.trigger('status:change:error', responseObj.response.errors);
-
                     }
                 });
             }
         }
     });
-
     return StatusView;
 }));

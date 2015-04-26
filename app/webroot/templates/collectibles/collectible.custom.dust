@@ -25,6 +25,21 @@
 		<legend>
 			Product Details
 		</legend>
+		<div class="form-group">
+			<label class="control-label col-lg-3" for="inputName">Platform</label>
+			<div class="col-lg-6">
+				<div class="btn-group">
+					<button id="collectibletype_id" type="button" class="btn btn-default">
+						{#collectible.collectibletype_id name=collectibleType.name}
+							{name}
+						{:else}
+							Select
+						{/collectible.collectibletype_id}
+					</button>
+				</div>
+				<input type="hidden" id="collectibletype_id" name="collectibletype_id" value="{collectible.collectibletype_id}">
+			</div>
+		</div>		
 		{@eq key="{renderManList}" value="true" type="boolean"}
 		<div class="control-group">
 			<label class="control-label" for="inputManufacturer">Manufacturer</label>
