@@ -203,7 +203,7 @@ define(function(require) {
                     opacity: 0.80
                 }).appendTo("body").fadeIn(200);
             }
-            if (typeof transactionsGraphData !=='undefined' && !_.isEmpty(transactionsGraphData)) {
+            if (typeof transactionsGraphData !== 'undefined' && !_.isEmpty(transactionsGraphData)) {
                 $.plot("#holder", [transactionsGraphData], {
                     xaxis: {
                         mode: "time",
