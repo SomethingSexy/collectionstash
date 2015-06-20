@@ -192,14 +192,17 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 									echo '</li>';									
 								}
 
-								// if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
-								// 	$userSubscribed = 'false';
-								// 	if (array_key_exists($collectibleDetail['Collectible']['entity_type_id'], $subscriptions)) {
-								// 		$userSubscribed = 'true';
-								// 	}
-								// 	echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="" href="#"><i class="fa fa-heart"></i> Watch</a></li>';
+								if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
+									$userSubscribed = 'false';
+	
+									foreach ($favorites['Collectible'] as $key => $value) {
+										if($value['id'] === $collectibleDetail['Collectible']['id']) {
+											$userSubscribed = 'true';
+										}
+									}
+									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-entity-type="stash" data-entity-type-id="' . $collectibleDetail['Collectible']['entity_type_id'] . '" class="" href="#"><i class="fa fa-heart"></i> Watch</a></li>';
 
-								// }
+								}
 
 								if ($showWho) {
 									echo '<li><a class="" title="Registry" href="/collectibles_users/registry/' . $collectibleDetail['Collectible']['id'] . '"><i class="fa fa-group"></i> Registry</a></li>';
