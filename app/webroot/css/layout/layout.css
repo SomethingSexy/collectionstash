@@ -90,3 +90,8 @@ body.home {
         padding-top: 60px;
    }
 }
+@media (max-width: 480px) { 
+    .nav-tabs > li {
+        float:none;
+    }
+}
