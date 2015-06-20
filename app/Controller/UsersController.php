@@ -202,8 +202,8 @@ class UsersController extends AppController
                             CakeLog::write('info', $results);
                             $this->Session->write('user', $user);
                             
-                            // $subscriptions = $this->User->Subscription->getSubscriptions($user['id']);
-                            // $this->Session->write('subscriptions', $subscriptions);
+                            $favorites = $this->User->Favorite->getFavorites($user['id']);
+                            $this->Session->write('favorites', $favorites);
                             
                             CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
                             // grab the total number of unread notifications

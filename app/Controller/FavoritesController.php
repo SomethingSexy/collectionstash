@@ -7,6 +7,7 @@ class FavoritesController extends AppController {
         $this->autoRender = false;
 
         debug($this->Favorite -> find('first', array('conditions'=> array('Favorite.id'=> 1))));
+        debug($this->Favorite -> find('first', array('conditions'=> array('Favorite.user_id'=> 1))));
     }
 }
 ?>

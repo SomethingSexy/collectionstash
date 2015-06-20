@@ -108,15 +108,15 @@ class AppController extends Controller
         return $user['User']['id'];
     }
     
-    // public function getSubscriptions() {
-    //     $subscriptions = $this->Session->read('subscriptions');
+    public function getFavorites() {
+        $subscriptions = $this->Session->read('favorites');
     
-    //     if ($subscriptions === null) {
-    //         return array();
-    //     } else {
-    //         return $subscriptions;
-    //     }
-    // }
+        if ($subscriptions === null) {
+            return array();
+        } else {
+            return $subscriptions;
+        }
+    }
     
     public function getNotificationsCount() {
         $count = $this->Session->read('notificationsCount');
