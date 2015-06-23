@@ -13,7 +13,7 @@ define(function(require) {
         CommentsView = require('views/common/view.comments'),
         CommentAddView = require('views/common/view.comment.add'),
         CommentsCollection = require('collections/collection.comments'),
-        subscribe = require('views/common/cs.subscribe'),
+        subscribe = require('views/common/utility.subscribe'),
         Status = require('models/model.status'),
         StatusView = require('views/view.status');
     require('jquery.blueimp-gallery');

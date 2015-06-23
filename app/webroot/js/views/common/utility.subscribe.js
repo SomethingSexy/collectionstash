@@ -1,4 +1,6 @@
-define(['require', 'jquery'], function(require, $) {
+define(function(require){
+    var $ = require('jquery');
+
 	// convert this to a better format lateer
     return {
         run: function() {
@@ -27,16 +29,18 @@ define(['require', 'jquery'], function(require, $) {
                 }
                 $(this).attr('data-subscribed', subscribed);
                 //This is the id of the entity we are subscribing to
-                var entityTypeId = $(this).attr('data-entity-type-id');
+                var typeId = $(this).attr('data-type-id');
+                var type = $(this).attr('data-type');
 
                 $.ajax({
                     type: "post",
                     data: {
-                        'data[Subscription][entity_type_id]': entityTypeId,
-                        'data[Subscription][subscribed]': subscribed,
+                        'data[Favorite][type_id]': typeId,
+                        'data[Favorite][type]': type,
+                        'data[Favorite][subscribed]': subscribed,
                     },
                     dataType: 'json',
-                    url: '/subscriptions/subscribe.json',
+                    url: '/favorites/favorite.json',
                     beforeSend: function(jqXHR, settings) {
 
                     },
@@ -54,6 +58,4 @@ define(['require', 'jquery'], function(require, $) {
 
         }
     };
-
-
 });
