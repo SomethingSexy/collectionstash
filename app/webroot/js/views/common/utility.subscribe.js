@@ -40,7 +40,7 @@ define(function(require){
                         'data[Favorite][subscribed]': subscribed,
                     },
                     dataType: 'json',
-                    url: '/favorites/favorite.json',
+                    url: '/favorites/favorite',
                     beforeSend: function(jqXHR, settings) {
 
                     },

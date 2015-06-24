@@ -7,6 +7,13 @@ class FavoritesController extends AppController {
         $this->autoRender = false;
         debug($this->Favorite->find('first', array('conditions' => array('Favorite.id' => 1))));
         debug($this->Favorite->find('first', array('conditions' => array('Favorite.user_id' => 1))));
+        debug($this->Favorite->CollectibleFavorite->find('all', array('conditions' => array('CollectibleFavorite.collectible_id' => '1'), 'joins' => array(array('table' => 'favorites', 'alias' => 'Favorite1', 'type' => 'inner', 'conditions' => array('CollectibleFavorite.favorite_id = Favorite1.id', 'Favorite1.user_id = 2'))))));
+        
+        $data['Favorite'] = array('user_id' => 2);
+        $data['CollectibleFavorite'] = array('collectible_id' => 10);
+        if ($this->Favorite->saveAssociated($data, array('validate' => false, 'deep' => true))) {
+            $retVal = true;
+        }
     }
     
     public function favorite() {
@@ -19,9 +26,9 @@ class FavoritesController extends AppController {
             return;
         }
         if ($this->request->is('post') || $this->request->is('put')) {
-            $type = $this->request->data['Subscription']['type'];
-            $id = $this->request->data['Subscription']['id'];
-            $subscribed = $this->request->data['Subscription']['subscribed'];
+            $type = $this->request->data['Favorite']['type'];
+            $id = $this->request->data['Favorite']['type_id'];
+            $subscribed = $this->request->data['Favorite']['subscribed'];
             $userId = $this->getUserId();
             if ($this->Favorite->addSubscription($id, $type, $userId, $subscribed)) {
                 // $subscriptions = $this->getSubscriptions();
@@ -29,7 +36,7 @@ class FavoritesController extends AppController {
                 //     // When you log in, it is pulling in the id of the subscription as the value
                 //     // Not sure it really matters
                 //     $subscriptions[$entityTypeId] = $this->Subscription->id;
-                // } 
+                // }
                 // else {
                 //     unset($subscriptions[$entityTypeId]);
                 // }
@@ -38,7 +45,7 @@ class FavoritesController extends AppController {
                 return;
             } 
             else {
-                $this->response->statusCode(200);
+                $this->response->statusCode(400);
                 $this->response->body('{}');
                 return;
             }
