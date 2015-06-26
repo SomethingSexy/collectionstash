@@ -45,12 +45,7 @@ define(function(require){
 
                     },
                     success: function(data, textStatus, XMLHttpRequest) {
-                        if (data.success.isSuccess) {
-
-                        } else {
-
-                        }
-
+                        // eh don't do anything
                     }
                 });
 
