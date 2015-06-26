@@ -14,6 +14,8 @@ class FavoritesController extends AppController {
         if ($this->Favorite->saveAssociated($data, array('validate' => false, 'deep' => true))) {
             $retVal = true;
         }
+
+        debug($this->Favorite->getCollectibleFavorite('4988', 1));
     }
     
     public function favorite() {
