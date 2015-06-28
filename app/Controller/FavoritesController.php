@@ -1,7 +1,8 @@
 <?php
 class FavoritesController extends AppController {
     
-    public $helpers = array('Html', 'Js', 'Minify');
+    public $helpers = array('Html', 'Js', 'Minify', 'FileUpload.FileUpload');
+    public $components = array('Image');
     // public function index() {
     //     $this->autoRender = false;
     //     debug($this->Favorite->find('first', array('conditions' => array('Favorite.id' => 1))));
@@ -24,21 +25,25 @@ class FavoritesController extends AppController {
             $user = $this->Favorite->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
             $this->paginate = array('paramType' => 'querystring', 'limit' => 25, 'contain' => array('CollectibleFavorite' => array('Collectible' => array('CollectiblesUpload' => array('Upload')))), 'conditions' => array('Favorite.user_id' => $user['User']['id']));
             $favorites = $this->paginate('Favorite');
-            debug($favorites);
-            foreach ($favorites as $key => $value) {
-                if (isset($value['CollectibleFavorite'])) {
-                }
-                // $img = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'imagePathOnly' => true));
-                // $resizedImg = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 200, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
-                // $largeThumbnail = $this->Image->image($value['UserUpload']['name'], array('uploadDir' => Configure::read('Settings.User.uploads.root-folder') . '/' . $user['User']['id'], 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
-                // $userUploads[$key]['UserUpload']['imagePath'] = $img['path'];
-                // $userUploads[$key]['UserUpload']['resizedImagePath'] = $resizedImg['path'];
-                // $userUploads[$key]['UserUpload']['thumbnailUrl'] = $largeThumbnail['path'];
-            }
             
+            foreach ($favorites as $key => & $value) {
+                if (isset($value['CollectibleFavorite'])) {
+                    if (!empty($value['CollectibleFavorite']['Collectible']['CollectiblesUpload'])) {
+                        foreach ($value['CollectibleFavorite']['Collectible']['CollectiblesUpload'] as $key => & $upload) {
+                            $img = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'imagePathOnly' => true));
+                            $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'width' => 200, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                            $largeThumbnail = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
+                            $upload['Upload']['imagePath'] = $img['path'];
+                            $upload['Upload']['resizedImagePath'] = $resizedImg['path'];
+                            $upload['Upload']['thumbnailUrl'] = $largeThumbnail['path'];
+                        }
+                    }
+                }
+            }
             // $userUploads = Set::extract('/UserUpload/.', $userUploads);
             
             // $this->set('uploads', $userUploads);
+            debug($favorites);
         } 
         else {
             $this->response->body(__('Invalid request.'));
