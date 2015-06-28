@@ -35,10 +35,8 @@ class FavoritesController extends AppController {
                         foreach ($value['CollectibleFavorite']['Collectible']['CollectiblesUpload'] as $uploadKey => $upload) {
                             $img = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'imagePathOnly' => true));
                             $resizedImg = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'width' => 200, 'height' => 200, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
-                            $largeThumbnail = $this->Image->image($upload['Upload']['name'], array('uploadDir' => Configure::read('Settings.Collectible.upload-directory'), 'width' => 400, 'height' => 400, 'imagePathOnly' => true, 'resizeType' => 'adaptive'));
                             $favorites[$key]['CollectibleFavorite']['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['imagePath'] = $img['path'];
                             $favorites[$key]['CollectibleFavorite']['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['resizedImagePath'] = $resizedImg['path'];
-                            $favorites[$key]['CollectibleFavorite']['Collectible']['CollectiblesUpload'][$uploadKey]['Upload']['thumbnailUrl'] = $largeThumbnail['path'];
                         }
                     }
                 }
