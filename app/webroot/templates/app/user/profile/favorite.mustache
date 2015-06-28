@@ -1,0 +1,14 @@
+<div class="image">
+	{{#CollectibleFavorite}}
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="{{Upload.imagePath}}" class="">
+				<img class="" src="{{Upload.resizedImagePath}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectibles_users/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}	
+	{{/CollectibleFavorite}}
+</div>

@@ -1,9 +1,9 @@
 define(function(require) {
     var Marionette = require('marionette'),
-        template = require('text!templates/app/user/profile/photo.mustache'),
+        template = require('text!templates/app/user/profile/favorite.mustache'),
         mustache = require('mustache');
     require('marionette.mustache');
-    
+
     return Marionette.ItemView.extend({
         className: 'tile photo',
         template: template,
