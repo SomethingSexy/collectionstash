@@ -2,8 +2,7 @@
 App::uses('Validation', 'Utility');
 App::uses('Sanitize', 'Utility');
 App::uses('CakeEmail', 'Network/Email');
-class UsersController extends AppController
-{
+class UsersController extends AppController {
     public $helpers = array('Html', 'Form', 'FileUpload.FileUpload', 'Minify');
     public $components = array('StashSearch');
     
@@ -25,7 +24,8 @@ class UsersController extends AppController
         $stash = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
         
         if ($stash['Stash']['privacy'] === '0' || ($loggedInUser['User']['id'] === $user['User']['id']) || ($stash['Stash']['privacy'] === '1' && $this->isLoggedIn())) {
-        } else {
+        } 
+        else {
             $this->set(compact('username'));
             $this->render('viewPrivate');
             return;
@@ -78,7 +78,8 @@ class UsersController extends AppController
             $stash['StashFact']['collectibles_user_count'] = $stashFacts['Stash']['collectibles_user_count'];
             $this->set('stashFacts', $stash['StashFact']);
             $permissions['edit_work'] = true;
-        } else {
+        } 
+        else {
             $permissions['edit_collectible_user'] = false;
             $permissions['show_stash_facts'] = false;
             $permissions['edit_work'] = false;
@@ -86,7 +87,8 @@ class UsersController extends AppController
         
         if ($this->isLoggedIn()) {
             $permissions['add_comment'] = true;
-        } else {
+        } 
+        else {
             $permissions['add_comment'] = false;
         }
         
@@ -130,7 +132,8 @@ class UsersController extends AppController
     public function home() {
         if ($this->isLoggedIn()) {
             $this->redirect('/profile/' . $this->getUsername());
-        } else {
+        } 
+        else {
             $this->redirect('/users/login');
         }
     }
@@ -162,7 +165,8 @@ class UsersController extends AppController
             $message = $this->Session->read('Message.error');
             $message = $message['message'];
             $messageType = 'error';
-        } else if ($this->Session->check('Message.success')) {
+        } 
+        else if ($this->Session->check('Message.success')) {
             $message = $this->Session->read('Message.success');
             $message = $message['message'];
             $messageType = 'success';
@@ -179,7 +183,8 @@ class UsersController extends AppController
                 $this->request->data['User']['email'] = $this->request->data['User']['username'];
                 $this->Auth->authenticate['Form'] = array('fields' => array('username' => 'email'));
                 $results = $this->User->getUserByEmail($this->request->data);
-            } else {
+            } 
+            else {
                 $results = $this->User->getUser($this->request->data['User']['username']);
             }
             
@@ -195,7 +200,8 @@ class UsersController extends AppController
                             $autoLogin = isset($this->request->data['User']['auto_login']) ? $this->request->data['User']['auto_login'] : false;
                             if ($autoLogin) {
                                 $this->AutoLogin->write($user['username'], $this->request->data['User']['password']);
-                            } else {
+                            } 
+                            else {
                                 $this->AutoLogin->delete();
                             }
                             
@@ -211,25 +217,29 @@ class UsersController extends AppController
                             $this->Session->write('notificationsCount', $totalNotifications);
                             
                             $this->redirect('/profile/' . $user['username']);
-                        } else {
+                        } 
+                        else {
                             $this->Session->setFlash(__('Username or password is incorrect', true), null, null, 'error');
                             $this->request->data['User']['password'] = '';
                             $this->request->data['User']['new_password'] = '';
                             $this->request->data['User']['confirm_password'] = '';
                             CakeLog::write('error', 'User ' . $this->request->data['User']['username'] . ' failed logging in at ' . date("Y-m-d H:i:s", time()));
                         }
-                    } else {
+                    } 
+                    else {
                         // $this -> Auth -> logout();
                         return $this->redirect(array('controller' => 'forgotten_requests', 'action' => 'forceResetPassword'));
                     }
-                } else {
+                } 
+                else {
                     // $this -> Auth -> logout();
                     $this->Session->setFlash(__('Your account has not been activated yet.', true), null, null, 'error');
                     $this->request->data['User']['password'] = '';
                     $this->request->data['User']['new_password'] = '';
                     $this->request->data['User']['confirm_password'] = '';
                 }
-            } else {
+            } 
+            else {
                 $this->Session->setFlash(__('Invalid Login.', true), null, null, 'error');
                 $this->request->data['User']['password'] = '';
                 $this->request->data['User']['new_password'] = '';
@@ -243,6 +253,9 @@ class UsersController extends AppController
         $user = $this->getUser();
         // $subscriptions = $this->User->Subscription->getSubscriptions($user['User']['id']);
         // $this->Session->write('subscriptions', $subscriptions);
+        
+        $favorites = $this->User->Favorite->getFavorites($user['User']['id']);
+        $this->Session->write('favorites', $favorites);
         
         $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['User']['id']);
         $this->Session->write('notificationsCount', $totalNotifications);
@@ -288,7 +301,8 @@ class UsersController extends AppController
                         if ($emailResult) {
                             $this->Session->setFlash('Your registration information was accepted');
                             $this->render('registrationComplete');
-                        } else {
+                        } 
+                        else {
                             //At this point sending the email failed, so we should roll it all back
                             $this->User->delete($newUserId);
                             $this->request->data['User']['password'] = '';
@@ -296,19 +310,22 @@ class UsersController extends AppController
                             $this->request->data['User']['confirm_password'] = '';
                             $this->Session->setFlash(__('There was a problem registering this information.', true), null, null, 'error');
                         }
-                    } else {
+                    } 
+                    else {
                         $this->request->data['User']['password'] = '';
                         $this->request->data['User']['new_password'] = '';
                         $this->request->data['User']['confirm_password'] = '';
                         $this->Session->setFlash(__('There was a problem registering this information.', true), null, null, 'error');
                     }
                 }
-            } else {
+            } 
+            else {
                 if ($email) {
                     $this->request->data['User']['email'] = $email;
                 }
             }
-        } else {
+        } 
+        else {
             $this->redirect(array('action' => 'login'), null, true);
         }
     }
@@ -328,15 +345,18 @@ class UsersController extends AppController
                     // Let the user know they can now log in!
                     $this->Session->setFlash(__('Your account has been activated, please log in below', true), null, null, 'success');
                     $this->redirect('login');
-                } else {
+                } 
+                else {
                     $this->set('userId', $user_id);
                     $this->render('activationExpired');
                 }
-            } else {
+            } 
+            else {
                 $this->Session->setFlash(__('Your account has already been activated!', true), null, null, 'error');
                 $this->redirect('login');
             }
-        } else {
+        } 
+        else {
             $this->Session->setFlash(__('That user does not exist, please register.', true), null, null, 'error');
             $this->redirect('login');
         }
@@ -355,19 +375,23 @@ class UsersController extends AppController
                         //do nothing
                         
                         
-                    } else {
+                    } 
+                    else {
                         //Do what?
                         
                         
                     }
-                } else {
+                } 
+                else {
                     $this->Session->setFlash(__('Your account has already been activated!', true), null, null, 'error');
                     $this->redirect('login');
                 }
-            } else {
+            } 
+            else {
                 $this->redirect('login');
             }
-        } else {
+        } 
+        else {
             $this->redirect('login');
         }
     }
@@ -407,24 +431,28 @@ class UsersController extends AppController
                                 $this->Session->setFlash(__('Your password has been successfully changed, please log in below', true), null, null, 'success');
                                 $this->redirect('login');
                             }
-                        } else {
+                        } 
+                        else {
                             $this->request->data['User']['password'] = '';
                             $this->request->data['User']['new_password'] = '';
                             $this->request->data['User']['confirm_password'] = '';
                             $this->Session->setFlash(__('Oops! Something wasn\'t entered correctly, please try again.', true), null, null, 'error');
                         }
                     }
-                } else {
+                } 
+                else {
                     //If it is expired, lets delete cause it is not needed out there
                     $this->ForgottenRequest->delete($forgottenRequest['ForgottenRequest']['id']);
                     $this->Session->setFlash(__('The key to reset your password as expired, please resubmit the request.', true), null, null, 'error');
                     $this->redirect(array('controller' => 'forgotten_requests', 'action' => 'forgotPassword'));
                 }
-            } else {
+            } 
+            else {
                 $this->Session->setFlash(__('Your request to reset your password was not found, if you need to reset your password select the link below.', true), null, null, 'error');
                 $this->redirect('login');
             }
-        } else {
+        } 
+        else {
             $this->Session->setFlash(__('Invalid request to reset your password.', true), null, null, 'error');
             $this->redirect('login');
         }

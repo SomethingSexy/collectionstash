@@ -1,7 +1,7 @@
 <?php
 class Favorite extends AppModel {
     public $name = 'Favorite';
-    public $hasOne = array('UserFavorite', 'CollectibleFavorite');
+    public $hasOne = array('UserFavorite' => array('dependent' => true), 'CollectibleFavorite' => array('dependent' => true));
     public $belongsTo = array('User');
     public $actsAs = array('Containable');
     function afterFind($results, $primary = false) {

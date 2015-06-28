@@ -23,7 +23,6 @@ class FavoritesController extends AppController {
      * API to return a list of favorites per user.  This will be paginated.
      */
     public function index($username = null) {
-        $this->autoRender = false;
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->Favorite->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
@@ -55,8 +54,7 @@ class FavoritesController extends AppController {
                 }
             }
             
-            debug($extractFavorites);
-            $this->response->body(json_encode($extractFavorites));
+            $this -> set('favorites', $extractFavorites);
         } 
         else {
             $this->response->body(__('Invalid request.'));

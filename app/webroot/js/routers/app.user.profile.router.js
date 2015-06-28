@@ -13,6 +13,7 @@ define(['backbone', 'marionette'], function(Backbone, Marionette) {
             "*username/photos": "photos",
             "*username/history": "history",
             "*username/activity": "activity",
+            "*username/favorites": "favorite",
             "*username": "index"
         }
     });
