@@ -822,6 +822,12 @@ ul.profile-tabs li span.meta {
     width: 200px;
     margin-bottom: 0;
 }
+.favorites.tiles.boxed-tiles .tile {
+    width: 200px;
+    display: inline-block;
+    float: none;
+}
+
 
 .tiles .tile .header {
     padding: 0 20px;
