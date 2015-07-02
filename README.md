@@ -47,3 +47,10 @@ httpd.conf
 #### PHP
 Make sure php_soap, php_curl, and php_openssl extensions are enabled.
 
+## Tech
+Current List
+* CakePHP for the server framework.  Some stuff is still using traditional MVC.  These are either older pages or pages that SEO is more important.
+* RequireJS for module loading.  Not all pages have been converted over to this so there are some pages using a more traditional format.
+* Backbone/Marionette for client-side framework.   Some pages are not using Backbone at all, either older pages or smaller enough that it did not require a full framework.  There are also some pages that were using straight up Backbone before I started to use Marionette.  You will see that some of the app pages are a little goofy because of this.  I had to bootstrap the code until I can convert them over.
+* Mustache for templates.  I started to use dustjs but I have dropped it in favor or Mustache.  However, not everything has been converted over yet.
+* Bootstrap for the UI framework.  The entire site has been converted to bootstrap, no more jquery-ui.
