@@ -59,3 +59,5 @@ Current List
 Most of the script files in webroot/js at the root level are legacy.  All newer stuff is crammed into folders.
 
 The server-side is all PHP.  It isn't bad but it is also PHP so have to deal with some of that BS.  There is some good stuff there and some bad stuff there.  In some of the original files you can definitely tell that I was still trying to figure it out.
+
+The admin pages are a bit rough.  Since I am the only one who uses them, I haven't spent the time to update the UI.
