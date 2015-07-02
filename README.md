@@ -45,5 +45,5 @@ httpd.conf
     </Directory>
 
 #### PHP
-Make sure php_sopa, php_curl, and php_openssl extensions are enabled.
+Make sure php_soap, php_curl, and php_openssl extensions are enabled.
 
