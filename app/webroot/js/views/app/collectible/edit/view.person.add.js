@@ -1,4 +1,4 @@
-define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache', 'mustache', 'underscore', 'views/common/growl', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _, growl) {
     var lastResults = [];
     var AddPersonView = Marionette.ItemView.extend({
         template: template,
@@ -6,9 +6,7 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
             'click .add-artist': 'addArtist',
             'keypress #inputArtist': 'inputChange'
         },
-        initialize: function(options) {
-
-        },
+        initialize: function(options) {},
         onRender: function() {
             var self = this;
             $('.artists-typeahead', this.el).select2({
@@ -23,7 +21,7 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                             page_limit: 100
                         };
                     },
-                    results: function(data, page) { 
+                    results: function(data, page) {
                         lastResults = data;
                         return {
                             results: data
@@ -38,8 +36,8 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                 },
                 createSearchChoice: function(term, data) {
                     if (lastResults.some(function(r) {
-                        return r.name == term
-                    })) {
+                            return r.name == term
+                        })) {
                         return {
                             id: data.id,
                             name: name
@@ -62,7 +60,6 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
         addArtist: function() {
             var self = this,
                 valObj = $('.artists-typeahead', this.el).select2('data');
-
             var name = valObj && valObj.name ? valObj.name : '';
             name = $.trim(name);
             $('.inline-error', self.el).text('');
@@ -84,23 +81,7 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
                                 }
                             }
                         }
-                        $.blockUI({
-                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                            showOverlay: false,
-                            css: {
-                                top: '100px',
-                                'background-color': '#DDFADE',
-                                border: '1px solid #93C49F',
-                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                'border-radius': '4px 4px 4px 4px',
-                                color: '#333333',
-                                'margin-bottom': '20px',
-                                padding: '8px 35px 8px 14px',
-                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                'z-index': 999999
-                            },
-                            timeout: 2000
-                        });
+                        growl.onSuccess(message);
                     },
                     error: function(model, response) {
                         var responseObj = $.parseJSON(response.responseText);
@@ -114,6 +95,5 @@ define(['marionette', 'text!templates/app/collectible/edit/person.add.mustache',
             }
         }
     });
-
     return AddPersonView;
 });
