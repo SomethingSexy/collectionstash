@@ -39,6 +39,7 @@
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
 	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
+	echo $this -> Html -> css('/bower_components/toastr/toastr.min');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 	echo $this -> Html -> css('/bower_components/select2/select2');
