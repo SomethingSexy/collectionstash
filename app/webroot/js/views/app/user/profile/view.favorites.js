@@ -24,11 +24,8 @@ define(function(require) {
             };
         },
         itemEvents: {
-            "stash:remove": function(event, view, id) {
-                this.trigger('stash:remove', id);
-            },
-            "stash:sell": function(event, view, id) {
-                this.trigger('stash:sell', id);
+            "favorite:remove": function(event, view, id) {
+                this.trigger('favorite:remove', id);
             }
         },
         events: {

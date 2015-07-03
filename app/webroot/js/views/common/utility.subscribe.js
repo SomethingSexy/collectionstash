@@ -16,7 +16,7 @@ define(function(require){
              * server to set.  Right now it is assuming the server will work
              */
             $('#subscribe').click(function(event) {
-                event.preventDefault();
+              
                 //First check if I am subscribing or unsubcribing.. not sure it matters yet
                 //data-subscribed="false" data-entity-type="stash" data-entity-id
                 var subscribed = $(this).attr('data-subscribed');
@@ -48,7 +48,7 @@ define(function(require){
                         // eh don't do anything
                     }
                 });
-
+                  event.preventDefault();
             });
 
         }

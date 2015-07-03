@@ -8,16 +8,14 @@
 		{{/primary}}
 	{{/Collectible.CollectiblesUpload}}
 	{{^Collectible.CollectiblesUpload}}
-		<a target="_blank" href="/collectibles_users/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
+		<a target="_blank" href="/collectible/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}	
 	{{/CollectibleFavorite}}
 	<div class="tile-actions">
     	<div class="favorite-container" data-id="{{id}}">
-           <button type="button" class="btn-fave done" data-source="casanova-collections">
+           <button type="button" class="btn-fave _toggle">
            		<i class="fa fa-heart"></i>
-
-        </button>
+        	</button>
     	</div>
-
     </div>
 </div>

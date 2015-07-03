@@ -52,7 +52,7 @@ class FavoritesController extends AppController {
                 }
             }
             
-            $this -> set('favorites', $extractFavorites);
+            $this->set('favorites', $extractFavorites);
         } 
         else {
             $this->response->body(__('Invalid request.'));
@@ -60,7 +60,7 @@ class FavoritesController extends AppController {
         }
     }
     
-    public function favorite() {
+    public function favorite($id = null) {
         $data = array();
         $this->autoRender = false;
         //must be logged in to post comment
@@ -69,12 +69,36 @@ class FavoritesController extends AppController {
             $this->response->statusCode(401);
             return;
         }
+        $userId = $this->getUserId();
+        // legacy-ish stuff post/put is also removing
         if ($this->request->is('post') || $this->request->is('put')) {
             $type = $this->request->data['Favorite']['type'];
             $id = $this->request->data['Favorite']['type_id'];
             $subscribed = $this->request->data['Favorite']['subscribed'];
-            $userId = $this->getUserId();
+            $subscribed = ($subscribed === 'true');
+
             if ($this->Favorite->addSubscription($id, $type, $userId, $subscribed)) {
+                // $subscriptions = $this->getSubscriptions();
+                // if ($subscribed === 'true') {
+                //     // When you log in, it is pulling in the id of the subscription as the value
+                //     // Not sure it really matters
+                //     $subscriptions[$entityTypeId] = $this->Subscription->id;
+                // }
+                // else {
+                //     unset($subscriptions[$entityTypeId]);
+                // }
+                $this->response->statusCode(200);
+                $this->response->body('{}');
+                return;
+            } 
+            else {
+                $this->response->statusCode(400);
+                $this->response->body('{}');
+                return;
+            }
+        } 
+        else if ($this->request->is('delete')) {
+            if ($this->Favorite->removeFavorite($id, $userId)) {
                 // $subscriptions = $this->getSubscriptions();
                 // if ($subscribed === 'true') {
                 //     // When you log in, it is pulling in the id of the subscription as the value
