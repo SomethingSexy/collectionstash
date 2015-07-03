@@ -46,12 +46,14 @@ class Favorite extends AppModel {
      */
     public function addSubscription($id, $type, $userId, $subscribed = null) {
         $retVal = false;
-
-        $subscribed = ($subscribed === 'true');
+ 
+        $subscribed = ($subscribed === true || $subscribed === 'true' );
         
         if ($type === 'collectible') {
+
             // if we are subscribing, check to see if we are already subscribed
             if ($subscribed) {
+
                 // if one already exists, just return true
                 if (count($this->getCollectibleFavorite($id, $userId)) > 0) {
                     $retVal = true;
@@ -59,6 +61,7 @@ class Favorite extends AppModel {
                 else {
                     $data['Favorite'] = array('user_id' => $userId);
                     $data['CollectibleFavorite'] = array('collectible_id' => $id);
+
                     if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
                         $retVal = true;
                     }
@@ -67,9 +70,9 @@ class Favorite extends AppModel {
             else {
                 // at this point we want to remove our subscription
                 $favorite = $this->getCollectibleFavorite($id, $userId);
-
+                
                 if (!empty($favorite)) {
-                    if ($this->delete($favorite['Favorite']['id'])) {
+                    if ($this->removeFavorite($favorite['Favorite']['id'])) {
                         $retVal = true;
                     }
                 } 
@@ -82,6 +85,12 @@ class Favorite extends AppModel {
         }
         
         return $retVal;
+    }
+    /**
+     *
+     */
+    public function removeFavorite($id, $userId) {
+        return $this->delete($id);
     }
 }
 ?>
