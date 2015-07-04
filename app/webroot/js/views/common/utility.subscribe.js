@@ -1,3 +1,4 @@
+// TODO: this is the old format, convert into backbone/marionette
 define(function(require){
     var $ = require('jquery');
 

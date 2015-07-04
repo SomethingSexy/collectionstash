@@ -50,6 +50,7 @@ define(function(require) {
     MyApp.photos = new PhotosCollection([], {
         username: MyApp.profile.get('username')
     });
+    // this is the favorites used for paginating
     MyApp.favorites = new FavoritesCollection([], {
         username: MyApp.profile.get('username')
     });
