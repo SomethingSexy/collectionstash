@@ -33,6 +33,7 @@ class UsersController extends AppController {
         
         $profile = array();
         $profile['username'] = $user['User']['username'];
+        $profile['id'] = $user['User']['id'];
         $profile['member_since'] = date("F j, Y", strtotime($user['User']['created']));
         $profile['first_name'] = $user['User']['first_name'];
         $profile['last_name'] = $user['User']['last_name'];
