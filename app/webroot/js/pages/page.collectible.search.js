@@ -1,3 +1,4 @@
+// TOOD: turn this into the new app structure
 $(function() { 
     var filtersView = new FiltersView();
 

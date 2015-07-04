@@ -518,7 +518,7 @@ class CollectiblesController extends AppController {
             }
             
             $this->set('userUploads', $extractUserUploads);
-            debug($this->getFavorites());
+
             $this->set('favorites', $this->getFavorites());
 
             $this->layout = 'require';

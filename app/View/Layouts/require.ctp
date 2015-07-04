@@ -78,7 +78,7 @@
 					return;
 				js = d.createElement(s);
 				js.id = id;
-				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>
