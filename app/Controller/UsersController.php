@@ -251,8 +251,6 @@ class UsersController extends AppController {
     function _autoLogin() {
         CakeLog::write('info', '_autoLogin' . date("Y-m-d H:i:s", time()));
         $user = $this->getUser();
-        // $subscriptions = $this->User->Subscription->getSubscriptions($user['User']['id']);
-        // $this->Session->write('subscriptions', $subscriptions);
         
         $favorites = $this->User->Favorite->getFavorites($user['User']['id']);
         $this->Session->write('favorites', $favorites);
