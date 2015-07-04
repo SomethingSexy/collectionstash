@@ -32,6 +32,7 @@ define(function(require) {
         },
         favorite: function(event) {
             event.preventDefault();
+            this.model.set('favorited', true);
             Backbone.ajax({
                 type: "post",
                 data: {

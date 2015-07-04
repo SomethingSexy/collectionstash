@@ -97,7 +97,34 @@ class Favorite extends AppModel {
                 }
             }
         } 
-        else if ($type === 'stash') {
+        else if ($type === 'user') {
+            if ($subscribed) {
+                // if one already exists, just return true
+                if (count($this->getUserFavorite($id, $userId)) > 0) {
+                    $retVal = true;
+                } 
+                else {
+                    $data['Favorite'] = array('user_id' => $userId);
+                    $data['UserFavorite'] = array('user_id' => $id);
+                    
+                    if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
+                        $retVal = true;
+                    }
+                }
+            } 
+            else {
+                // at this point we want to remove our subscription
+                $favorite = $this->getUserFavorite($id, $userId);
+                
+                if (!empty($favorite)) {
+                    if ($this->removeFavorite($favorite['Favorite']['id'])) {
+                        $retVal = true;
+                    }
+                } 
+                else {
+                    $retVal = true;
+                }
+            }
         }
         
         return $retVal;
