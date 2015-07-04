@@ -386,18 +386,35 @@ div.subnav-fixed {
 
 .stash-layout .profile .pic {
     margin-top: 50px;
-    /*width: 120px;*/
-    /*margin-left: 50px;*/
     margin-bottom: -60px;
 }
+
+@media (max-width: 480px) {
+    .stash-layout .profile .pic {
+        margin-bottom: 0;
+    }
+}
+
 
 .stash-layout .profile .name {
     padding-left: 200px;
     font-size: 30px;
 }
 
+@media (max-width: 480px) {
+    .stash-layout .profile .name  {
+        padding-left: 0;
+    }
+}
+
 .stash-layout .profile .info {
     padding-left: 200px;
+}
+
+@media (max-width: 480px) {
+   .stash-layout .profile .info  {
+        padding-left: 0;
+    }
 }
 
 .stash-layout .profile .info span {
@@ -470,6 +487,13 @@ ul.profile-tabs li span.meta {
     font-size: 12px;
     font-weight: normal;
     color: #999;
+}
+
+/* hide until we decide what we want this to look like */
+@media (max-width: 480px) {
+    ul.profile-tabs  {
+        display: none;
+    }
 }
 
 .activities .activity {
@@ -1976,3 +2000,4 @@ ol.fancy-comments > li {
         margin-bottom: 0;
     }
 }
+
