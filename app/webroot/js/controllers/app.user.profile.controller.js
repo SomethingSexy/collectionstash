@@ -565,7 +565,8 @@ define(function(require) {
 
             App.layout.userCard.show(new UserView({
                 model: App.profile,
-                facts: App.facts
+                facts: App.facts,
+                permissions: App.permissions
             }));
         },
         index: function() {

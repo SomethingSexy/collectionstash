@@ -23,7 +23,7 @@
 			</ul>
 	    </div>
         <div class="blockie pic"></div>
-        <div class="name"><small>{{username}}</small></div>
+        <div class="name"><small>{{username}}</small> {{#permissions.showFavorite}}<a class="btn btn-default btn-sm _favorite" data-type-id="{{id}}" data-type="user" href="#"><i class="fa fa-heart{{^favorited}}-o{{/favorited}}"></i></a>{{/permissions.showFavorite}}</div>
         <div class="info">
         	<span>Name: {{#display_name}}{{.}}{{/display_name}}{{^display_name}}{{first_name}}{{/display_name}}</span><span>Member since {{member_since}}</span>{{#location}}<span>{{.}}</span>{{/location}}
         </div>

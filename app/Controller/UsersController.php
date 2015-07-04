@@ -39,7 +39,6 @@ class UsersController extends AppController {
         $profile['display_name'] = $user['Profile']['display_name'];
         $profile['location'] = $user['Profile']['location'];
         $profile['entity_type_id'] = $stash['Stash']['entity_type_id'];
-        $this->set(compact('profile'));
         // grab stash information..note collectibles_user_count is all collectibles in the stash including history
         $stashFacts = $this->User->Stash->find('first', array('conditions' => array('Stash.user_id' => $user['User']['id']), 'contain' => array('StashFact')));
         $currentOwnedCount = $this->User->CollectiblesUser->find('count', array('conditions' => array('CollectiblesUser.user_id' => $user['User']['id'], 'active' => true), 'contain' => false));
@@ -78,24 +77,29 @@ class UsersController extends AppController {
             $stash['StashFact']['collectibles_user_count'] = $stashFacts['Stash']['collectibles_user_count'];
             $this->set('stashFacts', $stash['StashFact']);
             $permissions['edit_work'] = true;
+            $permissions['showFavorite'] = false;
         } 
         else {
             $permissions['edit_collectible_user'] = false;
             $permissions['show_stash_facts'] = false;
             $permissions['edit_work'] = false;
+            $permissions['showFavorite'] = true;
         }
         
         if ($this->isLoggedIn()) {
             $permissions['add_comment'] = true;
+            $profile['favorited'] = $this->User->Favorite->isFavorited($user['User']['id'], $loggedInUser['User']['id'], 'user');
         } 
         else {
             $permissions['add_comment'] = false;
+            $profile['favorited'] = false;
         }
         
         $reasons = $this->Stash->CollectiblesUser->CollectibleUserRemoveReason->find('all', array('contain' => false));
         $this->set(compact('reasons'));
         
         $this->set(compact('permissions'));
+        $this->set(compact('profile'));
         
         $this->set('filters', $this->StashSearch->getFilters($user['User']['id']));
         // retrieve all comments
