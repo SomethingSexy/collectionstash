@@ -203,7 +203,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 										}
 									}
 
-									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-type="collectible" data-type-id="' . $collectibleDetail['Collectible']['id'] . '" class="" href="#"><i class="fa fa-heart"></i> Watch</a></li>';
+									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-type="collectible" data-type-id="' . $collectibleDetail['Collectible']['id'] . '" class="" href="#"><i class="fa fa-heart"></i> Favorite</a></li>';
 
 								}
 

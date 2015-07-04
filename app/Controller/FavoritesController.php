@@ -76,17 +76,11 @@ class FavoritesController extends AppController {
             $id = $this->request->data['Favorite']['type_id'];
             $subscribed = $this->request->data['Favorite']['subscribed'];
             $subscribed = ($subscribed === 'true');
-
+            
             if ($this->Favorite->addSubscription($id, $type, $userId, $subscribed)) {
-                // $subscriptions = $this->getSubscriptions();
-                // if ($subscribed === 'true') {
-                //     // When you log in, it is pulling in the id of the subscription as the value
-                //     // Not sure it really matters
-                //     $subscriptions[$entityTypeId] = $this->Subscription->id;
-                // }
-                // else {
-                //     unset($subscriptions[$entityTypeId]);
-                // }
+                // reset the favorites in the session
+                $favorites = $this->Favorite->getFavorites($userId);
+                $this->Session->write('favorites', $favorites);
                 $this->response->statusCode(200);
                 $this->response->body('{}');
                 return;
@@ -99,15 +93,9 @@ class FavoritesController extends AppController {
         } 
         else if ($this->request->is('delete')) {
             if ($this->Favorite->removeFavorite($id, $userId)) {
-                // $subscriptions = $this->getSubscriptions();
-                // if ($subscribed === 'true') {
-                //     // When you log in, it is pulling in the id of the subscription as the value
-                //     // Not sure it really matters
-                //     $subscriptions[$entityTypeId] = $this->Subscription->id;
-                // }
-                // else {
-                //     unset($subscriptions[$entityTypeId]);
-                // }
+                // reset the favorites in the session
+                $favorites = $this->Favorite->getFavorites($userId);
+                $this->Session->write('favorites', $favorites);
                 $this->response->statusCode(200);
                 $this->response->body('{}');
                 return;
