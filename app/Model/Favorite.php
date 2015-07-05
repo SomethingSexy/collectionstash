@@ -1,4 +1,6 @@
 <?php
+App::uses('CakeEvent', 'Event');
+App::uses('ActivityTypes', 'Lib/Activity');
 class Favorite extends AppModel {
     public $name = 'Favorite';
     public $hasOne = array('UserFavorite' => array('dependent' => true), 'CollectibleFavorite' => array('dependent' => true));
@@ -22,9 +24,9 @@ class Favorite extends AppModel {
     /**
      * Gets favorites and organizes them by type, either User or Collectible
      */
-    public function getFavorites($userId) {
+    public function getFavorites($user) {
         $organize = array('User' => array(), 'Collectible' => array());
-        $favorites = $this->find('all', array('conditions' => array('Favorite.user_id' => $userId)));
+        $favorites = $this->find('all', array('conditions' => array('Favorite.user_id' => $user['User']['id'])));
         foreach ($favorites as $key => & $favorite) {
             if (isset($favorite['UserFavorite'])) {
                 $favorite['id'] = $favorite['UserFavorite']['user_id'];
@@ -39,20 +41,20 @@ class Favorite extends AppModel {
         return $organize;
     }
     
-    public function getCollectibleFavorite($id, $userId) {
-        return $this->CollectibleFavorite->find('first', array('conditions' => array('CollectibleFavorite.collectible_id' => $id), 'joins' => array(array('table' => 'favorites', 'alias' => 'Favorite1', 'type' => 'inner', 'conditions' => array('CollectibleFavorite.favorite_id = Favorite1.id', 'Favorite1.user_id = ' . $userId)))));
+    public function getCollectibleFavorite($id, $user) {
+        return $this->CollectibleFavorite->find('first', array('conditions' => array('CollectibleFavorite.collectible_id' => $id), 'joins' => array(array('table' => 'favorites', 'alias' => 'Favorite1', 'type' => 'inner', 'conditions' => array('CollectibleFavorite.favorite_id = Favorite1.id', 'Favorite1.user_id = ' . $user['User']['id'])))));
     }
     
-    public function getUserFavorite($id, $userId) {
-        return $this->UserFavorite->find('first', array('conditions' => array('UserFavorite.user_id' => $id), 'joins' => array(array('table' => 'favorites', 'alias' => 'Favorite1', 'type' => 'inner', 'conditions' => array('UserFavorite.favorite_id = Favorite1.id', 'Favorite1.user_id = ' . $userId)))));
+    public function getUserFavorite($id, $user) {
+        return $this->UserFavorite->find('first', array('conditions' => array('UserFavorite.user_id' => $id), 'joins' => array(array('table' => 'favorites', 'alias' => 'Favorite1', 'type' => 'inner', 'conditions' => array('UserFavorite.favorite_id = Favorite1.id', 'Favorite1.user_id = ' . $user['User']['id'])))));
     }
     
-    public function isFavorited($id, $userId, $type) {
+    public function isFavorited($id, $user, $type) {
         if ($type === 'collectible') {
-            return !!$this->getCollectibleFavorite($id, $userId);
+            return !!$this->getCollectibleFavorite($id, $user);
         } 
         else if ($type === 'user') {
-            return !!$this->getUserFavorite($id, $userId);
+            return !!$this->getUserFavorite($id, $user);
         } 
         else {
             return false;
@@ -63,7 +65,7 @@ class Favorite extends AppModel {
      *
      * just goin to add/remove for now
      */
-    public function addSubscription($id, $type, $userId, $subscribed = null) {
+    public function addSubscription($id, $type, $user, $subscribed = null) {
         $retVal = false;
         
         $subscribed = ($subscribed === true || $subscribed === 'true');
@@ -72,21 +74,23 @@ class Favorite extends AppModel {
             // if we are subscribing, check to see if we are already subscribed
             if ($subscribed) {
                 // if one already exists, just return true
-                if (count($this->getCollectibleFavorite($id, $userId)) > 0) {
+                if (count($this->getCollectibleFavorite($id, $user)) > 0) {
                     $retVal = true;
                 } 
                 else {
-                    $data['Favorite'] = array('user_id' => $userId);
+                    $data['Favorite'] = array('user_id' => $user['User']['id']);
                     $data['CollectibleFavorite'] = array('collectible_id' => $id);
                     
                     if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
+                        $collectible = $this -> CollectibleFavorite -> Collectible -> find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $id)));
+                        $this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
                         $retVal = true;
                     }
                 }
             } 
             else {
                 // at this point we want to remove our subscription
-                $favorite = $this->getCollectibleFavorite($id, $userId);
+                $favorite = $this->getCollectibleFavorite($id, $user);
                 
                 if (!empty($favorite)) {
                     if ($this->removeFavorite($favorite['Favorite']['id'])) {
@@ -101,11 +105,11 @@ class Favorite extends AppModel {
         else if ($type === 'user') {
             if ($subscribed) {
                 // if one already exists, just return true
-                if (count($this->getUserFavorite($id, $userId)) > 0) {
+                if (count($this->getUserFavorite($id, $user)) > 0) {
                     $retVal = true;
                 } 
                 else {
-                    $data['Favorite'] = array('user_id' => $userId);
+                    $data['Favorite'] = array('user_id' => $user['User']['id']);
                     $data['UserFavorite'] = array('user_id' => $id);
                     
                     if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
@@ -115,7 +119,7 @@ class Favorite extends AppModel {
             } 
             else {
                 // at this point we want to remove our subscription
-                $favorite = $this->getUserFavorite($id, $userId);
+                $favorite = $this->getUserFavorite($id, $user);
                 
                 if (!empty($favorite)) {
                     if ($this->removeFavorite($favorite['Favorite']['id'])) {
@@ -133,7 +137,7 @@ class Favorite extends AppModel {
     /**
      *
      */
-    public function removeFavorite($id, $userId) {
+    public function removeFavorite($id, $user) {
         return $this->delete($id);
     }
 }

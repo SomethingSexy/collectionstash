@@ -89,7 +89,7 @@ class UsersController extends AppController {
         
         if ($this->isLoggedIn()) {
             $permissions['add_comment'] = true;
-            $profile['favorited'] = $this->User->Favorite->isFavorited($user['User']['id'], $loggedInUser['User']['id'], 'user');
+            $profile['favorited'] = $this->User->Favorite->isFavorited($user['User']['id'], $loggedInUser, 'user');
         } 
         else {
             $permissions['add_comment'] = false;
@@ -213,7 +213,7 @@ class UsersController extends AppController {
                             CakeLog::write('info', $results);
                             $this->Session->write('user', $user);
                             
-                            $favorites = $this->User->Favorite->getFavorites($user['id']);
+                            $favorites = $this->User->Favorite->getFavorites(array('User' => array('id' =>  $user['id'])));
                             $this->Session->write('favorites', $favorites);
                             
                             CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
@@ -257,7 +257,7 @@ class UsersController extends AppController {
         CakeLog::write('info', '_autoLogin' . date("Y-m-d H:i:s", time()));
         $user = $this->getUser();
         
-        $favorites = $this->User->Favorite->getFavorites($user['User']['id']);
+        $favorites = $this->User->Favorite->getFavorites($user);
         $this->Session->write('favorites', $favorites);
         
         $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['User']['id']);
