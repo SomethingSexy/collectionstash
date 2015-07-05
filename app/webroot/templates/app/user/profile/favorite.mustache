@@ -11,6 +11,9 @@
 		<a target="_blank" href="/collectible/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}	
 	{{/CollectibleFavorite}}
+	{{#UserFavorite}}
+		<a target="_blank" href="/collectible/view/{{id}}" class=""><span class="blockie"></span></a>
+	{{/UserFavorite}}
 	<div class="tile-actions">
     	<div class="favorite-container" data-id="{{id}}">
            <button type="button" class="btn-fave _toggle">

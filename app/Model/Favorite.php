@@ -5,6 +5,7 @@ class Favorite extends AppModel {
     public $belongsTo = array('User');
     public $actsAs = array('Containable');
     function afterFind($results, $primary = false) {
+
         if ($results && $primary) {
             foreach ($results as $key => $val) {
                 if (isset($val['UserFavorite']) && is_null($val['UserFavorite']['id'])) {

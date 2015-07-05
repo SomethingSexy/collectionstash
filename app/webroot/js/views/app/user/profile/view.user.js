@@ -32,7 +32,8 @@ define(function(require) {
         },
         favorite: function(event) {
             event.preventDefault();
-            this.model.set('favorited', true);
+            // toggle it
+            this.model.set('favorited', !this.model.get('favorited'));
             Backbone.ajax({
                 type: "post",
                 data: {
@@ -41,12 +42,11 @@ define(function(require) {
                     'data[Favorite][subscribed]': this.model.get('favorited'),
                 },
                 dataType: 'json',
-                url: '/favorites/favorite',
-                beforeSend: function(jqXHR, settings) {},
-                success: function(data, textStatus, XMLHttpRequest) {
-                    // eh don't do anything
-                }
+                url: '/favorites/favorite'
             });
+
+            // don't care much about a response, just assume it works
+            this.render();
         }
     });
 });

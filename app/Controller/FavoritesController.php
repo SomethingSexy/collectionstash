@@ -26,7 +26,7 @@ class FavoritesController extends AppController {
         $this->set(compact('username'));
         if ($this->request->isGet()) {
             $user = $this->Favorite->User->find("first", array('conditions' => array('User.username' => $username), 'contain' => false));
-            $this->paginate = array('paramType' => 'querystring', 'limit' => 25, 'contain' => array('CollectibleFavorite' => array('Collectible' => array('CollectiblesUpload' => array('Upload')))), 'conditions' => array('Favorite.user_id' => $user['User']['id']));
+            $this->paginate = array('paramType' => 'querystring', 'limit' => 25, 'contain' => array('UserFavorite' => array('User'), 'CollectibleFavorite' => array('Collectible' => array('CollectiblesUpload' => array('Upload')))), 'conditions' => array('Favorite.user_id' => $user['User']['id']));
             $favorites = $this->paginate('Favorite');
             
             foreach ($favorites as $key => $value) {
@@ -41,7 +41,7 @@ class FavoritesController extends AppController {
                     }
                 }
             }
-            
+
             $extractFavorites = Set::extract('/Favorite/.', $favorites);
             foreach ($extractFavorites as $key => $value) {
                 if (isset($favorites[$key]['CollectibleFavorite'])) {
