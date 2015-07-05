@@ -1,4 +1,14 @@
-	<div class="image">
+<div class="image">
+
+	{{#Collectible.custom}}
+	 <a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}"><span class="label label-info">{{{Collectible.displayTitle}}}</span></a> 
+	{{/Collectible.custom}}
+	{{#Collectible.original}}
+		<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}"><span class="label label-info">{{{Collectible.displayTitle}}}</span></a>
+	{{/Collectible.original}}
+	{{^Collectible.original}}{{^Collectible.custom}}
+		 <a class="title" target="_blank" href="/collectibles_users/view/{{id}}"><span class="label label-info">{{{Collectible.displayTitle}}}</span></a> 
+	{{/Collectible.custom}}{{/Collectible.original}}
 	{{#UserUpload}}
 			<a data-gallery="gallery" href="{{UserUpload.imagePath}}" class="">
 				<img class="" src="{{UserUpload.thumbnailUrl}}" resizetype="strict" alt="{{UserUpload.description}}">
@@ -15,30 +25,25 @@
 		<a target="_blank" href="/collectibles_users/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
 	{{/Collectible.CollectiblesUpload}}
 	{{/UserUpload}}
-	</div>
-	<div class="caption">
-		<h3>
-		{{#Collectible.custom}}
-			<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
-		{{/Collectible.custom}}
-		{{#Collectible.original}}
-			<a class="title" target="_blank" href="/collectibles/view/{{Collectible.id}}">{{{Collectible.displayTitle}}}</a>
-		{{/Collectible.original}}
-		{{^Collectible.original}}{{^Collectible.custom}}
-			<a class="title" target="_blank" href="/collectibles_users/view/{{id}}">{{{Collectible.displayTitle}}}</a>
-		{{/Collectible.custom}}{{/Collectible.original}}
-		</h3>
-		<div class="_actions menu tile-links clearfix adjust">
-			<span class="pull-left marked-for-sale {{^sale}}hidden{{/sale}}">
-			<a class="" title="Marked for sale"><i class="fa fa-dollar"></i></a></span>
-			<span><a class="" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i></a></span>
-			{{#permissions.edit_collectible_user}}
-			<span><a href="javascript:void(0);" class="_add-photo"><i class="fa fa-camera"></i></a></span>
-				<span><a class="" title="Edit" href="/collectibles_users/edit/{{id}}"><i class="fa fa-edit"></i></a></span>
-				{{^sale}}
-					<span><a href="javascript:void(0);" data-collectible-user-id="{{id}}" class="stash-sell" title="Sell"><i class="fa fa-dollar"></i></a></span>
-				{{/sale}}
-				<span><a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-stash" title="Remove" href="#"><i class="fa fa-trash-o"></i></a></span>
-			{{/permissions.edit_collectible_user}}
+	<div class="tile-actions bottom-right">
+			<div class="sale-container">
+				 <span class="pull-left marked-for-sale {{^sale}}hidden{{/sale}}">
+					<a class="" title="Marked for sale"><i class="fa fa-dollar"></i></a>
+				</span>
+			</div>
+		<div class="btn-group">
+			{{! <div class="_actions menu tile-links clearfix adjust"> }}
+				<a class="btn btn-default" title="View Collectible Details" href="/collectibles/view/{{Collectible.id}}"><i class="fa fa-info"></i></a>
+				{{#permissions.edit_collectible_user}}
+					<a href="javascript:void(0);" class="btn btn-default _add-photo"><i class="fa fa-camera"></i></a>
+					<a class="btn btn-default" title="Edit" href="/collectibles_users/edit/{{id}}"><i class="fa fa-edit"></i></a>
+					{{^sale}}
+						<a href="javascript:void(0);" data-collectible-user-id="{{id}}" class="stash-sell btn btn-default" title="Sell"><i class="fa fa-dollar"></i></a>
+					{{/sale}}
+					<a data-prompt="true" data-collectible-user-id="{{id}}" class="remove-from-stash btn btn-default" title="Remove" href="#"><i class="fa fa-trash-o"></i></a>
+				{{/permissions.edit_collectible_user}}
+			{{! </div> }}
 		</div>
 	</div>
+
+</div>

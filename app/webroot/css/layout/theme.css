@@ -395,14 +395,13 @@ div.subnav-fixed {
     }
 }
 
-
 .stash-layout .profile .name {
     padding-left: 200px;
     font-size: 30px;
 }
 
 @media (max-width: 480px) {
-    .stash-layout .profile .name  {
+    .stash-layout .profile .name {
         padding-left: 0;
     }
 }
@@ -412,7 +411,7 @@ div.subnav-fixed {
 }
 
 @media (max-width: 480px) {
-   .stash-layout .profile .info  {
+    .stash-layout .profile .info {
         padding-left: 0;
     }
 }
@@ -489,9 +488,11 @@ ul.profile-tabs li span.meta {
     color: #999;
 }
 
+
 /* hide until we decide what we want this to look like */
+
 @media (max-width: 480px) {
-    ul.profile-tabs  {
+    ul.profile-tabs {
         display: none;
     }
 }
@@ -817,9 +818,9 @@ ul.profile-tabs li span.meta {
     position: relative;
 }
 
-.tiles .tile div.image:hover > .tile-actions {
+/*.tiles .tile div.image:hover > .tile-actions {
     visibility: visible;
-}
+}*/
 
 .tiles.boxed-tiles .tile div.image {
     height: 400px;
@@ -837,6 +838,7 @@ ul.profile-tabs li span.meta {
     margin-bottom: 0;
 }
 
+
 /**
  *favorites
  */
@@ -846,12 +848,12 @@ ul.profile-tabs li span.meta {
     width: 200px;
     margin-bottom: 0;
 }
+
 .favorites.tiles.boxed-tiles .tile {
     width: 200px;
     display: inline-block;
-    float: none;
+    /*float: none;*/
 }
-
 
 .tiles .tile .header {
     padding: 0 20px;
@@ -957,17 +959,35 @@ ul.profile-tabs li span.meta {
  */
 
 .tile-actions {
-    visibility: hidden;
+    /*visibility: hidden;*/
     position: absolute;
     right: 8px;
     top: 8px;
     border-radius: 4px;
 }
 
-.tile-actions .favorite-container, .collections-ui .collect-container {
+.tile-actions.bottom-right {
+    bottom: 8px;
+    top: inherit;
+}
+
+.tile .label {
+    position: absolute;
+    left: -4px;
+    top: -3px;
+    text-overflow: ellipsis;
+}
+
+.tile-actions .favorite-container {
     float: left;
     position: relative;
 }
+
+.tile-actions .btn {
+    float: left;
+    position: relative;
+}
+
 
 .table.table-bordered tbody tr td {
     padding-bottom: 9px;
@@ -2000,4 +2020,3 @@ ol.fancy-comments > li {
         margin-bottom: 0;
     }
 }
-
