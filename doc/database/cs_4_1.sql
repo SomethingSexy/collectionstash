@@ -3,10 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 05, 2015 at 05:18 PM
+-- Generation Time: Jul 05, 2015 at 05:40 PM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -15,8 +17,11 @@
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `cs_4_1`
+-- Database: `cs_4_1_lean`
 --
+CREATE DATABASE IF NOT EXISTS `cs_4_1_lean` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `cs_4_1_lean`;
+
 -- --------------------------------------------------------
 
 --
@@ -45,6 +50,16 @@ CREATE TABLE IF NOT EXISTS `action_types` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `action_types`
+--
+
+INSERT INTO `action_types` (`id`, `action`, `created`, `modified`) VALUES
+(1, 'Add', '2012-08-25 15:38:03', '2012-08-25 15:38:03'),
+(2, 'Edit', '2012-08-25 15:38:03', '2012-08-25 15:38:03'),
+(3, 'Approved', '2012-08-25 15:38:03', '2012-08-25 15:38:03'),
+(4, 'Delete', '2012-08-25 15:38:03', '2012-08-25 15:38:03');
 
 -- --------------------------------------------------------
 
@@ -76,6 +91,27 @@ CREATE TABLE IF NOT EXISTS `activity_types` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Dumping data for table `activity_types`
+--
+
+INSERT INTO `activity_types` (`id`, `type`, `created`, `modified`) VALUES
+(1, 'Add Comment', '2012-12-07 21:10:42', '2012-12-07 21:10:42'),
+(2, 'Add to Stash', '2012-12-08 12:44:00', '2012-12-08 12:44:00'),
+(3, 'Remove from Stash', '2012-12-08 12:44:00', '2012-12-08 12:44:00'),
+(4, 'Edit User Collectible', '2012-12-09 18:05:40', '2012-12-09 18:05:40'),
+(5, 'Add Photo', '2012-12-09 18:05:40', '2012-12-09 18:05:40'),
+(6, 'User Submit New', '2012-12-15 11:49:17', '2012-12-15 11:49:17'),
+(7, 'User Submit Edit', '2012-12-15 11:49:17', '2012-12-15 11:49:17'),
+(8, 'Admin Approve New', '2012-12-15 11:49:17', '2012-12-15 11:49:17'),
+(9, 'Admin Approve Edit', '2012-12-15 11:49:17', '2012-12-15 11:49:17'),
+(10, 'User Invites User', '2012-12-16 11:46:50', '2012-12-16 11:46:50'),
+(11, 'User Add New', '2013-04-28 17:15:42', '2013-04-28 17:15:42'),
+(12, 'User Edit', '2013-04-28 17:15:42', '2013-04-28 17:15:42'),
+(13, 'User Add Listing', '2013-05-28 17:42:42', '2013-05-28 17:42:42'),
+(14, 'Add to Wish List', '2013-12-27 00:00:00', '2013-12-27 00:00:00'),
+(15, 'Remove to Wish List', '2013-12-27 00:00:00', '2013-12-27 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -360,6 +396,40 @@ CREATE TABLE IF NOT EXISTS `attribute_categories` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
+
+--
+-- Dumping data for table `attribute_categories`
+--
+
+INSERT INTO `attribute_categories` (`id`, `parent_id`, `lft`, `rght`, `name`, `path_name`, `created`, `modified`) VALUES
+(1, NULL, 1, 54, 'Part', 'Part', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(5, 1, 34, 35, 'Print', 'Part/Print', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(6, 1, 32, 33, 'Head', 'Part/Head', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(7, 1, 30, 31, 'Hand', 'Part/Hand', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(8, 1, 36, 47, 'Weapon', 'Part/Weapon', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(9, 1, 6, 29, 'Clothing', 'Part/Clothing', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(10, 1, 4, 5, 'Environment', 'Part/Environment', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(11, 1, 48, 49, 'Prop', 'Part/Prop', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(12, 1, 2, 3, 'Display Base', 'Part/Display Base', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(13, 9, 19, 20, 'Shirt', 'Part/Clothing/Shirt', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(14, 9, 17, 18, 'Pants', 'Part/Clothing/Pants', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(15, 9, 13, 14, 'Hat', 'Part/Clothing/Hat', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(16, 9, 21, 22, 'Shoes', 'Part/Clothing/Shoes', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(17, 9, 15, 16, 'Jacket', 'Part/Clothing/Jacket', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(18, 9, 11, 12, 'Belt', 'Part/Clothing/Belt', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(20, 2, 60, 61, 'Autograph', 'Feature/Autograph', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(21, 9, 25, 26, 'Cape', 'Part/Clothing/Cape', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(22, 9, 23, 24, 'Miscellaneous', 'Part/Clothing/Miscellaneous', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(23, 9, 9, 10, 'Robe', 'Part/Clothing/Robe', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(24, 9, 7, 8, 'Socks', 'Part/Clothing/Socks', '0000-00-00 00:00:00', '2012-11-17 19:42:40'),
+(25, 9, 27, 28, 'Armour', 'Part/Clothing/Armour', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(26, 8, 39, 40, 'Firearm', 'Part/Weapon/Firearm', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(27, 8, 43, 44, 'Melee', 'Part/Weapon/Melee', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(28, 8, 45, 46, 'Miscellaneous', 'Part/Weapon/Miscellaneous', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(29, 8, 37, 38, 'Accessory', 'Part/Weapon/Accessory', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(30, 8, 41, 42, 'Holster', 'Part/Weapon/Holster', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(32, 1, 50, 51, 'Body', 'Part/Body', '0000-00-00 00:00:00', '2012-11-17 19:42:41'),
+(34, 1, 52, 53, 'Document', 'Part/Document', '2012-11-17 19:40:37', '2012-11-17 19:42:41');
 
 -- --------------------------------------------------------
 
@@ -736,6 +806,34 @@ CREATE TABLE IF NOT EXISTS `collectibletypes` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
 
+--
+-- Dumping data for table `collectibletypes`
+--
+
+INSERT INTO `collectibletypes` (`id`, `parent_id`, `lft`, `rght`, `name`, `collectible_count`, `modified`, `created`) VALUES
+(1, NULL, 1, 6, 'Action Figure', 1103, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(2, NULL, 7, 8, 'Diorama', 123, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(3, 11, 20, 19, 'Prop Replica', 70, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(4, NULL, 11, 12, 'Bust', 935, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(5, NULL, 13, 14, 'Maquette', 123, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(6, NULL, 15, 16, 'Ornament', 6, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(7, NULL, 17, 18, 'Statue', 1591, '2011-09-16 22:06:14', '2011-09-16 22:06:14'),
+(8, 1, 2, 3, 'Action Figure Environment', 24, '2011-09-16 22:07:39', '2011-09-16 22:07:39'),
+(9, 1, 4, 5, 'Action Figure Accessory', 38, '2011-09-16 22:08:11', '2011-09-16 22:08:11'),
+(10, NULL, 27, 28, 'Print', 236, '2013-02-10 12:27:15', '2013-02-10 12:27:15'),
+(11, NULL, 19, 20, 'Replica', 133, '2011-09-28 18:46:14', '2011-09-28 18:46:18'),
+(12, NULL, 21, 22, 'Vinyl Figure', 189, '2011-10-13 20:25:41', '2011-10-13 20:25:44'),
+(13, 7, 18, 19, 'Statue Accessory', 2, '2011-10-27 21:12:58', '2011-10-27 21:13:01'),
+(14, NULL, 23, 24, 'Designer Toy', 2, '2012-11-25 08:35:52', '2012-11-25 08:35:52'),
+(15, NULL, 25, 26, 'Coin', 16, '2013-01-14 19:11:39', '2013-01-14 19:11:39'),
+(17, NULL, 29, 30, 'Film Cell', 0, '2013-05-20 15:30:05', '2013-05-20 15:30:05'),
+(18, NULL, 31, 32, 'Button', 7, '2013-09-24 15:05:18', '2013-09-24 15:05:18'),
+(19, NULL, 33, 34, 'Keychain', 5, '2013-10-31 09:10:38', '2013-10-31 09:10:38'),
+(20, NULL, 35, 38, 'Model Kit', 3, '2013-11-06 19:43:40', '2013-11-06 19:43:40'),
+(21, NULL, 39, 42, 'Weapon', 0, '2013-11-06 22:20:47', '2013-11-06 22:20:47'),
+(22, 21, 40, 41, 'Knife', 0, '2013-11-06 22:21:33', '2013-11-06 22:21:33'),
+(23, 20, 36, 37, 'Garage Kit', 0, '2013-11-07 05:38:02', '2013-11-07 05:38:02');
+
 -- --------------------------------------------------------
 
 --
@@ -787,6 +885,16 @@ CREATE TABLE IF NOT EXISTS `collectible_user_remove_reasons` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=5 ;
 
+--
+-- Dumping data for table `collectible_user_remove_reasons`
+--
+
+INSERT INTO `collectible_user_remove_reasons` (`id`, `reason`, `remove`, `sold_cost_required`, `created`, `modified`) VALUES
+(1, 'Sold', 0, 0, '2013-06-04 00:00:00', '2013-06-04 00:00:00'),
+(2, 'Traded', 0, 0, '2013-06-04 00:00:00', '2013-06-04 00:00:00'),
+(3, 'Duplicate', 1, 0, '2013-06-04 00:00:00', '2013-06-04 00:00:00'),
+(4, 'Accidently Added', 1, 0, '2013-06-04 00:00:00', '2013-06-04 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -837,6 +945,27 @@ CREATE TABLE IF NOT EXISTS `conditions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
+--
+-- Dumping data for table `conditions`
+--
+
+INSERT INTO `conditions` (`id`, `name`) VALUES
+(1, 'New'),
+(2, 'Mint in Box'),
+(3, 'Mint in package'),
+(4, 'Mint on card'),
+(5, 'Mint and Complete'),
+(6, 'Mint, no box'),
+(7, 'Near Mint'),
+(8, 'Never removed from box'),
+(9, 'Loose'),
+(10, 'Very Fine'),
+(11, 'Fine'),
+(12, 'Very Good'),
+(13, 'Good'),
+(14, 'Fair'),
+(15, 'Poor');
+
 -- --------------------------------------------------------
 
 --
@@ -852,6 +981,17 @@ CREATE TABLE IF NOT EXISTS `currencies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
 
+--
+-- Dumping data for table `currencies`
+--
+
+INSERT INTO `currencies` (`id`, `iso_code`, `sign`, `created`, `modified`) VALUES
+(1, 'USD', '$', '2012-03-18 21:36:06', '2012-03-18 21:36:06'),
+(2, 'EUR', '€', '2012-03-18 21:36:06', '2012-03-18 21:36:06'),
+(3, 'GBP', '£', '2012-03-18 21:37:00', '2012-03-18 21:37:00'),
+(4, 'JPY', '¥', '2012-03-18 21:37:00', '2012-03-18 21:37:00'),
+(5, 'CNY', '¥', '2012-03-18 21:37:57', '2012-03-18 21:37:57');
+
 -- --------------------------------------------------------
 
 --
@@ -865,6 +1005,16 @@ CREATE TABLE IF NOT EXISTS `custom_statuses` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `custom_statuses`
+--
+
+INSERT INTO `custom_statuses` (`id`, `status`, `created`, `modified`) VALUES
+(1, 'Draft', '2013-04-06 10:40:59', '2013-04-06 10:40:59'),
+(2, 'Prototype', '2013-04-06 10:40:59', '2013-04-06 10:40:59'),
+(3, 'Work in Progress', '2013-04-06 10:40:59', '2013-04-06 10:40:59'),
+(4, 'Completed', '2013-04-06 10:40:59', '2013-04-06 10:40:59');
 
 -- --------------------------------------------------------
 
@@ -1235,6 +1385,30 @@ CREATE TABLE IF NOT EXISTS `scales` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
+--
+-- Dumping data for table `scales`
+--
+
+INSERT INTO `scales` (`id`, `scale`, `collectible_count`, `modified`, `created`) VALUES
+(1, '1:64', 6, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, '1:34', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, '1:32', 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, '1:24', 6, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, '1:18', 33, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, '1:6', 1356, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, '1:4', 581, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(9, '1:1', 165, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, '1:5', 188, '2011-09-13 14:47:35', '2011-09-13 14:47:38'),
+(11, '1:9', 63, '2011-09-19 19:27:00', '2011-09-19 19:27:03'),
+(12, '1:2', 93, '2011-09-19 19:29:05', '2011-09-19 19:29:07'),
+(13, '1:3', 17, '2011-09-19 19:29:14', '2011-09-19 19:29:17'),
+(14, '1:7', 194, '2011-09-19 19:30:20', '2011-09-19 19:30:20'),
+(15, '1:8', 173, '2011-09-19 19:30:20', '2011-09-19 19:30:20'),
+(16, '1:10', 48, '2011-09-19 19:30:20', '2011-09-19 19:30:20'),
+(17, '1:11', 5, '2011-09-19 19:30:20', '2011-09-19 19:30:20'),
+(18, '1:12', 112, '2011-09-19 19:30:20', '2011-09-19 19:30:20'),
+(19, '1:400', 1, '2012-08-06 21:55:47', '2012-08-06 21:55:49');
+
 -- --------------------------------------------------------
 
 --
@@ -1311,6 +1485,18 @@ CREATE TABLE IF NOT EXISTS `statuses` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `statuses`
+--
+
+INSERT INTO `statuses` (`id`, `status`, `created`, `modified`) VALUES
+(1, 'Draft', '2012-07-29 15:20:04', '2012-07-29 15:20:04'),
+(2, 'Submitted', '2012-07-29 15:20:04', '2012-07-29 15:20:04'),
+(3, 'Approved', '2012-07-29 15:20:04', '2012-07-29 15:20:04'),
+(4, 'Active', '2012-07-29 15:20:04', '2012-07-29 15:20:04'),
+(5, 'Inactive', '2012-07-29 15:20:04', '2012-07-29 15:20:04'),
+(6, 'Declined', '2012-07-29 15:20:59', '2012-07-29 15:20:59');
 
 -- --------------------------------------------------------
 
