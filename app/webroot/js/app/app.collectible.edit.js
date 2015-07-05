@@ -45,7 +45,8 @@ define(function(require) {
         directionalOriginalTemplate = require('text!templates/collectibles/directional.original.dust'),
         alertTemplate = require('text!templates/common/alert.dust'),
         uploadTemplate = require('text!templates/app/common/upload.mustache'),
-        downloadTemplate = require('text!templates/app/common/download.mustache');
+        downloadTemplate = require('text!templates/app/common/download.mustache'),
+        toastr = require('toastr');
     require('jquery.form');
     require('jquery.treeview');
     require('cs.core.tree');
@@ -57,7 +58,6 @@ define(function(require) {
     require('jquery.fileupload-image');
     require('jquery.fileupload-validate');
     require("jquery.ui.widget");
-    require('blockui');
     require('backbone.validation');
     require('backbone.bootstrap-modal');
     require('jquery.blueimp-gallery');
@@ -258,7 +258,6 @@ define(function(require) {
             dust.render(this.template, data, function(error, output) {
                 $(self.el).html(output);
             });
-
             var $fileupload = $('#fileupload');
             $fileupload.fileupload({
                 url: '/collectibles_uploads/upload',
@@ -279,23 +278,19 @@ define(function(require) {
                         file.autoUpload = true;
                         output += Mustache.render(uploadTemplate, file)
                     });
-
                     return output;
-
                 },
                 downloadTemplate: function(o) {
                     var output = '';
                     _.each(o.files, function(file, index) {
                         output += Mustache.render(downloadTemplate, file)
                     });
-
                     return output;
                 }
             }).bind('fileuploadadd', function(e, data) {
                 $('._error', '#upload-dialog').empty();
                 $('.url-upload-input', '#upload-dialog').val('');
             });
-
             $('#upload-dialog').on('hidden.bs.modal', function() {
                 $('#fileupload table tbody tr.template-download').remove();
                 pageEvents.trigger('upload:close');
@@ -319,7 +314,6 @@ define(function(require) {
                                 that.fileupload('option', 'done').call(that, $.Event('done'), {
                                     result: data
                                 });
-
                                 $('.url-upload-input', '#upload-dialog').val('');
                             }
                         },
@@ -330,7 +324,6 @@ define(function(require) {
                             } else if (_.isObject(jqXHR.responseJSON) && jqXHR.responseJSON.file) {
                                 message = jqXHR.responseJSON.file;
                             }
-
                             $('._error', '#upload-dialog').html('<div class="alert alert-danger" role="alert">' + message + '</div>');
                         },
                         complete: function() {
@@ -341,19 +334,8 @@ define(function(require) {
                 }
             });
             $(self.el).on('click', '.upload-link', function() {
-                $.blockUI({
-                    message: 'Loading...',
-                    css: {
-                        border: 'none',
-                        padding: '15px',
-                        backgroundColor: ' #F1F1F1',
-                        '-webkit-border-radius': '10px',
-                        '-moz-border-radius': '10px',
-                        color: '#222',
-                        background: 'none repeat scroll 0 0 #F1F1F',
-                        'border-radius': '5px 5px 5px 5px',
-                        'box-shadow': '0 0 10px rgba(0, 0, 0, 0.5)'
-                    }
+                toastr.warning('Loading...', null, {
+                    positionClass: 'toast-top-center'
                 });
                 $.ajax({
                     dataType: 'json',
@@ -365,7 +347,7 @@ define(function(require) {
                                 result: data.response.data
                             });
                         }
-                        $.unblockUI();
+                        toastr.clear();
                         $('.url-upload-input', '#upload-dialog').val('');
                         $('._error', '#upload-dialog').empty();
                         $('#upload-dialog').modal();
@@ -635,7 +617,6 @@ define(function(require) {
             }
             //TODO: At some point it might warrant a whole new view for customs
             var collectibleView = new CollectibleView(collectibleViewData);
-
             collectibleView.on('company:add', function() {
                 var model = new CompanyModel();
                 var companyView = new CompanyView({
@@ -653,7 +634,6 @@ define(function(require) {
                     partsLayout.modal.hideModal();
                 });
             });
-
             collectibleView.on('company:edit', function(model) {
                 var companyView = new CompanyView({
                     model: model,
@@ -667,19 +647,15 @@ define(function(require) {
                         // App.comments.add(response);
                     }
                     partsLayout.modal.hideModal();
-
                     collectibleView.render();
                 });
             });
-
             collectibleView.on('collectibletype:select', function() {
-
                 var collectibleTypeView = new CollectibleTypeView({
                     model: new Backbone.Model(),
                     collectiblTypeHtml: collectiblTypeHtml
                 });
                 partsLayout.modal.show(collectibleTypeView);
-
                 collectibleTypeView.on('select:type', function(id, label) {
                     collectibleTypeModel.set({
                         id: id,
@@ -692,7 +668,6 @@ define(function(require) {
                     partsLayout.modal.hideModal();
                 });
             });
-
             $('#photo-container').append(new PhotoView({
                 collection: uploads,
                 eventManager: pageEvents

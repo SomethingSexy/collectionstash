@@ -1,23 +1,22 @@
 define(function(require) {
     var Marionette = require('marionette'),
-        template = require('text!templates/app/user/profile/photos.mustache'),
-        emptyTemplate = require('text!templates/app/user/profile/photos.empty.mustache'),
-        PhotoView = require('views/app/user/profile/view.photo'),
+        template = require('text!templates/app/user/profile/favorites.mustache'),
+        emptyTemplate = require('text!templates/app/user/profile/favorites.empty.mustache'),
+        FavoriteView = require('views/app/user/profile/view.favorite'),
         mustache = require('mustache');
     require('imagesloaded');
     require('wookmark');
     require('marionette.mustache');
     require('jquery.blueimp-gallery');
     require('bootstrap');
-    
+
     var NoItemsView = Backbone.Marionette.ItemView.extend({
         template: emptyTemplate
     });
-
     return Marionette.CompositeView.extend({
         template: template,
-        itemView: PhotoView,
-        itemViewContainer: "._uploads",
+        itemView: FavoriteView,
+        itemViewContainer: "._favorites",
         emptyView: NoItemsView,
         itemViewOptions: function(model, index) {
             return {
@@ -25,11 +24,8 @@ define(function(require) {
             };
         },
         itemEvents: {
-            "stash:remove": function(event, view, id) {
-                this.trigger('stash:remove', id);
-            },
-            "stash:sell": function(event, view, id) {
-                this.trigger('stash:sell', id);
+            "favorite:remove": function(event, view, id) {
+                this.trigger('favorite:remove', id);
             }
         },
         events: {
@@ -80,7 +76,6 @@ define(function(require) {
                 this.addItemView(item, ItemView, index);
             }, this);
             this.endBuffering();
-
             // $('._tiles', this.el).imagesLoaded(function() {
             if (self.handler.wookmarkInstance) {
                 self.handler.wookmarkInstance.clear();
@@ -96,7 +91,6 @@ define(function(require) {
             // Update the layout.
             self.handler.wookmark();
             // });
-
             if (!this.collection.hasNextPage()) {
                 $('._more', this.el).hide();
             } else {

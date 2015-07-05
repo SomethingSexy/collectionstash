@@ -100,50 +100,6 @@ define(['marionette', 'text!templates/app/collectible/edit/collectible.part.must
         },
         addPhoto: function() {
             this.trigger('edit:part:photo', this.model);
-            // var self = this;
-            // var attribute = self.model.toJSON();
-            // // Hmmm, well, it might make sense at some point
-            // // to merge the upload stuff, directly into the attribute
-            // // model data but the plugin requires it's data in a special
-            // //format, so for now we are going to fetch each time we
-            // // need it, oh well.
-            // $.blockUI({
-            //     message: 'Loading...',
-            //     css: {
-            //         border: 'none',
-            //         padding: '15px',
-            //         backgroundColor: ' #F1F1F1',
-            //         '-webkit-border-radius': '10px',
-            //         '-moz-border-radius': '10px',
-            //         color: '#222',
-            //         background: 'none repeat scroll 0 0 #F1F1F',
-            //         'border-radius': '5px 5px 5px 5px',
-            //         'box-shadow': '0 0 10px rgba(0, 0, 0, 0.5)'
-            //     }
-            // });
-            // var uploads = new AttributeUploads([], {
-            //     'id': attribute.Attribute.id
-            // });
-            // uploads.fetch({
-            //     success: function() {
-            //         if (self.photoEditView) {
-            //             self.photoEditView.remove();
-            //         }
-            //         self.photoEditView = new AttributePhotoView({
-            //             collection: uploads,
-            //             model: self.model
-            //         });
-            //         $.unblockUI();
-            //         $('body').append(self.photoEditView.render().el);
-            //         $('#attribute-upload-dialog', 'body').modal({
-            //             backdrop: 'static'
-            //         });
-            //         $('#attribute-upload-dialog', 'body').on('hidden.bs.modal', function() {
-            //             self.photoEditView.remove();
-            //             self.model.fetch();
-            //         });
-            //     }
-            // });
         },
         duplicate: function() {
             this.trigger('remove:part:duplicate', this.model);

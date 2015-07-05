@@ -3,7 +3,7 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
     var $name = 'User';
     var $actsAs = array('Containable');
-    var $hasMany = array('Comment', 'Notification', 'Activity', 'Edit', 'Collectible', 'UserPointYearFact', 'UserPointFact', 'Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Subscription' => array('dependent' => true));
+    var $hasMany = array('Comment', 'Notification', 'Activity', 'Edit', 'Collectible', 'UserPointYearFact', 'UserPointFact', 'Stash' => array('dependent' => true), 'CollectiblesUser' => array('dependent' => true), 'Invite', 'UserUpload' => array('dependent' => true), 'Favorite' => array('dependent' => true));
     //TODO should I add here 'Collectible'? Since technically a user has many collectible because of the ones they added
     var $hasOne = array('Profile' => array('dependent' => true), 'WishList' => array('dependent' => true));
     
@@ -188,17 +188,15 @@ class User extends AppModel {
         // TODO: Update Stash to use the EntityTypeBehavior to automate this shit
         $userData['Stash']['0']['EntityType']['type'] = 'stash';
         $userData['WishList'] = array('collectibles_wish_list_count' => 0);
-
+        
         if ($this->saveAssociated($userData, array('deep' => true))) {
             //Find the user
             $user = $this->find("first", array('conditions' => array('User.id' => $this->id)));
-            //Subscribe them to their own stash
             
-            $this->Subscription->addSubscription($user['Stash'][0]['entity_type_id'], $user['User']['id']);
             return true;
         } 
         else {
-            debug($this->validationErrors);
+            // debug($this->validationErrors);
         }
         
         return false;

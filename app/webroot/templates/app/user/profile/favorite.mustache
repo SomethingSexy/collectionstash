@@ -1,0 +1,27 @@
+<div class="image">
+
+	{{#CollectibleFavorite}}
+		<span class="label label-info">{{{Collectible.name}}}</span>
+	{{#Collectible.CollectiblesUpload}}
+		{{#primary}}
+			<a data-gallery="gallery" href="{{Upload.imagePath}}" class="">
+				<img class="" src="{{Upload.resizedImagePath}}" resizetype="strict" alt="{{Collectible.descriptionTitle}}">
+			</a>
+		{{/primary}}
+	{{/Collectible.CollectiblesUpload}}
+	{{^Collectible.CollectiblesUpload}}
+		<a target="_blank" href="/collectible/view/{{id}}" class=""><img alt="" src="/img/no-photo.png"></a>
+	{{/Collectible.CollectiblesUpload}}	
+	{{/CollectibleFavorite}}
+	{{#UserFavorite}}
+		<span class="label label-info">{{User.username}}</span>
+		<a target="_blank" href="/profile/{{User.username}}" class=""><span class="blockie"></span></a>
+	{{/UserFavorite}}
+	<div class="tile-actions">
+    	<div class="favorite-container" data-id="{{id}}">
+           <button type="button" class="btn btn-default _toggle">
+           		<i class="fa fa-heart"></i>
+        	</button>
+    	</div>
+    </div>
+</div>

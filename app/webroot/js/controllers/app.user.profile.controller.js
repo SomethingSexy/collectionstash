@@ -11,6 +11,7 @@ define(function(require) {
         StashTableView = require('views/app/user/profile/view.stash.table'),
         WishlistView = require('views/app/user/profile/view.wishlist'),
         PhotosView = require('views/app/user/profile/view.photos'),
+        FavoritesView = require('views/app/user/profile/view.favorites'),
         WishlistTableView = require('views/app/user/profile/view.wishlist.table'),
         HistoryView = require('views/app/user/profile/view.history'),
         HistoryChartView = require('views/app/user/profile/view.history.chart'),
@@ -23,6 +24,7 @@ define(function(require) {
         layout = require('text!templates/app/user/profile/layout.mustache'),
         profileLayout = require('text!templates/app/user/profile/layout.profile.mustache'),
         photosLayout = require('text!templates/app/user/profile/layout.photos.mustache'),
+        favoritesLayout = require('text!templates/app/user/profile/layout.favorites.mustache'),
         stashLayout = require('text!templates/app/user/profile/layout.stash.mustache'),
         historyLayout = require('text!templates/app/user/profile/layout.history.mustache'),
         saleLayout = require('text!templates/app/user/profile/layout.sale.mustache'),
@@ -92,6 +94,16 @@ define(function(require) {
             photos: '._photos'
         }
     });
+
+    var FavoritesLayout = Backbone.Marionette.Layout.extend({
+        template: favoritesLayout,
+        initialize: function(options) {
+            this.permissions = options.permissions;
+        },
+        regions: {
+            photos: '._favorites'
+        }
+    });    
 
     var HistoryLayout = Backbone.Marionette.Layout.extend({
         template: historyLayout,
@@ -412,6 +424,22 @@ define(function(require) {
         layout.photos.show(view);
     }
 
+    function renderFavorites(){
+        var layout = new FavoritesLayout({
+            permissions: App.permissions,
+            model: App.profile
+        });
+
+        App.layout.main.show(layout);
+
+        var view = new FavoritesView({
+            collection: App.favorites,
+            permissions: App.permissions
+        });
+
+        layout.photos.show(view);
+    }
+
     function renderHistory(layout) {
         var view = new HistoryView({
             collection: App.history,
@@ -537,7 +565,8 @@ define(function(require) {
 
             App.layout.userCard.show(new UserView({
                 model: App.profile,
-                facts: App.facts
+                facts: App.facts,
+                permissions: App.permissions
             }));
         },
         index: function() {
@@ -758,6 +787,24 @@ define(function(require) {
             } else {
                 App.photos.getFirstPage();
                 renderPhotos();
+            }
+        },
+        favorite: function(){
+            renderHeader('favorites');
+            App.layout.main.show(new LoaderView());
+
+            // this is the correct way to do this if we already pulled the favorites done
+            // if it isn't empty, it won't go fetch the first page and it won't return a 
+            // deferred... kind of lame 
+            if (App.favorites.isEmpty()) {
+                App.favorites.getFirstPage({
+                    silent: true
+                }).done(function() {
+                    renderFavorites();
+                });
+            } else {
+                App.favorites.getFirstPage();
+                renderFavorites();
             }
         },
         history: function() {
