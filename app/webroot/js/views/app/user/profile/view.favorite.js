@@ -21,13 +21,15 @@ define(function(require) {
             return data;
         },
         onRender: function() {
-            var icon = blockies.create({ // All options are optional
-                seed: this.model.get('UserFavorite').User.username, // seed used to generate icon data, default: random
-                // color: '#dfe', // to manually specify the icon color, default: random
-                size: 10, // width/height of the icon in blocks, default: 10
-                scale: 20 // width/height of each block in pixels, default: 5
-            });
-            this.$('.blockie').html(icon);
+            if (this.model.has('UserFavorite')) {
+                var icon = blockies.create({ // All options are optional
+                    seed: this.model.get('UserFavorite').User.username, // seed used to generate icon data, default: random
+                    // color: '#dfe', // to manually specify the icon color, default: random
+                    size: 10, // width/height of the icon in blocks, default: 10
+                    scale: 20 // width/height of each block in pixels, default: 5
+                });
+                this.$('.blockie').html(icon);
+            }
         },
         toggle: function() {
             // for now just remove, if toggle is useful
