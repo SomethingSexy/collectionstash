@@ -17,5 +17,7 @@ class ActivityTypes {
 	public static $USER_ADD_LISTING = 13;
 	public static $ADD_COLLECTIBLE_WISH_LIST = 14;
 	public static $REMOVE_COLLECTIBLE_WISH_LIST = 15;
+	public static $ADD_FAVORITE = 16;
+	public static $REMOVE_FAVORITE = 17;
 }
 ?>

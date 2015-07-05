@@ -7,6 +7,7 @@ App::uses('EditActivity', 'Lib/Activity');
 App::uses('SubmissionActivity', 'Lib/Activity');
 App::uses('InviteActivity', 'Lib/Activity');
 App::uses('WishListActivity', 'Lib/Activity');
+App::uses('FavoriteActivity', 'Lib/Activity');
 App::uses('Activity', 'Model');
 class ActivityEventListener implements CakeEventListener {
 	/**
@@ -97,6 +98,12 @@ class ActivityEventListener implements CakeEventListener {
 				break;
 			case 15 :
 				$retVal = new WishListActivity('remove', $data);
+				break;
+			case 16 :
+				$retVal = new FavoriteActivity('add', $data);
+				break;
+			case 17 :
+				$retVal = new FavoriteActivity('remove', $data);
 				break;
 		}
 		return $retVal;

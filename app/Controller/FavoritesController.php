@@ -69,7 +69,7 @@ class FavoritesController extends AppController {
             $this->response->statusCode(401);
             return;
         }
-        $userId = $this->getUserId();
+        $user = $this->getUser();
         // legacy-ish stuff post/put is also removing
         if ($this->request->is('post') || $this->request->is('put')) {
             $type = $this->request->data['Favorite']['type'];
@@ -77,9 +77,9 @@ class FavoritesController extends AppController {
             $subscribed = $this->request->data['Favorite']['subscribed'];
             $subscribed = ($subscribed === 'true');
             
-            if ($this->Favorite->addSubscription($id, $type, $userId, $subscribed)) {
+            if ($this->Favorite->addSubscription($id, $type, $user, $subscribed)) {
                 // reset the favorites in the session
-                $favorites = $this->Favorite->getFavorites($userId);
+                $favorites = $this->Favorite->getFavorites($user);
                 $this->Session->write('favorites', $favorites);
                 $this->response->statusCode(200);
                 $this->response->body('{}');
@@ -92,9 +92,9 @@ class FavoritesController extends AppController {
             }
         } 
         else if ($this->request->is('delete')) {
-            if ($this->Favorite->removeFavorite($id, $userId)) {
+            if ($this->Favorite->removeFavorite($id, $user)) {
                 // reset the favorites in the session
-                $favorites = $this->Favorite->getFavorites($userId);
+                $favorites = $this->Favorite->getFavorites($user);
                 $this->Session->write('favorites', $favorites);
                 $this->response->statusCode(200);
                 $this->response->body('{}');
