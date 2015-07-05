@@ -1,4 +1,21 @@
-define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collections/collection.collectible.user', 'collections/collection.filters.selected', 'collections/collection.collectible.wishlist', 'collections/collection.comments', 'collections/collection.photos', 'collections/collection.history', 'collections/collection.edits', 'models/model.history.graph', 'collections/collection.collectible.sale', 'collections/collection.work', 'collections/collection.collectible.history'], function(Marionette, Backbone, _, ProfileModel, CollectiblesCollection, SelectedFilters, WishlistCollection, CommentCollection, PhotosCollection, HistoryCollection, EditsCollection, GraphModel, SaleCollection, WorkCollection, SubmissionCollection) {
+define(function(require) {
+    var Marionette = require('marionette'),
+        Backbone = require('backbone'),
+        _ = require('underscore'),
+        ProfileModel = require('models/model.profile'),
+        CollectiblesCollection = require('collections/collection.collectible.user'),
+        SelectedFilters = require('collections/collection.filters.selected'),
+        WishlistCollection = require('collections/collection.collectible.wishlist'),
+        CommentCollection = require('collections/collection.comments'),
+        PhotosCollection = require('collections/collection.photos'),
+        FavoritesCollection = require('collections/collection.favorites'),
+        HistoryCollection = require('collections/collection.history'),
+        EditsCollection = require('collections/collection.edits'),
+        GraphModel = require('models/model.history.graph'),
+        SaleCollection = require('collections/collection.collectible.sale'),
+        WorkCollection = require('collections/collection.work'),
+        SubmissionCollection = require('collections/collection.collectible.history'),
+        SubmissionCollection = require('collections/collection.collectible.history');
     // set up the app instance
     // TODO: we could probably have a base app that defines the header/footer
     var MyApp = new Marionette.Application();
@@ -10,7 +27,7 @@ define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collect
     });
     var enablePushState = true;
     // Disable for older browsers
-    var pushState = !! (enablePushState && window.history && window.history.pushState);
+    var pushState = !!(enablePushState && window.history && window.history.pushState);
     MyApp.on('initialize:after', function() {
         Backbone.history.start({
             pushState: pushState,
@@ -31,6 +48,10 @@ define(['marionette', 'backbone', 'underscore', 'models/model.profile', 'collect
         MyApp.stashFacts = new Backbone.Model(rawStashFacts);
     }
     MyApp.photos = new PhotosCollection([], {
+        username: MyApp.profile.get('username')
+    });
+    // this is the favorites used for paginating
+    MyApp.favorites = new FavoritesCollection([], {
         username: MyApp.profile.get('username')
     });
     MyApp.history = new HistoryCollection([], {

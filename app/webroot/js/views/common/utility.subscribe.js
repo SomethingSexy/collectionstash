@@ -1,4 +1,7 @@
-define(['require', 'jquery'], function(require, $) {
+// TODO: this is the old format, convert into backbone/marionette
+define(function(require){
+    var $ = require('jquery');
+
 	// convert this to a better format lateer
     return {
         run: function() {
@@ -14,7 +17,7 @@ define(['require', 'jquery'], function(require, $) {
              * server to set.  Right now it is assuming the server will work
              */
             $('#subscribe').click(function(event) {
-                event.preventDefault();
+              
                 //First check if I am subscribing or unsubcribing.. not sure it matters yet
                 //data-subscribed="false" data-entity-type="stash" data-entity-id
                 var subscribed = $(this).attr('data-subscribed');
@@ -27,33 +30,28 @@ define(['require', 'jquery'], function(require, $) {
                 }
                 $(this).attr('data-subscribed', subscribed);
                 //This is the id of the entity we are subscribing to
-                var entityTypeId = $(this).attr('data-entity-type-id');
+                var typeId = $(this).attr('data-type-id');
+                var type = $(this).attr('data-type');
 
                 $.ajax({
                     type: "post",
                     data: {
-                        'data[Subscription][entity_type_id]': entityTypeId,
-                        'data[Subscription][subscribed]': subscribed,
+                        'data[Favorite][type_id]': typeId,
+                        'data[Favorite][type]': type,
+                        'data[Favorite][subscribed]': subscribed,
                     },
                     dataType: 'json',
-                    url: '/subscriptions/subscribe.json',
+                    url: '/favorites/favorite',
                     beforeSend: function(jqXHR, settings) {
 
                     },
                     success: function(data, textStatus, XMLHttpRequest) {
-                        if (data.success.isSuccess) {
-
-                        } else {
-
-                        }
-
+                        // eh don't do anything
                     }
                 });
-
+                  event.preventDefault();
             });
 
         }
     };
-
-
 });

@@ -36,6 +36,8 @@
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
 	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
+	echo $this -> Html -> css('/bower_components/toastr/toastr.min');
+
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 
@@ -48,7 +50,7 @@
 	echo $this -> Minify -> script('/bower_components/bootstrap-datepicker/js/bootstrap-datepicker');
 	echo $this -> Minify -> script('/bower_components/backbone/backbone');
 	echo $this -> Minify -> script('jquery-plugins');
-	echo $this -> Minify -> script('/bower_components/blockui/jquery.blockUI');
+	echo $this -> Minify -> script('/bower_components/toastr/toastr');
 	// Replace this with dust eventually
 	echo $this -> Minify -> script('/bower_components/blueimp-tmpl/js/tmpl.min');
 	echo $this -> Minify -> script('/bower_components/blueimp-load-image/js/load-image.all.min');
@@ -89,7 +91,7 @@ if (isset($bodyClass))
 					return;
 				js = d.createElement(s);
 				js.id = id;
-				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>

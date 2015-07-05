@@ -1,12 +1,24 @@
-define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/user.mustache', 'mustache', 'blockies', 'marionette.mustache'], function(require, Marionette, _, template, mustache, blockies) {
-
+define(function(require) {
+    var Marionette = require('marionette'),
+        Backbone = require('backbone'),
+        _ = require('underscore'),
+        template = require('text!templates/app/user/profile/user.mustache'),
+        blockies = require('blockies');
+    require('mustache');
+    require('marionette.mustache');
     return Marionette.ItemView.extend({
         template: template,
+        events: {
+            'click ._favorite': 'favorite'
+        },
         initialize: function(options) {
             this.facts = options.facts;
+            this.permissions = options.permissions;
         },
         serializeData: function() {
-            var data = _.extend(this.model.toJSON(), this.facts.toJSON());
+            var data = _.extend(this.model.toJSON(), this.facts.toJSON(), {
+                permissions: this.permissions.toJSON()
+            });
             return data;
         },
         onRender: function() {
@@ -16,8 +28,25 @@ define(['require', 'marionette', 'underscore', 'text!templates/app/user/profile/
                 size: 10, // width/height of the icon in blocks, default: 10
                 scale: 15 // width/height of each block in pixels, default: 5
             });
+            this.$('.blockie').html(icon);
+        },
+        favorite: function(event) {
+            event.preventDefault();
+            // toggle it
+            this.model.set('favorited', !this.model.get('favorited'));
+            Backbone.ajax({
+                type: "post",
+                data: {
+                    'data[Favorite][type_id]': this.model.get('id'),
+                    'data[Favorite][type]': 'user',
+                    'data[Favorite][subscribed]': this.model.get('favorited'),
+                },
+                dataType: 'json',
+                url: '/favorites/favorite'
+            });
 
-            $('.blockie', this.el).html(icon);
+            // don't care much about a response, just assume it works
+            this.render();
         }
     });
 });

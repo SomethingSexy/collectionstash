@@ -3,20 +3,27 @@ App::uses('AuthComponent', 'Controller/Component');
 App::uses('CakeEventListener', 'Event');
 class AppController extends Controller
 {
+    
     // Since we are specifying the auto login and auth here, we need to pull in session as well
     public $components = array('Search', 'Session', 'AutoLogin', 'Auth' => array('authenticate' => array('Form')));
     
     public function beforeFilter() {
+        
         // Configure our auto login stuff
         $this->AutoLogin->settings = array(
+        
         // Model settings
         'model' => 'User', 'username' => 'username', 'password' => 'password',
+        
         // Controller settings
         'plugin' => '', 'controller' => 'Users', 'loginAction' => 'login', 'logoutAction' => 'logout',
+        
         // Cookie settings
         'cookieName' => 'rememberMe', 'expires' => ' + 1month',
+        
         // Process logic
         'active' => true, 'redirect' => true, 'requirePrompt' => true);
+        
         // Since I am not using auth to it'sfullestrightnow
         // we need to allow all, the individual methods will
         // figure out if they need a user to be logged in
@@ -25,7 +32,8 @@ class AppController extends Controller
         if ($this->request->isAjax()) {
             Configure::write('debug', 0);
             $this->layout = 'ajax';
-        } else {
+        } 
+        else {
             $this->layout = 'default';
         }
         if (AuthComponent::user('id')) {
@@ -33,20 +41,24 @@ class AppController extends Controller
             $this->set('username', $this->getUsername());
             if ($this->isUserAdmin()) {
                 $this->set('isUserAdmin', true);
-            } else {
+            } 
+            else {
                 $this->set('isUserAdmin', false);
             }
-        } else {
+        } 
+        else {
             $this->set('isLoggedIn', false);
             $this->set('isUserAdmin', false);
         }
         
-        $this->set('subscriptions', $this->getSubscriptions());
+        // $this->set('subscriptions', $this->getSubscriptions());
         $this->set('notificationsCount', $this->getNotificationsCount());
+        
         //Since this gets set for every request, setting this here for the default
         $this->set('title_for_layout', 'Collection Stash - A collector and artist platform for building and sharing your collection.');
         $this->set('description_for_layout', 'A collectible reference database and online collection cataloging platform.');
         $this->set('keywords_for_layout', 'statue collection, action figure collection, toy collection, collectible database, action figure, toy, stash, storage');
+        
         //This stores off any request parameters per request, can be used to recreate urls later
         $requestParams = '?';
         if (isset($this->request->query)) {
@@ -74,7 +86,8 @@ class AppController extends Controller
         $user = $this->getUser();
         if (isset($user['User']) && !empty($user['User'])) {
             return true;
-        } else {
+        } 
+        else {
             return false;
         }
     }
@@ -84,7 +97,8 @@ class AppController extends Controller
         
         if ($user['User']['admin'] == 1) {
             return true;
-        } else {
+        } 
+        else {
             return false;
         }
     }
@@ -94,9 +108,9 @@ class AppController extends Controller
         return $user['User']['id'];
     }
     
-    public function getSubscriptions() {
-        $subscriptions = $this->Session->read('subscriptions');
-        
+    public function getFavorites() {
+        $subscriptions = $this->Session->read('favorites');
+    
         if ($subscriptions === null) {
             return array();
         } else {
@@ -109,7 +123,8 @@ class AppController extends Controller
         
         if ($count === null) {
             return 0;
-        } else {
+        } 
+        else {
             return $count;
         }
     }
@@ -118,6 +133,7 @@ class AppController extends Controller
         $this->Session->setFlash('Your session has timed out.');
         $this->redirect(array('admin' => false, 'controller' => 'users', 'action' => 'login'), null, true);
     }
+    
     /**
      * This method will check if the user is logged in, if they are not it will
      * auto redirect them.
@@ -139,6 +155,7 @@ class AppController extends Controller
         $tmp = array();
         
         foreach ($array as $key => $val) {
+            
             // convert objects to arrays, in_array() does not support objects
             if (is_object($val)) $val = (array)$val;
             
@@ -159,7 +176,7 @@ class AppController extends Controller
         $subscription['Subscription']['subject'] = $subject;
         array_push($subscriptions, $subscription);
         
-        CakeEventManager::instance()->dispatch(new CakeEvent('Controller . Subscription . notify', $this, array('subscriptions' => $subscriptions)));
+        CakeEventManager::instance()->dispatch(new CakeEvent('Controller.Subscription.notify', $this, array('subscriptions' => $subscriptions)));
     }
     
     public function convertErrorsJSON($errors = null, $model = null) {
@@ -182,10 +199,12 @@ class AppController extends Controller
     }
     
     protected function getClientIP() {
+        
         // this is for production
         if (isset($_SERVER['HTTP_X_REAL_IP'])) {
             return $_SERVER['HTTP_X_REAL_IP'];
-        } else {
+        } 
+        else {
             return $this->request->clientIp();
         }
     }

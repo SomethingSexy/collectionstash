@@ -39,6 +39,7 @@
 	echo $this -> Minify -> css('layout/layout');
 	echo $this -> Minify -> css('jquery.treeview');
 	echo $this -> Html -> css('/bower_components/blueimp-gallery/css/blueimp-gallery.min');
+	echo $this -> Html -> css('/bower_components/toastr/toastr.min');
 	echo $this -> Minify -> css('layout/theme');
 	echo $this -> Minify -> css('layout/default');
 	echo $this -> Html -> css('/bower_components/select2/select2');
@@ -77,7 +78,7 @@
 					return;
 				js = d.createElement(s);
 				js.id = id;
-				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&status=0";
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 	</script>

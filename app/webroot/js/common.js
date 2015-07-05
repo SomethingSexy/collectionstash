@@ -26,7 +26,7 @@ requirejs.config({
         // for the old stuff that is brought into the newer stuff until it can be rewritten
         'dust': '../bower_components/dustjs-linkedin/dist/dust-full',
         'dust-helpers': '../bower_components/dustjs-linkedin-helpers/dist/dust-helpers',
-        'blockui': '../bower_components/blockui/jquery.blockUI',
+        toastr : '../bower_components/toastr/toastr',
         'select2': '../bower_components/select2/select2',
         'bootstrap-datepicker': '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
         'backbone.trackit': '../bower_components/backbone.trackit/backbone.trackit',
@@ -37,7 +37,6 @@ requirejs.config({
         'blueimp-gallery': '../bower_components/blueimp-gallery/js/blueimp-gallery',
         'jquery.blueimp-gallery': '../bower_components/blueimp-gallery/js/jquery.blueimp-gallery',
         'blueimp-helper': '../bower_components/blueimp-gallery/js/blueimp-helper',
-        'jquery.blockui': '../bower_components/blockui/jquery.blockUI',
         'd3': '../bower_components/d3/d3.min',
         'rickshaw': '../bower_components/rickshaw/rickshaw.min',
         'jquery-ui': '../bower_components/jquery-ui/ui',
@@ -80,7 +79,7 @@ requirejs.config({
         },
         // at some point we can turn stash.tools into an AMD module that will pull in all of these deps
         'stash.tools': {
-            deps: ['jquery', 'backbone', 'bootstrap', 'dust', 'dust-helpers', 'views/common/stash/view.stash.sell', 'blockui']
+            deps: ['jquery', 'backbone', 'bootstrap', 'dust', 'dust-helpers', 'views/common/stash/view.stash.sell', 'toastr']
         },
         'select2': {
             deps: ['jquery']

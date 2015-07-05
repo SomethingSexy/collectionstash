@@ -31,7 +31,8 @@ $config['Settings'] = Set::merge($config['Settings'], array(
 		),
 		'Contribute' => array(
 			'allowed'=> true
-		)	
+		),
+		'upload-directory' => 'files'	
   	),
 	'User' => array(
 		'uploads' => array(

@@ -1,4 +1,4 @@
-define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'mustache', 'underscore', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _) {
+define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'mustache', 'underscore', 'views/common/growl', 'marionette.mustache', 'select2'], function(Marionette, template, mustache, _, growl) {
     var lastResults = [];
     var AddTagView = Marionette.ItemView.extend({
         template: template,
@@ -35,8 +35,8 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
                 },
                 createSearchChoice: function(term, data) {
                     if (lastResults.some(function(r) {
-                        return r.tag == term
-                    })) {
+                            return r.tag == term
+                        })) {
                         return {
                             id: data.id,
                             tag: term
@@ -81,23 +81,7 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
                                 }
                             }
                         }
-                        $.blockUI({
-                            message: '<button class="close" data-dismiss="alert" type="button">×</button>' + message,
-                            showOverlay: false,
-                            css: {
-                                top: '100px',
-                                'background-color': '#DDFADE',
-                                border: '1px solid #93C49F',
-                                'box-shadow': '3px 3px 5px rgba(0, 0, 0, 0.5)',
-                                'border-radius': '4px 4px 4px 4px',
-                                color: '#333333',
-                                'margin-bottom': '20px',
-                                padding: '8px 35px 8px 14px',
-                                'text-shadow': '0 1px 0 rgba(255, 255, 255, 0.5)',
-                                'z-index': 999999
-                            },
-                            timeout: 2000
-                        });
+                        growl.onSuccess(message);
                     },
                     error: function(model, response) {
                         var responseObj = $.parseJSON(response.responseText);
@@ -111,6 +95,5 @@ define(['marionette', 'text!templates/app/collectible/edit/tag.add.mustache', 'm
             }
         }
     });
-
     return AddTagView;
 });

@@ -9,7 +9,8 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
             'click ._sale': 'sale',
             'click ._photos': 'photos',
             'click ._history': 'history',
-            'click ._activity': 'activity'
+            'click ._activity': 'activity',
+            'click ._favorite': 'favorite'
         },
         initialize: function(options) {
             this.selectedMenu = options.selectedMenu || 'profile';
@@ -51,6 +52,10 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
         activity: function(event) {
             event.preventDefault();
             this.trigger('navigate:menu', 'activity');
+        },
+        favorite: function(event) {
+            event.preventDefault();
+            this.trigger('navigate:menu', 'favorites');
         }
     });
 });
