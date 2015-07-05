@@ -818,6 +818,7 @@ ul.profile-tabs li span.meta {
     position: relative;
 }
 
+
 /*.tiles .tile div.image:hover > .tile-actions {
     visibility: visible;
 }*/
@@ -976,6 +977,17 @@ ul.profile-tabs li span.meta {
     left: -4px;
     top: -3px;
     text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 100%;
+}
+
+.tile .sale-label {
+    top: inherit;
+    bottom: 3px;
+}
+
+.favorites .tile .label {
+    width: 150px;
 }
 
 .tile-actions .favorite-container {
@@ -987,7 +999,6 @@ ul.profile-tabs li span.meta {
     float: left;
     position: relative;
 }
-
 
 .table.table-bordered tbody tr td {
     padding-bottom: 9px;
