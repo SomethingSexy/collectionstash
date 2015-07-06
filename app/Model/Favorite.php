@@ -7,7 +7,7 @@ class Favorite extends AppModel {
     public $belongsTo = array('User');
     public $actsAs = array('Containable');
     function afterFind($results, $primary = false) {
-
+        
         if ($results && $primary) {
             foreach ($results as $key => $val) {
                 if (isset($val['UserFavorite']) && is_null($val['UserFavorite']['id'])) {
@@ -82,8 +82,8 @@ class Favorite extends AppModel {
                     $data['CollectibleFavorite'] = array('collectible_id' => $id);
                     
                     if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
-                        $collectible = $this -> CollectibleFavorite -> Collectible -> find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $id)));
-                        $this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
+                        $collectible = $this->CollectibleFavorite->Collectible->find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $id)));
+                        $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
                         $retVal = true;
                     }
                 }
@@ -95,6 +95,8 @@ class Favorite extends AppModel {
                 if (!empty($favorite)) {
                     if ($this->removeFavorite($favorite['Favorite']['id'])) {
                         $retVal = true;
+                        $collectible = $this->CollectibleFavorite->Collectible->find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $id)));
+                        $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
                     }
                 } 
                 else {
