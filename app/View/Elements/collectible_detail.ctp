@@ -193,15 +193,7 @@ echo $this -> Html -> script('pages/page.collectible.view', array('inline' => fa
 								}
 
 								if (isset($isLoggedIn) && $isLoggedIn === true && !$adminMode) {
-									$userSubscribed = 'false';
-									
-									if(isset($favorites['Collectible'])){
-										foreach ($favorites['Collectible'] as $key => $value) {
-											if($value['id'] === $collectibleDetail['Collectible']['id']) {
-												$userSubscribed = 'true';
-											}
-										}
-									}
+									$userSubscribed = $isFavorited ? 'true' : 'false';
 
 									echo '<li><a id="subscribe"  data-subscribed="' . $userSubscribed . '" data-type="collectible" data-type-id="' . $collectibleDetail['Collectible']['id'] . '" class="" href="#"><i class="fa fa-heart"></i> Favorite</a></li>';
 

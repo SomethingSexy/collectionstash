@@ -84,7 +84,7 @@ class CollectiblesController extends AppController {
             else {
             }
         }
-
+        
         $this->set('allowImport', Configure::read('Settings.Collectible.Edit.allow-import'));
         $this->layout = 'require';
     }
@@ -518,9 +518,9 @@ class CollectiblesController extends AppController {
             }
             
             $this->set('userUploads', $extractUserUploads);
-
-            $this->set('favorites', $this->getFavorites());
-
+            
+            $this->set('isFavorited', $this->Collectible->User->Favorite->isFavorited($collectible['Collectible']['id'], $this->getUser(), 'collectible'));
+            
             $this->layout = 'require';
             
             $this->getEventManager()->dispatch(new CakeEvent('Controller.Track.view', $this, array('type' => 'collectible', 'id' => $id, 'ip' => $this->getClientIP(), 'user_id' => $this->getUserId())));

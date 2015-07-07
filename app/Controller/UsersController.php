@@ -213,9 +213,6 @@ class UsersController extends AppController {
                             CakeLog::write('info', $results);
                             $this->Session->write('user', $user);
                             
-                            $favorites = $this->User->Favorite->getFavorites(array('User' => array('id' =>  $user['id'])));
-                            $this->Session->write('favorites', $favorites);
-                            
                             CakeLog::write('info', 'User ' . $user['id'] . ' successfully logged in at ' . date("Y-m-d H:i:s", time()));
                             // grab the total number of unread notifications
                             $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['id']);
@@ -256,9 +253,6 @@ class UsersController extends AppController {
     function _autoLogin() {
         CakeLog::write('info', '_autoLogin' . date("Y-m-d H:i:s", time()));
         $user = $this->getUser();
-        
-        $favorites = $this->User->Favorite->getFavorites($user);
-        $this->Session->write('favorites', $favorites);
         
         $totalNotifications = $this->User->Notification->getCountUnreadNotifications($user['User']['id']);
         $this->Session->write('notificationsCount', $totalNotifications);
