@@ -95,8 +95,6 @@ class Favorite extends AppModel {
                 if (!empty($favorite)) {
                     if ($this->removeFavorite($favorite['Favorite']['id'])) {
                         $retVal = true;
-                        $collectible = $this->CollectibleFavorite->Collectible->find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $id)));
-                        $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
                     }
                 } 
                 else {
@@ -115,6 +113,9 @@ class Favorite extends AppModel {
                     $data['UserFavorite'] = array('user_id' => $id);
                     
                     if ($this->saveAssociated($data, array('validate' => false, 'deep' => true))) {
+                        $retVal = true;
+                        $userFavorite = $this->User->find('first', array('contain' => false, 'conditions' => array('User.id' => $id)));
+                        $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_FAVORITE, 'user' => $user, 'userFavorite' => $userFavorite)));
                         $retVal = true;
                     }
                 }
@@ -140,7 +141,32 @@ class Favorite extends AppModel {
      *
      */
     public function removeFavorite($id, $user) {
-        return $this->delete($id);
+        // find the favorite...make sure they can delete the favorite
+        $favorite = $this->find('first', array('conditions' => array('Favorite.id' => $id)));
+        
+        if (!$favorite) {
+            return false;
+        }
+        
+        if ($favorite['Favorite']['user_id'] !== $user['User']['id']) {
+            return false;
+        }
+        
+        if ($this->delete($id)) {
+            if (isset($favorite['CollectibleFavorite'])) {
+                $collectible = $this->CollectibleFavorite->Collectible->find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $favorite['CollectibleFavorite']['collectible_id'])));
+                $this->getEventManager()->dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$REMOVE_FAVORITE, 'user' => $user, 'collectible' => $collectible)));
+            } 
+            else if (isset($favorite['UserFavorite'])) {
+                // do we want to inform everyone that a user unfavorited another user?
+                
+            }
+            
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
 }
 ?>

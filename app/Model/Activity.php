@@ -86,6 +86,8 @@ class Activity extends AppModel
                         $data->object->url = $data->object->data->Listing->url;
                     } else if ($data->object->objectType === 'collectibles_user') {
                         $data->object->object_displayName = $data->object->data->Collectible->displayTitle;
+                    } else if ($data->object->objectType === 'user') {
+                        $data->object->object_displayName = $data->object->data->User->username;
                     } else {
                         $data->object->object_displayName = $data->object->objectType;
                     }
