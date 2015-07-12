@@ -50,13 +50,13 @@ class EntityChangeEventListener implements CakeEventListener {
             $favorites = $favoriteModel->UserFavorite->find('all', array('conditions' => array('UserFavorite.user_id' => $entityType['Stash']['User']['id'])));
             $subscriptions = array();
             foreach ($favorites as $key => $value) {
+                // no need to check against yourself, since you cannot favorite yourself
                 $subscription['Subscription'] = array();
                 $subscription['Subscription']['user_id'] = $value['Favorite']['user_id'];
                 $subscription['Subscription']['message'] = __('The following new comment has been posted to <a href="http://' . env('SERVER_NAME') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.');
                 $subscription['Subscription']['subject'] = __('A new coment has been posted.');
                 $subscription['Subscription']['notification_type'] = 'comment_add';
                 $subscription['Subscription']['notification_json_data'] = $templateData;
-                debug($subscription);
                 array_push($subscriptions, $subscription);
             }
             
@@ -65,40 +65,26 @@ class EntityChangeEventListener implements CakeEventListener {
             }
         } 
         else if ($type === 'collectible') {
+            $favoriteModel = new Favorite();
+            $favorites = $favoriteModel->CollectibleFavorite->find('all', array('conditions' => array('CollectibleFavorite.collectible_id' => $entityType['Collectible']['id'])));
+            $subscriptions = array();
+            foreach ($favorites as $key => $value) {
+                // since you can favorite the collectible, make sure you don't emailed for your own post
+                if ($value['Favorite']['user_id'] !== $userId) {
+                    $subscription['Subscription'] = array();
+                    $subscription['Subscription']['user_id'] = $value['Favorite']['user_id'];
+                    $subscription['Subscription']['message'] = __('The following new comment has been posted to the collectible <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $entityType['Collectible']['id'] . '">' . $entityType['Collectible']['name'] . '</a>' . '.');
+                    $subscription['Subscription']['subject'] = __('A new coment has been posted.');
+                    $subscription['Subscription']['notification_type'] = 'comment_add';
+                    $subscription['Subscription']['notification_json_data'] = $templateData;
+                    array_push($subscriptions, $subscription);
+                }
+            }
+            
+            if (!empty($subscriptions)) {
+                CakeEventManager::instance()->dispatch(new CakeEvent('Controller.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
+            }
         }
-        // $message = __('The following new comment has been posted to ');
-        // if ($entityType['EntityType']['type'] === 'stash') {
-        //  $message .= $entityType['Stash']['User']['username'] . '\'s <a href="http://' . env('SERVER_NAME') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.';
-        // } else if ($entityType['EntityType']['type'] === 'collectible') {
-        //  $message .= 'the collectible <a href="http://' . env('SERVER_NAME') . '/collectibles/view/' . $entityType['Collectible']['id'] . '">' . $entityType['Collectible']['name'] . '</a>' . '.';
-        // }
-        
-        // foreach ($subscriptions as $key => $subscription) {
-        //  //If the subscription is the same as the owner of the stash, unset it
-        //  if ($subscription['Subscription']['user_id'] === $userId) {
-        //      unset($subscriptions[$key]);
-        //  } else {
-        //      if ($entityType['EntityType']['type'] === 'stash' && $entityType['Stash']['User']['id'] === $subscription['Subscription']['user_id']) {
-        //          $message = __('The following new comment has been posted to your <a href="http://' . env('SERVER_NAME') . '/stash/' . $entityType['Stash']['User']['username'] . '">Stash</a>.');
-        //      }
-        
-        //      $subscriptions[$key]['Subscription']['message'] = $message;
-        //      $subscriptions[$key]['Subscription']['subject'] = __('A new coment has been posted.');
-        //      $subscriptions[$key]['Subscription']['notification_type'] = 'comment_add';
-        //      $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
-        //  }
-        // }
-        
-        // if (!empty($subscriptions)) {
-        //     CakeEventManager::instance()->dispatch(new CakeEvent('Controller.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
-        // }
-        // else {
-        //     CakeLog::write('info', 'No subscriptions');
-        // }
-        
-        // if the stash that the comment is being added, is not owned by the commenter, then set a notification to the owner of the stash
-        
-        
     }
     /**
      * This executes whenever a collectible as been added to someone's stash
