@@ -38,7 +38,11 @@ define(function(require) {
                 silent: true
             });
             this.el.querySelector('.tile-actions').style.display = 'none';
-            this.el.querySelector('img').style.opacity = '0.25';
+            if (this.model.has('CollectibleFavorite')) {
+                this.el.querySelector('img').style.opacity = '0.25';
+            } else {
+                this.el.querySelector('canvas').style.opacity = '0.25';
+            }
         }
     });
 });
