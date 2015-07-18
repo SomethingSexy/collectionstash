@@ -92,7 +92,7 @@ class EntityChangeEventListener implements CakeEventListener {
         $subscriptions = array();
         foreach ($favorites as $key => $value) {
             $message = $stash['User']['username'];
-            $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
+            $message.= __(' has added ' . $collectibleUser['Collectible']['name'] .' to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
             
             $subscription = $this->buildSubscription($value['Favorite']['user_id'], $message, __($stash['User']['username'] . ' updated their stash.'), 'stash_add', $templateData);
             array_push($subscriptions, $subscription);
@@ -123,7 +123,7 @@ class EntityChangeEventListener implements CakeEventListener {
         $subscriptions = array();
         foreach ($favorites as $key => $value) {
             $message = $wishList['User']['username'];
-            $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
+            $message.= __(' has added ' . $collectibleUser['Collectible']['name'] .'to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
             
             $subscription = $this->buildSubscription($value['Favorite']['user_id'], $message, __($wishList['User']['username'] . ' updated wish list.'), 'wishlist_add', $templateData);
             array_push($subscriptions, $subscription);
