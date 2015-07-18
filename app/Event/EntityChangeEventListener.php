@@ -86,14 +86,15 @@ class EntityChangeEventListener implements CakeEventListener {
         
         $collectibleUser = $event->subject->find('first', array('conditions' => array('CollectiblesUser.id' => $collectibleUserId), 'contain' => array('Condition', 'Merchant', 'Collectible' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'), 'CollectiblesUpload' => array('Upload')))));
         $templateData = json_encode($collectibleUser);
-
+        
         $favoriteModel = new Favorite();
         $favorites = $favoriteModel->UserFavorite->find('all', array('conditions' => array('UserFavorite.user_id' => $stash['User']['id'])));
         $subscriptions = array();
         foreach ($favorites as $key => $value) {
-            // no need to check against yourself, since you cannot favorite yourself
-            $message = __('The following new comment has been posted to <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
-            $subscription = $this->buildSubscription($value['Favorite']['user_id'], $message, __('A new coment has been posted.'), 'comment_add', $templateData);
+            $message = $stash['User']['username'];
+            $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/stash/' . $stash['User']['username'] . '">Stash</a>.');
+            
+            $subscription = $this->buildSubscription($value['Favorite']['user_id'], $message, __($stash['User']['username'] . ' updated their stash.'), 'stash_add', $templateData);
             array_push($subscriptions, $subscription);
         }
         
@@ -101,9 +102,7 @@ class EntityChangeEventListener implements CakeEventListener {
             CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
         }
     }
-    /**
-     * TODO: This doesn't really work.  We need to update the subscription/follower stuff then we can get this to work
-     */
+
     public function collectibleAddedToWishList($event) {
         // $event->subject = the object the event was dispatched from
         // in this example $event->subject = BlogController
@@ -118,36 +117,21 @@ class EntityChangeEventListener implements CakeEventListener {
         
         $collectibleUser = $event->subject->find('first', array('conditions' => array('CollectiblesWishList.id' => $collectibleUserId), 'contain' => array('Collectible' => array('Collectibletype', 'Manufacture', 'ArtistsCollectible' => array('Artist'), 'CollectiblesUpload' => array('Upload')))));
         $templateData = json_encode($collectibleUser);
-        // TODO: Update with favorite system
-        //now grab all of the Subscriptions
-        // $subscriptions = $event->subject->User->Subscription->find("all", array('contain' => array('User'), 'conditions' => array('Subscription.subscribed' => '1', 'Subscription.entity_type_id' => $wishList['Stash']['entity_type_id'])));
+
+        $favoriteModel = new Favorite();
+        $favorites = $favoriteModel->UserFavorite->find('all', array('conditions' => array('UserFavorite.user_id' => $wishList['User']['id'])));
+        $subscriptions = array();
+        foreach ($favorites as $key => $value) {
+            $message = $wishList['User']['username'];
+            $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
+            
+            $subscription = $this->buildSubscription($value['Favorite']['user_id'], $message, __($wishList['User']['username'] . ' updated wish list.'), 'wishlist_add', $templateData);
+            array_push($subscriptions, $subscription);
+        }
         
-        // //Build the message
-        // $message = $wishList['User']['username'];
-        // $message.= __(' has added the following collectible to their <a href="http://' . env('SERVER_NAME') . '/wishlist/' . $wishList['User']['username'] . '">Wish List</a>.');
-        
-        // foreach ($subscriptions as $key => $subscription) {
-        
-        //     //If the subscription is the same as the owner of the stash, unset it
-        //     if ($subscription['Subscription']['user_id'] === $wishList['WishList']['user_id']) {
-        //         unset($subscriptions[$key]);
-        //     }
-        //     else {
-        //         $subscriptions[$key]['Subscription']['message'] = $message;
-        //         $subscriptions[$key]['Subscription']['subject'] = __($wishList['User']['username'] . ' updated their wish list.');
-        //         $subscriptions[$key]['Subscription']['notification_type'] = 'wishlist_add';
-        //         $subscriptions[$key]['Subscription']['notification_json_data'] = $templateData;
-        //     }
-        // }
-        
-        // if (!empty($subscriptions)) {
-        //     CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
-        // }
-        // else {
-        //     CakeLog::write('info', 'No subscriptions');
-        // }
-        
-        
+        if (!empty($subscriptions)) {
+            CakeEventManager::instance()->dispatch(new CakeEvent('Model.Subscription.notify', $event->subject, array('subscriptions' => $subscriptions)));
+        }
     }
     /**
      * This won't be specific to the Entity stuff but I want to keep all of this logic
