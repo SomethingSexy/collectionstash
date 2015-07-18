@@ -34,8 +34,7 @@ class CollectiblesWishList extends AppModel {
 				// We need to get some data to handle this event
 				$collectible = $this -> Collectible -> find('first', array('contain' => array('CollectiblesUpload' => array('Upload'), 'Manufacture', 'User', 'ArtistsCollectible' => array('Artist')), 'conditions' => array('Collectible.id' => $data['CollectiblesWishList']['collectible_id'])));
 				$this -> getEventManager() -> dispatch(new CakeEvent('Model.Activity.add', $this, array('activityType' => ActivityTypes::$ADD_COLLECTIBLE_WISH_LIST, 'user' => $user, 'collectible' => $collectible, 'wishlist' => $wishList)));
-				// TODO: This won't work until the subscription stuff is upgraded
-				// $this -> getEventManager() -> dispatch(new CakeEvent('Controller.WishList.Collectible.add', $this, array('collectibleWishListId' => $this -> id, 'wishListId' => $wishList['WishList']['id'])));
+				$this -> getEventManager() -> dispatch(new CakeEvent('Controller.WishList.Collectible.add', $this, array('collectibleWishListId' => $this -> id, 'wishListId' => $wishList['WishList']['id'])));
 			} else {
 				$retVal['response']['isSuccess'] = false;
 				$errors = $this -> convertErrorsJSON($this -> validationErrors, 'CollectiblesUser');
