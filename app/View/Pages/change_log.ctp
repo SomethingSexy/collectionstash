@@ -1,5 +1,9 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v4.1.1</h3>
+    <ul>
+        <li>Fixing an issue with marking a collectible as sold. (#231)</li>
+    </ul>
     <h3>Release Notes for v4.1.0</h3>
     <ul>
         <li>Revamped the favorite/subscription system. (#60)</li>
