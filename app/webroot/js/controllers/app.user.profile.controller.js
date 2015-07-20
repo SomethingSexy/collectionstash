@@ -480,7 +480,7 @@ define(function(require) {
                 model: model,
                 reasons: App.reasonsCollection,
                 changeReason: false,
-                removeReasonId: model.get('Listing').collectible_user_remove_reason_id
+                removeReasonId: model.listing.get('collectible_user_remove_reason_id')
             }));
 
             model.once('sync', function() {
