@@ -969,7 +969,7 @@ ul.profile-tabs li span.meta {
     bottom: 3px;
 }
 
-.favorites .tile .label {
+.tile.photo .label {
     width: 150px;
 }
 
