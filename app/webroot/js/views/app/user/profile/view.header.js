@@ -10,7 +10,7 @@ define(['require', 'marionette', 'text!templates/app/user/profile/header.mustach
             'click ._photos': 'photos',
             'click ._history': 'history',
             'click ._activity': 'activity',
-            'click ._favorite': 'favorite'
+            'click ._favorites': 'favorite'
         },
         initialize: function(options) {
             this.selectedMenu = options.selectedMenu || 'profile';
