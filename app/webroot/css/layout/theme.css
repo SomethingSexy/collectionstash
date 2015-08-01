@@ -827,30 +827,13 @@ ul.profile-tabs li span.meta {
     height: 400px;
 }
 
-.user-uploads.tiles.boxed-tiles .tile {
-    width: 200px;
-    display: inline-block;
-    float: none;
-}
-
-.user-uploads.tiles.boxed-tiles .tile div.image {
+.tiles.boxed-tiles .tile.photo div.image {
     height: 200px;
     width: 200px;
     margin-bottom: 0;
 }
 
-
-/**
- *favorites
- */
-
-.favorites.tiles.boxed-tiles .tile div.image {
-    height: 200px;
-    width: 200px;
-    margin-bottom: 0;
-}
-
-.favorites.tiles.boxed-tiles .tile {
+.tiles.boxed-tiles .tile.photo {
     width: 200px;
     display: inline-block;
     /*float: none;*/
