@@ -27,26 +27,26 @@
 				<?php  } ?>
 				<?php if(Configure::read('Settings.Collectible.Contribute.allowed')){ ?>
 				<li>
-					<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles')); ?>
+					<?php echo $this -> Html -> link('Submit New Collectible', array('admin' => false, 'action' => 'create', 'controller' => 'collectibles'), array('alt' => 'Submit a new collectible')); ?>
 				</li>
 				<?php } ?>
 				<li class="dropdown">
 					<?php echo $this -> Html -> link('Collectibles Catalog<i class="fa fa-caret-down"></i>', '#', array('escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
 					
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-						<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search')); ?></li>
-						<li><a href="/collectibles/catalog?o=o&status=2">Pending Collectibles</a></li>	
-						<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search')); ?></li>
+						<li><?php echo $this -> Html -> link('Collectibles', array('admin' => false, 'controller' => 'collectibles', 'action' => 'search'), array('alt' => 'Collectibles')); ?></li>
+						<li><a href="/collectibles/catalog?o=o&status=2" alt="Pending Collectibles">Pending Collectibles</a></li>	
+						<li><?php echo $this -> Html -> link('Companies', array('admin' => false, 'controller' => 'manufactures', 'action' => 'search'), array('alt' => 'Companies and Manufacturers')); ?></li>
 					</ul>
 				</li>
 				<li>
-					<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index')); ?>
+					<?php echo $this -> Html -> link('Community', array('admin' => false, 'controller' => 'users', 'action' => 'index'), array('alt' => 'Community')); ?>
 				</li>
 				<li>
-					<?php echo $this -> Html -> link('User Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery')); ?>
+					<?php echo $this -> Html -> link('User Gallery', array('admin' => false, 'controller' => 'user_uploads', 'action' => 'gallery'), array('alt' => 'User Gallery')); ?>
 				</li>
 				<li>
-					<a href="/comments/"><?php echo __('Discussion'); ?></a>
+					<a href="/comments/" alt="Forum"><?php echo __('Discussion'); ?></a>
 				</li>									
 			</ul>
 			<form method="get" class="navbar-form navbar-left" role="search" action="/collectibles/search">
