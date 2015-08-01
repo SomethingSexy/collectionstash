@@ -1,5 +1,11 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+     <h3>Release Notes for v4.1.2</h3>
+    <ul>
+        <li>Fixed an issue with the collectible detail page not showing up when you are anonymous.</li>
+        <li>Updated the stash favorite link so it highlights when active.</li>
+        <li>Updated the stash favorite icon so it only shows up when you are logged in.</li>
+    </ul>   
     <h3>Release Notes for v4.1.1</h3>
     <ul>
         <li>Fixing an issue with marking a collectible as sold. (#231)</li>
