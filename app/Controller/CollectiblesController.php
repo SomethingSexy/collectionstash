@@ -519,7 +519,9 @@ class CollectiblesController extends AppController {
             
             $this->set('userUploads', $extractUserUploads);
             
-            $this->set('isFavorited', $this->Collectible->User->Favorite->isFavorited($collectible['Collectible']['id'], $this->getUser(), 'collectible'));
+            if ($this->isLoggedIn()) {
+                $this->set('isFavorited', $this->Collectible->User->Favorite->isFavorited($collectible['Collectible']['id'], $this->getUser(), 'collectible'));
+            }
             
             $this->layout = 'require';
             
