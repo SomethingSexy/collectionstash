@@ -35,6 +35,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
 							$this -> FileUpload -> reset();
 							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 200, 'height' => 200, 'resizeType' => 'adaptive')) . '</a>';
+							$this -> FileUpload -> reset();
 							break;
 						}
 					}

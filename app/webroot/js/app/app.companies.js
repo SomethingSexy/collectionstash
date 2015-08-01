@@ -1,7 +1,7 @@
 define(function(require) {
 
     var Marionette = require('marionette'),
-        CollectiblesCollection = require('collections/collection.companies'),
+        CompaniesCollection = require('collections/collection.companies'),
         CompanyModel = require('models/model.company'),
         ModalRegion = require('views/common/modal.region'),
         _ = require('underscore');
@@ -32,7 +32,7 @@ define(function(require) {
         });
     });
 
-    MyApp.companies = new CollectiblesCollection(models);
+    MyApp.companies = new CompaniesCollection(models);
     MyApp.permissions = new Backbone.Model(rawPermissions);
 
     if (typeof rawBrands !== 'undefined') {
