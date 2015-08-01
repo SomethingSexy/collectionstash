@@ -84,7 +84,10 @@ class UsersController extends AppController {
             $permissions['edit_collectible_user'] = false;
             $permissions['show_stash_facts'] = false;
             $permissions['edit_work'] = false;
-            $permissions['showFavorite'] = true;
+            // stupid spot but fixing last minute bug, only show if logged in
+            if ($this->isLoggedIn()) {
+                $permissions['showFavorite'] = true;
+            }
         }
         
         if ($this->isLoggedIn()) {
