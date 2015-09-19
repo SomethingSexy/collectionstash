@@ -26,7 +26,7 @@ echo $this -> Html -> script('pages/page.company.list', array('inline' => false)
 	<div class="row" id="companies-layout">
 		<div class="col-md-9">
 				<div class="row spacer">
-					<div class="col-md-12 _sort">			
+					<div class="col-md-12 _search">			
 
 					</div>
 				</div>
