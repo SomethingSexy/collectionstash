@@ -67,6 +67,7 @@ cake -app F:\Development\projects\collectionstash\app one_time_update_collectibl
 cake -app F:\Development\projects\collectionstash\app process_collectible_views
 cake -app F:\Development\projects\collectionstash\app process_activities
 cake -app F:\Development\projects\collectionstash\app one_time_add_wish_list
+cake -app F:\Development\projects\collectionstash\app process_stash_fact
 
 linux: ./cake 
 
