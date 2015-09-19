@@ -48,6 +48,9 @@ class ProcessStashFactShell extends AppShell {
 				if (!is_null($collectibleUser['Collectible']['collectible_price_fact_id']) && isset($collectibleUser['Collectible']['CollectiblePriceFact']) && $this -> isfloat($collectibleUser['Collectible']['CollectiblePriceFact']['average_price'])) {
 					$currentValue = $currentValue + $collectibleUser['Collectible']['CollectiblePriceFact']['average_price'];
 					$countCollectibleCurrentValue = $countCollectibleCurrentValue + 1;
+				} else if ($collectibleUser['Collectible']['msrp']) {
+					$currentValue = $currentValue + $collectibleUser['Collectible']['msrp'];
+					$countCollectibleCurrentValue = $countCollectibleCurrentValue + 1;					
 				}
 
 				// calculate the total paid of the stash
