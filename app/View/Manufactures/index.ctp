@@ -9,52 +9,7 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 	<h2><?php echo $manufacture['Manufacture']['title']?> <small><?php echo $manufacture['Manufacture']['url']?></small></h2>
 	
 	<div class="row">
-		<div class="col-md-4">
-			<div class="widget">
-				<div class="widget-header">
-					<h3>Stats</h3>
-				</div>			
-				<div class="widget-content">
-					<dl class="dl-horizontal">
-			
-						<dt><?php echo __('Total Collectibles'); ?></dt><dd><?php echo $manufacture['Manufacture']['collectible_count']
-							?></dd>
-			
-						<dt><?php echo __('Percentage'); ?></dt><dd><?php echo $manufacture['Manufacture']['percentage_of_total']
-							?></dd>
-				
-						<dt><?php echo __('Total Brands'); ?></dt><dd><?php echo $manufacture['Manufacture']['license_count']
-							?></dd>
-						<dt><?php echo __('Highest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['highest_price']
-							?></dd>
-						<dt><?php echo __('Lowest Price'); ?></dt><dd><?php echo $manufacture['Manufacture']['lowest_price']
-							?></dd>	
-						<?php
-						if (isset($manufacture['Manufacture']['highest_edition_size'])) {
-							echo '<dt>';
-							echo __('Highest Edition Size');
-							echo '</dt>';
-							echo '<dd>';
-							echo $manufacture['Manufacture']['highest_edition_size'];
-							echo '</dd>';
-						}
-						?>							
-						<?php
-						if (isset($manufacture['Manufacture']['lowest_edition_size'])) {
-							echo '<dt>';
-							echo __('Lowest Edition Size');
-							echo '</dt>';
-							echo '<dd>';
-							echo $manufacture['Manufacture']['lowest_edition_size'];
-							echo '</dd>';
-						}
-						?>							
-					</dl>					
-				</div>
-	
-			</div>
-		</div>
-		<div class="col-md-8">
+		<div class="col-md-12">
 			<div class="widget manufacturer-collectibles">
 				<div class="widget-header">
 					<h3>Collectibles</h3>
@@ -66,41 +21,39 @@ echo $this -> Html -> script('cs.stash', array('inline' => false));
 			echo '<div id="titles-nav" class="hidden">';
 			echo $this -> Paginator -> next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));
 			echo '</div>';
-			echo '<div class="tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
+			echo '<div class="tiles boxed-tiles stashable" data-toggle="modal-gallery" data-target="#modal-gallery">';
 
 			foreach ($collectibles as $collectible) {
 				$collectibleJSON = json_encode($collectible['Collectible']);
 				$collectibleJSON = htmlentities(str_replace(array("\'", "'"), array("\\\'", "\'"), $collectibleJSON));
-				echo '<div class="tile">';
+				echo '<div class="tile photo">';
+				echo '<div class="image">';
+				echo '<span class="label label-info">'. $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']), array('title' => $collectible['Collectible']['displayTitle'])). '</span>';
 				if (!empty($collectible['CollectiblesUpload'])) {
 					foreach ($collectible['CollectiblesUpload'] as $key => $upload) {
 						if ($upload['primary']) {
-							echo '<div class="image">';
 							echo '<a data-gallery="gallery" href="' . $this -> FileUpload -> image($upload['Upload']['name'], array('imagePathOnly' => true, 'uploadDir' => 'files')) . '">';
 							$this -> FileUpload -> reset();
-							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 400, 'height' => 400)) . '</a>';
-							echo '</div>';
+							echo $this -> FileUpload -> image($upload['Upload']['name'], array('alt' => $collectible['Collectible']['descriptionTitle'], 'imagePathOnly' => false, 'uploadDir' => 'files', 'width' => 200, 'height' => 200, 'resizeType' => 'adaptive')) . '</a>';
+							$this -> FileUpload -> reset();
 							break;
 						}
 					}
-
-					//echo $fileUpload -> image($myCollectible['Collectible']['Upload'][0]['name'], array());
 				} else {
-					echo '<div class="image"><img src="/img/silhouette_thumb.png"/></div>';
+					echo '<div class="image"><img src="/img/no-photo.png"/></div>';
 				}
-				echo '<div class="header"><h2>';
-				echo $this -> Html -> link($collectible['Collectible']['displayTitle'], array('controller' => 'collectibles', 'action' => 'view', $collectible['Collectible']['id'], $collectible['Collectible']['slugField']));
-				echo '</h2></div>';
-				echo '<div class="menu tile-links clearfix">';
 				if ($isLoggedIn) {
-					echo '<span><a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn" title="Add to Wish List" href="#"><i class="fa fa-star"></i></a></span>';
-					echo '<span><a class="add-full-to-stash btn" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
-					echo '<img src="/img/icon/add_stash_link_25x25.png">';
-					echo '</a></span>';
-					
+					echo '<div class="tile-actions bottom-right">';
+					echo '<div class="btn-group">';
+					echo '<a data-collectible-id="' . $collectible['Collectible']['id'] . '" class="add-to-wishlist btn btn-default" title="Add to Wish List" href="#"><i class="fa fa-star"></i></a></span>';
+					echo '<a class="add-full-to-stash btn btn-default" data-collectible=\'' . $collectibleJSON . '\' data-collectible-id="' . $collectible['Collectible']['id'] . '"  href="javascript:void(0)" title="Add to Stash">';
+					echo '<img src="/img/icon/add_stash_link_16x16.png">';
+					echo '</a>';
+					echo '</div>';
+					echo '</div>';
 				}
-				echo '</div>';
-				echo '</div>';
+				echo '</div>'; //image
+				echo '</div>';//tile photo
 			}
 			echo '</div>';
 			     ?>
