@@ -52,7 +52,12 @@
 	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
 {{/Collectible.CollectiblePriceFact}}
 {{^Collectible.CollectiblePriceFact}}
-	<td> - </td>
+	{{#Collectible.msrp}}
+		<td>{{Collectible.msrp}}*</td>
+	{{/Collectible.msrp}}
+	{{^Collectible.msrp}}
+		<td> - </td>
+	{{/Collectible.msrp}}
 {{/Collectible.CollectiblePriceFact}}
 
 {{#purchase_date}}
