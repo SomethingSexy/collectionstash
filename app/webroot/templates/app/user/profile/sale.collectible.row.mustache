@@ -33,12 +33,16 @@
 	{{/edition_size}}
 {{/Collectible.edition_size}}	
 
-
 {{#Collectible.CollectiblePriceFact}}
 	<td>{{Collectible.CollectiblePriceFact.average_price}}</td>
 {{/Collectible.CollectiblePriceFact}}
 {{^Collectible.CollectiblePriceFact}}
-	<td> - </td>
+	{{#Collectible.msrp}}
+		<td>{{Collectible.msrp}}*</td>
+	{{/Collectible.msrp}}
+	{{^Collectible.msrp}}
+		<td> - </td>
+	{{/Collectible.msrp}}
 {{/Collectible.CollectiblePriceFact}}
 									
 <td class="sold-cost">
