@@ -1,6 +1,13 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
-     <h3>Release Notes for v4.1.2</h3>
+    <h3>Release Notes for v4.2.0</h3>
+    <ul>
+        <li>Updated the manufacturer listing page to include a text search.</li>
+        <li>Updated the collectible cards on the manufacturer detail page to match the other parts of the site.</li>
+        <li>Updated the user stash value processing so that if a collectible doesn't have a listing value, it uses the retail value.</li>
+        <li>Updated the stash sale view and history view to reflect the change above.</li>
+    </ul>
+    <h3>Release Notes for v4.1.2</h3>
     <ul>
         <li>Fixed an issue with the collectible detail page not showing up when you are anonymous.</li>
         <li>Updated the stash favorite link so it highlights when active.</li>
