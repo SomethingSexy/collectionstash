@@ -1,6 +1,6 @@
 {
     "name": "collectionstash",
-    "version": "4.2.0",
+    "version": "4.2.1",
     "private": true,
     "scripts": {
         "preinstall": "npm install -g grunt-cli",

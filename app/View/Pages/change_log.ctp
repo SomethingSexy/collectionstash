@@ -1,5 +1,11 @@
 <div class="col-md-12">
     <h2>Change Log</h2>
+    <h3>Release Notes for v4.2.1</h3>
+    <ul>
+        <li>Fixed an issue with company listing page where filtering would stop paging from working. (#242)</li>
+        <li>Fixed an issue with company listing page where filtering would stop the edit modal from working. (#241)</li>
+        <li>Updated the user gallery to match stash photo view. (#243)</li>
+    </ul>
     <h3>Release Notes for v4.2.0</h3>
     <ul>
         <li>Updated the manufacturer listing page to include a text search.</li>
