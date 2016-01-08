@@ -27,7 +27,8 @@ define(function(require) {
             permissions: App.permissions
         });
         companiesView.on('edit:company', function(id) {
-            var company = App.companies.get(id);
+            // grab it out of the full collection since that should be guranteed to have it
+            var company = App.companies.fullCollection.get(id);
             company.once('save:done', function(model, response, options) {
                 if (_.isArray(response)) {
                     // App.comments.add(response);
@@ -52,6 +53,12 @@ define(function(require) {
             });
             searchView.on('search', function(text) {
                 var filtered = this.collection.byTitle(text);
+                if (text.trim() === '') {
+                    filtered = null;
+                } else {
+                    filtered = this.collection.byTitle(text);
+                }
+                
                 renderCompaniesView(filtered);
             });
             App.layout.search.show(searchView);
